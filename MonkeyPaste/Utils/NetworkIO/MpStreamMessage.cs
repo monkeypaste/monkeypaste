@@ -72,7 +72,7 @@ namespace MonkeyPaste {
         public string SerializeDbObject() {
             //header string format: <MessageTypeId><FromGuid><ToGuid><SendDateTime><checksum>
             return string.Format(
-                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
+                 @"{1}{0}{2}{0}{3}{0}{4}{0}{5}",
                  HeaderParseToken,
                  (int)MessageType,
                  FromGuid,
@@ -215,10 +215,11 @@ namespace MonkeyPaste {
         #endregion
 
         public static MpStreamMessage Parse(string streamMessageStr) {
-            var msgParts = streamMessageStr.Split(new string[] { MpStreamMessage.HeaderContentParseToken }, StringSplitOptions.RemoveEmptyEntries);            
-            var sm = new MpStreamMessage() { 
+            var msgParts = streamMessageStr.Split(new string[] { MpStreamMessage.HeaderContentParseToken }, StringSplitOptions.RemoveEmptyEntries);
+
+            var sm = new MpStreamMessage() {
                 Header = MpStreamHeader.Parse(msgParts[0]),
-                Content = msgParts[1]
+                Content = msgParts.Length > 1 ? msgParts[1] : string.Empty
             };
             sm.Validate();
             return sm;
@@ -246,7 +247,7 @@ namespace MonkeyPaste {
         public string SerializeDbObject() {
             //format: <header><content><Eof>
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}",
+                @"{1}{0}{2}{0}{3}",
                 HeaderContentParseToken,
                 Header.SerializeDbObject(),
                 Content,

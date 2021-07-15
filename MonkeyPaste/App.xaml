@@ -141,6 +141,13 @@
                              Size="22"
                              Color="Black" />
 
+            <FontImageSource x:Key="ColorIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf53f;"
+                             Size="22"
+                             Color="Black" />
+
+            
             <FontImageSource
                 x:Key="SquareIcon0"
                 FontFamily="{StaticResource FontAwesomeSolid}"

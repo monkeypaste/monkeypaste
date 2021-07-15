@@ -64,6 +64,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public void Init(MpISync localSync) {
+            localSync.OnSyncableChange += LocalSync_OnSyncableChange;
+
             Task.Run(async () => {
                 _localSyncData = localSync;
                 while (!MpHelpers.Instance.IsConnectedToNetwork()) {
@@ -138,46 +140,54 @@ namespace MonkeyPaste {
                         }
                     }
                 } else {
-                    var listener = ConnectSocket(@"192.168.43.209", 44381);
-                    //var dbFileResponse = MpStreamMessage.CreateDbFileResponse(ThisEndpoint, string.Empty, _localSyncData.GetDbFileAsBase64());
-                    //Send(listener, dbFileResponse);
-                    //return;
-                    var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
-                    var handshakeResponse = SendReceive(listener,handshakeRequest);
-                    OtherEndpoint = MpDeviceEndpoint.Parse(handshakeResponse.Content); 
-                    var lastSyncDt = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
-                    var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
-                        ThisEndpoint,
-                        OtherEndpoint.DeviceGuid,
-                        lastSyncDt);
-                    var dbLogResponse = SendReceive(listener, dbLogRequest);
-                    var remoteChangesLookup = await _localSyncData.PrepareRemoteLogForSyncing(dbLogResponse.Content);
-                    var flipRequest = MpStreamMessage.CreateFlipRequest(
-                        ThisEndpoint,
-                        OtherEndpoint.DeviceGuid);
+                    try {
+                        var listener = ConnectSocket(@"192.168.43.209", 44381);
+                        //var dbFileResponse = MpStreamMessage.CreateDbFileResponse(ThisEndpoint, string.Empty, _localSyncData.GetDbFileAsBase64());
+                        //Send(listener, dbFileResponse);
+                        //return;
+                        var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
+                        var handshakeResponse = SendReceive(listener, handshakeRequest);
+                        OtherEndpoint = MpDeviceEndpoint.Parse(handshakeResponse.Content);
+                        var lastSyncDt = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
+                        var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
+                            ThisEndpoint,
+                            OtherEndpoint.DeviceGuid,
+                            lastSyncDt);
+                        var dbLogResponse = SendReceive(listener, dbLogRequest);
+                        var remoteChangesLookup = await _localSyncData.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                        var flipRequest = MpStreamMessage.CreateFlipRequest(
+                            ThisEndpoint,
+                            OtherEndpoint.DeviceGuid);
 
-                    var odbLogRequest = SendReceive(listener, flipRequest);
-                    var lastSyncForOther = DateTime.Parse(odbLogRequest.Content);
-                    var dbLogQueryResultStr = await _localSyncData.GetLocalLogFromSyncDate(lastSyncForOther);
-                    var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, OtherEndpoint.DeviceGuid, dbLogQueryResultStr);
-                    var disconnectRequest = SendReceive(listener, thisdbLogResponse);
-                    var newSyncDt = DateTime.Parse(disconnectRequest.Content);
-                    var disconnectResponse = MpStreamMessage.CreateDisconnectResponse(
-                        ThisEndpoint, 
-                        OtherEndpoint.DeviceGuid, 
-                        newSyncDt);
-                    Send(listener, disconnectResponse);
-                    listener.Close();
+                        var odbLogRequest = SendReceive(listener, flipRequest);
+                        var lastSyncForOther = DateTime.Parse(odbLogRequest.Content);
+                        var dbLogQueryResultStr = await _localSyncData.GetLocalLogFromSyncDate(lastSyncForOther);
+                        var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, OtherEndpoint.DeviceGuid, dbLogQueryResultStr);
+                        var disconnectRequest = SendReceive(listener, thisdbLogResponse);
+                        var newSyncDt = DateTime.Parse(disconnectRequest.Content);
+                        var disconnectResponse = MpStreamMessage.CreateDisconnectResponse(
+                            ThisEndpoint,
+                            OtherEndpoint.DeviceGuid,
+                            newSyncDt);
+                        Send(listener, disconnectResponse);
+                        listener.Close();
 
-                    await _localSyncData.PerformSync(
-                        remoteChangesLookup, 
-                        newSyncDt,
-                        OtherEndpoint.DeviceGuid);
+                        await _localSyncData.PerformSync(
+                            remoteChangesLookup,
+                            newSyncDt,
+                            OtherEndpoint.DeviceGuid);
+                    }
+                    catch(Exception ex) {
+                        MpConsole.WriteTraceLine(@"Sync exception: ", ex);
+                    }
                 }
             });
         }
 
-        
+        private void LocalSync_OnSyncableChange(object sender, object e) {
+            throw new NotImplementedException();
+        }
+
 
         #region Network I/O
         private Socket ConnectSocket(string server, int port) {
@@ -219,7 +229,7 @@ namespace MonkeyPaste {
             string smsgStr = smsg.SerializeDbObject();
             Byte[] bytesSent = Encoding.ASCII.GetBytes(smsgStr);
 
-            MpConsole.WriteLine(@"Sending: " + smsgStr);
+            MpConsole.WriteLine(@"Sending {0}: " + smsgStr, Enum.GetName(typeof(MpSyncMesageType),smsg.Header.MessageType));
             s.Send(bytesSent, bytesSent.Length, SocketFlags.None);
             MpConsole.WriteLine(@"Sent: {0} bytes", bytesSent.Length);
             return null;

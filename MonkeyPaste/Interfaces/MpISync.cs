@@ -27,5 +27,7 @@ namespace MonkeyPaste {
         MpIStringToSyncObjectTypeConverter GetTypeConverter();
 
         string GetDbFileAsBase64();
+
+        event EventHandler<object> OnSyncableChange;
     }
 }

@@ -29,6 +29,7 @@
                         Margin="10"
                         BackgroundColor="Transparent"
                         HeightRequest="40"
+                        Command="{Binding AddTagCommand}"
                         ImageSource="{StaticResource PlusIcon}" />
                 </Grid>
             </CollectionView.Header>

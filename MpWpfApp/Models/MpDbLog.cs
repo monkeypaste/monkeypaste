@@ -13,6 +13,12 @@ namespace MpWpfApp {
         private static List<MpDbLog> _AllDbLogList = null;
         public static int TotalDbLogCount = 0;
 
+        #region Events
+        public static event EventHandler<MpDbLog> OnItemAdded;
+        public static event EventHandler<MpDbLog> OnItemUpdated;
+        public static event EventHandler<MpDbLog> OnItemDeleted;
+        #endregion
+
 
         public int DbLogId { get; set; }
         public Guid DbObjectGuid { get; set; }
@@ -44,6 +50,41 @@ namespace MpWpfApp {
                 return udbpl[0];
             }
             return null;
+        }
+
+        public static List<MpDbLog> GetDbLogsByGuid(string dboGuid, DateTime fromDateUtc) {
+            if (_AllDbLogList == null) {
+                GetAllDbLogs();
+            }
+            return _AllDbLogList
+                    .Where(x => x.DbObjectGuid.ToString() == dboGuid && x.LogActionDateTime > fromDateUtc)
+                    .ToList();
+        }
+        public static List<MonkeyPaste.MpDbLog> FilterOutdatedRemoteLogs(string dboGuid, List<MonkeyPaste.MpDbLog> rlogs) {
+            //this is an update so cross check local log and only apply updates more recent
+            //than what is local
+
+            //sort logs by transaction date time so most recent changes applied last
+            rlogs = rlogs.OrderBy(x => x.LogActionDateTime).ToList();
+            var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
+            var rlogsToRemove = new List<MonkeyPaste.MpDbLog>();
+            //query local db and get logs for item since oldest remote transaction datetime
+            var llogs = MpDbLog.GetDbLogsByGuid(dboGuid, remoteLogsMinDt);
+            foreach (var rlog in rlogs) {
+                foreach (var llog in llogs) {
+                    if (rlog.AffectedColumnName == llog.AffectedColumnName &&
+                       rlog.LogActionDateTime < llog.LogActionDateTime) {
+                        rlogsToRemove.Add(rlog);
+                        //break so rlog entries are not duplicated
+                        break;
+                    }
+                }
+            }
+            //remove outdated remote changes
+            foreach (var rlogToRemove in rlogsToRemove) {
+                rlogs.Remove(rlogToRemove);
+            }
+            return rlogs;
         }
 
         public MpDbLog() { }
@@ -114,6 +155,7 @@ namespace MpWpfApp {
                             { "@scg", SourceClientGuid.ToString() }
                     });
                 DbLogId = MpDb.Instance.GetLastRowId("MpDbLog", "pk_MpDbLogId");
+                OnItemAdded?.Invoke(this, this);
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpDbLog set DbObjectGuid=@dbog,DbTableName=@dbtn,AffectedColumnName=@acn,AffectedColumnValue=@acv,LogActionType=@lat,LogActionDateTime=@ladt,SourceClientGuid=@scg where pk_MpDbLogId=@dblid",
@@ -127,6 +169,7 @@ namespace MpWpfApp {
                         { "@ladt",LogActionDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                         { "@scg", SourceClientGuid.ToString() }
                     });
+                OnItemUpdated?.Invoke(this, this);
             }
             var al = GetAllDbLogs().Where(x => x.DbLogId == DbLogId).ToList();
             if (al.Count > 0) {

@@ -28,11 +28,13 @@ namespace MpWpfApp {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
 
-       
 
         //private int _passwordAttempts = 0;
 
         private bool _isLoaded = false;
+
+        public event EventHandler<object> OnSyncableChange;
+
         public bool IsLoaded {
             get {
                 return _isLoaded;
@@ -125,6 +127,7 @@ namespace MpWpfApp {
                 Console.WriteLine("DbPassword is: " + newPassword);
             }
         }
+
         private SQLiteConnection SetConnection(bool isInit = false) {
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
@@ -150,9 +153,13 @@ namespace MpWpfApp {
             return conn;
         }
         public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false) {
+            MpDbLogActionType actionType = MpDbLogActionType.None;
             if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking) {
                 //only track objects providing a guid
-                MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);
+                actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject); 
+                if(actionType != MpDbLogActionType.None) {
+                    OnSyncableChange?.Invoke(this, dbObjectGuid);
+                }
             }
 
             int numberOfRowsAffected;
@@ -165,6 +172,11 @@ namespace MpWpfApp {
                         }
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
+                }
+                switch (actionType) {
+                    case MpDbLogActionType.Create:
+                        //OnItemAdded?.Invoke(this,)
+                        break;
                 }
                 return numberOfRowsAffected;
             }
@@ -704,13 +716,20 @@ namespace MpWpfApp {
             Dictionary<Guid, List<MonkeyPaste.MpDbLog>> changeLookup,
             DateTime newSyncDate,
             string remoteClientGuid) {
-            // process leaf tables first
-
-            var colorChanges = new List<MpColor>();
+            var relevantChanges = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
             foreach (var ckvp in changeLookup) {
                 if (ckvp.Value == null || ckvp.Value.Count == 0) {
                     continue;
                 }
+                var rlogs = MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value);
+                if (rlogs.Count > 0) {
+                    relevantChanges.Add(ckvp.Key, rlogs.OrderBy(x => x.LogActionDateTime).ToList());
+                }
+            }
+
+            // process leaf tables first
+            var colorChanges = new List<MpColor>();
+            foreach (var ckvp in relevantChanges) {
                 if (ckvp.Value[0].DbTableName == "MpColor") {
                     var color = new MpColor().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                     colorChanges.Add(color);
@@ -722,9 +741,6 @@ namespace MpWpfApp {
             //process tags
             var tagChanges = new List<MpTag>();
             foreach (var ckvp in changeLookup) {
-                if (ckvp.Value == null || ckvp.Value.Count == 0) {
-                    continue;
-                }
                 if (ckvp.Value[0].DbTableName == "MpTag") {
                     var tag = new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                     tagChanges.Add(tag);

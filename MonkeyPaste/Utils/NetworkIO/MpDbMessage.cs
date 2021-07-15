@@ -9,10 +9,11 @@ namespace MonkeyPaste {
 		public List<MpSerialzedSyncObjWithType> DbObjects { get; set; } = new List<MpSerialzedSyncObjWithType>();
 
 		public static MpDbMessage Parse(string message, MpIStringToSyncObjectTypeConverter converter) {
-			if(string.IsNullOrEmpty(message)) {
-				return null;
-            }
 			var dbMessage = new MpDbMessage();
+			if (string.IsNullOrEmpty(message)) {
+				return dbMessage;
+            }
+			
 			//split msg by parseToken then sub elements pass to jsonDbObject
 			//and and to to list
 			var dbObjects = message.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);

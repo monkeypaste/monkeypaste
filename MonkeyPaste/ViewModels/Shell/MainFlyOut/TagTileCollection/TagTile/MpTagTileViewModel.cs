@@ -11,8 +11,6 @@ namespace MonkeyPaste {
     public class MpTagTileViewModel : MpViewModelBase {
         #region Properties
 
-        //public MpClipCollectionViewModel ClipCollectionViewModel { get; set; }
-
         public MpTag Tag { get; set; }
 
         public bool IsSelected { get; set; } = false;
@@ -24,10 +22,18 @@ namespace MonkeyPaste {
                 }
                 return Tag.ClipList.Count;
             }
-        }
-               
+        }              
 
         public bool IsNameReadOnly { get; set; } = true;
+
+        public bool IsUserTag {
+            get {
+                if(Tag == null) {
+                    return false;
+                }
+                return Tag.Id > 4;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -37,10 +43,12 @@ namespace MonkeyPaste {
             PropertyChanged += MpTagViewModel_PropertyChanged;
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
             MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
+            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
             Tag = tag;
             //ClipCollectionViewModel = new MpClipCollectionViewModel(Tag.Id);
             Task.Run(Initialize);
-        }        
+        }
+
         #endregion
 
         #region Private Methods
@@ -79,6 +87,17 @@ namespace MonkeyPaste {
                 }
             });
         }
+        private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
+            Device.InvokeOnMainThreadAsync(async () => {
+                if (e is MpTag t) {
+                    if (t.Id == Tag.Id) {
+                        Tag.TagName = t.TagName;
+                        Tag.TagColor = t.TagColor;
+                        Tag.TagSortIdx = t.TagSortIdx;
+                    }
+                } 
+            });
+        }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
             Device.BeginInvokeOnMainThread(() => {
@@ -106,6 +125,11 @@ namespace MonkeyPaste {
         #region Commands
         public ICommand RenameTagCommand => new Command(() => {
             IsNameReadOnly = false;
+        });
+
+        public ICommand ChangeTagColorCommand => new Command(async () => {
+            MpConsole.WriteLine(@"Change color for tag " + Tag.TagName);
+            await Task.Delay(1);
         });
         #endregion
     }

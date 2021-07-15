@@ -8,11 +8,17 @@
         <SwipeView IsEnabled="{Binding IsSelected}">
             <SwipeView.LeftItems>
                 <SwipeItems>
-                    <SwipeItem BackgroundColor="LightBlue"                                             
+                    <SwipeItem BackgroundColor="LightBlue"       
+                               IsEnabled="{Binding IsUserTag}"                                      
                                Command="{Binding RenameTagCommand}"
                                IconImageSource="{StaticResource EditIcon}"
                                Text="Rename" />
+                    <SwipeItem BackgroundColor="LightGreen"
+                               Command="{Binding ChangeTagColorCommand}"
+                               IconImageSource="{StaticResource ColorIcon}"
+                               Text="Color" />
                     <SwipeItem BackgroundColor="LightPink"
+                               IsEnabled="{Binding IsUserTag}"
                                Command="{Binding BindingContext.DeleteTagCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                CommandParameter="{Binding .}"
                                IconImageSource="{StaticResource DeleteIcon}"

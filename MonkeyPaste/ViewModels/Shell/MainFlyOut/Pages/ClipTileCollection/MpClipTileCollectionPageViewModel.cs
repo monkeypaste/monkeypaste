@@ -52,8 +52,6 @@ namespace MonkeyPaste {
                     var ctvm = await CreateClipViewModel(c);
                     ClipViewModels.Add(ctvm);
                     ctvm.OnPropertyChanged(nameof(ctvm.IconImageSource));
-
-                    //MpSocketClient.Instance.SendMessage(c.ToString());
                 }
                 
                 ClipViewModels.CollectionChanged += ClipViewModels_CollectionChanged;

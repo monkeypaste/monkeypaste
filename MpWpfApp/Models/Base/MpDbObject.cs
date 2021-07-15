@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -10,6 +11,7 @@ namespace MpWpfApp {
         public Dictionary<string, object> columnData = new Dictionary<string, object>();
 
         public abstract void LoadDataRow(DataRow dr);
+                
 
         public int GetByteSize() {
             return 0;

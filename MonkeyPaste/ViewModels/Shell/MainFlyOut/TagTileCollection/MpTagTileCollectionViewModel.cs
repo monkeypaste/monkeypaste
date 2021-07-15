@@ -32,14 +32,20 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpTagTileCollectionViewModel() : base() {
             PropertyChanged += MpTagCollectionViewModel_PropertyChanged;
+
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
+            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
+
             Task.Run(Initialize);
         }
 
+        
+
         public MpTagTileViewModel CreateTagViewModel(MpTag tag) {
-            var tagViewModel = new MpTagTileViewModel(tag);
-            tagViewModel.PropertyChanged += TagViewModel_PropertyChanged;
-            return tagViewModel;
+            MpTagTileViewModel ttvm = new MpTagTileViewModel(tag);
+            ttvm.PropertyChanged += TagViewModel_PropertyChanged;
+            return ttvm;
         }
 
         public void ClearSelection() {
@@ -59,7 +65,6 @@ namespace MonkeyPaste {
             ClipCollectionViewModel = new MpClipTileCollectionPageViewModel();
             await Task.Delay(300);
             IsBusy = false;
-
             
             return;
         }
@@ -79,8 +84,35 @@ namespace MonkeyPaste {
 
         #region Event Handlers
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpClip) {
+            if (e is MpTag t) {
+                var ttvm = CreateTagViewModel(t);
+                TagViewModels.Add(ttvm);          
+            }
+        }
 
+        private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpTag t) {
+                var ttvmToRemove = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
+                if(ttvmToRemove != null) {
+                    //remove tag and update sort order
+                    TagViewModels.Remove(ttvmToRemove);
+                    int sortIdx = 0;
+                    foreach(var ttvm in TagViewModels.OrderBy(x=>x.Tag.TagSortIdx)) {
+                        ttvm.Tag.TagSortIdx = sortIdx++;
+                        Task.Run(async()=> await MpDb.Instance.UpdateItem<MpTag>(ttvm.Tag));
+                    }
+                }
+            }
+        }
+
+        private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpTag t) {
+                var ttvmToUpdate = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
+                if (ttvmToUpdate != null) {
+                    if(TagViewModels.IndexOf(ttvmToUpdate) != t.TagSortIdx) {
+                        TagViewModels.Move(TagViewModels.IndexOf(ttvmToUpdate), t.TagSortIdx);
+                    }
+                }
             }
         }
 
@@ -88,20 +120,6 @@ namespace MonkeyPaste {
             if (sender is MpTagTileViewModel ttvm) {
                 switch (e.PropertyName) {
                     case nameof(ttvm.IsSelected):
-                        //if (ttvm.IsSelected) {
-                        //    if (SelectedTagViewModel == ttvm) {
-                        //        //implies selection came from ui do nothing
-                        //    } else {
-                        //        if (SelectedTagViewModel != null) {
-                        //            SelectedTagViewModel.IsSelected = false;
-                        //        }
-                        //        SelectedTagViewModel = ttvm;
-                        //    }
-                        //} else {
-                        //    if (SelectedTagViewModel == ttvm) {
-                        //        SelectedTagViewModel = null;
-                        //    }
-                        //}
                         break;
                 }
                 await MpDb.Instance.UpdateItem<MpTag>(ttvm.Tag);
@@ -110,22 +128,27 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands       
-
-        public ICommand SelectTagCommand => new Command<object>(async (args) => {
-            //if (args != null && args is MpTagTileViewModel stivm && stivm != SelectedTagViewModel) {
-            //    if(SelectedTagViewModel != null) {
-            //        SelectedTagViewModel.IsSelected = false;
-            //    }
-            //    stivm.IsSelected = true;
-            //    SelectedTagViewModel = stivm;
-            //    await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
-            //} else if (args == null) {
-            //    ClearSelection();
-            //}
+        public ICommand AddTagCommand => new Command<object>(async (args) => {
+            var newTag = new MpTag() {
+                TagName = "Untitled",
+                TagColor = new MpColor(MpHelpers.Instance.GetRandomColor()),
+                TagSortIdx = TagViewModels.Count
+            };
+            await MpDb.Instance.AddItem<MpColor>(newTag.TagColor);
+            newTag.ColorId = newTag.TagColor.Id;
+            await MpDb.Instance.AddItem<MpTag>(newTag);
+            //delay to let DbItem_Added add tag to collection
+            await Task.Delay(300);
+            SelectedTagViewModel = TagViewModels[TagViewModels.Count - 1];
         });
 
         public ICommand DeleteTagCommand => new Command<object>(async (args) => {
-            MpConsole.WriteLine("Delete Tag" + (args as MpTagTileViewModel).Tag.TagName);
+            if(args != null && args is MpTagTileViewModel ttvm) {
+                if(TagViewModels.Contains(ttvm)) {
+                    TagViewModels.Remove(ttvm);
+                    await MpDb.Instance.DeleteItem<MpTag>(ttvm.Tag);                    
+                }
+            }
         });
         #endregion
     }

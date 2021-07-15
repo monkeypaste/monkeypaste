@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using System.IO;
 using Newtonsoft.Json;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace MonkeyPaste {
     public class MpDb : MpISync {
@@ -24,7 +25,7 @@ namespace MonkeyPaste {
 
         #region Private Variables
         private SQLiteAsyncConnection _connectionAsync;
-        //private SQLiteConnection _connectionAsync;
+        private SQLiteConnection _connection;
         #endregion
 
         #region Properties
@@ -38,17 +39,23 @@ namespace MonkeyPaste {
         public event EventHandler<MpDbModelBase> OnItemAdded;
         public event EventHandler<MpDbModelBase> OnItemUpdated;
         public event EventHandler<MpDbModelBase> OnItemDeleted;
+        public event EventHandler<object> OnSyncableChange;
         #endregion
 
         #region Public Methods
-        public async Task Init() {
+        public async Task Init(bool isWpf = false) {
             if (_connectionAsync != null) {
                 return;
             }
             InitUser(IdentityToken);
             InitClient(AccessToken);
 
-            await CreateConnectionAsync();
+            if(isWpf) {
+                //CreateConnection();
+            } else {
+                await CreateConnectionAsync();
+            }
+            
             IsLoaded = true;
         }
 
@@ -94,9 +101,8 @@ namespace MonkeyPaste {
                     (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
                 }
                 MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
-            }
-            
-
+                OnSyncableChange?.Invoke(this, item);
+            }            
             await _connectionAsync.InsertAsync(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
@@ -107,6 +113,7 @@ namespace MonkeyPaste {
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory && !ignoreTracking) {                
                 MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
+                OnSyncableChange?.Invoke(this, item);
             }           
 
             await _connectionAsync.UpdateAsync(item);
@@ -115,29 +122,32 @@ namespace MonkeyPaste {
 
         public async Task AddOrUpdate<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
-            if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
+            if ((item as MpDbModelBase).Id == 0 || 
+                string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
                 await AddItem(item,ignoreTracking, sourceClientGuid);
             } else {
                 await UpdateItem(item,ignoreTracking, sourceClientGuid);
             }
         }
 
-        
-
-        public async Task DeleteItem<T>(T item, string sourceClientGuid = "") where T: new() {
+        public async Task DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false) where T: new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid); ;
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory && !ignoreTracking) {
+                MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+                OnSyncableChange?.Invoke(this, item);
+            }            
 
             await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
         }
-
         public async Task<object> GetObjDbRow(string tableName, string objGuid) {
             var dt = await QueryAsync(
-                "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
-            
+                tableName,
+                string.Format("select * from {0} where {1}=?",tableName,tableName+"Guid"),
+                objGuid);
+
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
@@ -168,8 +178,7 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        #region Private Methods       
-
+        #region Private Methods  
         private async Task CreateConnectionAsync() {
             if (_connectionAsync != null) {
                 return;
@@ -180,7 +189,6 @@ namespace MonkeyPaste {
             File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
-
 
             var connStr = new SQLiteConnectionString(
                 databasePath: dbPath,//MpPreferences.Instance.DbPath, 
@@ -355,13 +363,20 @@ namespace MonkeyPaste {
             Dictionary<Guid, List<MpDbLog>> changeLookup,
             DateTime newSyncDate,
             string remoteClientGuid) {
-            // process leaf tables first
 
-            var colorChanges = new List<MpColor>();
-            foreach(var ckvp in changeLookup) {
-                if(ckvp.Value == null || ckvp.Value.Count == 0) {
+            var relevantChanges = new Dictionary<Guid,List<MpDbLog>>();
+            foreach (var ckvp in changeLookup) {
+                if (ckvp.Value == null || ckvp.Value.Count == 0) {
                     continue;
                 }
+                var rlogs = await MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value);
+                if (rlogs.Count > 0) {
+                    relevantChanges.Add(ckvp.Key, rlogs.OrderBy(x => x.LogActionDateTime).ToList());
+                }
+            }
+            // process leaf tables first
+            var colorChanges = new List<MpColor>();
+            foreach(var ckvp in relevantChanges) {
                 if(ckvp.Value[0].DbTableName == "MpColor") {
                     var color = await new MpColor().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value,remoteClientGuid);
                     colorChanges.Add(color);
@@ -372,10 +387,7 @@ namespace MonkeyPaste {
 
             //process tags
             var tagChanges = new List<MpTag>();
-            foreach (var ckvp in changeLookup) {
-                if (ckvp.Value == null || ckvp.Value.Count == 0) {
-                    continue;
-                }
+            foreach (var ckvp in relevantChanges) {
                 if (ckvp.Value[0].DbTableName == "MpTag") {
                     var tag = await new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                     tagChanges.Add(tag);

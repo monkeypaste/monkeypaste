@@ -155,7 +155,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isAppPaused = false;
+        private bool _isAppPaused = true;
         public bool IsAppPaused {
             get {
                 return _isAppPaused;

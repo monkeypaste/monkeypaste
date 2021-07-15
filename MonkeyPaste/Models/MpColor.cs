@@ -10,6 +10,7 @@ using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
+    [Table("MpColor")]
     public class MpColor : MpDbModelBase, MpISyncableDbObject {                       
         public int R { get; set; }
         public int G { get; set; }
@@ -79,6 +80,15 @@ namespace MonkeyPaste {
             return null;
         }
 
+        public static async Task<MpColor> GetColorByGuid(string colorGuid) {
+            var allColors = await MpDb.Instance.GetItems<MpColor>();
+            var udbpl = allColors.Where(x => x.ColorGuid.ToString() == colorGuid).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
         public static async Task<List<MpColor>> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
@@ -115,15 +125,15 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public async Task<MpColor> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<MpColor> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {            
             var cdr = await MpDb.Instance.GetObjDbRow("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
                 newColor = new MpColor();
-            } else {
+            } else {                
                 newColor = cdr as MpColor;
             }
-            foreach (var li in logs) {
+            foreach (var li in rlogs) {
                 switch (li.AffectedColumnName) {
                     case "MpColorGuid":
                         newColor.ColorGuid = System.Guid.Parse(li.AffectedColumnValue);

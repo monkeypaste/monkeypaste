@@ -77,6 +77,42 @@ namespace MonkeyPaste {
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
+        public static async Task<List<MpDbLog>> GetDbLogsByGuid(string dboGuid,DateTime fromDateUtc) {
+            var dboLogs = new List<MpDbLog>();
+
+            var allLogs = await MpDb.Instance.GetItems<MpDbLog>();
+            return allLogs
+                    .Where(x => x.DbObjectGuid.ToString() == dboGuid && x.LogActionDateTime > fromDateUtc)
+                    .ToList();
+        }
+
+        public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs (string dboGuid, List<MpDbLog> rlogs) {
+            //this is an update so cross check local log and only apply updates more recent
+            //than what is local
+
+            //sort logs by transaction date time so most recent changes applied last
+            rlogs = rlogs.OrderBy(x => x.LogActionDateTime).ToList();
+            var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
+            var rlogsToRemove = new List<MpDbLog>();
+            //query local db and get logs for item since oldest remote transaction datetime
+            var llogs = await MpDbLog.GetDbLogsByGuid(dboGuid, remoteLogsMinDt);
+            foreach (var rlog in rlogs) {
+                foreach (var llog in llogs) {
+                    if (rlog.AffectedColumnName == llog.AffectedColumnName &&
+                       rlog.LogActionDateTime < llog.LogActionDateTime) {
+                        rlogsToRemove.Add(rlog);
+                        //break so rlog entries are not duplicated
+                        break;
+                    }
+                }
+            }
+            //remove outdated remote changes
+            foreach (var rlogToRemove in rlogsToRemove) {
+                rlogs.Remove(rlogToRemove);
+            }
+            return rlogs;
+        }
+
         public async Task<object> DeserializeDbObject(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
 

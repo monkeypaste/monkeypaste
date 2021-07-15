@@ -184,6 +184,7 @@
     <Compile Include="Utils\FlowDocuments\MpFlowDocumentHelpers.cs" />
     <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
     <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
+    <Compile Include="Utils\MpDbFilePath_Wpf.cs" />
     <Compile Include="Utils\MpDbLogTracker.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\MpBrowserUrlDetector.cs" />

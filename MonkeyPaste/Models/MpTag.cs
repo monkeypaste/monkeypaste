@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using FFImageLoading.Helpers.Exif;
 
 namespace MonkeyPaste {
+    [Table("MpTag")]
     public class MpTag : MpDbModelBase, MpISyncableDbObject {
         public const int RecentTagId = 1;
         public const int AllTagId = 2;
@@ -48,18 +49,37 @@ namespace MonkeyPaste {
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
 
-        [Ignore]
-        public string ColorGuid {
-            set {
 
+        private MpColor _tagColor;
+        [Ignore]
+        public MpColor TagColor { 
+            get {
+                if(_tagColor == null && ColorId > 0) {
+                    _tagColor = MpColor.GetColorById(ColorId).Result;
+                } else if(_tagColor != null && _tagColor.Id != ColorId) {
+                    if(ColorId == 0) {
+                        ColorId = _tagColor.Id;
+                    } else {
+                        _tagColor = MpColor.GetColorById(ColorId).Result;
+                    }
+                }
+                return _tagColor;
+            }
+            set {
+                if(_tagColor != value) {
+                    _tagColor = value;
+                    if(_tagColor != null) {
+                        ColorId = _tagColor.Id;
+                    } else {
+                        ColorId = 0;
+                    }
+                }
             }
         }
 
-        [ManyToOne]
-        public MpColor TagColor { get; set; }
-
         public string TagName { get; set; } = "Untitled";
 
+        [Ignore]
         [ManyToMany(typeof(MpClip))]
         public List<MpClip> ClipList { get; set; }
 
@@ -146,7 +166,8 @@ namespace MonkeyPaste {
                         newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
                         break;
                     case "fk_MpColorId":
-                        var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
+                        //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
+                        var color = await MpColor.GetColorByGuid(li.AffectedColumnValue);
                         newTag.ColorId = (color as MpColor).Id;
                         break;
                     default:

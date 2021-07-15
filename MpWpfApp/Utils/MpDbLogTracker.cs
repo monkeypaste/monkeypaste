@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpDbLogTracker {
-        public static bool TrackDbWrite(string query, Dictionary<string,object> args, string objGuid, string clientGuid, object obj) {
+        public static MonkeyPaste.MpDbLogActionType TrackDbWrite(string query, Dictionary<string,object> args, string objGuid, string clientGuid, object obj) {
             if(string.IsNullOrEmpty(objGuid)) {
                 throw new Exception(@"DbLog object guid cannot be null");
             }
@@ -48,16 +48,16 @@ namespace MpWpfApp {
                 alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
                 if(alteredColumnNameValueLookUp.Count == 0) {
                     //since no data is altered return false to not write to db or change log
-                    return false;
+                    return MonkeyPaste.MpDbLogActionType.None;
                 }
                 foreach (var kvp in alteredColumnNameValueLookUp) {
-                    new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
+                    new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase(clie);
                 }
             } else {
-                new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
+                new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase(clientGuid);
             }
 
-            return true;
+            return actionType;
         }
 
         
