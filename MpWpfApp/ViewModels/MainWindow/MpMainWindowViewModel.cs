@@ -268,6 +268,7 @@ namespace MpWpfApp {
             }
         }
 
+
         public Visibility AppVisibility {
             get {
                 return ProcessingVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
@@ -277,10 +278,6 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
-            //Task.Run(() => {
-            //    MonkeyPaste.MpSyncManager.Instance.Init();
-            //});
-
 
             MpMainWindowViewModel.IsApplicationLoading = true;
 

@@ -265,7 +265,7 @@ namespace MpWpfApp {
                         throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                 }
             }
-            newTag.WriteToDatabase(fromClientGuid);
+            //newTag.WriteToDatabase(fromClientGuid);
             return newTag;
         }
 

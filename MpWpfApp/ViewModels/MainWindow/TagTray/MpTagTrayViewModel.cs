@@ -129,7 +129,45 @@ namespace MpWpfApp {
             foreach (MpTag t in allTags) {
                 this.Add(new MpTagTileViewModel(t));
             }
+
+            MpDb.Instance.OnSyncCreate += Db_OnSyncCreate;
+            MpDb.Instance.OnSyncUpdate += Db_OnSyncUpdate;
+            MpDb.Instance.OnSyncDelete += Db_OnSyncDelete;
         }
+
+        private void Db_OnSyncDelete(object sender, object e) {
+            if (e == null) {
+                return;
+            }
+            if (e is MpTag t) {
+                var ttvm = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
+                if(ttvm != null) {
+                    this.Remove(ttvm);
+                }
+            }
+        }
+
+        private void Db_OnSyncUpdate(object sender, object e) {
+            if (e == null) {
+                return;
+            }
+            if (e is MpTag t) {
+                var ttvm = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
+                if (ttvm != null) {
+                    ttvm.Tag = t;
+                }
+            }
+        }
+
+        private void Db_OnSyncCreate(object sender, object e) {
+            if(e == null) {
+                return;
+            }
+            if(e is MpTag t) {
+                Add(new MpTagTileViewModel(t));
+            }            
+        }
+
         public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
             CollectionChanged += (s, e) => {
                 UpdateSortOrder();

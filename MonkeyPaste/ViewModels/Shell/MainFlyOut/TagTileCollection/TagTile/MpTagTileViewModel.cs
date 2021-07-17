@@ -91,9 +91,7 @@ namespace MonkeyPaste {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpTag t) {
                     if (t.Id == Tag.Id) {
-                        Tag.TagName = t.TagName;
-                        Tag.TagColor = t.TagColor;
-                        Tag.TagSortIdx = t.TagSortIdx;
+                        Tag = t;
                     }
                 } 
             });

@@ -205,7 +205,7 @@ namespace MpWpfApp {
                         { "@a", A },
                         { "@cid", ColorId }
                     }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking);
-                var c = _AllColorList.Where(x => x.ColorId == ColorId).FirstOrDefault();
+                var c = GetAllColors().Where(x => x.ColorId == ColorId).FirstOrDefault();
                 if (c != null) {
                     _AllColorList[_AllColorList.IndexOf(c)] = this;
                 }

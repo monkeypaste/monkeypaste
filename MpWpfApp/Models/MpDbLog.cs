@@ -52,14 +52,30 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static List<MpDbLog> GetDbLogsByGuid(string dboGuid, DateTime fromDateUtc) {
+        public static List<MonkeyPaste.MpDbLog> GetDbLogsByGuid(string dboGuid, DateTime fromDateUtc) {
             if (_AllDbLogList == null) {
                 GetAllDbLogs();
             }
-            return _AllDbLogList
+            var wpfLogs = _AllDbLogList
                     .Where(x => x.DbObjectGuid.ToString() == dboGuid && x.LogActionDateTime > fromDateUtc)
                     .ToList();
+
+            var logs = new List<MonkeyPaste.MpDbLog>();
+            foreach(var wpfl in wpfLogs) {
+                var l = new MonkeyPaste.MpDbLog() {
+                    ObjectGuid = wpfl.DbObjectGuid.ToString(),
+                    DbTableName = wpfl.DbTableName,
+                    ActionType = (int)wpfl.LogActionType,
+                    LogActionDateTime = wpfl.LogActionDateTime,
+                    SourceClientGuid = wpfl.SourceClientGuid,
+                    AffectedColumnName = wpfl.AffectedColumnName,
+                    AffectedColumnValue = wpfl.AffectedColumnValue
+                };
+                logs.Add(l);
+            }
+            return logs;
         }
+
         public static List<MonkeyPaste.MpDbLog> FilterOutdatedRemoteLogs(string dboGuid, List<MonkeyPaste.MpDbLog> rlogs) {
             //this is an update so cross check local log and only apply updates more recent
             //than what is local

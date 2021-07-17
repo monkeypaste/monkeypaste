@@ -13,8 +13,6 @@ namespace MonkeyPaste {
         HandshakeResponse,
         DbLogRequest,
         DbLogResponse,
-        //DbObjectRequest,
-        //DbObjectResponse,
         FlipRequest, //swap A & B and return to RequestLog
         //FlipResponse,
         DisconnectRequest,
@@ -96,7 +94,7 @@ namespace MonkeyPaste {
     }
 
     public class MpStreamMessage : MpISyncableDbObject {
-        public const string HeaderContentParseToken = @"#^$*&";
+        public const string HeaderContentParseToken = @"#^$*@";
         public const string EofToken = @"<EOF>";
 
         public MpStreamHeader Header { get; set; }

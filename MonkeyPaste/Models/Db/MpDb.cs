@@ -113,7 +113,7 @@ namespace MonkeyPaste {
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory && !ignoreTracking) {                
                 MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
-                OnSyncableChange?.Invoke(this, item);
+                OnSyncableChange?.Invoke(this, (item as  MpDbModelBase).Guid);
             }           
 
             await _connectionAsync.UpdateAsync(item);
@@ -316,6 +316,11 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetExternalIp4Address();
         }
 
+        public async Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
+            var logs = await MpDbLog.GetDbLogsByGuid(dboGuid, fromDtUtc);
+            return logs;
+        }
+
         public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             var shl = await GetItems<MpSyncHistory>();
             var sh = shl.Where(x => x.OtherClientGuid.ToString() == otherDeviceGuid)
@@ -327,13 +332,19 @@ namespace MonkeyPaste {
             return DateTime.MinValue;
         }
 
-        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime) {
+        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
             var logItems = await MpDb.Instance.GetItems<MpDbLog>();
             var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime).ToList();
 
             var dbol = new List<MpISyncableDbObject>();
             foreach (var li in matchLogItems) {
+                if(li.SourceClientGuid.ToString() == ignoreGuid) {
+                    continue;
+                }
                 dbol.Add(li as MpISyncableDbObject);
+            }
+            if(dbol.Count == 0) {
+                return string.Empty;
             }
             var dbMsgStr = MpDbMessage.Create(dbol);
             return dbMsgStr;
@@ -386,15 +397,46 @@ namespace MonkeyPaste {
             }
 
             //process tags
+            var tagDeletes = new List<MpTag>();
             var tagChanges = new List<MpTag>();
             foreach (var ckvp in relevantChanges) {
                 if (ckvp.Value[0].DbTableName == "MpTag") {
+                    bool isDelete = false;
+                    foreach(var lv in ckvp.Value) {
+                        if(lv.LogActionType == MpDbLogActionType.Delete) {
+                            isDelete = true;
+                            break;
+                        }
+                    }
+                    if(isDelete) {
+                        var tagToRemove = await MpDb.Instance.GetObjDbRow(@"MpTag", ckvp.Key.ToString()) as MpTag;
+                        tagDeletes.Add(tagToRemove);
+                        continue;
+                    } 
                     var tag = await new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                     tagChanges.Add(tag);
                 } else {
                     continue;
                 }
-            }            
+            }
+
+            foreach(var tagToDelete in tagDeletes) {
+                await MpDb.Instance.DeleteItem<MpTag>(tagToDelete);
+            }
+            foreach(var tc in tagChanges) {
+                await MpDb.Instance.AddOrUpdate<MpTag>(tc);
+            }
+
+            var newSyncHistory = new MpSyncHistory() {
+                OtherClientGuid = System.Guid.Parse(remoteClientGuid),
+                SyncDateTime = newSyncDate
+            };
+
+            await MpDb.Instance.AddItem<MpSyncHistory>(newSyncHistory);
+        }
+
+        public object GetMainThreadObj() {
+            return Application.Current.MainPage;
         }
 
         public MpIStringToSyncObjectTypeConverter GetTypeConverter() {

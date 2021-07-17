@@ -11,15 +11,12 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(objGuid)) {
                 throw new Exception(@"DbLog object guid cannot be null");
             }
-            
-
-            var alteredColumnNameValueLookUp = new Dictionary<string, string>();
 
             Guid objectGuid = Guid.Parse(objGuid);
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(Properties.Settings.Default.ThisClientGuid) : Guid.Parse(clientGuid);
             string tableName = "UnknownTableName";
             var actionType = MonkeyPaste.MpDbLogActionType.None;
-            var actionDateTime = DateTime.Now;
+            var actionDateTime = DateTime.UtcNow;
            
             if(query.ToLower().StartsWith("insert")) {
                 actionType = MonkeyPaste.MpDbLogActionType.Create;
@@ -45,16 +42,16 @@ namespace MpWpfApp {
                     throw new Exception(@"DbLog object cannot be null for non-delete transactions");
                 }
                 var oldRow = MpDb.Instance.GetDbObjectByTableGuid(tableName, objGuid);
-                alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
+                var alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
                 if(alteredColumnNameValueLookUp.Count == 0) {
                     //since no data is altered return false to not write to db or change log
                     return MonkeyPaste.MpDbLogActionType.None;
                 }
                 foreach (var kvp in alteredColumnNameValueLookUp) {
-                    new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase(clie);
+                    new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
                 }
             } else {
-                new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase(clientGuid);
+                new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
             }
 
             return actionType;

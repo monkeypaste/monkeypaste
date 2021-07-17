@@ -154,7 +154,8 @@ namespace MonkeyPaste {
             } else {
                 newTag = cdr as MpTag;
             }
-            foreach (var li in logs) {
+
+            foreach (var li in logs.OrderBy(x => x.LogActionDateTime)) {
                 switch (li.AffectedColumnName) {
                     case "MpTagGuid":
                         newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
@@ -174,7 +175,7 @@ namespace MonkeyPaste {
                         throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                 }
             }
-            await MpDb.Instance.AddOrUpdate<MpTag>(newTag,fromClientGuid);
+            //await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
             return newTag;
         }
 

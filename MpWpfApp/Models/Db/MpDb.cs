@@ -11,11 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using System.Xml.Linq;
 using Microsoft.Win32;
 using MonkeyPaste;
 using Newtonsoft.Json;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MpWpfApp {
     public class MpDb : MonkeyPaste.MpISync {
@@ -34,6 +35,11 @@ namespace MpWpfApp {
         private bool _isLoaded = false;
 
         public event EventHandler<object> OnSyncableChange;
+
+
+        public event EventHandler<object> OnSyncCreate;
+        public event EventHandler<object> OnSyncUpdate;
+        public event EventHandler<object> OnSyncDelete;
 
         public bool IsLoaded {
             get {
@@ -156,10 +162,7 @@ namespace MpWpfApp {
             MpDbLogActionType actionType = MpDbLogActionType.None;
             if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking) {
                 //only track objects providing a guid
-                actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject); 
-                if(actionType != MpDbLogActionType.None) {
-                    OnSyncableChange?.Invoke(this, dbObjectGuid);
-                }
+                actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);                 
             }
 
             int numberOfRowsAffected;
@@ -173,10 +176,8 @@ namespace MpWpfApp {
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
-                switch (actionType) {
-                    case MpDbLogActionType.Create:
-                        //OnItemAdded?.Invoke(this,)
-                        break;
+                if (actionType != MpDbLogActionType.None) {
+                    OnSyncableChange?.Invoke(this, dbObjectGuid);
                 }
                 return numberOfRowsAffected;
             }
@@ -672,6 +673,12 @@ namespace MpWpfApp {
             return MpHelpers.Instance.GetExternalIp4Address();
         }
 
+        public async Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
+            var logs = MpDbLog.GetDbLogsByGuid(dboGuid, fromDtUtc);
+            await Task.Delay(1);
+            return logs;
+        }
+
         public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             await Task.Delay(0);
             var sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
@@ -681,10 +688,13 @@ namespace MpWpfApp {
             return DateTime.MinValue;
         }
 
-        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime) {
+        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
             var logItems = MpDbLog.GetAllDbLogs().Where(x => x.LogActionDateTime > fromDateTime).ToList();
             var dbol = new List<MpISyncableDbObject>();
             foreach (var li in logItems) {
+                if (li.SourceClientGuid.ToString() == ignoreGuid) {
+                    continue;
+                }
                 dbol.Add(li as MpISyncableDbObject);
             }
             var dbMsgStr = MpDbMessage.Create(dbol);
@@ -739,16 +749,67 @@ namespace MpWpfApp {
             }
 
             //process tags
+            var tagDeletes = new List<MpTag>();
             var tagChanges = new List<MpTag>();
+            var tagCreates = new List<MpTag>();
             foreach (var ckvp in changeLookup) {
                 if (ckvp.Value[0].DbTableName == "MpTag") {
+                    bool isDelete = false;
+                    foreach (var lv in ckvp.Value) {
+                        if (lv.LogActionType == MpDbLogActionType.Delete) {
+                            isDelete = true;
+                            break;
+                        }
+                    }
+                    if (isDelete) {
+                        var tagToRemove = new MpTag(MpDb.Instance.GetDbObjectByTableGuid(@"MpTag", ckvp.Key.ToString()));
+                        tagDeletes.Add(tagToRemove);
+                        continue;
+                    }
+                    bool isAdd = false;
+                    foreach (var lv in ckvp.Value) {
+                        if (lv.LogActionType == MpDbLogActionType.Create) {
+                            isAdd = true;
+                            break;
+                        }
+                    }
                     var tag = new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
-                    tagChanges.Add(tag);
+                    if(isAdd) {
+                        tagCreates.Add(tag);
+                    } else {
+                        tagChanges.Add(tag);
+                    }
+                    
                 } else {
                     continue;
                 }
             }
+
+            foreach(var td in tagDeletes) {
+                td.DeleteFromDatabase(remoteClientGuid);
+                OnSyncDelete?.Invoke(this, td);
+            }
+
+            foreach (var tu in tagChanges) {
+                tu.WriteToDatabase(remoteClientGuid);
+                OnSyncUpdate?.Invoke(this, tu);
+            }
+
+            foreach (var tc in tagCreates) {
+                tc.WriteToDatabase(remoteClientGuid);
+                OnSyncCreate?.Invoke(this, tc);
+            }
+
+            var newSyncHistory = new MpSyncHistory() {
+                OtherClientGuid = System.Guid.Parse(remoteClientGuid),
+                SyncDateTime = newSyncDate
+            };
+            newSyncHistory.WriteToDatabase();
             await Task.Delay(1);
+        }
+
+        public object GetMainThreadObj() {
+            return Application.Current.MainWindow;
         }
 
         public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
