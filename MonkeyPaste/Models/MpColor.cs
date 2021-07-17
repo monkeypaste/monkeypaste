@@ -60,6 +60,20 @@ namespace MonkeyPaste {
             }
         }
         public MpColor() { }
+        
+        public MpColor(int colorId) {
+            Task.Run(async () => {
+                var cl = await MpDb.Instance.GetItems<MpColor>();
+                var c = cl.Where(x => x.Id == colorId).FirstOrDefault();
+                if(c != null) {
+                    Id = c.Id;
+                    R = c.R;
+                    G = c.G;
+                    B = c.B;
+                    A = c.A;
+                }
+            });
+        }
 
         public MpColor(double r, double g, double b, double a) : this() {
             R = (int)(r * 255);
@@ -125,7 +139,7 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public async Task<MpColor> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {            
+        public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {            
             var cdr = await MpDb.Instance.GetObjDbRow("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
@@ -188,7 +202,8 @@ namespace MonkeyPaste {
             return typeof(MpColor);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
             MpColor other = null;
             if (drOrModel == null) {
                 //this occurs when this model is being added

@@ -45,7 +45,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <BoxView Margin="30,20,10,20"
-                             BackgroundColor="{Binding Tag.TagColor.Color}"
+                             BackgroundColor="{Binding TagColor}"
                              HeightRequest="25"
                              HorizontalOptions="Center"
                              VerticalOptions="Center"
@@ -56,7 +56,7 @@
                            FontSize="Micro"
                            HorizontalOptions="Center"
                            Text="{Binding ClipCount}"
-                           TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                           TextColor="{Binding TagColor, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
                            VerticalOptions="Center" />
                 </Grid>
                 <Entry x:Name="TagNameEntry"

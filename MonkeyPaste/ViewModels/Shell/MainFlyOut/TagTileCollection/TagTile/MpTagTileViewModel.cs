@@ -26,6 +26,8 @@ namespace MonkeyPaste {
 
         public bool IsNameReadOnly { get; set; } = true;
 
+        public Color TagColor { get; set; }
+
         public bool IsUserTag {
             get {
                 if(Tag == null) {
@@ -34,6 +36,7 @@ namespace MonkeyPaste {
                 return Tag.Id > 4;
             }
         }
+
         #endregion
 
         #region Public Methods
@@ -54,15 +57,27 @@ namespace MonkeyPaste {
         #region Private Methods
         private async Task Initialize() {
             Tag.ClipList = await MpClip.GetAllClipsByTagId(Tag.Id);
-            Tag.TagColor = await MpColor.GetColorById(Tag.ColorId);
+            //var c = await MpColor.GetColorById(Tag.ColorId);
+            //Tag.TagColor = c.ColorBrush;
+            //Tag.OnPropertyChanged(nameof(Tag.TagColor));
+            Tag = Tag;
         }
 
         #region Event Handlers
         private void MpTagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(IsSelected):
-                    break;
-            }
+            Task.Run(async () => {
+                switch (e.PropertyName) {
+                    case nameof(Tag):
+                        var c = await MpColor.GetColorById(Tag.ColorId);
+                        TagColor = c.Color;
+                        break;
+                    case nameof(TagColor):
+
+                        break;
+                    case nameof(IsSelected):
+                        break;
+                }
+            });
         }
 
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {

@@ -86,10 +86,9 @@ namespace MonkeyPaste {
                     .ToList();
         }
 
-        public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs (string dboGuid, List<MpDbLog> rlogs) {
+        public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs (string dboGuid, List<MpDbLog> rlogs, DateTime lastSyncDt) {
             //this is an update so cross check local log and only apply updates more recent
-            //than what is local
-
+            //than what is local            
             //sort logs by transaction date time so most recent changes applied last
             rlogs = rlogs.OrderBy(x => x.LogActionDateTime).ToList();
             var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
@@ -97,12 +96,16 @@ namespace MonkeyPaste {
             //query local db and get logs for item since oldest remote transaction datetime
             var llogs = await MpDbLog.GetDbLogsByGuid(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
-                foreach (var llog in llogs) {
-                    if (rlog.AffectedColumnName == llog.AffectedColumnName &&
-                       rlog.LogActionDateTime < llog.LogActionDateTime) {
-                        rlogsToRemove.Add(rlog);
-                        //break so rlog entries are not duplicated
-                        break;
+                if(rlog.LogActionDateTime < lastSyncDt) {
+                    rlogsToRemove.Add(rlog);
+                } else {
+                    foreach (var llog in llogs) {
+                        if (rlog.AffectedColumnName == llog.AffectedColumnName &&
+                           rlog.LogActionDateTime < llog.LogActionDateTime) {
+                            rlogsToRemove.Add(rlog);
+                            //break so rlog entries are not duplicated
+                            break;
+                        }
                     }
                 }
             }
@@ -146,7 +149,7 @@ namespace MonkeyPaste {
             return typeof(MpDbLog);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 
@@ -175,6 +178,10 @@ namespace MonkeyPaste {
                 outStr += prop.Name + ": " + prop.GetValue(this) + ", ";
             }
             return outStr;
+        }
+
+        public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
+            throw new NotImplementedException();
         }
     }
 }

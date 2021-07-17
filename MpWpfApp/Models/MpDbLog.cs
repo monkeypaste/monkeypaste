@@ -76,7 +76,7 @@ namespace MpWpfApp {
             return logs;
         }
 
-        public static List<MonkeyPaste.MpDbLog> FilterOutdatedRemoteLogs(string dboGuid, List<MonkeyPaste.MpDbLog> rlogs) {
+        public static List<MonkeyPaste.MpDbLog> FilterOutdatedRemoteLogs(string dboGuid, List<MonkeyPaste.MpDbLog> rlogs, DateTime lastSyncDt) {
             //this is an update so cross check local log and only apply updates more recent
             //than what is local
 
@@ -87,12 +87,16 @@ namespace MpWpfApp {
             //query local db and get logs for item since oldest remote transaction datetime
             var llogs = MpDbLog.GetDbLogsByGuid(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
-                foreach (var llog in llogs) {
-                    if (rlog.AffectedColumnName == llog.AffectedColumnName &&
-                       rlog.LogActionDateTime < llog.LogActionDateTime) {
-                        rlogsToRemove.Add(rlog);
-                        //break so rlog entries are not duplicated
-                        break;
+                if(rlog.LogActionDateTime < lastSyncDt) {
+                    rlogsToRemove.Add(rlog);
+                } else {
+                    foreach (var llog in llogs) {
+                        if (rlog.AffectedColumnName == llog.AffectedColumnName &&
+                           rlog.LogActionDateTime < llog.LogActionDateTime) {
+                            rlogsToRemove.Add(rlog);
+                            //break so rlog entries are not duplicated
+                            break;
+                        }
                     }
                 }
             }
@@ -241,7 +245,11 @@ namespace MpWpfApp {
             return typeof(MpDbLog);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            throw new NotImplementedException();
+        }
+
+        public Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
     }

@@ -79,18 +79,20 @@ namespace MonkeyPaste {
                         //    var handshakeResponse = await ReceiveWebSocketAsync(cws);
                             
                         //}
+                        if(_localSync.IsWpf()) {
+                            await SessionManager.DisconnectAll();
+                        }
                         // check-in w/ webserver and add non-local endpoints
                         var webResponse = await SessionManager.Connect(ThisEndpoint);
                         foreach (var rep in webResponse) {
                             if(rep.DeviceGuid == ThisEndpoint.DeviceGuid) {
                                 continue;
                             }
-                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.DeviceGuid);
                             var rs = ConnectSocket(rep.PrivateIp4Address, rep.PrivateConnectPortNum);
                             if(rs != null && listener == null) {
                                 listener = rs;
                             }
-                            _remoteDevices.Add(new MpRemoteDevice(rs, rep, lastSyncDt));
+                            _remoteDevices.Add(new MpRemoteDevice(rs, rep));
                         }
                     } else {
                         // no internet so scan local network
@@ -148,13 +150,12 @@ namespace MonkeyPaste {
 
                                         var rep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
                                         if (rep == null) {
-                                            _remoteDevices.Add(new MpRemoteDevice(client, oep, newSyncDt));
+                                            _remoteDevices.Add(new MpRemoteDevice(client, oep));
                                         } else {
                                             var repIdx = _remoteDevices.IndexOf(rep);
                                             if (repIdx < 0) {
                                                 throw new Exception("Unknown remote endpoint");
                                             }
-                                            _remoteDevices[repIdx].LastSyncDateTimeUtc = newSyncDt;
                                         }
                                     }
                                     var cep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
@@ -215,7 +216,6 @@ namespace MonkeyPaste {
                                                 remoteChangesLookup,
                                                 newSyncDt,
                                                 lep.DeviceGuid);
-                                    _remoteDevices[0].LastSyncDateTimeUtc = newSyncDt;
                                 }
                                 listener.Close();
                                 listener = null;
@@ -229,20 +229,16 @@ namespace MonkeyPaste {
             });
         }
 
-        private void UpdateRemoteDeviceLog(string rdguid, DateTime newSyncDtUtc) {
-            var rep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == rdguid).FirstOrDefault();
-            var repIdx = _remoteDevices.IndexOf(rep);
-            if (repIdx < 0) {
-                throw new Exception("Unknown remote endpoint");
-            }
-            _remoteDevices[repIdx].LastSyncDateTimeUtc = newSyncDtUtc;
-        }
-
         private void LocalSync_OnSyncableChange(object sender, object e) {
             Task.Run(async () => {
                 if (e is string dboGuid) {
+                    var llogs = await _localSync.GetDbObjectLogs(dboGuid, DateTime.MinValue);
+                    if(llogs.Count == 0) {
+                        return;
+                    }
                     foreach (var rep in _remoteDevices) {
-                        var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(rep.LastSyncDateTimeUtc,rep.RemoteEndpoint.DeviceGuid);
+                        var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
+                        var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncDt,rep.RemoteEndpoint.DeviceGuid);
                         if(!string.IsNullOrEmpty(dbLogQueryResultStr)) {
                             var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, rep.RemoteEndpoint.DeviceGuid, dbLogQueryResultStr);
                             SendSocket(rep.RemoteSocket, thisdbLogResponse);
@@ -316,8 +312,9 @@ namespace MonkeyPaste {
             } else {
                 response = response.Replace(MpStreamMessage.EofToken, string.Empty);
             }
-            MpConsole.WriteLine(@"Received: " + response);
-            return MpStreamMessage.Parse(response);
+            var smsg = MpStreamMessage.Parse(response);
+            MpConsole.WriteLine(@"Received {0}: " + response, Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType));
+            return smsg;
         }
 
         private string ReceiveAllSocket(Socket socket) {

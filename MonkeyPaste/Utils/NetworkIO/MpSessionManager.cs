@@ -66,6 +66,25 @@ namespace MonkeyPaste {
             Disconnect();
         }
 
+        public async Task DisconnectAll() {
+            var uri = new Uri(
+                    string.Format(@"https://www.monkeypaste.com/api/clear.php?email={0}",
+                    @"test@test.com"
+                    ));
+            try {
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode) {
+                    var result = await response.Content.ReadAsStringAsync();
+                    MpConsole.WriteLine(@"Cleared all sessions");
+                } else {
+                    MpConsole.WriteTraceLine(@"Failed to clear all sessions");
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(@"Exception clearing all sessions: " + ex);
+            }
+        }
+
         public async Task<List<MpDeviceEndpoint>> Connect(MpDeviceEndpoint cep) {
             var uri = new Uri(
                     string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privip={3}&port={4}&at={5}&dguid={6}",

@@ -9,7 +9,7 @@ namespace MonkeyPaste {
                 throw new Exception(@"typeString is null or empty");
             }
             if (!typeString.Contains(".")) {
-                throw new Exception(@"typeString must be namespace qualified");
+                typeString = "MonkeyPaste." + typeString;
             }
             if (!typeString.ToLower().StartsWith(@"mpwpfapp") &&
                !typeString.ToLower().StartsWith(@"monkeypaste")) {

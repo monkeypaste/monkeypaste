@@ -166,7 +166,7 @@ namespace MpWpfApp {
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
 
-        public override void WriteToDatabase(string sourceClientGuid, bool isFirstLoad = false) {
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false,bool ignoreSyncing = false) {
             if (TagGuid == Guid.Empty) {
                 TagGuid = Guid.NewGuid();
             }
@@ -192,7 +192,7 @@ namespace MpWpfApp {
                         { "@tn", TagName },
                         { "@cid", ColorId },
                         { "@si", TagSortIdx }
-                    }, TagGuid.ToString(),sourceClientGuid,this,isFirstLoad);
+                    }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
             } else {
                 TagColor.WriteToDatabase();
@@ -205,21 +205,21 @@ namespace MpWpfApp {
                         { "@cid", ColorId },
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
-                    }, TagGuid.ToString(),sourceClientGuid,this,isFirstLoad);
+                    }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
             }
         }
         public override void WriteToDatabase() {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
         }
-        public void WriteToDatabase(bool isFirstLoad) {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid,isFirstLoad);
+        public void WriteToDatabase(bool ignoreTracking,bool ignoreSyncing) {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid,ignoreTracking,ignoreSyncing);
         }
-        public override void DeleteFromDatabase(string sourceClientGuid) {
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             MpDb.Instance.ExecuteWrite(
                 "delete from MpTag where pk_MpTagId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", TagId }
-                }, TagGuid.ToString());
+                }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
 
             var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where where fk_MpTagId=@tid", new Dictionary<string, object> { { "@tid", TagId } });
             if (dt != null && dt.Rows.Count > 0) {
@@ -229,7 +229,7 @@ namespace MpWpfApp {
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(),sourceClientGuid,ignoreTracking,ignoreSyncing);
                 }
             }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
@@ -238,7 +238,8 @@ namespace MpWpfApp {
             DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
         }
 
-        public MpTag CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
             var tdr = MpDb.Instance.GetDbObjectByTableGuid("MpTag", tagGuid);
             MpTag newTag = null;
             if (tdr == null) {
@@ -262,7 +263,8 @@ namespace MpWpfApp {
                         newTag.ColorId = new MpColor(cdr).ColorId;
                         break;
                     default:
-                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
                 }
             }
             //newTag.WriteToDatabase(fromClientGuid);
@@ -295,7 +297,8 @@ namespace MpWpfApp {
             return typeof(MpTag);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
             MpTag other = null;
             if(drOrModel is DataRow) {
                 other = new MpTag(drOrModel as DataRow);

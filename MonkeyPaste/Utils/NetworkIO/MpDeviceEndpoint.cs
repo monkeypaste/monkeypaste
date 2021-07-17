@@ -131,7 +131,11 @@ namespace MonkeyPaste {
             return ep;
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            throw new NotImplementedException();
+        }
+
+        public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
         #endregion

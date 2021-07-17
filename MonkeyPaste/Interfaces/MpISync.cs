@@ -32,6 +32,8 @@ namespace MonkeyPaste {
 
         string GetDbFileAsBase64();
 
+        
+
         event EventHandler<object> OnSyncableChange;
     }
 }

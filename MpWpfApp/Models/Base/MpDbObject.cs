@@ -27,9 +27,9 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
-        public virtual void WriteToDatabase(string sourceClientGuid,bool ignoreTracking = false) { }
+        public virtual void WriteToDatabase(string sourceClientGuid,bool ignoreTracking = false,bool ignoreSyncing = false) { }
 
-        public virtual void DeleteFromDatabase(string sourceClientGuid) { }
+        public virtual void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) { }
         
         protected Dictionary<string, string> CheckValue(
             object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {

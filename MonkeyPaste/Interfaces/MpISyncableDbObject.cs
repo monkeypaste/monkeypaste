@@ -9,8 +9,7 @@ namespace MonkeyPaste {
         string SerializeDbObject();
         Type GetDbObjectType();
 
-        Dictionary<string, string> DbDiff(object drOrModel);
-        // TODO Add the following for per column syncing
-        //Dictionary<string, string> GetAlteredColumns();
+        Task<Dictionary<string, string>> DbDiff(object drOrModel);
+        Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid);
     }
 }

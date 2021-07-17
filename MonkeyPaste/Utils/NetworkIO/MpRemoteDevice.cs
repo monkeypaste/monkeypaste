@@ -7,14 +7,12 @@ using System.Text;
 namespace MonkeyPaste {
     public class MpRemoteDevice {
         public MpDeviceEndpoint RemoteEndpoint { get; set; }
-        public DateTime LastSyncDateTimeUtc { get; set; }
         public Socket RemoteSocket { get; set; } 
 
         public MpRemoteDevice() { }
-        public MpRemoteDevice(Socket s, MpDeviceEndpoint rep,DateTime lsdtutc) {
+        public MpRemoteDevice(Socket s, MpDeviceEndpoint rep) {
             RemoteSocket = s;
             RemoteEndpoint = rep;
-            LastSyncDateTimeUtc = lsdtutc;
         }
     }
 }

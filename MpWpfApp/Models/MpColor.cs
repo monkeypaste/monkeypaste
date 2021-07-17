@@ -173,7 +173,7 @@ namespace MpWpfApp {
             return dt.Rows.Count == 0;
         }
 
-        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false) {
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false,bool ignoreSyncing = false) {
             if (ColorGuid == Guid.Empty) {
                 ColorGuid = Guid.NewGuid();
             }
@@ -191,7 +191,7 @@ namespace MpWpfApp {
                         { "@g", G },
                         { "@b", B },
                         { "@a", A }
-                    }, ColorGuid.ToString(), sourceClientGuid,this,ignoreTracking);
+                    }, ColorGuid.ToString(), sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
                 GetAllColors().Add(this);
             } else {
@@ -204,7 +204,7 @@ namespace MpWpfApp {
                         { "@b", B },
                         { "@a", A },
                         { "@cid", ColorId }
-                    }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking);
+                    }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 var c = GetAllColors().Where(x => x.ColorId == ColorId).FirstOrDefault();
                 if (c != null) {
                     _AllColorList[_AllColorList.IndexOf(c)] = this;
@@ -217,7 +217,7 @@ namespace MpWpfApp {
         public void WriteToDatabase(bool isFirstLoad) {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid, isFirstLoad);
         }
-        public override void DeleteFromDatabase(string sourceClientGuid) {
+        public override void DeleteFromDatabase(string sourceClientGuid,bool ignoreTracking = false,bool ignoreSyncing = false) {
             if (ColorId <= 0) {
                 return;
             }
@@ -226,13 +226,14 @@ namespace MpWpfApp {
                 "delete from MpColor where pk_MpColorId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", ColorId }
-                }, ColorGuid.ToString(),sourceClientGuid,this);
+                }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
         }
         public void DeleteFromDatabase() {
             DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
         }
 
-        public MpColor CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
             var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
@@ -295,7 +296,8 @@ namespace MpWpfApp {
             return typeof(MpColor);
         }
 
-        public Dictionary<string,string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string,string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
             MpColor other = null;
             if(drOrModel == null) {
                 //this occurs when this model is being added
