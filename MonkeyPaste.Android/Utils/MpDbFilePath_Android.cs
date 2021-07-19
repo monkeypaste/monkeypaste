@@ -18,7 +18,7 @@ namespace MonkeyPaste.Droid {
         public string DbFilePath() {
             return Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), 
-                MonkeyPaste.MpPreferences.DbName);
+                MonkeyPaste.MpPreferences.Instance.DbName);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpSource>> GetAllSources() {
             if(_AllSources == null) {
-                _AllSources = await MpDb.Instance.GetItems<MpSource>();
+                _AllSources = await MpDb.Instance.GetItemsAsync<MpSource>();
             }
             return _AllSources;
         }

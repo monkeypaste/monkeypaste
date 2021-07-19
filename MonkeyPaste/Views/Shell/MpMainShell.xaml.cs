@@ -12,9 +12,13 @@ namespace MonkeyPaste {
         public MpIKeyboardInteractionService LayoutService { get; set; }
         public MpILocalStorage StorageService { get; set; }
 
+
+        public event EventHandler<object> OnShellDisappearing;
+
         public MpMainShell() {
             InitializeComponent();
         }
+
 
         public MpMainShell(MpINativeInterfaceWrapper niw) : this() {
             LayoutService = niw.GetKeyboardInteractionService();
@@ -24,10 +28,18 @@ namespace MonkeyPaste {
         public ICommand OpenSettingsPageCommand => new Command(async () => {
             SettingsPageView = new MpSettingsPageView() ?? SettingsPageView;
             await Navigation.PushModalAsync(SettingsPageView);
-        });
+        });        
 
         private void Button_Clicked(object sender, EventArgs e) {
             OpenSettingsPageCommand.Execute(null);
+        }
+
+        private void Shell_Disappearing(object sender, EventArgs e) {
+            return;
+        }
+
+        private void StackLayout_LayoutChanged(object sender, EventArgs e) {
+            return;
         }
     }
 }

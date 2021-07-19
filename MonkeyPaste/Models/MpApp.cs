@@ -60,12 +60,12 @@ namespace MonkeyPaste {
         public MpIcon Icon { get; set; }
 
         public static async Task<MpApp> GetAppByPath(string appPath) {
-            var allApps = await MpDb.Instance.GetItems<MpApp>();
+            var allApps = await MpDb.Instance.GetItemsAsync<MpApp>();
             return allApps.Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();
         }
 
         public static async Task<MpApp> GetAppById(int appId) {
-            var allApps = await MpDb.Instance.GetItems<MpApp>();
+            var allApps = await MpDb.Instance.GetItemsAsync<MpApp>();
             return allApps.Where(x => x.Id == appId).FirstOrDefault();
         }
 
@@ -81,7 +81,7 @@ namespace MonkeyPaste {
                 Icon = newIcon
             };
 
-            await MpDb.Instance.AddItem<MpApp>(newApp);
+            await MpDb.Instance.AddItemAsync<MpApp>(newApp);
 
             return newApp;
         }

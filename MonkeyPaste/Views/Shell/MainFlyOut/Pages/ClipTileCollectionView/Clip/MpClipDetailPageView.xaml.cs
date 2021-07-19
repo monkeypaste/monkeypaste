@@ -42,7 +42,7 @@ namespace MonkeyPaste {
             ContentEditorWebView = null;
             cidpvm.Dispose();
 
-            await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);
+            await MpDb.Instance.UpdateItemAsync<MpClip>(cidpvm.Clip);
 
             base.OnDisappearing();
         }

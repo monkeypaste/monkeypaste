@@ -31,7 +31,7 @@ namespace MonkeyPaste {
         public string ImageBase64 { get; set; }
 
         public static async Task<MpDbImage> GetDbImageById(int id) {
-            var allicons = await MpDb.Instance.GetItems<MpDbImage>();
+            var allicons = await MpDb.Instance.GetItemsAsync<MpDbImage>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
         public MpDbImage() {

@@ -84,13 +84,15 @@ namespace MonkeyPaste {
             if(!_isLoaded) {
                 Init();
             }
-            line = line == null ? new object(): line;
-            args = args == null ? new object() : args;
+            line = line == null ? string.Empty: line;
+            //args = args == null ? string.Empty : args;
             string outStr = string.Empty;
             if(args != null && args.GetType() == typeof(Exception)) {
                 outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}\nException: {4}", callerFilePath, callerName, lineNum, line,args.ToString());
-            } else {
+            } else if(line.ToString().Contains(@"{0}")) {
                 outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}", callerFilePath, callerName, lineNum, string.Format(line.ToString(),args.ToString()));
+            } else {
+                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}", callerFilePath, callerName, lineNum, line.ToString());                
             }
             
             Console.WriteLine(outStr);

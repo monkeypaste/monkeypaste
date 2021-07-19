@@ -92,7 +92,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpIcon> GetIconById(int id) {
-            var allicons = await MpDb.Instance.GetItems<MpIcon>();
+            var allicons = await MpDb.Instance.GetItemsAsync<MpIcon>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
 
@@ -102,7 +102,7 @@ namespace MonkeyPaste {
                 //ImageBytes = iconImg
                 ImageBase64 = iconImgBase64
             };
-            await MpDb.Instance.AddItem<MpDbImage>(newImage);
+            await MpDb.Instance.AddItemAsync<MpDbImage>(newImage);
             
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
             var colorList = await MpColor.CreatePrimaryColorList(iconSkBmp);
@@ -121,7 +121,7 @@ namespace MonkeyPaste {
                 Color5 = colorList[4],
                 Color5Id = colorList[4].Id,
             };
-            await MpDb.Instance.AddItem<MpIcon>(newIcon);
+            await MpDb.Instance.AddItemAsync<MpIcon>(newIcon);
 
             return newIcon;
         }

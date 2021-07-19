@@ -9,9 +9,11 @@
         <CollectionView
             x:Name="TagCollectionView"
             Margin="10"        
-            SelectionMode="Single"
+            SelectionMode="Single" 
             ItemsSource="{Binding TagViewModels}"
-            SelectedItem="{Binding SelectedTagViewModel, Mode=TwoWay}">
+            SelectedItem="{Binding SelectedTagViewModel}"
+            SelectionChangedCommand="{Binding SelectionChangedCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference TagCollectionView}}">
             <CollectionView.Header>
                 <Grid ColumnDefinitions="0.2*,0.6*,0.2*">
                     <Image
@@ -40,7 +42,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:MpTagTileViewModel">
-                    <local:MpTagView BindingContext="{Binding .}" />
+                    <local:MpTagTileView BindingContext="{Binding .}" />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

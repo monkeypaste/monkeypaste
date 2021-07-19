@@ -27,22 +27,13 @@ namespace MonkeyPaste {
 
 
         #region Application Properties
-        public const string SslAlgorithm = "SHA256WITHRSA";
-        public const string SslCASubject = "CN=MPCA";
-        public const string SslCertSubject = "CN=127.0.01";
+        public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
+        public string SslCASubject { get; set; } = "CN{ get; set; } =MPCA";
+        public string SslCertSubject { get; set; } = "CN{ get; set; } =127.0.01";
 
-        public const string DbName = "Mp.db";
-        public const int MinDbPasswordLength = 12;
-        public const int MaxDbPasswordLength = 18;
-
-        public const SQLite.SQLiteOpenFlags DbFlags =
-            // open the database in read/write mode
-            SQLite.SQLiteOpenFlags.ReadWrite |
-            // create the database if it doesn't exist
-            SQLite.SQLiteOpenFlags.Create |
-            // enable multi-threaded database access
-            SQLite.SQLiteOpenFlags.SharedCache;
-
+        public string DbName { get; set; } = "Mp.db";
+        public int MinDbPasswordLength { get; set; } = 12;
+        public int MaxDbPasswordLength { get; set; } = 18;
 
         public string LocalStoragePath {
             get {
@@ -120,7 +111,7 @@ namespace MonkeyPaste {
         #region User Properties
         public string ThisClientGuidStr {
             get {
-                return Preferences.Get(nameof(ThisClientGuidStr), Guid.NewGuid().ToString());
+                return Preferences.Get(nameof(ThisClientGuidStr), string.Empty);
             }
             set {
                 Preferences.Set(nameof(ThisClientGuidStr), value);

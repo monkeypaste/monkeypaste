@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using System.Windows.Input;
+using System.Diagnostics;
+using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste {
     public class MpTagTileCollectionViewModel : MpViewModelBase {
         #region Properties
+
+        #region View Models
         public MpClipTileCollectionPageViewModel ClipCollectionViewModel { get; set; }
 
         public ObservableCollection<MpTagTileViewModel> TagViewModels { get; set; } = new ObservableCollection<MpTagTileViewModel>();
@@ -27,6 +31,8 @@ namespace MonkeyPaste {
                 return TagViewModels.Where(x => x.Tag.Id == 3).FirstOrDefault();
             }
         }
+        #endregion
+
         #endregion
 
         #region Public Methods
@@ -58,16 +64,21 @@ namespace MonkeyPaste {
         #region Private Methods
         private async Task Initialize() {
             IsBusy = true;
-            var tags = await MpDb.Instance.GetItems<MpTag>();
-            TagViewModels = new ObservableCollection<MpTagTileViewModel>(tags.Select(x => CreateTagViewModel(x)));
+            var tags = await MpDb.Instance.GetItemsAsync<MpTag>();
+            var tvms = tags.Select(x => CreateTagViewModel(x)).OrderBy(x=>x.Tag.TagSortIdx);
+            TagViewModels = new ObservableCollection<MpTagTileViewModel>(tvms);
             OnPropertyChanged(nameof(TagViewModels));
-            SelectedTagViewModel = RecentTagViewModel;
             ClipCollectionViewModel = new MpClipTileCollectionPageViewModel();
             await Task.Delay(300);
+            SelectedTagViewModel = RecentTagViewModel;
             IsBusy = false;
             
             return;
         }
+
+        #endregion
+
+        #region Event Handlers
 
         private async void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -80,9 +91,7 @@ namespace MonkeyPaste {
                     break;
             }
         }
-        #endregion
 
-        #region Event Handlers
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpTag t) {
                 var ttvm = CreateTagViewModel(t);
@@ -99,7 +108,7 @@ namespace MonkeyPaste {
                     int sortIdx = 0;
                     foreach(var ttvm in TagViewModels.OrderBy(x=>x.Tag.TagSortIdx)) {
                         ttvm.Tag.TagSortIdx = sortIdx++;
-                        Task.Run(async()=> await MpDb.Instance.UpdateItem<MpTag>(ttvm.Tag));
+                        Task.Run(async()=> await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag));
                     }
                 }
             }
@@ -122,15 +131,54 @@ namespace MonkeyPaste {
                     case nameof(ttvm.IsSelected):
                         break;
                 }
-                await MpDb.Instance.UpdateItem<MpTag>(ttvm.Tag);
+                await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag);
             }
         }
         #endregion
 
         #region Commands       
+
+        #region Drag & Drop
+        public ICommand ItemDragged => new Command<MpTagTileViewModel>((item) => {
+            Debug.WriteLine($"OnItemDragged: {item?.Tag.TagName}");
+            TagViewModels.ForEach(i => i.IsBeingDragged = item == i);
+        });
+
+        public ICommand ItemDraggedOver => new Command<MpTagTileViewModel>((item) => {
+            Debug.WriteLine($"OnItemDraggedOver: {item?.Tag.TagName}");
+            var itemBeingDragged = TagViewModels.FirstOrDefault(i => i.IsBeingDragged);
+            TagViewModels.ForEach(i => i.IsBeingDraggedOver = item == i && item != itemBeingDragged);
+        });
+
+        public ICommand ItemDragLeave => new Command<MpTagTileViewModel>((item) => {
+            Debug.WriteLine($"OnItemDragLeave: {item?.Tag.TagName}");
+            TagViewModels.ForEach(i => i.IsBeingDraggedOver = false);
+        });
+
+        public ICommand ItemDropped => new Command<MpTagTileViewModel>(async (item) => {
+            var itemToMove = TagViewModels.First(i => i.IsBeingDragged);
+            var itemToInsertBefore = item;
+            if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore) {
+                return;
+            }
+            var insertFromIndex = TagViewModels.IndexOf(itemToMove);
+            var insertAtIndex = TagViewModels.IndexOf(itemToInsertBefore);
+            TagViewModels.Move(insertFromIndex, insertAtIndex);
+            itemToMove.IsBeingDragged = false;
+            itemToInsertBefore.IsBeingDraggedOver = false;
+
+            itemToMove.Tag.TagSortIdx = TagViewModels.IndexOf(itemToMove);
+            itemToInsertBefore.Tag.TagSortIdx = TagViewModels.IndexOf(itemToInsertBefore);
+
+            await MpDb.Instance.UpdateItemAsync<MpTag>(itemToMove.Tag);
+            await MpDb.Instance.UpdateItemAsync<MpTag>(itemToInsertBefore.Tag);
+        });
+        #endregion
+
+
         public ICommand AddTagCommand => new Command<object>(async (args) => {
             var tagColor = new MpColor(MpHelpers.Instance.GetRandomColor());
-            await MpDb.Instance.AddItem<MpColor>(tagColor);
+            await MpDb.Instance.AddItemAsync<MpColor>(tagColor);
             var newTag = new MpTag() {
                 TagName = "Untitled",
                 TagSortIdx = TagViewModels.Count,
@@ -138,10 +186,11 @@ namespace MonkeyPaste {
             };
             //await MpDb.Instance.AddItem<MpColor>(newTag.TagColor);
             //newTag.ColorId = newTag.TagColor.Id;
-            await MpDb.Instance.AddItem<MpTag>(newTag);
+            await MpDb.Instance.AddItemAsync<MpTag>(newTag);
             //delay to let DbItem_Added add tag to collection
             await Task.Delay(300);
             SelectedTagViewModel = TagViewModels[TagViewModels.Count - 1];
+            SelectedTagViewModel.RenameTagCommand.Execute(null);
         });
 
         public ICommand DeleteTagCommand => new Command<object>(async (args) => {
@@ -150,6 +199,12 @@ namespace MonkeyPaste {
                     TagViewModels.Remove(ttvm);
                     await MpDb.Instance.DeleteItem<MpTag>(ttvm.Tag);                    
                 }
+            }
+        }); 
+
+        public ICommand SelectionChangedCommand => new Command<object>(async (args) => {
+            if (args != null && args is MpTagTileViewModel ttvm) {
+                SelectedTagViewModel = args as MpTagTileViewModel;
             }
         });
         #endregion

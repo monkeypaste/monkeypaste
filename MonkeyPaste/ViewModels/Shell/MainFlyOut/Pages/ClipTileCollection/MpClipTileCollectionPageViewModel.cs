@@ -67,7 +67,7 @@ namespace MonkeyPaste {
                 app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
                 c.App = app;
 
-                var color = await MpColor.GetColorById(c.ColorId);
+                var color = await MpColor.GetColorByIdAsync(c.ColorId);
                 if(color != null) {
                     c.ItemColor = color;
                 }
@@ -178,7 +178,7 @@ namespace MonkeyPaste {
                         break;
                 }
 
-                await MpDb.Instance.UpdateItem<MpClip>(civm.Clip);
+                await MpDb.Instance.UpdateItemAsync<MpClip>(civm.Clip);
             }
         }
 

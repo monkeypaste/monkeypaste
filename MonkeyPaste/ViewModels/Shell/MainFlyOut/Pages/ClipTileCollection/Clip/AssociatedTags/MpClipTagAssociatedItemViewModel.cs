@@ -13,8 +13,6 @@ namespace MonkeyPaste {
 
         public MpTag Tag { get; set; }
 
-        public Color TagColor { get; set; }
-
         public bool IsAssociated { get; set; }
 
         public bool IsEnabled {
@@ -40,10 +38,9 @@ namespace MonkeyPaste {
         }
 
         private async void MpClipTagAssociatedItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            await Task.Delay(1);
             switch(e.PropertyName) {
-                case nameof(Tag):
-                    var c = await MpColor.GetColorById(Tag.ColorId);
-                    TagColor = c.Color;
+                default:
                     break;
             }
         }
@@ -54,8 +51,7 @@ namespace MonkeyPaste {
             await UpdateAssocation();
 
             Tag.ClipList = await MpClip.GetAllClipsByTagId(Tag.Id);
-            //var c = await MpColor.GetColorById(Tag.ColorId);
-            //TagColor = c.ColorBrush;
+            Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
         }
 
         private async Task UpdateAssocation() {

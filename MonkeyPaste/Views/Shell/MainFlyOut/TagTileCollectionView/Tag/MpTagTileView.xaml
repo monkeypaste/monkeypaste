@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MonkeyPaste"
              x:DataType="local:MpTagTileViewModel"
-             x:Class="MonkeyPaste.MpTagView">
+             x:Class="MonkeyPaste.MpTagTileView">
   <ContentView.Content>
-        <SwipeView IsEnabled="{Binding IsSelected}">
+        <SwipeView x:Name="TagTileSwipeView" SwipeStarted="SwipeView_SwipeStarted"
+                   IsEnabled="{Binding IsSelected}">
             <SwipeView.LeftItems>
                 <SwipeItems>
-                    <SwipeItem BackgroundColor="LightBlue"       
-                               IsEnabled="{Binding IsUserTag}"                                      
+                    <SwipeItem BackgroundColor="LightBlue"                              
+                               IsEnabled="{Binding IsUserTag}"
                                Command="{Binding RenameTagCommand}"
                                IconImageSource="{StaticResource EditIcon}"
                                Text="Rename" />
@@ -26,6 +27,20 @@
                 </SwipeItems>
             </SwipeView.LeftItems>
             <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
+                <Grid.GestureRecognizers>
+                    <DragGestureRecognizer CanDrag="True"
+                                           DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                           DragStartingCommandParameter="{Binding}" />
+
+                    <DropGestureRecognizer AllowDrop="True"
+                                           DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                           DragLeaveCommandParameter="{Binding}"
+                                           DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                           DragOverCommandParameter="{Binding}"
+                                           Drop="DropGestureRecognizer_Drop"
+                                           DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                           DropCommandParameter="{Binding}" />
+                </Grid.GestureRecognizers>
                 <Grid.Triggers>
                     <DataTrigger TargetType="Grid"
                                  Binding="{Binding IsSelected}"
@@ -45,7 +60,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <BoxView Margin="30,20,10,20"
-                             BackgroundColor="{Binding TagColor}"
+                             BackgroundColor="{Binding Tag.TagColor.Color}"
                              HeightRequest="25"
                              HorizontalOptions="Center"
                              VerticalOptions="Center"
@@ -56,18 +71,19 @@
                            FontSize="Micro"
                            HorizontalOptions="Center"
                            Text="{Binding ClipCount}"
-                           TextColor="{Binding TagColor, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                           TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
                            VerticalOptions="Center" />
                 </Grid>
-                <Entry x:Name="TagNameEntry"
-                       Background="{x:Null}"
-                       BackgroundColor="Transparent"
-                       Grid.Column="1"
-                       FontAttributes="Italic"
-                       IsReadOnly="{Binding IsNameReadOnly}"
-                       Text="{Binding Tag.TagName}"
-                       TextColor="Black"
-                       VerticalTextAlignment="Center" />
+                <local:MpCustomEntry x:Name="TagNameEntry"
+                                     Background="{x:Null}"
+                                     BackgroundColor="Transparent"
+                                     Completed="TagNameEntry_Completed"
+                                     Grid.Column="1"
+                                     FontAttributes="Italic"
+                                     IsReadOnly="{Binding IsNameReadOnly}"
+                                     Text="{Binding Tag.TagName}"
+                                     TextColor="Black"
+                                     VerticalTextAlignment="Center" />
             </Grid>
         </SwipeView>
     </ContentView.Content>

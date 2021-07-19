@@ -31,7 +31,7 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private async Task Initialize() {
-            var tags = await MpDb.Instance.GetItems<MpTag>();
+            var tags = await MpDb.Instance.GetItemsAsync<MpTag>();
             ClipTagAssociatedItemViewModels = 
                 new ObservableCollection<MpClipTagAssociatedItemViewModel>(
                     tags.Select(x => CreateClipTagAssociatedViewModel(x)));

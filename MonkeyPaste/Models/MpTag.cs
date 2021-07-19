@@ -49,7 +49,34 @@ namespace MonkeyPaste {
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
 
-        public string TagName { get; set; } = "Untitled";
+        private MpColor _tagColor;
+        [Ignore]
+        public MpColor TagColor {
+            get {
+                if (_tagColor == null && ColorId > 0) {
+                    _tagColor = MpColor.GetColorById(ColorId);
+                } else if (_tagColor != null && _tagColor.Id != ColorId) {
+                    if (ColorId == 0) {
+                        ColorId = _tagColor.Id;
+                    } else {
+                        _tagColor = MpColor.GetColorByIdAsync(ColorId).Result;
+                    }
+                }
+                return _tagColor;
+            }
+            set {
+                if (_tagColor != value) {
+                    _tagColor = value;
+                    if (_tagColor != null) {
+                        ColorId = _tagColor.Id;
+                    } else {
+                        ColorId = 0;
+                    }
+                }
+            }
+        }
+
+        public string TagName { get; set; }
 
         [Ignore]
         [ManyToMany(typeof(MpClip))]
@@ -64,7 +91,7 @@ namespace MonkeyPaste {
 
         public async Task<MpColor> GetTagColor() {
             if (ColorId > 0) {
-                var tc = await MpColor.GetColorById(ColorId);
+                var tc = await MpColor.GetColorByIdAsync(ColorId);
                 return tc;
             }
 
@@ -93,7 +120,7 @@ namespace MonkeyPaste {
                 return false;
             }
 
-            await MpDb.Instance.AddItem<MpClipTag>(new MpClipTag() { ClipId = clip.Id, TagId = Id });
+            await MpDb.Instance.AddItemAsync<MpClipTag>(new MpClipTag() { ClipId = clip.Id, TagId = Id });
 
             //ClipList.Add(clip);
             Console.WriteLine("Tag link created between tag " + Id + " with Clip " + clip.Id);
@@ -132,7 +159,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var cdr = await MpDb.Instance.GetObjDbRow("MpTag", tagGuid);
+            var cdr = await MpDb.Instance.GetObjDbRowAsync("MpTag", tagGuid);
             MpTag newTag = null;
             if (cdr == null) {
                 newTag = new MpTag();
@@ -153,7 +180,7 @@ namespace MonkeyPaste {
                         break;
                     case "fk_MpColorId":
                         //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
-                        var color = await MpColor.GetColorByGuid(li.AffectedColumnValue);
+                        var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
                         newTag.ColorId = (color as MpColor).Id;
                         break;
                     default:
@@ -215,18 +242,18 @@ namespace MonkeyPaste {
                 diffLookup);
             diffLookup = CheckValue(
                 TagName, other.TagName,
-                "G",
+                "TagName",
                 diffLookup);
             diffLookup = CheckValue(
                 TagSortIdx, other.TagSortIdx,
                 "SortIdx",
                 diffLookup);
-            var c = await MpColor.GetColorById(ColorId);
+            //var c = await MpColor.GetColorById(ColorId);
             diffLookup = CheckValue(
                 ColorId, other.ColorId,
                 "fk_MpColorId",
                 diffLookup,
-                c.ColorGuid
+                TagColor.ColorGuid
                 );
 
             return diffLookup;

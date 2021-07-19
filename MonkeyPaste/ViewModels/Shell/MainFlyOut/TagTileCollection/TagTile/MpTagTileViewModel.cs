@@ -9,10 +9,17 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpTagTileViewModel : MpViewModelBase {
+        #region Private Variables
+        private string _orgTagName = string.Empty;
+        #endregion
+
         #region Properties
 
+        #region Model
         public MpTag Tag { get; set; }
+        #endregion
 
+        #region State
         public bool IsSelected { get; set; } = false;
 
         public int ClipCount {
@@ -25,9 +32,15 @@ namespace MonkeyPaste {
         }              
 
         public bool IsNameReadOnly { get; set; } = true;
+        #endregion
 
-        public Color TagColor { get; set; }
+        #region Drag & Drop
+        public bool IsBeingDraggedOver { get; set; } = false;
 
+        public bool IsBeingDragged { get; set; } = false;
+        #endregion
+
+        #region Business Logic
         public bool IsUserTag {
             get {
                 if(Tag == null) {
@@ -36,6 +49,7 @@ namespace MonkeyPaste {
                 return Tag.Id > 4;
             }
         }
+        #endregion
 
         #endregion
 
@@ -57,24 +71,18 @@ namespace MonkeyPaste {
         #region Private Methods
         private async Task Initialize() {
             Tag.ClipList = await MpClip.GetAllClipsByTagId(Tag.Id);
-            //var c = await MpColor.GetColorById(Tag.ColorId);
-            //Tag.TagColor = c.ColorBrush;
-            //Tag.OnPropertyChanged(nameof(Tag.TagColor));
-            Tag = Tag;
+            Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
         }
 
         #region Event Handlers
         private void MpTagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             Task.Run(async () => {
                 switch (e.PropertyName) {
-                    case nameof(Tag):
-                        var c = await MpColor.GetColorById(Tag.ColorId);
-                        TagColor = c.Color;
-                        break;
-                    case nameof(TagColor):
-
-                        break;
-                    case nameof(IsSelected):
+                    case nameof(IsNameReadOnly):
+                        if(!IsNameReadOnly && Tag.TagName != _orgTagName) {
+                            _orgTagName = Tag.TagName;
+                            await MpDb.Instance.UpdateItemAsync<MpTag>(Tag);
+                        }
                         break;
                 }
             });
@@ -133,16 +141,23 @@ namespace MonkeyPaste {
             });
         }
         #endregion
+
         #endregion        
 
         #region Commands
-        public ICommand RenameTagCommand => new Command(() => {
-            IsNameReadOnly = false;
-        });
+        public ICommand RenameTagCommand => new Command(
+            () => {
+                _orgTagName = Tag.TagName;
+                IsNameReadOnly = false;
+            },
+            () => {
+                return Tag.Id > 4;
+            });
 
         public ICommand ChangeTagColorCommand => new Command(async () => {
-            MpConsole.WriteLine(@"Change color for tag " + Tag.TagName);
-            await Task.Delay(1);
+            Tag.TagColor.Color = MpHelpers.Instance.GetRandomColor();
+            await MpDb.Instance.UpdateItemAsync<MpColor>(Tag.TagColor);
+            OnPropertyChanged(nameof(Tag));
         });
         #endregion
     }

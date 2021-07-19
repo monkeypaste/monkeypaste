@@ -40,12 +40,12 @@ namespace MonkeyPaste {
         public int ClipId { get; set; }
 
         public static async Task<List<MpClipTag>> GetAllClipsForTagId(int tagId) {
-            var allClipTagList = await MpDb.Instance.GetItems<MpClipTag>();
+            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
             return allClipTagList.Where(x => x.TagId == tagId).ToList();
         }
 
         public static async Task DeleteAllClipTagsForClipId(int ClipId) {
-            var allClipTagList = await MpDb.Instance.GetItems<MpClipTag>();
+            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
             var citl = allClipTagList.Where(x => x.ClipId == ClipId).ToList();
             foreach(var cit in citl) {
                 await MpDb.Instance.DeleteItem<MpClipTag>(cit);
@@ -53,7 +53,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task DeleteAllClipTagsForTagId(int tagId) {
-            var allClipTagList = await MpDb.Instance.GetItems<MpClipTag>();
+            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
             var citl = allClipTagList.Where(x => x.TagId == tagId).ToList();
             foreach (var cit in citl) {
                 await MpDb.Instance.DeleteItem<MpClipTag>(cit);

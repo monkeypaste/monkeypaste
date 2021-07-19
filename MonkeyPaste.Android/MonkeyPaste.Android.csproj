@@ -118,6 +118,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="MpCopyClipboardNotificationActivity.cs" />
     <Compile Include="MpProcessTextActivity.cs" />
+    <Compile Include="Renderers\MpCustomEntryRenderer.cs" />
     <Compile Include="Renderers\MpWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

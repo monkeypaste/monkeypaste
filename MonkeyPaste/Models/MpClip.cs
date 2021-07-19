@@ -112,7 +112,7 @@ namespace MonkeyPaste {
 
         #region Static Methods
         public static async Task<MpClip> GetClipById(int ClipId) {
-            var allItems = await MpDb.Instance.GetItems<MpClip>();
+            var allItems = await MpDb.Instance.GetItemsAsync<MpClip>();
             var udbpl = allItems.Where(x => x.Id == ClipId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
@@ -162,8 +162,8 @@ namespace MonkeyPaste {
         }
 
         public static async Task<ObservableCollection<MpClip>> Search(int tagId, string searchString) {
-            var allClips = await MpDb.Instance.GetItems<MpClip>();
-            var allClipTags = await MpDb.Instance.GetItems<MpClipTag>();
+            var allClips = await MpDb.Instance.GetItemsAsync<MpClip>();
+            var allClipTags = await MpDb.Instance.GetItemsAsync<MpClipTag>();
 
             var searchResult = (from ci in allClips
                                 join cit in allClipTags on
@@ -205,7 +205,7 @@ namespace MonkeyPaste {
                 }
                 newClip.App = app;
                 newClip.AppId = app.Id;
-                await MpDb.Instance.AddOrUpdate<MpClip>(newClip);
+                await MpDb.Instance.AddOrUpdateAsync<MpClip>(newClip);
 
                 //add Clip to default tags
                 var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
@@ -217,7 +217,7 @@ namespace MonkeyPaste {
                             ClipId = newClip.Id,
                             TagId = tag.Id
                         };
-                        await MpDb.Instance.AddItem<MpClipTag>(ClipTag);
+                        await MpDb.Instance.AddItemAsync<MpClipTag>(ClipTag);
                     }
                 }
                 return newClip;

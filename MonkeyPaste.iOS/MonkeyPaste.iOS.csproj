@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\MpCustomEntryRenderer.cs" />
     <Compile Include="Services\MpKeyboardInteractionService.cs" />
     <Compile Include="Utils\MpDbFilePath_IOS.cs" />
     <None Include="Entitlements.plist" />

@@ -108,7 +108,7 @@ namespace MonkeyPaste {
         });
 
         public ICommand Save => new Command(async () => {
-            await MpDb.Instance.AddOrUpdate<MpClip>(Clip);
+            await MpDb.Instance.AddOrUpdateAsync<MpClip>(Clip);
             //wait Navigation.PopAsync();
         });
 

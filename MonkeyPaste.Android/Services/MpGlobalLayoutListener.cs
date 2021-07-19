@@ -45,7 +45,7 @@ namespace MonkeyPaste.Droid {
             }
 
             var screenSize = new Point();
-            this.activity.WindowManager?.DefaultDisplay?.GetSize(screenSize);
+            this.activity.WindowManager?.DefaultDisplay?.GetRealSize(screenSize);
 
             var screenSizeWithoutKeyboard = new Rect();
             var rootView = this.activity.FindViewById(Android.Resource.Id.Content);

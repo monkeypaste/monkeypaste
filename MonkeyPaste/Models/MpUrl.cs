@@ -47,12 +47,12 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpUrl> GetUrlByPath(string urlPath) {
-            var allUrls = await MpDb.Instance.GetItems<MpUrl>();
+            var allUrls = await MpDb.Instance.GetItemsAsync<MpUrl>();
             return allUrls.Where(x => x.UrlPath.ToLower() == urlPath.ToLower()).FirstOrDefault();
         }
 
         public static async Task<MpUrl> GetUrlById(int urlId) {
-            var allUrls = await MpDb.Instance.GetItems<MpUrl>();
+            var allUrls = await MpDb.Instance.GetItemsAsync<MpUrl>();
             var udbpl = allUrls.Where(x => x.Id == urlId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];

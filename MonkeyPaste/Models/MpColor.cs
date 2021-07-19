@@ -63,7 +63,7 @@ namespace MonkeyPaste {
         
         public MpColor(int colorId) {
             Task.Run(async () => {
-                var cl = await MpDb.Instance.GetItems<MpColor>();
+                var cl = await MpDb.Instance.GetItemsAsync<MpColor>();
                 var c = cl.Where(x => x.Id == colorId).FirstOrDefault();
                 if(c != null) {
                     Id = c.Id;
@@ -85,8 +85,8 @@ namespace MonkeyPaste {
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { 
         }
 
-        public static async Task<MpColor> GetColorById(int colorId) {
-            var allColors = await MpDb.Instance.GetItems<MpColor>();
+        public static async Task<MpColor> GetColorByIdAsync(int colorId) {
+            var allColors = await MpDb.Instance.GetItemsAsync<MpColor>();
             var udbpl = allColors.Where(x => x.Id == colorId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
@@ -94,8 +94,17 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static async Task<MpColor> GetColorByGuid(string colorGuid) {
-            var allColors = await MpDb.Instance.GetItems<MpColor>();
+        public static MpColor GetColorById(int colorId) {
+            var allColors = MpDb.Instance.GetItems<MpColor>();
+            var udbpl = allColors.Where(x => x.Id == colorId).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
+        public static async Task<MpColor> GetColorByGuidAsync(string colorGuid) {
+            var allColors = await MpDb.Instance.GetItemsAsync<MpColor>();
             var udbpl = allColors.Where(x => x.ColorGuid.ToString() == colorGuid).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
@@ -140,7 +149,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {            
-            var cdr = await MpDb.Instance.GetObjDbRow("MpColor", colorGuid);
+            var cdr = await MpDb.Instance.GetObjDbRowAsync("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
                 newColor = new MpColor();
@@ -168,7 +177,7 @@ namespace MonkeyPaste {
                         throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                 }
             }
-            await MpDb.Instance.AddOrUpdate<MpColor>(newColor,fromClientGuid);
+            await MpDb.Instance.AddOrUpdateAsync<MpColor>(newColor,fromClientGuid);
             return newColor;
         }
 

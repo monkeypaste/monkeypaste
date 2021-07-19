@@ -36,6 +36,8 @@
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\ClipCollectionViewModelClip\ClipViewModelClip\Title\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Content\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Title\**" />
+    <Compile Remove="Models\Db\SQLite\SQLite.cs" />
+    <Compile Remove="Models\Db\SQLite\SQLiteAsync.cs" />
     <Compile Remove="ViewModels\Bases\MpUndoableViewModelBase.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
@@ -159,5 +161,9 @@
     <Compile Update="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml.cs">
       <DependentUpon>MpTagTileView.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Db\SQLite\" />
   </ItemGroup>
 </Project>

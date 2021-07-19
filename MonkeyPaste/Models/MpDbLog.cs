@@ -73,14 +73,14 @@ namespace MonkeyPaste {
             }
         }
         public static async Task<MpDbLog> GetDbLogById(int DbLogId) {
-            var allLogs = await MpDb.Instance.GetItems<MpDbLog>();
+            var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
         public static async Task<List<MpDbLog>> GetDbLogsByGuid(string dboGuid,DateTime fromDateUtc) {
             var dboLogs = new List<MpDbLog>();
 
-            var allLogs = await MpDb.Instance.GetItems<MpDbLog>();
+            var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
             return allLogs
                     .Where(x => x.DbObjectGuid.ToString() == dboGuid && x.LogActionDateTime > fromDateUtc)
                     .ToList();

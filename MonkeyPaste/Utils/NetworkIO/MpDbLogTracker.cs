@@ -7,36 +7,34 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpDbLogTracker {
-        public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
+        public static async Task TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
             Guid objectGuid = Guid.Parse(dbModel.Guid);
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisClientGuidStr) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
             tableName = tableName.Substring(tableName.IndexOf(".") + 1);
             var actionDateTime = DateTime.UtcNow;
 
-            Task.Run(async () => {
-                var oldItem = await MpDb.Instance.GetObjDbRow(tableName, objectGuid.ToString());
-                var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiff(oldItem);
-                if(alteredColumnNameValuePairs.Count == 0) {
-                    return;
-                }
-                if (actionType == MpDbLogActionType.Delete || alteredColumnNameValuePairs == null || alteredColumnNameValuePairs.Count == 0) {
-                    var dbi = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
-                    await MpDb.Instance.AddItem(dbi);
-                } else {
-                    foreach (var kvp in alteredColumnNameValuePairs) {
-                        var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
-                        await MpDb.Instance.AddItem(dbi);
-                    }
-                }
+            if (actionType == MpDbLogActionType.Delete) {
+                var dbi = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
+                await MpDb.Instance.AddItemAsync(dbi, string.Empty, true, true);
+                return;
+            }
 
-            });
+            var oldItem = await MpDb.Instance.GetObjDbRowAsync(tableName, objectGuid.ToString());
+            var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiff(oldItem);
+            if (alteredColumnNameValuePairs.Count == 0) {
+                return;
+            }
 
+            foreach (var kvp in alteredColumnNameValuePairs) {
+                var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
+                await MpDb.Instance.AddItemAsync(dbi, string.Empty, true, true);
+            }
         }
 
         public static void PrintDbLog() {
             Task.Run(async () => {
-                var dblil = await MpDb.Instance.GetItems<MpDbLog>();
+                var dblil = await MpDb.Instance.GetItemsAsync<MpDbLog>();
 
                 foreach(var dbli in dblil) {
                     Console.WriteLine(dbli.ToString());

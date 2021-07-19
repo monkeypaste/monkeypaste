@@ -35,9 +35,9 @@ namespace MonkeyPaste {
         }
 
         private void CreateCertificate() {
-            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPreferences.SslCASubject);
+            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPreferences.Instance.SslCASubject);
 
-            var cert = GenerateSelfSignedCertificate(MpPreferences.SslCertSubject, MpPreferences.SslCASubject, caPrivKey);
+            var cert = GenerateSelfSignedCertificate(MpPreferences.Instance.SslCertSubject, MpPreferences.Instance.SslCASubject, caPrivKey);
 
             MpPreferences.Instance.SslPublicKey = cert.GetPublicKeyString();
 
