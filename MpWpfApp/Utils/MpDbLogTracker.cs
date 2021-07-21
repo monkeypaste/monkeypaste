@@ -37,25 +37,24 @@ namespace MpWpfApp {
                 throw new Exception(@"Unknown query format: " + query);
             }
 
-            Task.Run(async () => {
-                if (actionType != MonkeyPaste.MpDbLogActionType.Delete) {
-                    if (obj == null) {
-                        throw new Exception(@"DbLog object cannot be null for non-delete transactions");
-                    }
-                    var oldRow = MpDb.Instance.GetDbObjectByTableGuid(tableName, objGuid);
-                    var alteredColumnNameValueLookUp = await (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
-                    if (alteredColumnNameValueLookUp.Count == 0) {
-                        //since no data is altered return false to not write to db or change log
-                        return;
-                    }
-                    foreach (var kvp in alteredColumnNameValueLookUp) {
-                        new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
-                    }
-                } else {
-                    new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
+            if (actionType != MonkeyPaste.MpDbLogActionType.Delete) {
+                if (obj == null) {
+                    throw new Exception(@"DbLog object cannot be null for non-delete transactions");
                 }
-            });
-
+                var oldRow = MpDb.Instance.GetDbObjectByTableGuid(tableName, objGuid);
+                var alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
+                if (alteredColumnNameValueLookUp.Count == 0) {
+                    //since no data is altered return false to not write to db or change log
+                    return MonkeyPaste.MpDbLogActionType.None;
+                }
+                foreach (var kvp in alteredColumnNameValueLookUp) {
+                    var newLog = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
+                    newLog.WriteToDatabase(clientGuid,true,true);
+                }
+            } else {
+                var newLog = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
+                newLog.WriteToDatabase(clientGuid, true, true);
+            }
             return actionType;
         }
 

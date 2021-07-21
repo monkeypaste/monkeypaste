@@ -5,12 +5,13 @@
              x:DataType="local:MpTagTileViewModel"
              x:Class="MonkeyPaste.MpTagTileView">
   <ContentView.Content>
-        <SwipeView x:Name="TagTileSwipeView" SwipeStarted="SwipeView_SwipeStarted"
+        <SwipeView x:Name="TagTileSwipeView" 
+                   SwipeStarted="SwipeView_SwipeStarted"
                    IsEnabled="{Binding IsSelected}">
             <SwipeView.LeftItems>
                 <SwipeItems>
                     <SwipeItem BackgroundColor="LightBlue"                              
-                               IsEnabled="{Binding IsUserTag}"
+                               IsEnabled="{Binding IsUserTag}"                               
                                Command="{Binding RenameTagCommand}"
                                IconImageSource="{StaticResource EditIcon}"
                                Text="Rename" />
@@ -75,16 +76,21 @@
                            VerticalOptions="Center" />
                 </Grid>
                 <local:MpCustomEntry x:Name="TagNameEntry"
+                                     Grid.Column="1"
                                      Background="{x:Null}"
                                      BackgroundColor="Transparent"
                                      Completed="TagNameEntry_Completed"
-                                     Grid.Column="1"
                                      FontAttributes="Italic"
                                      IsReadOnly="{Binding IsNameReadOnly}"
                                      Text="{Binding Tag.TagName}"
                                      TextColor="Black"
                                      VerticalTextAlignment="Center" />
-            </Grid>
+            <!--<Button x:Name="ContextMenuButton"
+                    Grid.Column="2"
+                    ImageSource="{StaticResource DotsIcon}"
+                    HeightRequest="25">
+            </Button>-->
+        </Grid>
         </SwipeView>
     </ContentView.Content>
 </ContentView>

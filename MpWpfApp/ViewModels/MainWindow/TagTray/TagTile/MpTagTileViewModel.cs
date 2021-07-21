@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -294,10 +295,10 @@ namespace MpWpfApp {
             set {
                 if (_tag != value) {
                     _tag = value;
-                    OnPropertyChanged(nameof(Tag));
                     OnPropertyChanged(nameof(TagColor));
                     OnPropertyChanged(nameof(TagName));
                     OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged(nameof(Tag));
                 }
             }
         }
@@ -321,6 +322,10 @@ namespace MpWpfApp {
                                 }
                             }
                         }
+                        break;
+                    case nameof(Tag):
+
+                        Tag.OnSyncTagUpdated += Tag_OnSyncTagUpdated;
                         break;
                 }
             };
@@ -470,6 +475,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void Tag_OnSyncTagUpdated(object sender, EventArgs e) {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() => {
+                if (sender is MpTag t) {
+                    if(t.TagId == Tag.TagId) {
+                        Tag = t;
+                    }
+                }
+            }));
+        }
         #endregion
 
         #region Commands

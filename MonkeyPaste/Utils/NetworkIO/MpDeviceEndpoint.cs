@@ -131,7 +131,7 @@ namespace MonkeyPaste {
             return ep;
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

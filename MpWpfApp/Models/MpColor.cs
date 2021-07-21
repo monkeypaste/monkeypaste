@@ -174,6 +174,9 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false,bool ignoreSyncing = false) {
+            if (string.IsNullOrEmpty(sourceClientGuid)) {
+                sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
+            }
             if (ColorGuid == Guid.Empty) {
                 ColorGuid = Guid.NewGuid();
             }
@@ -262,7 +265,7 @@ namespace MpWpfApp {
                         throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                 }
             }
-            newColor.WriteToDatabase(fromClientGuid);
+            //newColor.WriteToDatabase(fromClientGuid);
             return newColor;
         }
 
@@ -296,8 +299,7 @@ namespace MpWpfApp {
             return typeof(MpColor);
         }
 
-        public async Task<Dictionary<string,string>> DbDiff(object drOrModel) {
-            await Task.Delay(1);
+        public Dictionary<string,string> DbDiff(object drOrModel) {
             MpColor other = null;
             if(drOrModel == null) {
                 //this occurs when this model is being added
@@ -309,11 +311,6 @@ namespace MpWpfApp {
                 throw new Exception("Cannot compare xam model to local model");
             }
             var diffLookup = new Dictionary<string, string>();
-            //if(ColorId > 0) {
-            //    diffLookup = CheckValue(ColorId, other.ColorId,
-            //    "pk_MpColorId",
-            //    diffLookup);
-            //}
             diffLookup = CheckValue(ColorGuid, other.ColorGuid,
                 "MpColorGuid",
                 diffLookup);

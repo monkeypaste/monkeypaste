@@ -177,7 +177,7 @@ namespace MonkeyPaste {
                         throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                 }
             }
-            await MpDb.Instance.AddOrUpdateAsync<MpColor>(newColor,fromClientGuid);
+            //await MpDb.Instance.AddOrUpdateAsync<MpColor>(newColor,fromClientGuid);
             return newColor;
         }
 
@@ -211,8 +211,7 @@ namespace MonkeyPaste {
             return typeof(MpColor);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
-            await Task.Delay(1);
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             MpColor other = null;
             if (drOrModel == null) {
                 //this occurs when this model is being added
@@ -224,11 +223,6 @@ namespace MonkeyPaste {
                 throw new Exception("Cannot compare xam model to local model");
             }
             var diffLookup = new Dictionary<string, string>();
-            //if (Id > 0) {
-            //    diffLookup = CheckValue(Id, other.Id,
-            //    "pk_MpColorId",
-            //    diffLookup);
-            //}
             diffLookup = CheckValue(ColorGuid, other.ColorGuid,
                 "MpColorGuid",
                 diffLookup);

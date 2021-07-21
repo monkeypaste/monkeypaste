@@ -79,9 +79,9 @@ namespace MonkeyPaste {
             Task.Run(async () => {
                 switch (e.PropertyName) {
                     case nameof(IsNameReadOnly):
-                        if(!IsNameReadOnly && Tag.TagName != _orgTagName) {
+                        if(IsNameReadOnly && Tag.TagName != _orgTagName) {
                             _orgTagName = Tag.TagName;
-                            await MpDb.Instance.UpdateItemAsync<MpTag>(Tag);
+                            await MpDb.Instance.AddOrUpdateAsync<MpTag>(Tag);
                         }
                         break;
                 }
@@ -110,35 +110,65 @@ namespace MonkeyPaste {
                 }
             });
         }
+        //private void Db_OnItemUpdated(object sender, MpDbObjectUpdateEventArg e) {
+        //    Device.InvokeOnMainThreadAsync(async () => {
+        //        if (e.DbObject is MpTag t) {
+        //            if (t.Id == Tag.Id) {
+        //                if(e.UpdatedPropertyLookup.Count == 0) {
+        //                    Tag = t;
+        //                } else {
+        //                    foreach(var kvp in e.UpdatedPropertyLookup) {
+        //                        var prop = Tag.GetType().GetProperties().Where(x => x.Name == kvp.Key).FirstOrDefault();
+        //                        if(prop != null) {
+        //                            if(prop.PropertyType == typeof(int)) {
+        //                                prop.SetValue(Tag, Convert.ToInt32(kvp.Value));
+        //                            } else if (prop.PropertyType == typeof(string)) {
+        //                                prop.SetValue(Tag, kvp.Value);
+        //                            } else {
+        //                                MpConsole.WriteTraceLine(@"Unknown property type: " + prop.PropertyType.ToString());
+        //                            }
+        //                        }
+        //                    }
+        //                }                        
+        //            }
+        //        } 
+        //    });
+        //}
+
         private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpTag t) {
                     if (t.Id == Tag.Id) {
                         Tag = t;
                     }
-                } 
+                } else if(e is MpColor c) {
+                    if(c.Id == Tag.ColorId) {
+                        Tag.TagColor = await MpColor.GetColorByIdAsync(c.Id);
+                        OnPropertyChanged(nameof(Tag));
+                    }
+                }
             });
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            Device.BeginInvokeOnMainThread(() => {
-                if (e is MpClipTag dcit) {
-                    if (dcit.TagId == Tag.Id) {
-                        //when Clip unlinked
-                        var ci = Tag.ClipList.Where(x => x.Id == dcit.ClipId).FirstOrDefault();
-                        if (ci != null) {
-                            Tag.ClipList.Remove(ci);
-                            OnPropertyChanged(nameof(ClipCount));
-                        }
-                    }
-                } else if (e is MpClip dci) {
-                    //when copy item deleted
-                    if (Tag.ClipList.Any(x=>x.Id == dci.Id)) {
-                        Tag.ClipList.Remove(dci);
-                        OnPropertyChanged(nameof(ClipCount));
-                    }
-                }
-            });
+            //Device.BeginInvokeOnMainThread(() => {
+            //    if (e is MpClipTag dcit) {
+            //        if (dcit.TagId == Tag.Id) {
+            //            //when Clip unlinked
+            //            var ci = Tag.ClipList.Where(x => x.Id == dcit.ClipId).FirstOrDefault();
+            //            if (ci != null) {
+            //                Tag.ClipList.Remove(ci);
+            //                OnPropertyChanged(nameof(ClipCount));
+            //            }
+            //        }
+            //    } else if (e is MpClip dci) {
+            //        //when copy item deleted
+            //        if (Tag.ClipList.Any(x=>x.Id == dci.Id)) {
+            //            Tag.ClipList.Remove(dci);
+            //            OnPropertyChanged(nameof(ClipCount));
+            //        }
+            //    }
+            //});
         }
         #endregion
 

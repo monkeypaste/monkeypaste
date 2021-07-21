@@ -210,7 +210,7 @@ namespace MonkeyPaste {
             }
             ClipViewModels.Remove(civm);
             
-            await MpDb.Instance.DeleteItem(civm.Clip);
+            await MpDb.Instance.DeleteItemAsync(civm.Clip);
             await MpClipTag.DeleteAllClipTagsForClipId(civm.Clip.Id);
         });
 

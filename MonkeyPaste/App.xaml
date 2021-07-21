@@ -202,8 +202,14 @@
                 FontFamily="{StaticResource FontAwesomeSolid}"
                 Glyph="&#xf044;"
                 Size="22"
-                Color="Black" />            
-            
+                Color="Black" />
+
+            <FontImageSource x:Key="DotsIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf142;"
+                             Size="22"
+                             Color="Black" />
+
 
             <FontImageSource x:Key="CheckedIcon"
                              FontFamily="{StaticResource FontAwesomeSolid}"

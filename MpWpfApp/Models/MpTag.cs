@@ -8,6 +8,12 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTag : MpDbObject, MpISyncableDbObject {
+        public static event EventHandler OnSyncTagAdded;
+        public event EventHandler OnSyncTagUpdated;
+        public event EventHandler OnSyncTagDeleted;
+        public event EventHandler<MpCopyItem> OnSyncTagCopyItemLinked;
+        public event EventHandler<MpCopyItem> OnSyncTagCopyItemUnlinked;
+
         public int TagId { get; set; }
         public Guid TagGuid { get; set; }
 
@@ -15,10 +21,7 @@ namespace MpWpfApp {
         public int ColorId { get; set; }
 
         public string TagName { get; set; }
-        public MpColor TagColor { 
-            get; 
-            set; 
-        }
+        public MpColor TagColor { get; set; }
         //unused
         public int ParentTagId { get; set; } = 0;
         public MpTag() { }
@@ -57,40 +60,14 @@ namespace MpWpfApp {
                 TagGuid = Guid.NewGuid();
             } else {
                 TagGuid = Guid.Parse(dr["MpTagGuid"].ToString());
-            }
-            
+            }            
            
             TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
             TagColor = new MpColor(ColorId);
         }
-
-        private bool IsAltered() {
-            var dt = MpDb.Instance.Execute(
-                @"SELECT pk_MpTagId FROM MpTag WHERE MpTagGuid=@tg AND fk_ParentTagId=@ptid AND TagName=@tn AND SortIdx=@si AND fk_MpColorId=@cid",
-                new Dictionary<string, object> {
-                    { "@tg", TagGuid.ToString() },
-                    { "@ptid", ParentTagId },
-                    { "@tn", TagName },
-                    { "@si", TagSortIdx },
-                    { "@cid", ColorId }
-                });
-            return dt.Rows.Count == 0;
-        }
-
-        private string AlteredColumnNames() {
-            var dt = MpDb.Instance.Execute(
-                @"SELECT * FROM MpTag WHERE pk_MpTagId=@tid",
-                new Dictionary<string, object> { { "@tid", TagId } });
-            if (dt == null || dt.Rows.Count == 0) {
-                return null;
-            }
-            var tag = new MpTag(dt.Rows[0]);
-            return null;
-        }
-
-        
+                
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
             if(ci == null) {
                 return false;
@@ -106,7 +83,7 @@ namespace MpWpfApp {
             }
             return false;
         }
-        public bool LinkWithCopyItem(MpCopyItem ci) {
+        public bool LinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "") {
             if(ci == null) {
                 return false;
             }
@@ -137,12 +114,14 @@ namespace MpWpfApp {
                     { "@stid", TagId },
                     { "@so", SortOrderIdx }
                 },cistog.ToString());
-                //+ ci.CopyItemId + "," + this.TagId + "," + SortOrderIdx + ")");
-            //WriteToDatabase();
+
+            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
+                OnSyncTagCopyItemLinked?.Invoke(this, ci);
+            }
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
             return true;
         }
-        public void UnlinkWithCopyItem(MpCopyItem ci) {
+        public void UnlinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "") {
             if(ci == null) {
                 return;
             }
@@ -162,17 +141,21 @@ namespace MpWpfApp {
                         }, citg.ToString());
                 }
             }
+            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
+                OnSyncTagCopyItemUnlinked?.Invoke(this, ci);
+            }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false,bool ignoreSyncing = false) {
+            if(string.IsNullOrEmpty(sourceClientGuid)) {
+                sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
+            }
             if (TagGuid == Guid.Empty) {
                 TagGuid = Guid.NewGuid();
             }
-            //if (!IsAltered()) {
-            //    return;
-            //}
+
             if (string.IsNullOrEmpty(TagName)) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
@@ -183,7 +166,7 @@ namespace MpWpfApp {
                     //occurs with initial tag creation on first load
                     TagColor = MpColor.GetColorById(ColorId);
                 }
-                TagColor.WriteToDatabase();
+                TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpTag(MpTagGuid,TagName,fk_MpColorId,SortIdx) values(@tg,@tn,@cid,@si)",
@@ -194,8 +177,11 @@ namespace MpWpfApp {
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
+                if(sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
+                    OnSyncTagAdded?.Invoke(this,null);
+                }
             } else {
-                TagColor.WriteToDatabase();
+                TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
                     "update MpTag set MpTagGuid=@tg, TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
@@ -206,6 +192,9 @@ namespace MpWpfApp {
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
+                if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
+                    OnSyncTagUpdated?.Invoke(this, null);
+                }
             }
         }
         public override void WriteToDatabase() {
@@ -221,7 +210,7 @@ namespace MpWpfApp {
                     { "@tid", TagId }
                 }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
 
-            var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where where fk_MpTagId=@tid", new Dictionary<string, object> { { "@tid", TagId } });
+            var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where fk_MpTagId=@tid", new Dictionary<string, object> { { "@tid", TagId } });
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
                     var citg = Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
@@ -231,6 +220,9 @@ namespace MpWpfApp {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
                         }, citg.ToString(),sourceClientGuid,ignoreTracking,ignoreSyncing);
                 }
+            }
+            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
+                OnSyncTagDeleted?.Invoke(this, null);
             }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
@@ -255,9 +247,9 @@ namespace MpWpfApp {
                     case "TagName":
                         newTag.TagName = li.AffectedColumnValue;
                         break;
-                    case "SortIdx":
-                        newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
+                    //case "SortIdx":
+                    //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+                    //    break;
                     case "fk_MpColorId":
                         var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", li.AffectedColumnValue);
                         newTag.ColorId = new MpColor(cdr).ColorId;
@@ -277,19 +269,19 @@ namespace MpWpfApp {
             var dbLog = new MpTag() {
                 TagGuid = System.Guid.Parse(objParts[0]),
                 TagName = objParts[1],
-                TagSortIdx = Convert.ToInt32(objParts[2]),
-                ColorId = Convert.ToInt32(objParts[3])
+                //TagSortIdx = Convert.ToInt32(objParts[2]),
+                ColorId = Convert.ToInt32(objParts[2])
             };
             return dbLog;
         }
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
                 TagGuid.ToString(),
                 TagName,
-                TagSortIdx,
+                //TagSortIdx,
                 ColorId);
         }
 
@@ -297,8 +289,7 @@ namespace MpWpfApp {
             return typeof(MpTag);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
-            await Task.Delay(1);
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             MpTag other = null;
             if(drOrModel is DataRow) {
                 other = new MpTag(drOrModel as DataRow);
@@ -308,11 +299,6 @@ namespace MpWpfApp {
             }
             //returns db column name and string value of dr that is diff
             var diffLookup = new Dictionary<string, string>();
-            //if(TagId > 0) {
-            //    diffLookup = CheckValue(TagId, other.TagId,
-            //        "pk_MpTagId",
-            //        diffLookup);
-            //}
             diffLookup = CheckValue(TagGuid, other.TagGuid,
                 "MpTagGuid",
                 diffLookup);
@@ -323,10 +309,10 @@ namespace MpWpfApp {
                 TagName, other.TagName,
                 "TagName",
                 diffLookup);
-            diffLookup = CheckValue(
-                TagSortIdx, other.TagSortIdx,
-                "SortIdx",
-                diffLookup);
+            //diffLookup = CheckValue(
+            //    TagSortIdx, other.TagSortIdx,
+            //    "SortIdx",
+            //    diffLookup);
             diffLookup = CheckValue(
                 ColorId, other.ColorId,
                 "fk_MpColorId",

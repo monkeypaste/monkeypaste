@@ -77,7 +77,7 @@ namespace MonkeyPaste {
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
-        public static async Task<List<MpDbLog>> GetDbLogsByGuid(string dboGuid,DateTime fromDateUtc) {
+        public static async Task<List<MpDbLog>> GetDbLogsByGuidAsync(string dboGuid,DateTime fromDateUtc) {
             var dboLogs = new List<MpDbLog>();
 
             var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
@@ -94,7 +94,7 @@ namespace MonkeyPaste {
             var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
             var rlogsToRemove = new List<MpDbLog>();
             //query local db and get logs for item since oldest remote transaction datetime
-            var llogs = await MpDbLog.GetDbLogsByGuid(dboGuid, remoteLogsMinDt);
+            var llogs = await MpDbLog.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
                 if(rlog.LogActionDateTime < lastSyncDt) {
                     rlogsToRemove.Add(rlog);
@@ -149,7 +149,7 @@ namespace MonkeyPaste {
             return typeof(MpDbLog);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

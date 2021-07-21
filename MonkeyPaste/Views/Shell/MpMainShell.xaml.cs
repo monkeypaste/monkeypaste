@@ -12,7 +12,6 @@ namespace MonkeyPaste {
         public MpIKeyboardInteractionService LayoutService { get; set; }
         public MpILocalStorage StorageService { get; set; }
 
-
         public event EventHandler<object> OnShellDisappearing;
 
         public MpMainShell() {

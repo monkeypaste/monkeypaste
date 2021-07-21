@@ -71,8 +71,7 @@ namespace MpWpfApp {
             SyncDateTime = DateTime.Parse(dr["SyncDateTime"].ToString());
         }
 
-
-        public override void WriteToDatabase() {
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (OtherClientGuid == Guid.Empty) {
                 OtherClientGuid = Guid.NewGuid();
             }
@@ -83,7 +82,7 @@ namespace MpWpfApp {
                         new System.Collections.Generic.Dictionary<string, object> {
                             { "@ocg",OtherClientGuid.ToString() },
                         { "@sdt", SyncDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
-                    });
+                    },"",sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 SyncHistoryId = MpDb.Instance.GetLastRowId("MpSyncHistory", "pk_MpSyncHistoryId");
                 GetAllSyncHistorys().Add(this);
             } else {
@@ -93,12 +92,15 @@ namespace MpWpfApp {
                         { "@ocg",OtherClientGuid.ToString() },
                         { "@sdt", SyncDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                         { "@shid", SyncHistoryId }
-                    });
+                    }, "", sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 var c = _AllSyncHistoryList.Where(x => x.SyncHistoryId == SyncHistoryId).FirstOrDefault();
-                if(c != null) {
+                if (c != null) {
                     _AllSyncHistoryList[_AllSyncHistoryList.IndexOf(c)] = this;
                 }
-            }                  
+            }
+        }
+        public override void WriteToDatabase() {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, true, true);
         }
     }
 }

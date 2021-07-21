@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                         //    var handshakeResponse = await ReceiveWebSocketAsync(cws);
                             
                         //}
-                        if(_localSync.IsWpf() || !_localSync.IsWpf()) {
+                        if(_localSync.IsWpf()) {
                             await SessionManager.DisconnectAll();
                         }
                         // check-in w/ webserver and add non-local endpoints
@@ -121,6 +121,15 @@ namespace MonkeyPaste {
 
                                 var handshakeRequest = ReceiveSocket(client);
                                 var oep = MpDeviceEndpoint.Parse(handshakeRequest.Content);
+                                foreach(var rd in _remoteDevices) {
+                                    //check known clients for this ip where this may be a reconnect so replace info with new if ip match
+                                    if(rd.RemoteEndpoint.PrivateIp4Address == oep.PrivateIp4Address) {
+                                        int rdIdx = _remoteDevices.IndexOf(rd);
+                                        _remoteDevices[rdIdx].RemoteEndpoint = oep;
+                                        _remoteDevices[rdIdx].RemoteSocket = client;
+                                    }
+                                }
+
                                 var handshakeResponse = MpStreamMessage.CreateHandshakeResponse(ThisEndpoint, oep.DeviceGuid);
                                 var dbLogRequest = SendReceiveSocket(client, handshakeResponse);
                                 var lastSyncForOther = DateTime.Parse(dbLogRequest.Content);
@@ -128,7 +137,7 @@ namespace MonkeyPaste {
                                 var dbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, oep.DeviceGuid, dbLogQueryResultStr);
 
                                 var flipRequest = SendReceiveSocket(client, dbLogResponse);
-                                var thisLastSyncDt = await _localSync.GetLastSyncForRemoteDevice(oep.DeviceGuid);
+                                var thisLastSyncDt = _localSync.GetLastSyncForRemoteDevice(oep.DeviceGuid);
                                 var thisDbLogRequest = MpStreamMessage.CreateDbLogRequest(
                                     ThisEndpoint,
                                     oep.DeviceGuid,
@@ -142,10 +151,8 @@ namespace MonkeyPaste {
                                             continue;
                                         }
                                         var remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
-                                        DateTime newSyncDt = DateTime.UtcNow;
                                         await _localSync.PerformSync(
                                             remoteChangesLookup,
-                                            newSyncDt,
                                             oep.DeviceGuid);
 
                                         var rep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
@@ -179,7 +186,7 @@ namespace MonkeyPaste {
                             var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
                             var handshakeResponse = SendReceiveSocket(listener, handshakeRequest);
                             var lep = MpDeviceEndpoint.Parse(handshakeResponse.Content);
-                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(lep.DeviceGuid);
+                            var lastSyncDt = _localSync.GetLastSyncForRemoteDevice(lep.DeviceGuid);
 
                             var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
                                 ThisEndpoint,
@@ -197,11 +204,8 @@ namespace MonkeyPaste {
                             var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, lep.DeviceGuid, dbLogQueryResultStr);
                             SendSocket(listener, thisdbLogResponse);
 
-                            var newSyncDt = DateTime.UtcNow;
-
                             await _localSync.PerformSync(
                                 remoteChangesLookup,
-                                newSyncDt,
                                 lep.DeviceGuid);                            
 
                             await Task.Run(async () => {
@@ -211,10 +215,8 @@ namespace MonkeyPaste {
                                         continue;
                                     }
                                     remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
-                                    newSyncDt = DateTime.UtcNow;
                                     await _localSync.PerformSync(
                                                 remoteChangesLookup,
-                                                newSyncDt,
                                                 lep.DeviceGuid);
                                 }
                                 listener.Close();
@@ -237,7 +239,7 @@ namespace MonkeyPaste {
                         return;
                     }
                     foreach (var rep in _remoteDevices) {
-                        var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
+                        var lastSyncDt =  _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
                         var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncDt,rep.RemoteEndpoint.DeviceGuid);
                         if(!string.IsNullOrEmpty(dbLogQueryResultStr)) {
                             var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, rep.RemoteEndpoint.DeviceGuid, dbLogQueryResultStr);

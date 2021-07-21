@@ -685,8 +685,7 @@ namespace MpWpfApp {
             return logs;
         }
 
-        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
-            await Task.Delay(0);
+        public DateTime GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             var sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
             if (sh != null) {
                 return sh.SyncDateTime;
@@ -730,9 +729,7 @@ namespace MpWpfApp {
 
         public async Task PerformSync(
             Dictionary<Guid, List<MonkeyPaste.MpDbLog>> changeLookup,
-            DateTime newSyncDate,
             string remoteClientGuid) {
-            var lastSyncDt = await MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
             var updateChanges = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();

@@ -160,7 +160,7 @@ namespace MpWpfApp {
         //        });
         //}
 
-        public override void WriteToDatabase() {
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (DbLogId == 0) {
                 MpDb.Instance.ExecuteWrite(
                         "insert into MpDbLog(DbObjectGuid,DbTableName,AffectedColumnName,AffectedColumnValue,LogActionType,LogActionDateTime,SourceClientGuid) " +
@@ -173,7 +173,7 @@ namespace MpWpfApp {
                             { "@lat", (int)LogActionType },
                             { "@ladt",LogActionDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                             { "@scg", SourceClientGuid.ToString() }
-                    });
+                    },DbObjectGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 DbLogId = MpDb.Instance.GetLastRowId("MpDbLog", "pk_MpDbLogId");
                 OnItemAdded?.Invoke(this, this);
             } else {
@@ -188,7 +188,7 @@ namespace MpWpfApp {
                         { "@lat", (int)LogActionType },
                         { "@ladt",LogActionDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                         { "@scg", SourceClientGuid.ToString() }
-                    });
+                    }, DbObjectGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 OnItemUpdated?.Invoke(this, this);
             }
             var al = GetAllDbLogs().Where(x => x.DbLogId == DbLogId).ToList();
@@ -196,7 +196,11 @@ namespace MpWpfApp {
                 _AllDbLogList[_AllDbLogList.IndexOf(al[0])] = this;
             } else {
                 _AllDbLogList.Add(this);
-            }        
+            }
+        }
+
+        public override void WriteToDatabase() {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, false, false);
         }
 
         public void DeleteFromDatabase() {
@@ -245,7 +249,7 @@ namespace MpWpfApp {
             return typeof(MpDbLog);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

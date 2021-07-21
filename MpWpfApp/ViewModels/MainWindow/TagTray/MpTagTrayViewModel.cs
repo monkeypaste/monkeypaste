@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,6 +15,7 @@ namespace MpWpfApp {
     public class MpTagTrayViewModel : MpUndoableObservableCollectionViewModel<MpTagTrayViewModel,MpTagTileViewModel> {
         #region Private Variables
         #endregion
+
         #region View Models
         public MpTagTileViewModel SelectedTagTile {
             get {
@@ -64,7 +66,8 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpTagTrayViewModel() : base() {
-            //INSERT INTO MpTag(TagName,fk_MpColorId,SortIdx) VALUES ('All',2,1),('Recent',4,0),('Favorites',3,2),('Help',1,3);
+            MpTag.OnSyncTagAdded += MpTag_OnSyncTagAdded;
+
             var allTags = MpTag.GetAllTags();
             if(allTags.Count == 0) {
                 //occurs on first load
@@ -129,45 +132,7 @@ namespace MpWpfApp {
             foreach (MpTag t in allTags) {
                 this.Add(new MpTagTileViewModel(t));
             }
-
-            MpDb.Instance.OnSyncCreate += Db_OnSyncCreate;
-            MpDb.Instance.OnSyncUpdate += Db_OnSyncUpdate;
-            MpDb.Instance.OnSyncDelete += Db_OnSyncDelete;
-        }
-
-        private void Db_OnSyncDelete(object sender, object e) {
-            if (e == null) {
-                return;
-            }
-            if (e is MpTag t) {
-                var ttvm = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
-                if(ttvm != null) {
-                    this.Remove(ttvm);
-                }
-            }
-        }
-
-        private void Db_OnSyncUpdate(object sender, object e) {
-            if (e == null) {
-                return;
-            }
-            if (e is MpTag t) {
-                var ttvm = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
-                if (ttvm != null) {
-                    ttvm.Tag = t;
-                }
-
-            }
-        }
-
-        private void Db_OnSyncCreate(object sender, object e) {
-            if(e == null) {
-                return;
-            }
-            if(e is MpTag t) {
-                Add(new MpTagTileViewModel(t));
-            }            
-        }
+        }        
 
         public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
             CollectionChanged += (s, e) => {
@@ -305,6 +270,10 @@ namespace MpWpfApp {
             }
         }
         public new void Add(MpTagTileViewModel newTagTile) {
+            newTagTile.Tag.OnSyncTagDeleted += Tag_OnSyncTagDeleted;
+            newTagTile.Tag.OnSyncTagCopyItemLinked += Tag_OnSyncTagCopyItemLinked;
+            newTagTile.Tag.OnSyncTagCopyItemUnlinked += Tag_OnSyncTagCopyItemUnlinked;
+
             base.Add(newTagTile);
 
             //watches Tag IsSelected so recent is selected if none are
@@ -367,12 +336,15 @@ namespace MpWpfApp {
                         break;
                 }
             };
-        }
+        }        
 
-        public new void Remove(MpTagTileViewModel tagTileToRemove) {
+        public new void Remove(MpTagTileViewModel tagTileToRemove, bool fromSync = false) {
             //when removing a tag auto-select the history tag
             base.Remove(tagTileToRemove);
-            tagTileToRemove.Tag.DeleteFromDatabase();
+
+            if(!fromSync) {
+                tagTileToRemove.Tag.DeleteFromDatabase();
+            }
 
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();
@@ -433,6 +405,42 @@ namespace MpWpfApp {
         public MpTagTileViewModel GetRecentTagTileViewModel() {
             return this.Where(tt => tt.Tag.TagId == 2).ToList()[0];
         }
+        #endregion
+
+        #region Private Methods
+
+        #region Model Sync Events
+        private void MpTag_OnSyncTagAdded(object sender, EventArgs e) {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() =>
+            {
+                if (sender is MpTag t) {
+                    this.Add(new MpTagTileViewModel(t));
+                }
+            }));         
+        }
+
+        private void Tag_OnSyncTagCopyItemUnlinked(object sender, MpCopyItem e) {
+            throw new NotImplementedException();
+        }
+
+        private void Tag_OnSyncTagCopyItemLinked(object sender, MpCopyItem e) {
+            throw new NotImplementedException();
+        }
+
+        private void Tag_OnSyncTagDeleted(object sender, EventArgs e) {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() => {
+                if(sender is MpTag t) {
+                    var ttvmToRemove = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
+                    if (ttvmToRemove != null) {
+                        this.Remove(ttvmToRemove, true);
+                    }
+                }
+            }));
+        }
+
+        
+        #endregion
+
         #endregion
 
         #region Commands

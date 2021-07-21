@@ -12,7 +12,7 @@ namespace MonkeyPaste.iOS {
         public string DbFilePath() {
             string personalFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             string libraryFolder = Path.Combine(personalFolder, "..", "Library");
-            return Path.Combine(libraryFolder, MonkeyPaste.MpPreferences.DbName);
+            return Path.Combine(libraryFolder, MonkeyPaste.MpPreferences.Instance.DbName);
         }
     }
 }

@@ -85,17 +85,20 @@ namespace MonkeyPaste {
                 Init();
             }
             line = line == null ? string.Empty: line;
+            if(args != null) {
+                line += args.ToString();
+            }
             //args = args == null ? string.Empty : args;
             string outStr = string.Empty;
-            if(args != null && args.GetType() == typeof(Exception)) {
-                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}\nException: {4}", callerFilePath, callerName, lineNum, line,args.ToString());
-            } else if(line.ToString().Contains(@"{0}")) {
-                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}", callerFilePath, callerName, lineNum, string.Format(line.ToString(),args.ToString()));
-            } else {
-                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}", callerFilePath, callerName, lineNum, line.ToString());                
-            }
-            
-            Console.WriteLine(outStr);
+            Console.WriteLine("");
+            Console.WriteLine(@"-----------------------------------------------------------------------");
+            Console.WriteLine("File: "+callerFilePath);
+            Console.WriteLine("Member: " + callerName);
+            Console.WriteLine("Line: " + lineNum);
+            Console.WriteLine("Msg: " + line);
+            Console.WriteLine(@"-----------------------------------------------------------------------");
+            Console.WriteLine("");
+
             _sb.AppendLine(string.Format(@"[{0}] : {1}", DateTime.Now, outStr));
         }
 

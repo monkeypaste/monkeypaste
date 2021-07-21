@@ -84,9 +84,9 @@
     <Compile Include="Renderers\MpCustomEntryRenderer.cs" />
     <Compile Include="Services\MpKeyboardInteractionService.cs" />
     <Compile Include="Utils\MpDbFilePath_IOS.cs" />
+    <Compile Include="Utils\MpIosInterfaceWrapper.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <Compile Include="MpBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MpPhotoImporter.cs" />
     <BundleResource Include="Resources\FontAwesome5Regular.otf" />

@@ -43,7 +43,7 @@ namespace MonkeyPaste {
         }
 
         [Column("SortIdx")]
-        public int TagSortIdx { get; set; } = 1;
+        public int TagSortIdx { get; set; } = -1;
 
         [ForeignKey(typeof(MpColor))]
         [Column("fk_MpColorId")]
@@ -59,7 +59,7 @@ namespace MonkeyPaste {
                     if (ColorId == 0) {
                         ColorId = _tagColor.Id;
                     } else {
-                        _tagColor = MpColor.GetColorByIdAsync(ColorId).Result;
+                        _tagColor = MpColor.GetColorById(ColorId);
                     }
                 }
                 return _tagColor;
@@ -135,7 +135,7 @@ namespace MonkeyPaste {
                 return;
             }
             var result = await MpDb.Instance.QueryAsync<MpClipTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
-            await MpDb.Instance.DeleteItem<MpClipTag>(result[0]);
+            await MpDb.Instance.DeleteItemAsync<MpClipTag>(result[0]);
 
             //var clipToRemove = ClipList.Where(x => x.Id == clip.Id).FirstOrDefault();
             //if(clipToRemove != null) {
@@ -175,9 +175,9 @@ namespace MonkeyPaste {
                     case "TagName":
                         newTag.TagName = li.AffectedColumnValue;
                         break;
-                    case "SortIdx":
-                        newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
+                    //case "SortIdx":
+                    //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+                    //    break;
                     case "fk_MpColorId":
                         //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
                         var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
@@ -198,19 +198,19 @@ namespace MonkeyPaste {
             var dbLog = new MpTag() {
                 TagGuid = System.Guid.Parse(objParts[0]),
                 TagName = objParts[1],
-                TagSortIdx = Convert.ToInt32(objParts[2]),
-                ColorId = Convert.ToInt32(objParts[3])
+                //TagSortIdx = Convert.ToInt32(objParts[2]),
+                ColorId = Convert.ToInt32(objParts[2])
             };
             return dbLog;
         }
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
                 TagGuid.ToString(),
                 TagName,
-                TagSortIdx,
+                //TagSortIdx,
                 ColorId);
         }
 
@@ -218,7 +218,7 @@ namespace MonkeyPaste {
             return typeof(MpTag);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             MpTag other = null;
             if(drOrModel == null) {
                 other = new MpTag();
@@ -229,11 +229,6 @@ namespace MonkeyPaste {
             }
             //returns db column name and string value of dr that is diff
             var diffLookup = new Dictionary<string, string>();
-            //if(Id > 0) {
-            //    diffLookup = CheckValue(Id, other.Id,
-            //        "pk_MpTagId",
-            //        diffLookup);
-            //}
             diffLookup = CheckValue(TagGuid, other.TagGuid,
                 "MpTagGuid",
                 diffLookup);
@@ -244,10 +239,10 @@ namespace MonkeyPaste {
                 TagName, other.TagName,
                 "TagName",
                 diffLookup);
-            diffLookup = CheckValue(
-                TagSortIdx, other.TagSortIdx,
-                "SortIdx",
-                diffLookup);
+            //diffLookup = CheckValue(
+            //    TagSortIdx, other.TagSortIdx,
+            //    "SortIdx",
+            //    diffLookup);
             //var c = await MpColor.GetColorById(ColorId);
             diffLookup = CheckValue(
                 ColorId, other.ColorId,

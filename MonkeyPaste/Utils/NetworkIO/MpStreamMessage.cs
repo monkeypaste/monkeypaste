@@ -88,7 +88,7 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 
@@ -264,7 +264,7 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

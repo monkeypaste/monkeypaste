@@ -13,6 +13,6 @@ namespace MonkeyPaste {
         public MpRemoteDevice(Socket s, MpDeviceEndpoint rep) {
             RemoteSocket = s;
             RemoteEndpoint = rep;
-        }
+        }        
     }
 }

@@ -8,9 +8,14 @@ using System.Linq;
 using System.Windows.Input;
 using System.Diagnostics;
 using Xamarin.Forms.Internals;
+using FFImageLoading.Helpers.Exif;
 
 namespace MonkeyPaste {
     public class MpTagTileCollectionViewModel : MpViewModelBase {
+        #region Private Variables
+        private int _resortStartIdx = -1;
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -49,6 +54,9 @@ namespace MonkeyPaste {
         
 
         public MpTagTileViewModel CreateTagViewModel(MpTag tag) {
+            if(tag.TagSortIdx < 0) {
+                tag.TagSortIdx = TagViewModels.Count;
+            }
             MpTagTileViewModel ttvm = new MpTagTileViewModel(tag);
             ttvm.PropertyChanged += TagViewModel_PropertyChanged;
             return ttvm;
@@ -76,6 +84,16 @@ namespace MonkeyPaste {
             return;
         }
 
+        private async Task UpdateSort(bool fromDb = false) {
+            if(fromDb) {
+
+            } else {
+                foreach(var tvm in TagViewModels) {
+                    tvm.Tag.TagSortIdx = TagViewModels.IndexOf(tvm);
+                    await MpDb.Instance.UpdateItemAsync<MpTag>(tvm.Tag);
+                }
+            }
+        }
         #endregion
 
         #region Event Handlers
@@ -100,38 +118,56 @@ namespace MonkeyPaste {
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpTag t) {
-                var ttvmToRemove = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
-                if(ttvmToRemove != null) {
-                    //remove tag and update sort order
-                    TagViewModels.Remove(ttvmToRemove);
-                    int sortIdx = 0;
-                    foreach(var ttvm in TagViewModels.OrderBy(x=>x.Tag.TagSortIdx)) {
-                        ttvm.Tag.TagSortIdx = sortIdx++;
-                        Task.Run(async()=> await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag));
-                    }
-                }
+            //Device.InvokeOnMainThreadAsync(async () => {
+            //    if (e is MpTag t) {
+            //        var ttvmToRemove = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
+            //        if (ttvmToRemove != null) {
+            //            //remove tag and update sort order
+            //            int removedIdx = TagViewModels.IndexOf(ttvmToRemove);
+            //            TagViewModels.Remove(ttvmToRemove);
+            //            await UpdateSort();
+            //        }
+            //    }
+            //});
+
+            if (e is MpTag) {
+                Device.InvokeOnMainThreadAsync(async () => {
+                    //await Task.Delay(1000);
+                    await Task.Run(Initialize);
+                });
             }
         }
 
         private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
+            //Device.InvokeOnMainThreadAsync(async () => {
+            //    if (e is MpTag t) {
+            //        var ttvmToUpdate = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
+            //        if (ttvmToUpdate != null) {
+            //            ttvmToUpdate.Tag.ColorId = t.ColorId;                        
+            //            ttvmToUpdate.Tag.TagName = t.TagName;
+            //            if(ttvmToUpdate.Tag.TagSortIdx != t.TagSortIdx) {
+
+            //            }
+            //            OnPropertyChanged(nameof(Tag));
+            //        }
+            //    }
+            //});
+
             if (e is MpTag t) {
-                var ttvmToUpdate = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
-                if (ttvmToUpdate != null) {
-                    if(TagViewModels.IndexOf(ttvmToUpdate) != t.TagSortIdx) {
-                        TagViewModels.Move(TagViewModels.IndexOf(ttvmToUpdate), t.TagSortIdx);
-                    }
-                }
+                
+                //Device.InvokeOnMainThreadAsync(async () => {
+                //    await Task.Run(Initialize);
+                //});
             }
         }
 
-        private async void TagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void TagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (sender is MpTagTileViewModel ttvm) {
                 switch (e.PropertyName) {
                     case nameof(ttvm.IsSelected):
                         break;
                 }
-                await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag);
+                //await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag);
             }
         }
         #endregion
@@ -196,8 +232,8 @@ namespace MonkeyPaste {
         public ICommand DeleteTagCommand => new Command<object>(async (args) => {
             if(args != null && args is MpTagTileViewModel ttvm) {
                 if(TagViewModels.Contains(ttvm)) {
-                    TagViewModels.Remove(ttvm);
-                    await MpDb.Instance.DeleteItem<MpTag>(ttvm.Tag);                    
+                    //TagViewModels.Remove(ttvm);
+                    await MpDb.Instance.DeleteItemAsync<MpTag>(ttvm.Tag);                    
                 }
             }
         }); 

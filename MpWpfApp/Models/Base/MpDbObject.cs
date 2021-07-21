@@ -27,9 +27,9 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
-        public virtual void WriteToDatabase(string sourceClientGuid,bool ignoreTracking = false,bool ignoreSyncing = false) { }
+        public virtual void WriteToDatabase(string sourceClientGuid,bool ignoreTracking = false,bool ignoreSyncing = false) { throw new Exception(@"WriteToDb w/ args must be overriden"); }
 
-        public virtual void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) { }
+        public virtual void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) { throw new Exception(@"DeleteFromoDb w/ args must be overriden"); }
         
         protected Dictionary<string, string> CheckValue(
             object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {

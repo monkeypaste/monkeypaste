@@ -122,7 +122,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
         protected MpViewModelBase() {
-            OnInitialize();
+            //OnInitialize();
         }
 
         protected virtual void OnInitialize() {

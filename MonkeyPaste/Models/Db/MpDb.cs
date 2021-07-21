@@ -11,7 +11,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Xamarin.Forms.PlatformConfiguration;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste {    
     public class MpDb : MpISync {
         #region Singleton
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
@@ -29,7 +29,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = false;
+        public bool UseWAL { get; set; } = true;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -103,6 +103,10 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
+            if (item == null) {
+                MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
+                return;
+            }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
                     (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
@@ -123,15 +127,30 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
+
+            if (item == null) {
+                MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
+                return;
+            }
+            //object oldItem = null;
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {   
                 if(!ignoreTracking) {
                     await MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
                 }
-                               
-            }           
+                //string tableName = new MpXamStringToSyncObjectTypeConverter().Convert(item.GetType().ToString()).ToString().Replace(@"MonkeyPaste.", string.Empty);
+                //oldItem = await GetObjDbRowAsync(tableName, (item as MpDbModelBase).Guid);
+            }
+            
 
             await _connectionAsync.UpdateAsync(item);
-            OnItemUpdated?.Invoke(this, item as MpDbModelBase); 
+            //var updateEventArg = new MpDbObjectUpdateEventArg() {
+            //    DbObject = item as MpDbModelBase
+            //};
+            //if (oldItem != null) {
+            //    updateEventArg.UpdatedPropertyLookup = (item as MpISyncableDbObject).DbDiff(oldItem);
+            //}
+            //OnItemUpdated?.Invoke(this, updateEventArg); 
+            OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
@@ -148,9 +167,13 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T: new() {
+        public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T: new() {
             if (_connectionAsync == null) {
                 await Init();
+            }
+            if(item == null) {
+                MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
+                return;
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if(!ignoreTracking) {
@@ -208,8 +231,8 @@ namespace MonkeyPaste {
             var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
 
             var connStr = new SQLiteConnectionString(
-                databasePath: dbPath,//MpPreferences.Instance.DbPath, 
-                storeDateTimeAsTicks: true,
+                databasePath: dbPath,
+                storeDateTimeAsTicks: false,
                 //key: MpPreferences.Instance.DbPassword,
                 openFlags: SQLiteOpenFlags.ReadWrite |
                            SQLiteOpenFlags.Create |
@@ -225,8 +248,8 @@ namespace MonkeyPaste {
             var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
 
             var connStr = new SQLiteConnectionString(
-                databasePath: dbPath,//MpPreferences.Instance.DbPath, 
-                storeDateTimeAsTicks: true,
+                databasePath: dbPath,
+                storeDateTimeAsTicks: false,
                 //key: MpPreferences.Instance.DbPassword,
                 openFlags: SQLiteOpenFlags.ReadWrite |
                            SQLiteOpenFlags.Create |
@@ -245,7 +268,7 @@ namespace MonkeyPaste {
 
             var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
             
-            //File.Delete(dbPath);
+            File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -375,17 +398,21 @@ namespace MonkeyPaste {
         }
 
         public async Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
-            var logs = await MpDbLog.GetDbLogsByGuid(dboGuid, fromDtUtc);
+            var logs = await MpDbLog.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
             return logs;
         }
 
-        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
-            var shl = await GetItemsAsync<MpSyncHistory>();
-            var sh = shl.Where(x => x.OtherClientGuid.ToString() == otherDeviceGuid)
-                        .OrderByDescending(x => x.SyncDateTime)
+        public DateTime GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+            var shl = GetItems<MpSyncHistory>();
+            if(shl.Count == 0) {
+                return DateTime.MinValue;
+            }
+            var lsh = shl
+                        .Where(x=>x.OtherClientGuid.ToString() == otherDeviceGuid)
+                        .OrderByDescending(x=>x.SyncDateTime)
                         .FirstOrDefault();
-            if (sh != null) {
-                return sh.SyncDateTime;
+            if (lsh != null) {
+                return lsh.SyncDateTime;
             }
             return DateTime.MinValue;
         }
@@ -427,9 +454,8 @@ namespace MonkeyPaste {
 
         public async Task PerformSync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
-            DateTime newSyncDate,
             string remoteClientGuid) {
-            var lastSyncDt = await MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
+            var lastSyncDt = MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MpDbLog>>();
             var updateChanges = new Dictionary<Guid, List<MpDbLog>>();
@@ -487,7 +513,7 @@ namespace MonkeyPaste {
             // in delete, add, update order
             foreach(var ckvp in deleteChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var deleteMethod = typeof(MpDb).GetMethod("DeleteItem");
+                var deleteMethod = typeof(MpDb).GetMethod("DeleteItemAsync");
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 var dbo = await MpDb.Instance.GetObjDbRowAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
                 Task deleteItem = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
@@ -498,7 +524,7 @@ namespace MonkeyPaste {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
-                var addMethod = typeof(MpDb).GetMethod("AddOrUpdate");
+                var addMethod = typeof(MpDb).GetMethod("AddOrUpdateAsync");
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
                 Task addItem = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await addItem;
@@ -508,7 +534,7 @@ namespace MonkeyPaste {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
-                var updateMethod = typeof(MpDb).GetMethod("UpdateItem");
+                var updateMethod = typeof(MpDb).GetMethod("UpdateItemAsync");
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
                 Task updateItem = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await updateItem;
@@ -519,7 +545,7 @@ namespace MonkeyPaste {
                 OtherClientGuid = System.Guid.Parse(remoteClientGuid),
                 SyncDateTime = DateTime.UtcNow
             };
-            await MpDb.Instance.AddItemAsync<MpSyncHistory>(newSyncHistory);
+            await MpDb.Instance.AddItemAsync<MpSyncHistory>(newSyncHistory,"",true,true);
         }
 
         private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {

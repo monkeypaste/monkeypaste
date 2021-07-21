@@ -85,7 +85,10 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<List<MpDeviceEndpoint>> Connect(MpDeviceEndpoint cep) {
+        public async Task<List<MpDeviceEndpoint>> Connect(MpDeviceEndpoint cep, int tryCount = 5) {
+            if(tryCount < 0) {
+                return new List<MpDeviceEndpoint>();
+            }
             var uri = new Uri(
                     string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privip={3}&port={4}&at={5}&dguid={6}",
                     @"test@test.com",
@@ -103,8 +106,8 @@ namespace MonkeyPaste {
                     MpConsole.WriteTraceLine(@"Connected to server with access token: " + uri.ToString());
                     return ProcessWebConnectResponse(result);
                 } else {
-                    MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString());
-                    return new List<MpDeviceEndpoint>();
+                    MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString() + " attempt: "+(tryCount - 4));
+                    return await Connect(cep, tryCount--);
                 }
             }
             catch (Exception ex) {
@@ -164,10 +167,10 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(response)) {
                 return repl;
             }
-            var rpl = response.Split(new string[] { "&" }, StringSplitOptions.None);
+            var rpl = response.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < rpl.Length; i++) {
-                if(i + 5 >= rpl.Length) {
+                if(i + 6 > rpl.Length) {
                     MpConsole.WriteTraceLine(@"Malformed remote device response from server, ignoring");
                     break;
                 }

@@ -20,7 +20,7 @@ namespace MonkeyPaste {
 
 
         private void MpTagTileView_OnShellDisappearing(object sender, object e) {
-            TagTileSwipeView.Close();
+            //TagTileSwipeView.Close();
         }
 
         private void MpTagTileView_BindingContextChanged(object sender, EventArgs e) {
@@ -50,7 +50,7 @@ namespace MonkeyPaste {
         }
 
         public void CloseSwipeView() {
-            TagTileSwipeView.Close();
+            //TagTileSwipeView.Close();
         }
 
         private void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e) {

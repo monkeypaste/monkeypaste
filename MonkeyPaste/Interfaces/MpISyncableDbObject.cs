@@ -9,7 +9,7 @@ namespace MonkeyPaste {
         string SerializeDbObject();
         Type GetDbObjectType();
 
-        Task<Dictionary<string, string>> DbDiff(object drOrModel);
+        Dictionary<string, string> DbDiff(object drOrModel);
         Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid);
     }
 }

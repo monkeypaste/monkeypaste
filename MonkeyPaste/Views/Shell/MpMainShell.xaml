@@ -10,7 +10,8 @@
     </Shell.BindingContext>
     <Shell.FlyoutContentTemplate>
         <DataTemplate>
-            <StackLayout BackgroundColor="LightYellow" LayoutChanged="StackLayout_LayoutChanged">
+            <StackLayout BackgroundColor="LightYellow" 
+                         LayoutChanged="StackLayout_LayoutChanged">
                 <Grid HeightRequest="200">
                     <Image Margin="3"
                            Aspect="AspectFill"
@@ -25,55 +26,27 @@
                                                BindingContext="{Binding TagCollectionViewModel}" />
                 </ContentView>
 
-                <Grid BackgroundColor="Orange">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" 
-                               Margin="5"
-                               HeightRequest="45"
-                               Source="{StaticResource SettingsIcon}" />
-                        <Button Grid.Column="1"
-                                Margin="0"
-                                Text="Settings"
-                                Clicked="Button_Clicked"
-                                BackgroundColor="LightYellow"
-                                TextColor="DimGray" HorizontalOptions="Start"
-                                VerticalOptions="Start" />
-                    </Grid>
-                    <StackLayout Grid.Column="1"
-                                 Orientation="Horizontal">
-                        <Image Margin="0"
-                               HeightRequest="45"
-                               Source="{StaticResource HelpIcon}" />
-                        <Button Margin="0"
-                                Text="Help"
-                                BackgroundColor="LightYellow"
-                                TextColor="DimGray"
-                                HorizontalOptions="Start"
-                                VerticalOptions="Center" />
-                    </StackLayout>
-                    <StackLayout Grid.Column="2"
-                                 Orientation="Horizontal">
-                        <Image Margin="20,0,0,0"
-                               HeightRequest="45"
-                               Source="{StaticResource SyncIcon}" />
-                        <Button Margin="0,5,5,5"
-                                Text="Sync"
-                                Command="{Binding SyncCommand}"
-                                BackgroundColor="LightYellow"
-                                TextColor="DimGray"
-                                HorizontalOptions="Start"
-                                VerticalOptions="Center" />
-                    </StackLayout>
-                </Grid>
+                <StackLayout Orientation="Horizontal">
+                    <Image Margin="20,0,0,0"
+                           HeightRequest="45"
+                           Source="{StaticResource SettingsIcon}" />
+                    <Button Margin="5"
+                            Text="Settings"
+                            BackgroundColor="LightYellow"
+                            TextColor="DimGray"
+                            VerticalOptions="Center" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Image Margin="20,0,0,0"
+                           HeightRequest="45"
+                           Source="{StaticResource HelpIcon}" />
+                    <Button Margin="0,5,5,5"
+                            Text="Help"
+                            BackgroundColor="LightYellow"
+                            TextColor="DimGray"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center" />
+                </StackLayout>
             </StackLayout>
         </DataTemplate>
     </Shell.FlyoutContentTemplate>
