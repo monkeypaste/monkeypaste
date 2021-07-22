@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Android.Util;
 using Xamarin.Essentials;
 using FFImageLoading.Forms.Platform;
 using System.Reflection;
@@ -20,6 +21,15 @@ using Xamarin.Forms;
 using Plugin.CurrentActivity;
 using System.Net;
 using Java.Security;
+using Android.Widget;
+using Android.Gms.Common;
+using Firebase.Iid;
+using Firebase;
+using Firebase.Messaging;
+using Firebase.Installations;
+using Java.Interop;
+using Android.Gms.Extensions;
+using Android.Gms.Tasks;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -31,9 +41,17 @@ namespace MonkeyPaste.Droid {
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
         public static MainActivity Current;
 
-        static readonly int NOTIFICATION_ID = 1000;
-        static readonly string CHANNEL_ID = "location_notification";
+        static readonly int CB_NOTIFICATION_ID = 1000;
+        static readonly string CB_CHANNEL_ID = "location_notification";
         internal static readonly string COUNT_KEY = "count";
+
+
+        static readonly string TAG = "MainActivity";
+        // google play services
+        internal static readonly string GPS_CHANNEL_ID = "my_notification_channel";
+        internal static readonly int GPS_NOTIFICATION_ID = 100;
+
+        TextView msgText;
         int count = 0;
                 
         public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
@@ -44,14 +62,15 @@ namespace MonkeyPaste.Droid {
 
             base.OnCreate(savedInstanceState);
 
-            //AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
-            //    typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
-            //        .SetValue(args.Exception, null);
-            //    throw args.Exception;
-            //};
-            //AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => {
-            //    args.Handled = true;
-            //};
+            if (Intent.Extras != null) {
+                MpConsole.WriteLine(@"Main activity contains the following extras: ");
+                foreach (var key in Intent.Extras.KeySet()) {
+                    var value = Intent.Extras.GetString(key);
+                    MpConsole.WriteLine("Key: {0} Value: {1}", key, value);
+                }
+            }
+
+            
 
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
@@ -69,9 +88,37 @@ namespace MonkeyPaste.Droid {
             AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper() {
                 KeyboardService = new MpKeyboardInteractionService(),
                 StorageService = new MpLocalStorage_Android()
-            };           
+            };
 
-            
+
+            //if (IsPlayServicesAvailable()) {
+            //    CreateGpsNotificationChannel();
+            //    FirebaseApp.InitializeApp(ApplicationContext);
+            //    MpConsole.WriteLine("FCM InstanceID token: " + FirebaseInstanceId.Instance.Token);
+            //} else {
+            //    MpConsole.WriteTraceLine(@"Error w/ Google play services");
+            //}
+
+            // Required for push notifications so check if Play services are available on the device or navigate to store to install them
+            CreateGpsNotificationChannel();
+
+            if (!IsPlayServicesAvailable()) {
+                GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this);
+            }
+            //FirebaseApp.InitializeApp(this.Application.ApplicationContext);
+            //var firebaseListener = new FirebaseListener();
+            //FirebaseMessaging.Instance.GetToken().AddOnCompleteListener(firebaseListener);
+            //var token = await firebaseListener.GetToken();
+
+            //Task.Run(async () => {
+            //    await FirebaseInstallations.Instance.GetToken(true).AddOnCompleteListener(firebaseListener);
+            //    var token = await firebaseListener.GetToken();
+
+            //    //await FirebaseMessaging.Instance.GetToken().AddOnCompleteListener(firebaseListener);
+            //    //var token = await firebaseListener.GetToken();
+            //    Log.Debug(TAG, $"FCM push token:'{token}'");
+            //});
+
             LoadApplication(new App(AndroidInterfaceWrapper));
             LoadSelectedTextAsync();
 
@@ -87,8 +134,48 @@ namespace MonkeyPaste.Droid {
             //    StartForegroundService(intent);
             //}
         }
+        
+        public bool IsPlayServicesAvailable() {
+            string logStr = string.Empty;
+            bool isAvailable = false;
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            if (resultCode != ConnectionResult.Success) {
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode)) {
+                    logStr = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                    isAvailable = true;
+                } else {
+                    isAvailable = false;
+                    logStr = "This device is not supported";
+                    Finish();
+                }
+            } else {
+                logStr = "Google Play Services is available.";
+                isAvailable = true;
+            }
+            MpConsole.WriteLine(logStr);
+            return isAvailable;
+        }
 
-        void CreateNotificationChannel() {
+        void CreateGpsNotificationChannel() {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O) {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification
+                // channel on older versions of Android.
+                return;
+            }
+
+            var channel = new NotificationChannel(GPS_CHANNEL_ID,
+                                                  "FCM Notifications",
+                                                  NotificationImportance.Default) {
+
+                Description = "Firebase Cloud Messages appear in this channel"
+            };
+
+            var notificationManager = (NotificationManager)GetSystemService(Android.Content.Context.NotificationService);
+            notificationManager.CreateNotificationChannel(channel);
+        }
+
+        void CreateCbNotificationChannel() {
             if (Build.VERSION.SdkInt < BuildVersionCodes.O) {
                 // Notification channels are new in API 26 (and not a part of the
                 // support library). There is no need to create a notification
@@ -98,7 +185,7 @@ namespace MonkeyPaste.Droid {
 
             var name = Resources.GetString(Resource.String.channel_name);
             var description = GetString(Resource.String.channel_description);
-            var channel = new NotificationChannel(CHANNEL_ID, name, NotificationImportance.Default) {
+            var channel = new NotificationChannel(CB_CHANNEL_ID, name, NotificationImportance.Default) {
                 Description = description
             };
 
@@ -106,7 +193,7 @@ namespace MonkeyPaste.Droid {
             notificationManager.CreateNotificationChannel(channel);
         }
 
-        void PublishNotification() {
+        void PublishCbNotification() {
             // Pass the current button press count value to the next activity:
             //var valuesForActivity = new Bundle();
             //valuesForActivity.PutInt(COUNT_KEY, count);
@@ -126,7 +213,7 @@ namespace MonkeyPaste.Droid {
             var resultPendingIntent = stackBuilder.GetPendingIntent(0, (int)PendingIntentFlags.UpdateCurrent);
 
             // Build the notification:
-            var builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+            var builder = new NotificationCompat.Builder(this, CB_CHANNEL_ID)
                           .SetAutoCancel(false) // Dismiss the notification from the notification area when the user clicks on it
                           .SetContentIntent(resultPendingIntent) // Start up this activity when the user clicks the intent.
                           .SetContentTitle("Tap to store clipboard") // Set the title
@@ -143,7 +230,7 @@ namespace MonkeyPaste.Droid {
 
             // Finally, publish the notification:
             var notificationManager = NotificationManagerCompat.From(this);
-            notificationManager.Notify(NOTIFICATION_ID, builder.Build());
+            notificationManager.Notify(CB_NOTIFICATION_ID, builder.Build());
 
             // Increment the button press count:
             count++;
@@ -173,4 +260,58 @@ namespace MonkeyPaste.Droid {
         }
 
     }
+
+    class TaskCompleteListener : Java.Lang.Object, IOnCompleteListener {
+        private readonly TaskCompletionSource<Java.Lang.Object> taskCompletionSource;
+
+        public TaskCompleteListener(TaskCompletionSource<Java.Lang.Object> tcs) {
+            this.taskCompletionSource = tcs;
+        }
+
+        public void OnComplete(Android.Gms.Tasks.Task task) {
+            if (task.IsCanceled) {
+                this.taskCompletionSource.SetCanceled();
+            } else if (task.IsSuccessful) {
+                this.taskCompletionSource.SetResult(task.Result);
+            } else {
+                this.taskCompletionSource.SetException(task.Exception);
+            }
+        }
+    }
+
+    public class FirebaseListener : Java.Lang.Object, Android.Gms.Tasks.IOnCompleteListener {
+        private TaskCompletionSource<String> tcs = new TaskCompletionSource<String>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task<String> GetToken() {
+            return tcs.Task;
+        }
+
+        public void Disposed() {
+        }
+
+        public void DisposeUnlessReferenced() {
+        }
+
+        public void Finalized() {
+        }
+
+        public void OnComplete(Android.Gms.Tasks.Task task) {
+            if (task.IsSuccessful) {
+                string theToken = task.Result.ToString();
+                tcs.SetResult(theToken);
+            } else {
+                tcs.SetResult(null);
+            }
+        }
+
+        public void SetJniIdentityHashCode(int value) {
+        }
+
+        public void SetJniManagedPeerState(JniManagedPeerStates value) {
+        }
+
+        public void SetPeerReference(JniObjectReference reference) {
+        }
+    }
+
 }

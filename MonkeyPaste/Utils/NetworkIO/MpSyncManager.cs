@@ -80,26 +80,45 @@ namespace MonkeyPaste {
                             
                         //}
                         if(_localSync.IsWpf()) {
-                            await SessionManager.DisconnectAll();
+                            //disconnect all
+                            await SessionManager.Disconnect(ThisEndpoint,true);
                         }
                         // check-in w/ webserver and add non-local endpoints
                         var webResponse = await SessionManager.Connect(ThisEndpoint);
+                        cws = await ConnectWebSocket();
+                        await SendWebSocketAsync(cws, MpStreamMessage.CreateHandshakeRequest(ThisEndpoint));
+
+                        if (!_localSync.IsWpf() && 
+                            webResponse.Count == 1 && 
+                            webResponse.Where(x=>x.AccessToken == ThisEndpoint.AccessToken).FirstOrDefault() != null) {
+                            // BUG when android creates socket listener cannot get wpf client to connect 
+                            // so loop back until another device is connected to act as listner...
+                            await SessionManager.Disconnect(ThisEndpoint);
+                            await Task.Delay(10000);
+                            continue;
+                        }
                         foreach (var rep in webResponse) {
                             if(rep.DeviceGuid == ThisEndpoint.DeviceGuid) {
                                 continue;
                             }
-                            var rs = ConnectSocket(rep.PrivateIp4Address, rep.PrivateConnectPortNum);
-                            if(rs != null && listener == null) {
-                                listener = rs;
+                            try {
+                                var rs = ConnectSocket(rep.PrivateIp4Address, rep.PrivateConnectPortNum);
+                                if (rs != null && listener == null) {
+                                    listener = rs;
+                                }
+                                _remoteDevices.Add(new MpRemoteDevice(rs, rep));                                
                             }
-                            _remoteDevices.Add(new MpRemoteDevice(rs, rep));
+                            catch(Exception ex) {
+                                MpConsole.WriteTraceLine(@"Could not connect to listener: " + rep.ToString());
+                                continue;
+                            }
                         }
                     } else {
                         // no internet so scan local network
                         if (System.Diagnostics.Debugger.IsAttached) {
                             //...
                         } else {
-                            // only do local ip sweep in release to avoied turning all the 
+                            // only do local ip sweep in release to avoid turning all the 
                             //exceptions off
                             listener = await MpPrivateEndpointDiscoveryHelper.Discover(
                                                 ThisEndpoint.PrivateIp4Address,
@@ -262,13 +281,19 @@ namespace MonkeyPaste {
                 // an exception that occurs when the host IP Address is not compatible with the address family
                 // (typical in the IPv6 case).
                 foreach (IPAddress address in hostEntry.AddressList) {
-                    IPEndPoint ipe = new IPEndPoint(address, port);
-                    Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    try {
+                        IPEndPoint ipe = new IPEndPoint(address, port);
+                        Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                        tempSocket.Connect(ipe);
 
-                    tempSocket.Connect(ipe);
-
-                    if (tempSocket.Connected) {
-                        return tempSocket;
+                        if (tempSocket.Connected) {
+                            return tempSocket;
+                        }
+                    }
+                    catch(Exception ex) {
+                        MpConsole.WriteTraceLine(@"Couldn't connect to endpoint: " + server + ":" + port);
+                        MpConsole.WriteLine("With exception: " + ex);
+                        continue;
                     }
                 }
             }
@@ -364,14 +389,59 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Network I/O
+
+        private static async Task DoClientWebSocket() {
+            using (ClientWebSocket ws = new ClientWebSocket()) {
+                Uri serverUri = new Uri("wss://echo.websocket.org/");
+
+                //Implementation of timeout of 5000 ms
+                var source = new CancellationTokenSource();
+                source.CancelAfter(5000);
+
+                await ws.ConnectAsync(serverUri, source.Token);
+                var iterationNo = 0;
+                // restricted to 5 iteration only
+                while (ws.State == WebSocketState.Open && iterationNo++ < 5) {
+                    string msg = "hello0123456789123456789123456789123456789123456789123456789";
+                    ArraySegment<byte> bytesToSend =
+                                new ArraySegment<byte>(Encoding.UTF8.GetBytes(msg));
+                    await ws.SendAsync(bytesToSend, WebSocketMessageType.Text,
+                                         true, source.Token);
+                    //Receive buffer
+                    var receiveBuffer = new byte[200];
+                    //Multipacket response
+                    var offset = 0;
+                    var dataPerPacket = 10; //Just for example
+                    while (true) {
+                        ArraySegment<byte> bytesReceived =
+                                  new ArraySegment<byte>(receiveBuffer, offset, dataPerPacket);
+                        WebSocketReceiveResult result = await ws.ReceiveAsync(bytesReceived,
+                                                                      source.Token);
+                        //Partial data received
+                        Console.WriteLine("Data:{0}",
+                                         Encoding.UTF8.GetString(receiveBuffer, offset,
+                                                                      result.Count));
+                        offset += result.Count;
+                        if (result.EndOfMessage)
+                            break;
+                    }
+                    Console.WriteLine("Complete response: {0}",
+                                        Encoding.UTF8.GetString(receiveBuffer, 0,
+                                                                    offset));
+                }
+            }
+        }
+
+
         public async Task<ClientWebSocket> ConnectWebSocket() {
             var socket = new ClientWebSocket();
             try {
-                await socket.ConnectAsync(new Uri(@"ws://206.72.205.68:12345/websockets.php"), CancellationToken.None);
+                await socket.ConnectAsync(new Uri(@"ws://monkeypaste.com:8080"), CancellationToken.None);
+
+                
+                //await Receive(socket);
 
                 return socket;
-                //await Send(socket, "data");
-                //await Receive(socket);
 
             }
             catch (Exception ex) {
@@ -392,7 +462,6 @@ namespace MonkeyPaste {
         public async Task<MpStreamMessage> ReceiveWebSocketAsync(ClientWebSocket ws) {
             var buffer = new ArraySegment<byte>(new Byte[8192]);
             WebSocketReceiveResult result = null;
-
             using (var ms = new MemoryStream()) {
                 do {
                     result = await ws.ReceiveAsync(buffer, CancellationToken.None);
@@ -413,7 +482,10 @@ namespace MonkeyPaste {
 
         #endregion
         public void Dispose() {
-            SessionManager.Dispose();
+            if(ThisEndpoint == null) {
+                return;
+            }
+            SessionManager.Disconnect(ThisEndpoint);
         }
         #endregion
 

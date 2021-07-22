@@ -9,9 +9,10 @@ using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.ConstrainedExecution;
+using System.Net.WebSockets;
 
 namespace MonkeyPaste {
-    public class MpSessionManager : IDisposable {
+    public class MpSessionManager {
         #region Private Variables 
         private HttpClient _client {
             get {
@@ -22,66 +23,39 @@ namespace MonkeyPaste {
                 return client;
             }
         }
-
         
         #endregion
 
         #region Properties
+
         #region Events
         #endregion
+
         #endregion
 
         #region Public Methods
 
-        public async Task<bool> Disconnect() {
-            return true;
-        }
-
-        //public async Task Upload(object data) {
-        //    var dataItems = (List<object>)data;
-        //    var baseUrl = @"https://www.monkeypaste.com/api/upload.php?at={0}&data={1}&groupId={2}&packetId={3}";
-
-        //    for (int i = 0; i < dataItems.Count; i++) {
-        //        var uri = new Uri(
-        //            string.Format(baseUrl,
-        //            _accessToken,
-        //            dataItems[i].ToString(),
-        //            i,
-        //            0));
-        //        try {
-        //            var response = await _client.GetAsync(uri);
-        //            if (response.IsSuccessStatusCode) {
-        //                continue;
-        //            } else {
-        //                Console.WriteLine("Failure");
-        //            }
-        //        }
-        //        catch (Exception ex) {
-        //            Console.WriteLine("Failure: " + ex);
-        //        }
-        //    } 
-        //}
-
-        public void Dispose() {
-            Disconnect();
-        }
-
-        public async Task DisconnectAll() {
+        public async Task Disconnect(MpDeviceEndpoint cep, bool disconnectAll = false, int tryCount = 5) {
             var uri = new Uri(
-                    string.Format(@"https://www.monkeypaste.com/api/clear.php?email={0}",
-                    @"test@test.com"
-                    ));
+                        string.Format(@"https://www.monkeypaste.com/api/disconnect.php?email={0}&ip={1}&at={2}&clearAll={3}",
+                        @"test@test.com",
+                        cep.PrivateIp4Address,
+                        cep.AccessToken,
+                        disconnectAll ? "1":"0"
+                        ));
             try {
                 var response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode) {
                     var result = await response.Content.ReadAsStringAsync();
-                    MpConsole.WriteLine(@"Cleared all sessions");
+                    MpConsole.WriteLine(@"Disconnected local client");
                 } else {
-                    MpConsole.WriteTraceLine(@"Failed to clear all sessions");
+                    MpConsole.WriteTraceLine(@"Failed to disconnect");
+                    await Disconnect(cep, disconnectAll, tryCount--);
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine(@"Exception clearing all sessions: " + ex);
+                MpConsole.WriteTraceLine(@"Exception disconnecting session: " + ex);
+                await Disconnect(cep, disconnectAll, tryCount--);
             }
         }
 
@@ -193,6 +167,8 @@ namespace MonkeyPaste {
             var access = e.NetworkAccess;
             var profiles = e.ConnectionProfiles;
         }
+
+
 
         #endregion
 

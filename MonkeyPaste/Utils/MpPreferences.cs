@@ -109,6 +109,15 @@ namespace MonkeyPaste {
         #endregion
 
         #region User Properties
+        public string FmsRegistrationToken {
+            get {
+                return Preferences.Get(nameof(FmsRegistrationToken), string.Empty);
+            }
+            set {
+                Preferences.Set(nameof(FmsRegistrationToken), value);
+            }
+        }
+
         public string ThisClientGuidStr {
             get {
                 return Preferences.Get(nameof(ThisClientGuidStr), string.Empty);

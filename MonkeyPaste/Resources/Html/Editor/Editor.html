@@ -221,6 +221,17 @@
     <div id='editor-container'>
     </div>
 
+    <script>
+        var conn = new WebSocket('ws://206.72.205.68:8080');
+        conn.onopen = function (e) {
+            console.log("Connection established!");
+        };
+
+        conn.onmessage = function (e) {
+            console.log(e.data);
+        };
+    </script>
+
     <!--<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
             crossorigin="anonymous"></script>
     <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>-->

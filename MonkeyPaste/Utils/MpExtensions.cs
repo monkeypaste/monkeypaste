@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+
 namespace MonkeyPaste {
     public static class MpExtensions {
         #region Documents
@@ -18,6 +21,7 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetCheckSum(str);
         }
         #endregion
+
         #region Visual
         public static string GetHexString(this Xamarin.Forms.Color color) {
             var red = (int)(color.R * 255);
@@ -52,6 +56,6 @@ namespace MonkeyPaste {
             //return Color.FromArgb(r, g, b);
             return Color.FromRgba(r, g, b, 255);
         }
-        #endregion
+        #endregion        
     }
 }
