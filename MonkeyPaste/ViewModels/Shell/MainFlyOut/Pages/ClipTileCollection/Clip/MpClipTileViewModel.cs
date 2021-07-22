@@ -7,7 +7,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpClipTileViewModel : MpViewModelBase {
+    public class MpCopyItemTileViewModel : MpViewModelBase {
         #region Private Variables
         public event EventHandler ItemStatusChanged;
         #endregion
@@ -15,19 +15,19 @@ namespace MonkeyPaste {
         #region Properties
         public bool IsSelected { get; set; } = false;
 
-        public MpClip Clip { get; set; }
+        public MpCopyItem CopyItem { get; set; }
 
         public string StatusText { get; set; } = "Status";
 
         public bool IsFavorite {
             get {
-                if(Clip == null) {
+                if(CopyItem == null) {
                     return false;
                 }
                 var favTagList = MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
 
                 if (favTagList != null && favTagList.Count > 0) {
-                    var result = MpDb.Instance.QueryAsync<MpClipTag>("select * from MpClipTag where ClipId=? and TagId=?", Clip.Id, favTagList[0].Id).Result;
+                    var result = MpDb.Instance.QueryAsync<MpCopyItemTag>("select * from MpCopyItemTag where CopyItemId=? and TagId=?", CopyItem.Id, favTagList[0].Id).Result;
                     return result != null && result.Count > 0;
                 }
                 return false;
@@ -36,10 +36,10 @@ namespace MonkeyPaste {
 
         public ImageSource IconImageSource {
             get {
-                if(Clip == null) {
+                if(CopyItem == null) {
                     return null;
                 }
-                return (StreamImageSource)new MpImageConverter().Convert(Clip.App.Icon.IconImage.ImageBase64, typeof(ImageSource));
+                return (StreamImageSource)new MpImageConverter().Convert(CopyItem.App.Icon.IconImage.ImageBase64, typeof(ImageSource));
             }
         }
 
@@ -47,32 +47,32 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() { }
+        public MpCopyItemTileViewModel() { }
 
-        public MpClipTileViewModel(MpClip item) {
-            PropertyChanged += MpClipViewModel_PropertyChanged;
+        public MpCopyItemTileViewModel(MpCopyItem item) {
+            PropertyChanged += MpCopyItemViewModel_PropertyChanged;
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
-            Clip = item;
-            Routing.RegisterRoute("Clipdetails", typeof(MpClipDetailPageView));
-            Routing.RegisterRoute("ClipTagAssociations", typeof(MpClipTagAssociationPageView));
+            CopyItem = item;
+            Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
+            Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));
             Task.Run(Initialize);
         }
         #endregion
 
         #region Private Methods
         private async Task Initialize() {
-            //Clip.App
+            //CopyItem.App
         }
         #region Event Handlers
-        private void MpClipViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(Clip):
+                case nameof(CopyItem):
                     OnPropertyChanged(nameof(IconImageSource));
                     break;
                 case nameof(IsSelected):
                     if(IsSelected) {
                         //Device.InvokeOnMainThreadAsync(async () => {
-                        //    await Shell.Current.GoToAsync($"Clipdetails?ClipId={Clip.Id}");
+                        //    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                         //});
                     }
                     break;
@@ -80,9 +80,9 @@ namespace MonkeyPaste {
         }
 
         private void MpDb_OnItemUpdated(object sender, MpDbModelBase e) {
-            if(e is MpClip ci) {
-                if(ci.Id == Clip.Id) {
-                    Clip = ci;
+            if(e is MpCopyItem ci) {
+                if(ci.Id == CopyItem.Id) {
+                    CopyItem = ci;
                 }
             }
         }
@@ -93,36 +93,36 @@ namespace MonkeyPaste {
         #region Commands
         public ICommand ShowTagAssociationsCommand => new Command(async () => {
             Device.InvokeOnMainThreadAsync(async () => {
-                await Shell.Current.GoToAsync($"ClipTagAssociations?ClipId={Clip.Id}");
+                await Shell.Current.GoToAsync($"CopyItemTagAssociations?CopyItemId={CopyItem.Id}");
             });
-            //await Navigation.PushModal(new MpClipTagAssociationPageView(new MpClipTagAssociationPageViewModel(Clip)));
-            //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithClipAsync(Clip.Id);
+            //await Navigation.PushModal(new MpCopyItemTagAssociationPageView(new MpCopyItemTagAssociationPageViewModel(CopyItem)));
+            //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithCopyItemAsync(CopyItem.Id);
         });
 
-        public ICommand ClipTileTappedCommand => new Command(async () => {
+        public ICommand CopyItemTileTappedCommand => new Command(async () => {
             if(IsSelected) {
                 Device.InvokeOnMainThreadAsync(async () => {
-                    await Shell.Current.GoToAsync($"Clipdetails?ClipId={Clip.Id}");
+                    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                 });
             }
         });
 
         public ICommand Save => new Command(async () => {
-            await MpDb.Instance.AddOrUpdateAsync<MpClip>(Clip);
+            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
             //wait Navigation.PopAsync();
         });
 
-        private Command _setClipboardToItemCommand = null;
-        public ICommand SetClipboardToItemCommand {
+        private Command _setCopyItemboardToItemCommand = null;
+        public ICommand SetCopyItemboardToItemCommand {
             get {
-                if (_setClipboardToItemCommand == null) {
-                    _setClipboardToItemCommand = new Command(SetClipboardToItem);
+                if (_setCopyItemboardToItemCommand == null) {
+                    _setCopyItemboardToItemCommand = new Command(SetCopyItemboardToItem);
                 }
-                return _setClipboardToItemCommand;
+                return _setCopyItemboardToItemCommand;
             }
         }
-        private void SetClipboardToItem() {
-            Clipboard.SetTextAsync(Clip.ItemText);
+        private void SetCopyItemboardToItem() {
+            Clipboard.SetTextAsync(CopyItem.ItemText);
             ItemStatusChanged?.Invoke(this, new EventArgs());
         }
         #endregion

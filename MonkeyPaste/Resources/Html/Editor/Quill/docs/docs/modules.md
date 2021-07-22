@@ -23,7 +23,7 @@ var quill = new Quill('#editor', {
 });
 ```
 
-The [Clipboard](/docs/modules/clipboard/), [Keyboard](/docs/modules/keyboard/), and [History](/docs/modules/history/) modules are required by Quill and do not need to be included explictly, but may be configured like any other module.
+The [CopyItemboard](/docs/modules/clipboard/), [Keyboard](/docs/modules/keyboard/), and [History](/docs/modules/history/) modules are required by Quill and do not need to be included explictly, but may be configured like any other module.
 
 
 ## Extending
@@ -31,10 +31,10 @@ The [Clipboard](/docs/modules/clipboard/), [Keyboard](/docs/modules/keyboard/), 
 Modules may also be extended and re-registered, replacing the original module. Even required modules may be re-registered and replaced.
 
 ```javascript
-var Clipboard = Quill.import('modules/clipboard');
+var CopyItemboard = Quill.import('modules/clipboard');
 var Delta = Quill.import('delta');
 
-class PlainClipboard extends Clipboard {
+class PlainCopyItemboard extends CopyItemboard {
   convert(html = null) {
     if (typeof html === 'string') {
       this.container.innerHTML = html;
@@ -45,10 +45,10 @@ class PlainClipboard extends Clipboard {
   }
 }
 
-Quill.register('modules/clipboard', PlainClipboard, true);
+Quill.register('modules/clipboard', PlainCopyItemboard, true);
 
-// Will be created with instance of PlainClipboard
+// Will be created with instance of PlainCopyItemboard
 var quill = new Quill('#editor');
 ```
 
-*Note: This particular example was selected to show what is possible. It is often easier to just use an API or configuration the existing module exposes. In this example, the existing Clipboard's [addMatcher](/docs/modules/clipboard/#addmatcher) API is suitable for most paste customization scenarios.*
+*Note: This particular example was selected to show what is possible. It is often easier to just use an API or configuration the existing module exposes. In this example, the existing CopyItemboard's [addMatcher](/docs/modules/clipboard/#addmatcher) API is suitable for most paste customization scenarios.*

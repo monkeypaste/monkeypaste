@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public class MpDbObjectUpdateEventArg : EventArgs {
-        public MpDbModelBase DbObject { get; set; }
+    public class MpDbSyncEventArgs : EventArgs {
+        public object DbObject { get; set; }
+        public MpDbLogActionType EventType { get; set; }
         public Dictionary<string, string> UpdatedPropertyLookup { get; set; } = new Dictionary<string, string>();        
+        public string SourceGuid { get; set; }
     }
 }

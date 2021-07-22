@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using SQLite;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -70,10 +71,11 @@ namespace MpWpfApp {
                 Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();
-                SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
+                System.Data.SQLite.SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
                 ExecuteWrite(GetCreateString(), null);
                 //SetDbPassword(MpHelpers.Instance.GetRandomString());
             }
+            InitPCL();
             Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
         }
@@ -110,7 +112,7 @@ namespace MpWpfApp {
                     using (var con = SetConnection()) {
                         con.Open();
                         var query = @"PRAGMA key=" + newPassword;
-                        using (var cmd = new SQLiteCommand(query, con)) {
+                        using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -118,7 +120,7 @@ namespace MpWpfApp {
                     using (var con = SetConnection()) {
                         con.Open();
                         var query = @"PRAGMA rekey=" + newPassword;
-                        using (var cmd = new SQLiteCommand(query, con)) {
+                        using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -131,7 +133,7 @@ namespace MpWpfApp {
             }
         }
 
-        private SQLiteConnection SetConnection(bool isInit = false) {
+        private System.Data.SQLite.SQLiteConnection SetConnection(bool isInit = false) {
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
             SQLiteConnectionStringBuilder connStr = new SQLiteConnectionStringBuilder();
@@ -142,9 +144,9 @@ namespace MpWpfApp {
                 //connStr.Password = Properties.Settings.Default.DbPassword;
             }
             //Console.WriteLine("Connection String: " + connStr);
-            SQLiteConnection conn = null; 
+            System.Data.SQLite.SQLiteConnection conn = null; 
             try {
-                conn = new SQLiteConnection(connStr.ConnectionString);
+                conn = new System.Data.SQLite.SQLiteConnection(connStr.ConnectionString);
             }
             catch (Exception e) {
                 Console.WriteLine("Error during SQL connection: " + connStr + "\n" + "With error: " + e.ToString());
@@ -155,17 +157,71 @@ namespace MpWpfApp {
             }
             return conn;
         }
+
+        private SQLite.SQLiteConnection SetConnectionPCL(bool isInit = false) {
+            // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
+            // about passwords
+            SQLiteConnectionString connStr = new SQLiteConnectionString(
+                databasePath: Properties.Settings.Default.DbPath,
+                storeDateTimeAsTicks: false,
+                //key: MpPreferences.Instance.DbPassword,
+                openFlags: SQLiteOpenFlags.ReadWrite |
+                           SQLiteOpenFlags.Create |
+                           SQLiteOpenFlags.SharedCache |
+                           SQLiteOpenFlags.FullMutex
+                );
+
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.DbPassword)) {
+                //connStr.Password = Properties.Settings.Default.DbPassword;
+            }
+            //Console.WriteLine("Connection String: " + connStr);
+            SQLite.SQLiteConnection conn = null;
+            try {
+                conn = new SQLite.SQLiteConnection(connStr);
+            }
+            catch (Exception e) {
+                Console.WriteLine("Error during SQL connection: " + connStr + "\n" + "With error: " + e.ToString());
+                conn = null;
+                Properties.Settings.Default.DbPath = null;
+                InitDb();
+                SetConnection(isInit);
+            }
+            return conn;
+        }
+
+        private void InitPCL() {
+            using (var con = SetConnectionPCL()) {
+                //con.CreateTable<MpApp>();
+                //con.CreateTable<MpClient>();
+                //con.CreateTable<MpClientPlatform>();
+                //con.CreateTable<MpClip>();
+                //con.CreateTable<MpClipComposite>();
+                //con.CreateTable<MpClipTag>();
+                //con.CreateTable<MpClipTemplate>();
+                con.CreateTable<MpColor>();
+                //con.CreateTable<MpDbImage>();
+                //con.CreateTable<MpIcon>();
+                //con.CreateTable<MpPasteHistory>();
+                //con.CreateTable<MpSource>();
+                con.CreateTable<MpTag>();
+                //con.CreateTable<MpUrl>();
+                //con.CreateTable<MpUrlDomain>();
+                //con.CreateTable<MpDbLog>();
+                //con.CreateTable<MpSyncHistory>();
+            }
+        }
+
         public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
             MpDbLogActionType actionType = MpDbLogActionType.None;
             if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking) {
                 //only track objects providing a guid
                 actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);                 
             }
-
+            
             int numberOfRowsAffected;
-            using (var con = SetConnection()) {
+            using (var con = SetConnection()) {   
                 con.Open();
-                using (var cmd = new SQLiteCommand(query, con)) {
+                using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if(args != null) {
                         foreach (var pair in args) {
                             cmd.Parameters.AddWithValue(pair.Key, pair.Value);
@@ -185,7 +241,7 @@ namespace MpWpfApp {
             }
             using (var con = SetConnection()) {
                 con.Open(); 
-                using (var cmd = new SQLiteCommand(query, con)) {
+                using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (KeyValuePair<string, object> entry in args) {
                             cmd.Parameters.AddWithValue(entry.Key, entry.Value);
@@ -202,6 +258,12 @@ namespace MpWpfApp {
             }
         }
 
+        public SQLite.TableMapping GetTableMapping(string tableName) {
+            using (var con = SetConnectionPCL()) {
+                return con.TableMappings.Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
+            }            
+        }
+
         public DataRow GetDbObjectByTableGuid(string tableName, string objGuid) {            
             var dt = MpDb.Instance.Execute(
                 "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
@@ -215,7 +277,7 @@ namespace MpWpfApp {
             int numberOfRowsAffected;
             using (var con = SetConnection()) {
                 con.Open();
-                using (var cmd = new SQLiteCommand(query, con)) {
+                using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (var pair in args) {
                             cmd.Parameters.AddWithValue(pair.Key, pair.Value);
@@ -233,7 +295,7 @@ namespace MpWpfApp {
             }
             using (var con = SetConnection()) {
                 con.Open();
-                using (var cmd = new SQLiteCommand(query, con)) {
+                using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (KeyValuePair<string, object> entry in args) {
                             cmd.Parameters.AddWithValue(entry.Key, entry.Value);
@@ -253,21 +315,14 @@ namespace MpWpfApp {
             }
         }
         
-        public void CloseDb() {
-            SQLiteConnection sql_con = SetConnection();
-            sql_con.Close();
-            sql_con.Dispose();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
         public void WriteDatabaseToXmlFile(string out_filename) {
-            SQLiteConnection sqc = SetConnection();
+            System.Data.SQLite.SQLiteConnection sqc = SetConnection();
             sqc.Open();
             var sqd = new SqlDataAdapter(null, GetAllData());
             var ds = new DataSet();
             sqd.Fill(ds, "adv");
-            SQLiteConnection sql_con = SetConnection();
-            SQLiteCommand sql_cmd = sql_con.CreateCommand();
+            System.Data.SQLite.SQLiteConnection sql_con = SetConnection();
+            System.Data.SQLite.SQLiteCommand sql_cmd = sql_con.CreateCommand();
             ds.WriteXml(out_filename);
         }
         public int GetLastRowId(string tableName, string pkName) {
@@ -788,8 +843,9 @@ namespace MpWpfApp {
             foreach (var ckvp in deleteChanges) {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = dbot.GetMethod("DeleteFromDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
-                var dbo = MpDb.Instance.GetDbObjectByTableGuid(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
-                deleteMethod.Invoke(dbo, new object[] { remoteClientGuid,false,true });
+                var dbo = Activator.CreateInstance(dbot);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                deleteMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
             foreach (var ckvp in addChanges) {
@@ -797,15 +853,15 @@ namespace MpWpfApp {
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
-                writeMethod.Invoke(dbo, new object[] { remoteClientGuid,false,true });
+                writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
             foreach (var ckvp in updateChanges) {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var rdbo = Activator.CreateInstance(dbot);
                 rdbo = await (rdbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
-                var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool),typeof(bool) });
-                writeMethod.Invoke(rdbo, new object[] { remoteClientGuid,false,true });
+                var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
+                writeMethod.Invoke(rdbo, new object[] { remoteClientGuid, false, true });
             }
 
             var newSyncHistory = new MpSyncHistory() {

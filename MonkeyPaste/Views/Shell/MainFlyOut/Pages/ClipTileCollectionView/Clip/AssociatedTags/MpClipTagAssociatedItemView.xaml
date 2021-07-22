@@ -2,8 +2,8 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MonkeyPaste"
-             x:Class="MonkeyPaste.MpClipTagAssociatedItemView"
-             x:DataType="local:MpClipTagAssociatedItemViewModel">
+             x:Class="MonkeyPaste.MpCopyItemTagAssociatedItemView"
+             x:DataType="local:MpCopyItemTagAssociatedItemViewModel">
   <ContentView.Content>
         <Frame Margin="0"
                Padding="20"

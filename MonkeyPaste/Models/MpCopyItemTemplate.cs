@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
-    public class MpClipTemplate : MpDbModelBase {
-        private static List<MpClipTag> _AllClipTagList = null;
+    public class MpCopyItemTemplate : MpDbModelBase {
+        private static List<MpCopyItemTag> _AllCopyItemTagList = null;
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTemplateId")]
@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Ignore]
-        public Guid ClipTemplateGuid {
+        public Guid CopyItemTemplateGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -32,9 +32,9 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpClip))]
+        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
-        public int ClipId { get; set; }
+        public int CopyItemId { get; set; }
 
         [ForeignKey(typeof(MpColor))]
         [Column("fk_MpColorId")]
@@ -46,7 +46,7 @@ namespace MonkeyPaste {
         public MpColor Color { get; set; }
         #endregion
 
-        public MpClipTemplate() {
+        public MpCopyItemTemplate() {
         }
     }
 }

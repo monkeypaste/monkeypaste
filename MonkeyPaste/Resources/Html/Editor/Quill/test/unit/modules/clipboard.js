@@ -2,7 +2,7 @@ import Delta from 'quill-delta';
 import { Range } from '../../../core/selection';
 import Quill from '../../../core';
 
-describe('Clipboard', function() {
+describe('CopyItemboard', function() {
   describe('events', function() {
     beforeEach(function() {
       this.quill = this.initialize(Quill, '<h1>0123</h1><p>5<em>67</em>8</p>');

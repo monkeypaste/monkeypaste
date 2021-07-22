@@ -7,11 +7,11 @@ using System.Linq;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste {
-    public class MpClipTagAssociationPageViewModel : MpViewModelBase {
+    public class MpCopyItemTagAssociationPageViewModel : MpViewModelBase {
         #region Properties
-        public MpClip Clip { get; set; }
+        public MpCopyItem CopyItem { get; set; }
 
-        public ObservableCollection<MpClipTagAssociatedItemViewModel> ClipTagAssociatedItemViewModels { get; set; }
+        public ObservableCollection<MpCopyItemTagAssociatedItemViewModel> CopyItemTagAssociatedItemViewModels { get; set; }
 
         public double PageWidth {
             get {
@@ -21,10 +21,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpClipTagAssociationPageViewModel() : base() { }
+        public MpCopyItemTagAssociationPageViewModel() : base() { }
 
-        public MpClipTagAssociationPageViewModel(MpClip clip) {
-            Clip = clip;
+        public MpCopyItemTagAssociationPageViewModel(MpCopyItem clip) {
+            CopyItem = clip;
             Task.Run(Initialize);
         }
         #endregion
@@ -32,13 +32,13 @@ namespace MonkeyPaste {
         #region Private Methods
         private async Task Initialize() {
             var tags = await MpDb.Instance.GetItemsAsync<MpTag>();
-            ClipTagAssociatedItemViewModels = 
-                new ObservableCollection<MpClipTagAssociatedItemViewModel>(
-                    tags.Select(x => CreateClipTagAssociatedViewModel(x)));
+            CopyItemTagAssociatedItemViewModels = 
+                new ObservableCollection<MpCopyItemTagAssociatedItemViewModel>(
+                    tags.Select(x => CreateCopyItemTagAssociatedViewModel(x)));
         }
 
-        private MpClipTagAssociatedItemViewModel CreateClipTagAssociatedViewModel(MpTag tag) {
-            var nctavm = new MpClipTagAssociatedItemViewModel(Clip, tag);
+        private MpCopyItemTagAssociatedItemViewModel CreateCopyItemTagAssociatedViewModel(MpTag tag) {
+            var nctavm = new MpCopyItemTagAssociatedItemViewModel(CopyItem, tag);
             return nctavm;
         }
         #endregion

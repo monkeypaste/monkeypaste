@@ -13,6 +13,7 @@ namespace MpWpfApp {
         /// </summary>
         //public MpUndoableObservableCollectionViewModel(int maxItems) : base(maxItems) { }
 
+        public MpUndoableObservableCollectionViewModel() : base() { }
         
         /// <summary>
         /// Add an item to the undoable list.

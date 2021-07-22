@@ -3994,7 +3994,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard
         /// </summary>
-        public const string Clipboard = "\uf328";
+        public const string CopyItemboard = "\uf328";
 
         /// <summary>
         /// fa-clipboard-check unicode value ("\uf46c").
@@ -4003,7 +4003,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard-check
         /// </summary>
-        public const string ClipboardCheck = "\uf46c";
+        public const string CopyItemboardCheck = "\uf46c";
 
         /// <summary>
         /// fa-clipboard-list unicode value ("\uf46d").
@@ -4012,7 +4012,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard-list
         /// </summary>
-        public const string ClipboardList = "\uf46d";
+        public const string CopyItemboardList = "\uf46d";
 
         /// <summary>
         /// fa-clipboard-list-check unicode value ("\uf737").
@@ -4021,7 +4021,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard-list-check
         /// </summary>
-        public const string ClipboardListCheck = "\uf737";
+        public const string CopyItemboardListCheck = "\uf737";
 
         /// <summary>
         /// fa-clipboard-prescription unicode value ("\uf5e8").
@@ -4030,7 +4030,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard-prescription
         /// </summary>
-        public const string ClipboardPrescription = "\uf5e8";
+        public const string CopyItemboardPrescription = "\uf5e8";
 
         /// <summary>
         /// fa-clipboard-user unicode value ("\uf7f3").
@@ -4039,7 +4039,7 @@ namespace MonkeyPaste {
         /// <para/>
         /// See https://fontawesome.com/icons/clipboard-user
         /// </summary>
-        public const string ClipboardUser = "\uf7f3";
+        public const string CopyItemboardUser = "\uf7f3";
 
         /// <summary>
         /// fa-clock unicode value ("\uf017").

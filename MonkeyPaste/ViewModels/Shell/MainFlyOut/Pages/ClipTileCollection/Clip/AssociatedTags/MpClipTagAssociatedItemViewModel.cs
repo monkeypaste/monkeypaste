@@ -7,9 +7,9 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpClipTagAssociatedItemViewModel : MpViewModelBase {
+    public class MpCopyItemTagAssociatedItemViewModel : MpViewModelBase {
         #region Properties
-        public MpClip Clip { get; set; }
+        public MpCopyItem CopyItem { get; set; }
 
         public MpTag Tag { get; set; }
 
@@ -28,16 +28,16 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpClipTagAssociatedItemViewModel() : base() { }
+        public MpCopyItemTagAssociatedItemViewModel() : base() { }
 
-        public MpClipTagAssociatedItemViewModel(MpClip clip, MpTag tag) : this() {
-            PropertyChanged += MpClipTagAssociatedItemViewModel_PropertyChanged;
-            Clip = clip;
+        public MpCopyItemTagAssociatedItemViewModel(MpCopyItem clip, MpTag tag) : this() {
+            PropertyChanged += MpCopyItemTagAssociatedItemViewModel_PropertyChanged;
+            CopyItem = clip;
             Tag = tag;
             Task.Run(Initialize);
         }
 
-        private async void MpClipTagAssociatedItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private async void MpCopyItemTagAssociatedItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             await Task.Delay(1);
             switch(e.PropertyName) {
                 default:
@@ -50,16 +50,16 @@ namespace MonkeyPaste {
         private async Task Initialize() {
             await UpdateAssocation();
 
-            Tag.ClipList = await MpClip.GetAllClipsByTagId(Tag.Id);
+            Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
             Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
         }
 
         private async Task UpdateAssocation() {
-            if (Clip == null || Tag == null) {
+            if (CopyItem == null || Tag == null) {
                 return;
             }
 
-            IsAssociated = await Tag.IsLinkedWithClipAsync(Clip);
+            IsAssociated = await Tag.IsLinkedWithCopyItemAsync(CopyItem);
         }
         #endregion
 
@@ -67,14 +67,14 @@ namespace MonkeyPaste {
         public ICommand ToggleAssociationCommand => new Command(
             async () => {
                 if(IsAssociated) {
-                    await Tag.UnlinkWithClipAsync(Clip);
+                    await Tag.UnlinkWithCopyItemAsync(CopyItem);
                 } else {
-                    await Tag.LinkWithClipAsync(Clip);
+                    await Tag.LinkWithCopyItemAsync(CopyItem);
                 }
                 await UpdateAssocation();
             },
             () => {
-                return Clip != null && Tag != null && IsEnabled;
+                return CopyItem != null && Tag != null && IsEnabled;
             });
         #endregion
     }

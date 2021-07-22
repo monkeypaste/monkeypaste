@@ -45,7 +45,7 @@ To realize the full benefits of 1.0, it is encouraged to take a fresh view of Qu
 
 - UndoManager has been renamed to [History](/docs/modules/history/).
 
-- PasteManager has been renamed to [Clipboard](/docs/modules/clipboard/), and will provide custom copy and paste behavior.
+- PasteManager has been renamed to [CopyItemboard](/docs/modules/clipboard/), and will provide custom copy and paste behavior.
 
 - LinkTooltip has been moved to be theme specific. With the addition of [Bubble](/docs/themes/#bubble) and videos and [formulas](/docs/modules/formula/), it no longer made sense to open a separate tooltip for links as its own general UI element. The old tooltip behavior is still present in Snow, but is now specific to that theme.
 
@@ -120,7 +120,7 @@ var oldBullettedList = {
 
 - Toolbar icons now use SVGs instead of inline PNGs allowing freedom to resize icons while retaining clarity. CSS can now also be used to easily change the active state color instead of the default #06c blue.
 
-- Improved ability to customize interpretation of pastes in [Clipboard](/docs/modules/clipboard/).
+- Improved ability to customize interpretation of pastes in [CopyItemboard](/docs/modules/clipboard/).
 
 - Improved ability to customize [keyboard handlers](/docs/modules/keyboard/).
 

@@ -24,7 +24,7 @@ namespace MonkeyPaste {
         public MpApp App { get; set; }
 
         [Ignore]
-        public MpIClipSource PrimarySource {
+        public MpICopyItemSource PrimarySource {
             get {
                 if (UrlId <= 0) {
                     if (AppId <= 0) {
@@ -40,7 +40,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpIClipSource SecondarySource {
+        public MpICopyItemSource SecondarySource {
             get {
                 var ps = PrimarySource;
                 if(ps != null) {

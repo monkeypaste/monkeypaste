@@ -9,7 +9,7 @@ import Inline from './blots/inline';
 import Scroll from './blots/scroll';
 import TextBlot from './blots/text';
 
-import Clipboard from './modules/clipboard';
+import CopyItemboard from './modules/clipboard';
 import History from './modules/history';
 import Keyboard from './modules/keyboard';
 import Uploader from './modules/uploader';
@@ -25,7 +25,7 @@ Quill.register({
   'blots/scroll': Scroll,
   'blots/text': TextBlot,
 
-  'modules/clipboard': Clipboard,
+  'modules/clipboard': CopyItemboard,
   'modules/history': History,
   'modules/keyboard': Keyboard,
   'modules/uploader': Uploader,

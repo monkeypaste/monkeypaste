@@ -37,16 +37,14 @@
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We want to show your photos in this app</string>
-  <key>UIAppFonts</key>
-  <array>
-    <string>FontAwesomeBrandsRegular.otf</string>
-    <string>FontAwesomeRegular.otf</string>
-    <string>FontAwesomeSolid.otf</string>
-  </array>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>This app needs access to photos.</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>This app needs access to the photo gallery.</string>
+	<string>This app needs access to photos.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FontAwesomeBrandsRegular.otf</string>
+		<string>FontAwesomeRegular.otf</string>
+		<string>FontAwesomeSolid.otf</string>
+	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs access to the photo gallery.</string>
 </dict>
 </plist>

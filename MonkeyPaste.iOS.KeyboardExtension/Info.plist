@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>MonkeyPaste.iOS.KeyboardExtension</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.MonkeyPaste.iOS.KeyboardExtension</string>
+	<string>com.thomaskefauver.MonkeyPaste.MonkeyPaste.iOS.KeyboardExtension</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

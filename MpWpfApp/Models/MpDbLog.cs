@@ -52,6 +52,8 @@ namespace MpWpfApp {
             return null;
         }
 
+        
+
         public static List<MonkeyPaste.MpDbLog> GetDbLogsByGuid(string dboGuid, DateTime fromDateUtc) {
             if (_AllDbLogList == null) {
                 GetAllDbLogs();

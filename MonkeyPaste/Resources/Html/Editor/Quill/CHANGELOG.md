@@ -63,7 +63,7 @@ Thank you [@Natim](https://github.com/Natim) and [@stephenLYao](https://github.c
 
 # 1.3.0
 
-Add `matchVisual` [configuration](https://quilljs.com/docs/modules/clipboard/#configuration) to Clipboard.
+Add `matchVisual` [configuration](https://quilljs.com/docs/modules/clipboard/#configuration) to CopyItemboard.
 
 - Use DOM API to determine selected `<select>` option [#1576](https://github.com/quilljs/quill/pull/1576)
 - Add `:focus` styles to toolbar [#1540](https://github.com/quilljs/quill/issues/1540)
@@ -642,7 +642,7 @@ Weekly beta preview release. Major emphasis on keyboard API and customization.
 ### Breaking Changes
 
 - Rename code highlighter module to syntax
-- Clipboard matchers specified in configuration appends to instead of replaces default matchers
+- CopyItemboard matchers specified in configuration appends to instead of replaces default matchers
 - Change video embed to use `<iframe>` instead of `<video>` enabling Youtube/Vimeo links
 
 ### Features

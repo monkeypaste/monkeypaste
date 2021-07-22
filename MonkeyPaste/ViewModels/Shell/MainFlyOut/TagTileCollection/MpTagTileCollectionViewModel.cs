@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         #region Properties
 
         #region View Models
-        public MpClipTileCollectionPageViewModel ClipCollectionViewModel { get; set; }
+        public MpCopyItemTileCollectionPageViewModel CopyItemCollectionViewModel { get; set; }
 
         public ObservableCollection<MpTagTileViewModel> TagViewModels { get; set; } = new ObservableCollection<MpTagTileViewModel>();
 
@@ -76,7 +76,7 @@ namespace MonkeyPaste {
             var tvms = tags.Select(x => CreateTagViewModel(x)).OrderBy(x=>x.Tag.TagSortIdx);
             TagViewModels = new ObservableCollection<MpTagTileViewModel>(tvms);
             OnPropertyChanged(nameof(TagViewModels));
-            ClipCollectionViewModel = new MpClipTileCollectionPageViewModel();
+            CopyItemCollectionViewModel = new MpCopyItemTileCollectionPageViewModel();
             await Task.Delay(300);
             SelectedTagViewModel = RecentTagViewModel;
             IsBusy = false;
@@ -101,10 +101,10 @@ namespace MonkeyPaste {
         private async void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedTagViewModel):
-                    if (SelectedTagViewModel != null && ClipCollectionViewModel != null) {
+                    if (SelectedTagViewModel != null && CopyItemCollectionViewModel != null) {
                         ClearSelection();
                         SelectedTagViewModel.IsSelected = true;
-                        await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+                        await CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
                     }
                     break;
             }

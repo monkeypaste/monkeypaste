@@ -2,15 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MonkeyPaste"
-             x:Class="MonkeyPaste.MpClipTagAssociationPageView"
-             x:DataType="local:MpClipTagAssociationPageViewModel"
+             x:Class="MonkeyPaste.MpCopyItemTagAssociationPageView"
+             x:DataType="local:MpCopyItemTagAssociationPageViewModel"
              Title="Tags"
              BackgroundColor="DimGray"
              WidthRequest="{Binding PageWidth}">
     <ContentPage.Content>
         <CollectionView HorizontalOptions="Center"
                         VerticalOptions="Fill"                        
-                        ItemsSource="{Binding ClipTagAssociatedItemViewModels}"
+                        ItemsSource="{Binding CopyItemTagAssociatedItemViewModels}"
                         Margin="10,50,10,50"
                         SelectionMode="Single">
             <CollectionView.ItemsLayout>
@@ -19,8 +19,8 @@
                                    SnapPointsType="Mandatory" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="local:MpClipTagAssociatedItemViewModel">
-                    <local:MpClipTagAssociatedItemView BindingContext="{Binding .}" />
+                <DataTemplate x:DataType="local:MpCopyItemTagAssociatedItemViewModel">
+                    <local:MpCopyItemTagAssociatedItemView BindingContext="{Binding .}" />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

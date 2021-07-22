@@ -34,9 +34,9 @@ namespace MonkeyPaste {
         [Column("fk_MpClientId")]
         public int ClientId { get; set; }
 
-        [ForeignKey(typeof(MpClip))]
+        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
-        public int ClipId { get; set; }
+        public int CopyItemId { get; set; }
 
         [ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]

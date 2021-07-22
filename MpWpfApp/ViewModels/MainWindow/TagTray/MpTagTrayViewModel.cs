@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using FFImageLoading.Helpers.Exif;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace MpWpfApp {
                 return null;
             }
         }
+
+        public new MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
 
         #region Properties
@@ -66,7 +69,9 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpTagTrayViewModel() : base() {
-            MpTag.OnSyncTagAdded += MpTag_OnSyncTagAdded;
+            MpDbObject.SyncAdd += MpDbObject_SyncAdd;
+            MpDbObject.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDbObject.SyncDelete += MpDbObject_SyncDelete;
 
             var allTags = MpTag.GetAllTags();
             if(allTags.Count == 0) {
@@ -126,6 +131,7 @@ namespace MpWpfApp {
                     TagSortIdx = 3
                 };
                 t.WriteToDatabase("", true, true);
+
                 allTags.Add(t);
             }
             //create tiles for all the tags
@@ -157,6 +163,7 @@ namespace MpWpfApp {
         }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
+            MainWindowViewModel = base.MainWindowViewModel;
             var tagTrayGrid = (Grid)sender;
             var tagTray = (ListBox)tagTrayGrid.FindName("TagTray");
             var leftButton = (RepeatButton)tagTrayGrid.FindName("TagTrayNavLeftButton");
@@ -270,79 +277,77 @@ namespace MpWpfApp {
             }
         }
         public new void Add(MpTagTileViewModel newTagTile) {
-            newTagTile.Tag.OnSyncTagDeleted += Tag_OnSyncTagDeleted;
-            newTagTile.Tag.OnSyncTagCopyItemLinked += Tag_OnSyncTagCopyItemLinked;
-            newTagTile.Tag.OnSyncTagCopyItemUnlinked += Tag_OnSyncTagCopyItemUnlinked;
-
             base.Add(newTagTile);
 
             //watches Tag IsSelected so recent is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(newTagTile.IsSelected):
-                        //ensure at least history is selected
-                        if (newTagTile.IsSelected == false) {
-                            //find all selected tag tiles
-                            var selectedTagTiles = this.Where(tt => tt.IsSelected == true).ToList();
-                            //if none selected select history tag
-                            if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
-                                //GetHistoryTagTileViewModel().IsSelected = true;
-                                GetRecentTagTileViewModel().IsSelected = true;
-                            }
-                        } else if(!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
-                            //this else if prevents filtered out tiles from being shown while searching and an item is 
-                            //added while main window is locked
-                            MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
-                            MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
+                MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                    switch (e.PropertyName) {
+                        case nameof(newTagTile.IsSelected):
+                            //ensure at least history is selected
+                            if (newTagTile.IsSelected == false) {
+                                //find all selected tag tiles
+                                var selectedTagTiles = this.Where(tt => tt.IsSelected == true).ToList();
+                                //if none selected select history tag
+                                if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
+                                    //GetHistoryTagTileViewModel().IsSelected = true;
+                                    GetRecentTagTileViewModel().IsSelected = true;
+                                }
+                            } else if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
+                                //this else if prevents filtered out tiles from being shown while searching and an item is 
+                                //added while main window is locked
+                                MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
+                                MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
 
-                            foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
-                                //this ensures when switching between tags the last selected tag in a list reset
-                                //ctvm.IsSelected = false;
-                                if (newTagTile.IsLinkedWithClipTile(ctvm)) {
-                                    ctvm.TileVisibility = Visibility.Visible;
-                                    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                                        //if composite parent is linked show all children
-                                        rtbvm.SubItemVisibility = Visibility.Visible;
-                                    }
-                                } else if(ctvm.CopyItemType == MpCopyItemType.Composite) {
-                                    bool hasSubLink = false;
-                                    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                                        if(newTagTile.IsLinkedWithRtbItem(rtbvm)) {
-                                            rtbvm.HostClipTileViewModel.TileVisibility = Visibility.Visible;
+                                foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                                    //this ensures when switching between tags the last selected tag in a list reset
+                                    //ctvm.IsSelected = false;
+                                    if (newTagTile.IsLinkedWithClipTile(ctvm)) {
+                                        ctvm.TileVisibility = Visibility.Visible;
+                                        foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                            //if composite parent is linked show all children
                                             rtbvm.SubItemVisibility = Visibility.Visible;
-                                            hasSubLink = true;
                                         }
-                                    }
-                                    if(!hasSubLink) {
+                                    } else if (ctvm.CopyItemType == MpCopyItemType.Composite) {
+                                        bool hasSubLink = false;
+                                        foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                            if (newTagTile.IsLinkedWithRtbItem(rtbvm)) {
+                                                rtbvm.HostClipTileViewModel.TileVisibility = Visibility.Visible;
+                                                rtbvm.SubItemVisibility = Visibility.Visible;
+                                                hasSubLink = true;
+                                            }
+                                        }
+                                        if (!hasSubLink) {
+                                            ctvm.TileVisibility = Visibility.Collapsed;
+                                        }
+                                    } else {
                                         ctvm.TileVisibility = Visibility.Collapsed;
                                     }
-                                } else {
-                                    ctvm.TileVisibility = Visibility.Collapsed;
                                 }
-                            }
-                            if (MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox != null) {
-                                //this ensures visibility takes affect if filtering by app
-                                //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
-                            }
-                            
-                            if (MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0 && 
-                                !MainWindowViewModel.ClipTrayViewModel.IsAnyContextMenuOpened) {
-                                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
-                            }
-                            
-                        }
+                                if (MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox != null) {
+                                    //this ensures visibility takes affect if filtering by app
+                                    //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
+                                }
 
-                        base.OnPropertyChanged(nameof(NavButtonVisibility));
-                        break;
-                }
+                                if (MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0 &&
+                                    !MainWindowViewModel.ClipTrayViewModel.IsAnyContextMenuOpened) {
+                                    MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                                }
+
+                            }
+
+                            base.OnPropertyChanged(nameof(NavButtonVisibility));
+                            break;
+                    }
+                }));                
             };
         }        
 
-        public new void Remove(MpTagTileViewModel tagTileToRemove, bool fromSync = false) {
+        public new void Remove(MpTagTileViewModel tagTileToRemove) {
             //when removing a tag auto-select the history tag
             base.Remove(tagTileToRemove);
 
-            if(!fromSync) {
+            if(!tagTileToRemove.Tag.IsSyncing) {
                 tagTileToRemove.Tag.DeleteFromDatabase();
             }
 
@@ -410,35 +415,42 @@ namespace MpWpfApp {
         #region Private Methods
 
         #region Model Sync Events
-        private void MpTag_OnSyncTagAdded(object sender, EventArgs e) {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() =>
-            {
-                if (sender is MpTag t) {
-                    this.Add(new MpTagTileViewModel(t));
-                }
-            }));         
-        }
-
-        private void Tag_OnSyncTagCopyItemUnlinked(object sender, MpCopyItem e) {
-            throw new NotImplementedException();
-        }
-
-        private void Tag_OnSyncTagCopyItemLinked(object sender, MpCopyItem e) {
-            throw new NotImplementedException();
-        }
-
-        private void Tag_OnSyncTagDeleted(object sender, EventArgs e) {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() => {
-                if(sender is MpTag t) {
+        private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (sender is MpTag t) {                    
                     var ttvmToRemove = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
                     if (ttvmToRemove != null) {
-                        this.Remove(ttvmToRemove, true);
+                        ttvmToRemove.Tag.StartSync(e.SourceGuid);
+                        ttvmToRemove.Tag.TagColor.StartSync(e.SourceGuid);
+                        this.Remove(ttvmToRemove);
+                        ttvmToRemove.Tag.EndSync();
+                        ttvmToRemove.Tag.TagColor.EndSync();
                     }
                 }
             }));
         }
 
-        
+        private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            }));
+        }
+
+        private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (sender is MpTag t) {
+                    t.StartSync(e.SourceGuid);
+                    var dupCheck = this.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
+                    if (dupCheck == null) {
+                        this.Add(new MpTagTileViewModel(t));
+                    } else {
+                        MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
+                        dupCheck.Tag = t;
+                    }
+                    t.EndSync();
+                }
+            }));
+        }
+
         #endregion
 
         #endregion

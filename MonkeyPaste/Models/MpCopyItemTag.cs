@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
-    public class MpClipTag : MpDbModelBase {
+    public class MpCopyItemTag : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTagId")]
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Ignore]
-        public Guid ClipTagGuid {
+        public Guid CopyItemTagGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -35,34 +35,34 @@ namespace MonkeyPaste {
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
-        [ForeignKey(typeof(MpClip))]
+        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
-        public int ClipId { get; set; }
+        public int CopyItemId { get; set; }
 
-        public static async Task<List<MpClipTag>> GetAllClipsForTagId(int tagId) {
-            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
-            return allClipTagList.Where(x => x.TagId == tagId).ToList();
+        public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagId(int tagId) {
+            var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+            return allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
         }
 
-        public static async Task DeleteAllClipTagsForClipId(int ClipId) {
-            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
-            var citl = allClipTagList.Where(x => x.ClipId == ClipId).ToList();
+        public static async Task DeleteAllCopyItemTagsForCopyItemId(int CopyItemId) {
+            var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+            var citl = allCopyItemTagList.Where(x => x.CopyItemId == CopyItemId).ToList();
             foreach(var cit in citl) {
-                await MpDb.Instance.DeleteItemAsync<MpClipTag>(cit);
+                await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
             }
         }
 
-        public static async Task DeleteAllClipTagsForTagId(int tagId) {
-            var allClipTagList = await MpDb.Instance.GetItemsAsync<MpClipTag>();
-            var citl = allClipTagList.Where(x => x.TagId == tagId).ToList();
+        public static async Task DeleteAllCopyItemTagsForTagId(int tagId) {
+            var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+            var citl = allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
             foreach (var cit in citl) {
-                await MpDb.Instance.DeleteItemAsync<MpClipTag>(cit);
+                await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
             }
         }
 
         #endregion
 
-        public MpClipTag() {
+        public MpCopyItemTag() {
         }
     }
 }

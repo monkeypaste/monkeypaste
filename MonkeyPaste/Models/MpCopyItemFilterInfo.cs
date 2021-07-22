@@ -5,7 +5,7 @@ using SQLite;
 using SQLiteNetExtensions;
 
 namespace MonkeyPaste {
-    //public class MpClipFilterInfoItem : MpDbObject {
+    //public class MpCopyItemFilterInfoItem : MpDbObject {
     //    [AutoIncrement, PrimaryKey]
     //    public override int Id { get; set; }
 
@@ -13,10 +13,10 @@ namespace MonkeyPaste {
 
     //    public int FilterByObjectId { get; set; }
 
-    //    public MpClipFilterInfoItem() : base(typeof(MpClipFilterInfoItem)) { }
+    //    public MpCopyItemFilterInfoItem() : base(typeof(MpCopyItemFilterInfoItem)) { }
     //}
 
-    //public class MpClipFilterInfo : MpDbObject {
+    //public class MpCopyItemFilterInfo : MpDbObject {
     //    [AutoIncrement,PrimaryKey]
     //    public override int Id { get; set; }
 
@@ -28,6 +28,6 @@ namespace MonkeyPaste {
 
 
 
-    //    public MpClipFilterInfo() : base(typeof(MpClipFilterInfo)) { }
+    //    public MpCopyItemFilterInfo() : base(typeof(MpCopyItemFilterInfo)) { }
     //}
 }

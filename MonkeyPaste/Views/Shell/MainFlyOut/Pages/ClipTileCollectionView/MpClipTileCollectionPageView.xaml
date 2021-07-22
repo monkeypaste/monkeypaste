@@ -1,4 +1,4 @@
-﻿<ContentPage x:Class="MonkeyPaste.MpClipCollectionPageView"
+﻿<ContentPage x:Class="MonkeyPaste.MpCopyItemCollectionPageView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MonkeyPaste"
@@ -7,44 +7,44 @@
              HeightRequest="1000"
              BackgroundColor="Purple"
              Title="Monkey Paste"
-             x:Name="ClipCollectionView"
-             x:DataType="local:MpClipTileCollectionPageViewModel">
+             x:Name="CopyItemCollectionView"
+             x:DataType="local:MpCopyItemTileCollectionPageViewModel">
     <Shell.SearchHandler>
-        <local:MpClipTileViewModelSearchHandler x:Name="ClipViewModelSearchHandler" 
+        <local:MpCopyItemTileViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
                                                 Placeholder="Enter search term"
                                                 SearchBoxVisibility="Collapsible"
-                                                ItemsSource="{Binding ClipViewModels}"
+                                                ItemsSource="{Binding CopyItemViewModels}"
                                                 ShowsResults="False"
-                                                DisplayMemberName="Clip.ItemPlainText">
-            <local:MpClipTileViewModelSearchHandler.ItemTemplate>
-                <DataTemplate x:DataType="local:MpClipTileViewModel">
+                                                DisplayMemberName="CopyItem.ItemPlainText">
+            <local:MpCopyItemTileViewModelSearchHandler.ItemTemplate>
+                <DataTemplate x:DataType="local:MpCopyItemTileViewModel">
                     <Grid Padding="10"
                           ColumnDefinitions="0.15*,0.85*">
                         <Image Margin="0,10,0,0"
                                Aspect="AspectFit"
                                HeightRequest="60"
-                               Source="{Binding Clip.App.Icon.IconImage, Converter={StaticResource ImageConverter}}"
+                               Source="{Binding CopyItem.App.Icon.IconImage, Converter={StaticResource ImageConverter}}"
                                VerticalOptions="Start"
                                WidthRequest="60">
                         </Image>
                         <Label FontSize="14"
                                FontAttributes="Italic"
-                               Text="{Binding Clip.ItemText}"
+                               Text="{Binding CopyItem.ItemText}"
                                TextColor="Black" />
                     </Grid>
                 </DataTemplate>
-            </local:MpClipTileViewModelSearchHandler.ItemTemplate>
-        </local:MpClipTileViewModelSearchHandler>
+            </local:MpCopyItemTileViewModelSearchHandler.ItemTemplate>
+        </local:MpCopyItemTileViewModelSearchHandler>
     </Shell.SearchHandler>
     <ContentPage.Content>
         <StackLayout>
             <!--<local:MpSearchBarView BindingContext="{Binding SearchBarViewModel}" />-->
-            <CollectionView x:Name="ClipViewModels"
+            <CollectionView x:Name="CopyItemViewModels"
                             EmptyView="{Binding}"
-                            ItemsSource="{Binding ClipViewModels}"
+                            ItemsSource="{Binding CopyItemViewModels}"
                             RemainingItemsThreshold="5"
-                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreClipsCommand}"
-                            SelectedItem="{Binding SelectedClipViewModel, Mode=TwoWay}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCopyItemsCommand}"
+                            SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
                             SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
@@ -52,12 +52,12 @@
                                        SnapPointsType="Mandatory" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="local:MpClipTileViewModel">
-                        <local:MpClipView BindingContext="{Binding .}" />
+                    <DataTemplate x:DataType="local:MpCopyItemTileViewModel">
+                        <local:MpCopyItemView BindingContext="{Binding .}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyViewTemplate>
-                    <DataTemplate x:DataType="local:MpClipTileCollectionPageViewModel">
+                    <DataTemplate x:DataType="local:MpCopyItemTileCollectionPageViewModel">
                         <Grid>
                             <ActivityIndicator IsVisible="{Binding IsBusy}" />
                             <Label HorizontalOptions="Center"

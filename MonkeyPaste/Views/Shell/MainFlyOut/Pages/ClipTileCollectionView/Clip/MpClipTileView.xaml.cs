@@ -9,11 +9,11 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MpClipView : ContentView
+    public partial class MpCopyItemView : ContentView
     {
-        public MpClipView() : this(new MpClipTileViewModel()) { }
+        public MpCopyItemView() : this(new MpCopyItemTileViewModel()) { }
 
-        public MpClipView(MpClipTileViewModel viewModel) : base()
+        public MpCopyItemView(MpCopyItemTileViewModel viewModel) : base()
         {
             InitializeComponent();
             BindingContext = viewModel;
@@ -21,7 +21,7 @@ namespace MonkeyPaste {
 
         private void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e) {
             if (sender != null && sender is SwipeView sv) {
-                var ctvm = sv.BindingContext as MpClipTileViewModel;
+                var ctvm = sv.BindingContext as MpCopyItemTileViewModel;
                 ctvm.IsSelected = true;
             }
         }

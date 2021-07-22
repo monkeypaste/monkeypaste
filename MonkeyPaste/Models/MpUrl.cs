@@ -7,7 +7,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbModelBase, MpIClipSource {
+    public class MpUrl : MpDbModelBase, MpICopyItemSource {
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpUrlId")]
         public override int Id { get; set; }
@@ -61,7 +61,7 @@ namespace MonkeyPaste {
         }
 
 
-        #region MpIClipSource Implementation
+        #region MpICopyItemSource Implementation
         public MpIcon SourceIcon {
             get {
                 if (UrlDomain == null) {

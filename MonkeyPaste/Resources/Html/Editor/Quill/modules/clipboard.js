@@ -61,7 +61,7 @@ const STYLE_ATTRIBUTORS = [
   return memo;
 }, {});
 
-class Clipboard extends Module {
+class CopyItemboard extends Module {
   constructor(quill, options) {
     super(quill, options);
     this.quill.root.addEventListener('copy', e => this.onCaptureCopy(e, false));
@@ -205,7 +205,7 @@ class Clipboard extends Module {
     return [elementMatchers, textMatchers];
   }
 }
-Clipboard.DEFAULTS = {
+CopyItemboard.DEFAULTS = {
   matchers: [],
 };
 
@@ -520,7 +520,7 @@ function matchText(node, delta) {
 }
 
 export {
-  Clipboard as default,
+  CopyItemboard as default,
   matchAttributor,
   matchBlot,
   matchNewline,

@@ -245,7 +245,7 @@
             </Style>
 
 
-            <Style x:Key="Clip_Selection_BoxView" TargetType="BoxView">
+            <Style x:Key="CopyItem_Selection_BoxView" TargetType="BoxView">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">

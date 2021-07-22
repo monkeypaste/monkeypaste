@@ -11,23 +11,23 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty(nameof(ClipId), "ClipId")]
-    public partial class MpClipDetailPageView : ContentPage {
-        public int ClipId {
+    [QueryProperty(nameof(CopyItemId), "CopyItemId")]
+    public partial class MpCopyItemDetailPageView : ContentPage {
+        public int CopyItemId {
             set {
-                LoadClip(value);
+                LoadCopyItem(value);
             }
         }
 
-        public MpClipDetailPageView() : base() {
+        public MpCopyItemDetailPageView() : base() {
             InitializeComponent();
         }
         protected override async void OnDisappearing() {
-            var cidpvm = BindingContext as MpClipDetailPageViewModel;
+            var cidpvm = BindingContext as MpCopyItemDetailPageViewModel;
                         
-            //cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
-            cidpvm.Clip.ItemText = await cidpvm.EvaluateEditorJavaScript($"getText()");
-            cidpvm.Clip.ItemText = cidpvm.Clip.ItemText.Replace("\"", string.Empty);
+            //cidpvm.CopyItem.ItemPlainText = await cidpvm.StopMessageListener();
+            cidpvm.CopyItem.ItemText = await cidpvm.EvaluateEditorJavaScript($"getText()");
+            cidpvm.CopyItem.ItemText = cidpvm.CopyItem.ItemText.Replace("\"", string.Empty);
 
             var itemHtml = await cidpvm.EvaluateEditorJavaScript($"getHtml()");
             // Unescape that damn Unicode Java bull.
@@ -37,20 +37,20 @@ namespace MonkeyPaste {
                 m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
             itemHtml = Regex.Unescape(itemHtml);
             itemHtml = itemHtml.Replace("\"", string.Empty);
-            cidpvm.Clip.ItemHtml = itemHtml;
+            cidpvm.CopyItem.ItemHtml = itemHtml;
 
             ContentEditorWebView = null;
             cidpvm.Dispose();
 
-            await MpDb.Instance.UpdateItemAsync<MpClip>(cidpvm.Clip);
+            await MpDb.Instance.UpdateItemAsync<MpCopyItem>(cidpvm.CopyItem);
 
             base.OnDisappearing();
         }
 
-        private async void LoadClip(int ciid) {
+        private async void LoadCopyItem(int ciid) {
             try {
-                var ci = await MpClip.GetClipById(ciid);
-                var cidpvm = new MpClipDetailPageViewModel(ci);
+                var ci = await MpCopyItem.GetCopyItemById(ciid);
+                var cidpvm = new MpCopyItemDetailPageViewModel(ci);
                 BindingContext = cidpvm;
                 //init when evaljs is non-null
                 
@@ -60,7 +60,7 @@ namespace MonkeyPaste {
         }
 
         private void ContentEditorWebView_Navigated(object sender, WebNavigatedEventArgs e) {
-            var cidpvm = BindingContext as MpClipDetailPageViewModel;
+            var cidpvm = BindingContext as MpCopyItemDetailPageViewModel;
             //cidpvm.StartMessageListener();
         }
     }

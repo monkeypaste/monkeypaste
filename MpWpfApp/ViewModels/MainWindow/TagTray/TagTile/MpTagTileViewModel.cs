@@ -74,12 +74,14 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if (_isSelected != value || MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp)                    {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged(nameof(TagTextColor));
-                }
+                MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                    if (_isSelected != value || MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
+                        _isSelected = value;
+                        OnPropertyChanged(nameof(IsSelected));
+                        OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                        OnPropertyChanged(nameof(TagTextColor));
+                    }
+                }));
             }
         }
 
@@ -302,12 +304,18 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        
         #endregion
 
         #endregion
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
+            MpDbObject.SyncAdd += MpDbObject_SyncAdd;
+            MpDbObject.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDbObject.SyncDelete += MpDbObject_SyncDelete;
+
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsEditing):
@@ -324,14 +332,12 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(Tag):
-
-                        Tag.OnSyncTagUpdated += Tag_OnSyncTagUpdated;
                         break;
                 }
             };
 
             Tag = tag;
-        }
+        }        
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             var tagBorder = (MpClipBorder)sender;
@@ -475,15 +481,44 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private void Tag_OnSyncTagUpdated(object sender, EventArgs e) {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke((Action)(() => {
+
+        #region Sync Event Handlers
+        private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            //throw new NotImplementedException();
+        }
+
+        private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpTag t) {
-                    if(t.TagId == Tag.TagId) {
+                    if (Tag == null) {
+                        return;
+                    }
+                    if (t.Guid == Tag.Guid) {
+                        t.StartSync(e.SourceGuid);
                         Tag = t;
+                        t.EndSync();
+                    }
+                } else if (sender is MpColor c) {
+                    if (Tag == null || Tag.TagColor == null) {
+                        return;
+                    }
+                    if (c.Guid == Tag.TagColor.Guid) {
+                        Tag.TagColor.StartSync(e.SourceGuid);
+                        TagColor = c.ColorBrush;
+                        Tag.TagColor.EndSync();
                     }
                 }
             }));
         }
+
+        private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            //throw new NotImplementedException();
+        }
+
+        
+
+        #endregion
+
         #endregion
 
         #region Commands

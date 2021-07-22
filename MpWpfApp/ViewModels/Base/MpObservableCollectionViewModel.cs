@@ -133,7 +133,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         #endregion
 
         #region Visibility
-        
+
         #endregion
 
         #region State

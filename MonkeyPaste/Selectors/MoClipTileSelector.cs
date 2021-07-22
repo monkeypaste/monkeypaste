@@ -2,7 +2,7 @@
 using System.Reflection;
 using Xamarin.Forms;
 namespace MonkeyPaste {
-    public class MoClipTileSelector : DataTemplateSelector {
+    public class MoCopyItemTileSelector : DataTemplateSelector {
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container) {
             //var list = (CollectionView)container;
             //if (item is MpLocalSimpleTextMessage) {

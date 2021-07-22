@@ -10,7 +10,39 @@ namespace MpWpfApp {
         public string TableName = "Unknown";
         public Dictionary<string, object> columnData = new Dictionary<string, object>();
 
-        public abstract void LoadDataRow(DataRow dr);
+        public SQLite.TableMapping GetTableMapping() {
+            return MpDb.Instance.GetTableMapping(GetType().ToString().Replace(@"MpWpfApp.",string.Empty));
+        }
+
+
+        public static event EventHandler<MpDbSyncEventArgs> SyncAdd;
+        public static event EventHandler<MpDbSyncEventArgs> SyncUpdate;
+        public static event EventHandler<MpDbSyncEventArgs> SyncDelete;
+
+        protected virtual void OnSyncAdd(MpDbSyncEventArgs e) {
+            SyncAdd?.Invoke(this, e);
+        }
+        protected virtual void OnSyncUpdate(MpDbSyncEventArgs e) {
+            SyncUpdate?.Invoke(this, e);
+        }
+        protected virtual void OnSyncDelete(MpDbSyncEventArgs e) {
+            SyncDelete?.Invoke(this, e);
+        }
+
+
+        public string SyncingWithDeviceGuid { get; set; } = string.Empty;
+
+        public bool IsSyncing => !string.IsNullOrEmpty(SyncingWithDeviceGuid);
+
+        public void StartSync(string sourceGuid) {
+            SyncingWithDeviceGuid = sourceGuid;
+        }
+
+        public void EndSync() {
+            SyncingWithDeviceGuid = string.Empty;
+        }
+
+        public virtual void LoadDataRow(DataRow dr) { }
                 
 
         public int GetByteSize() {

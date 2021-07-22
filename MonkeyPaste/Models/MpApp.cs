@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbModelBase, MpIClipSource {
+    public class MpApp : MpDbModelBase, MpICopyItemSource {
         [Column("pk_MpAppId")]
         public override int Id { get; set; }
 
@@ -88,7 +88,7 @@ namespace MonkeyPaste {
         public MpApp() {
         }
 
-        #region MpIClipSource Implementation
+        #region MpICopyItemSource Implementation
         public MpIcon SourceIcon => Icon;
 
         public string SourcePath => AppPath;

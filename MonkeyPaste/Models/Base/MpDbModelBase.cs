@@ -7,7 +7,19 @@ using SQLite;
 namespace MonkeyPaste {
     public abstract class MpDbModelBase {
         public const string ParseToken = @"^(@!@";
-        public abstract int Id { set; get; }    
+        public abstract int Id { set; get; }
+
+        protected string SyncingWithDeviceGuid { get; set; } = string.Empty;
+
+        public bool IsSyncing => !string.IsNullOrEmpty(SyncingWithDeviceGuid);
+
+        public void StartSync(string sourceGuid) {
+            SyncingWithDeviceGuid = sourceGuid;
+        }
+
+        public void EndSync() {
+            SyncingWithDeviceGuid = string.Empty;
+        }
 
         [Ignore]
         public string Guid { get; set; }

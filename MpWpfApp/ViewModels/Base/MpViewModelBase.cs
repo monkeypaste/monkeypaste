@@ -24,6 +24,8 @@ namespace MpWpfApp {
         }
         #endregion
 
+
+
         public bool CanAcceptChildren { get; set; } = true;
 
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;

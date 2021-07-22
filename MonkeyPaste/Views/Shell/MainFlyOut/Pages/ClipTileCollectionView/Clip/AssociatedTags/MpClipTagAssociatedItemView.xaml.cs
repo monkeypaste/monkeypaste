@@ -9,8 +9,8 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MpClipTagAssociatedItemView : ContentView {
-        public MpClipTagAssociatedItemView() {
+    public partial class MpCopyItemTagAssociatedItemView : ContentView {
+        public MpCopyItemTagAssociatedItemView() {
             InitializeComponent();
         }
     }

@@ -9,26 +9,26 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty(nameof(ClipId), "ClipId")]
-    public partial class MpClipTagAssociationPageView : ContentPage {
-        public int ClipId {
+    [QueryProperty(nameof(CopyItemId), "CopyItemId")]
+    public partial class MpCopyItemTagAssociationPageView : ContentPage {
+        public int CopyItemId {
             set {
-                LoadClip(value);
+                LoadCopyItem(value);
             }
         }
-        public MpClipTagAssociationPageView()  {
+        public MpCopyItemTagAssociationPageView()  {
             InitializeComponent();
         }
 
-        //public MpClipTagAssociationPageView(MpClipTagAssociationPageViewModel ctapvm) : base() {
+        //public MpCopyItemTagAssociationPageView(MpCopyItemTagAssociationPageViewModel ctapvm) : base() {
         //    InitializeComponent();
         //    //BindingContext = ctapvm;
         //}
 
-        private async void LoadClip(int ciid) {
+        private async void LoadCopyItem(int ciid) {
             try {
-                var ci = await MpClip.GetClipById(ciid);
-                BindingContext = new MpClipTagAssociationPageViewModel(ci);
+                var ci = await MpCopyItem.GetCopyItemById(ciid);
+                BindingContext = new MpCopyItemTagAssociationPageViewModel(ci);
             }
             catch (Exception) {
                 MpConsole.WriteLine($"Failed to load copy item {ciid}.");

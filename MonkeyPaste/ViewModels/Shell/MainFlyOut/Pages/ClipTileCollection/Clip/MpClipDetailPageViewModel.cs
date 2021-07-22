@@ -10,9 +10,9 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpClipDetailPageViewModel : MpViewModelBase, IDisposable {
+    public class MpCopyItemDetailPageViewModel : MpViewModelBase, IDisposable {
         #region Properties
-        public MpClip Clip { get; set; }
+        public MpCopyItem CopyItem { get; set; }
 
         public MpJsMessageListener JsMessageListener { get; set; }
 
@@ -24,17 +24,17 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpClipDetailPageViewModel() : base() { }
+        public MpCopyItemDetailPageViewModel() : base() { }
 
-        public MpClipDetailPageViewModel(MpClip ci) : this() {
-            PropertyChanged += MpClipDetailPageViewModel_PropertyChanged;
-            Clip = ci;
+        public MpCopyItemDetailPageViewModel(MpCopyItem ci) : this() {
+            PropertyChanged += MpCopyItemDetailPageViewModel_PropertyChanged;
+            CopyItem = ci;
             
             //JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
             Initialize();
         }
 
-        private void MpClipDetailPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+        private void MpCopyItemDetailPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(EvaluateEditorJavaScript):
                     if(EvaluateEditorJavaScript != null) {
@@ -84,9 +84,9 @@ namespace MonkeyPaste {
 
         public async Task InitEditor() {
             (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged += LayoutService_OnKeyboardHeightChanged;
-            string content = Clip.ItemHtml;
+            string content = CopyItem.ItemHtml;
             if(string.IsNullOrEmpty(content)) {
-                content = Clip.ItemText;
+                content = CopyItem.ItemText;
             }
             //await EvaluateEditorJavaScript($"init('{content}',null,null,null,null)");
         }
@@ -101,12 +101,12 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void Initialize() {
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpClipDetailPageViewModel)).Assembly;
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
             var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string contentTag = @"<div id='editor'>";
-                html = html.Replace(contentTag, contentTag + Clip.ItemText);
+                html = html.Replace(contentTag, contentTag + CopyItem.ItemText);
                 EditorHtml = html;
             }
         }

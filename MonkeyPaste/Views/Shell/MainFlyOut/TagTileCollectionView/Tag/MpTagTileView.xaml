@@ -71,7 +71,7 @@
                            BackgroundColor="Transparent"
                            FontSize="Micro"
                            HorizontalOptions="Center"
-                           Text="{Binding ClipCount}"
+                           Text="{Binding CopyItemCount}"
                            TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
                            VerticalOptions="Center" />
                 </Grid>

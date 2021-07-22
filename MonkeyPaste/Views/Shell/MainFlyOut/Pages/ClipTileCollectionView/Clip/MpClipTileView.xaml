@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView x:Class="MonkeyPaste.MpClipView"
+<ContentView x:Class="MonkeyPaste.MpCopyItemView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              IsVisible="{Binding IsVisible}"
              xmlns:local="clr-namespace:MonkeyPaste"
-             x:DataType="local:MpClipTileViewModel">
+             x:DataType="local:MpCopyItemTileViewModel">
     <ContentView.Content>
         <SwipeView SwipeStarted="SwipeView_SwipeStarted">
             <SwipeView.LeftItems>
@@ -15,7 +15,7 @@
                                IconImageSource="{StaticResource StarOutlineIcon}"
                                Text="Tags" />
                     <SwipeItem BackgroundColor="LightPink"
-                               Command="{Binding BindingContext.DeleteClipCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                               Command="{Binding BindingContext.DeleteCopyItemCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                CommandParameter="{Binding .}"
                                IconImageSource="{StaticResource DeleteIcon}"
                                Text="Delete" />
@@ -27,7 +27,7 @@
                    HeightRequest="100"
                    IsClippedToBounds="True">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ClipTileTappedCommand}"
+                    <TapGestureRecognizer Command="{Binding CopyItemTileTappedCommand}"
                                           NumberOfTapsRequired="1" />
                 </Frame.GestureRecognizers>
                 <Frame.OutlineColor>
@@ -41,7 +41,7 @@
                                 iOS="10" />
                 </Frame.Margin>
                 <StackLayout Orientation="Horizontal">
-                    <!--<BoxView Style="{StaticResource Clip_Selection_BoxView}"
+                    <!--<BoxView Style="{StaticResource CopyItem_Selection_BoxView}"
                              WidthRequest="6" />-->
                     <ff:CachedImage Aspect="AspectFit"
                                     Margin="0,10,0,0"
@@ -50,7 +50,7 @@
                                     HeightRequest="60"
                                     CacheDuration="50"
                                     RetryCount="3"
-                                    Source="{Binding Clip.App.Icon.IconImage.ImageBase64, Converter={StaticResource ImageConverter}}"
+                                    Source="{Binding CopyItem.App.Icon.IconImage.ImageBase64, Converter={StaticResource ImageConverter}}"
                                     RetryDelay="600"
                                     DownsampleToViewSize="true" />
                     <Grid Padding="0"
@@ -67,7 +67,7 @@
                                Padding="0,5,0,0"
                                FontSize="16"
                                HorizontalTextAlignment="Start"
-                               Text="{Binding Clip.Title, Mode=TwoWay}"
+                               Text="{Binding CopyItem.Title, Mode=TwoWay}"
                                TextColor="Black"
                                VerticalTextAlignment="End">
                             <Label.LineBreakMode>
@@ -83,7 +83,7 @@
                         <Label Grid.Row="2"
                                Padding="5"
                                FontSize="16"
-                               Text="{Binding Clip.ItemText, Mode=TwoWay}"
+                               Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
                                TextColor="Black" />
                     </Grid>
                 </StackLayout>

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MonkeyPaste {
     [Table("MpCompositeCopyItem")]
-    public class MpClipComposite : MpDbModelBase {
+    public class MpCompositeCopyItem : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCompositeCopyItemId")]
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Ignore]
-        public Guid ClipCompositeGuid {
+        public Guid CopyItemCompositeGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -31,19 +31,19 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpClip))]
+        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
-        public int ClipId { get; set; }
+        public int CopyItemId { get; set; }
 
-        [ForeignKey(typeof(MpClip))]
+        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_ParentMpCopyItemId")]
-        public int ParentClipId { get; set; }
+        public int ParentCopyItemId { get; set; }
 
         public int SortOrderIdx { get; set; }
 
         #endregion
 
-        public MpClipComposite() {
+        public MpCompositeCopyItem() {
         }
     }
 }

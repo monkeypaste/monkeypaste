@@ -618,12 +618,21 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(action, priority);
+        }
+
+        public async Task RunOnMainThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
+            await System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(action, priority);
+        }
+
         public string GetTempFileNameWithExtension(string ext) {
             if(string.IsNullOrEmpty(ext)) {
                 return Path.GetTempFileName();
             }
             return Path.GetTempFileName().Replace(@".tmp",string.Empty) + ext;
         }
+
         public void PassKeysListToWindow(IntPtr handle,List<List<Key>> keyList) {     
             try {
                 WinApi.SetForegroundWindow(handle);

@@ -55,7 +55,7 @@
         <ShellContent x:Name="CollectionsContent"
                       Title="Collections"
                       Icon="{StaticResource TagsIcon}"
-                      BindingContext="{Binding TagCollectionViewModel.ClipCollectionViewModel}"
-                      ContentTemplate="{DataTemplate local:MpClipCollectionPageView}" />
+                      BindingContext="{Binding TagCollectionViewModel.CopyItemCollectionViewModel}"
+                      ContentTemplate="{DataTemplate local:MpCopyItemCollectionPageView}" />
     </FlyoutItem>
 </Shell>

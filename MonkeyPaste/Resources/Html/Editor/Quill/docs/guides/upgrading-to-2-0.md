@@ -12,7 +12,7 @@ In progress
 - `registry` - added to allow multiple editors with different formats to coexist on the same page.
 - `formats` *removed* - `registry` is now strictly more powerful and safer.
 
-## Clipboard
+## CopyItemboard
 
 - `convert` - API changed to include both HTML and text and previous functionality is broken into multiple method calls (`convert`, `onCapturePaste`) to allow more surface to hook into.
 - `onCapturePaste` - Added

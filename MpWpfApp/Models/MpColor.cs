@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,13 +8,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
+    [Table("MpColor")]
     public class MpColor : MpDbObject, MonkeyPaste.MpISyncableDbObject {
         private static List<MpColor> _AllColorList = null;
         public static int TotalColorCount = 0;
 
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpColorId")]
         public int ColorId { get; set; }
-        public Guid ColorGuid { get; set; }
 
+        public string Guid { get; set; }
+        [Ignore]
+        public Guid ColorGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        [Ignore]
         public Color Color {
             get {
                 return Color.FromArgb((byte)A, (byte)R, (byte)G, (byte)B);
@@ -27,6 +45,7 @@ namespace MpWpfApp {
             }
         }
 
+        [Ignore]
         public Brush ColorBrush {
             get {
                 if(Color == null) {
@@ -37,9 +56,9 @@ namespace MpWpfApp {
 
         }
         public int R { get; private set; }
-         public int G { get; private set; }
-         public int B { get; private set; }
-         public int A { get; private set; } 
+        public int G { get; private set; }
+        public int B { get; private set; }
+        public int A { get; private set; } 
 
         public static List<MpColor> GetAllColors() {
             if(_AllColorList == null) {
@@ -123,7 +142,7 @@ namespace MpWpfApp {
             }
         }
         public MpColor(int r, int g, int b, int a) : this() {
-            ColorGuid = Guid.NewGuid();
+            ColorGuid = System.Guid.NewGuid();
             R = r;
             G = g;
             B = b;
@@ -139,9 +158,9 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
             if (dr["MpColorGuid"] == null || dr["MpColorGuid"].GetType() == typeof(System.DBNull)) {
-                ColorGuid = Guid.NewGuid();
+                ColorGuid = System.Guid.NewGuid();
             } else {
-                ColorGuid = Guid.Parse(dr["MpColorGuid"].ToString());
+                ColorGuid = System.Guid.Parse(dr["MpColorGuid"].ToString());
             }
             R = Convert.ToInt32(dr["R"].ToString());
             G = Convert.ToInt32(dr["G"].ToString());
@@ -177,8 +196,8 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(sourceClientGuid)) {
                 sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
             }
-            if (ColorGuid == Guid.Empty) {
-                ColorGuid = Guid.NewGuid();
+            if (ColorGuid == System.Guid.Empty) {
+                ColorGuid = System.Guid.NewGuid();
             }
             //if (!IsAltered()) {
             //    return;
@@ -215,7 +234,11 @@ namespace MpWpfApp {
             }
         }
         public override void WriteToDatabase() {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid);      
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            } 
         }
         public void WriteToDatabase(bool isFirstLoad) {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid, isFirstLoad);
@@ -231,8 +254,13 @@ namespace MpWpfApp {
                     { "@cid", ColorId }
                 }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
         }
+
         public void DeleteFromDatabase() {
-            DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
         }
 
         public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
@@ -247,7 +275,7 @@ namespace MpWpfApp {
             foreach (var li in logs) {
                 switch (li.AffectedColumnName) {
                     case "MpColorGuid":
-                        newColor.ColorGuid = Guid.Parse(li.AffectedColumnValue);
+                        newColor.ColorGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "R":
                         newColor.R = Convert.ToInt32(li.AffectedColumnValue);

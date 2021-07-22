@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste;
 using Newtonsoft.Json;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,26 +9,47 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MpWpfApp {
+    [Table("MpTag")]
     public class MpTag : MpDbObject, MpISyncableDbObject {
-        public static event EventHandler OnSyncTagAdded;
-        public event EventHandler OnSyncTagUpdated;
-        public event EventHandler OnSyncTagDeleted;
-        public event EventHandler<MpCopyItem> OnSyncTagCopyItemLinked;
-        public event EventHandler<MpCopyItem> OnSyncTagCopyItemUnlinked;
 
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpTagId")]
         public int TagId { get; set; }
-        public Guid TagGuid { get; set; }
 
+        [Column("MpTagGuid")]
+        public string Guid { get; set; }
+
+        [Ignore]
+        public Guid TagGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        [Column("SortIdx")]
         public int TagSortIdx { get; set; }
+
+        [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId")]
         public int ColorId { get; set; }
 
         public string TagName { get; set; }
+
+        [Ignore]
         public MpColor TagColor { get; set; }
-        //unused
+
+        [Column("fk_ParentTagId")]
+        [ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
         public MpTag() { }
         public MpTag(string tagName, Color tagColor, int tagSortIdx) {
-            TagGuid = Guid.NewGuid();
+            TagGuid = System.Guid.NewGuid();
             TagName = tagName;
             TagColor = new MpColor((int)tagColor.R, (int)tagColor.G, (int)tagColor.B, 255);
             TagSortIdx = tagSortIdx;
@@ -57,9 +80,9 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
             if (dr["MpTagGuid"] == null || dr["MpTagGuid"].GetType() == typeof(System.DBNull)) {
-                TagGuid = Guid.NewGuid();
+                TagGuid = System.Guid.NewGuid();
             } else {
-                TagGuid = Guid.Parse(dr["MpTagGuid"].ToString());
+                TagGuid = System.Guid.Parse(dr["MpTagGuid"].ToString());
             }            
            
             TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
@@ -97,7 +120,7 @@ namespace MpWpfApp {
                     { "@tid", TagId }
                 });
             int SortOrderIdx = dt.Rows.Count + 1;
-            var citg = Guid.NewGuid();
+            var citg = System.Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
                 "insert into MpCopyItemTag(MpCopyItemTagGuid,fk_MpCopyItemId,fk_MpTagId) values(@citg,@ciid,@tid)",
                 new Dictionary<string, object> {
@@ -105,7 +128,7 @@ namespace MpWpfApp {
                     { "@ciid", ci.CopyItemId },
                     { "@tid", TagId }
                 },citg.ToString());
-            var cistog = Guid.NewGuid();
+            var cistog = System.Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
                 "insert into MpCopyItemSortTypeOrder(MpCopyItemSortTypeOrderGuid,fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(@cistog,@ciid,@stid,@so)",
                 new Dictionary<string, object> {
@@ -116,7 +139,12 @@ namespace MpWpfApp {
                 },cistog.ToString());
 
             if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncTagCopyItemLinked?.Invoke(this, ci);
+                OnSyncAdd(
+                    new MpDbSyncEventArgs() {
+                        DbObject = ci,
+                        EventType = MpDbLogActionType.Create,
+                        SourceGuid = sourceClientGuid
+                    });
             }
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
             return true;
@@ -133,7 +161,7 @@ namespace MpWpfApp {
                     { "@tid", TagId } });
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
-                    var citg = Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
+                    var citg = System.Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
                     MpDb.Instance.ExecuteWrite(
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
@@ -142,7 +170,12 @@ namespace MpWpfApp {
                 }
             }
             if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncTagCopyItemUnlinked?.Invoke(this, ci);
+                OnSyncDelete(
+                    new MpDbSyncEventArgs() {
+                        DbObject = ci,
+                        EventType = MpDbLogActionType.Delete,
+                        SourceGuid = sourceClientGuid
+                    });
             }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
@@ -152,8 +185,8 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(sourceClientGuid)) {
                 sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
             }
-            if (TagGuid == Guid.Empty) {
-                TagGuid = Guid.NewGuid();
+            if (TagGuid == System.Guid.Empty) {
+                TagGuid = System.Guid.NewGuid();
             }
 
             if (string.IsNullOrEmpty(TagName)) {
@@ -165,6 +198,11 @@ namespace MpWpfApp {
                 if (TagColor == null) {
                     //occurs with initial tag creation on first load
                     TagColor = MpColor.GetColorById(ColorId);
+                    if(TagColor == null) {
+                        MpConsole.WriteTraceLine(@"Tag create error, Color should be defined already but so creating random one");
+                        //seems to be an intermittent problem maybe caused by SyncStart SyncEnd calls for color
+                        TagColor = new MpColor(MpHelpers.Instance.GetRandomColor());
+                    }
                 }
                 TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
                 ColorId = TagColor.ColorId;
@@ -178,7 +216,12 @@ namespace MpWpfApp {
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
                 if(sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                    OnSyncTagAdded?.Invoke(this,null);
+                    OnSyncAdd(
+                        new MpDbSyncEventArgs() {
+                            DbObject = this,
+                            EventType = MpDbLogActionType.Create,
+                            SourceGuid = sourceClientGuid
+                        });
                 }
             } else {
                 TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
@@ -192,18 +235,33 @@ namespace MpWpfApp {
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
+
                 if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                    OnSyncTagUpdated?.Invoke(this, null);
+                    OnSyncUpdate(
+                        new MpDbSyncEventArgs() {
+                            DbObject = this,
+                            EventType = MpDbLogActionType.Modify,
+                            SourceGuid = sourceClientGuid
+                        });
                 }
             }
         }
         public override void WriteToDatabase() {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            if(IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }            
         }
         public void WriteToDatabase(bool ignoreTracking,bool ignoreSyncing) {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid,ignoreTracking,ignoreSyncing);
         }
+
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (string.IsNullOrEmpty(sourceClientGuid)) {
+                sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
+            }
+
             MpDb.Instance.ExecuteWrite(
                 "delete from MpTag where pk_MpTagId=@tid",
                 new Dictionary<string, object> {
@@ -213,7 +271,7 @@ namespace MpWpfApp {
             var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where fk_MpTagId=@tid", new Dictionary<string, object> { { "@tid", TagId } });
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
-                    var citg = Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
+                    var citg = System.Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
                     MpDb.Instance.ExecuteWrite(
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
@@ -221,13 +279,38 @@ namespace MpWpfApp {
                         }, citg.ToString(),sourceClientGuid,ignoreTracking,ignoreSyncing);
                 }
             }
+
+            if(TagColor != null) {
+                TagColor.DeleteFromDatabase(sourceClientGuid, ignoreTracking, ignoreSyncing);
+            }
+
             if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncTagDeleted?.Invoke(this, null);
+                OnSyncDelete(
+                    new MpDbSyncEventArgs() {
+                        DbObject = this,
+                        EventType = MpDbLogActionType.Delete,
+                        SourceGuid = sourceClientGuid
+                    });
             }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
+        
         public void DeleteFromDatabase() {
-            DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        protected override void OnSyncAdd(MpDbSyncEventArgs e) {
+            base.OnSyncAdd(e);
+        }
+        protected override void OnSyncUpdate(MpDbSyncEventArgs e) {
+            base.OnSyncUpdate(e);
+        }
+        protected override void OnSyncDelete(MpDbSyncEventArgs e) {
+            base.OnSyncDelete(e);
         }
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
