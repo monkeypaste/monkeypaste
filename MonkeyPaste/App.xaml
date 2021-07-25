@@ -15,10 +15,8 @@
 
             <ResourceDictionary>
                 <Style TargetType="NavigationPage">
-                    <Setter Property="BarBackgroundColor"
-                            Value="#273E47" />
-                    <Setter Property="BarTextColor"
-                            Value="White" />
+                    <Setter Property="BarBackgroundColor" Value="#273E47" />
+                    <Setter Property="BarTextColor" Value="White" />
                 </Style>
             </ResourceDictionary>
 
@@ -122,11 +120,12 @@
                 Size="22"
                 Color="Black" />
 
-            <FontImageSource x:Key="TemplateIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf02c;"
-                             Size="22"
-                             Color="Black" />
+            <FontImageSource
+                x:Key="TemplateIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf02c;"
+                Size="22"
+                Color="Black" />
 
             <FontImageSource
                 x:Key="HelpIcon"
@@ -135,19 +134,21 @@
                 Size="22"
                 Color="Black" />
 
-            <FontImageSource x:Key="SyncIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf2f1;"
-                             Size="22"
-                             Color="Black" />
+            <FontImageSource
+                x:Key="SyncIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf2f1;"
+                Size="22"
+                Color="Black" />
 
-            <FontImageSource x:Key="ColorIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf53f;"
-                             Size="22"
-                             Color="Black" />
+            <FontImageSource
+                x:Key="ColorIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf53f;"
+                Size="22"
+                Color="Black" />
 
-            
+
             <FontImageSource
                 x:Key="SquareIcon0"
                 FontFamily="{StaticResource FontAwesomeSolid}"
@@ -204,24 +205,27 @@
                 Size="22"
                 Color="Black" />
 
-            <FontImageSource x:Key="DotsIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf142;"
-                             Size="22"
-                             Color="Black" />
+            <FontImageSource
+                x:Key="DotsIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf142;"
+                Size="22"
+                Color="Black" />
 
 
-            <FontImageSource x:Key="CheckedIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf00c;"
-                             Size="22"
-                             Color="Black" />
-            
-            <FontImageSource x:Key="SquareOutlineIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf0c8;"
-                             Size="22"
-                             Color="Black" />
+            <FontImageSource
+                x:Key="CheckedIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf00c;"
+                Size="22"
+                Color="Black" />
+
+            <FontImageSource
+                x:Key="SquareOutlineIcon"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="&#xf0c8;"
+                Size="22"
+                Color="Black" />
 
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="#A25EBB" />

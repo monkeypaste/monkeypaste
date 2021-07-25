@@ -48,6 +48,7 @@
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
     <None Remove="Resources\Icons\monkey.png" />
+    <None Remove="Behaviors\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +76,7 @@
     <PackageReference Include="Plugin.PushNotification" Version="3.6.9" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
     <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
@@ -100,6 +102,9 @@
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Controls\MpPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -133,6 +138,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Shell\MpMainShell.xaml" />
+    <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\MpClipTileCollectionPageView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpClipTileView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpClipDetailPageView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociationPageView.xaml" />
+    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociatedItemView.xaml" />
+    <None Include="App.xaml" />
+    <None Include="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml" />
+    <None Include="Controls\MpPopupPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Resources\Icons\search.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -164,5 +182,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Db\SQLite\" />
+    <Folder Include="Behaviors\" />
   </ItemGroup>
 </Project>

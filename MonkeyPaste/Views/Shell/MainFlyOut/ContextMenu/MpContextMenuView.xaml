@@ -1,32 +1,56 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MonkeyPaste.MpContextMenuView">
-  <ListView x:Name="MyListView"
+﻿<rg:PopupPage
+    x:Class="MonkeyPaste.MpContextMenuView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    xmlns:rg="http://rotorgames.com"
+    x:DataType="local:MpContextMenuViewModel"
+    BackgroundColor="Transparent"
+    CloseWhenBackgroundIsClicked="True">
+    <AbsoluteLayout>
+        <ListView
+            x:Name="ContextMenuListView"
+            BackgroundColor="White"
+            HeightRequest="{Binding Height}"
+            HorizontalOptions="End"
             ItemsSource="{Binding Items}"
-            ItemTapped="Handle_ItemTapped"
-            CachingStrategy="RecycleElement">
-    <!--Built in Cells-->
-    <ListView.ItemTemplate>
-        <DataTemplate>
-            <TextCell Text="{Binding .}" />
-        </DataTemplate>
-    </ListView.ItemTemplate>
-    
-    <!--Custom View Cells-->
-    <!--
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <StackLayout>
-            <Label Text="{Binding Text}" 
-                   Style="{DynamicResource ListItemTextStyle}" />
-            <Label Text="{Binding Detail}" 
-                   Style="{DynamicResource ListItemDetailTextStyle}"/>
-          </StackLayout>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-    -->
-  </ListView>
-</ContentView>
+            VerticalOptions="Start"
+            WidthRequest="{Binding Width}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:MpContextMenuItemViewModel">
+                    <ViewCell>
+                        <Grid
+                            Padding="{Binding BindingContext.Padding, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                            IsEnabled="{Binding IsEnabled}"
+                            WidthRequest="{Binding BindingContext.ItemWidth, Source={RelativeSource AncestorType={x:Type ListView}}}">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Command}" NumberOfTapsRequired="1" />
+                            </Grid.GestureRecognizers>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="0.7*" />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                Grid.Column="0"
+                                HeightRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                Source="{Binding IconImageSource}"
+                                WidthRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="{Binding BindingContext.FontSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                Text="{Binding Title}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                        </Grid>
+                        <!--<Label
+                            Padding="10"
+                            BackgroundColor="Transparent"
+                            Text="{Binding Title}"
+                            TextColor="Black" />-->
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </AbsoluteLayout>
+</rg:PopupPage>

@@ -31,7 +31,7 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 
 namespace MonkeyPaste {
-public class MpHelpers {
+    public class MpHelpers {
         #region Singleton
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
@@ -59,7 +59,7 @@ public class MpHelpers {
         private string _passwordChars = null;
         public string PasswordChars {
             get {
-                if(_passwordChars == null) {
+                if (_passwordChars == null) {
                     var sb = new StringBuilder();
                     for (int i = char.MinValue; i <= char.MaxValue; i++) {
                         char c = Convert.ToChar(i);
@@ -148,11 +148,12 @@ public class MpHelpers {
 
         public double GetFileSizeInBytes(string filePath) {
             try {
-                if(File.Exists(filePath)) {
+                if (File.Exists(filePath)) {
                     FileInfo fi = new FileInfo(filePath);
                     return fi.Length;
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error checking size of path {filePath}", ex);
             }
             return -1;
@@ -172,10 +173,11 @@ public class MpHelpers {
                         sw.WriteLine(textToAppend);
                     }
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error appending text '{textToAppend}' to path '{path}'");
                 MpConsole.WriteTraceLine($"With exception: {ex}");
-            }            
+            }
         }
 
         public string ReadTextFromFile(string filePath) {
@@ -186,7 +188,8 @@ public class MpHelpers {
                     f.Close();
                     return outStr;
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
@@ -213,10 +216,11 @@ public class MpHelpers {
                     }
                     return filePath;
                 }
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'",ex);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 return null;
-            }            
+            }
         }
 
         public string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary = false) {
@@ -226,7 +230,8 @@ public class MpHelpers {
                 }
                 File.WriteAllBytes(filePath, byteArray);
                 return filePath;
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
                 return null;
             }
@@ -335,13 +340,11 @@ public class MpHelpers {
                 }
             };
 
-        public Brush GetContentColor(int c, int r)
-        {
+        public Brush GetContentColor(int c, int r) {
             return _ContentColors[c][r];
         }
 
-        public double ColorDistance(Color e1, Color e2)
-        {
+        public double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)e1.R + (long)e2.R) / 2;
             long r = (long)e1.R - (long)e2.R;
@@ -352,8 +355,7 @@ public class MpHelpers {
             return d / max;
         }
 
-        public bool IsBright(Color c, int brightThreshold = 150)
-        {
+        public bool IsBright(Color c, int brightThreshold = 150) {
             int grayVal = (int)Math.Sqrt(
                 (c.R * 255) * (c.R * 255) * .299 +
                 (c.G * 255) * (c.G * 255) * .587 +
@@ -361,32 +363,26 @@ public class MpHelpers {
             return grayVal > brightThreshold;
         }
 
-        public SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha)
-        {
+        public SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
             var c = solidColorBrush.Color;
-            solidColorBrush.Color = Color.FromRgba(c.R,c.G,c.B,(double)alpha);
+            solidColorBrush.Color = Color.FromRgba(c.R, c.G, c.B, (double)alpha);
             return solidColorBrush;
         }
 
-        public SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor)
-        {
-            if (correctionFactor == 0.0f)
-            {
+        public SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
+            if (correctionFactor == 0.0f) {
                 return b;
             }
             double red = (double)b.Color.R;
             double green = (double)b.Color.G;
             double blue = (double)b.Color.B;
 
-            if (correctionFactor < 0)
-            {
+            if (correctionFactor < 0) {
                 correctionFactor = 1 + correctionFactor;
                 red *= correctionFactor;
                 green *= correctionFactor;
                 blue *= correctionFactor;
-            }
-            else
-            {
+            } else {
                 red = (255 - red) * correctionFactor + red;
                 green = (255 - green) * correctionFactor + green;
                 blue = (255 - blue) * correctionFactor + blue;
@@ -395,18 +391,15 @@ public class MpHelpers {
             return new SolidColorBrush(Color.FromRgba((byte)red, (byte)green, (byte)blue, b.Color.A));
         }
 
-        public Brush GetDarkerBrush(Brush b)
-        {
+        public Brush GetDarkerBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, -0.5);
         }
 
-        public Brush GetLighterBrush(Brush b)
-        {
+        public Brush GetLighterBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
-        public Color GetRandomColor(byte alpha = 255)
-        {
+        public Color GetRandomColor(byte alpha = 255) {
             //if (alpha == 255) {
             //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             //}
@@ -416,8 +409,7 @@ public class MpHelpers {
             return ((SolidColorBrush)GetContentColor(x, y)).Color;
         }
 
-        public Brush GetRandomBrushColor(byte alpha = 255)
-        {
+        public Brush GetRandomBrushColor(byte alpha = 255) {
             return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
         }
         #endregion
@@ -477,22 +469,22 @@ public class MpHelpers {
         }
         public bool IsConnectedToNetwork() {
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-            
+
         }
 
         public bool IsMpServerAvailable() {
-            if(!IsConnectedToNetwork()) {
+            if (!IsConnectedToNetwork()) {
                 return false;
             }
             try {
-                
+
                 using (var client = new WebClient()) {
                     try {
                         var stream = client.OpenRead(@"https://www.monkeypaste.com/");
                         stream.Dispose();
                         return true;
                     }
-                    catch(System.AggregateException ex) {
+                    catch (System.AggregateException ex) {
                         MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
                         return false;
                     }
@@ -511,11 +503,11 @@ public class MpHelpers {
 
         public string GetLocalIp4Address() {
             var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211);
-            if(ips.Length > 0) {
+            if (ips.Length > 0) {
                 return ips[0];
             }
             ips = GetAllLocalIPv4(NetworkInterfaceType.Ethernet);
-            if(ips.Length > 0) {
+            if (ips.Length > 0) {
                 return ips[0];
             }
             return "0.0.0.0";
@@ -545,41 +537,33 @@ public class MpHelpers {
             return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
-        public string GetFullyFormattedUrl(string str)
-        {
+        public string GetFullyFormattedUrl(string str) {
             //returns url so it has protocol prefix
-            if (str.StartsWith(@"http://"))
-            {
+            if (str.StartsWith(@"http://")) {
                 return str;
             }
-            if (str.StartsWith(@"https://"))
-            {
+            if (str.StartsWith(@"https://")) {
                 return str;
             }
             //use http without s because if it is https then it will resolve to but otherwise will not load
             return @"http://" + str;
         }
 
-        public string GetUrlDomain(string url)
-        {
+        public string GetUrlDomain(string url) {
             //returns protocol prefixed domain url text
-            try
-            {
+            try {
                 url = GetFullyFormattedUrl(url);
                 int domainStartIdx = url.IndexOf(@"//") + 2;
-                if (url.Length <= domainStartIdx)
-                {
+                if (url.Length <= domainStartIdx) {
                     return string.Empty;
                 }
-                if (!url.Substring(domainStartIdx).Contains(@"/"))
-                {
+                if (!url.Substring(domainStartIdx).Contains(@"/")) {
                     return url.Substring(domainStartIdx);
                 }
                 int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
                 return url.Substring(domainStartIdx).Substring(0, domainEndIdx);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
             }
             return null;

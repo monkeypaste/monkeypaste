@@ -21,7 +21,7 @@ namespace MonkeyPaste.Droid {
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
                 this.Control.Background = gd;
                 this.Control.SetRawInputType(InputTypes.TextFlagNoSuggestions);
-                Control.SetHintTextColor(ColorStateList.ValueOf(global::Android.Graphics.Color.White));
+                //Control.SetHintTextColor(ColorStateList.ValueOf(global::Android.Graphics.Color.White));
             }
         }
     }

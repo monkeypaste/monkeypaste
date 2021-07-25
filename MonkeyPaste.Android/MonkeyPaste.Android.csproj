@@ -66,9 +66,6 @@
     <PackageReference Include="Acr.UserDialogs">
       <Version>7.1.0.514</Version>
     </PackageReference>
-    <PackageReference Include="HotSpotManager">
-      <Version>1.0.7</Version>
-    </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
@@ -128,6 +125,7 @@
     <Compile Include="Renderers\MpWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\LocationFetcher.cs" />
     <Compile Include="Services\MpFirebaseMessagingService.cs" />
     <Compile Include="Services\MpGlobalLayoutListener.cs" />
     <Compile Include="SplashActivity.cs" />

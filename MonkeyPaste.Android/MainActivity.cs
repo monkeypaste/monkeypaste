@@ -56,7 +56,7 @@ namespace MonkeyPaste.Droid {
                 
         public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
 
-        protected override async void OnCreate(Bundle savedInstanceState) {
+        protected override void OnCreate(Bundle savedInstanceState) {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -70,8 +70,7 @@ namespace MonkeyPaste.Droid {
                 }
             }
 
-            
-
+            Rg.Plugins.Popup.Popup.Init(this);
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
 
@@ -79,7 +78,6 @@ namespace MonkeyPaste.Droid {
            
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            
 
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
@@ -90,34 +88,12 @@ namespace MonkeyPaste.Droid {
                 StorageService = new MpLocalStorage_Android()
             };
 
-
-            //if (IsPlayServicesAvailable()) {
-            //    CreateGpsNotificationChannel();
-            //    FirebaseApp.InitializeApp(ApplicationContext);
-            //    MpConsole.WriteLine("FCM InstanceID token: " + FirebaseInstanceId.Instance.Token);
-            //} else {
-            //    MpConsole.WriteTraceLine(@"Error w/ Google play services");
-            //}
-
             // Required for push notifications so check if Play services are available on the device or navigate to store to install them
             CreateGpsNotificationChannel();
 
             if (!IsPlayServicesAvailable()) {
                 GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this);
             }
-            //FirebaseApp.InitializeApp(this.Application.ApplicationContext);
-            //var firebaseListener = new FirebaseListener();
-            //FirebaseMessaging.Instance.GetToken().AddOnCompleteListener(firebaseListener);
-            //var token = await firebaseListener.GetToken();
-
-            //Task.Run(async () => {
-            //    await FirebaseInstallations.Instance.GetToken(true).AddOnCompleteListener(firebaseListener);
-            //    var token = await firebaseListener.GetToken();
-
-            //    //await FirebaseMessaging.Instance.GetToken().AddOnCompleteListener(firebaseListener);
-            //    //var token = await firebaseListener.GetToken();
-            //    Log.Debug(TAG, $"FCM push token:'{token}'");
-            //});
 
             LoadApplication(new App(AndroidInterfaceWrapper));
             LoadSelectedTextAsync();
@@ -134,7 +110,15 @@ namespace MonkeyPaste.Droid {
             //    StartForegroundService(intent);
             //}
         }
-        
+
+        public override void OnBackPressed() {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed)) {
+                // Do something if there are some pages in the `PopupStack`
+            } else {
+                // Do something if there are not any pages in the `PopupStack`
+            }
+        }
+
         public bool IsPlayServicesAvailable() {
             string logStr = string.Empty;
             bool isAvailable = false;

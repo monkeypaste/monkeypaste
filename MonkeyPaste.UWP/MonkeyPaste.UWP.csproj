@@ -159,9 +159,6 @@
     <PackageReference Include="sqlite-net-sqlcipher">
       <Version>1.7.335</Version>
     </PackageReference>
-    <PackageReference Include="SQLite.Net.Async-PCL">
-      <Version>3.1.1</Version>
-    </PackageReference>
     <PackageReference Include="SQLiteNetExtensions.Async">
       <Version>2.1.0</Version>
     </PackageReference>

@@ -1,96 +1,106 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MonkeyPaste"
-             x:DataType="local:MpTagTileViewModel"
-             x:Class="MonkeyPaste.MpTagTileView">
-  <ContentView.Content>
-        <SwipeView x:Name="TagTileSwipeView" 
-                   SwipeStarted="SwipeView_SwipeStarted"
-                   IsEnabled="{Binding IsSelected}">
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="MonkeyPaste.MpTagTileView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    x:DataType="local:MpTagTileViewModel">
+    <ContentView.Content>
+        <SwipeView
+            x:Name="TagTileSwipeView"
+            IsEnabled="{Binding IsSelected}"
+            SwipeStarted="SwipeView_SwipeStarted">
             <SwipeView.LeftItems>
                 <SwipeItems>
-                    <SwipeItem BackgroundColor="LightBlue"                              
-                               IsEnabled="{Binding IsUserTag}"                               
-                               Command="{Binding RenameTagCommand}"
-                               IconImageSource="{StaticResource EditIcon}"
-                               Text="Rename" />
-                    <SwipeItem BackgroundColor="LightGreen"
-                               Command="{Binding ChangeTagColorCommand}"
-                               IconImageSource="{StaticResource ColorIcon}"
-                               Text="Color" />
-                    <SwipeItem BackgroundColor="LightPink"
-                               IsEnabled="{Binding IsUserTag}"
-                               Command="{Binding BindingContext.DeleteTagCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                               CommandParameter="{Binding .}"
-                               IconImageSource="{StaticResource DeleteIcon}"
-                               Text="Delete" />
+                    <SwipeItem
+                        BackgroundColor="LightBlue"
+                        Command="{Binding RenameTagCommand}"
+                        IconImageSource="{StaticResource EditIcon}"
+                        IsEnabled="{Binding IsUserTag}"
+                        Text="Rename" />
+                    <SwipeItem
+                        BackgroundColor="LightGreen"
+                        Command="{Binding ChangeTagColorCommand}"
+                        IconImageSource="{StaticResource ColorIcon}"
+                        Text="Color" />
+                    <SwipeItem
+                        BackgroundColor="LightPink"
+                        Command="{Binding BindingContext.DeleteTagCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        CommandParameter="{Binding .}"
+                        IconImageSource="{StaticResource DeleteIcon}"
+                        IsEnabled="{Binding IsUserTag}"
+                        Text="Delete" />
                 </SwipeItems>
             </SwipeView.LeftItems>
             <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
                 <Grid.GestureRecognizers>
-                    <DragGestureRecognizer CanDrag="True"
-                                           DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                                           DragStartingCommandParameter="{Binding}" />
-
-                    <DropGestureRecognizer AllowDrop="True"
-                                           DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                                           DragLeaveCommandParameter="{Binding}"
-                                           DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                                           DragOverCommandParameter="{Binding}"
-                                           Drop="DropGestureRecognizer_Drop"
-                                           DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                                           DropCommandParameter="{Binding}" />
+                    <DragGestureRecognizer
+                        CanDrag="True"
+                        DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        DragStartingCommandParameter="{Binding}" />
+                    <DropGestureRecognizer
+                        AllowDrop="True"
+                        DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        DragLeaveCommandParameter="{Binding}"
+                        DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        DragOverCommandParameter="{Binding}"
+                        Drop="DropGestureRecognizer_Drop"
+                        DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        DropCommandParameter="{Binding}" />
                 </Grid.GestureRecognizers>
                 <Grid.Triggers>
-                    <DataTrigger TargetType="Grid"
-                                 Binding="{Binding IsSelected}"
-                                 Value="True">
-                        <Setter Property="BackgroundColor"
-                                Value="Orange" />
+                    <DataTrigger
+                        Binding="{Binding IsSelected}"
+                        TargetType="Grid"
+                        Value="True">
+                        <Setter Property="BackgroundColor" Value="Orange" />
                     </DataTrigger>
-                    <DataTrigger TargetType="Grid"
-                                 Binding="{Binding IsSelected}"
-                                 Value="False">
-                        <Setter Property="BackgroundColor"
-                                Value="LightYellow" />
+                    <DataTrigger
+                        Binding="{Binding IsSelected}"
+                        TargetType="Grid"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="LightYellow" />
                     </DataTrigger>
                 </Grid.Triggers>
                 <Grid BackgroundColor="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <BoxView Margin="30,20,10,20"
-                             BackgroundColor="{Binding Tag.TagColor.Color}"
-                             HeightRequest="25"
-                             HorizontalOptions="Center"
-                             VerticalOptions="Center"
-                             WidthRequest="25" />
-                    <Label Grid.Row="0"
-                           Margin="20,0,0,0"
-                           BackgroundColor="Transparent"
-                           FontSize="Micro"
-                           HorizontalOptions="Center"
-                           Text="{Binding CopyItemCount}"
-                           TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
-                           VerticalOptions="Center" />
+                    <BoxView
+                        Margin="30,20,10,20"
+                        BackgroundColor="{Binding Tag.TagColor.Color}"
+                        HeightRequest="25"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="25" />
+                    <Label
+                        Grid.Row="0"
+                        Margin="20,0,0,0"
+                        BackgroundColor="Transparent"
+                        FontSize="Micro"
+                        HorizontalOptions="Center"
+                        Text="{Binding CopyItemCount}"
+                        TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                        VerticalOptions="Center" />
                 </Grid>
-                <local:MpCustomEntry x:Name="TagNameEntry"
-                                     Grid.Column="1"
-                                     Background="{x:Null}"
-                                     BackgroundColor="Transparent"
-                                     Completed="TagNameEntry_Completed"
-                                     FontAttributes="Italic"
-                                     IsReadOnly="{Binding IsNameReadOnly}"
-                                     Text="{Binding Tag.TagName}"
-                                     TextColor="Black"
-                                     VerticalTextAlignment="Center" />
-            <!--<Button x:Name="ContextMenuButton"
+                <local:MpCustomEntry
+                    x:Name="TagNameEntry"
+                    Grid.Column="1"
+                    Background="{x:Null}"
+                    BackgroundColor="Transparent"
+                    Completed="TagNameEntry_Completed"
+                    FontAttributes="Italic"
+                    IsReadOnly="{Binding IsNameReadOnly}"
+                    Text="{Binding Tag.TagName}"
+                    TextColor="Black"
+                    VerticalTextAlignment="Center" />
+                <Button
+                    x:Name="ContextMenuButton"
                     Grid.Column="2"
-                    ImageSource="{StaticResource DotsIcon}"
-                    HeightRequest="25">
-            </Button>-->
-        </Grid>
+                    Clicked="ContextMenuButton_Clicked"
+                    HeightRequest="25"
+                    ImageSource="{StaticResource DotsIcon}" />
+            </Grid>
         </SwipeView>
     </ContentView.Content>
 </ContentView>

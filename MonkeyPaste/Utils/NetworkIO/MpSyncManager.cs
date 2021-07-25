@@ -85,12 +85,12 @@ namespace MonkeyPaste {
                         }
                         // check-in w/ webserver and add non-local endpoints
                         var webResponse = await SessionManager.Connect(ThisEndpoint);
-                        cws = await ConnectWebSocket();
-                        await SendWebSocketAsync(cws, MpStreamMessage.CreateHandshakeRequest(ThisEndpoint));
+                        //cws = await ConnectWebSocket();
+                        //await SendWebSocketAsync(cws, MpStreamMessage.CreateHandshakeRequest(ThisEndpoint));
 
-                        if (!_localSync.IsWpf() && 
-                            webResponse.Count == 1 && 
-                            webResponse.Where(x=>x.AccessToken == ThisEndpoint.AccessToken).FirstOrDefault() != null) {
+                        if (!_localSync.IsWpf() &&
+                            webResponse.Count == 1 &&
+                            webResponse.Where(x => x.AccessToken == ThisEndpoint.AccessToken).FirstOrDefault() != null) {
                             // BUG when android creates socket listener cannot get wpf client to connect 
                             // so loop back until another device is connected to act as listner...
                             await SessionManager.Disconnect(ThisEndpoint);
@@ -128,14 +128,24 @@ namespace MonkeyPaste {
                     }
 
                     if (listener == null) {
-                        var server = new Socket(ThisEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                        server.Bind(ThisEndpoint.PrivateConnectIPEndPoint);
-                        server.Listen(10);
+                        Socket server = null;
+                        if (_localSync.IsWpf()) {
+                            server = new Socket(ThisEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                            server.Bind(ThisEndpoint.PrivateConnectIPEndPoint);
+                            server.Listen(10);
+                        }  
+                        
                         while (true) {
                             Socket client = null;
                             try {
                                 MpConsole.WriteLine("Waiting for connection...");
-                                client = server.Accept();
+                                if (server != null) {
+                                    client = server.Accept();
+                                } else {
+                                    var tcpl = new TcpListener(ThisEndpoint.PrivateConnectIPEndPoint);
+                                    tcpl.Start();
+                                    client = tcpl.AcceptSocket();
+                                }
                                 MpConsole.WriteLine("Connection made");
 
                                 var handshakeRequest = ReceiveSocket(client);
