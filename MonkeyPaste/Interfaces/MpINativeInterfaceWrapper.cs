@@ -7,5 +7,7 @@ namespace MonkeyPaste {
         MpIPhotoGalleryManager GetPhotoGalleryManager();
         MpIKeyboardInteractionService GetKeyboardInteractionService();
         MpILocalStorage GetLocalStorageManager();
+        MpIGlobalTouch GetGlobalTouch();
+        MpIUiLocationFetcher GetLocationFetcher();
     }
 }

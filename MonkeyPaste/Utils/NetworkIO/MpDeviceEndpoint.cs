@@ -25,6 +25,19 @@ namespace MonkeyPaste {
 
         public string DeviceGuid { get; set; }
 
+        public ObservableCollection<MpDeviceEndpoint> ConnectedEndpoints { get; set; } = new ObservableCollection<MpDeviceEndpoint>();
+
+        public bool IsPrivateListening { get; set; } = false;
+
+        public bool IsPublicListening { get; set; } = false;
+
+        public bool IsListening {
+            get {
+                return IsPrivateListening || IsPublicListening;
+            }
+        }
+
+        #region IPEndPoints
         public IPEndPoint PrivateConnectIPEndPoint {
             get {
                 if (string.IsNullOrEmpty(PrivateIp4Address)) {
@@ -68,24 +81,21 @@ namespace MonkeyPaste {
                     PublicSyncPortNum);
             }
         }
+        #endregion
 
-        public ObservableCollection<MpDeviceEndpoint> ConnectedEndpoints { get; set; } = new ObservableCollection<MpDeviceEndpoint>();
-
-        public bool IsPrivateListening { get; set; } = false;
-
-        public bool IsPublicListening { get; set; } = false;
-
-        public bool IsListening {
-            get {
-                return IsPrivateListening || IsPublicListening;
-            }
-        }
         #endregion
 
         #region Public Methods
 
         public MpDeviceEndpoint() { }
         
+
+        public bool IsLocal(MpDeviceEndpoint oep) {
+            if(oep == null || string.IsNullOrEmpty(oep.PrivateIp4Address)) {
+                return false;
+            }
+            return PrivateIp4Address == oep.PrivateIp4Address;
+        }
 
         public override string ToString() {
             return SerializeDbObject();
@@ -97,7 +107,7 @@ namespace MonkeyPaste {
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}", 
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}", 
                 ParseToken,
                 PublicIp4Address, 
                 PublicConnectPortNum, 
@@ -107,7 +117,8 @@ namespace MonkeyPaste {
                 DeviceGuid, 
                 ConnectDateTime,
                 PublicSyncPortNum,
-                PrivateSyncPortNum);
+                PrivateSyncPortNum,
+                IsPrivateListening ? "1":"0");
         }
 
         public Type GetDbObjectType() {
@@ -125,7 +136,8 @@ namespace MonkeyPaste {
                 DeviceGuid = epParts[5],
                 ConnectDateTime = DateTime.Parse(epParts[6]),
                 PublicSyncPortNum = Convert.ToInt32(epParts[7]),
-                PrivateSyncPortNum = Convert.ToInt32(epParts[8])
+                PrivateSyncPortNum = Convert.ToInt32(epParts[8]),
+                IsPrivateListening = epParts[9] == "1"
             };
             await Task.Delay(1);
             return ep;

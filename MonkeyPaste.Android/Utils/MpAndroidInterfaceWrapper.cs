@@ -13,6 +13,12 @@ namespace MonkeyPaste.Droid {
     public class MpAndroidInterfaceWrapper : MpINativeInterfaceWrapper {
         public MpKeyboardInteractionService KeyboardService { private get; set; }
         public MpLocalStorage_Android StorageService { private get; set; }
+        public MpGlobalTouch TouchService { private get; set; }
+        public MpUiLocationFetcher UiLocationFetcher { private get; set; }
+
+        public MpIGlobalTouch GetGlobalTouch() {
+            return TouchService;
+        }
 
         public MpIKeyboardInteractionService GetKeyboardInteractionService() {
             return KeyboardService;
@@ -20,6 +26,10 @@ namespace MonkeyPaste.Droid {
 
         public MpILocalStorage GetLocalStorageManager() {
             return StorageService;
+        }
+
+        public MpIUiLocationFetcher GetLocationFetcher() {
+            return UiLocationFetcher;
         }
 
         public MpIPhotoGalleryManager GetPhotoGalleryManager() {

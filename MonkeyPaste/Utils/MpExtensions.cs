@@ -23,6 +23,27 @@ namespace MonkeyPaste {
         #endregion
 
         #region Visual
+        /// <summary>
+        /// Gets the screen coordinates from top left corner.
+        /// </summary>
+        /// <returns>The screen coordinates.</returns>
+        /// <param name="view">View.</param>
+        public static Point GetScreenCoordinates(this VisualElement view) {
+            var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
+            return locationFetcher.GetCoordinates(view);
+        }
+
+        public static Rectangle GetScreenRect(this VisualElement view) {
+            var origin = view.GetScreenCoordinates();
+            return new Rectangle(origin, new Size(view.Width, view.Height));
+        }
+
+        public static Point GetScreenPoint(this Point p,VisualElement view) {
+            var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
+            var density = locationFetcher.GetDensity(view);
+            return new Point(p.X / density, p.Y / density);
+        }
+
         public static string GetHexString(this Xamarin.Forms.Color color) {
             var red = (int)(color.R * 255);
             var green = (int)(color.G * 255);

@@ -159,6 +159,9 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
+
             var cdr = await MpDb.Instance.GetObjDbRowAsync("MpTag", tagGuid);
             MpTag newTag = null;
             if (cdr == null) {

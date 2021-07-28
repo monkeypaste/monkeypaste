@@ -41,6 +41,7 @@
     <Compile Remove="ViewModels\Bases\MpUndoableViewModelBase.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
+    <Compile Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <None Remove=".DS_Store" />
@@ -59,6 +60,7 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml" />
   </ItemGroup>
@@ -73,7 +75,6 @@
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.514" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.34" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Plugin.PushNotification" Version="3.6.9" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
@@ -86,10 +87,8 @@
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
-    <PackageReference Include="Xamarin.Plugins.Clipboard" Version="2.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
@@ -103,6 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpColorChooserContextMenuItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">

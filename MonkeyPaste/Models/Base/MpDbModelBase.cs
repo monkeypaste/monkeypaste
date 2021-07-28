@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using SQLite;
 
 namespace MonkeyPaste {
@@ -32,6 +34,64 @@ namespace MonkeyPaste {
             }
             diffLookup.Add(colName, forceAVal == null ? a.ToString() : forceAVal.ToString());
             return diffLookup;
+        }
+
+        public static async Task<object> CreateOrUpdateFromLogs(
+            List<MonkeyPaste.MpDbLog> logs, 
+            string fromClientGuid) {
+            string tableName = logs[0].DbTableName;
+            var tm = MpDb.Instance.GetTableMapping(tableName);
+            if (tm == null) {
+                throw new Exception(@"Cannot find table mapping for table: " + tableName);
+            }
+            string dboGuid = logs[0].DbObjectGuid.ToString();
+            var dbo = await MpDb.Instance.GetObjDbRowAsync(tableName, dboGuid);
+            if (dbo == null) {
+                //for add transactions
+                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+                dbo = Activator.CreateInstance(dbot);
+            }
+
+            foreach (var log in logs.OrderBy(x => x.LogActionDateTime)) {
+                //get column mapping for log item
+                var colProp = tm.Columns.Where(x => x.Name == log.AffectedColumnName).FirstOrDefault();
+                if (colProp == null) {
+                    throw new Exception(@"Cannot find column: " + log.AffectedColumnName);
+                }
+                if (colProp.IsPK) {
+                    //ignore primary keys (shouldn't be here) only used locally
+                    continue;
+                }
+                //get model prop from column mapping
+                var dboProp = dbo.GetType()
+                            .GetProperties()
+                            .Where(x => x.Name == colProp.PropertyName)
+                            .FirstOrDefault();
+                if (dboProp == null) {
+                    throw new Exception("Cannot find model property: " + colProp.PropertyName);
+                }
+
+                //handle fk substitution
+                string fkPrefix = @"fk_";
+                if (colProp.Name.StartsWith(fkPrefix)) {
+                    string fkTableName = colProp.Name
+                                            .Replace(fkPrefix, string.Empty)
+                                            .Replace(@"Id", string.Empty);
+                    var fkDbo = MpDb.Instance.GetObjDbRow(fkTableName, log.AffectedColumnValue);
+                    dboProp.SetValue(dbo, (fkDbo as MpDbModelBase).Id);
+                } else if(colProp.Name.EndsWith(@"Guid")) {
+                    (dbo as MpDbModelBase).Guid = log.AffectedColumnValue;
+                } else {
+                    if(dboProp.PropertyType == typeof(int)) {
+                        dboProp.SetValue(dbo, Convert.ToInt32(log.AffectedColumnValue));
+                    } else if (dboProp.PropertyType == typeof(bool)) {
+                        dboProp.SetValue(dbo, Convert.ToInt32(log.AffectedColumnValue) == 1);
+                    } else {
+                        dboProp.SetValue(dbo, log.AffectedColumnValue);
+                    }                    
+                }
+            }
+            return dbo;
         }
     }
 }

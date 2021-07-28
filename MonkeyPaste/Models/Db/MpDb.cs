@@ -59,6 +59,15 @@ namespace MonkeyPaste {
             IsLoaded = true;
         }
 
+        public SQLite.TableMapping GetTableMapping(string tableName) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            return _connection
+                    .TableMappings
+                    .Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
+        }
+
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
                 await Init();
@@ -648,15 +657,17 @@ namespace MonkeyPaste {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = typeof(MpDb).GetMethod("DeleteItemAsync");
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
-                var dbo = await MpDb.Instance.GetObjDbRowAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
+                //var dbo = await MpDb.Instance.GetObjDbRowAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 Task deleteItem = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await deleteItem;
             }
 
             foreach (var ckvp in addChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                //var dbo = Activator.CreateInstance(dbot);
+                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod("AddOrUpdateAsync");
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
                 Task addItem = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
@@ -665,8 +676,9 @@ namespace MonkeyPaste {
 
             foreach (var ckvp in updateChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
+                //var dbo = Activator.CreateInstance(dbot);
+                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod("UpdateItemAsync");
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
                 Task updateItem = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });

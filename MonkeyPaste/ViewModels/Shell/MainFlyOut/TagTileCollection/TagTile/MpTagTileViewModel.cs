@@ -15,6 +15,10 @@ namespace MonkeyPaste {
 
         #region Properties
 
+        #region View Models
+        public MpContextMenuViewModel ContextMenuViewModel { get; set; }
+        #endregion
+
         #region Model
         public MpTag Tag { get; set; }
         #endregion
@@ -62,6 +66,7 @@ namespace MonkeyPaste {
             MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
             MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
             Tag = tag;
+
             //CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(Tag.Id);
             Task.Run(Initialize);
         }
@@ -72,6 +77,30 @@ namespace MonkeyPaste {
         private async Task Initialize() {
             Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
             Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
+
+            ContextMenuViewModel = new MpContextMenuViewModel();
+            if (IsUserTag) {
+                ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                    Title = "Rename",
+                    Command = RenameTagCommand,
+                    IconImageResourceName = "EditIcon"
+                });
+            }
+
+            //ContextMenuViewModel.Items.Add(new MpColorChooserContextMenuItemViewModel());
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Change Color",
+                Command = ChangeTagColorCommand,
+                IconImageResourceName = "ColorIcon"
+            });
+            if (IsUserTag) {
+                ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                    Title = "Delete",
+                    Command = DeleteTagCommand,
+                    IconImageResourceName = "DeleteIcon"
+                });
+            }
+            OnViewModelLoaded();
         }
 
         #region Event Handlers
@@ -189,6 +218,14 @@ namespace MonkeyPaste {
             await MpDb.Instance.UpdateItemAsync<MpColor>(Tag.TagColor);
             OnPropertyChanged(nameof(Tag));
         });
+
+        public ICommand DeleteTagCommand => new Command(
+            async () => {
+                await MpDb.Instance.DeleteItemAsync<MpTag>(Tag);
+            },
+            () => {
+                return Tag.Id > 4;
+            });
         #endregion
     }
 }

@@ -9,8 +9,11 @@ using System.Windows.Input;
 namespace MonkeyPaste {
     public partial class MpMainShell : Shell {
         public MpSettingsPageView SettingsPageView { get; set; }
+
         public MpIKeyboardInteractionService LayoutService { get; set; }
         public MpILocalStorage StorageService { get; set; }
+        public MpIGlobalTouch GlobalTouchService { get; set; }
+        public MpINativeInterfaceWrapper NativeWrapper { get; set; }
 
         public event EventHandler<object> OnShellDisappearing;
 
@@ -20,6 +23,8 @@ namespace MonkeyPaste {
 
 
         public MpMainShell(MpINativeInterfaceWrapper niw) : this() {
+            NativeWrapper = niw;
+            GlobalTouchService = niw.GetGlobalTouch();
             LayoutService = niw.GetKeyboardInteractionService();
             StorageService = niw.GetLocalStorageManager();
         }

@@ -13,41 +13,57 @@ using Xamarin.Forms.Xaml;
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MpTagTileView : ContentView {
-        public event EventHandler<object> OnSwipeStarted;
         MpContextMenuView cm;
+
+        private double _minDragY = 10.0;
+
+        #region Events
+        public event EventHandler OnGlobalTouch;
+        #endregion
 
         public MpTagTileView() {
             InitializeComponent();
 
-            PopupNavigation.Instance.Pushing += (sender, e) => Debug.WriteLine($"[Popup] Pushing: {e.Page.GetType().Name}");
-            PopupNavigation.Instance.Pushed += (sender, e) => Debug.WriteLine($"[Popup] Pushed: {e.Page.GetType().Name}");
-
             BindingContextChanged += MpTagTileView_BindingContextChanged;
-            (Application.Current.MainPage as MpMainShell).OnShellDisappearing += MpTagTileView_OnShellDisappearing;
-
-            var cmvm = new MpContextMenuViewModel();
-            cmvm.Items.Add(new MpContextMenuItemViewModel() { Title = "Test1", IconImageSource = ImageSource.FromResource("MonkeyPaste.Resources.Icons.monkey.png") });
-            cmvm.Items.Add(new MpContextMenuItemViewModel() { Title = "Test2" });
-            cmvm.Items.Add(new MpContextMenuItemViewModel() { Title = "Test3" });
-
-            cm = new MpContextMenuView();
-            cm.BindingContext = cmvm;
         }
 
-
-        private void MpTagTileView_OnShellDisappearing(object sender, object e) {
-            //TagTileSwipeView.Close();
-        }
 
         private void MpTagTileView_BindingContextChanged(object sender, EventArgs e) {
-            if(BindingContext != null) {
-                (BindingContext as MpTagTileViewModel).PropertyChanged += MpTagTileView_PropertyChanged;
-            }            
+            if (BindingContext != null && BindingContext is MpTagTileViewModel ttvm) {
+                ttvm.PropertyChanged += MpTagTileView_PropertyChanged;
+
+                PopupNavigation.Instance.Pushing += (sender, e) => Debug.WriteLine($"[Popup] Pushing: {e.Page.GetType().Name}");
+                PopupNavigation.Instance.Pushed += (sender, e) => Debug.WriteLine($"[Popup] Pushed: {e.Page.GetType().Name}");
+
+                cm = new MpContextMenuView();
+                cm.BindingContext = (BindingContext as MpTagTileViewModel).ContextMenuViewModel;
+
+                OnGlobalTouch += MpTagTileView_OnGlobalTouch;
+                (Application.Current.MainPage as MpMainShell).GlobalTouchService.Subscribe(OnGlobalTouch);
+            }
         }
 
+        private void MpTagTileView_OnGlobalTouch(object sender, EventArgs e) {
+            //var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
+            //var dpi = locationFetcher.GetDensity(this);
+            //var gtp = (e as MpTouchEventArgs<Point>).EventData;
+            //gtp = new Point(gtp.X / dpi, gtp.Y / dpi);
+            //var thisOrigin = locationFetcher.GetCoordinates(this);
+            //var thisRect = new Rectangle(thisOrigin, new Size(this.Width, this.Height));
+
+            //if (thisRect.Contains(gtp)) {
+            //    (BindingContext as MpTagTileViewModel).IsSelected = true;
+            //}
+            var gtp = (e as MpTouchEventArgs<Point>).EventData.GetScreenPoint(this);
+            var thisRect = this.GetScreenRect();
+            if (thisRect.Contains(gtp)) {
+                (BindingContext as MpTagTileViewModel).IsSelected = true;
+            }
+        }
 
         private void DropGestureRecognizer_Drop(object sender, DropEventArgs e) {
             e.Handled = true;
+            TagTileDragGestureRecognizer.CanDrag = false;
         }
 
         private void MpTagTileView_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -65,13 +81,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public void CloseSwipeView() {
-            //TagTileSwipeView.Close();
-        }
-
-        private void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e) {
-            OnSwipeStarted?.Invoke(sender, e);
-        }
 
         private void TagNameEntry_Completed(object sender, EventArgs e) {
             var ttvm = (BindingContext as MpTagTileViewModel);
@@ -79,9 +88,14 @@ namespace MonkeyPaste {
         }
 
         private async void ContextMenuButton_Clicked(object sender, EventArgs e) {
-            var locationFetcher = DependencyService.Get<ILocationFetcher>();
+            if(cm.IsMenuVisible) {
+                return;
+            }
+            var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
             var location = locationFetcher.GetCoordinates(sender as VisualElement);
             var cmvm = cm.BindingContext as MpContextMenuViewModel;
+            //cmvm.Width = 300;
+            //cmvm.Height = 300;
             var w = cmvm.Width;
             var h = cmvm.Height;
             var bw = ContextMenuButton.Width;
@@ -89,8 +103,18 @@ namespace MonkeyPaste {
             cm.AnchorY = 0;
             cm.TranslationX = location.X - w + bw - cmvm.Padding.Left;
             cm.TranslationY = location.Y - cmvm.ItemHeight + cmvm.Padding.Top + cmvm.Padding.Bottom;
-
+            cm.TranslationX = Math.Max(0, cm.TranslationX);
             await PopupNavigation.Instance.PushAsync(cm);
+        }
+
+        private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e) {
+            switch (e.StatusType) {
+                case GestureStatus.Running:
+                    if(Math.Abs(e.TotalY) > _minDragY) {
+                        TagTileDragGestureRecognizer.CanDrag = true;
+                    }
+                    break;
+            }
         }
     }
 }

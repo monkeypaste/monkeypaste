@@ -148,7 +148,10 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {            
+        public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> rlogs, string fromClientGuid) {
+            await Task.Delay(1);
+            return MpDbModelBase.CreateOrUpdateFromLogs(rlogs, fromClientGuid);
+
             var cdr = await MpDb.Instance.GetObjDbRowAsync("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {

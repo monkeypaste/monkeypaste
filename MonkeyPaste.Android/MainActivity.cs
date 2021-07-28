@@ -4,32 +4,20 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using Android.Util;
 using Xamarin.Essentials;
 using FFImageLoading.Forms.Platform;
-using System.Reflection;
 using Android.Support.V4.App;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 using Android.Media;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using Android.Graphics;
-using static Android.Graphics.Paint;
-using static Android.Provider.Settings;
-using static Java.Util.Jar.Attributes;
-using Xamarin.Forms;
 using Plugin.CurrentActivity;
 using System.Net;
-using Java.Security;
 using Android.Widget;
-using Android.Gms.Common;
-using Firebase.Iid;
-using Firebase;
-using Firebase.Messaging;
-using Firebase.Installations;
 using Java.Interop;
-using Android.Gms.Extensions;
-using Android.Gms.Tasks;
+using Android.Views;
+using Xamarin.Forms;
+using Rg.Plugins.Popup.Services;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -45,18 +33,20 @@ namespace MonkeyPaste.Droid {
         static readonly string CB_CHANNEL_ID = "location_notification";
         internal static readonly string COUNT_KEY = "count";
 
-
-        static readonly string TAG = "MainActivity";
-        // google play services
-        internal static readonly string GPS_CHANNEL_ID = "my_notification_channel";
-        internal static readonly int GPS_NOTIFICATION_ID = 100;
-
-        TextView msgText;
-        int count = 0;
-                
         public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
 
+        public event EventHandler GlobalTouchHandler;
+
+        public override bool DispatchTouchEvent(MotionEvent ev) {
+            if (ev.Action == MotionEventActions.Up) {
+               GlobalTouchHandler?.Invoke(null, new MpTouchEventArgs<Point>(new Point(ev.GetX(), ev.GetY())));
+            }
+
+            return base.DispatchTouchEvent(ev);
+        }
         protected override void OnCreate(Bundle savedInstanceState) {
+            Current = this;
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -81,19 +71,13 @@ namespace MonkeyPaste.Droid {
 
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
-            Current = this;
 
             AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper() {
                 KeyboardService = new MpKeyboardInteractionService(),
-                StorageService = new MpLocalStorage_Android()
+                StorageService = new MpLocalStorage_Android(),
+                TouchService = new MpGlobalTouch(),
+                UiLocationFetcher = new MpUiLocationFetcher()
             };
-
-            // Required for push notifications so check if Play services are available on the device or navigate to store to install them
-            CreateGpsNotificationChannel();
-
-            if (!IsPlayServicesAvailable()) {
-                GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this);
-            }
 
             LoadApplication(new App(AndroidInterfaceWrapper));
             LoadSelectedTextAsync();
@@ -109,54 +93,6 @@ namespace MonkeyPaste.Droid {
             //if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O) {
             //    StartForegroundService(intent);
             //}
-        }
-
-        public override void OnBackPressed() {
-            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed)) {
-                // Do something if there are some pages in the `PopupStack`
-            } else {
-                // Do something if there are not any pages in the `PopupStack`
-            }
-        }
-
-        public bool IsPlayServicesAvailable() {
-            string logStr = string.Empty;
-            bool isAvailable = false;
-            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-            if (resultCode != ConnectionResult.Success) {
-                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode)) {
-                    logStr = GoogleApiAvailability.Instance.GetErrorString(resultCode);
-                    isAvailable = true;
-                } else {
-                    isAvailable = false;
-                    logStr = "This device is not supported";
-                    Finish();
-                }
-            } else {
-                logStr = "Google Play Services is available.";
-                isAvailable = true;
-            }
-            MpConsole.WriteLine(logStr);
-            return isAvailable;
-        }
-
-        void CreateGpsNotificationChannel() {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O) {
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                return;
-            }
-
-            var channel = new NotificationChannel(GPS_CHANNEL_ID,
-                                                  "FCM Notifications",
-                                                  NotificationImportance.Default) {
-
-                Description = "Firebase Cloud Messages appear in this channel"
-            };
-
-            var notificationManager = (NotificationManager)GetSystemService(Android.Content.Context.NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
         }
 
         void CreateCbNotificationChannel() {
@@ -215,9 +151,6 @@ namespace MonkeyPaste.Droid {
             // Finally, publish the notification:
             var notificationManager = NotificationManagerCompat.From(this);
             notificationManager.Notify(CB_NOTIFICATION_ID, builder.Build());
-
-            // Increment the button press count:
-            count++;
         }
 
         private async void LoadSelectedTextAsync() {
@@ -244,58 +177,4 @@ namespace MonkeyPaste.Droid {
         }
 
     }
-
-    class TaskCompleteListener : Java.Lang.Object, IOnCompleteListener {
-        private readonly TaskCompletionSource<Java.Lang.Object> taskCompletionSource;
-
-        public TaskCompleteListener(TaskCompletionSource<Java.Lang.Object> tcs) {
-            this.taskCompletionSource = tcs;
-        }
-
-        public void OnComplete(Android.Gms.Tasks.Task task) {
-            if (task.IsCanceled) {
-                this.taskCompletionSource.SetCanceled();
-            } else if (task.IsSuccessful) {
-                this.taskCompletionSource.SetResult(task.Result);
-            } else {
-                this.taskCompletionSource.SetException(task.Exception);
-            }
-        }
-    }
-
-    public class FirebaseListener : Java.Lang.Object, Android.Gms.Tasks.IOnCompleteListener {
-        private TaskCompletionSource<String> tcs = new TaskCompletionSource<String>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-        public Task<String> GetToken() {
-            return tcs.Task;
-        }
-
-        public void Disposed() {
-        }
-
-        public void DisposeUnlessReferenced() {
-        }
-
-        public void Finalized() {
-        }
-
-        public void OnComplete(Android.Gms.Tasks.Task task) {
-            if (task.IsSuccessful) {
-                string theToken = task.Result.ToString();
-                tcs.SetResult(theToken);
-            } else {
-                tcs.SetResult(null);
-            }
-        }
-
-        public void SetJniIdentityHashCode(int value) {
-        }
-
-        public void SetJniManagedPeerState(JniManagedPeerStates value) {
-        }
-
-        public void SetPeerReference(JniObjectReference reference) {
-        }
-    }
-
 }

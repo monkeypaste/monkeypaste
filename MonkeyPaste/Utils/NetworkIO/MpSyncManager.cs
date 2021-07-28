@@ -79,8 +79,8 @@ namespace MonkeyPaste {
                         //    var handshakeResponse = await ReceiveWebSocketAsync(cws);
                             
                         //}
-                        if(_localSync.IsWpf()) {
-                            //disconnect all
+                        if(!_localSync.IsWpf()) {
+                            // for debugging disconnect all
                             await SessionManager.Disconnect(ThisEndpoint,true);
                         }
                         // check-in w/ webserver and add non-local endpoints
@@ -88,21 +88,25 @@ namespace MonkeyPaste {
                         //cws = await ConnectWebSocket();
                         //await SendWebSocketAsync(cws, MpStreamMessage.CreateHandshakeRequest(ThisEndpoint));
 
-                        if (!_localSync.IsWpf() &&
-                            webResponse.Count == 1 &&
-                            webResponse.Where(x => x.AccessToken == ThisEndpoint.AccessToken).FirstOrDefault() != null) {
-                            // BUG when android creates socket listener cannot get wpf client to connect 
-                            // so loop back until another device is connected to act as listner...
-                            await SessionManager.Disconnect(ThisEndpoint);
-                            await Task.Delay(10000);
-                            continue;
-                        }
+                        //if (!_localSync.IsWpf() &&
+                        //    webResponse.Count == 1 &&
+                        //    webResponse.Where(x => x.AccessToken == ThisEndpoint.AccessToken).FirstOrDefault() != null) {
+                        //    // BUG when android creates socket listener cannot get wpf client to connect 
+                        //    // so loop back until another device is connected to act as listner...
+                        //    await SessionManager.Disconnect(ThisEndpoint);
+                        //    await Task.Delay(10000);
+                        //    continue;
+                        //}
                         foreach (var rep in webResponse) {
                             if(rep.DeviceGuid == ThisEndpoint.DeviceGuid) {
                                 continue;
                             }
+                            //if(!ThisEndpoint.IsLocal(rep) || !rep.IsPrivateListening) {
+                                //ignore ep's not on local network or not reporting listening (to avoid stupid Socket Exception)
+                                //continue;
+                            //}
                             try {
-                                var rs = ConnectSocket(rep.PrivateIp4Address, rep.PrivateConnectPortNum);
+                                var rs = ConnectSocket(rep);
                                 if (rs != null && listener == null) {
                                     listener = rs;
                                 }
@@ -128,13 +132,7 @@ namespace MonkeyPaste {
                     }
 
                     if (listener == null) {
-                        Socket server = null;
-                        if (_localSync.IsWpf()) {
-                            server = new Socket(ThisEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                            server.Bind(ThisEndpoint.PrivateConnectIPEndPoint);
-                            server.Listen(10);
-                        }  
-                        
+                        Socket server = CreateLocalListener(ThisEndpoint);
                         while (true) {
                             Socket client = null;
                             try {
@@ -282,6 +280,13 @@ namespace MonkeyPaste {
         #region Network I/O
 
         #region Private Network I/O
+        private Socket CreateLocalListener(MpDeviceEndpoint tep) {
+            var listener = new Socket(tep.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            listener.Bind(tep.PrivateConnectIPEndPoint);
+            listener.Listen(10);
+            return listener;
+        }
+
         private Socket ConnectSocket(string server, int port) {
             try {
                 // Get host related information.
@@ -291,6 +296,9 @@ namespace MonkeyPaste {
                 // an exception that occurs when the host IP Address is not compatible with the address family
                 // (typical in the IPv6 case).
                 foreach (IPAddress address in hostEntry.AddressList) {
+                    if(address.AddressFamily != AddressFamily.InterNetwork) {
+                        continue;
+                    }
                     try {
                         IPEndPoint ipe = new IPEndPoint(address, port);
                         Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -309,6 +317,22 @@ namespace MonkeyPaste {
             }
             catch(Exception ex) {
                 MpConsole.WriteTraceLine(@"Error connecting to listener {0}:{1} w/ exception: {2}", server, port.ToString(),ex.ToString());
+            }
+            return null;
+        }
+
+        private Socket ConnectSocket(MpDeviceEndpoint otherEndpoint) {
+            try {
+                Socket tempSocket = new Socket(otherEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                tempSocket.Connect(otherEndpoint.PrivateConnectIPEndPoint);
+
+                if (tempSocket.Connected) {
+                    return tempSocket;
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(@"Couldn't connect to endpoint: " + otherEndpoint.ToString());
+                MpConsole.WriteLine("With exception: " + ex);
             }
             return null;
         }

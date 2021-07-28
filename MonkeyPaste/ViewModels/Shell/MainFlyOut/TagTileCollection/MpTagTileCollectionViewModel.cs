@@ -49,9 +49,7 @@ namespace MonkeyPaste {
             MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
 
             Task.Run(Initialize);
-        }
-
-        
+        }       
 
         public MpTagTileViewModel CreateTagViewModel(MpTag tag) {
             if(tag.TagSortIdx < 0) {
@@ -78,10 +76,8 @@ namespace MonkeyPaste {
             OnPropertyChanged(nameof(TagViewModels));
             CopyItemCollectionViewModel = new MpCopyItemTileCollectionPageViewModel();
             await Task.Delay(300);
-            SelectedTagViewModel = RecentTagViewModel;
+            RecentTagViewModel.IsSelected = true;
             IsBusy = false;
-            
-            return;
         }
 
         private async Task UpdateSort(bool fromDb = false) {
@@ -165,6 +161,9 @@ namespace MonkeyPaste {
             if (sender is MpTagTileViewModel ttvm) {
                 switch (e.PropertyName) {
                     case nameof(ttvm.IsSelected):
+                        if(ttvm.IsSelected) {
+                            SelectionChangedCommand.Execute(ttvm);
+                        }
                         break;
                 }
                 //await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag);
@@ -227,18 +226,9 @@ namespace MonkeyPaste {
             await Task.Delay(300);
             SelectedTagViewModel = TagViewModels[TagViewModels.Count - 1];
             SelectedTagViewModel.RenameTagCommand.Execute(null);
-        });
+        });       
 
-        public ICommand DeleteTagCommand => new Command<object>(async (args) => {
-            if(args != null && args is MpTagTileViewModel ttvm) {
-                if(TagViewModels.Contains(ttvm)) {
-                    //TagViewModels.Remove(ttvm);
-                    await MpDb.Instance.DeleteItemAsync<MpTag>(ttvm.Tag);                    
-                }
-            }
-        }); 
-
-        public ICommand SelectionChangedCommand => new Command<object>(async (args) => {
+        public ICommand SelectionChangedCommand => new Command<object>( (args) => {
             if (args != null && args is MpTagTileViewModel ttvm) {
                 SelectedTagViewModel = args as MpTagTileViewModel;
             }
