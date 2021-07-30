@@ -4,7 +4,7 @@ using System.Data;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpCopyItemTemplate : MpDbObject {
+    public class MpCopyItemTemplate : MpDbModelBase {
         public int CopyItemTemplateId { get; set; } = 0;
         public Guid CopyItemTemplateGuid { get; set; }
 

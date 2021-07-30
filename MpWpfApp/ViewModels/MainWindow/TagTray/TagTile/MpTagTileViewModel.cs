@@ -189,7 +189,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
+                return MpHelpers.Instance.IsBright(((SolidColorBrush)Color).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -275,15 +275,15 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush TagColor {
+        public Brush Color {
             get {
-                return new SolidColorBrush(Tag.TagColor.Color);
+                return new SolidColorBrush(Tag.Color.Color);
             }
             set {
-                if (new SolidColorBrush(Tag.TagColor.Color) != value) {
-                    Tag.TagColor.Color = ((SolidColorBrush)value).Color;
-                    Tag.TagColor.WriteToDatabase();
-                    OnPropertyChanged(nameof(TagColor));
+                if (new SolidColorBrush(Tag.Color.Color) != value) {
+                    Tag.Color.Color = ((SolidColorBrush)value).Color;
+                    Tag.Color.WriteToDatabase();
+                    OnPropertyChanged(nameof(Color));
                     OnPropertyChanged(nameof(TagCountTextColor));
                 }
             }
@@ -297,7 +297,7 @@ namespace MpWpfApp {
             set {
                 if (_tag != value) {
                     _tag = value;
-                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(Color));
                     OnPropertyChanged(nameof(TagName));
                     OnPropertyChanged(nameof(TagId));
                     OnPropertyChanged(nameof(Tag));
@@ -312,9 +312,9 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
-            MpDbObject.SyncAdd += MpDbObject_SyncAdd;
-            MpDbObject.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDbObject.SyncDelete += MpDbObject_SyncDelete;
+            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
+            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
 
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
@@ -406,10 +406,10 @@ namespace MpWpfApp {
                     cm,
                     cmi,
                     (s, e1) => {
-                        ChangeTagColorCommand.Execute((Brush)((Border)s).Tag);
+                        ChangeColorCommand.Execute((Brush)((Border)s).Tag);
                     },
-                    MpHelpers.Instance.GetColorColumn(TagColor),
-                    MpHelpers.Instance.GetColorRow(TagColor)
+                    MpHelpers.Instance.GetColorColumn(Color),
+                    MpHelpers.Instance.GetColorRow(Color)
                 );
         }
 
@@ -499,13 +499,13 @@ namespace MpWpfApp {
                         t.EndSync();
                     }
                 } else if (sender is MpColor c) {
-                    if (Tag == null || Tag.TagColor == null) {
+                    if (Tag == null || Tag.Color == null) {
                         return;
                     }
-                    if (c.Guid == Tag.TagColor.Guid) {
-                        Tag.TagColor.StartSync(e.SourceGuid);
-                        TagColor = c.ColorBrush;
-                        Tag.TagColor.EndSync();
+                    if (c.Guid == Tag.Color.Guid) {
+                        Tag.Color.StartSync(e.SourceGuid);
+                        Color = c.ColorBrush;
+                        Tag.Color.EndSync();
                     }
                 }
             }));
@@ -539,18 +539,18 @@ namespace MpWpfApp {
                 SelectTagCommand, null);
         }
 
-        private RelayCommand<Brush> _changeTagColorCommand;
-        public ICommand ChangeTagColorCommand {
+        private RelayCommand<Brush> _changeColorCommand;
+        public ICommand ChangeColorCommand {
             get {
-                if (_changeTagColorCommand == null) {
-                    _changeTagColorCommand = new RelayCommand<Brush>(ChangeTagColor);
+                if (_changeColorCommand == null) {
+                    _changeColorCommand = new RelayCommand<Brush>(ChangeColor);
                 }
-                return _changeTagColorCommand;
+                return _changeColorCommand;
             }
         }
-        private void ChangeTagColor(Brush newBrush) {
+        private void ChangeColor(Brush newBrush) {
             if(newBrush != null) {
-                TagColor = newBrush;
+                Color = newBrush;
                 Tag.WriteToDatabase();
             }
         }

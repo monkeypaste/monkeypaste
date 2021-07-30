@@ -51,7 +51,7 @@ namespace MonkeyPaste {
             await UpdateAssocation();
 
             Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
-            Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
+            Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
         }
 
         private async Task UpdateAssocation() {

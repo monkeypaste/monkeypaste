@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
 
-    public class MpApp : MpDbObject {
+    public class MpApp : MpDbModelBase {
         private static List<MpApp> _AllAppList = null;
         public static int TotalAppCount = 0;
 

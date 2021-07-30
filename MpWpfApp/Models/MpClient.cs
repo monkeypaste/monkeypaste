@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace MpWpfApp {
-    public class MpClient : MpDbObject {
+    public class MpClient : MpDbModelBase {
         public int ClientId { get; set; }
         public Guid ClientGuid { get; set; }
 

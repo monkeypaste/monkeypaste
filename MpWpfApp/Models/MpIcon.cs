@@ -10,7 +10,7 @@ using static System.Data.Entity.Infrastructure.Design.Executor;
 
 
 namespace MpWpfApp {
-    public class MpIcon : MpDbObject {
+    public class MpIcon : MpDbModelBase {
         public static int TotalIconCount = 0;
         public int IconId { get; set; }
         public Guid IconGuid { get; set; }

@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public enum MpSyncMesageType {
         None = 0,
-        DbFileRequest,
-        DbFileResponse,
         HandshakeRequest,
         HandshakeResponse,
         DbLogRequest,
         DbLogResponse,
         FlipRequest, //swap A & B and return to RequestLog
-        //FlipResponse,
         DisconnectRequest,
         DisconnectResponse,        
         //error types
@@ -24,8 +21,7 @@ namespace MonkeyPaste {
         ErrorInvalidAccessToken,
         ErrorInvalidData,
         ErrorRequestDenied,
-        ErrorOutOfMemory,
-        
+        ErrorOutOfMemory,        
     }
 
     public class MpStreamHeader : MpISyncableDbObject {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpUrl : MpDbObject {
+    public class MpUrl : MpDbModelBase {
         private static List<MpUrl> _AllUrlList = null;
         public static int TotalUrlCount = 0;
 

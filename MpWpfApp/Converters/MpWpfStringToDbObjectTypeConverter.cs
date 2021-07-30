@@ -22,7 +22,7 @@ namespace MpWpfApp {
                 if (typeString.ToLower().StartsWith(@"monkeypaste")) {
                     typeString = typeString.Replace(@"MonkeyPaste", @"MpWpfApp");
                 } 
-                var asm = typeof(MpDbObject).Assembly;
+                var asm = typeof(MpDbModelBase).Assembly;
                 return asm.GetType(typeString);
             }
             catch(Exception ex) {

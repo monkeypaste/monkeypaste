@@ -17,7 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 //using Windows.Storage;
 
 namespace MpWpfApp {
-    public class MpCopyItem : MpDbObject, ICloneable {
+    public class MpCopyItem : MpDbModelBase, ICloneable {
         private static List<MpCopyItem> _AllCopyItemList = null;
         public static int TotalCopyItemCount = 0;
         #region Private Variables

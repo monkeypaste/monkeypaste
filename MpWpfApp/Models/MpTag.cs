@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     [Table("MpTag")]
-    public class MpTag : MpDbObject, MpISyncableDbObject {
+    public class MpTag : MpDbModelBase, MpISyncableDbObject {
 
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpTagId")]
@@ -42,16 +42,17 @@ namespace MpWpfApp {
         public string TagName { get; set; }
 
         [Ignore]
-        public MpColor TagColor { get; set; }
+        public MpColor Color { get; set; }
 
         [Column("fk_ParentTagId")]
         [ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
+
         public MpTag() { }
-        public MpTag(string tagName, Color tagColor, int tagSortIdx) {
+        public MpTag(string tagName, Color color, int tagSortIdx) {
             TagGuid = System.Guid.NewGuid();
             TagName = tagName;
-            TagColor = new MpColor((int)tagColor.R, (int)tagColor.G, (int)tagColor.B, 255);
+            Color = new MpColor((int)color.R, (int)color.G, (int)color.B, 255);
             TagSortIdx = tagSortIdx;
         }
         public MpTag(int tagId) {
@@ -88,7 +89,7 @@ namespace MpWpfApp {
             TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
-            TagColor = new MpColor(ColorId);
+            Color = new MpColor(ColorId);
         }
                 
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
@@ -137,15 +138,6 @@ namespace MpWpfApp {
                     { "@stid", TagId },
                     { "@so", SortOrderIdx }
                 },cistog.ToString());
-
-            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncAdd(
-                    new MpDbSyncEventArgs() {
-                        DbObject = ci,
-                        EventType = MpDbLogActionType.Create,
-                        SourceGuid = sourceClientGuid
-                    });
-            }
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
             return true;
         }
@@ -169,15 +161,6 @@ namespace MpWpfApp {
                         }, citg.ToString());
                 }
             }
-            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncDelete(
-                    new MpDbSyncEventArgs() {
-                        DbObject = ci,
-                        EventType = MpDbLogActionType.Delete,
-                        SourceGuid = sourceClientGuid
-                    });
-            }
-            //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
 
@@ -193,19 +176,19 @@ namespace MpWpfApp {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
-            //if new tag
-            if (TagId == 0) {
-                if (TagColor == null) {
-                    //occurs with initial tag creation on first load
-                    TagColor = MpColor.GetColorById(ColorId);
-                    if(TagColor == null) {
-                        MpConsole.WriteTraceLine(@"Tag create error, Color should be defined already but so creating random one");
-                        //seems to be an intermittent problem maybe caused by SyncStart SyncEnd calls for color
-                        TagColor = new MpColor(MpHelpers.Instance.GetRandomColor());
-                    }
+            if (Color == null) {
+                //occurs with initial tag creation on first load
+                Color = MpColor.GetColorById(ColorId);
+                if (Color == null) {
+                    MpConsole.WriteTraceLine(@"Tag create error, Color should be defined already but so creating random one");
+                    //seems to be an intermittent problem maybe caused by SyncStart SyncEnd calls for color
+                    Color = new MpColor(MpHelpers.Instance.GetRandomColor());
                 }
-                TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
-                ColorId = TagColor.ColorId;
+            }
+            if (TagId == 0) {
+                
+                Color.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
+                ColorId = Color.ColorId;
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpTag(MpTagGuid,TagName,fk_MpColorId,SortIdx) values(@tg,@tn,@cid,@si)",
                     new Dictionary<string, object> {
@@ -215,17 +198,9 @@ namespace MpWpfApp {
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
-                if(sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                    OnSyncAdd(
-                        new MpDbSyncEventArgs() {
-                            DbObject = this,
-                            EventType = MpDbLogActionType.Create,
-                            SourceGuid = sourceClientGuid
-                        });
-                }
             } else {
-                TagColor.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
-                ColorId = TagColor.ColorId;
+                Color.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
+                ColorId = Color.ColorId;
                 MpDb.Instance.ExecuteWrite(
                     "update MpTag set MpTagGuid=@tg, TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
                     new Dictionary<string, object> {
@@ -234,16 +209,7 @@ namespace MpWpfApp {
                         { "@cid", ColorId },
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
-                    }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
-
-                if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                    OnSyncUpdate(
-                        new MpDbSyncEventArgs() {
-                            DbObject = this,
-                            EventType = MpDbLogActionType.Modify,
-                            SourceGuid = sourceClientGuid
-                        });
-                }
+                    }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);                
             }
         }
         public override void WriteToDatabase() {
@@ -279,20 +245,9 @@ namespace MpWpfApp {
                         }, citg.ToString(),sourceClientGuid,ignoreTracking,ignoreSyncing);
                 }
             }
-
-            if(TagColor != null) {
-                TagColor.DeleteFromDatabase(sourceClientGuid, ignoreTracking, ignoreSyncing);
+            if(Color != null) {
+                Color.DeleteFromDatabase(sourceClientGuid, ignoreTracking, ignoreSyncing);
             }
-
-            if (sourceClientGuid != Properties.Settings.Default.ThisClientGuid) {
-                OnSyncDelete(
-                    new MpDbSyncEventArgs() {
-                        DbObject = this,
-                        EventType = MpDbLogActionType.Delete,
-                        SourceGuid = sourceClientGuid
-                    });
-            }
-            //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
         
         public void DeleteFromDatabase() {
@@ -303,19 +258,9 @@ namespace MpWpfApp {
             }
         }
 
-        protected override void OnSyncAdd(MpDbSyncEventArgs e) {
-            base.OnSyncAdd(e);
-        }
-        protected override void OnSyncUpdate(MpDbSyncEventArgs e) {
-            base.OnSyncUpdate(e);
-        }
-        protected override void OnSyncDelete(MpDbSyncEventArgs e) {
-            base.OnSyncDelete(e);
-        }
-
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             await Task.Delay(1);
-            var tdr = MpDb.Instance.GetDbObjectByTableGuid("MpTag", tagGuid);
+            var tdr = MpDb.Instance.GetDbDataRowByTableGuid("MpTag", tagGuid);
             MpTag newTag = null;
             if (tdr == null) {
                 newTag = new MpTag();
@@ -334,7 +279,7 @@ namespace MpWpfApp {
                     //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
                     //    break;
                     case "fk_MpColorId":
-                        var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", li.AffectedColumnValue);
+                        var cdr = MpDb.Instance.GetDbDataRowByTableGuid("MpColor", li.AffectedColumnValue);
                         newTag.ColorId = new MpColor(cdr).ColorId;
                         break;
                     default:
@@ -400,7 +345,7 @@ namespace MpWpfApp {
                 ColorId, other.ColorId,
                 "fk_MpColorId",
                 diffLookup,
-                TagColor.ColorGuid
+                Color.ColorGuid
                 );
 
             return diffLookup;

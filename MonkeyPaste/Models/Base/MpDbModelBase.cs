@@ -36,7 +36,7 @@ namespace MonkeyPaste {
             return diffLookup;
         }
 
-        public static async Task<object> CreateOrUpdateFromLogs(
+        public static object CreateOrUpdateFromLogs(
             List<MonkeyPaste.MpDbLog> logs, 
             string fromClientGuid) {
             string tableName = logs[0].DbTableName;
@@ -45,13 +45,16 @@ namespace MonkeyPaste {
                 throw new Exception(@"Cannot find table mapping for table: " + tableName);
             }
             string dboGuid = logs[0].DbObjectGuid.ToString();
-            var dbo = await MpDb.Instance.GetObjDbRowAsync(tableName, dboGuid);
+            var actionType = logs[0].LogActionType;
+            var dbo = MpDb.Instance.GetDbObjectByTableGuid(tableName, dboGuid);
             if (dbo == null) {
                 //for add transactions
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
                 dbo = Activator.CreateInstance(dbot);
             }
-
+            if(actionType == MpDbLogActionType.Delete) {
+                return dbo;
+            }
             foreach (var log in logs.OrderBy(x => x.LogActionDateTime)) {
                 //get column mapping for log item
                 var colProp = tm.Columns.Where(x => x.Name == log.AffectedColumnName).FirstOrDefault();
@@ -77,8 +80,14 @@ namespace MonkeyPaste {
                     string fkTableName = colProp.Name
                                             .Replace(fkPrefix, string.Empty)
                                             .Replace(@"Id", string.Empty);
-                    var fkDbo = MpDb.Instance.GetObjDbRow(fkTableName, log.AffectedColumnValue);
+                    var fkDbo = MpDb.Instance.GetDbObjectByTableGuid(fkTableName, log.AffectedColumnValue);
                     dboProp.SetValue(dbo, (fkDbo as MpDbModelBase).Id);
+
+                    var fkGuidProp = dbo.GetType()
+                                        .GetProperties()
+                                        .Where(x => x.Name == fkTableName.Replace("Mp", string.Empty))
+                                        .FirstOrDefault();
+                    fkGuidProp.SetValue(dbo, fkDbo);
                 } else if(colProp.Name.EndsWith(@"Guid")) {
                     (dbo as MpDbModelBase).Guid = log.AffectedColumnValue;
                 } else {

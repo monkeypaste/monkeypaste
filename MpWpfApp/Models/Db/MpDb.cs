@@ -37,7 +37,6 @@ namespace MpWpfApp {
 
         public event EventHandler<object> OnSyncableChange;
 
-
         public event EventHandler<object> OnSyncCreate;
         public event EventHandler<object> OnSyncUpdate;
         public event EventHandler<object> OnSyncDelete;
@@ -231,6 +230,8 @@ namespace MpWpfApp {
                 }
                 if (actionType != MpDbLogActionType.None && !ignoreSyncing) {
                     OnSyncableChange?.Invoke(this, dbObjectGuid);
+                } else if(dbObject != null) {
+                    (dbObject as MpDbModelBase).NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
                 }
                 return numberOfRowsAffected;
             }
@@ -264,13 +265,38 @@ namespace MpWpfApp {
             }            
         }
 
-        public DataRow GetDbObjectByTableGuid(string tableName, string objGuid) {            
+        public DataRow GetDbDataRowByTableGuid(string tableName, string objGuid) {            
             var dt = MpDb.Instance.Execute(
                 "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
             if (dt != null && dt.Rows.Count > 0) {
                 return dt.Rows[0];
             }
             return null;
+        }
+        public object GetDbObjectByTableGuid(string tableName, string objGuid) {
+            using (var con = SetConnectionPCL()) {
+                TableMapping qtm = null;
+                foreach (var tm in con.TableMappings) {
+                    if (tm.TableName.ToLower() == tableName.ToLower()) {
+                        qtm = tm;
+                        break;
+                    }
+                }
+                if (qtm == null) {
+                    return null;
+                }
+
+                var dt = con.Query(
+                    qtm,
+                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
+                objGuid);
+
+                if (dt != null && dt.Count > 0) {
+                    return dt[0];
+                }
+                return null;
+            }
+            
         }
 
         public async Task<int> ExecuteWriteAsync(string query, Dictionary<string, object> args) {
@@ -843,25 +869,28 @@ namespace MpWpfApp {
             foreach (var ckvp in deleteChanges) {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = dbot.GetMethod("DeleteFromDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
-                var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                //var dbo = Activator.CreateInstance(dbot);
+                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 deleteMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
             foreach (var ckvp in addChanges) {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                //var dbo = Activator.CreateInstance(dbot);
+                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
                 writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
             foreach (var ckvp in updateChanges) {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var rdbo = Activator.CreateInstance(dbot);
-                rdbo = await (rdbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                //var rdbo = Activator.CreateInstance(dbot);
+                //rdbo = await (rdbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
-                writeMethod.Invoke(rdbo, new object[] { remoteClientGuid, false, true });
+                writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
             var newSyncHistory = new MpSyncHistory() {

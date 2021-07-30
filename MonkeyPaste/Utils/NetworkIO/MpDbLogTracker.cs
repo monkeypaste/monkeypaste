@@ -20,7 +20,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var oldItem = await MpDb.Instance.GetObjDbRowAsync(tableName, objectGuid.ToString());
+            var oldItem = await MpDb.Instance.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
             var alteredColumnNameValuePairs = (dbModel as MpISyncableDbObject).DbDiff(oldItem);
             if (alteredColumnNameValuePairs.Count == 0) {
                 return;
@@ -45,7 +45,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var oldItem = MpDb.Instance.GetObjDbRowAsync(tableName, objectGuid.ToString());
+            var oldItem = MpDb.Instance.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
             var alteredColumnNameValuePairs = (dbModel as MpISyncableDbObject).DbDiff(oldItem);
             if (alteredColumnNameValuePairs.Count == 0) {
                 return;

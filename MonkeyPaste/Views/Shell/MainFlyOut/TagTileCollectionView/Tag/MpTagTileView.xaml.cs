@@ -44,16 +44,6 @@ namespace MonkeyPaste {
         }
 
         private void MpTagTileView_OnGlobalTouch(object sender, EventArgs e) {
-            //var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
-            //var dpi = locationFetcher.GetDensity(this);
-            //var gtp = (e as MpTouchEventArgs<Point>).EventData;
-            //gtp = new Point(gtp.X / dpi, gtp.Y / dpi);
-            //var thisOrigin = locationFetcher.GetCoordinates(this);
-            //var thisRect = new Rectangle(thisOrigin, new Size(this.Width, this.Height));
-
-            //if (thisRect.Contains(gtp)) {
-            //    (BindingContext as MpTagTileViewModel).IsSelected = true;
-            //}
             var gtp = (e as MpTouchEventArgs<Point>).EventData.GetScreenPoint(this);
             var thisRect = this.GetScreenRect();
             if (thisRect.Contains(gtp)) {
@@ -105,16 +95,6 @@ namespace MonkeyPaste {
             cm.TranslationY = location.Y - cmvm.ItemHeight + cmvm.Padding.Top + cmvm.Padding.Bottom;
             cm.TranslationX = Math.Max(0, cm.TranslationX);
             await PopupNavigation.Instance.PushAsync(cm);
-        }
-
-        private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e) {
-            switch (e.StatusType) {
-                case GestureStatus.Running:
-                    if(Math.Abs(e.TotalY) > _minDragY) {
-                        TagTileDragGestureRecognizer.CanDrag = true;
-                    }
-                    break;
-            }
         }
     }
 }

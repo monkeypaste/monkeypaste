@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpDbImage : MpDbObject {
+    public class MpDbImage : MpDbModelBase {
         public int DbImageId { get; set; }
         public Guid DbImageGuid { get; set; }
 

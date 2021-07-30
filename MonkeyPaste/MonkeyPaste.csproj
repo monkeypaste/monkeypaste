@@ -184,6 +184,5 @@
 
   <ItemGroup>
     <Folder Include="Models\Db\SQLite\" />
-    <Folder Include="Behaviors\" />
   </ItemGroup>
 </Project>

@@ -318,7 +318,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<object> GetObjDbRowAsync(string tableName, string objGuid) {
+        public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
                 string.Format("select * from {0} where {1}=?",tableName,tableName+"Guid"),
@@ -330,7 +330,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public object GetObjDbRow(string tableName, string objGuid) {
+        public object GetDbObjectByTableGuid(string tableName, string objGuid) {
             var dt = Query(
                 tableName,
                 string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
@@ -477,14 +477,14 @@ namespace MonkeyPaste {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
                 ColorId = green.Id,
-                //TagColor = green,
+                //Color = green,
                 TagSortIdx = 0
             }, "", true, true);
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 ColorId = blue.Id,
-                //TagColor = blue,
+                //Color = blue,
                 TagSortIdx = 1
             }, "", true, true);
 
@@ -492,14 +492,14 @@ namespace MonkeyPaste {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
                 ColorId = yellow.Id,
-                //TagColor = yellow,
+                //Color = yellow,
                 TagSortIdx = 2
             }, "", true, true);
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
                 ColorId = orange.Id,
-                //TagColor = orange,
+                //Color = orange,
                 TagSortIdx = 3
             }, "", true, true);
 
@@ -744,27 +744,6 @@ namespace MonkeyPaste {
         }
 
         #endregion
-    }
-
-    public class CustomerComparer : IComparer<KeyValuePair<Guid, List<MpDbLog>>> {
-        private List<string> orderedLogs = new List<string>() {
-                          "MpColor",
-                          "MpDbImage",
-                          "MpIcon",
-                          "MpUrl",
-                          "MpUrlDomain",
-                          "MpApp",
-                          "MpSource",
-                          "MpCompositeCopyItem",
-                          "MpCopyItemTag",
-                          "MpCopyItemTemplate",
-                          "MpCopyItem",
-                          "MpTag",
-                          "MpClient" };
-
-        public int Compare(KeyValuePair<Guid, List<MpDbLog>> a, KeyValuePair<Guid, List<MpDbLog>> b) {
-            return orderedLogs.IndexOf(a.Value[0].DbTableName) - orderedLogs.IndexOf(b.Value[0].DbTableName);
-        }
     }
 
     public class MpDbLogTableComparer : IComparer<MpDbLog> {

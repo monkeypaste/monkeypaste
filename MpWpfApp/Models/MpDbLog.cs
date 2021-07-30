@@ -9,7 +9,7 @@ using MonkeyPaste;
 using Newtonsoft.Json;
 
 namespace MpWpfApp {   
-    public class MpDbLog : MpDbObject, MpISyncableDbObject {
+    public class MpDbLog : MpDbModelBase, MpISyncableDbObject {
         private static List<MpDbLog> _AllDbLogList = null;
         public static int TotalDbLogCount = 0;
 

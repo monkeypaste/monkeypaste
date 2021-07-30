@@ -41,7 +41,7 @@ namespace MpWpfApp {
                 if (obj == null) {
                     throw new Exception(@"DbLog object cannot be null for non-delete transactions");
                 }
-                var oldRow = MpDb.Instance.GetDbObjectByTableGuid(tableName, objGuid);
+                var oldRow = MpDb.Instance.GetDbDataRowByTableGuid(tableName, objGuid);
                 var alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
                 if (alteredColumnNameValueLookUp.Count == 0) {
                     //since no data is altered return false to not write to db or change log

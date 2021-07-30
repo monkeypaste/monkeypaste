@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPath : MpDbObject {
+    public class MpPasteToAppPath : MpDbModelBase {
         public int PasteToAppPathId { get; set; }
         public string AppPath { get; set; }
         public string AppName { get; set; }

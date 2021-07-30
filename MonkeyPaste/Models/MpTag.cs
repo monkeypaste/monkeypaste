@@ -49,26 +49,28 @@ namespace MonkeyPaste {
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
 
-        private MpColor _tagColor;
+        private MpColor _color;
         [Ignore]
-        public MpColor TagColor {
+        public MpColor Color {
             get {
-                if (_tagColor == null && ColorId > 0) {
-                    _tagColor = MpColor.GetColorById(ColorId);
-                } else if (_tagColor != null && _tagColor.Id != ColorId) {
+                if (_color == null && ColorId > 0) {
+                    _color = MpColor.GetColorById(ColorId);
+                } else if (_color != null && _color.Id != ColorId) {
                     if (ColorId == 0) {
-                        ColorId = _tagColor.Id;
+                        ColorId = _color.Id;
+                    } else if (ColorId > 0) {
+                        _color = MpColor.GetColorById(ColorId);
                     } else {
-                        _tagColor = MpColor.GetColorById(ColorId);
+                        _color = new MpColor();
                     }
                 }
-                return _tagColor;
+                return _color;
             }
             set {
-                if (_tagColor != value) {
-                    _tagColor = value;
-                    if (_tagColor != null) {
-                        ColorId = _tagColor.Id;
+                if (_color != value) {
+                    _color = value;
+                    if (_color != null) {
+                        ColorId = _color.Id;
                     } else {
                         ColorId = 0;
                     }
@@ -89,7 +91,7 @@ namespace MonkeyPaste {
         public MpTag() {
         }
 
-        public async Task<MpColor> GetTagColor() {
+        public async Task<MpColor> GetColor() {
             if (ColorId > 0) {
                 var tc = await MpColor.GetColorByIdAsync(ColorId);
                 return tc;
@@ -98,7 +100,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public void SetTagColor(int colorId) {
+        public void SetColor(int colorId) {
             ColorId = colorId;
         }
 
@@ -162,7 +164,7 @@ namespace MonkeyPaste {
             await Task.Delay(1);
             return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
 
-            var cdr = await MpDb.Instance.GetObjDbRowAsync("MpTag", tagGuid);
+            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
             MpTag newTag = null;
             if (cdr == null) {
                 newTag = new MpTag();
@@ -251,7 +253,7 @@ namespace MonkeyPaste {
                 ColorId, other.ColorId,
                 "fk_MpColorId",
                 diffLookup,
-                TagColor.ColorGuid
+                Color.ColorGuid
                 );
 
             return diffLookup;

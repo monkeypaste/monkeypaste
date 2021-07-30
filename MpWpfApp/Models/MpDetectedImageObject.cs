@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObject : MpDbObject {
+    public class MpDetectedImageObject : MpDbModelBase {
         public int DetectedImageObjectId { get; set; } = 0;
         public int CopyItemId { get; set; }
 

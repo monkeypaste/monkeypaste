@@ -144,7 +144,7 @@
                             checkIconPath,
                             null,
                             tagTile.ShortcutKeyString,
-                            tagTile.TagColor));
+                            tagTile.Color));
                 }
                 return _tagMenuItems;
             }

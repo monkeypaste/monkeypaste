@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -432,6 +433,9 @@ namespace MpWpfApp {
             }
 
             MainWindowGridTop = _startMainWindowTop;
+
+            OnPropertyChanged(nameof(MainWindowWidth));
+            OnPropertyChanged(nameof(MainWindowHeight));
             //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
         }
 
@@ -440,6 +444,15 @@ namespace MpWpfApp {
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+
+            SystemParameters.StaticPropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(SystemParameters.WorkArea)) {
+                    this.Dispatcher.Invoke(() => {
+                        SetupMainWindowRect();
+                    });
+                }
+            };
         }
 
         public void AddTempFile(string fp) {

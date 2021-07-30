@@ -69,9 +69,9 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpTagTrayViewModel() : base() {
-            MpDbObject.SyncAdd += MpDbObject_SyncAdd;
-            MpDbObject.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDbObject.SyncDelete += MpDbObject_SyncDelete;
+            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
+            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
 
             var allTags = MpTag.GetAllTags();
             if(allTags.Count == 0) {
@@ -97,7 +97,7 @@ namespace MpWpfApp {
                     TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                     TagName = "Recent",
                     ColorId = green.ColorId,
-                    TagColor = green,
+                    Color = green,
                     TagSortIdx = 0
                 };
                 t.WriteToDatabase("", true, true);
@@ -107,7 +107,7 @@ namespace MpWpfApp {
                     TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                     TagName = "All",
                     ColorId = blue.ColorId,
-                    TagColor = blue,
+                    Color = blue,
                     TagSortIdx = 1
                 };
                 t.WriteToDatabase("", true, true);
@@ -117,7 +117,7 @@ namespace MpWpfApp {
                     TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                     TagName = "Favorites",
                     ColorId = yellow.ColorId,
-                    TagColor = yellow,
+                    Color = yellow,
                     TagSortIdx = 2
                 };
                 t.WriteToDatabase("", true, true);
@@ -127,7 +127,7 @@ namespace MpWpfApp {
                     TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                     TagName = "Help",
                     ColorId = orange.ColorId,
-                    TagColor = orange,
+                    Color = orange,
                     TagSortIdx = 3
                 };
                 t.WriteToDatabase("", true, true);
@@ -421,10 +421,10 @@ namespace MpWpfApp {
                     var ttvmToRemove = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
                     if (ttvmToRemove != null) {
                         ttvmToRemove.Tag.StartSync(e.SourceGuid);
-                        ttvmToRemove.Tag.TagColor.StartSync(e.SourceGuid);
+                        ttvmToRemove.Tag.Color.StartSync(e.SourceGuid);
                         this.Remove(ttvmToRemove);
                         ttvmToRemove.Tag.EndSync();
-                        ttvmToRemove.Tag.TagColor.EndSync();
+                        ttvmToRemove.Tag.Color.EndSync();
                     }
                 }
             }));

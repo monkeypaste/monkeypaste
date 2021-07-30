@@ -33,14 +33,20 @@ namespace MonkeyPaste.Droid {
         static readonly string CB_CHANNEL_ID = "location_notification";
         internal static readonly string COUNT_KEY = "count";
 
+        private bool _wasTouchDrag = false;
+
         public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
 
         public event EventHandler GlobalTouchHandler;
 
         public override bool DispatchTouchEvent(MotionEvent ev) {
-            if (ev.Action == MotionEventActions.Up) {
-               GlobalTouchHandler?.Invoke(null, new MpTouchEventArgs<Point>(new Point(ev.GetX(), ev.GetY())));
+            if (ev.Action == MotionEventActions.Up && !_wasTouchDrag) {
+                GlobalTouchHandler?.Invoke(null, new MpTouchEventArgs<Point>(new Point(ev.GetX(), ev.GetY())));
+                _wasTouchDrag = false;
+            } else if (ev.Action == MotionEventActions.Move) {
+                _wasTouchDrag = true;
             }
+
 
             return base.DispatchTouchEvent(ev);
         }

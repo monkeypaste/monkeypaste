@@ -9,7 +9,7 @@ namespace MpWpfApp {
     public class MpKeyCombination {
 
     }
-    public class MpShortcut : MpDbObject {
+    public class MpShortcut : MpDbModelBase {
         #region Public Properties
         public int ShortcutId { get; set; } = 0;
         public int CopyItemId { get; set; } = 0;

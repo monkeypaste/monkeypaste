@@ -1,44 +1,38 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView
-    x:Class="MonkeyPaste.MpTagTileView"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MonkeyPaste"
-    x:DataType="local:MpTagTileViewModel">
+<ContentView x:Class="MonkeyPaste.MpTagTileView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MonkeyPaste"
+             local:MpSmartSelection.HasSmartSelection="True"
+             x:DataType="local:MpTagTileViewModel">
     <ContentView.Content>
         <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
             <Grid.GestureRecognizers>
-                <!--<TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                                      CommandParameter="{Binding}" />-->
-                <!--<PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />-->
-                <DragGestureRecognizer
-                    x:Name="TagTileDragGestureRecognizer"
-                    CanDrag="False"
-                    DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                    DragStartingCommandParameter="{Binding}" />
-                <DropGestureRecognizer
-                    AllowDrop="True"
-                    DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                    DragLeaveCommandParameter="{Binding}"
-                    DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                    DragOverCommandParameter="{Binding}"
-                    Drop="DropGestureRecognizer_Drop"
-                    DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                    DropCommandParameter="{Binding}" />
+                <DragGestureRecognizer x:Name="TagTileDragGestureRecognizer"
+                                       CanDrag="True"
+                                       DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragStartingCommandParameter="{Binding}" />
+                <DropGestureRecognizer AllowDrop="True"
+                                       DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragLeaveCommandParameter="{Binding}"
+                                       DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragOverCommandParameter="{Binding}"
+                                       Drop="DropGestureRecognizer_Drop"
+                                       DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DropCommandParameter="{Binding}" />
             </Grid.GestureRecognizers>
             <Grid.Triggers>
-                <DataTrigger
-                    Binding="{Binding IsSelected}"
-                    TargetType="Grid"
-                    Value="True">
-                    <Setter Property="BackgroundColor" Value="Orange" />
+                <DataTrigger Binding="{Binding IsSelected}"
+                             TargetType="Grid"
+                             Value="True">
+                    <Setter Property="BackgroundColor"
+                            Value="Orange" />
                 </DataTrigger>
-                <DataTrigger
-                    Binding="{Binding IsSelected}"
-                    TargetType="Grid"
-                    Value="False">
-                    <Setter Property="BackgroundColor" Value="LightYellow" />
+                <DataTrigger Binding="{Binding IsSelected}"
+                             TargetType="Grid"
+                             Value="False">
+                    <Setter Property="BackgroundColor"
+                            Value="LightYellow" />
                 </DataTrigger>
             </Grid.Triggers>
             <Grid>
@@ -51,7 +45,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <BoxView Margin="30,20,10,20"
-                         BackgroundColor="{Binding Tag.TagColor.Color}"
+                         BackgroundColor="{Binding Tag.Color.Color}"
                          HeightRequest="25"
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
@@ -68,7 +62,7 @@
                        FontSize="Micro"
                        HorizontalOptions="Center"
                        Text="{Binding CopyItemCount}"
-                       TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                       TextColor="{Binding Tag.Color.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
                        VerticalOptions="Center">
                     <!--<Label.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1"

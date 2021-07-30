@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace MonkeyPaste.UWP {
     public class MpDbFilePath_Uwp : MonkeyPaste.MpIDbFilePath {
         public string DbFilePath() {
-            var dbName = MonkeyPaste.MpPreferences.DbName;
+            var dbName = MonkeyPaste.MpPreferences.Instance.DbName;
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, dbName);
         }
     }

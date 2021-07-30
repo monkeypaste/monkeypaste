@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                         //    var handshakeResponse = await ReceiveWebSocketAsync(cws);
                             
                         //}
-                        if(!_localSync.IsWpf()) {
+                        if(_localSync.IsWpf()) {
                             // for debugging disconnect all
                             await SessionManager.Disconnect(ThisEndpoint,true);
                         }

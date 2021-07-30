@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpSyncHistory : MpDbObject {
+    public class MpSyncHistory : MpDbModelBase {
         private static List<MpSyncHistory> _AllSyncHistoryList = null;
         public static int TotalSyncHistoryCount = 0;
 

@@ -93,7 +93,7 @@
             Width="{Binding MainWindowWidth}"
             Background="Transparent">
         <Grid x:Name="MainWindowGrid"
-              Canvas.Top="{Binding MainWindowGridTop}"
+              Canvas.Top="{Binding MainWindowGridTop}"              
               Height="{Binding MainWindowGridHeight}"
               Width="{Binding MainWindowWidth}"
               Background="Green">
@@ -422,7 +422,7 @@
                                                             Margin="3,0,0,0"
                                                             Padding="5"
                                                             BorderThickness="0"
-                                                            Background="{Binding TagColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                                            Background="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                                             <TextBlock Background="Transparent"
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Center"

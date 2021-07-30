@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
 
-    public class MpUrlDomain : MpDbObject {
+    public class MpUrlDomain : MpDbModelBase {
         private static List<MpUrlDomain> _AllUrlDomainList = null;
 
         public static int TotalUrlDomainCount = 0;

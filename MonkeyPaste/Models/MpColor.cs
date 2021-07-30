@@ -152,7 +152,7 @@ namespace MonkeyPaste {
             await Task.Delay(1);
             return MpDbModelBase.CreateOrUpdateFromLogs(rlogs, fromClientGuid);
 
-            var cdr = await MpDb.Instance.GetObjDbRowAsync("MpColor", colorGuid);
+            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
                 newColor = new MpColor();

@@ -76,7 +76,7 @@ namespace MonkeyPaste {
         #region Private Methods
         private async Task Initialize() {
             Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
-            Tag.TagColor = await MpColor.GetColorByIdAsync(Tag.ColorId);
+            Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
 
             ContextMenuViewModel = new MpContextMenuViewModel();
             if (IsUserTag) {
@@ -90,7 +90,7 @@ namespace MonkeyPaste {
             //ContextMenuViewModel.Items.Add(new MpColorChooserContextMenuItemViewModel());
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
                 Title = "Change Color",
-                Command = ChangeTagColorCommand,
+                Command = ChangeColorCommand,
                 IconImageResourceName = "ColorIcon"
             });
             if (IsUserTag) {
@@ -172,7 +172,7 @@ namespace MonkeyPaste {
                     }
                 } else if(e is MpColor c) {
                     if(c.Id == Tag.ColorId) {
-                        Tag.TagColor = await MpColor.GetColorByIdAsync(c.Id);
+                        Tag.Color = await MpColor.GetColorByIdAsync(c.Id);
                         OnPropertyChanged(nameof(Tag));
                     }
                 }
@@ -213,9 +213,9 @@ namespace MonkeyPaste {
                 return Tag.Id > 4;
             });
 
-        public ICommand ChangeTagColorCommand => new Command(async () => {
-            Tag.TagColor.Color = MpHelpers.Instance.GetRandomColor();
-            await MpDb.Instance.UpdateItemAsync<MpColor>(Tag.TagColor);
+        public ICommand ChangeColorCommand => new Command(async () => {
+            Tag.Color.Color = MpHelpers.Instance.GetRandomColor();
+            await MpDb.Instance.UpdateItemAsync<MpColor>(Tag.Color);
             OnPropertyChanged(nameof(Tag));
         });
 

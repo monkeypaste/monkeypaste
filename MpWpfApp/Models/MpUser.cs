@@ -13,7 +13,7 @@ namespace MpWpfApp {
         inactive,
         deactivated
     }
-    public class MpUser : MpDbObject {
+    public class MpUser : MpDbModelBase {
         public int UserId { get; set; }
         public int ClientId { get; set; }
         public DateTime LoginDateTime { get; set; }

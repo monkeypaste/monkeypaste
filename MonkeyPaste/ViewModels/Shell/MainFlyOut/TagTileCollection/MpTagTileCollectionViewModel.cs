@@ -212,15 +212,15 @@ namespace MonkeyPaste {
 
 
         public ICommand AddTagCommand => new Command<object>(async (args) => {
-            var tagColor = new MpColor(MpHelpers.Instance.GetRandomColor());
-            await MpDb.Instance.AddItemAsync<MpColor>(tagColor);
+            var Color = new MpColor(MpHelpers.Instance.GetRandomColor());
+            await MpDb.Instance.AddItemAsync<MpColor>(Color);
             var newTag = new MpTag() {
                 TagName = "Untitled",
                 TagSortIdx = TagViewModels.Count,
-                ColorId = tagColor.Id
+                ColorId = Color.Id
             };
-            //await MpDb.Instance.AddItem<MpColor>(newTag.TagColor);
-            //newTag.ColorId = newTag.TagColor.Id;
+            //await MpDb.Instance.AddItem<MpColor>(newTag.Color);
+            //newTag.ColorId = newTag.Color.Id;
             await MpDb.Instance.AddItemAsync<MpTag>(newTag);
             //delay to let DbItem_Added add tag to collection
             await Task.Delay(300);

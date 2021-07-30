@@ -137,7 +137,7 @@
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />
-    <Compile Include="Models\Base\MpDbObject.cs" />
+    <Compile Include="Models\Base\MpDbModelBase.cs" />
     <Compile Include="Models\Base\MpObject.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpApp.cs" />

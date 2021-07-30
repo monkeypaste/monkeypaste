@@ -17,7 +17,7 @@ namespace MpWpfApp {
         Ipad = 5,
         Tablet
     }
-    public class MpPlatform : MpDbObject {
+    public class MpPlatform : MpDbModelBase {
         public int PlatformId { get; set; }
         public MpPlatformType PlatformType { get; set; }
         public MpDeviceType DeviceType { get; set; }

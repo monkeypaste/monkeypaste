@@ -57,6 +57,7 @@ namespace MonkeyPaste {
 
         #region Event Handlers
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            return;
             //not sure why i need to do below but if more than 1 item it will not be
             //sized correctly
             int count = Items.Count > 1 ? Items.Count + 1 : Items.Count;

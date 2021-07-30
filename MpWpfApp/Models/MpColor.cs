@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     [Table("MpColor")]
-    public class MpColor : MpDbObject, MonkeyPaste.MpISyncableDbObject {
+    public class MpColor : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
         private static List<MpColor> _AllColorList = null;
         public static int TotalColorCount = 0;
 
@@ -17,7 +17,9 @@ namespace MpWpfApp {
         [Column("pk_MpColorId")]
         public int ColorId { get; set; }
 
+        [Column("MpColorGuid")]
         public string Guid { get; set; }
+
         [Ignore]
         public Guid ColorGuid {
             get {
@@ -55,10 +57,18 @@ namespace MpWpfApp {
             }
 
         }
-        public int R { get; private set; }
-        public int G { get; private set; }
-        public int B { get; private set; }
-        public int A { get; private set; } 
+
+        [Column("R")]
+        public int R { get; set; }
+
+        [Column("G")]
+        public int G { get; set; }
+
+        [Column("B")]
+        public int B { get; set; }
+
+        [Column("A")]
+        public int A { get; set; } 
 
         public static List<MpColor> GetAllColors() {
             if(_AllColorList == null) {
@@ -167,30 +177,6 @@ namespace MpWpfApp {
             B = Convert.ToInt32(dr["B"].ToString());
             A = Convert.ToInt32(dr["A"].ToString());
         }
-        //public void DeleteFromDatabase() {
-        //    if (ColorId <= 0) {
-        //        return;
-        //    }
-
-        //    MpDb.Instance.ExecuteWrite(
-        //        "delete from MpColor where pk_MpColorId=@cid",
-        //        new Dictionary<string, object> {
-        //            { "@cid", ColorId }
-        //        });
-        //}
-
-        private bool IsAltered() {
-            var dt = MpDb.Instance.Execute(
-                @"SELECT pk_MpColorId FROM MpColor WHERE MpColorGuid=@cg AND R=@r AND G=@g AND B=@b AND A=@a",
-                new Dictionary<string, object> {
-                    { "@cg", ColorGuid.ToString() },
-                    { "@r", R },
-                    { "@g", G },
-                    { "@b", B },
-                    { "@a", A }
-                });
-            return dt.Rows.Count == 0;
-        }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false,bool ignoreSyncing = false) {
             if (string.IsNullOrEmpty(sourceClientGuid)) {
@@ -199,10 +185,6 @@ namespace MpWpfApp {
             if (ColorGuid == System.Guid.Empty) {
                 ColorGuid = System.Guid.NewGuid();
             }
-            //if (!IsAltered()) {
-            //    return;
-            //}
-
 
             if (ColorId == 0) {
                 MpDb.Instance.ExecuteWrite(
@@ -265,7 +247,7 @@ namespace MpWpfApp {
 
         public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             await Task.Delay(1);
-            var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", colorGuid);
+            var cdr = MpDb.Instance.GetDbDataRowByTableGuid("MpColor", colorGuid);
             MpColor newColor = null;
             if (cdr == null) {
                 newColor = new MpColor();

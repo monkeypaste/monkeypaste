@@ -90,7 +90,7 @@ namespace MpWpfApp {
                             string.Empty,
                             null,
                             tagTile.ShortcutKeyString,
-                            tagTile.TagColor));
+                            tagTile.Color));
                 }
                 return _tagMenuItems;
             }

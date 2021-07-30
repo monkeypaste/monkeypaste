@@ -1,12 +1,15 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
 namespace MpWpfApp {
     public abstract class MpObject : INotifyPropertyChanged {
+        [Ignore]
         public bool HasChanged { get; set; }
-
+        [Ignore]
         public string DisplayName { get; set; }
+        [Ignore]
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

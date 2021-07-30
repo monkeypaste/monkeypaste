@@ -4,7 +4,7 @@ using System.Data;
 using System.Globalization;
 
 namespace MpWpfApp {
-    public class MpPasteHistory : MpDbObject {
+    public class MpPasteHistory : MpDbModelBase {
         public static int TotalPasteHistoryCount = 0;
 
         public int PasteHistoryId { get; set; }
