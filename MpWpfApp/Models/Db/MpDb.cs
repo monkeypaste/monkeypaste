@@ -746,11 +746,18 @@ namespace MpWpfApp {
         public string GetThisClientGuid() {
             return Properties.Settings.Default.ThisClientGuid;
         }
-        public string GetLocalIp4Address() {
+        public string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
             }
             return MpHelpers.Instance.GetLocalIp4Address();
+        }
+
+        public string[] GetAllLocalIp4Addresses() {
+            if (!IsConnectedToNetwork()) {
+                return new string[] { "0.0.0.0" };
+            }
+            return MonkeyPaste.MpHelpers.Instance.GetAllLocalIPv4();
         }
 
         public string GetExternalIp4Address() {

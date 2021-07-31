@@ -8,16 +8,36 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpDeviceEndpoint : MpISyncableDbObject {
+        #region Private Variables
+        #endregion
+
         #region Properties
         public const string ParseToken = @"$%#@";
 
-        public string PublicIp4Address { get; set; }
-        public int PublicConnectPortNum { get; set; }
-        public int PublicSyncPortNum { get; set; }
+        public int PrimaryPrivateIp4AddressIdx { get; set; } = -1;
 
-        public string PrivateIp4Address { get; set; }
-        public int PrivateConnectPortNum { get; set; }
-        public int PrivateSyncPortNum { get; set; }
+        public string PublicIp4Address { get; set; }
+        public int PublicPortNum { get; set; }
+
+        public string PrimaryPrivateIp4Address {
+            get {
+                if (PrimaryPrivateIp4AddressIdx >= 0 && PrimaryPrivateIp4AddressIdx < PrivateIp4Addresses.Count) {
+                    return PrivateIp4Addresses[PrimaryPrivateIp4AddressIdx];
+                }
+                return "0.0.0.0";
+            }
+        }
+        public int PrivatePortNum { get; set; }
+        public ObservableCollection<string> PrivateIp4Addresses { get; set; } = new ObservableCollection<string>();
+        public string PrivateIp4AddressesCsv {
+            get {
+                var sb = new StringBuilder();
+                foreach(var ip in PrivateIp4Addresses) {
+                    sb.Append(ip + ",");
+                }
+                return sb.ToString();
+            }
+        }
 
         public string AccessToken { get; set; }
 
@@ -38,47 +58,14 @@ namespace MonkeyPaste {
         }
 
         #region IPEndPoints
-        public IPEndPoint PrivateConnectIPEndPoint {
+        public IPEndPoint PrivateIPEndPoint {
             get {
-                if (string.IsNullOrEmpty(PrivateIp4Address)) {
+                if (string.IsNullOrEmpty(PrimaryPrivateIp4Address)) {
                     return null;
                 }
                 return new IPEndPoint(
-                    IPAddress.Parse(PrivateIp4Address),
-                    PrivateConnectPortNum);
-            }
-        }
-
-        public IPEndPoint PublicConnectIPEndPoint {
-            get {
-                if (string.IsNullOrEmpty(PublicIp4Address)) {
-                    return null;
-                }
-                return new IPEndPoint(
-                    IPAddress.Parse(PublicIp4Address),
-                    PublicConnectPortNum);
-            }
-        }
-
-        public IPEndPoint PrivateSyncIPEndPoint {
-            get {
-                if (string.IsNullOrEmpty(PrivateIp4Address)) {
-                    return null;
-                }
-                return new IPEndPoint(
-                    IPAddress.Parse(PrivateIp4Address),
-                    PrivateSyncPortNum);
-            }
-        }
-
-        public IPEndPoint PublicSyncIPEndPoint {
-            get {
-                if (string.IsNullOrEmpty(PublicIp4Address)) {
-                    return null;
-                }
-                return new IPEndPoint(
-                    IPAddress.Parse(PublicIp4Address),
-                    PublicSyncPortNum);
+                    IPAddress.Parse(PrimaryPrivateIp4Address),
+                    PrivatePortNum);
             }
         }
         #endregion
@@ -88,13 +75,13 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public MpDeviceEndpoint() { }
-        
+
 
         public bool IsLocal(MpDeviceEndpoint oep) {
-            if(oep == null || string.IsNullOrEmpty(oep.PrivateIp4Address)) {
+            if (oep == null || string.IsNullOrEmpty(oep.PublicIp4Address)) {
                 return false;
             }
-            return PrivateIp4Address == oep.PrivateIp4Address;
+            return PublicIp4Address == oep.PublicIp4Address;
         }
 
         public override string ToString() {
@@ -107,18 +94,17 @@ namespace MonkeyPaste {
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}", 
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}",
                 ParseToken,
-                PublicIp4Address, 
-                PublicConnectPortNum, 
-                PrivateIp4Address, 
-                PrivateConnectPortNum, 
-                AccessToken, 
-                DeviceGuid, 
+                PublicIp4Address,
+                PublicPortNum,
+                PrivateIp4AddressesCsv,
+                PrimaryPrivateIp4AddressIdx,
+                PrivatePortNum,
+                AccessToken,
+                DeviceGuid,
                 ConnectDateTime,
-                PublicSyncPortNum,
-                PrivateSyncPortNum,
-                IsPrivateListening ? "1":"0");
+                IsPrivateListening ? "1" : "0");
         }
 
         public Type GetDbObjectType() {
@@ -129,15 +115,14 @@ namespace MonkeyPaste {
             var epParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var ep = new MpDeviceEndpoint() {
                 PublicIp4Address = epParts[0],
-                PublicConnectPortNum = Convert.ToInt32(epParts[1]),
-                PrivateIp4Address = epParts[2],
-                PrivateConnectPortNum = Convert.ToInt32(epParts[3]),
-                AccessToken = epParts[4],
-                DeviceGuid = epParts[5],
-                ConnectDateTime = DateTime.Parse(epParts[6]),
-                PublicSyncPortNum = Convert.ToInt32(epParts[7]),
-                PrivateSyncPortNum = Convert.ToInt32(epParts[8]),
-                IsPrivateListening = epParts[9] == "1"
+                PublicPortNum = Convert.ToInt32(epParts[1]),
+                PrivateIp4Addresses = new ObservableCollection<string>(epParts[2].Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries)),
+                PrimaryPrivateIp4AddressIdx = Convert.ToInt32(epParts[3]),
+                PrivatePortNum = Convert.ToInt32(epParts[4]),
+                AccessToken = epParts[5],
+                DeviceGuid = epParts[6],
+                ConnectDateTime = DateTime.Parse(epParts[7]),
+                IsPrivateListening = epParts[8] == "1"
             };
             await Task.Delay(1);
             return ep;

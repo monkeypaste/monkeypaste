@@ -39,7 +39,7 @@ namespace MonkeyPaste {
             var uri = new Uri(
                         string.Format(@"https://www.monkeypaste.com/api/disconnect.php?email={0}&ip={1}&at={2}&clearAll={3}",
                         @"test@test.com",
-                        cep.PrivateIp4Address,
+                        cep.PrimaryPrivateIp4Address,
                         cep.AccessToken,
                         disconnectAll ? "1":"0"
                         ));
@@ -59,34 +59,29 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<List<MpDeviceEndpoint>> Connect(MpDeviceEndpoint cep, int tryCount = 5) {
+        public async Task<string> Connect(MpDeviceEndpoint cep, int tryCount = 5) {
             if(tryCount < 0) {
-                return new List<MpDeviceEndpoint>();
+                return string.Empty;
             }
             var uri = new Uri(
-                    string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privip={3}&port={4}&at={5}&dguid={6}",
+                    string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privipl={3}&primIpIdx={4}&port={5}&at={6}&dguid={7}",
                     @"test@test.com",
                     @"password",
                     cep.PublicIp4Address,
-                    cep.PrivateIp4Address,
-                    cep.PublicConnectPortNum,
+                    cep.PrivateIp4AddressesCsv,
+                    cep.PrimaryPrivateIp4AddressIdx,
+                    cep.PrivatePortNum,
                     cep.AccessToken,
                     cep.DeviceGuid
                     ));
             try {
                 var response = await _client.GetAsync(uri);
-                if (response.IsSuccessStatusCode) {
-                    var result = await response.Content.ReadAsStringAsync();                   
-                    MpConsole.WriteTraceLine(@"Connected to server with access token: " + uri.ToString());
-                    return ProcessWebConnectResponse(result);
-                } else {
-                    MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString() + " attempt: "+(tryCount - 4));
-                    return await Connect(cep, tryCount--);
-                }
+                var result = await response.Content.ReadAsStringAsync();
+                return result;
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine(@"Error connecting to server: " + ex);
-                return new List<MpDeviceEndpoint>();
+                return string.Empty;
             }
         }
 
@@ -136,30 +131,7 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
-        private List<MpDeviceEndpoint> ProcessWebConnectResponse(string response) {
-            var repl = new List<MpDeviceEndpoint>();
-            if(string.IsNullOrEmpty(response)) {
-                return repl;
-            }
-            var rpl = response.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-
-            for (int i = 0; i < rpl.Length; i++) {
-                if(i + 6 > rpl.Length) {
-                    MpConsole.WriteTraceLine(@"Malformed remote device response from server, ignoring");
-                    break;
-                }
-                //format: "$oip&$oprivip&$oportnum&$oat&$oldt&$odg&";
-                var ep = new MpDeviceEndpoint();
-                ep.PublicIp4Address = rpl[i];
-                ep.PrivateIp4Address = rpl[++i];
-                ep.PublicConnectPortNum = ep.PrivateConnectPortNum = Convert.ToInt32(rpl[++i]);
-                ep.AccessToken = rpl[++i];
-                ep.ConnectDateTime = DateTime.Parse(rpl[++i]);
-                ep.DeviceGuid = rpl[++i];
-                repl.Add(ep);
-            }
-            return repl;
-        }
+        
 
         #region Event Handlers
 

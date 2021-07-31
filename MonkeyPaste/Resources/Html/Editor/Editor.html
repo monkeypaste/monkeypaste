@@ -224,9 +224,10 @@
     <script>
         var conn = new WebSocket('ws://206.72.205.68:8080');
         conn.onopen = function (e) {
-            console.log("Connection established!");
+            console.log("Connection established!"); 
+            conn.send("YO");
         };
-
+        
         conn.onmessage = function (e) {
             console.log(e.data);
         };

@@ -15,7 +15,8 @@ namespace MonkeyPaste {
         int GetSyncPort();
 
         string GetThisClientGuid();
-        string GetLocalIp4Address();
+        string[] GetAllLocalIp4Addresses();
+        string GetPrimaryLocalIp4Address();
         string GetExternalIp4Address();
 
         Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc);

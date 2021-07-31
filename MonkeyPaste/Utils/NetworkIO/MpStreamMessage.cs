@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public enum MpSyncMesageType {
         None = 0,
+        WebDeviceRequest,
+        WebDeviceResponse,
         HandshakeRequest,
         HandshakeResponse,
         DbLogRequest,
@@ -118,21 +120,12 @@ namespace MonkeyPaste {
         }
 
         #region Sync Phase Message Builders
-        public static MpStreamMessage CreateDbFileRequest(MpDeviceEndpoint dep, string toGuid) {
+        public static MpStreamMessage CreateWebDeviceRequest(MpDeviceEndpoint dep) {
             var sm = new MpStreamMessage(
-                MpSyncMesageType.DbFileRequest,
+                MpSyncMesageType.WebDeviceRequest,
                 dep.DeviceGuid,
-                toGuid,
-                @"DbRequest");
-            return sm;
-        }
-
-        public static MpStreamMessage CreateDbFileResponse(MpDeviceEndpoint dep, string toGuid, string dbBytesAsString) {
-            var sm = new MpStreamMessage(
-                MpSyncMesageType.DbFileResponse,
-                dep.DeviceGuid,
-                toGuid,
-                dbBytesAsString);
+                "hub",
+                dep.SerializeDbObject());
             return sm;
         }
 
@@ -140,7 +133,7 @@ namespace MonkeyPaste {
             var sm = new MpStreamMessage(
                 MpSyncMesageType.HandshakeRequest,
                 dep.DeviceGuid,
-                "unknown",
+                "hub",
                 dep.SerializeDbObject());
             return sm;
         }
