@@ -551,8 +551,8 @@ namespace MonkeyPaste {
             return logs;
         }
 
-        public DateTime GetLastSyncForRemoteDevice(string otherDeviceGuid) {
-            var shl = GetItems<MpSyncHistory>();
+        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+            var shl = await GetItemsAsync<MpSyncHistory>();
             if(shl.Count == 0) {
                 return DateTime.MinValue;
             }
@@ -604,7 +604,7 @@ namespace MonkeyPaste {
         public async Task PerformSync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
             string remoteClientGuid) {
-            var lastSyncDt = MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
+            var lastSyncDt = await MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MpDbLog>>();
             var updateChanges = new Dictionary<Guid, List<MpDbLog>>();
@@ -614,7 +614,7 @@ namespace MonkeyPaste {
                     continue;
                 }
                 //filter changes by > local action date time
-                var rlogs = ckvp.Value;//await MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value,lastSyncDt);
+                var rlogs = ckvp.Value;//await MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value, lastSyncDt); //
                 if (rlogs.Count > 0) {
                     //seperate changes into 3 types
                     foreach(var l in rlogs.OrderBy(x => x.LogActionDateTime).ToList()) {
@@ -662,12 +662,12 @@ namespace MonkeyPaste {
             // in delete, add, update order
             foreach(var ckvp in deleteChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                var deleteMethod = typeof(MpDb).GetMethod("DeleteItemAsync");
+                var deleteMethod = typeof(MpDb).GetMethod(nameof(DeleteItemAsync));
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 //var dbo = await MpDb.Instance.GetObjDbRowAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
                 var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                Task deleteItem = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
-                await deleteItem;
+                var deleteTask = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                await deleteTask;
             }
 
             foreach (var ckvp in addChanges) {
@@ -675,10 +675,10 @@ namespace MonkeyPaste {
                 //var dbo = Activator.CreateInstance(dbot);
                 //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var addMethod = typeof(MpDb).GetMethod("AddOrUpdateAsync");
+                var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
-                Task addItem = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
-                await addItem;
+                var addTask = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                await addTask;
             }
 
             foreach (var ckvp in updateChanges) {
@@ -686,10 +686,10 @@ namespace MonkeyPaste {
                 //var dbo = Activator.CreateInstance(dbot);
                 //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
                 var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var updateMethod = typeof(MpDb).GetMethod("UpdateItemAsync");
+                var updateMethod = typeof(MpDb).GetMethod(nameof(UpdateItemAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
-                Task updateItem = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
-                await updateItem;
+                var updateTask = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                await updateTask;
             }
 
 

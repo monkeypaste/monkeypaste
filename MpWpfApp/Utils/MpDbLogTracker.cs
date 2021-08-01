@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +10,9 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpDbLogTracker {
         public static MonkeyPaste.MpDbLogActionType TrackDbWrite(string query, Dictionary<string,object> args, string objGuid, string clientGuid, object obj) {
-            if(string.IsNullOrEmpty(objGuid)) {
-                throw new Exception(@"DbLog object guid cannot be null");
+            if (string.IsNullOrEmpty(objGuid)) {
+                MpConsole.WriteLine(@"Cannot track item without a guid");
+                return MpDbLogActionType.None;
             }
 
             Guid objectGuid = Guid.Parse(objGuid);

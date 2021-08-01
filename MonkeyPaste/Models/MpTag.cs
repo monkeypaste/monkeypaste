@@ -146,7 +146,7 @@ namespace MonkeyPaste {
             Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
         }
 
-        public async Task DeleteFromDatabaseAsync() {
+        //public async Task DeleteFromDatabaseAsync() {
             //await MpDb.Instance.ExecuteWriteAsync<MpTag>(
             //    "delete from MpTag where Id=@tid",
             //    new Dictionary<string, object> {
@@ -158,43 +158,43 @@ namespace MonkeyPaste {
             //    new Dictionary<string, object> {
             //        { "@tid", Id }
             //    });
-        }
+        //}
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             await Task.Delay(1);
             return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
 
-            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
-            MpTag newTag = null;
-            if (cdr == null) {
-                newTag = new MpTag();
-            } else {
-                newTag = cdr as MpTag;
-            }
+            //var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
+            //MpTag newTag = null;
+            //if (cdr == null) {
+            //    newTag = new MpTag();
+            //} else {
+            //    newTag = cdr as MpTag;
+            //}
 
-            foreach (var li in logs.OrderBy(x => x.LogActionDateTime)) {
-                switch (li.AffectedColumnName) {
-                    case "MpTagGuid":
-                        newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
-                        break;
-                    case "TagName":
-                        newTag.TagName = li.AffectedColumnValue;
-                        break;
-                    //case "SortIdx":
-                    //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
-                    //    break;
-                    case "fk_MpColorId":
-                        //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
-                        var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
-                        newTag.ColorId = (color as MpColor).Id;
-                        break;
-                    default:
-                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
-                        break;
-                }
-            }
-            //await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
-            return newTag;
+            //foreach (var li in logs.OrderBy(x => x.LogActionDateTime)) {
+            //    switch (li.AffectedColumnName) {
+            //        case "MpTagGuid":
+            //            newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
+            //            break;
+            //        case "TagName":
+            //            newTag.TagName = li.AffectedColumnValue;
+            //            break;
+            //        //case "SortIdx":
+            //        //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+            //        //    break;
+            //        case "fk_MpColorId":
+            //            //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
+            //            var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
+            //            newTag.ColorId = (color as MpColor).Id;
+            //            break;
+            //        default:
+            //            MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+            //            break;
+            //    }
+            //}
+            ////await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
+            //return newTag;
         }
 
         public async Task<object> DeserializeDbObject(string objStr) {
@@ -249,12 +249,14 @@ namespace MonkeyPaste {
             //    "SortIdx",
             //    diffLookup);
             //var c = await MpColor.GetColorById(ColorId);
-            diffLookup = CheckValue(
+            if(Color != null) {
+                diffLookup = CheckValue(
                 ColorId, other.ColorId,
                 "fk_MpColorId",
                 diffLookup,
                 Color.ColorGuid
                 );
+            }
 
             return diffLookup;
         }

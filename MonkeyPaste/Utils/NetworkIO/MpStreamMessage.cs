@@ -15,7 +15,8 @@ namespace MonkeyPaste {
         DbLogResponse,
         FlipRequest, //swap A & B and return to RequestLog
         DisconnectRequest,
-        DisconnectResponse,        
+        DisconnectResponse,       
+        WebDeviceDisconnect,
         //error types
         ErrorBase, //only used to differentiate with normal msgs
         ErrorNotConnected,
@@ -27,7 +28,6 @@ namespace MonkeyPaste {
     }
 
     public class MpStreamHeader : MpISyncableDbObject {
-        private string _headerStr;
         public const string HeaderParseToken = @"$$##@";
 
         public DateTime MessageDateTime { get; set; }
@@ -194,14 +194,14 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
-            var sm = new MpStreamMessage(
-                errorType,
-                dep.DeviceGuid,
-                toGuid,
-                msg);
-            return sm;
-        }
+        //public static MpStreamMessage CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
+        //    var sm = new MpStreamMessage(
+        //        errorType,
+        //        dep.DeviceGuid,
+        //        toGuid,
+        //        msg);
+        //    return sm;
+        //}
 
         #endregion
 

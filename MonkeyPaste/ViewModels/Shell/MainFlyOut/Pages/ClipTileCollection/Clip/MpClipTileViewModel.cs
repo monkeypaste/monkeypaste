@@ -61,6 +61,7 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private async Task Initialize() {
+            await Task.Delay(1);
             //CopyItem.App
         }
         #region Event Handlers
@@ -92,7 +93,7 @@ namespace MonkeyPaste {
 
         #region Commands
         public ICommand ShowTagAssociationsCommand => new Command(async () => {
-            Device.InvokeOnMainThreadAsync(async () => {
+            await Device.InvokeOnMainThreadAsync(async () => {
                 await Shell.Current.GoToAsync($"CopyItemTagAssociations?CopyItemId={CopyItem.Id}");
             });
             //await Navigation.PushModal(new MpCopyItemTagAssociationPageView(new MpCopyItemTagAssociationPageViewModel(CopyItem)));
@@ -101,7 +102,7 @@ namespace MonkeyPaste {
 
         public ICommand CopyItemTileTappedCommand => new Command(async () => {
             if(IsSelected) {
-                Device.InvokeOnMainThreadAsync(async () => {
+                await Device.InvokeOnMainThreadAsync(async () => {
                     await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                 });
             }

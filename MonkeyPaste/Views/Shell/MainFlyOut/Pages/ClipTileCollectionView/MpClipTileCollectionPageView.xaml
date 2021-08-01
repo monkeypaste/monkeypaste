@@ -63,7 +63,7 @@
                             <Label HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"
                                    IsVisible="{Binding IsNotBusy}"
-                                   Text="No photos to import could be found"
+                                   Text="{Binding EmptyCollectionLableText}"
                                    VerticalOptions="Center" />
                         </Grid>
                     </DataTemplate>

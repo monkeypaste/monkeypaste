@@ -226,7 +226,7 @@ namespace MpWpfApp {
             //ORDER BY user_uid LIMIT { 5}
             //OFFSET { 6}
             //Where { 5} is page size and { 6 } is page number * page size.
-
+            await Task.Delay(1);
             var result = MpDb.Instance.Execute(
                                 @"SELECT * from MpCopyItem
                                       WHERE pk_MpCopyItemId in 
@@ -966,7 +966,7 @@ namespace MpWpfApp {
             if(ItemScreenshot == null) {
                 return;
             }
-
+            await Task.Delay(1);
         }
         #endregion
 

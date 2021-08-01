@@ -14,9 +14,6 @@ namespace MonkeyPaste {
     }
 
     public class MpDbLog : MpDbModelBase, MpISyncableDbObject {
-        private static List<MpDbLog> _AllDbLogList = null;
-        public static int TotalDbLogCount = 0;
-
         [Column("pk_MpDbLogId")]
         public override int Id { get; set; }
 

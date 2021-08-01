@@ -107,6 +107,9 @@
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpColorChooserContextMenuItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuItemView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

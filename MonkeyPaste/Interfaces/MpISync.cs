@@ -21,7 +21,7 @@ namespace MonkeyPaste {
 
         Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc);
 
-        DateTime GetLastSyncForRemoteDevice(string otherDeviceGuid);
+        Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid);
 
         Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "");
 

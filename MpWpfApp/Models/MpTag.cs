@@ -341,12 +341,14 @@ namespace MpWpfApp {
             //    TagSortIdx, other.TagSortIdx,
             //    "SortIdx",
             //    diffLookup);
-            diffLookup = CheckValue(
+            if(Color != null) {
+                diffLookup = CheckValue(
                 ColorId, other.ColorId,
                 "fk_MpColorId",
                 diffLookup,
                 Color.ColorGuid
                 );
+            }
 
             return diffLookup;
         }

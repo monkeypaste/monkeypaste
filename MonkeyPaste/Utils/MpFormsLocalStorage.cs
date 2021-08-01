@@ -10,6 +10,7 @@ namespace MonkeyPaste
         public const string FavoritePhotosKey = "FavoritePhotos";
         public async Task<List<string>> Get()
         {
+            await Task.Delay(1);
             if (Application.Current.Properties.ContainsKey(FavoritePhotosKey))
             {
                 var filenames = (string)Application.Current.Properties[FavoritePhotosKey];

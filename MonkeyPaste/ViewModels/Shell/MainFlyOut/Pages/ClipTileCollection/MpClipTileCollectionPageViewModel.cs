@@ -27,6 +27,8 @@ namespace MonkeyPaste {
         public MpCopyItemTileViewModel SelectedCopyItemViewModel { get; set; }
         #endregion
 
+        public string EmptyCollectionLableText { get; set; }
+
         public int TagId { get; set; }
         #endregion
 
@@ -53,7 +55,13 @@ namespace MonkeyPaste {
                     CopyItemViewModels.Add(ctvm);
                     ctvm.OnPropertyChanged(nameof(ctvm.IconImageSource));
                 }
-                
+                if(clips.Count == 0) {
+                    var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
+                    var t = tl.Where(x => x.Id == TagId).FirstOrDefault();
+                    if(t != null) {
+                        EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);
+                    }
+                }
                 CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
                 OnPropertyChanged(nameof(CopyItemViewModels));
             });

@@ -94,7 +94,7 @@ namespace MonkeyPaste {
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}",
                 ParseToken,
                 PublicIp4Address,
                 PublicPortNum,
@@ -104,7 +104,9 @@ namespace MonkeyPaste {
                 AccessToken,
                 DeviceGuid,
                 ConnectDateTime,
-                IsPrivateListening ? "1" : "0");
+                IsPrivateListening ? "1" : "0",
+                @"test@test.com",
+                @"password");
         }
 
         public Type GetDbObjectType() {

@@ -1438,7 +1438,7 @@ namespace MpWpfApp {
             return randomList;
         }
 
-        private List<List<Brush>> _ContentColors = new List<List<Brush>> {
+        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
                     new SolidColorBrush(Color.FromRgb(243, 69, 68)),

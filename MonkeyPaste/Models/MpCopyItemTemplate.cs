@@ -10,7 +10,6 @@ using System.Linq;
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
     public class MpCopyItemTemplate : MpDbModelBase {
-        private static List<MpCopyItemTag> _AllCopyItemTagList = null;
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTemplateId")]

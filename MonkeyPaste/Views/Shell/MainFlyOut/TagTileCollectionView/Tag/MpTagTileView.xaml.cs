@@ -15,8 +15,6 @@ namespace MonkeyPaste {
     public partial class MpTagTileView : ContentView {
         MpContextMenuView cm;
 
-        private double _minDragY = 10.0;
-
         #region Events
         public event EventHandler OnGlobalTouch;
         #endregion
@@ -40,10 +38,16 @@ namespace MonkeyPaste {
 
                 OnGlobalTouch += MpTagTileView_OnGlobalTouch;
                 (Application.Current.MainPage as MpMainShell).GlobalTouchService.Subscribe(OnGlobalTouch);
+            } else {
+                OnGlobalTouch -= MpTagTileView_OnGlobalTouch;
+                (Application.Current.MainPage as MpMainShell).GlobalTouchService.Unsubscribe(OnGlobalTouch);
             }
         }
 
         private void MpTagTileView_OnGlobalTouch(object sender, EventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
             var gtp = (e as MpTouchEventArgs<Point>).EventData.GetScreenPoint(this);
             var thisRect = this.GetScreenRect();
             if (thisRect.Contains(gtp)) {
@@ -77,24 +81,26 @@ namespace MonkeyPaste {
             ttvm.IsNameReadOnly = true;
         }
 
-        private async void ContextMenuButton_Clicked(object sender, EventArgs e) {
-            if(cm.IsMenuVisible) {
-                return;
-            }
-            var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
-            var location = locationFetcher.GetCoordinates(sender as VisualElement);
-            var cmvm = cm.BindingContext as MpContextMenuViewModel;
-            //cmvm.Width = 300;
-            //cmvm.Height = 300;
-            var w = cmvm.Width;
-            var h = cmvm.Height;
-            var bw = ContextMenuButton.Width;
-            cm.AnchorX = 0;// location.X - w;
-            cm.AnchorY = 0;
-            cm.TranslationX = location.X - w + bw - cmvm.Padding.Left;
-            cm.TranslationY = location.Y - cmvm.ItemHeight + cmvm.Padding.Top + cmvm.Padding.Bottom;
-            cm.TranslationX = Math.Max(0, cm.TranslationX);
-            await PopupNavigation.Instance.PushAsync(cm);
+        private void ContextMenuButton_Clicked(object sender, EventArgs e) {
+            Task.Run(async () => {
+                if (cm.IsMenuVisible) {
+                    return;
+                }
+                var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
+                var location = locationFetcher.GetCoordinates(sender as VisualElement);
+                var cmvm = cm.BindingContext as MpContextMenuViewModel;
+                //cmvm.Width = 300;
+                //cmvm.Height = 300;
+                var w = cmvm.Width;
+                var h = cmvm.Height;
+                var bw = ContextMenuButton.Width;
+                cm.AnchorX = 0;// location.X - w;
+                cm.AnchorY = 0;
+                cm.TranslationX = location.X - w + bw - cmvm.Padding.Left;
+                cm.TranslationY = location.Y - cmvm.ItemHeight + cmvm.Padding.Top + cmvm.Padding.Bottom;
+                cm.TranslationX = Math.Max(0, cm.TranslationX);
+                await PopupNavigation.Instance.PushAsync(cm, false);
+            });
         }
     }
 }

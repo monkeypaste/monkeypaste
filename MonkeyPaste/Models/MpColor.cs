@@ -152,36 +152,36 @@ namespace MonkeyPaste {
             await Task.Delay(1);
             return MpDbModelBase.CreateOrUpdateFromLogs(rlogs, fromClientGuid);
 
-            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpColor", colorGuid);
-            MpColor newColor = null;
-            if (cdr == null) {
-                newColor = new MpColor();
-            } else {                
-                newColor = cdr as MpColor;
-            }
-            foreach (var li in rlogs) {
-                switch (li.AffectedColumnName) {
-                    case "MpColorGuid":
-                        newColor.ColorGuid = System.Guid.Parse(li.AffectedColumnValue);
-                        break;
-                    case "R":
-                        newColor.R = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
-                    case "G":
-                        newColor.G = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
-                    case "B":
-                        newColor.B = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
-                    case "A":
-                        newColor.A = Convert.ToInt32(li.AffectedColumnValue);
-                        break;
-                    default:
-                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
-                }
-            }
-            //await MpDb.Instance.AddOrUpdateAsync<MpColor>(newColor,fromClientGuid);
-            return newColor;
+            //var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpColor", colorGuid);
+            //MpColor newColor = null;
+            //if (cdr == null) {
+            //    newColor = new MpColor();
+            //} else {                
+            //    newColor = cdr as MpColor;
+            //}
+            //foreach (var li in rlogs) {
+            //    switch (li.AffectedColumnName) {
+            //        case "MpColorGuid":
+            //            newColor.ColorGuid = System.Guid.Parse(li.AffectedColumnValue);
+            //            break;
+            //        case "R":
+            //            newColor.R = Convert.ToInt32(li.AffectedColumnValue);
+            //            break;
+            //        case "G":
+            //            newColor.G = Convert.ToInt32(li.AffectedColumnValue);
+            //            break;
+            //        case "B":
+            //            newColor.B = Convert.ToInt32(li.AffectedColumnValue);
+            //            break;
+            //        case "A":
+            //            newColor.A = Convert.ToInt32(li.AffectedColumnValue);
+            //            break;
+            //        default:
+            //            throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+            //    }
+            //}
+            ////await MpDb.Instance.AddOrUpdateAsync<MpColor>(newColor,fromClientGuid);
+            //return newColor;
         }
 
         public async Task<object> DeserializeDbObject(string objStr) {

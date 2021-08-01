@@ -143,7 +143,7 @@ namespace MonkeyPaste {
             var nonce = new byte[NonceBitSize / 8];
             Random.NextBytes(nonce, 0, nonce.Length);
 
-            var cipher = new GcmBlockCipher(new AesFastEngine());
+            var cipher = new GcmBlockCipher(new AesEngine());
             var parameters = new AeadParameters(new KeyParameter(key), MacBitSize, nonce, nonSecretPayload);
             cipher.Init(true, parameters);
 
@@ -182,7 +182,7 @@ namespace MonkeyPaste {
                 //Grab Nonce
                 var nonce = cipherReader.ReadBytes(NonceBitSize / 8);
 
-                var cipher = new GcmBlockCipher(new AesFastEngine());
+                var cipher = new GcmBlockCipher(new AesEngine());
                 var parameters = new AeadParameters(new KeyParameter(key), MacBitSize, nonce, nonSecretPayload);
                 cipher.Init(false, parameters);
 

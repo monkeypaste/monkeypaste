@@ -193,7 +193,7 @@ namespace MpWpfApp {
                 
                 return handle;
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 //Console.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
                 return IntPtr.Zero;
             }

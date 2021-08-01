@@ -37,10 +37,6 @@ namespace MpWpfApp {
 
         public event EventHandler<object> OnSyncableChange;
 
-        public event EventHandler<object> OnSyncCreate;
-        public event EventHandler<object> OnSyncUpdate;
-        public event EventHandler<object> OnSyncDelete;
-
         public bool IsLoaded {
             get {
                 return _isLoaded;
@@ -773,7 +769,8 @@ namespace MpWpfApp {
             return logs;
         }
 
-        public DateTime GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+            await Task.Delay(1);
             var sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
             if (sh != null) {
                 return sh.SyncDateTime;
@@ -818,6 +815,7 @@ namespace MpWpfApp {
         public async Task PerformSync(
             Dictionary<Guid, List<MonkeyPaste.MpDbLog>> changeLookup,
             string remoteClientGuid) {
+            var lastSyncDt = await MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
             var updateChanges = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
@@ -827,7 +825,7 @@ namespace MpWpfApp {
                     continue;
                 }
                 //filter changes by > local action date time
-                var rlogs = ckvp.Value;//MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value,lastSyncDt);
+                var rlogs = ckvp.Value;//MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value,lastSyncDt); //
                 if (rlogs.Count > 0) {
                     //seperate changes into 3 types
                     foreach (var l in rlogs.OrderBy(x => x.LogActionDateTime).ToList()) {
@@ -905,7 +903,6 @@ namespace MpWpfApp {
                 SyncDateTime = DateTime.UtcNow
             };
             newSyncHistory.WriteToDatabase();
-            await Task.Delay(1);
         }
 
         private Dictionary<Guid, List<MonkeyPaste.MpDbLog>> OrderByPrecedence(Dictionary<Guid, List<MonkeyPaste.MpDbLog>> dict) {

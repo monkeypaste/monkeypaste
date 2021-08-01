@@ -415,6 +415,19 @@ namespace MonkeyPaste {
         #endregion
 
         #region Network
+
+        public string GetIpForDomain(string domain) {
+            if(string.IsNullOrEmpty(domain)) {
+                return "0.0.0.0";
+            }
+            var al = Dns.GetHostAddresses(domain).ToList();
+            foreach(var a in al) {
+                if(a.AddressFamily == AddressFamily.InterNetwork) {
+                    return a.ToString();
+                }
+            }
+            return "0.0.0.0";
+        }
         //if you are using local Hosting or on premises with self signed certficate,   
         //in IOS add domain host address and Android use IP ADDRESS  
         const string SERVICE_BASE_URL = "https://devenvexe.com"; //replace base address   

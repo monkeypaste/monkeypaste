@@ -122,6 +122,7 @@ namespace MonkeyPaste {
             if (args == null) {
                 return;
             }
+            await Task.Delay(1);
         });
         #endregion
     }

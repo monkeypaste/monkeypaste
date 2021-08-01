@@ -19,6 +19,7 @@ namespace MonkeyPaste {
         }
 
         public ICommand Start => new Command(async () => {
+            await Task.Delay(1);
             //var spvm = BindingContext as MpSettingsPageViewModel;
             //MpViewModelBase.User = spvm.Username;
 

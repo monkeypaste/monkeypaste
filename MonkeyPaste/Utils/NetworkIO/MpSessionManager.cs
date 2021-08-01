@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Runtime.ConstrainedExecution;
 using System.Net.WebSockets;
+using static Xamarin.Essentials.Permissions;
 
 namespace MonkeyPaste {
     public class MpSessionManager {
@@ -28,23 +29,27 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        #region Events
-        #endregion
-
         #endregion
 
         #region Public Methods
 
         public async Task Disconnect(MpDeviceEndpoint cep, bool disconnectAll = false, int tryCount = 5) {
-            var uri = new Uri(
-                        string.Format(@"https://www.monkeypaste.com/api/disconnect.php?email={0}&ip={1}&at={2}&clearAll={3}",
-                        @"test@test.com",
-                        cep.PrimaryPrivateIp4Address,
-                        cep.AccessToken,
-                        disconnectAll ? "1":"0"
-                        ));
+            //var uri = new Uri(
+            //            string.Format(@"https://www.monkeypaste.com/api/disconnect.php?email={0}&at={1}&clearAll={2}",
+            //            @"test@test.com",
+            //            cep.PrimaryPrivateIp4Address,
+            //            cep.AccessToken,
+            //            disconnectAll ? "1":"0"
+            //            ));
             try {
-                var response = await _client.GetAsync(uri);
+                var uri = new Uri(string.Format(@"https://www.monkeypaste.com/api/disconnect.php"));
+                var data = new FormUrlEncodedContent(
+                        new Dictionary<string, string>() {
+                            { "email", "test@test.com" },
+                            { "at", cep.AccessToken },
+                            { "clearAll", disconnectAll ? "1":"0" }
+                        });
+                var response = await _client.PostAsync(uri, data);
                 if (response.IsSuccessStatusCode) {
                     var result = await response.Content.ReadAsStringAsync();
                     MpConsole.WriteLine(@"Disconnected local client");
@@ -63,19 +68,31 @@ namespace MonkeyPaste {
             if(tryCount < 0) {
                 return string.Empty;
             }
-            var uri = new Uri(
-                    string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privipl={3}&primIpIdx={4}&port={5}&at={6}&dguid={7}",
-                    @"test@test.com",
-                    @"password",
-                    cep.PublicIp4Address,
-                    cep.PrivateIp4AddressesCsv,
-                    cep.PrimaryPrivateIp4AddressIdx,
-                    cep.PrivatePortNum,
-                    cep.AccessToken,
-                    cep.DeviceGuid
-                    ));
+            //var uri = new Uri(
+            //        string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privipl={3}&primIpIdx={4}&port={5}&at={6}&dguid={7}",
+            //        @"test@test.com",
+            //        @"password",
+            //        cep.PublicIp4Address,
+            //        cep.PrivateIp4AddressesCsv,
+            //        cep.PrimaryPrivateIp4AddressIdx,
+            //        cep.PrivatePortNum,
+            //        cep.AccessToken,
+            //        cep.DeviceGuid
+            //        ));
+            var uri = new Uri(string.Format(@"https://www.monkeypaste.com/api/connect.php"));
             try {
-                var response = await _client.GetAsync(uri);
+                var data = new FormUrlEncodedContent(
+                        new Dictionary<string, string>() {
+                            { "email", "test@test.com" },
+                            { "passhash", "password" },
+                            { "ip", cep.PublicIp4Address },
+                            { "privipl", cep.PrivateIp4AddressesCsv },
+                            { "primIpIdx", cep.PrimaryPrivateIp4AddressIdx.ToString() },
+                            { "port", cep.PrivatePortNum.ToString() },
+                            { "at", cep.AccessToken },
+                            { "dguid", cep.DeviceGuid }
+                        });
+                var response = await _client.PostAsync(uri,data);
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
             }
@@ -83,49 +100,6 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Error connecting to server: " + ex);
                 return string.Empty;
             }
-        }
-
-        public void SendMessage(MpStreamMessage smsg) {
-            Task.Run(async () => {
-                var uri = new Uri(string.Format(@"https://www.monkeypaste.com/api/sync.php"));
-                try {
-                    var data = new FormUrlEncodedContent(
-                        new Dictionary<string, string>() {
-                            { "action", "send" },
-                            { "fromGuid",smsg.Header.FromGuid },
-                            { "toGuid",smsg.Header.ToGuid },
-                            { "smsg", smsg.SerializeDbObject() }
-                        });
-                    var response = await _client.PostAsync(uri, data);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine(@"Error sending message: " + smsg.ToString());
-                    MpConsole.WriteTraceLine(@"Error sending message to server exception: " + ex);
-                }
-            });
-        }
-
-        public async Task<MpStreamMessage> ReceiveMessage(MpDeviceEndpoint thisEndpoint) {
-            var uri = new Uri(string.Format(@"https://www.monkeypaste.com/api/sync.php"));
-            try {
-                var data = new FormUrlEncodedContent(
-                    new Dictionary<string, string>() {
-                            { "action", "receive" },
-                            { "fromGuid",thisEndpoint.DeviceGuid }
-                    });
-                var response = await _client.PostAsync(uri, data);
-                if (response.IsSuccessStatusCode) {
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (string.IsNullOrEmpty(result)) {
-                        return null;
-                    }
-                    return MpStreamMessage.Parse(result);
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine(@"Error receiving message to server exception: " + ex);
-            }
-            return null;
         }
         #endregion
 

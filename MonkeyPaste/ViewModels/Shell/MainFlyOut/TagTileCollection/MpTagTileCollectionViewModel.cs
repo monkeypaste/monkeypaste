@@ -150,7 +150,11 @@ namespace MonkeyPaste {
             //});
 
             if (e is MpTag t) {
-                
+                if(SelectedTagViewModel.Tag.Id == t.Id) {
+                    if(CopyItemCollectionViewModel.CopyItemViewModels.Count == 0) {
+                        CopyItemCollectionViewModel.EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);                       
+                    }
+                }
                 //Device.InvokeOnMainThreadAsync(async () => {
                 //    await Task.Run(Initialize);
                 //});
@@ -217,7 +221,8 @@ namespace MonkeyPaste {
             var newTag = new MpTag() {
                 TagName = "Untitled",
                 TagSortIdx = TagViewModels.Count,
-                ColorId = Color.Id
+                ColorId = Color.Id,
+                Color = Color
             };
             //await MpDb.Instance.AddItem<MpColor>(newTag.Color);
             //newTag.ColorId = newTag.Color.Id;

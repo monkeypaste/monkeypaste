@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDbLogTracker {
         public static async Task TrackDbWriteAsync(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
+            if(string.IsNullOrEmpty(dbModel.Guid)) {
+                MpConsole.WriteLine(@"Cannot track item without a guid");
+                return;
+            }
             Guid objectGuid = Guid.Parse(dbModel.Guid);
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisClientGuidStr) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
@@ -45,7 +49,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var oldItem = MpDb.Instance.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
+            var oldItem = MpDb.Instance.GetDbObjectByTableGuid(tableName, objectGuid.ToString());
             var alteredColumnNameValuePairs = (dbModel as MpISyncableDbObject).DbDiff(oldItem);
             if (alteredColumnNameValuePairs.Count == 0) {
                 return;
