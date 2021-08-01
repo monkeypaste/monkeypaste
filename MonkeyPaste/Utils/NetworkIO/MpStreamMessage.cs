@@ -1,7 +1,5 @@
-﻿using Acr.UserDialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -15,7 +13,7 @@ namespace MonkeyPaste {
         DbLogResponse,
         FlipRequest, //swap A & B and return to RequestLog
         DisconnectRequest,
-        DisconnectResponse,       
+        DisconnectResponse,
         WebDeviceDisconnect,
         //error types
         ErrorBase, //only used to differentiate with normal msgs
@@ -24,7 +22,7 @@ namespace MonkeyPaste {
         ErrorInvalidAccessToken,
         ErrorInvalidData,
         ErrorRequestDenied,
-        ErrorOutOfMemory,        
+        ErrorOutOfMemory,
     }
 
     public class MpStreamHeader : MpISyncableDbObject {
@@ -39,10 +37,10 @@ namespace MonkeyPaste {
         public string ContentCheckSum { get; private set; }
 
         public MpStreamHeader(
-            MpSyncMesageType msgType, 
-            string fromGuid, 
-            string toGuid, 
-            DateTime sendDateTime, 
+            MpSyncMesageType msgType,
+            string fromGuid,
+            string toGuid,
+            DateTime sendDateTime,
             string checkSum = "") {
             MessageType = msgType;
             FromGuid = fromGuid;
@@ -106,14 +104,14 @@ namespace MonkeyPaste {
         public MpStreamMessage() { }
 
         public MpStreamMessage(
-            MpSyncMesageType msgType, 
-            string fromGuid, 
-            string toGuid, 
+            MpSyncMesageType msgType,
+            string fromGuid,
+            string toGuid,
             string content) {
             Header = new MpStreamHeader(
-                msgType, 
-                fromGuid, 
-                toGuid, 
+                msgType,
+                fromGuid,
+                toGuid,
                 DateTime.UtcNow,
                 content.CheckSum());
             Content = content;
@@ -138,7 +136,7 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateHandshakeResponse(MpDeviceEndpoint dep,string toGuid) {
+        public static MpStreamMessage CreateHandshakeResponse(MpDeviceEndpoint dep, string toGuid) {
             var sm = new MpStreamMessage(
                 MpSyncMesageType.HandshakeResponse,
                 dep.DeviceGuid,
@@ -164,7 +162,7 @@ namespace MonkeyPaste {
                 logDbMessageStr);
             return sm;
         }
-                
+
         public static MpStreamMessage CreateFlipRequest(MpDeviceEndpoint dep, string toGuid) {
             // once B has needed A data it will make a flipRequest = true
             // once A has needed B data it will make a flipRequest of false to finish sync
@@ -214,22 +212,22 @@ namespace MonkeyPaste {
             };
             sm.Validate();
             return sm;
-        }        
+        }
 
         private void Validate() {
-            if(Header == null) {
+            if (Header == null) {
                 throw new Exception("Header must be non-null");
             }
             string givenCheckSum = Header.ContentCheckSum;
             string calcCheckSum = Content.CheckSum();
 
-            if(calcCheckSum != givenCheckSum) {
+            if (calcCheckSum != givenCheckSum) {
                 throw new Exception(string.Format(@"Checksum mismatch given: {0} calc: {1} for msg: {2}", givenCheckSum, calcCheckSum, Content));
             }
         }
 
         public bool IsError() {
-            if(Header == null) {
+            if (Header == null) {
                 throw new Exception(@"Header must be non-null");
             }
             return (int)Header.MessageType > (int)MpSyncMesageType.ErrorBase;

@@ -53,6 +53,10 @@
             content: "Ω";
         }
 
+        .ql-templatebutton:after {
+            content: "§";
+        }
+
         span.template {
             border-style: solid;
             border-color: white;
@@ -101,18 +105,92 @@
             .ql-snow .ql-Table-Input.ql-picker .ql-picker-label {
                 padding: 2px 4px;
             }
+
+        /* Template Button */
+        .template_btn {
+            display: inline;
+            padding: 5px;
+            text-decoration: none;
+            border: 1px solid #CCC;
+            color: #67c5ff;
+            border: solid 2px #67c5ff;
+            background-color: yellow;
+            border-radius: 3px;
+            transition: .4s;
+            margin: 0 0.2em 0 0;
+        }
+
+            .template_btn:hover {
+                background: #67c5ff;
+                color: white;
+                cursor: pointer;
+            }
+
+        /* Template Context Menu*/
+        .cls-context-menu-link {
+            display: block;
+            padding: 20px;
+            background: #ECECEC;
+        }
+
+        .cls-context-menu {
+            position: absolute;
+            display: none;
+        }
+
+            .cls-context-menu ul,
+            #context-menu li {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+
+        .cls-context-menu {
+            border: solid 1px #CCC;
+        }
+
+            .cls-context-menu li {
+                border-bottom: solid 1px #CCC;
+            }
+
+                .cls-context-menu li:last-child {
+                    border: none;
+                }
+
+                .cls-context-menu li a {
+                    display: block;
+                    padding: 5px 10px;
+                    text-decoration: none;
+                    color: blue;
+                }
+
+                    .cls-context-menu li a:hover {
+                        background: blue;
+                        color: #FFF;
+                    }
     </style>
 </head>
 <body>
     <div id='editor'>
     </div>
 
+    <div id="div-context-menu" class="cls-context-menu">
+        <ul>
+            <li><a href="#to=0">link-to=0 -item-1 </a></li>
+            <li><a href="#to=0">link-to=0 -item-2 </a></li>
+            <li><a href="#to=0">link-to=0 -item-3 </a></li>
+        </ul>
+    </div>
+
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
             crossorigin="anonymous"></script>
     <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
-    <script type="text/javascript">        
+    <script type="text/javascript">
         var curQuillDiv = $("#editor");
         var quill;
+        var isShowingTemplateMenu = false;
+        var clickCount = 0;
 
         function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize) {
             if (fontFamilys == null) {
@@ -174,7 +252,7 @@
                 [{ 'align': [] }],
                 // ['clean'],                                         // remove formatting button
                 ['omega'],
-
+                ['templatebutton'],
                 [{ 'Table-Input': loadTable() }]
             ];
 
@@ -213,9 +291,27 @@
             return fontStyles;
         }
 
+        function loadTemplateButton() {
+            let Inline = Quill.import('blots/inline');
+
+            class TemplateButton extends Inline {
+                static create(value) {
+                    let node = super.create();
+                    node.setAttribute('class', 'template_btn');
+                    return node;
+                }
+            }
+
+            TemplateButton.blotName = 'templatebutton';
+            TemplateButton.tagName = 'div';
+            Quill.register(TemplateButton);
+        }
+
         function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
             Quill.register("modules/htmlEditButton", htmlEditButton);
             Quill.register({ 'modules/better-table': quillBetterTable }, true);
+
+            loadTemplateButton();
 
             // Append the CSS stylesheet to the page
             var node = document.createElement('style');
@@ -279,8 +375,6 @@
                         }
                     };
                 })());
-
-
             }, function () {
                 $(this).parent().children().removeClass("ql-picker-item-highlight");
             });
@@ -315,6 +409,51 @@
                     createLink();
                 }
             });
+
+            var templateButton = document.querySelector('.ql-templatebutton');
+
+            templateButton.addEventListener('click', function (e) {
+                console.log('function called');
+                showTemplateContextMenu(templateButton, e);
+
+                var range = quill.getSelection();
+                if (range) {
+                    console.log('range is valid');
+                    quill.formatText(range, 'templatebutton');
+
+                } else {
+                    console.log('it it invalid');
+                }
+            });
+
+            document.addEventListener('click', function (e) {
+                if (isShowingTemplateMenu && clickCount > 0) {
+                    hideTemplateContextMenu();
+                } else {
+                    clickCount++;
+                }
+                return;
+            });
+        }
+
+        function showTemplateContextMenu(tb, e) {
+            clickCount = 0;
+            var rgtClickContextMenu = document.getElementById('div-context-menu');
+            const rect = tb.getBoundingClientRect();
+            const x = rect.left + 20;
+            const y = e.clientY - rect.top;
+            rgtClickContextMenu.style.left = `${x}px`;
+            rgtClickContextMenu.style.top = `${y}px`;
+            rgtClickContextMenu.style.display = 'block';
+
+            isShowingTemplateMenu = true;
+        }
+
+        function hideTemplateContextMenu() {
+            var rgtClickContextMenu = document.getElementById('div-context-menu');
+            rgtClickContextMenu.style.display = 'none';
+
+            isShowingTemplateMenu = false;
         }
 
         function getFontName(font) {
@@ -367,7 +506,7 @@
             if (range) {
                 var text = quill.getText(range.index, range.length);
                 quill.deleteText(range.index, range.length);
-                var ts = '<a href="https://www.google.com">' + text + '</a>';
+                var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
                 quill.clipboard.dangerouslyPasteHTML(range.index, ts);
 
                 console.log('text:\n' + getText());
@@ -389,8 +528,8 @@
                 $("#editor").css("top", 0);
             }
         }
-            //==================================================================================================
-        init(null, null, null,null, null);
+        //==================================================================================================
+        init(null, null, null, null, null);
     </script>
 
 </body>

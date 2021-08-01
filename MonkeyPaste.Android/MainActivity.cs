@@ -24,7 +24,8 @@ namespace MonkeyPaste.Droid {
         Label = "MonkeyPaste",
         Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
-        MainLauncher = false,
+        MainLauncher = false, 
+        LaunchMode = LaunchMode.SingleInstance,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
         public static MainActivity Current;
@@ -85,7 +86,7 @@ namespace MonkeyPaste.Droid {
             };
 
             LoadApplication(new App(AndroidInterfaceWrapper));
-            LoadSelectedTextAsync();
+            //LoadSelectedTextAsync();
 
 
             //CreateNotificationChannel();
@@ -99,6 +100,7 @@ namespace MonkeyPaste.Droid {
             //    StartForegroundService(intent);
             //}
         }
+
 
         void CreateCbNotificationChannel() {
             if (Build.VERSION.SdkInt < BuildVersionCodes.O) {
@@ -156,20 +158,7 @@ namespace MonkeyPaste.Droid {
             // Finally, publish the notification:
             var notificationManager = NotificationManagerCompat.From(this);
             notificationManager.Notify(CB_NOTIFICATION_ID, builder.Build());
-        }
-
-        private async void LoadSelectedTextAsync() {
-            var selectedText = Intent!.GetStringExtra("SelectedText");// ?? string.Empty;
-            var hostPackageName = Intent!.GetStringExtra("HostPackageName") ?? string.Empty;
-            var hostAppName = Intent!.GetStringExtra("HostAppName") ?? string.Empty;
-            var hostAppIcon = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
-            var hostAppIconBase64 = Intent!.GetStringExtra("HostIconBase64") ?? string.Empty;
-            if (!string.IsNullOrWhiteSpace(selectedText)) {
-                await Clipboard.SetTextAsync(selectedText);
-
-                await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon, hostAppIconBase64 });
-            }
-        }
+        }       
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults) {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -5,9 +5,13 @@
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              IsVisible="{Binding IsVisible}"
              xmlns:local="clr-namespace:MonkeyPaste"
-             x:DataType="local:MpCopyItemTileViewModel">
+             x:DataType="local:MpCopyItemViewModel">
+    <ContentView.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding CopyItemTileTappedCommand}"
+                                          NumberOfTapsRequired="1" />
+    </ContentView.GestureRecognizers>
     <ContentView.Content>
-        <SwipeView SwipeStarted="SwipeView_SwipeStarted">
+        <!--<SwipeView SwipeStarted="SwipeView_SwipeStarted">
             <SwipeView.LeftItems>
                 <SwipeItems>
                     <SwipeItem BackgroundColor="LightGreen"
@@ -21,15 +25,14 @@
                                Text="Delete" />
                 </SwipeItems>
             </SwipeView.LeftItems>
+        </SwipeView>-->
+        <!--<Grid>-->
             <Frame Padding="0"
                    BackgroundColor="White"
                    HasShadow="True"
                    HeightRequest="100"
                    IsClippedToBounds="True">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding CopyItemTileTappedCommand}"
-                                          NumberOfTapsRequired="1" />
-                </Frame.GestureRecognizers>
+                
                 <Frame.OutlineColor>
                     <OnPlatform x:TypeArguments="Color"
                                 Android="Gray"
@@ -41,8 +44,6 @@
                                 iOS="10" />
                 </Frame.Margin>
                 <StackLayout Orientation="Horizontal">
-                    <!--<BoxView Style="{StaticResource CopyItem_Selection_BoxView}"
-                             WidthRequest="6" />-->
                     <ff:CachedImage Aspect="AspectFit"
                                     Margin="0,10,0,0"
                                     VerticalOptions="Start"
@@ -86,8 +87,21 @@
                                Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
                                TextColor="Black" />
                     </Grid>
+                    <Button x:Name="ContextMenuButton"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    Clicked="ContextMenuButton_Clicked"
+                    HeightRequest="25"
+                        WidthRequest="15"
+                    ImageSource="{StaticResource DotsIcon}"/>
                 </StackLayout>
             </Frame>
-        </SwipeView>
+            <!--<Button BackgroundColor="Transparent"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    BorderWidth="0"
+                    Command="{Binding CopyItemTileTappedCommand}">
+            </Button>
+        </Grid>]-->
     </ContentView.Content>
 </ContentView>

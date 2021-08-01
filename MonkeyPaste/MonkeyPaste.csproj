@@ -165,6 +165,9 @@
     <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemView.xaml.cs">
+      <DependentUpon>MpCopyItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemDetailPageViewCopyItem.xaml.cs">
       <DependentUpon>MpCopyItemDetailPageViewCopyItem.xaml</DependentUpon>
     </Compile>

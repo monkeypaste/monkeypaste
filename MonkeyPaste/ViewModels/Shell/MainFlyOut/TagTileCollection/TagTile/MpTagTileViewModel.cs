@@ -79,13 +79,11 @@ namespace MonkeyPaste {
             Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
 
             ContextMenuViewModel = new MpContextMenuViewModel();
-            if (IsUserTag) {
-                ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
-                    Title = "Rename",
-                    Command = RenameTagCommand,
-                    IconImageResourceName = "EditIcon"
-                });
-            }
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Rename",
+                Command = RenameTagCommand,
+                IconImageResourceName = "EditIcon"
+            });
 
             //ContextMenuViewModel.Items.Add(new MpColorChooserContextMenuItemViewModel());
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
@@ -93,13 +91,12 @@ namespace MonkeyPaste {
                 Command = ChangeColorCommand,
                 IconImageResourceName = "ColorIcon"
             });
-            if (IsUserTag) {
-                ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
-                    Title = "Delete",
-                    Command = DeleteTagCommand,
-                    IconImageResourceName = "DeleteIcon"
-                });
-            }
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Delete",
+                Command = DeleteTagCommand,
+                IconImageResourceName = "DeleteIcon"
+            });
+
             OnViewModelLoaded();
         }
 

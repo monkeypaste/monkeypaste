@@ -131,13 +131,8 @@ namespace MonkeyPaste {
                             Socket client = null;
                             try {
                                 MpConsole.WriteLine("Waiting for connection...");
-                                if (server != null) {
-                                    client = server.Accept();
-                                } else {
-                                    var tcpl = new TcpListener(ThisEndpoint.PrivateIPEndPoint);
-                                    tcpl.Start();
-                                    client = tcpl.AcceptSocket();
-                                }
+                                client = server.Accept();
+
                                 MpConsole.WriteLine("Connection made");
 
                                 var handshakeRequest = ReceiveSocket(client);

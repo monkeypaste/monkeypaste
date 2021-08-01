@@ -22,9 +22,9 @@ namespace MonkeyPaste {
         #region Properties
         
         #region View Models
-        public ObservableCollection<MpCopyItemTileViewModel> CopyItemViewModels { get; set; }
+        public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; }
 
-        public MpCopyItemTileViewModel SelectedCopyItemViewModel { get; set; }
+        public MpCopyItemViewModel SelectedCopyItemViewModel { get; set; }
         #endregion
 
         public string EmptyCollectionLableText { get; set; }
@@ -48,7 +48,7 @@ namespace MonkeyPaste {
         public async Task SetTag(int tagId) {
             TagId = tagId;
             await MainThread.InvokeOnMainThreadAsync(async () => {
-                CopyItemViewModels = new ObservableCollection<MpCopyItemTileViewModel>();
+                CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>();
                 var clips = await MpCopyItem.GetPage(TagId, 0, _pageSize);
                 foreach(var c in clips) {
                     var ctvm = await CreateCopyItemViewModel(c);
@@ -67,8 +67,8 @@ namespace MonkeyPaste {
             });
         }
 
-        public async Task<MpCopyItemTileViewModel> CreateCopyItemViewModel(MpCopyItem c) {
-            MpCopyItemTileViewModel ctvm = null;
+        public async Task<MpCopyItemViewModel> CreateCopyItemViewModel(MpCopyItem c) {
+            MpCopyItemViewModel ctvm = null;
             await Device.InvokeOnMainThreadAsync(async () => {
                 MpApp app = await MpApp.GetAppById(c.AppId);
                 app.Icon = await MpIcon.GetIconById(app.IconId);
@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                 if(color != null) {
                     c.ItemColor = color;
                 }
-                ctvm = new MpCopyItemTileViewModel(c);
+                ctvm = new MpCopyItemViewModel(c);
 
                 ctvm.PropertyChanged += CopyItemViewModel_PropertyChanged;
                 //Routing.RegisterRoute(@"CopyItemdetails/" + ctvm, typeof(MpCopyItemDetailPageView));
@@ -95,7 +95,7 @@ namespace MonkeyPaste {
         }
 
         public void OnSearchQueryChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var civmsh = sender as MpCopyItemTileViewModelSearchHandler;
+            var civmsh = sender as MpCopyItemViewModelSearchHandler;
             switch(e.PropertyName) {
                 case nameof(civmsh.Query):
                     PerformSearchCommand.Execute(civmsh.Query);
@@ -117,12 +117,13 @@ namespace MonkeyPaste {
         }
 
         #region Event Handlers
-        private async void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(SelectedCopyItemViewModel):
+                    var scivm = SelectedCopyItemViewModel;
                     ClearSelection();
-                    if(SelectedCopyItemViewModel != null) {
-                        SelectedCopyItemViewModel.IsSelected = true;
+                    if(scivm != null) {
+                        SelectedCopyItemViewModel = scivm;
                     }
                     break;
             }
@@ -133,11 +134,23 @@ namespace MonkeyPaste {
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            //throw new NotImplementedException();
+            if(e is MpCopyItem ci) {
+                var civm = CopyItemViewModels.Where(x => x.CopyItem.Id == ci.Id).FirstOrDefault();
+                if(civm != null) {
+                    CopyItemViewModels.Remove(civm);
+                }
+            }
         }
 
-        private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
-            //throw new NotImplementedException();
+        private async void Db_OnItemUpdated(object sender, MpDbModelBase e) {
+            //if (e is MpCopyItem uci) {
+            //    var uctvm = await CreateCopyItemViewModel(uci);
+            //    var ctvm = CopyItemViewModels.Where(x => x.CopyItem.Id == uci.Id).FirstOrDefault();
+            //    if(ctvm != null) {
+            //        CopyItemViewModels[CopyItemViewModels.IndexOf(ctvm)] = uctvm;
+            //    }
+                
+            //}
         }
 
         private async void Db_OnItemAdded(object sender, MpDbModelBase e) {
@@ -166,12 +179,13 @@ namespace MonkeyPaste {
         }
 
         private async void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (sender is MpCopyItemTileViewModel civm) {
+            if (sender is MpCopyItemViewModel civm) {
                 switch (e.PropertyName) {
                     case nameof(civm.IsSelected):
                         if (civm.IsSelected) {
                             if (SelectedCopyItemViewModel == civm) {
                                 //implies selection came from ui do nothing
+                                //SelectedCopyItemViewModel = civm;
                             } else {
                                 if (SelectedCopyItemViewModel != null) {
                                     SelectedCopyItemViewModel.IsSelected = false;
@@ -199,7 +213,7 @@ namespace MonkeyPaste {
             if(CopyItemViewModels == null) {
                 return;
             }
-            IEnumerable<MpCopyItemTileViewModel> searchResult = null;
+            IEnumerable<MpCopyItemViewModel> searchResult = null;
             if (string.IsNullOrEmpty(query)) {
                 searchResult = CopyItemViewModels;
             } else {
@@ -213,7 +227,7 @@ namespace MonkeyPaste {
         });
 
         public ICommand DeleteCopyItemCommand => new Command<object>(async (args) => {
-            if(args == null || args is not MpCopyItemTileViewModel civm) {
+            if(args == null || args is not MpCopyItemViewModel civm) {
                 return;
             }
             CopyItemViewModels.Remove(civm);
@@ -229,6 +243,11 @@ namespace MonkeyPaste {
             collection.CollectionChanged += Collection_CollectionChanged;
         });
 
+        public ICommand SelectionChangedCommand => new Command<object>((args) => {
+            if (args != null && args is MpCopyItemViewModel ttvm) {
+                SelectedCopyItemViewModel = args as MpCopyItemViewModel;
+            }
+        });
         #endregion
     }
 }

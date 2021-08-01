@@ -10,14 +10,14 @@
              x:Name="CopyItemCollectionView"
              x:DataType="local:MpCopyItemTileCollectionPageViewModel">
     <Shell.SearchHandler>
-        <local:MpCopyItemTileViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
+        <local:MpCopyItemViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
                                                 Placeholder="Enter search term"
                                                 SearchBoxVisibility="Collapsible"
                                                 ItemsSource="{Binding CopyItemViewModels}"
                                                 ShowsResults="False"
                                                 DisplayMemberName="CopyItem.ItemPlainText">
-            <local:MpCopyItemTileViewModelSearchHandler.ItemTemplate>
-                <DataTemplate x:DataType="local:MpCopyItemTileViewModel">
+            <local:MpCopyItemViewModelSearchHandler.ItemTemplate>
+                <DataTemplate x:DataType="local:MpCopyItemViewModel">
                     <Grid Padding="10"
                           ColumnDefinitions="0.15*,0.85*">
                         <Image Margin="0,10,0,0"
@@ -33,8 +33,8 @@
                                TextColor="Black" />
                     </Grid>
                 </DataTemplate>
-            </local:MpCopyItemTileViewModelSearchHandler.ItemTemplate>
-        </local:MpCopyItemTileViewModelSearchHandler>
+            </local:MpCopyItemViewModelSearchHandler.ItemTemplate>
+        </local:MpCopyItemViewModelSearchHandler>
     </Shell.SearchHandler>
     <ContentPage.Content>
         <StackLayout>
@@ -45,14 +45,16 @@
                             RemainingItemsThreshold="5"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCopyItemsCommand}"
                             SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
-                            SelectionMode="Single">
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference CopyItemViewModels}}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
                                        SnapPointsAlignment="Start"
                                        SnapPointsType="Mandatory" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="local:MpCopyItemTileViewModel">
+                    <DataTemplate x:DataType="local:MpCopyItemViewModel">                        
                         <local:MpCopyItemView BindingContext="{Binding .}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

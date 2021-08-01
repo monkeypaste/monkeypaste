@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -57,9 +58,24 @@ namespace MonkeyPaste.Droid {
                         intent.PutExtra("HostIconBase64", Convert.ToBase64String(imageInByte));
                     }
                 }
+
+                LoadSelectedTextAsync(intent);
                 
                 StartActivity(intent);
             }            
+        }
+
+        private async void LoadSelectedTextAsync(Intent i) {
+            var selectedText = i!.GetStringExtra("SelectedText");// ?? string.Empty;
+            var hostPackageName = i!.GetStringExtra("HostPackageName") ?? string.Empty;
+            var hostAppName = i!.GetStringExtra("HostAppName") ?? string.Empty;
+            var hostAppIcon = i!.GetByteArrayExtra("HostIconByteArray") ?? null;
+            var hostAppIconBase64 = i!.GetStringExtra("HostIconBase64") ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(selectedText)) {
+                await Clipboard.SetTextAsync(selectedText);
+
+                await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon, hostAppIconBase64 });
+            }
         }
 
         private byte[] GetByteArray(Bitmap bmp) {

@@ -19,5 +19,13 @@ namespace MonkeyPaste {
                 CopyItemViewModelSearchHandler.PropertyChanged += cicvm.OnSearchQueryChanged;
             };   
         }
+        protected override void OnAppearing() {
+            base.OnAppearing();
+            var cicpvm = BindingContext as MpCopyItemTileCollectionPageViewModel;
+            if(cicpvm != null) {
+                //occurs when navigating back from editing a copy item
+                cicpvm.SetTag(cicpvm.TagId);
+            }
+        }
     }
 }

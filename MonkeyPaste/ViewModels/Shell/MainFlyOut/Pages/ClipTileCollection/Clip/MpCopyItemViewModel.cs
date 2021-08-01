@@ -1,4 +1,5 @@
 ﻿using FFImageLoading.Forms;
+using FFImageLoading.Helpers.Exif;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,12 +8,17 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpCopyItemTileViewModel : MpViewModelBase {
+    public class MpCopyItemViewModel : MpViewModelBase {
         #region Private Variables
         public event EventHandler ItemStatusChanged;
         #endregion
 
         #region Properties
+
+        #region View Models
+        public MpContextMenuViewModel ContextMenuViewModel { get; set; }
+        #endregion
+
         public bool IsSelected { get; set; } = false;
 
         public MpCopyItem CopyItem { get; set; }
@@ -21,7 +27,7 @@ namespace MonkeyPaste {
 
         public bool IsFavorite {
             get {
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return false;
                 }
                 var favTagList = MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
@@ -36,7 +42,7 @@ namespace MonkeyPaste {
 
         public ImageSource IconImageSource {
             get {
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return null;
                 }
                 return (StreamImageSource)new MpImageConverter().Convert(CopyItem.App.Icon.IconImage.ImageBase64, typeof(ImageSource));
@@ -47,9 +53,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpCopyItemTileViewModel() { }
+        public MpCopyItemViewModel() { }
 
-        public MpCopyItemTileViewModel(MpCopyItem item) {
+        public MpCopyItemViewModel(MpCopyItem item) {
             PropertyChanged += MpCopyItemViewModel_PropertyChanged;
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
             CopyItem = item;
@@ -61,17 +67,29 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private async Task Initialize() {
+            ContextMenuViewModel = new MpContextMenuViewModel();
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Change Tags",
+                Command = ShowTagAssociationsCommand,
+                IconImageResourceName = "StarOutlineIcon"
+            });
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Delete",
+                Command = DeleteCopyItemCommand,
+                IconImageResourceName = "DeleteIcon"
+            });
+
             await Task.Delay(1);
             //CopyItem.App
         }
         #region Event Handlers
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(CopyItem):
                     OnPropertyChanged(nameof(IconImageSource));
                     break;
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         //Device.InvokeOnMainThreadAsync(async () => {
                         //    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                         //});
@@ -81,9 +99,10 @@ namespace MonkeyPaste {
         }
 
         private void MpDb_OnItemUpdated(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci) {
-                if(ci.Id == CopyItem.Id) {
-                    CopyItem = ci;
+            if (e is MpCopyItem ci) {
+                if (ci.Id == CopyItem.Id) {
+                    //CopyItem = ci;
+                    //OnPropertyChanged(nameof(IconImageSource));
                 }
             }
         }
@@ -92,6 +111,12 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
+        public ICommand DeleteCopyItemCommand => new Command(
+            async () => {
+                await MpDb.Instance.DeleteItemAsync<MpCopyItem>(CopyItem);
+                await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(CopyItem.Id);
+            });
+
         public ICommand ShowTagAssociationsCommand => new Command(async () => {
             await Device.InvokeOnMainThreadAsync(async () => {
                 await Shell.Current.GoToAsync($"CopyItemTagAssociations?CopyItemId={CopyItem.Id}");
@@ -104,7 +129,10 @@ namespace MonkeyPaste {
             if(IsSelected) {
                 await Device.InvokeOnMainThreadAsync(async () => {
                     await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
+                    return;
                 });
+            } else {
+                IsSelected = true;
             }
         });
 

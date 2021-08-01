@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpCopyItemTileViewModelSearchHandler : SearchHandler {
+    public class MpCopyItemViewModelSearchHandler : SearchHandler {
         protected override void OnQueryChanged(string oldValue, string newValue) {
             base.OnQueryChanged(oldValue, newValue);
 
@@ -26,10 +26,10 @@ namespace MonkeyPaste {
             // Let the animation complete
             await Task.Delay(1000);
 
-            if (item == null || item is not MpCopyItemTileViewModel) {
+            if (item == null || item is not MpCopyItemViewModel) {
                 return;
             }
-            var civm = item as MpCopyItemTileViewModel;
+            var civm = item as MpCopyItemViewModel;
 
             ShellNavigationState state = (App.Current.MainPage as Shell).CurrentState;
             // The following route works because route names are unique in this application.

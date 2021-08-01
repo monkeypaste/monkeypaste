@@ -36,6 +36,7 @@ namespace MonkeyPaste {
             return diffLookup;
         }
 
+
         public static object CreateOrUpdateFromLogs(
             List<MonkeyPaste.MpDbLog> logs, 
             string fromClientGuid) {
