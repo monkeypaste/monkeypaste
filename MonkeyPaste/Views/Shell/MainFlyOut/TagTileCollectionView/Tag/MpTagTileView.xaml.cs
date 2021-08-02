@@ -89,8 +89,7 @@ namespace MonkeyPaste {
                 var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
                 var location = locationFetcher.GetCoordinates(sender as VisualElement);
                 var cmvm = cm.BindingContext as MpContextMenuViewModel;
-                //cmvm.Width = 300;
-                //cmvm.Height = 300;
+
                 var w = cmvm.Width;
                 var h = cmvm.Height;
                 var bw = ContextMenuButton.Width;

@@ -112,6 +112,7 @@ namespace MonkeyPaste {
         }
 
         public void Dispose() {
+            StopMessageListener();
             EvaluateEditorJavaScript = null;
             (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged -= LayoutService_OnKeyboardHeightChanged;
         }

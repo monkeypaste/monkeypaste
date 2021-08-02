@@ -22,21 +22,36 @@ namespace MonkeyPaste {
         public MpCopyItemView(MpCopyItemViewModel viewModel) : base() {
             InitializeComponent();
             BindingContextChanged += MpCopyItemView_BindingContextChanged;
-            BindingContext = viewModel;
-
-            
+            BindingContext = viewModel;            
         }
 
         private void MpCopyItemView_BindingContextChanged(object sender, EventArgs e) {
-            if (BindingContext != null && BindingContext is MpCopyItemViewModel) {
+            if (BindingContext != null && BindingContext is MpCopyItemViewModel civm) {
+                civm.PropertyChanged += MpCopyItemViewModel_PropertyChanged;
                 cm = new MpContextMenuView();
-                cm.BindingContext = (BindingContext as MpCopyItemViewModel).ContextMenuViewModel;
+                cm.BindingContext = civm.ContextMenuViewModel;
                 //OnGlobalTouch += MpCopyItemView_OnGlobalTouch;
                 //(Application.Current.MainPage as MpMainShell).GlobalTouchService.Subscribe(OnGlobalTouch);
             } else {
                // OnGlobalTouch -= MpCopyItemView_OnGlobalTouch;
                 //(Application.Current.MainPage as MpMainShell).GlobalTouchService.Unsubscribe(OnGlobalTouch);
             }
+        }
+
+        private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var civm = sender as MpCopyItemViewModel;
+            switch(e.PropertyName) {
+                case nameof(civm.IsTitleReadOnly):
+                    if(!civm.IsTitleReadOnly) {
+                        //TitleEntry.Focus();
+
+                    }
+                    break;
+            }
+        }
+        private void TitleEntry_Completed(object sender, EventArgs e) {
+            var civm = BindingContext as MpCopyItemViewModel;
+            civm.IsTitleReadOnly = false;
         }
 
         //private void MpCopyItemView_OnGlobalTouch(object sender, EventArgs e) {
@@ -59,8 +74,6 @@ namespace MonkeyPaste {
                 var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
                 var location = locationFetcher.GetCoordinates(sender as VisualElement);
                 var cmvm = cm.BindingContext as MpContextMenuViewModel;
-                //cmvm.Width = 300;
-                //cmvm.Height = 300;
                 var w = cmvm.Width;
                 var h = cmvm.Height;
                 var bw = ContextMenuButton.Width;

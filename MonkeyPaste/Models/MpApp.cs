@@ -9,6 +9,7 @@ using System.Linq;
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpICopyItemSource {
         [Column("pk_MpAppId")]
+        [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
         [Column("MpAppGuid")]
@@ -56,7 +57,7 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [OneToOne]
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpIcon Icon { get; set; }
 
         public static async Task<MpApp> GetAppByPath(string appPath) {

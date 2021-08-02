@@ -70,24 +70,31 @@ namespace MonkeyPaste {
         #endregion
 
         #region Fk Objects
-        [OneToOne]
+        [OneToOne(foreignKey:nameof(IconImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconImage { get; set; }
-        [OneToOne]
+
+        [OneToOne(foreignKey: nameof(IconBorderImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderImage { get; set; }
-        [OneToOne]
+
+        [OneToOne(foreignKey: nameof(IconBorderHighlightImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderHighlightImage { get; set; }
-        [OneToOne]
+
+        [OneToOne(foreignKey: nameof(IconBorderHighlightSelectedImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderHighlightSelectedImage { get; set; }
 
-        [ManyToOne]
+        [OneToOne(foreignKey: nameof(Color1Id), CascadeOperations = CascadeOperation.All)]
         public MpColor Color1 { get; set; }
-        [ManyToOne]
+
+        [OneToOne(foreignKey: nameof(Color2Id), CascadeOperations = CascadeOperation.All)]
         public MpColor Color2 { get; set; }
-        [ManyToOne]
+
+        [OneToOne(foreignKey: nameof(Color3Id), CascadeOperations = CascadeOperation.All)]
         public MpColor Color3 { get; set; }
-        [ManyToOne]
+
+        [OneToOne(foreignKey: nameof(Color4Id), CascadeOperations = CascadeOperation.All)]
         public MpColor Color4 { get; set; }
-        [ManyToOne]
+
+        [OneToOne(foreignKey: nameof(Color5Id), CascadeOperations = CascadeOperation.All)]
         public MpColor Color5 { get; set; }
         #endregion
 
@@ -108,7 +115,7 @@ namespace MonkeyPaste {
             var colorList = await MpColor.CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
-                IconImageId = newImage.Id,
+                //IconImageId = newImage.Id,
                 IconImage = newImage,
                 Color1 = colorList[0],
                 Color1Id = colorList[0].Id,

@@ -4,6 +4,10 @@ using System.Text;
 using System.Linq;
 using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
+using SQLiteNetExtensions;
+using SQLiteNetExtensions.Extensions;
+using SQLiteNetExtensions.Exceptions;
+using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
@@ -124,21 +128,30 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
-            return await _connectionAsync.Table<T>().ToListAsync();
+            //return await _connectionAsync.Table<T>().ToListAsync();
+            var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
+            return dbol;
         }
 
         public List<T> GetItems<T>() where T : new() {
             if (_connection == null) {
                 CreateConnection();
             }
-            return _connection.Table<T>().ToList();
+            return _connection.GetAllWithChildren<T>(recursive: true);
+        }
+        public async Task<T> GetItemAsync<T>(int id) where T : new() {
+            if (_connectionAsync == null) {
+                await Init();
+            }
+            var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
+            return dbo;
         }
 
         public T GetItem<T>(int id) where T : new() {
             if (_connection == null) {
                 CreateConnection();
             }
-            return _connection.Table<T>().Where(x => (x as MpDbModelBase).Id == id).FirstOrDefault();
+            return _connection.GetWithChildren<T>(id,true);
         }
 
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -157,8 +170,8 @@ namespace MonkeyPaste {
                     await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
                 }
                 
-            }            
-            await _connectionAsync.InsertAsync(item);
+            }
+            await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -182,7 +195,7 @@ namespace MonkeyPaste {
                 }
 
             }
-            _connection.Insert(item);
+            _connection.InsertWithChildren(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -198,24 +211,13 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
                 return;
             }
-            //object oldItem = null;
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {   
                 if(!ignoreTracking) {
                     await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
                 }
-                //string tableName = new MpXamStringToSyncObjectTypeConverter().Convert(item.GetType().ToString()).ToString().Replace(@"MonkeyPaste.", string.Empty);
-                //oldItem = await GetObjDbRowAsync(tableName, (item as MpDbModelBase).Guid);
             }
-            
 
-            await _connectionAsync.UpdateAsync(item);
-            //var updateEventArg = new MpDbObjectUpdateEventArg() {
-            //    DbObject = item as MpDbModelBase
-            //};
-            //if (oldItem != null) {
-            //    updateEventArg.UpdatedPropertyLookup = (item as MpISyncableDbObject).DbDiff(oldItem);
-            //}
-            //OnItemUpdated?.Invoke(this, updateEventArg); 
+            await _connectionAsync.UpdateWithChildrenAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -231,24 +233,12 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
                 return;
             }
-            //object oldItem = null;
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if (!ignoreTracking) {
                     MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
                 }
-                //string tableName = new MpXamStringToSyncObjectTypeConverter().Convert(item.GetType().ToString()).ToString().Replace(@"MonkeyPaste.", string.Empty);
-                //oldItem = await GetObjDbRowAsync(tableName, (item as MpDbModelBase).Guid);
             }
-
-
-            _connection.Update(item);
-            //var updateEventArg = new MpDbObjectUpdateEventArg() {
-            //    DbObject = item as MpDbModelBase
-            //};
-            //if (oldItem != null) {
-            //    updateEventArg.UpdatedPropertyLookup = (item as MpISyncableDbObject).DbDiff(oldItem);
-            //}
-            //OnItemUpdated?.Invoke(this, updateEventArg); 
+            _connection.UpdateWithChildren(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -288,9 +278,9 @@ namespace MonkeyPaste {
                 if(!ignoreTracking) {
                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
                 }
-            }            
+            }
 
-            await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
+            await _connectionAsync.DeleteAsync(item, true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase); 
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -311,7 +301,7 @@ namespace MonkeyPaste {
                 }
             }
 
-            _connection.Delete<T>((item as MpDbModelBase).Id);
+            _connection.Delete(item,true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
                 OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
@@ -346,7 +336,7 @@ namespace MonkeyPaste {
         //    await _connectionAsync.UpdateWithChildrenAsync(dbo);
         //}
 
-        //public async Task<T> GetWithChildren<T>(T item) where T: new() {
+        //public async Task<T> GetWithChildren<T>(T item) where T : new() {
         //    return await _connectionAsync.GetWithChildrenAsync<T>((item as MpDbObject).Id);
         //}
 
@@ -410,7 +400,7 @@ namespace MonkeyPaste {
 
             var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
             
-            File.Delete(dbPath);
+            //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -437,7 +427,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpClient>();
             await _connectionAsync.CreateTableAsync<MpClientPlatform>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
-            await _connectionAsync.CreateTableAsync<MpCompositeCopyItem>();
+            //await _connectionAsync.CreateTableAsync<MpCompositeCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
             await _connectionAsync.CreateTableAsync<MpColor>();
@@ -476,32 +466,30 @@ namespace MonkeyPaste {
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
-                ColorId = green.Id,
-                //Color = green,
+                Color = green,
                 TagSortIdx = 0
             }, "", true, true);
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
-                ColorId = blue.Id,
-                //Color = blue,
+                Color = blue,
                 TagSortIdx = 1
             }, "", true, true);
 
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
-                ColorId = yellow.Id,
-                //Color = yellow,
+                Color = yellow,
                 TagSortIdx = 2
             }, "", true, true);
-            await AddItemAsync<MpTag>(new MpTag() {
+
+            var helpTag = new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
-                ColorId = orange.Id,
-                //Color = orange,
+                Color = orange,
                 TagSortIdx = 3
-            }, "", true, true);
+            };
+            await AddItemAsync<MpTag>(helpTag, "", true, true);
 
             MpConsole.WriteTraceLine(@"Create all default tables");
         }

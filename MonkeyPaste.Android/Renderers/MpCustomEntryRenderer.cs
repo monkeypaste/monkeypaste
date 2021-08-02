@@ -13,12 +13,14 @@ using Android.Widget;
 namespace MonkeyPaste.Droid {
     public class MpCustomEntryRenderer : EntryRenderer {
         public MpCustomEntryRenderer(Android.Content.Context context) : base(context) { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e) {
             base.OnElementChanged(e);
 
             if (Control != null) {
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetColor(global::Android.Graphics.Color.Transparent);
+                Control.SetPadding(0, Control.PaddingTop, Control.PaddingRight, Control.PaddingBottom);
                 this.Control.Background = gd;
                 this.Control.SetRawInputType(InputTypes.TextFlagNoSuggestions);
                 //Control.SetHintTextColor(ColorStateList.ValueOf(global::Android.Graphics.Color.White));

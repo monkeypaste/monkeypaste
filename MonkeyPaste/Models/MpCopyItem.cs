@@ -14,6 +14,10 @@ namespace MonkeyPaste {
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; }
 
+        [ForeignKey(typeof(MpCopyItem))]
+        [Column("fk_MpCopyItemId")]
+        public int CompositeParentCopyItemId { get; set; }
+
         [Column("MpCopyItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
         [Ignore]
@@ -32,20 +36,14 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
-        [ManyToOne]
-        public MpApp App { get; set; }
 
         [ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
-        [ManyToOne]
-        public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpColor))]
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
-        [ManyToOne]
-        public MpColor ItemColor { get; set; }
 
         public string Title { get; set; }
 
@@ -77,18 +75,11 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_MpDbImageId")]
         public int ItemImageId { get; set; }
-        [OneToOne]
-        [Ignore]
-        public MpDbImage ItemDbImage{ get; set; }
+
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_SsMpDbImageId")]
         public int SsDbImageId { get; set; }
-        [OneToOne]
-        [Ignore]
-        public MpDbImage SsDbImage { get; set; }
-
-        
 
         public string ItemDescription { get; set; }
 
@@ -100,13 +91,34 @@ namespace MonkeyPaste {
         #endregion
 
         #region Fk Objects
-        [OneToMany]
+        //[ManyToMany(typeof(MpCopyItemTag))]
+        //public List<MpTag> Tags { get; set; }
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
+        public MpApp App { get; set; }
+
+        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        public MpUrl Url { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpDbImage SsDbImage { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpDbImage ItemDbImage { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpColor ItemColor { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpCopyItemTemplate> Templates { get; set; }
 
-        [OneToMany]
+        [OneToMany(inverseProperty:nameof(CompositeParentCopyItem), CascadeOperations = CascadeOperation.All)]
         public List<MpCopyItem> CompositeSubItems { get; set; }
 
-        [OneToMany]
+        [ManyToOne(inverseProperty:nameof(CompositeSubItems), CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpCopyItem CompositeParentCopyItem { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
 
@@ -158,7 +170,13 @@ namespace MonkeyPaste {
                                 count,
                                 start);
 
-            return new ObservableCollection<MpCopyItem>(result);
+            var results = new ObservableCollection<MpCopyItem>();
+            foreach(var r in result) {
+                var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(r.Id);
+                results.Add(ci);
+            }
+
+            return results;
         }
 
         public static async Task<ObservableCollection<MpCopyItem>> Search(int tagId, string searchString) {
@@ -186,44 +204,38 @@ namespace MonkeyPaste {
             var hostAppName = (args as object[])[2] as string;
             var hostAppImage = (args as object[])[3] as byte[];
             var hostAppImageBase64 = (args as object[])[4] as string;
+
+            MpApp app = await MpApp.GetAppByPath(hostPackageName);
+            if (app == null) {
+                app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
+            }
+
             var newCopyItem = new MpCopyItem() {
                 CopyDateTime = DateTime.Now,
                 Title = "Text",
                 ItemText = itemPlainText,
-                //Host = hostPackageName,
+                ItemType = MpCopyItemType.RichText,
+                ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor()),
+                App = app,
+                CopyCount = 1
                 //ItemImage = hostAppImage
             };
 
-            //await MpDb.Instance.AddItem<MpCopyItem>(newCopyItem);
+            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(newCopyItem);
 
-            //add source to CopyItem
-            if (!string.IsNullOrEmpty(hostPackageName)) {
-                //add or update CopyItem's source app
-                MpApp app = await MpApp.GetAppByPath(hostPackageName);
-                if (app == null) {
-                    app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
+            //add CopyItem to default tags
+            var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
+                "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", MpTag.AllTagId, MpTag.RecentTagId);
+
+            if (defaultTagList != null) {
+                foreach (var tag in defaultTagList) {
+                    var CopyItemTag = new MpCopyItemTag() {
+                        CopyItemId = newCopyItem.Id,
+                        TagId = tag.Id
+                    };
+                    await MpDb.Instance.AddItemAsync<MpCopyItemTag>(CopyItemTag);
                 }
-                newCopyItem.App = app;
-                newCopyItem.AppId = app.Id;
-                await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(newCopyItem);
-
-                //add CopyItem to default tags
-                var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
-                    "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", "1", "2");
-
-                if (defaultTagList != null) {
-                    foreach (var tag in defaultTagList) {
-                        var CopyItemTag = new MpCopyItemTag() {
-                            CopyItemId = newCopyItem.Id,
-                            TagId = tag.Id
-                        };
-                        await MpDb.Instance.AddItemAsync<MpCopyItemTag>(CopyItemTag);
-                    }
-                }
-                return newCopyItem;
             }
-
-            MpConsole.WriteTraceLine($"Error creating clip, there was no source application");
             return newCopyItem;
         }
         #endregion

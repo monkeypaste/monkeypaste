@@ -49,47 +49,50 @@ namespace MonkeyPaste {
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
 
-        private MpColor _color;
-        [Ignore]
-        public MpColor Color {
-            get {
-                if (_color == null && ColorId > 0) {
-                    _color = MpColor.GetColorById(ColorId);
-                } else if (_color != null && _color.Id != ColorId) {
-                    if (ColorId == 0) {
-                        ColorId = _color.Id;
-                    } else if (ColorId > 0) {
-                        _color = MpColor.GetColorById(ColorId);
-                    } else {
-                        _color = new MpColor();
-                    }
-                }
-                return _color;
-            }
-            set {
-                if (_color != value) {
-                    _color = value;
-                    if (_color != null) {
-                        ColorId = _color.Id;
-                    } else {
-                        ColorId = 0;
-                    }
-                }
-            }
-        }
+        //private MpColor _color;
+        //[Ignore]
+        //public MpColor Color {
+        //    get {
+        //        if (_color == null && ColorId > 0) {
+        //            _color = MpColor.GetColorById(ColorId);
+        //        } else if (_color != null && _color.Id != ColorId) {
+        //            if (ColorId == 0) {
+        //                ColorId = _color.Id;
+        //            } else if (ColorId > 0) {
+        //                _color = MpColor.GetColorById(ColorId);
+        //            } else {
+        //                _color = new MpColor();
+        //            }
+        //        }
+        //        return _color;
+        //    }
+        //    set {
+        //        if (_color != value) {
+        //            _color = value;
+        //            if (_color != null) {
+        //                ColorId = _color.Id;
+        //            } else {
+        //                ColorId = 0;
+        //            }
+        //        }
+        //    }
+        //}
 
         public string TagName { get; set; }
-
-        [Ignore]
-        [ManyToMany(typeof(MpCopyItem))]
-        public List<MpCopyItem> CopyItemList { get; set; }
 
         //unused        
         //public int ParentTagId { get; set; }
         #endregion
 
-        public MpTag() {
-        }
+        #region Fk Objects
+        [ManyToMany(typeof(MpCopyItemTag))]
+        public List<MpCopyItem> CopyItemList { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpColor Color { get; set; }
+        #endregion
+
+        public MpTag() { }
 
         public async Task<MpColor> GetColor() {
             if (ColorId > 0) {

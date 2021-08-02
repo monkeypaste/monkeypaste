@@ -7,6 +7,7 @@
 
   <PropertyGroup>
    <LangVersion>9.0</LangVersion>
+   <UserSecretsId>623e67e0-1876-454b-b45d-16da11cd372a</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -113,6 +114,9 @@
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpRenamePopupPageView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemDetailPageViewCopyItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -165,8 +169,14 @@
     <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemDetailPageView.xaml.cs">
+      <DependentUpon>MpCopyItemDetailPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemView.xaml.cs">
       <DependentUpon>MpCopyItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\MpCopyItemCollectionPageView.xaml.cs">
+      <DependentUpon>MpCopyItemCollectionPageView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemDetailPageViewCopyItem.xaml.cs">
       <DependentUpon>MpCopyItemDetailPageViewCopyItem.xaml</DependentUpon>

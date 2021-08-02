@@ -12,7 +12,7 @@
     </rg:PopupPage.Resources>
     <AbsoluteLayout>
         <ListView x:Name="ContextMenuListView"
-                  BackgroundColor="Transparent"
+                  BackgroundColor="White"
                   HeightRequest="{Binding Height}" 
                   HorizontalOptions="End" 
                   HasUnevenRows="True"

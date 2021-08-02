@@ -11,59 +11,43 @@
                                           NumberOfTapsRequired="1" />
     </ContentView.GestureRecognizers>
     <ContentView.Content>
-        <!--<SwipeView SwipeStarted="SwipeView_SwipeStarted">
-            <SwipeView.LeftItems>
-                <SwipeItems>
-                    <SwipeItem BackgroundColor="LightGreen"
-                               Command="{Binding ShowTagAssociationsCommand}"
-                               IconImageSource="{StaticResource StarOutlineIcon}"
-                               Text="Tags" />
-                    <SwipeItem BackgroundColor="LightPink"
-                               Command="{Binding BindingContext.DeleteCopyItemCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                               CommandParameter="{Binding .}"
-                               IconImageSource="{StaticResource DeleteIcon}"
-                               Text="Delete" />
-                </SwipeItems>
-            </SwipeView.LeftItems>
-        </SwipeView>-->
-        <!--<Grid>-->
-            <Frame Padding="0"
+        <Frame Padding="0"
                    BackgroundColor="White"
                    HasShadow="True"
                    HeightRequest="100"
                    IsClippedToBounds="True">
-                
-                <Frame.OutlineColor>
-                    <OnPlatform x:TypeArguments="Color"
+
+            <Frame.OutlineColor>
+                <OnPlatform x:TypeArguments="Color"
                                 Android="Gray"
                                 iOS="Gray" />
-                </Frame.OutlineColor>
-                <Frame.Margin>
-                    <OnPlatform x:TypeArguments="Thickness"
+            </Frame.OutlineColor>
+            <Frame.Margin>
+                <OnPlatform x:TypeArguments="Thickness"
                                 Android="10"
                                 iOS="10" />
-                </Frame.Margin>
-                <StackLayout Orientation="Horizontal">
-                    <ff:CachedImage Aspect="AspectFit"
+            </Frame.Margin>
+            <StackLayout Orientation="Horizontal">
+                <ff:CachedImage Aspect="AspectFit"
                                     Margin="0,10,0,0"
                                     VerticalOptions="Start"
                                     WidthRequest="60"
                                     HeightRequest="60"
                                     CacheDuration="50"
                                     RetryCount="3"
-                                    Source="{Binding CopyItem.App.Icon.IconImage.ImageBase64, Converter={StaticResource ImageConverter}}"
+                                    Source="{Binding IconImageSource}"
                                     RetryDelay="600"
                                     DownsampleToViewSize="true" />
-                    <Grid Padding="0"
+                <Grid Padding="0"
                           BackgroundColor="Transparent"
                           HorizontalOptions="FillAndExpand"
                           VerticalOptions="CenterAndExpand">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.5*" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"
                                FontAttributes="Bold"
                                Padding="0,5,0,0"
                                FontSize="16"
@@ -71,32 +55,32 @@
                                Text="{Binding CopyItem.Title, Mode=TwoWay}"
                                TextColor="Black"
                                VerticalTextAlignment="End">
-                            <Label.LineBreakMode>
-                                <OnPlatform x:TypeArguments="LineBreakMode"
+                    <Label.LineBreakMode>
+                        <OnPlatform x:TypeArguments="LineBreakMode"
                                             Android="NoWrap"
                                             iOS="TailTruncation" />
-                            </Label.LineBreakMode>
-                        </Label>
-                        <BoxView Grid.Row="1"
+                    </Label.LineBreakMode>
+                </Label>
+                <BoxView Grid.Row="1"
                                  HeightRequest="1"
                                  HorizontalOptions="FillAndExpand"
                                  Color="Gray" />
-                        <Label Grid.Row="2"
+                <Label Grid.Row="2"
                                Padding="5"
                                FontSize="16"
                                Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
                                TextColor="Black" />
-                    </Grid>
-                    <Button x:Name="ContextMenuButton"
+                </Grid>
+                <Button x:Name="ContextMenuButton"
                     BackgroundColor="Transparent"
                     BorderWidth="0"
                     Clicked="ContextMenuButton_Clicked"
                     HeightRequest="25"
-                        WidthRequest="15"
+                    WidthRequest="20"
                     ImageSource="{StaticResource DotsIcon}"/>
-                </StackLayout>
-            </Frame>
-            <!--<Button BackgroundColor="Transparent"
+            </StackLayout>
+        </Frame>
+        <!--<Button BackgroundColor="Transparent"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"
                     BorderWidth="0"

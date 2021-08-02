@@ -15,6 +15,7 @@ namespace MonkeyPaste {
 
     public class MpDbLog : MpDbModelBase, MpISyncableDbObject {
         [Column("pk_MpDbLogId")]
+        [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
         [Column("DbObjectGuid")]
@@ -69,6 +70,7 @@ namespace MonkeyPaste {
                 ClientGuid = value.ToString();
             }
         }
+
         public static async Task<MpDbLog> GetDbLogById(int DbLogId) {
             var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();

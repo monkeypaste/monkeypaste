@@ -13,9 +13,6 @@ namespace MonkeyPaste {
         public MpTagTileCollectionViewModel TagCollectionViewModel { get; set; }
         #endregion
 
-       
-
-
         #region Public Methods
         public MpMainShellViewModel() {
             Task.Run(async () => {

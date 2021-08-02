@@ -75,8 +75,8 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private async Task Initialize() {
-            Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
-            Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
+            //Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
+            //Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
 
             ContextMenuViewModel = new MpContextMenuViewModel();
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
@@ -136,30 +136,7 @@ namespace MonkeyPaste {
                 }
             });
         }
-        //private void Db_OnItemUpdated(object sender, MpDbObjectUpdateEventArg e) {
-        //    Device.InvokeOnMainThreadAsync(async () => {
-        //        if (e.DbObject is MpTag t) {
-        //            if (t.Id == Tag.Id) {
-        //                if(e.UpdatedPropertyLookup.Count == 0) {
-        //                    Tag = t;
-        //                } else {
-        //                    foreach(var kvp in e.UpdatedPropertyLookup) {
-        //                        var prop = Tag.GetType().GetProperties().Where(x => x.Name == kvp.Key).FirstOrDefault();
-        //                        if(prop != null) {
-        //                            if(prop.PropertyType == typeof(int)) {
-        //                                prop.SetValue(Tag, Convert.ToInt32(kvp.Value));
-        //                            } else if (prop.PropertyType == typeof(string)) {
-        //                                prop.SetValue(Tag, kvp.Value);
-        //                            } else {
-        //                                MpConsole.WriteTraceLine(@"Unknown property type: " + prop.PropertyType.ToString());
-        //                            }
-        //                        }
-        //                    }
-        //                }                        
-        //            }
-        //        } 
-        //    });
-        //}
+        
 
         private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
             Device.InvokeOnMainThreadAsync(async () => {

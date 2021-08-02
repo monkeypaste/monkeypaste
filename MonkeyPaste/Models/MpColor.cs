@@ -143,6 +143,10 @@ namespace MonkeyPaste {
             for (int i = primaryIconColorList.Count; i < listCount; i++) {
                 primaryIconColorList.Add(new MpColor(MpHelpers.Instance.GetRandomColor()));
             }
+
+            foreach(var c in primaryIconColorList) {
+                await MpDb.Instance.AddItemAsync<MpColor>(c);
+            }
             //sw.Stop();
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;

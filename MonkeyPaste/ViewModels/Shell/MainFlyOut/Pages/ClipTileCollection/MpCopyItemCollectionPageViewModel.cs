@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FFImageLoading.Helpers.Exif;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -51,9 +52,12 @@ namespace MonkeyPaste {
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>();
                 var clips = await MpCopyItem.GetPage(TagId, 0, _pageSize);
                 foreach(var c in clips) {
-                    var ctvm = await CreateCopyItemViewModel(c);
+                    if(CopyItemViewModels.Any(x=>x.CopyItem.Id == c.Id)) {
+                        continue;
+                    }
+                    var ctvm = CreateCopyItemViewModel(c);
                     CopyItemViewModels.Add(ctvm);
-                    ctvm.OnPropertyChanged(nameof(ctvm.IconImageSource));
+                    //ctvm.OnPropertyChanged(nameof(ctvm.IconImageSource));
                 }
                 if(clips.Count == 0) {
                     var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
@@ -67,24 +71,10 @@ namespace MonkeyPaste {
             });
         }
 
-        public async Task<MpCopyItemViewModel> CreateCopyItemViewModel(MpCopyItem c) {
+        public MpCopyItemViewModel CreateCopyItemViewModel(MpCopyItem c) {
             MpCopyItemViewModel ctvm = null;
-            await Device.InvokeOnMainThreadAsync(async () => {
-                MpApp app = await MpApp.GetAppById(c.AppId);
-                app.Icon = await MpIcon.GetIconById(app.IconId);
-                app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
-                c.App = app;
-
-                var color = await MpColor.GetColorByIdAsync(c.ColorId);
-                if(color != null) {
-                    c.ItemColor = color;
-                }
-                ctvm = new MpCopyItemViewModel(c);
-
-                ctvm.PropertyChanged += CopyItemViewModel_PropertyChanged;
-                //Routing.RegisterRoute(@"CopyItemdetails/" + ctvm, typeof(MpCopyItemDetailPageView));
-            });
-            
+            ctvm = new MpCopyItemViewModel(c);
+            ctvm.PropertyChanged += CopyItemViewModel_PropertyChanged;
             return ctvm;
         }
 
@@ -142,7 +132,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private async void Db_OnItemUpdated(object sender, MpDbModelBase e) {
+        private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
             //if (e is MpCopyItem uci) {
             //    var uctvm = await CreateCopyItemViewModel(uci);
             //    var ctvm = CopyItemViewModels.Where(x => x.CopyItem.Id == uci.Id).FirstOrDefault();
@@ -153,29 +143,32 @@ namespace MonkeyPaste {
             //}
         }
 
-        private async void Db_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem nci) {
-                var ctvm = await CreateCopyItemViewModel(nci);
-                CopyItemViewModels.Add(ctvm);
-            }
+        private void Db_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpCopyItemTag citg) {
+                if(citg.TagId == TagId && !CopyItemViewModels.Any(x => x.CopyItem.Id == citg.CopyItemId)) {
+                    _ = Task.Run(() => Initialize(TagId));
+                }                
+            }  
         }
 
-        private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
-            foreach (MpCopyItem CopyItem in args.NewItems) {
-                _itemsAdded++;
-                CopyItemViewModels.Add(CreateCopyItemViewModel(CopyItem).Result);
-            }
-            if (_itemsAdded == _pageSize) {
-                var collection = (ObservableCollection<MpCopyItem>)sender;
-                collection.CollectionChanged -= Collection_CollectionChanged;
-            }
-        }
+        //private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+        //    foreach (MpCopyItem CopyItem in args.NewItems) {
+        //        if(!CopyItemViewModels.Any(x=>x.CopyItem.Id == CopyItem.Id)) {
+        //            _itemsAdded++;
+        //            CopyItemViewModels.Add(CreateCopyItemViewModel(CopyItem));
+        //        }
+        //    }
+        //    if (_itemsAdded == _pageSize) {
+        //        var collection = (ObservableCollection<MpCopyItem>)sender;
+        //        collection.CollectionChanged -= Collection_CollectionChanged;
+        //    }
+        //}
 
         private void CopyItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (e.NewItems != null && e.NewItems.Count > 0) {
-                IsBusy = false;
-                CopyItemViewModels.CollectionChanged -= CopyItemViewModels_CollectionChanged;
-            }
+            //if (e.NewItems != null && e.NewItems.Count > 0) {
+            //    IsBusy = false;
+            //    CopyItemViewModels.CollectionChanged -= CopyItemViewModels_CollectionChanged;
+            //}
         }
 
         private async void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -200,7 +193,7 @@ namespace MonkeyPaste {
                         break;
                 }
 
-                await MpDb.Instance.UpdateItemAsync<MpCopyItem>(civm.CopyItem);
+                //await MpDb.Instance.UpdateItemAsync<MpCopyItem>(civm.CopyItem);
             }
         }
 
@@ -237,10 +230,10 @@ namespace MonkeyPaste {
         });
 
         public ICommand LoadMoreCopyItemsCommand => new Command(async () => {
-            _currentStartIndex += _pageSize;
-            _itemsAdded = 0;
-            var collection = await MpCopyItem.GetPage(1, _currentStartIndex, _pageSize);
-            collection.CollectionChanged += Collection_CollectionChanged;
+            //_currentStartIndex += _pageSize;
+            //_itemsAdded = 0;
+            //var collection = await MpCopyItem.GetPage(TagId, _currentStartIndex, _pageSize);
+            //collection.CollectionChanged += Collection_CollectionChanged;
         });
 
         public ICommand SelectionChangedCommand => new Command<object>((args) => {

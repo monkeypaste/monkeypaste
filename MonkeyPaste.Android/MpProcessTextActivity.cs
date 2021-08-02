@@ -32,19 +32,18 @@ namespace MonkeyPaste.Droid {
         protected override async void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
 
-            var selectedText = Intent.GetCharSequenceExtra(Intent.ExtraProcessText);
-            if (!string.IsNullOrEmpty(selectedText)) {
-                MpConsole.WriteTraceLine(@"PROCESS_TEXT: " + selectedText.ToString());
+            string selectedText = string.Empty, hostPackageName = string.Empty, hostAppName = string.Empty, hostAppIconBase64 = string.Empty;
+            byte[] hostIconByteArray = null;
 
-                var intent = new Intent(this, typeof(MainActivity));
-                intent.PutExtra("SelectedText", selectedText);
-                intent.PutExtra("HostPackageName", this.Referrer.Host);
+            selectedText = Intent.GetCharSequenceExtra(Intent.ExtraProcessText);
+
+            if (!string.IsNullOrEmpty(selectedText)) {
+                hostPackageName = this.Referrer.Host;
 
                 if (!string.IsNullOrEmpty(this.Referrer.Host)) {
                     try {
                         var appInfo = this.ApplicationContext.PackageManager.GetApplicationInfo(this.Referrer.Host, 0);
-                        var appName = appInfo != null ? this.ApplicationContext.PackageManager.GetApplicationLabel(appInfo) : "(unknown)";
-                        intent.PutExtra("HostAppName", appName);
+                        hostAppName = appInfo != null ? this.ApplicationContext.PackageManager.GetApplicationLabel(appInfo) : "(unknown)";
                     } catch (Exception ex) {
                         MpConsole.WriteTraceLine(@"Android.ProcessTextActivity error finding app name for referrer: " + this.Referrer.Host);
                         MpConsole.WriteTraceLine(@"With Exception: " + ex);
@@ -52,30 +51,20 @@ namespace MonkeyPaste.Droid {
                     var imgSrc = MpPackageNameSource.FromPackageName(this.Referrer.Host);
                     var pnsh = new MpPackageNameSourceHandler();
                     var bmp = await pnsh.LoadImageAsync(imgSrc, this.ApplicationContext);
-                    byte[] imageInByte = GetByteArray(bmp);
-                    if (imageInByte != null && imageInByte.Length > 0) {
-                        intent.PutExtra("HostIconByteArray", imageInByte);
-                        intent.PutExtra("HostIconBase64", Convert.ToBase64String(imageInByte));
+                    hostIconByteArray = GetByteArray(bmp);
+                    if (hostIconByteArray != null && hostIconByteArray.Length > 0) {
+                        hostAppIconBase64 = Convert.ToBase64String(hostIconByteArray);
                     }
                 }
+                if (!string.IsNullOrWhiteSpace(selectedText)) {
+                    await Clipboard.SetTextAsync(selectedText);
 
-                LoadSelectedTextAsync(intent);
+                    await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostIconByteArray, hostAppIconBase64 });
+                }
                 
-                StartActivity(intent);
+                StartActivity(new Intent(this, typeof(MainActivity)));
+                Finish();
             }            
-        }
-
-        private async void LoadSelectedTextAsync(Intent i) {
-            var selectedText = i!.GetStringExtra("SelectedText");// ?? string.Empty;
-            var hostPackageName = i!.GetStringExtra("HostPackageName") ?? string.Empty;
-            var hostAppName = i!.GetStringExtra("HostAppName") ?? string.Empty;
-            var hostAppIcon = i!.GetByteArrayExtra("HostIconByteArray") ?? null;
-            var hostAppIconBase64 = i!.GetStringExtra("HostIconBase64") ?? string.Empty;
-            if (!string.IsNullOrWhiteSpace(selectedText)) {
-                await Clipboard.SetTextAsync(selectedText);
-
-                await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon, hostAppIconBase64 });
-            }
         }
 
         private byte[] GetByteArray(Bitmap bmp) {

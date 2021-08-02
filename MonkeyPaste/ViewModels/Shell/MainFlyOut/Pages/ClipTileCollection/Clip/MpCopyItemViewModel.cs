@@ -1,5 +1,6 @@
 ﻿using FFImageLoading.Forms;
 using FFImageLoading.Helpers.Exif;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {
         #region Private Variables
         public event EventHandler ItemStatusChanged;
+        private string _orgTitle = string.Empty;
         #endregion
 
         #region Properties
@@ -49,6 +51,8 @@ namespace MonkeyPaste {
             }
         }
 
+        public bool IsTitleReadOnly { get; set; } = true;
+
         public bool IsVisible { get; set; } = true;
         #endregion
 
@@ -61,8 +65,11 @@ namespace MonkeyPaste {
             CopyItem = item;
             Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
             Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));
+
             Task.Run(Initialize);
         }
+
+
         #endregion
 
         #region Private Methods
@@ -74,19 +81,20 @@ namespace MonkeyPaste {
                 IconImageResourceName = "StarOutlineIcon"
             });
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
+                Title = "Rename",
+                Command = RenameCopyItemCommand,
+                IconImageResourceName = "EditIcon"
+            });
+            ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
                 Title = "Delete",
                 Command = DeleteCopyItemCommand,
                 IconImageResourceName = "DeleteIcon"
             });
-
-            await Task.Delay(1);
-            //CopyItem.App
         }
         #region Event Handlers
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(CopyItem):
-                    OnPropertyChanged(nameof(IconImageSource));
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
@@ -95,13 +103,20 @@ namespace MonkeyPaste {
                         //});
                     }
                     break;
+                case nameof(IsTitleReadOnly):
+                    if (IsTitleReadOnly && CopyItem.Title != _orgTitle) {
+                        _orgTitle = CopyItem.Title;
+                        MpDb.Instance.AddOrUpdate<MpCopyItem>(CopyItem);
+                    }
+                    break;
             }
         }
 
         private void MpDb_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 if (ci.Id == CopyItem.Id) {
-                    //CopyItem = ci;
+                    CopyItem = ci;
+                    //await Initialize();
                     //OnPropertyChanged(nameof(IconImageSource));
                 }
             }
@@ -123,6 +138,24 @@ namespace MonkeyPaste {
             });
             //await Navigation.PushModal(new MpCopyItemTagAssociationPageView(new MpCopyItemTagAssociationPageViewModel(CopyItem)));
             //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithCopyItemAsync(CopyItem.Id);
+        });
+
+        public ICommand RenameCopyItemCommand => new Command(async () => {
+            _orgTitle = CopyItem.Title;
+
+            var renamePopupPage = new MpRenamePopupPageView(_orgTitle);
+            renamePopupPage.OnComplete += async (s, e) => {
+                if (renamePopupPage.WasCanceled) {
+                    CopyItem.Title = _orgTitle;
+                } else if (e != _orgTitle) {
+                    CopyItem.Title = e;
+                    OnPropertyChanged(nameof(CopyItem));
+                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                }
+                await PopupNavigation.Instance.PopAllAsync();
+            };
+            await PopupNavigation.Instance.PushAsync(renamePopupPage,false);
+            
         });
 
         public ICommand CopyItemTileTappedCommand => new Command(async () => {
