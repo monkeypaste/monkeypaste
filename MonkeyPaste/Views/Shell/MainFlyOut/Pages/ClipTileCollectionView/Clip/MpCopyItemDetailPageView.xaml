@@ -11,7 +11,8 @@
             <local:MpWebView x:Name="ContentEditorWebView"
                              EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
                 <local:MpWebView.Source>
-                    <HtmlWebViewSource Html="{Binding EditorHtml}" />
+                    <HtmlWebViewSource x:Name="HtmlSource"  
+                                       Html="{Binding EditorHtml}" />
                 </local:MpWebView.Source>
             </local:MpWebView>
         </Grid>

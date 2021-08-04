@@ -15,13 +15,15 @@ using System.Threading;
 using Android.Service.Controls;
 using Android.Webkit;
 using System.Threading.Tasks;
+using MonkeyPaste.Droid;
 
-[assembly: ExportRenderer(typeof(MpWebView), typeof(Mobile.Droid.MpWebViewRenderer))]
-namespace Mobile.Droid {
+[assembly: ExportRenderer(typeof(MpWebView), typeof(MpWebViewRenderer))]
+namespace MonkeyPaste.Droid {
     //from https://www.xamarinhelp.com/xamarin-forms-webview-executing-javascript/
     // TODO Add renderers to other platforms
     public class MpWebViewRenderer : WebViewRenderer {
         public MpWebViewRenderer(Context context) : base(context) { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.WebView> e) {
             base.OnElementChanged(e);
 
@@ -33,7 +35,9 @@ namespace Mobile.Droid {
                     Device.BeginInvokeOnMainThread(() => {
                         Control?.EvaluateJavascript(js, new JavascriptCallback((r) => { response = r; reset.Set(); }));
                     });
-                    await Task.Run(() => { reset.WaitOne(); });
+                    await Task.Run(() => { 
+                        reset.WaitOne(); 
+                    });
                     return response;
                 };
             }

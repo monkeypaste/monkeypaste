@@ -114,7 +114,6 @@
             border: 1px solid #CCC;
             color: #67c5ff;
             border: solid 2px #67c5ff;
-            background-color: yellow;
             border-radius: 3px;
             transition: .4s;
             margin: 0 0.2em 0 0;
@@ -169,17 +168,24 @@
                         background: blue;
                         color: #FFF;
                     }
+
+        .ql-label {
+            background-color: lightgrey;
+            padding: 0.3em;
+            margin: 0 0.2em;
+        }
+
+            .ql-label button {
+                margin-left: 0.3em;
+            }
     </style>
 </head>
 <body>
     <div id='editor'>
     </div>
 
-    <div id="div-context-menu" class="cls-context-menu">
-        <ul>
-            <li><a href="#to=0">link-to=0 -item-1 </a></li>
-            <li><a href="#to=0">link-to=0 -item-2 </a></li>
-            <li><a href="#to=0">link-to=0 -item-3 </a></li>
+    <div id="templateToolbarMenu" class="cls-context-menu">
+        <ul id="templateToolbarMenuList">
         </ul>
     </div>
 
@@ -206,6 +212,7 @@
 
             if (html != null) {
                 setHtml(html);
+                loadTemplates();
             }
         }
 
@@ -291,27 +298,60 @@
             return fontStyles;
         }
 
-        function loadTemplateButton() {
-            let Inline = Quill.import('blots/inline');
+        function loadTemplateSpan() {
+            const Parchment = Quill.imports.parchment;
+            const Delta = Quill.imports.delta;
 
-            class TemplateButton extends Inline {
+            class TemplateSpan extends Parchment.EmbedBlot {
                 static create(value) {
-                    let node = super.create();
+                    const node = super.create(value);
+                    node.contentEditable = 'false';
+                    node.innerText = value.templateName;
+                    node.setAttribute('templateName', value.templateName);
+                    node.setAttribute('templateColor', value.templateColor);
+                    node.setAttribute('templateId', value.templateId);
                     node.setAttribute('class', 'template_btn');
+                    node.setAttribute('style', 'background-color: ' + value.templateColor);
+                    //this._addRemovalButton(node);
                     return node;
                 }
+
+                //static value(node) {
+                //    return node.childNodes[0].textContent;
+                //}
+                static value(domNode) {
+                    return {
+                        templateId: domNode.getAttribute('templateId'),
+                        templateName: domNode.getAttribute('templateName'),
+                        templateColor: domNode.getAttribute('templateColor'),
+                    }
+                }
+
+                static _addRemovalButton(node) {
+                    const button = document.createElement('button');
+                    button.innerText = 'x';
+                    button.onclick = () => node.remove();
+                    button.contentEditable = 'false';
+                    node.appendChild(button);
+
+                    // Extra span forces the cursor to the end of the label, otherwise it appears inside the removal button
+                    const span = document.createElement('span');
+                    span.innerText = ' ';
+                    node.appendChild(span);
+                }
             }
+            TemplateSpan.blotName = 'templatespan';
+            TemplateSpan.tagName = 'SPAN';
+            TemplateSpan.className = 'ql-templatespan';
 
-            TemplateButton.blotName = 'templatebutton';
-            TemplateButton.tagName = 'div';
-            Quill.register(TemplateButton);
+            Quill.register(TemplateSpan);
         }
-
+        
         function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
             Quill.register("modules/htmlEditButton", htmlEditButton);
             Quill.register({ 'modules/better-table': quillBetterTable }, true);
 
-            loadTemplateButton();
+            loadTemplateSpan();
 
             // Append the CSS stylesheet to the page
             var node = document.createElement('style');
@@ -319,7 +359,7 @@
             document.body.appendChild(node);
 
             quill = new Quill(curQuillDiv[0], {
-                placeholder: 'Compose your text...',
+                placeholder: '',
                 theme: 'snow',
                 modules: {
                     toolbar: loadToolbar(fontFamilys, fontSizes, defaultFontIdx),
@@ -345,7 +385,6 @@
                     }
                 }
             });
-
 
             var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
             curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
@@ -413,17 +452,12 @@
             var templateButton = document.querySelector('.ql-templatebutton');
 
             templateButton.addEventListener('click', function (e) {
-                console.log('function called');
-                showTemplateContextMenu(templateButton, e);
-
-                var range = quill.getSelection();
-                if (range) {
-                    console.log('range is valid');
-                    quill.formatText(range, 'templatebutton');
-
+                var tl = getTemplates();
+                if (tl.length > 0) {
+                    showTemplateContextMenu(templateButton, e);
                 } else {
-                    console.log('it it invalid');
-                }
+                    createTemplate();
+                }                
             });
 
             document.addEventListener('click', function (e) {
@@ -436,9 +470,82 @@
             });
         }
 
+        function createTemplate(templateId) {
+            var range = quill.getSelection(true);
+
+            var tl = getTemplates();
+            var newTemplateObj = {
+                templateId: -(tl.length + 1),
+                templateColor: getRandomColor(),
+                templateName: quill.getText(range.index, range.length)
+            };
+
+            if (templateId != null) {
+                for (var i = 0; i < tl.length; i++) {
+                    var t = tl[i];
+                    if (t['templateId'] == templateId) {
+                        newTemplateObj = t;
+                        break;
+                    }
+                }
+            }
+            if (range.length == 0 && templateId == null) {
+                newTemplateObj['templateName'] = "Template #" + parseInt(tl.length + 1);
+            }            
+
+            quill.deleteText(range.index, range.length);
+            quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.API);
+            quill.insertText(range.index + 1, ' ', Quill.sources.API);
+            quill.setSelection(range.index + 1, Quill.sources.API);
+        }
+
+        function loadTemplates() {
+            //document.getElementsByClassName("template_btn").forEach(function (t) {
+            //    t.getAttribute('templateId')
+            //});
+        }
+
+        function getTemplates() {
+            var domTemplates = document.getElementsByClassName("template_btn");
+            var templates = [];
+            for (var i = 0; i < domTemplates.length; i++) {
+                var domTemplate = domTemplates[i];
+                var template = {
+                    templateId: domTemplate.getAttribute('templateId'),
+                    templateName: domTemplate.getAttribute('templateName'),
+                    templateColor: domTemplate.getAttribute('templateColor'),
+                    templateText: domTemplate.innerText
+                }
+                var isDup = false;
+                for (var j = 0; j < templates.length; j++) {
+                    if (templates[j]['templateId'] == template['templateId']) {
+                        isDup = true;
+                        break;
+                    }
+                }
+                if (!isDup) {
+                    templates.push(template);
+                }
+            }
+            return templates;
+        }
+
         function showTemplateContextMenu(tb, e) {
             clickCount = 0;
-            var rgtClickContextMenu = document.getElementById('div-context-menu');
+            var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
+            var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
+            rgtClickContextMenuList.innerHTML = '';
+
+            var tl = getTemplates();
+            for (var i = 0; i < tl.length; i++) {
+                var t = tl[i];
+                var templateItem = '<li><a href="javascript:void(0);" onclick="createTemplate('+t['templateId']+');">' +
+                    '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
+                    '<span style="font-family:arial;">'+t['templateName'] + '</span></a></li>';
+                rgtClickContextMenuList.innerHTML += templateItem;
+            }
+
+            rgtClickContextMenuList.innerHTML += '<li><a href="javascript:void(0);" onclick="createTemplate();"><span style="font-family:arial;">Add Template</span></a></li>';
             const rect = tb.getBoundingClientRect();
             const x = rect.left + 20;
             const y = e.clientY - rect.top;
@@ -450,7 +557,7 @@
         }
 
         function hideTemplateContextMenu() {
-            var rgtClickContextMenu = document.getElementById('div-context-menu');
+            var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
             rgtClickContextMenu.style.display = 'none';
 
             isShowingTemplateMenu = false;
@@ -483,10 +590,24 @@
             return unescape(val);
         }
 
+        function getTemplatesJson() {
+            var val = JSON.stringify(getTemplates());
+            return val;
+        }
+
         function decodeHtml(html) {
             var txt = document.createElement("textarea");
             txt.innerHTML = html;
             return txt.value;
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
         function createTemplateSpan(templateName) {

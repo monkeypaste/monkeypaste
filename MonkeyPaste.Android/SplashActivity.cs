@@ -13,12 +13,11 @@ namespace MonkeyPaste.Droid {
     [Activity(
         Label = "Monkey Paste", 
         Theme = "@style/Splash", 
-        MainLauncher = true, NoHistory = true)]
+        MainLauncher = true)]
     public class SplashActivity : Activity {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
-            var startup = new Intent(this, typeof(MainActivity));
-            StartActivity(startup);
+            StartActivity(typeof(MainActivity));
             Finish();
         }
     }

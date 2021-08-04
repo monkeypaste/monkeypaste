@@ -109,7 +109,7 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpColor ItemColor { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        [OneToMany(CascadeOperations = CascadeOperation.CascadeDelete | CascadeOperation.CascadeRead)]
         public List<MpCopyItemTemplate> Templates { get; set; }
 
         [OneToMany(inverseProperty:nameof(CompositeParentCopyItem), CascadeOperations = CascadeOperation.All)]

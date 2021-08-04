@@ -14,13 +14,20 @@ namespace MonkeyPaste {
         #region Properties
         public MpCopyItem CopyItem { get; set; }
 
-        public MpJsMessageListener JsMessageListener { get; set; }
+        //public MpJsMessageListener JsMessageListener { get; set; }
 
         public Func<string, Task<string>> EvaluateEditorJavaScript { get; set; }
 
         public event EventHandler OnEditorLoaded;
 
         public string EditorHtml { get; set; }
+
+        public string Html { get; set; }
+        public string Text { get; set; }
+        public string Templates { get; set; }
+
+        public System.Timers.Timer UpdateTimer { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -46,22 +53,22 @@ namespace MonkeyPaste {
             }
         }
 
-        public void StartMessageListener() {
-            JsMessageListener.Start();
-        }
+        //public void StartMessageListener() {
+        //    JsMessageListener.Start();
+        //}
 
-        public async Task<string> StopMessageListener() {
-            string outStr = string.Empty;
-            if(JsMessageListener != null) {
-                JsMessageListener.Stop();
-            }
-            var itemText = await EvaluateEditorJavaScript($"getText()");
-            itemText = itemText.Replace("\"", string.Empty);
-            return itemText;
-        }
+        //public async Task<string> StopMessageListener() {
+        //    string outStr = string.Empty;
+        //    if(JsMessageListener != null) {
+        //        JsMessageListener.Stop();
+        //    }
+        //    var itemText = await EvaluateEditorJavaScript($"getText()");
+        //    itemText = itemText.Replace("\"", string.Empty);
+        //    return itemText;
+        //}
 
         private async Task SetToolbarTop(int y) {
-            await EvaluateEditorJavaScript($"moveToolbarTop({y})");
+            //await EvaluateEditorJavaScript($"moveToolbarTop({y})");
         } 
 
         public async Task<string> GetEditorText() {
@@ -109,10 +116,29 @@ namespace MonkeyPaste {
                 html = html.Replace(contentTag, contentTag + CopyItem.ItemText);
                 EditorHtml = html;
             }
+
+            UpdateTimer = new System.Timers.Timer();
+            UpdateTimer.Interval = 100;
+            UpdateTimer.AutoReset = true;
+            UpdateTimer.Elapsed += async (s, e) => {
+                if(EvaluateEditorJavaScript == null) {
+                    return;
+                }
+                Text = await EvaluateEditorJavaScript($"getText()");
+                if (EvaluateEditorJavaScript == null) {
+                    return;
+                }
+                Html = await EvaluateEditorJavaScript($"getHtml()");
+                if (EvaluateEditorJavaScript == null) {
+                    return;
+                }
+                Templates = await EvaluateEditorJavaScript($"getTemplates()");
+            };
+            UpdateTimer.Start();
         }
 
         public void Dispose() {
-            StopMessageListener();
+            //StopMessageListener();
             EvaluateEditorJavaScript = null;
             (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged -= LayoutService_OnKeyboardHeightChanged;
         }

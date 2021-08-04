@@ -21,22 +21,51 @@ namespace MonkeyPaste {
 
         public MpCopyItemDetailPageView() : base() {
             InitializeComponent();
+            
         }
         protected override async void OnDisappearing() {
             var cidpvm = BindingContext as MpCopyItemDetailPageViewModel;
-                        
-            //cidpvm.CopyItem.ItemPlainText = await cidpvm.StopMessageListener();
-            cidpvm.CopyItem.ItemText = await cidpvm.EvaluateEditorJavaScript($"getText()");
+            if(cidpvm == null || cidpvm.UpdateTimer == null) {
+                //for some reason when going to edit a new item it automatically
+                //disappears maybe because its receiving more taps than required?
+                //so this should catch it
+                base.OnDisappearing();
+                return;
+            }
+            cidpvm.UpdateTimer.Stop();
+
+            cidpvm.CopyItem.ItemText = cidpvm.Text; 
             cidpvm.CopyItem.ItemText = cidpvm.CopyItem.ItemText.Replace("\"", string.Empty);
 
-            var itemHtml = await cidpvm.EvaluateEditorJavaScript($"getHtml()");
+            var templatesStr = cidpvm.Templates.Replace("\"", string.Empty);
+            templatesStr = templatesStr.Substring(1, templatesStr.Length - 2);
+            var templates = templatesStr.Split(new string[] { "}" }, StringSplitOptions.RemoveEmptyEntries);
+            var citl = new List<MpCopyItemTemplate>();
+            foreach(var template in templates) {
+                var templateParts = template.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                var templateColor = Color.FromHex(templateParts[0].Substring(templateParts[0].IndexOf(':') + 1).Replace("#",string.Empty));
+                var templateId = Convert.ToInt32(templateParts[1].Substring(templateParts[1].IndexOf(':') + 1));
+                var templateName = templateParts[2].Substring(templateParts[2].IndexOf(':') + 1);
+                var templateText = templateParts[3].Substring(templateParts[3].IndexOf(':') + 1);
+
+                var t = new MpCopyItemTemplate() {
+                    Id = templateId > 0 ? templateId : 0,
+                    CopyItemId = cidpvm.CopyItem.Id,
+                    Color = new MpColor(templateColor),
+                    TemplateName = templateName,
+                    TemplateText = templateText
+                };
+                await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTemplate>(t);
+                citl.Add(t);
+            }
+            var itemHtml = cidpvm.Html;//await cidpvm.EvaluateEditorJavaScript($"getHtml()");
             // Unescape that damn Unicode Java bull.
             itemHtml = Regex.Replace(
                 itemHtml,
                 @"\\[Uu]([0-9A-Fa-f]{4})",
                 m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
             itemHtml = Regex.Unescape(itemHtml);
-            itemHtml = itemHtml.Replace("\"", string.Empty);
+            itemHtml = itemHtml.Replace("\"", char.ToString('"'));
             cidpvm.CopyItem.ItemHtml = itemHtml;
 
             ContentEditorWebView = null;

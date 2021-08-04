@@ -31,8 +31,9 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpCopyItem))]
+
         [Column("fk_MpCopyItemId")]
+        [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
         [ForeignKey(typeof(MpColor))]
@@ -41,7 +42,13 @@ namespace MonkeyPaste {
 
         public string TemplateName { get; set; }
 
-        [ManyToOne]
+        [Ignore]
+        public string TemplateText { get; set; }
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpCopyItem CopyItem { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpColor Color { get; set; }
         #endregion
 
