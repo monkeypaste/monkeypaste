@@ -69,8 +69,15 @@ namespace MpWpfApp {
             UrlDomainId = Convert.ToInt32(dr["fk_MpUrlDomainId"].ToString());
             UrlDomain = MpUrlDomain.GetUrlDomainById(UrlDomainId);
         }
-
+        
         public override void WriteToDatabase() {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (UrlId == 0) {
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpUrl(MpUrlGuid,UrlPath,UrlTitle,fk_MpUrlDomainId) values(@ug,@up,@ut,@udid)",
@@ -79,7 +86,7 @@ namespace MpWpfApp {
                         { "@up", UrlPath },
                         { "@ut", UrlTitle },
                         { "@udid", UrlDomainId }
-                    },UrlGuid.ToString());
+                    },UrlGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 UrlId = MpDb.Instance.GetLastRowId("MpUrl", "pk_MpUrlId");
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -90,7 +97,7 @@ namespace MpWpfApp {
                         { "@up", UrlPath },
                         { "@ut", UrlTitle },
                         { "@udid", UrlDomainId }
-                    },UrlGuid.ToString());
+                    },UrlGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
 
             var urldl = GetAllUrls().Where(x => x.UrlId == UrlId).ToList();
@@ -100,13 +107,20 @@ namespace MpWpfApp {
                 _AllUrlList.Add(this);
             }
         }
-        
-        public void DeleteFromDatabase() {            
+
+        public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             MpDb.Instance.ExecuteWrite(
                 "delete from MpUrl where pk_MpUrlId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", UrlId }
-                },UrlGuid.ToString());
+                },UrlGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
 
             var urldl = GetAllUrls().Where(x => x.UrlId == UrlId).ToList();
             if (urldl.Count > 0) {

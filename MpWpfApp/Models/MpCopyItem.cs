@@ -1170,6 +1170,15 @@ namespace MpWpfApp {
         }
 
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+
             if (CopyItemId <= 0) {
                 return;
             }
@@ -1181,7 +1190,7 @@ namespace MpWpfApp {
                     "delete from MpPasteHistory where pk_MpPasteHistoryId=@phid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@phid", ph.PasteHistoryId }
-                        },ph.SourceClientGuid.ToString());
+                        },ph.SourceClientGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }                
             }
             
@@ -1189,7 +1198,7 @@ namespace MpWpfApp {
                 "delete from MpCopyItem where pk_MpCopyItemId=@ciid",
                 new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId }
-                    }, CopyItemGuid.ToString());
+                    }, CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
 
             MpDb.Instance.ExecuteWrite(
                 "delete from MpDetectedImageObject where fk_MpCopyItemId=@ciid",
@@ -1205,7 +1214,7 @@ namespace MpWpfApp {
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
 
@@ -1217,7 +1226,7 @@ namespace MpWpfApp {
                     "delete from MpCopyItemSortTypeOrder where pk_MpCopyItemSortTypeOrderId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemSortTypeOrderId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
 
@@ -1235,7 +1244,7 @@ namespace MpWpfApp {
                     "delete from MpCopyItemTemplate where pk_MpCopyItemTemplateId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTemplateId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
 
@@ -1247,18 +1256,22 @@ namespace MpWpfApp {
                     "delete from MpCompositeCopyItem where pk_MpCopyItemTemplateId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTemplateId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
 
             if (CopyItemType == MpCopyItemType.Composite) {
-                MpDb.Instance.ExecuteWrite(
+                dt = MpDb.Instance.Execute(@"select * from MpCompositeCopyItem where fk_ParentMpCopyItemId=@ciid", new Dictionary<string, object> { { "@ciid", CopyItemId } });
+                if (dt != null && dt.Rows.Count > 0) {
+                    var citg = Guid.Parse(dt.Rows[0]["MpCompositeCopyItemGuid"].ToString());
+                    MpDb.Instance.ExecuteWrite(
                 "delete from MpCompositeCopyItem where fk_ParentMpCopyItemId=@ciid",
                 new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-                foreach(var cci in CompositeItemList) {
-                    cci.DeleteFromDatabase();
+                            { "@ciid", CopyItemId }
+                    }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+                    foreach (var cci in CompositeItemList) {
+                        cci.DeleteFromDatabase();
+                    }
                 }
             }
             var cil = GetAllCopyItems(out int count).Where(x => x.CopyItemId == CopyItemId).ToList();
@@ -1291,7 +1304,15 @@ namespace MpWpfApp {
         }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
-            if(!IsAltered()) {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (!IsAltered()) {
                 return;
             }
             if(CopyItemId < 0) {
@@ -1340,7 +1361,7 @@ namespace MpWpfApp {
                             { "@ihtml", ItemHtml },
                             { "@ii", ItemDbImageId},
                             { "@ciid", CopyItemId},
-                        },CopyItemGuid.ToString());
+                        },CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpCopyItem(ItemRtf,ItemHtml,MpCopyItemGuid,PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,fk_MpDbImageId) " + 
@@ -1363,7 +1384,7 @@ namespace MpWpfApp {
                             { "@it", itemText },
                             { "@ii", ItemDbImageId},
                             { "@ciid", CopyItemId},
-                        }, CopyItemGuid.ToString());
+                        }, CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  
             }
 
@@ -1378,7 +1399,7 @@ namespace MpWpfApp {
                             { @"ciid",CopyItemId },
                             { "@pciid", CompositeParentCopyItemId },
                             { "@soidx", CompositeSortOrderIdx }
-                        }, CompositeCopyItemGuid.ToString());
+                        }, CompositeCopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                     CompositeCopyItemId = MpDb.Instance.GetLastRowId("MpCompositeCopyItem", "pk_MpCompositeCopyItemId");
                 } else {
                     MpDb.Instance.ExecuteWrite(
@@ -1389,7 +1410,7 @@ namespace MpWpfApp {
                             { @"ciid",CopyItemId },
                             { "@pciid", CompositeParentCopyItemId },
                             { "@soidx", CompositeSortOrderIdx }
-                        },CompositeCopyItemGuid.ToString());
+                        },CompositeCopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
 

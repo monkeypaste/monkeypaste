@@ -14,8 +14,6 @@ namespace MonkeyPaste {
         #region Properties
         public MpCopyItem CopyItem { get; set; }
 
-        //public MpJsMessageListener JsMessageListener { get; set; }
-
         public Func<string, Task<string>> EvaluateEditorJavaScript { get; set; }
 
         public event EventHandler OnEditorLoaded;
@@ -36,39 +34,22 @@ namespace MonkeyPaste {
         public MpCopyItemDetailPageViewModel(MpCopyItem ci) : this() {
             PropertyChanged += MpCopyItemDetailPageViewModel_PropertyChanged;
             CopyItem = ci;
-            
-            //JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
-            Initialize();
+            //Initialize();
         }
 
         private void MpCopyItemDetailPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(EvaluateEditorJavaScript):
                     if(EvaluateEditorJavaScript != null) {
-                        InitEditor();
-                        //JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
-                        //StartMessageListener();
+                        //Initialize();
+                        //InitEditor();
                     }
                     break;
             }
         }
 
-        //public void StartMessageListener() {
-        //    JsMessageListener.Start();
-        //}
-
-        //public async Task<string> StopMessageListener() {
-        //    string outStr = string.Empty;
-        //    if(JsMessageListener != null) {
-        //        JsMessageListener.Stop();
-        //    }
-        //    var itemText = await EvaluateEditorJavaScript($"getText()");
-        //    itemText = itemText.Replace("\"", string.Empty);
-        //    return itemText;
-        //}
-
-        private async Task SetToolbarTop(int y) {
-            //await EvaluateEditorJavaScript($"moveToolbarTop({y})");
+        private void SetToolbarTop(int y) {
+            EvaluateEditorJavaScript($"moveToolbarTop({y})");
         } 
 
         public async Task<string> GetEditorText() {
@@ -81,27 +62,18 @@ namespace MonkeyPaste {
             return itemText.Replace("\"", string.Empty);
         }
 
-        public async Task SetEditorText(string content) {
-            await EvaluateEditorJavaScript($"setText('{content}')");
+        public void SetEditorText(string content) {
+            EvaluateEditorJavaScript($"setText('{content}')");
         }
 
-        public async Task SetEditorHtml(string html) {
-            await EvaluateEditorJavaScript($"setHtml('{html}')");
+        public void SetEditorHtml(string html) {
+            EvaluateEditorJavaScript($"setHtml('{html}')");
         }
 
-        public async Task InitEditor() {
-            (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged += LayoutService_OnKeyboardHeightChanged;
-            string content = CopyItem.ItemHtml;
-            if(string.IsNullOrEmpty(content)) {
-                content = CopyItem.ItemText;
-            }
-            //await EvaluateEditorJavaScript($"init('{content}',null,null,null,null)");
-        }
-
-        private async void LayoutService_OnKeyboardHeightChanged(object sender, float e) {
+        private void LayoutService_OnKeyboardHeightChanged(object sender, float e) {
             if (EvaluateEditorJavaScript != null) {
                 MpConsole.WriteLine(@"Kb Top: " + e);
-                await SetToolbarTop((int)e);
+                SetToolbarTop((int)e);
             }
         }
         #endregion
@@ -120,21 +92,23 @@ namespace MonkeyPaste {
             UpdateTimer = new System.Timers.Timer();
             UpdateTimer.Interval = 100;
             UpdateTimer.AutoReset = true;
-            UpdateTimer.Elapsed += async (s, e) => {
-                if(EvaluateEditorJavaScript == null) {
-                    return;
-                }
-                Text = await EvaluateEditorJavaScript($"getText()");
-                if (EvaluateEditorJavaScript == null) {
-                    return;
-                }
-                Html = await EvaluateEditorJavaScript($"getHtml()");
-                if (EvaluateEditorJavaScript == null) {
-                    return;
-                }
-                Templates = await EvaluateEditorJavaScript($"getTemplates()");
-            };
+            UpdateTimer.Elapsed += UpdateTimer_Elapsed;
             UpdateTimer.Start();
+        }
+
+        private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
+            if (EvaluateEditorJavaScript == null) {
+                return;
+            }
+            Text = await EvaluateEditorJavaScript($"getText()");
+            if (EvaluateEditorJavaScript == null) {
+                return;
+            }
+            Html = await EvaluateEditorJavaScript($"getHtml()");
+            if (EvaluateEditorJavaScript == null) {
+                return;
+            }
+            Templates = await EvaluateEditorJavaScript($"getTemplates()");
         }
 
         public void Dispose() {
@@ -145,12 +119,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
-        public ICommand CreateTemplateCommand => new Command<object>(async (args) => {
-            if (args == null) {
-                return;
-            }
-            await Task.Delay(1);
-        });
         #endregion
     }
 }

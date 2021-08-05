@@ -190,6 +190,13 @@ namespace MpWpfApp {
             return dt.Rows.Count == 0;
         }
         public override void WriteToDatabase() {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (!IsAltered()) {
                 return;
             }
@@ -229,7 +236,7 @@ namespace MpWpfApp {
                             { "@c3", ColorId[2] },
                             { "@c4", ColorId[3] },
                             { "@c5", ColorId[4] }
-                         }, IconGuid.ToString());
+                         }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -246,11 +253,20 @@ namespace MpWpfApp {
                         { "@c4", ColorId[3] },
                         { "@c5", ColorId[4] },
                         { "@iid", IconId }
-                    }, IconGuid.ToString());
+                    }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
         }
 
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+
             if (IconId <= 0) {
                 return;
             }
@@ -270,7 +286,7 @@ namespace MpWpfApp {
                 "delete from MpIcon where pk_MpIconId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", IconId }
-                }, IconGuid.ToString());
+                }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
         }
     }
 }

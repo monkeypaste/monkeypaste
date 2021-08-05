@@ -25,10 +25,14 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <style>
         body {
             margin: 0px;
             padding: 0px;
+            font-family: Arial;
         }
 
         .btn {
@@ -49,8 +53,12 @@
             color: green;
         }
 
-        .ql-omega:after {
-            content: "Ω";
+        #editor {
+            width: 100%;
+        }
+
+        .ql-toolbar {
+            width: 100%;
         }
 
         .ql-templatebutton:after {
@@ -125,6 +133,9 @@
                 cursor: pointer;
             }
 
+        .selectedTemplate {
+        }
+
         /* Template Context Menu*/
         .cls-context-menu-link {
             display: block;
@@ -169,15 +180,113 @@
                         color: #FFF;
                     }
 
-        .ql-label {
-            background-color: lightgrey;
-            padding: 0.3em;
-            margin: 0 0.2em;
+        /* Paste Template Toolbar */
+        .paste-template-toolbar {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            background-color: lightyellow;
+            border: solid 2px dimgray;
+            padding: 5px 10px;
         }
 
-            .ql-label button {
-                margin-left: 0.3em;
+        .paste-template-toolbar-btn {
+            display: inline-block;
+            padding: 5px;
+            text-decoration: none;
+            border: 1px solid #CCC;
+            color: #67c5ff;
+            border: solid 2px #67c5ff;
+            border-radius: 3px;
+            transition: .4s;
+            margin: 0 10px;
+            background-color: dimgray;
+            cursor:pointer;
+        }
+
+        paste-template-toolbar-btn:hover {
+            background: #67c5ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Custom Selector style*/
+        .Select-menu-outer {
+            top: auto;
+            bottom: 100%
+        }
+
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            font-family: Arial;
+        }
+
+            .custom-select select {
+                display: none;
             }
+
+        .select-selected {
+            background-color: DodgerBlue;
+        }
+
+            .select-selected:after {
+                position: absolute;
+                content: "";
+                top: 14px;
+                right: 10px;
+                width: 0;
+                height: 0;
+                border: 6px solid transparent;
+                border-color: #fff transparent transparent transparent;
+            }
+
+            .select-selected.select-arrow-active:after {
+                border-color: transparent transparent #fff transparent;
+                top: 7px;
+            }
+
+        .select-items div,
+        .select-selected {
+            color: #ffffff;
+            padding: 8px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: DodgerBlue;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div:hover,
+        .same-as-selected {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .select-items .square-box {
+            height: 18px;
+            width: 18px;
+            float: right;
+        }
+
+        .select-selected .square-box {
+            height: 18px;
+            width: 18px;
+            right: 30px;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -189,469 +298,685 @@
         </ul>
     </div>
 
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
-            crossorigin="anonymous"></script>
-    <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
-    <script type="text/javascript">
-        var curQuillDiv = $("#editor");
-        var quill;
-        var isShowingTemplateMenu = false;
-        var clickCount = 0;
+    <div id="pasteTemplateToolbar" class="paste-template-toolbar">
+        <div id="custom-select" class="custom-select" style="width:200px;">
+            <select id="pasteTemplateToolbarMenuSelector">
+            </select>
+        </div>
+        <div id="previousTemplateButton" class="paste-template-toolbar-btn">
+            <span>◄</span>
+        </div>
+        <div id="nextTemplateButton" class="paste-template-toolbar-btn">
+            <span>►</span>
+        </div>
+        <div id="clearAllTemplateTextButton" class="paste-template-toolbar-btn">
+            <span>CLEAR ALL</span>
+        </div>
+        <div style="display:inline-block">
+            <input id="templateTextArea" onchange="templateTextAreaChange()" onkeyup="templateTextAreaChange()" onreset="templateTextAreaChange()" type="search" cols="30" />
+        </div>
+        <div id="pasteTemplateButton" class="paste-template-toolbar-btn">
+            <span>FINISH</span>
+        </div>
+    </div>
 
-        function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize) {
-            if (fontFamilys == null) {
-                fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
-            }
-            if (fontSizes == null) {
-                fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
-            }
-            if (defaultFontIdx == null) {
-                defaultFontIdx = 0;
-            }
-            loadQuill(fontFamilys, fontSizes, defaultFontIdx);
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
+                crossorigin="anonymous"></script>
+        <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
+        <script type="text/javascript">
+            var curQuillDiv = $("#editor");
+            var quill;
+            var isShowingTemplateMenu = false;
+            var clickCount = 0;
+            var selectedTemplateId = 0;
 
-            if (html != null) {
-                setHtml(html);
-                loadTemplates();
-            }
-        }
-
-        function loadTable() {
-            var tableOptions = [];
-            var maxRows = 7;
-            var maxCols = 7;
-
-            for (let r = 1; r <= maxRows; r++) {
-                for (let c = 1; c <= maxCols; c++) {
-                    tableOptions.push('newtable_' + r + '_' + c);
+            function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
+                if (fontFamilys == null) {
+                    fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
                 }
-            }
-            return tableOptions;
-        }
+                if (fontSizes == null) {
+                    fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+                }
+                if (defaultFontIdx == null) {
+                    defaultFontIdx = 0;
+                }
+                loadQuill(fontFamilys, fontSizes, defaultFontIdx);
 
-        function loadToolbar(fontFamilys, fontSizes, defaultFontIdx) {
-            var fonts = loadFonts(fontFamilys);
-
-            var toolbarOptions2 = [
-                [{ header: [1, 2, 3, false] }],
-                [{ 'font': fonts.whitelist }],
-                ['bold', 'italic', 'underline'],
-                ['clean']
-                ["image"],
-            ];
-
-            var toolbarOptions = [
-                //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-                [{ 'size': fontSizes }],               // font sizes
-                [{ 'font': fonts.whitelist }],
-                ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
-                //['blockquote', 'code-block'],
-
-                // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-                //[{ 'direction': 'rtl' }],                         // text direction
-
-                // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['link', 'image', 'video', 'formula'],
-                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-                [{ 'align': [] }],
-                // ['clean'],                                         // remove formatting button
-                ['omega'],
-                ['templatebutton'],
-                [{ 'Table-Input': loadTable() }]
-            ];
-
-            return toolbarOptions;
-        }
-
-        function loadFonts(fontFamilys, fontSizes, defaultFontIdx) {
-            // Specify Quill fonts
-            var fontNames = fontFamilys.map(font => getFontName(font));
-            var fonts = Quill.import('attributors/class/font');
-            fonts.whitelist = fontNames;
-            Quill.register(fonts, true);
-
-            //font sizes
-            var size = Quill.import('attributors/style/size');
-            size.whitelist = fontSizes;
-            Quill.register(size, true);
-
-            return fonts;
-        }
-
-        function loadFontStyles(fontFamilys) {
-            // Add fonts to CSS style
-            var fontStyles = "";
-            fontFamilys.forEach(function (font) {
-                var fontName = getFontName(font);
-                fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-                    "content: '" + font + "';" +
-                    "font-family: '" + font + "', sans-serif;" +
-                    "}" +
-                    ".ql-font-" + fontName + "{" +
-                    " font-family: '" + font + "', sans-serif;" +
-                    "}";
-            });
-
-            return fontStyles;
-        }
-
-        function loadTemplateSpan() {
-            const Parchment = Quill.imports.parchment;
-            const Delta = Quill.imports.delta;
-
-            class TemplateSpan extends Parchment.EmbedBlot {
-                static create(value) {
-                    const node = super.create(value);
-                    node.contentEditable = 'false';
-                    node.innerText = value.templateName;
-                    node.setAttribute('templateName', value.templateName);
-                    node.setAttribute('templateColor', value.templateColor);
-                    node.setAttribute('templateId', value.templateId);
-                    node.setAttribute('class', 'template_btn');
-                    node.setAttribute('style', 'background-color: ' + value.templateColor);
-                    //this._addRemovalButton(node);
-                    return node;
+                //moveToolbarTop(0);
+                if (html != null) {
+                    setHtml(html);
                 }
 
-                //static value(node) {
-                //    return node.childNodes[0].textContent;
-                //}
-                static value(domNode) {
-                    return {
-                        templateId: domNode.getAttribute('templateId'),
-                        templateName: domNode.getAttribute('templateName'),
-                        templateColor: domNode.getAttribute('templateColor'),
+                if (isFillingTemplates) {
+                    showPasteTemplateToolbar();
+                }
+            }
+
+            function loadTable() {
+                var tableOptions = [];
+                var maxRows = 7;
+                var maxCols = 7;
+
+                for (let r = 1; r <= maxRows; r++) {
+                    for (let c = 1; c <= maxCols; c++) {
+                        tableOptions.push('newtable_' + r + '_' + c);
                     }
                 }
-
-                static _addRemovalButton(node) {
-                    const button = document.createElement('button');
-                    button.innerText = 'x';
-                    button.onclick = () => node.remove();
-                    button.contentEditable = 'false';
-                    node.appendChild(button);
-
-                    // Extra span forces the cursor to the end of the label, otherwise it appears inside the removal button
-                    const span = document.createElement('span');
-                    span.innerText = ' ';
-                    node.appendChild(span);
-                }
+                return tableOptions;
             }
-            TemplateSpan.blotName = 'templatespan';
-            TemplateSpan.tagName = 'SPAN';
-            TemplateSpan.className = 'ql-templatespan';
 
-            Quill.register(TemplateSpan);
-        }
-        
-        function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
-            Quill.register("modules/htmlEditButton", htmlEditButton);
-            Quill.register({ 'modules/better-table': quillBetterTable }, true);
+            function loadToolbar(fontFamilys, fontSizes, defaultFontIdx) {
+                var fonts = loadFonts(fontFamilys);
 
-            loadTemplateSpan();
+                var toolbarOptions = [
+                    //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'size': fontSizes }],               // font sizes
+                    [{ 'font': fonts.whitelist }],
+                    ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+                    //['blockquote', 'code-block'],
 
-            // Append the CSS stylesheet to the page
-            var node = document.createElement('style');
-            node.innerHTML = loadFontStyles(fontFamilys);
-            document.body.appendChild(node);
+                    // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                    //[{ 'direction': 'rtl' }],                         // text direction
 
-            quill = new Quill(curQuillDiv[0], {
-                placeholder: '',
-                theme: 'snow',
-                modules: {
-                    toolbar: loadToolbar(fontFamilys, fontSizes, defaultFontIdx),
-                    htmlEditButton: {
-                        syntax: true,
-                    },
-                    table: false,
-                    'better-table': {
-                        operationMenu: {
-                            items: {
-                                unmergeCells: {
-                                    text: 'Unmerge cells'
+                    // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['link', 'image', 'video', 'formula'],
+                    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{ 'align': [] }],
+                    // ['clean'],                                         // remove formatting button
+                    ['templatebutton'],
+                    [{ 'Table-Input': loadTable() }]
+                ];
+
+                return toolbarOptions;
+            }
+
+            function loadFonts(fontFamilys, fontSizes, defaultFontIdx) {
+                // Specify Quill fonts
+                var fontNames = fontFamilys.map(font => getFontName(font));
+                var fonts = Quill.import('attributors/class/font');
+                fonts.whitelist = fontNames;
+                Quill.register(fonts, true);
+
+                //font sizes
+                var size = Quill.import('attributors/style/size');
+                size.whitelist = fontSizes;
+                Quill.register(size, true);
+
+                return fonts;
+            }
+
+            function loadFontStyles(fontFamilys) {
+                // Add fonts to CSS style
+                var fontStyles = "";
+                fontFamilys.forEach(function (font) {
+                    var fontName = getFontName(font);
+                    fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
+                        "content: '" + font + "';" +
+                        "font-family: '" + font + "', sans-serif;" +
+                        "}" +
+                        ".ql-font-" + fontName + "{" +
+                        " font-family: '" + font + "', sans-serif;" +
+                        "}";
+                });
+
+                return fontStyles;
+            }
+
+            function loadTemplateSpan() {
+                const Parchment = Quill.imports.parchment;
+                const Delta = Quill.imports.delta;
+
+                class TemplateSpan extends Parchment.EmbedBlot {
+                    static create(value) {
+                        const node = super.create(value);
+                        node.contentEditable = 'false';
+                        node.innerText = value.templateName;
+                        node.setAttribute('templateName', value.templateName);
+                        node.setAttribute('templateColor', value.templateColor);
+                        node.setAttribute('templateId', value.templateId);
+                        node.setAttribute('class', 'template_btn');
+                        node.setAttribute('style', 'background-color: ' + value.templateColor);
+                        //this._addRemovalButton(node);
+                        return node;
+                    }
+
+                    //static value(node) {
+                    //    return node.childNodes[0].textContent;
+                    //}
+                    static value(domNode) {
+                        return {
+                            templateId: domNode.getAttribute('templateId'),
+                            templateName: domNode.getAttribute('templateName'),
+                            templateColor: domNode.getAttribute('templateColor'),
+                        }
+                    }
+
+                    static _addRemovalButton(node) {
+                        const button = document.createElement('button');
+                        button.innerText = 'x';
+                        button.onclick = () => node.remove();
+                        button.contentEditable = 'false';
+                        node.appendChild(button);
+
+                        // Extra span forces the cursor to the end of the label, otherwise it appears inside the removal button
+                        const span = document.createElement('span');
+                        span.innerText = ' ';
+                        node.appendChild(span);
+                    }
+                }
+                TemplateSpan.blotName = 'templatespan';
+                TemplateSpan.tagName = 'SPAN';
+                TemplateSpan.className = 'ql-templatespan';
+
+                Quill.register(TemplateSpan);
+            }
+
+            function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
+                Quill.register("modules/htmlEditButton", htmlEditButton);
+                Quill.register({ 'modules/better-table': quillBetterTable }, true);
+
+                loadTemplateSpan();
+
+                // Append the CSS stylesheet to the page
+                var node = document.createElement('style');
+                node.innerHTML = loadFontStyles(fontFamilys);
+                document.body.appendChild(node);
+
+                quill = new Quill(curQuillDiv[0], {
+                    placeholder: '',
+                    theme: 'snow',
+                    modules: {
+                        toolbar: loadToolbar(fontFamilys, fontSizes, defaultFontIdx),
+                        htmlEditButton: {
+                            syntax: true,
+                        },
+                        table: false,
+                        'better-table': {
+                            operationMenu: {
+                                items: {
+                                    unmergeCells: {
+                                        text: 'Unmerge cells'
+                                    }
+                                },
+                                color: {
+                                    colors: ['green', 'red', 'yellow', 'blue', 'white'],
+                                    text: 'Background Colors:'
                                 }
-                            },
-                            color: {
-                                colors: ['green', 'red', 'yellow', 'blue', 'white'],
-                                text: 'Background Colors:'
                             }
+                        },
+                        keyboard: {
+                            bindings: quillBetterTable.keyboardBindings
                         }
-                    },
-                    keyboard: {
-                        bindings: quillBetterTable.keyboardBindings
                     }
-                }
-            });
+                });
 
-            var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
-            curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
-            var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
-            curTableCellIconSpans.click((function () {
-                var curQuillBetterTable = quill.getModule('better-table');
-                var curQuillToolbar = quill.getModule('toolbar');
-                return function () {
-                    var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-                    var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-                    curQuillBetterTable.insertTable(curRowIndex, curColIndex);
-                    // The following two lines have been added, thinking that it would fix the issue of keeping the icon in blue color.  However Quill keeps adding the classes back, so this fix doesn't work.
-                    $(this).parent().parent().find(".ql-selected").removeClass("ql-selected"); $(this).parent().parent().find(".ql-active").removeClass("ql-active");
-                };
-            })());
-            curTableCellIconSpans.hover(function () {
-                var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-                var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-                $(this).parent().children().each((function () {
-                    var curRowIndex1 = curRowIndex;
-                    var curColIndex1 = curColIndex;
+                var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
+                curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
+                var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
+                curTableCellIconSpans.click((function () {
+                    var curQuillBetterTable = quill.getModule('better-table');
+                    var curQuillToolbar = quill.getModule('toolbar');
                     return function () {
-                        var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
-                        var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
-                        if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
-                            $(this).addClass("ql-picker-item-highlight");
-                        }
+                        var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
+                        var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
+                        curQuillBetterTable.insertTable(curRowIndex, curColIndex);
+                        // The following two lines have been added, thinking that it would fix the issue of keeping the icon in blue color.  However Quill keeps adding the classes back, so this fix doesn't work.
+                        $(this).parent().parent().find(".ql-selected").removeClass("ql-selected"); $(this).parent().parent().find(".ql-active").removeClass("ql-active");
                     };
                 })());
-            }, function () {
-                $(this).parent().children().removeClass("ql-picker-item-highlight");
-            });
+                curTableCellIconSpans.hover(function () {
+                    var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
+                    var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
+                    $(this).parent().children().each((function () {
+                        var curRowIndex1 = curRowIndex;
+                        var curColIndex1 = curColIndex;
+                        return function () {
+                            var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
+                            var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
+                            if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
+                                $(this).addClass("ql-picker-item-highlight");
+                            }
+                        };
+                    })());
+                }, function () {
+                    $(this).parent().children().removeClass("ql-picker-item-highlight");
+                });
 
-            var toolbar = quill.getModule('toolbar');
-            toolbar.addHandler('omega', function () {
-                console.log('omega')
-            });
 
+                var templateButton = document.querySelector('.ql-templatebutton');
 
-            var customButton = document.querySelector('.ql-omega');
-            customButton.addEventListener('click', function () {
-                var range = quill.getSelection();
-                if (range) {
-                    //var sIdx = range.index > 0 ? range.index - 1 : 0;
-                    //let delta = quill.getContents();
+                templateButton.addEventListener('click', function (e) {
+                    var tl = getTemplates();
+                    if (tl.length > 0) {
+                        showTemplateContextMenu(templateButton, e);
+                    } else {
+                        createTemplate();
+                    }
+                });
 
-                    //const a = delta.retain(sIdx).delete(range.length).insert('POOOP');
+                document.addEventListener('click', function (e) {
+                    if (isShowingTemplateMenu && clickCount > 0) {
+                        hideTemplateContextMenu();
+                    } else {
+                        clickCount++;
+                    }
+                    return;
+                });
+            }
 
-                    //var ops = [
-                    //    { retain: sIdx },
-                    //    { delete: range.length },
-                    //    { insert: 'POOOP' }
-                    //];
+            function createTemplate(templateId) {
+                var range = quill.getSelection(true);
 
-                    //quill.updateContents(ops);
-                    //quill.insertText(range.index, "Ω");
-                    //setSelectionContent('pooopy');
-                    //setSelection(range.index, range.index + range.length);
-
-                    //createTemplateSpan('New Template #1');
-                    createLink();
-                }
-            });
-
-            var templateButton = document.querySelector('.ql-templatebutton');
-
-            templateButton.addEventListener('click', function (e) {
                 var tl = getTemplates();
-                if (tl.length > 0) {
-                    showTemplateContextMenu(templateButton, e);
-                } else {
-                    createTemplate();
-                }                
-            });
+                var newTemplateObj = {
+                    templateId: -(tl.length + 1),
+                    templateColor: getRandomColor(),
+                    templateName: quill.getText(range.index, range.length)
+                };
 
-            document.addEventListener('click', function (e) {
-                if (isShowingTemplateMenu && clickCount > 0) {
-                    hideTemplateContextMenu();
-                } else {
-                    clickCount++;
+                if (templateId != null) {
+                    for (var i = 0; i < tl.length; i++) {
+                        var t = tl[i];
+                        if (t['templateId'] == templateId) {
+                            newTemplateObj = t;
+                            break;
+                        }
+                    }
                 }
-                return;
-            });
-        }
+                if (range.length == 0 && templateId == null) {
+                    newTemplateObj['templateName'] = "Template #" + parseInt(tl.length + 1);
+                }
 
-        function createTemplate(templateId) {
-            var range = quill.getSelection(true);
+                quill.deleteText(range.index, range.length);
+                quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.API);
+                quill.insertText(range.index + 1, ' ', Quill.sources.API);
+                quill.setSelection(range.index + 1, Quill.sources.API);
+            }
 
-            var tl = getTemplates();
-            var newTemplateObj = {
-                templateId: -(tl.length + 1),
-                templateColor: getRandomColor(),
-                templateName: quill.getText(range.index, range.length)
-            };
+            function selectTemplate(templateId,fromDropDown) {
+                if (templateId == null) {
+                    return;
+                }
+                var stl = document.getElementsByClassName("template_btn");
+                for (var i = 0; i < stl.length; i++) {
+                    var t = stl[i];
+                    if (t.getAttribute('templateid') == templateId) {
+                        $('#templateTextArea').placeholder = "Enter text for " + t.innerText;
+                        if (t.innerText != getTemplateById(templateId)['templateName']) {
+                            $('#templateTextArea').val(t.innerText);
+                        } else {
+                            $('#templateTextArea').val('');
+                        }
+                        selectedTemplateId = templateId;
+                    }
+                }
+                if (fromDropDown == null || !fromDropDown) {
 
-            if (templateId != null) {
+                    var items = document.getElementById('custom-select').getElementsByTagName("div");
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].getAttribute('optionId') != null && items[i].getAttribute('optionId') == selectedTemplateId) {
+                            //onTemplateOptionClick(null, items[i]);
+                            eventFire(items[i], 'click');
+                            break;
+                        }
+                    }
+                }
+            }
+            function eventFire(el, etype) {
+                if (el.fireEvent) {
+                    el.fireEvent('on' + etype);
+                } else {
+                    var evObj = document.createEvent('Events');
+                    evObj.initEvent(etype, true, false);
+                    el.dispatchEvent(evObj);
+                }
+            }
+
+            function templateTextAreaChange() {
+                var curText = $('#templateTextArea').val();
+                setTemplateText(selectedTemplateId, curText);
+            }
+
+            function setTemplateText(templateId, text) {
+                var stl = document.getElementsByClassName("template_btn");
+                for (var i = 0; i < stl.length; i++) {
+                    var t = stl[i];
+                    if (t.getAttribute('templateid') == templateId) {
+                        t.innerText = text;
+                    }
+                }
+            }
+
+            function getTemplates() {
+                var domTemplates = document.getElementsByClassName("template_btn");
+                var templates = [];
+                for (var i = 0; i < domTemplates.length; i++) {
+                    var domTemplate = domTemplates[i];
+                    var template = {
+                        templateId: domTemplate.getAttribute('templateId'),
+                        templateName: domTemplate.getAttribute('templateName'),
+                        templateColor: domTemplate.getAttribute('templateColor'),
+                        templateText: domTemplate.innerText
+                    }
+                    var isDup = false;
+                    for (var j = 0; j < templates.length; j++) {
+                        if (templates[j]['templateId'] == template['templateId']) {
+                            isDup = true;
+                            break;
+                        }
+                    }
+                    if (!isDup) {
+                        templates.push(template);
+                    }
+                }
+                return templates;
+            }
+
+            function getTemplateById(templateId) {
+                var tl = getTemplates();
                 for (var i = 0; i < tl.length; i++) {
                     var t = tl[i];
                     if (t['templateId'] == templateId) {
-                        newTemplateObj = t;
+                        return t;
+                    }
+                }
+                return null;
+            }
+
+            function showTemplateContextMenu(tb, e) {
+                clickCount = 0;
+                
+                var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
+                var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
+                rgtClickContextMenuList.innerHTML = '';
+
+                var tl = getTemplates();
+                for (var i = 0; i < tl.length; i++) {
+                    var t = tl[i];
+                    var templateItem = '<li><a href="javascript:void(0);" onclick="createTemplate(' + t['templateId'] + ');">' +
+                        '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
+                        '<span style="font-family:arial;">' + t['templateName'] + '</span></a></li>';
+                    rgtClickContextMenuList.innerHTML += templateItem;
+                }
+
+                rgtClickContextMenuList.innerHTML += '<li><a href="javascript:void(0);" onclick="createTemplate();"><span style="font-family:arial;">Add Template</span></a></li>';
+                const rect = tb.getBoundingClientRect();
+                const x = rect.left + 20;
+                const y = e.clientY - rect.top;
+                rgtClickContextMenu.style.left = `${x}px`;
+                rgtClickContextMenu.style.top = `${y}px`;
+                rgtClickContextMenu.style.display = 'block';
+
+                //if (tl.length > 0) {
+                //    selectTemplate(tl[0]['templateId']);
+                //}
+
+                isShowingTemplateMenu = true;
+            }
+
+            function hideTemplateContextMenu() {
+                var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
+                rgtClickContextMenu.style.display = 'none';
+
+                isShowingTemplateMenu = false;
+            }
+
+            function showPasteTemplateToolbar() {
+                var ptt = document.getElementById('pasteTemplateToolbar');
+                ptt.style.display = 'inline-block';
+                document.getElementById('custom-select').innerHTML = '<select id="pasteTemplateToolbarMenuSelector"></select >';
+
+                var templateMenuSelector = document.getElementById('pasteTemplateToolbarMenuSelector');
+                templateMenuSelector.innerHTML = '';
+
+                var tl = getTemplates();
+                for (var i = 0; i < tl.length; i++) {
+                    var t = tl[i];
+                    var templateItem = '<option class="templateOption" value="' + t['templateId'] + '" onchange="selectTemplate(' + t['templateId'] + ');">'+
+                        t['templateName'] + '</option>';
+                    templateMenuSelector.innerHTML += templateItem;
+                }
+
+
+                document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
+                    var curIdx = 0;
+                    for (var i = 0; i < tl.length; i++) {
+                        if (tl[i]['templateId'] == selectedTemplateId) {
+                            curIdx = i;
+                            break;
+                        }
+                    }
+                    var nextIdx = curIdx+1;
+                    if (nextIdx >= tl.length) {
+                        nextIdx = 0;
+                    }
+                    selectTemplate(tl[nextIdx]['templateId']);
+                });
+
+                document.getElementById('previousTemplateButton').addEventListener('click', function (e) {
+                    var curIdx = 0;
+                    for (var i = 0; i < tl.length; i++) {
+                        if (tl[i]['templateId'] == selectedTemplateId) {
+                            curIdx = i;
+                            break;
+                        }
+                    }
+                    var prevIdx = curIdx-1;
+                    if (prevIdx < 0) {
+                        prevIdx = tl.length - 1;
+                    }
+                    selectTemplate(tl[prevIdx]['templateId']);
+                });
+
+                createTemplateSelectorStyling(templateMenuSelector);
+
+                //var viewportBottom = window.scrollY + window.innerHeight;
+                //moveTemplateToolbarTop(viewportBottom);
+
+                $("#editor").css("position", "absolute");
+                $(".ql-toolbar").css("position", "absolute");
+                $("#pasteTemplateToolbar").css("position", "absolute");
+
+                let tbb = $(".ql-toolbar").outerHeight();
+                //let eb = $("#editor").css("bottom");
+                // 
+                $("#pasteTemplateToolbar").css("top", tbb);
+                let pttbb = $(".ql-toolbar").outerHeight() + tbb;
+                $("#editor").css("top",pttbb);
+            }
+
+            function createTemplateSelectorStyling() {
+                var tl = getTemplates();
+                var x, i, j, selElmnt, a, b, c;
+                x = document.getElementsByClassName("custom-select");
+                for (i = 0; i < x.length; i++) {
+                    selElmnt = x[i].getElementsByTagName("select")[0];
+                    var st = getTemplateById(selElmnt.options[selElmnt.selectedIndex].getAttribute('value'));
+                    a = document.createElement("DIV");
+                    a.setAttribute("class", "select-selected");
+                    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                    a2 = document.createElement("SPAN");
+                    a2.setAttribute("class", "square-box");
+                    a2.setAttribute("style", "background-color: " + st['templateColor']);
+                    a.appendChild(a2);
+                    x[i].appendChild(a);
+                    b = document.createElement("DIV");
+                    b.setAttribute("class", "select-items select-hide");
+                    for (j = 0; j < selElmnt.length; j++) {
+                        var t = getTemplateById(selElmnt.options[j].getAttribute('value'));
+                        c = document.createElement("DIV");
+                        c.setAttribute('optionId', t['templateId']);
+                        c.innerHTML = selElmnt.options[j].innerHTML;
+                        d = document.createElement("SPAN");
+                        d.setAttribute("class", "square-box");
+                        d.setAttribute("style", "background-color: " + t['templateColor']);
+                        c.appendChild(d);
+                        
+                        c.addEventListener("click", onTemplateOptionClick);
+                        b.appendChild(c);
+                    }
+                    x[i].appendChild(b);
+                    a.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        closeAllSelect(this);
+                        this.nextSibling.classList.toggle("select-hide");
+                        this.classList.toggle("select-arrow-active");
+                    });
+                    
+                }
+
+                function closeAllSelect(elmnt) {
+                    var x, y, i, arrNo = [];
+                    x = document.getElementsByClassName("select-items");
+                    y = document.getElementsByClassName("select-selected");
+                    for (i = 0; i < y.length; i++) {
+                        if (elmnt == y[i]) {
+                            arrNo.push(i)
+                        } else {
+                            y[i].classList.remove("select-arrow-active");
+                        }
+                    }
+                    for (i = 0; i < x.length; i++) {
+                        if (arrNo.indexOf(i)) {
+                            x[i].classList.add("select-hide");
+                        }
+                    }
+                }
+                document.addEventListener("click", closeAllSelect);                
+            }
+
+            function onTemplateOptionClick(e,target) {
+                var targetDiv = e == null ? target : e.currentTarget;
+                var y, i, k, s, h;
+                s = targetDiv.parentNode.parentNode.getElementsByTagName("select")[0];
+                h = targetDiv.parentNode.previousSibling;
+                for (i = 0; i < s.length; i++) {
+                    if (s.options[i].innerText == targetDiv.innerText) {
+                        s.selectedIndex = i;
+                        h.innerHTML = targetDiv.innerHTML;
+                        y = targetDiv.parentNode.getElementsByClassName("same-as-selected");
+                        for (k = 0; k < y.length; k++) {
+                            y[k].removeAttribute("class");
+                        }
+                        targetDiv.setAttribute("class", "same-as-selected");
                         break;
                     }
                 }
+
+                selectTemplate(s.options[s.selectedIndex].value, true);
+                h.click();
             }
-            if (range.length == 0 && templateId == null) {
-                newTemplateObj['templateName'] = "Template #" + parseInt(tl.length + 1);
-            }            
 
-            quill.deleteText(range.index, range.length);
-            quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.API);
-            quill.insertText(range.index + 1, ' ', Quill.sources.API);
-            quill.setSelection(range.index + 1, Quill.sources.API);
-        }
+            function hidePasteTemplateToolbar() {
+                var ptt = document.getElementById('pasteTemplateToolbar');
+                ptt.style.display = 'none';
+            }
 
-        function loadTemplates() {
-            //document.getElementsByClassName("template_btn").forEach(function (t) {
-            //    t.getAttribute('templateId')
-            //});
-        }
+            function getFontName(font) {
+                // Generate code-friendly font names
+                return font.toLowerCase().replace(/\s/g, "-");
+            }
 
-        function getTemplates() {
-            var domTemplates = document.getElementsByClassName("template_btn");
-            var templates = [];
-            for (var i = 0; i < domTemplates.length; i++) {
-                var domTemplate = domTemplates[i];
-                var template = {
-                    templateId: domTemplate.getAttribute('templateId'),
-                    templateName: domTemplate.getAttribute('templateName'),
-                    templateColor: domTemplate.getAttribute('templateColor'),
-                    templateText: domTemplate.innerText
+            function setText(text) {
+                quill.setText(text + '\n');
+            }
+
+            function setHtml(html) {
+                //var delta = quill.clipboard.convert(html);
+                //quill.setContents(delta, 'silent');
+                quill.root.innerHTML = html;
+            }
+
+            function getText() {
+                var text = quill.getText(0, quill.getLength() - 1);
+                return text;
+            }
+
+            function getHtml() {
+                //document.getElementsByClassName
+                //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+                var val = quill.root.innerHTML;
+                return unescape(val);
+            }
+
+            function getTemplatesJson() {
+                var val = JSON.stringify(getTemplates());
+                return val;
+            }
+
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
+
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
                 }
-                var isDup = false;
-                for (var j = 0; j < templates.length; j++) {
-                    if (templates[j]['templateId'] == template['templateId']) {
-                        isDup = true;
-                        break;
-                    }
+                return color;
+            }
+
+            function createTemplateSpan(templateName) {
+                var range = quill.getSelection(true);
+                if (range) {
+                    quill.deleteText(range.index, range.length);
+                    var ts = '<span style="border-style:solid;border-color:orange;border-radius:10px;padding:15px;background-color:purple;color:white;font-size:15em">&lt;' + templateName + '&gt;</span>';
+                    quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                    console.log('text:\n' + getText());
+                    console.table('\nhtml:\n' + getHtml());
                 }
-                if (!isDup) {
-                    templates.push(template);
+            }
+
+            function createLink() {
+                var range = quill.getSelection(true);
+                if (range) {
+                    var text = quill.getText(range.index, range.length);
+                    quill.deleteText(range.index, range.length);
+                    var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
+                    quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                    console.log('text:\n' + getText());
+                    console.table('\nhtml:\n' + getHtml());
                 }
             }
-            return templates;
-        }
 
-        function showTemplateContextMenu(tb, e) {
-            clickCount = 0;
-            var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
-            var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
-            rgtClickContextMenuList.innerHTML = '';
+            function moveToolbarTop(y) {
+                $("#editor").css("position", "absolute");
+                $(".ql-toolbar").css("position", "absolute");
 
-            var tl = getTemplates();
-            for (var i = 0; i < tl.length; i++) {
-                var t = tl[i];
-                var templateItem = '<li><a href="javascript:void(0);" onclick="createTemplate('+t['templateId']+');">' +
-                    '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
-                    '<span style="font-family:arial;">'+t['templateName'] + '</span></a></li>';
-                rgtClickContextMenuList.innerHTML += templateItem;
+                var viewportBottom = window.scrollY + window.innerHeight;
+                let tbh = $(".ql-toolbar").outerHeight();
+                if (y <= 0) {
+                    //keyboard is not visible
+                    $(".ql-toolbar").css("top", y);
+                    $("#editor").css("top", y + tbh);
+                } else {
+                    $(".ql-toolbar").css("top", y - tbh);
+                    $("#editor").css("top", 0);
+                }
+                $("#editor").css("bottom", viewportBottom - tbh);
             }
 
-            rgtClickContextMenuList.innerHTML += '<li><a href="javascript:void(0);" onclick="createTemplate();"><span style="font-family:arial;">Add Template</span></a></li>';
-            const rect = tb.getBoundingClientRect();
-            const x = rect.left + 20;
-            const y = e.clientY - rect.top;
-            rgtClickContextMenu.style.left = `${x}px`;
-            rgtClickContextMenu.style.top = `${y}px`;
-            rgtClickContextMenu.style.display = 'block';
+            function moveTemplateToolbarTop(y) {
+                $("#editor").css("position", "absolute");
+                $(".ql-toolbar").css("position", "absolute");
+                $("#pasteTemplateToolbar").css("position", "absolute");
 
-            isShowingTemplateMenu = true;
-        }
-
-        function hideTemplateContextMenu() {
-            var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
-            rgtClickContextMenu.style.display = 'none';
-
-            isShowingTemplateMenu = false;
-        }
-
-        function getFontName(font) {
-            // Generate code-friendly font names
-            return font.toLowerCase().replace(/\s/g, "-");
-        }
-
-        function setText(text) {
-            quill.setText(text + '\n');
-        }
-
-        function setHtml(html) {
-            //var delta = quill.clipboard.convert(html);
-            //quill.setContents(delta, 'silent');
-            quill.root.innerHTML = html;
-        }
-
-        function getText() {
-            var text = quill.getText(0, quill.getLength() - 1);
-            return text;
-        }
-
-        function getHtml() {
-            //document.getElementsByClassName
-            //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
-            var val = quill.root.innerHTML;
-            return unescape(val);
-        }
-
-        function getTemplatesJson() {
-            var val = JSON.stringify(getTemplates());
-            return val;
-        }
-
-        function decodeHtml(html) {
-            var txt = document.createElement("textarea");
-            txt.innerHTML = html;
-            return txt.value;
-        }
-
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+                let tbh = $("#pasteTemplateToolbar").outerHeight();
+                //let eb = $("#editor").css("bottom");
+               // $("#editor").css("bottom", eb - tbh);
+                $("#pasteTemplateToolbar").css("top", y - tbh - 20);
             }
-            return color;
-        }
-
-        function createTemplateSpan(templateName) {
-            var range = quill.getSelection(true);
-            if (range) {
-                quill.deleteText(range.index, range.length);
-                var ts = '<span style="border-style:solid;border-color:orange;border-radius:10px;padding:15px;background-color:purple;color:white;font-size:15em">&lt;' + templateName + '&gt;</span>';
-                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
-
-                console.log('text:\n' + getText());
-                console.table('\nhtml:\n' + getHtml());
-            }
-        }
-
-        function createLink() {
-            var range = quill.getSelection(true);
-            if (range) {
-                var text = quill.getText(range.index, range.length);
-                quill.deleteText(range.index, range.length);
-                var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
-                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
-
-                console.log('text:\n' + getText());
-                console.table('\nhtml:\n' + getHtml());
-            }
-        }
-
-        function moveToolbarTop(y) {
-            $("#editor").css("position", "absolute");
-            $(".ql-toolbar").css("position", "absolute");
-
-            let tbh = $(".ql-toolbar").outerHeight();
-            if (y <= 0) {
-                //keyboard is not visible
-                $(".ql-toolbar").css("top", y);
-                $("#editor").css("top", y + tbh);
-            } else {
-                $(".ql-toolbar").css("top", y + tbh);
-                $("#editor").css("top", 0);
-            }
-        }
-        //==================================================================================================
-        init(null, null, null, null, null);
-    </script>
+            //==================================================================================================
+           // init(null, null, null, null, null);
+        </script>
 
 </body>
 </html>

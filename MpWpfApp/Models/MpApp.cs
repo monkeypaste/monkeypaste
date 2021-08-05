@@ -187,12 +187,14 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            //for (int i = 1; i <= PrimaryIconColorList.Count; i++) {
-            //    var c = PrimaryIconColorList[i-1];
-            //    c.WriteToDatabase();
-            //    ColorId[i - 1] = c.ColorId;
-            //}
-            if(!HasChanged) {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (!HasChanged) {
                 return;
             }
             Icon.WriteToDatabase();
@@ -208,7 +210,7 @@ namespace MpWpfApp {
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName },
-                        },AppGuid.ToString());
+                        },AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -221,7 +223,7 @@ namespace MpWpfApp {
                         { "@sp", AppPath },
                         { "@an", AppName },
                         { "@aid", AppId }
-                    }, AppGuid.ToString());
+                    }, AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
 
             var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
@@ -233,8 +235,16 @@ namespace MpWpfApp {
 
             MpAppCollectionViewModel.Instance.Refresh();
         }
-
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+
             if (AppId <= 0) {
                 return;
             }
@@ -244,7 +254,7 @@ namespace MpWpfApp {
                 "delete from MpApp where pk_MpAppId=@aid",
                 new Dictionary<string, object> {
                     { "@aid", AppId }
-                }, AppGuid.ToString());
+                }, AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
 
             var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
             if (al.Count > 0) {

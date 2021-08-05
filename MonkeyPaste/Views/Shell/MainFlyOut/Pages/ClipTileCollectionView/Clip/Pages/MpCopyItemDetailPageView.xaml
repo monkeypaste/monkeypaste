@@ -9,6 +9,7 @@
     <ContentPage.Content>
         <Grid>
             <local:MpWebView x:Name="ContentEditorWebView"
+                             Navigated="ContentEditorWebView_Navigated"
                              EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
                 <local:MpWebView.Source>
                     <HtmlWebViewSource x:Name="HtmlSource"  

@@ -68,6 +68,13 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             Color.WriteToDatabase();
             ColorId = Color.ColorId;
 
@@ -79,7 +86,7 @@ namespace MpWpfApp {
                             { "@ciid", CopyItemId },
                             { "@cid", ColorId},
                             { "@tn", TemplateName }
-                    },CopyItemTemplateGuid.ToString());
+                    },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -90,17 +97,25 @@ namespace MpWpfApp {
                             { "@ciid", CopyItemId },
                             { "@cid", ColorId },
                             { "@tn", TemplateName }
-                    },CopyItemTemplateGuid.ToString());
+                    },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
         }
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+
             Color.DeleteFromDatabase();
 
             MpDb.Instance.ExecuteWrite(
                 "delete from MpCopyItemTemplate where pk_MpCopyItemTemplateId=@citid",
                 new Dictionary<string, object> {
                     { "@citid", CopyItemTemplateId }
-                },CopyItemTemplateGuid.ToString());
+                },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
         }
     }
 }

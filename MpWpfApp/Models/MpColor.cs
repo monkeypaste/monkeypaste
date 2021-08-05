@@ -225,6 +225,13 @@ namespace MpWpfApp {
         public void WriteToDatabase(bool isFirstLoad) {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid, isFirstLoad);
         }
+        public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
         public override void DeleteFromDatabase(string sourceClientGuid,bool ignoreTracking = false,bool ignoreSyncing = false) {
             if (ColorId <= 0) {
                 return;
@@ -237,13 +244,7 @@ namespace MpWpfApp {
                 }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
         }
 
-        public void DeleteFromDatabase() {
-            if (IsSyncing) {
-                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
-            } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
-            }
-        }
+        
 
         public async Task<object> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             await Task.Delay(1);

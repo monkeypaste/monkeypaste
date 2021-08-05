@@ -63,7 +63,14 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if(!IsAltered()) {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (!IsAltered()) {
                 return;
             }
             string imgStr = DbImageBase64;//MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
@@ -73,7 +80,7 @@ namespace MpWpfApp {
                     new Dictionary<string, object> {
                         { "@dbig",DbImageGuid.ToString() },
                         { "@ib64", imgStr }
-                    },DbImageGuid.ToString());
+                    },DbImageGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 DbImageId = MpDb.Instance.GetLastRowId("MpDbImage", "pk_MpDbImageId");
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -82,16 +89,25 @@ namespace MpWpfApp {
                         { "@dbig", DbImageGuid.ToString() },
                         { "@dbiid", DbImageId },
                         { "@ib64", imgStr  }
-                    },DbImageGuid.ToString());
+                    },DbImageGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
         }
 
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+
             MpDb.Instance.ExecuteWrite(
                 "delete from MpDbImage where pk_MpDbImageId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", DbImageId }
-                },DbImageGuid.ToString());
+                },DbImageGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
         }
     }
 }

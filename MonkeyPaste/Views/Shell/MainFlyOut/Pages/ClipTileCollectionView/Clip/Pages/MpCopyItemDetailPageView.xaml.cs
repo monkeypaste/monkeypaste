@@ -89,6 +89,9 @@ namespace MonkeyPaste {
         }
 
         private void ContentEditorWebView_Navigated(object sender, WebNavigatedEventArgs e) {
+            if(e.Result == WebNavigationResult.Success) {
+
+            }
             var cidpvm = BindingContext as MpCopyItemDetailPageViewModel;
             //cidpvm.StartMessageListener();
         }

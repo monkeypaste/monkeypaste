@@ -208,7 +208,7 @@ namespace MpWpfApp {
 
         public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
             MpDbLogActionType actionType = MpDbLogActionType.None;
-            if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking) {
+            if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking && dbObject != null && dbObject is MpISyncableDbObject) {
                 //only track objects providing a guid
                 actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);                 
             }
@@ -644,7 +644,6 @@ namespace MpWpfApp {
                     , MpCopyItemTemplateGuid text
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpColorId integer default 2
-                    , HexColor text NOT NULL
                     , TemplateName text NOT NULL 
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)                    

@@ -107,8 +107,8 @@ namespace MpWpfApp {
             }
             return false;
         }
-        public bool LinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "") {
-            if(ci == null) {
+        public bool LinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (ci == null) {
                 return false;
             }
             //returns FALSE if copyitem is already linked to maintain correct counts
@@ -128,7 +128,7 @@ namespace MpWpfApp {
                     { "@citg", citg.ToString() },
                     { "@ciid", ci.CopyItemId },
                     { "@tid", TagId }
-                },citg.ToString());
+                },citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             var cistog = System.Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
                 "insert into MpCopyItemSortTypeOrder(MpCopyItemSortTypeOrderGuid,fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(@cistog,@ciid,@stid,@so)",
@@ -137,12 +137,12 @@ namespace MpWpfApp {
                     { "@ciid", ci.CopyItemId },
                     { "@stid", TagId },
                     { "@so", SortOrderIdx }
-                },cistog.ToString());
+                },cistog.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
             return true;
         }
-        public void UnlinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "") {
-            if(ci == null) {
+        public void UnlinkWithCopyItem(MpCopyItem ci, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (ci == null) {
                 return;
             }
             if (!IsLinkedWithCopyItem(ci)) {
@@ -158,7 +158,7 @@ namespace MpWpfApp {
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
-                        }, citg.ToString());
+                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 }
             }
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");

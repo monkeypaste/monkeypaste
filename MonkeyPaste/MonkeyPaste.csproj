@@ -39,6 +39,7 @@
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <Compile Remove="Models\Db\SQLite\SQLite.cs" />
     <Compile Remove="Models\Db\SQLite\SQLiteAsync.cs" />
+    <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="ViewModels\Bases\MpUndoableViewModelBase.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
@@ -174,6 +175,12 @@
     </Compile>
     <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemView.xaml.cs">
       <DependentUpon>MpCopyItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemTagAssociationPageView.xaml.cs">
+      <DependentUpon>MpCopyItemTagAssociationPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemTagAssociatedItemView.xaml.cs">
+      <DependentUpon>MpCopyItemTagAssociatedItemView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\MpCopyItemCollectionPageView.xaml.cs">
       <DependentUpon>MpCopyItemCollectionPageView.xaml</DependentUpon>

@@ -164,6 +164,13 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             //for (int i = 1; i <= PrimaryIconColorList.Count; i++) {
             //    var c = PrimaryIconColorList[i - 1];
             //    c.WriteToDatabase();
@@ -182,7 +189,7 @@ namespace MpWpfApp {
                             { "@udt", UrlDomainTitle },
                             { "@fib", FavIconId },
                             { "@iudr", Convert.ToInt32(IsUrlDomainRejected) }
-                        },UrlDomainGuid.ToString());
+                        },UrlDomainGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 UrlDomainId = MpDb.Instance.GetLastRowId("MpUrlDomain", "pk_MpUrlDomainId");
             }
 
@@ -195,6 +202,14 @@ namespace MpWpfApp {
         }
 
         public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+            }
+        }
+
+        public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (UrlDomainId <= 0) {
                 return;
             }
@@ -205,7 +220,7 @@ namespace MpWpfApp {
                 "delete from MpUrlDomain where pk_MpUrlDomainId=@aid",
                 new Dictionary<string, object> {
                     { "@aid", UrlDomainId }
-                },UrlDomainGuid.ToString());
+                },UrlDomainGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
 
             var urldl = GetAllUrlDomains().Where(x => x.UrlDomainId == UrlDomainId).ToList();
             if (urldl.Count > 0) {
