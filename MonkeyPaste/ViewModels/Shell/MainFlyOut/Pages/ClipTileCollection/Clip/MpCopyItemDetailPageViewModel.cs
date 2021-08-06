@@ -32,22 +32,14 @@ namespace MonkeyPaste {
         public MpCopyItemDetailPageViewModel() : base() { }
 
         public MpCopyItemDetailPageViewModel(MpCopyItem ci) : this() {
-            PropertyChanged += MpCopyItemDetailPageViewModel_PropertyChanged;
             CopyItem = ci;
-            //Initialize();
+            Initialize();
         }
 
-        private void MpCopyItemDetailPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(EvaluateEditorJavaScript):
-                    if(EvaluateEditorJavaScript != null) {
-                        //Initialize();
-                        //InitEditor();
-                    }
-                    break;
-            }
+        public void InitEditor(bool fillTemplates = false) {
+            return;
         }
-
+        
         private void SetToolbarTop(int y) {
             EvaluateEditorJavaScript($"moveToolbarTop({y})");
         } 
@@ -85,9 +77,14 @@ namespace MonkeyPaste {
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string contentTag = @"<div id='editor'>";
-                html = html.Replace(contentTag, contentTag + CopyItem.ItemText);
+                var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+                foreach(var cit in CopyItem.Templates) {
+                    data = data.Replace(cit.ToHtml(), cit.ToQuillEncoded());
+                }
+                html = html.Replace(contentTag, contentTag + data) ;
                 EditorHtml = html;
             }
+            
 
             UpdateTimer = new System.Timers.Timer();
             UpdateTimer.Interval = 100;

@@ -92,6 +92,24 @@
                              Size="22"
                              Color="Black" />
 
+            <FontImageSource x:Key="ClipboardOutlineIcon"
+                             FontFamily="{StaticResource FontAwesomeRegular}"
+                             Glyph="&#xf328;"
+                             Size="22"
+                             Color="White" />
+
+            <FontImageSource x:Key="ClipboardSolidIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf328;"
+                             Size="22"
+                             Color="White" />
+
+            <FontImageSource x:Key="ClipboardSolidCheckedIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf46c;"
+                             Size="22"
+                             Color="White" />
+
             <FontImageSource x:Key="DeleteIcon_Disabled"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf2ed;"
@@ -130,7 +148,7 @@
 
             <FontImageSource x:Key="TemplateIcon"
                              FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf02c;"
+                             Glyph="&#xf02b;"
                              Size="22"
                              Color="Black" />
 

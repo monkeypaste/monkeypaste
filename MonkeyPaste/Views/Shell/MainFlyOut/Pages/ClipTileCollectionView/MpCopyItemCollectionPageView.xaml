@@ -5,13 +5,13 @@
              xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
              WidthRequest="1000"
              HeightRequest="1000"
-             BackgroundColor="Purple"
+             BackgroundColor="Purple" 
              Title="Monkey Paste"
              x:Name="CopyItemCollectionView"
              x:DataType="local:MpCopyItemTileCollectionPageViewModel">
     <Shell.SearchHandler>
         <local:MpCopyItemViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
-                                                Placeholder="Enter search term"
+                                                Placeholder="Enter search term" IsSearchEnabled="False"
                                                 SearchBoxVisibility="Collapsible"
                                                 ItemsSource="{Binding CopyItemViewModels}"
                                                 ShowsResults="False"
@@ -36,9 +36,18 @@
             </local:MpCopyItemViewModelSearchHandler.ItemTemplate>
         </local:MpCopyItemViewModelSearchHandler>
     </Shell.SearchHandler>
+    <ContentPage.ToolbarItems>
+        <local:MpBindableToolbarItem ItemId="1" 
+                                     IconImageSource="{StaticResource EditIcon}"
+                                     IsVisible="{Binding IsEditButtonEnabled}"
+                                     Command="{Binding EditSelectedCopyItemCommand}"/>
+        <local:MpBindableToolbarItem ItemId="2" 
+                                     IconImageSource="{Binding ClipboardToolbarIcon}"
+                                     IsVisible="{Binding IsEditButtonEnabled}"
+                                     Command="{Binding SetClipboardToSelectedCopyItemCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <!--<local:MpSearchBarView BindingContext="{Binding SearchBarViewModel}" />-->
             <CollectionView x:Name="CopyItemViewModels"
                             EmptyView="{Binding}"
                             ItemsSource="{Binding CopyItemViewModels}"
@@ -54,7 +63,7 @@
                                        SnapPointsType="Mandatory" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="local:MpCopyItemViewModel">                        
+                    <DataTemplate x:DataType="local:MpCopyItemViewModel">
                         <local:MpCopyItemView BindingContext="{Binding .}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

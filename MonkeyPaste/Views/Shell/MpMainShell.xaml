@@ -3,7 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MonkeyPaste"
-    Title="Monkey Paste"
+    Title="Monkey Paste" 
     x:DataType="local:MpMainShellViewModel"
     Disappearing="Shell_Disappearing">
     <Shell.BindingContext>
@@ -25,7 +25,6 @@
                 <ContentView>
                     <local:MpTagCollectionView x:Name="TagCollectionView" BindingContext="{Binding TagCollectionViewModel}" />
                 </ContentView>
-
                 <StackLayout Orientation="Horizontal">
                     <Image
                         Margin="20,0,0,0"

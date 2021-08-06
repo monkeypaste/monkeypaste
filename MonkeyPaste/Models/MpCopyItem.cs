@@ -122,6 +122,7 @@ namespace MonkeyPaste {
         public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
 
+
         #region Static Methods
         public static async Task<MpCopyItem> GetCopyItemById(int CopyItemId) {
             var allItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();

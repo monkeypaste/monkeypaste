@@ -8,16 +8,19 @@ using System.Windows.Input;
 
 namespace MonkeyPaste {
     public partial class MpMainShell : Shell {
+        public static bool IsLoaded { get; set; } = false;
+
         public MpSettingsPageView SettingsPageView { get; set; }
 
         public MpIKeyboardInteractionService LayoutService { get; set; }
         public MpILocalStorage StorageService { get; set; }
         public MpIGlobalTouch GlobalTouchService { get; set; }
         public MpINativeInterfaceWrapper NativeWrapper { get; set; }
-
+        
         public event EventHandler<object> OnShellDisappearing;
 
         public MpMainShell() {
+            IsLoaded = true;
             InitializeComponent();
         }
 

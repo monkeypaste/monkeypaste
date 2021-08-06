@@ -23,7 +23,17 @@ namespace MonkeyPaste {
 
         public bool IsSelected { get; set; } = false;
 
+        public bool WasSetToClipboard { get; set; } = false;
+
         public MpCopyItem CopyItem { get; set; }
+
+        public bool HasTemplates {
+            get {
+                return CopyItem.Templates != null && CopyItem.Templates.Count > 0;
+            }
+        }
+
+        
 
         public string StatusText { get; set; } = "Status";
 
@@ -101,6 +111,8 @@ namespace MonkeyPaste {
                         //Device.InvokeOnMainThreadAsync(async () => {
                         //    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                         //});
+                    } else {
+                        WasSetToClipboard = false;
                     }
                     break;
                 case nameof(IsTitleReadOnly):
@@ -132,8 +144,8 @@ namespace MonkeyPaste {
                 await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(CopyItem.Id);
             });
 
-        public ICommand ShowTagAssociationsCommand => new Command(async () => {
-            await Device.InvokeOnMainThreadAsync(async () => {
+        public ICommand ShowTagAssociationsCommand => new Command(() => {
+            Device.InvokeOnMainThreadAsync(async () => {
                 await Shell.Current.GoToAsync($"CopyItemTagAssociations?CopyItemId={CopyItem.Id}");
             });
             //await Navigation.PushModal(new MpCopyItemTagAssociationPageView(new MpCopyItemTagAssociationPageViewModel(CopyItem)));
@@ -158,35 +170,32 @@ namespace MonkeyPaste {
             
         });
 
-        public ICommand CopyItemTileTappedCommand => new Command(async () => {
-            if(IsSelected) {
-                await Device.InvokeOnMainThreadAsync(async () => {
-                    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
-                    return;
-                });
+        public ICommand SelectCopyItemCommand => new Command(
+            () => IsSelected = true,
+            ()=>IsVisible);
+
+        public ICommand EditCopyItemCommand => new Command(
+            () => {
+                Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
+            },
+            ()=>IsSelected);
+
+        public ICommand FillOutTemplatesCommand => new Command(
+            () => {
+                Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=1"));
+            },
+            () => IsSelected);
+
+
+        public ICommand SetClipboardToItemCommand => new Command(async () => {
+            if(HasTemplates) {
+                FillOutTemplatesCommand.Execute(null);
             } else {
-                IsSelected = true;
+                await Clipboard.SetTextAsync(CopyItem.ItemText);                
             }
-        });
-
-        public ICommand Save => new Command(async () => {
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
-            //wait Navigation.PopAsync();
-        });
-
-        private Command _setCopyItemboardToItemCommand = null;
-        public ICommand SetCopyItemboardToItemCommand {
-            get {
-                if (_setCopyItemboardToItemCommand == null) {
-                    _setCopyItemboardToItemCommand = new Command(SetCopyItemboardToItem);
-                }
-                return _setCopyItemboardToItemCommand;
-            }
-        }
-        private void SetCopyItemboardToItem() {
-            Clipboard.SetTextAsync(CopyItem.ItemText);
+            WasSetToClipboard = true;
             ItemStatusChanged?.Invoke(this, new EventArgs());
-        }
+        });
         #endregion
     }
 }

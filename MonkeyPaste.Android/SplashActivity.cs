@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -12,7 +13,7 @@ using System.Text;
 namespace MonkeyPaste.Droid {
     [Activity(
         Label = "Monkey Paste", 
-        Theme = "@style/Splash", 
+        Theme = "@style/Splash",
         MainLauncher = true)]
     public class SplashActivity : Activity {
         protected override void OnCreate(Bundle savedInstanceState) {

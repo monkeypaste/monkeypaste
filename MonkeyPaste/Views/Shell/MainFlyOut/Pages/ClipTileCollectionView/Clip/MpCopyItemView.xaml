@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:MonkeyPaste"
              x:DataType="local:MpCopyItemViewModel">
     <ContentView.GestureRecognizers>
-        <TapGestureRecognizer Command="{Binding CopyItemTileTappedCommand}"
+        <TapGestureRecognizer Command="{Binding SelectCopyItemCommand}"
                                           NumberOfTapsRequired="1" />
     </ContentView.GestureRecognizers>
     <ContentView.Content>

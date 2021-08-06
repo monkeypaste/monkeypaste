@@ -6,6 +6,7 @@ using SQLite;
 using SQLiteNetExtensions;
 using SQLiteNetExtensions.Attributes;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
@@ -31,7 +32,7 @@ namespace MonkeyPaste {
             }
         }
 
-
+        
         [Column("fk_MpCopyItemId")]
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
@@ -53,6 +54,23 @@ namespace MonkeyPaste {
         #endregion
 
         public MpCopyItemTemplate() {
+        }
+
+        public string ToHtml() {
+            // 
+            return string.Format(
+                @"<span class='template_btn' contenteditable='false' templatename='{0}' templatecolor='{1}' templateid='{2}' style='background-color: {3}; color: {4};'>{0}</span>",
+                TemplateName,
+                Color.Color.ToHex(),
+                Id,
+                string.Format(@"rgb({0},{1},{2})", Color.R, Color.G, Color.B),
+                MpHelpers.Instance.IsBright(Color.Color) ? "black" : "white");
+        }
+
+        public string ToQuillEncoded() {
+            return string.Format(
+                @"{{{0}}}}",
+                Id);
         }
     }
 }

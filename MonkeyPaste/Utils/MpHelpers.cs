@@ -356,10 +356,11 @@ namespace MonkeyPaste {
         }
 
         public bool IsBright(Color c, int brightThreshold = 150) {
+            double s = c.R < 1 || c.G < 1 || c.B < 1 ? 255 : 1;
             int grayVal = (int)Math.Sqrt(
-                (c.R * 255) * (c.R * 255) * .299 +
-                (c.G * 255) * (c.G * 255) * .587 +
-                (c.B * 255) * (c.B * 255) * .114);
+                (c.R * s) * (c.R * s) * .299 +
+                (c.G * s) * (c.G * s) * .587 +
+                (c.B * s) * (c.B * s) * .114);
             return grayVal > brightThreshold;
         }
 

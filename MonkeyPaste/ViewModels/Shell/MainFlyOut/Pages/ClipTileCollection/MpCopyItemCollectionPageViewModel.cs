@@ -31,6 +31,24 @@ namespace MonkeyPaste {
         public string EmptyCollectionLableText { get; set; }
 
         public int TagId { get; set; }
+
+        public bool IsEditButtonEnabled {
+            get {
+                return SelectedCopyItemViewModel != null;
+            }
+        }
+
+        public ImageSource ClipboardToolbarIcon {
+            get {
+                if(SelectedCopyItemViewModel == null) {
+                    return null;
+                }
+                if (SelectedCopyItemViewModel.WasSetToClipboard) {
+                    return Application.Current.Resources["ClipboardSolidCheckedIcon"] as FontImageSource;
+                }
+                return Application.Current.Resources["ClipboardOutlineIcon"] as FontImageSource;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -115,6 +133,7 @@ namespace MonkeyPaste {
                     if(scivm != null) {
                         SelectedCopyItemViewModel = scivm;
                     }
+                    OnPropertyChanged(nameof(IsEditButtonEnabled));
                     break;
             }
         }
@@ -239,6 +258,18 @@ namespace MonkeyPaste {
         public ICommand SelectionChangedCommand => new Command<object>((args) => {
             if (args != null && args is MpCopyItemViewModel ttvm) {
                 SelectedCopyItemViewModel = args as MpCopyItemViewModel;
+            }
+        });
+
+        public ICommand EditSelectedCopyItemCommand => new Command(() => {
+            if (SelectedCopyItemViewModel != null) {
+                SelectedCopyItemViewModel.EditCopyItemCommand.Execute(null);
+            }
+        });
+
+        public ICommand SetClipboardToSelectedCopyItemCommand => new Command(() => {
+            if (SelectedCopyItemViewModel != null) {
+                SelectedCopyItemViewModel.SetClipboardToItemCommand.Execute(null);
             }
         });
         #endregion
