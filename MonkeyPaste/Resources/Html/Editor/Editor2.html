@@ -345,6 +345,17 @@
         var isLoaded = false;
         var isPastingTemplate = false;
         var isShowingPasteTemplateToolbar = false;
+        var templatesJson = "[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";
+        /*
+         * var myArray = {id1: 100, id2: 200, "tag with spaces": 300};
+            myArray.id3 = 400;
+            myArray["id4"] = 500;
+            You can loop through it using for..in loop:
+
+            for (var key in myArray) {
+              console.log("key " + key + " has value " + myArray[key]);
+            }
+            */
 
         function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
             if (fontFamilys == null) {
@@ -360,28 +371,20 @@
 
             isPastingTemplate = isFillingTemplates;
             isLoaded = true;
+
+            //html = "sdlikfjsdlkfj sdlfikjsdl;kfj {{5,Pokemon,#808080}}                 {{5,Pokemon,#808080}}      {{7,Pokemon334,#AA4433}}              {{3,Pokemon,#FF22BB}}";
             //moveToolbarTop(0);
             if (html != null) {
                 setHtml(html);
-                var tsIdx = html.indexOf("{{");
-                while (tsIdx >= 0) {
-                    var curHtml = html.substring(tsIdx);
-                    var teIdx = curHtml.indexOf("}}");
-                    if (teIdx >= 0) {
-                        var tId = curHtml.substring(0, teIdx);
-                        
-                    }
-                }
-            }
-
-            
+                loadTemplates();
+            }            
 
             if (isFillingTemplates) {
                 showPasteTemplateToolbar();
             }
         }
 
-        function loadTable() {
+        function registerTables() {
             var tableOptions = [];
             var maxRows = 7;
             var maxCols = 7;
@@ -394,8 +397,8 @@
             return tableOptions;
         }
 
-        function loadToolbar(fontFamilys, fontSizes, defaultFontIdx) {
-            var fonts = loadFonts(fontFamilys);
+        function registerToolbar(fontFamilys, fontSizes, defaultFontIdx) {
+            var fonts = registerFonts(fontFamilys);
 
             var toolbarOptions = [
                 //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
@@ -416,13 +419,13 @@
                 [{ 'align': [] }],
                 // ['clean'],                                         // remove formatting button
                 // ['templatebutton'],
-                [{ 'Table-Input': loadTable() }]
+                [{ 'Table-Input': registerTables() }]
             ];
 
             return toolbarOptions;
         }
 
-        function loadFonts(fontFamilys, fontSizes, defaultFontIdx) {
+        function registerFonts(fontFamilys, fontSizes, defaultFontIdx) {
             // Specify Quill fonts
             var fontNames = fontFamilys.map(font => getFontName(font));
             var fonts = Quill.import('attributors/class/font');
@@ -437,7 +440,7 @@
             return fonts;
         }
 
-        function loadFontStyles(fontFamilys) {
+        function registerFontStyles(fontFamilys) {
             // Add fonts to CSS style
             var fontStyles = "";
             fontFamilys.forEach(function (font) {
@@ -454,7 +457,7 @@
             return fontStyles;
         }
 
-        function loadTemplateSpan() {
+        function registerTemplateSpan() {
             const Parchment = Quill.imports.parchment;
             const Delta = Quill.imports.delta;
 
@@ -467,17 +470,20 @@
                     node.setAttribute('templateName', value.templateName);
                     node.setAttribute('templateColor', value.templateColor);
                     node.setAttribute('templateId', value.templateId);
+                    node.setAttribute('docIdx',value.docIdx)
                     node.setAttribute('class', 'template_btn');
                     node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
+                    node.addEventListener('click', function (e) {
+                        wasLastClickOnTemplate = true;
+                        selectTemplate(value.templateId, false);
+                    });
                     //this._addRemovalButton(node);
                     return node;
                 }
 
-                //static value(node) {
-                //    return node.childNodes[0].textContent;
-                //}
                 static value(domNode) {
                     return {
+                        docIdx: domNode.getAttribute('docIdx'),
                         templateId: domNode.getAttribute('templateId'),
                         templateName: domNode.getAttribute('templateName'),
                         templateColor: domNode.getAttribute('templateColor'),
@@ -511,18 +517,18 @@
             Quill.register("modules/htmlEditButton", htmlEditButton);
             Quill.register({ 'modules/better-table': quillBetterTable }, true);
 
-            loadTemplateSpan();
+            registerTemplateSpan();
 
             // Append the CSS stylesheet to the page
             var node = document.createElement('style');
-            node.innerHTML = loadFontStyles(fontFamilys);
+            node.innerHTML = registerFontStyles(fontFamilys);
             document.body.appendChild(node);
 
             quill = new Quill(curQuillDiv[0], {
                 placeholder: '',
                 theme: 'snow',
                 modules: {
-                    toolbar: loadToolbar(fontFamilys, fontSizes, defaultFontIdx),
+                    toolbar: registerToolbar(fontFamilys, fontSizes, defaultFontIdx),
                     htmlEditButton: {
                         syntax: true,
                     },
@@ -611,7 +617,6 @@
             });
 
             quill.on('selection-change', function (range, oldRange, source) {
-
                 if (range) {
                     if (range.length == 0) {
                         console.log('User cursor is on', range.index);
@@ -624,50 +629,179 @@
                     console.log('Cursor not in the editor');
                 }
             });
+
+            quill.on('text-change', function (delta, oldDelta, source) {
+                var retainVal = 0;
+                var textDelta = 0;
+                var wasAddTemplate = false;
+                delta.ops.forEach(function (op) {
+                    if(op.insert != null && op.insert.templatespan != null) {
+                        //handle shifting in create template
+                        wasAddTemplate = true;
+                        return;
+                    }
+                    if(op.retain != null) {
+                        retainVal = op.retain;
+                    }
+                    if(op.insert != null && op.insert.templatespan == null) {
+                        textDelta += op.insert.length;
+                    }
+                    if(op.delete != null) {
+                        textDelta -= parseInt(op.delete);
+                    }
+                });
+                if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
+                    shiftTemplates(retainVal, textDelta);
+                    console.log(getTemplates());
+                } 
+                
+            });
         }
 
-        function createTemplate(templateId) {
-            var range = quill.getSelection(true);
-
+        function shiftTemplates(fromDocIdx, byVal) {
             var tl = getTemplates();
-            var newTemplateObj = {
-                templateId: -(tl.length + 1),
-                templateColor: getRandomColor(),
-                templateName: quill.getText(range.index, range.length).trim()
-            };
-            var isNew = templateId == null;
-            if (templateId != null) {
-                for (var i = 0; i < tl.length; i++) {
-                    var t = tl[i];
-                    if (t['templateId'] == templateId) {
-                        newTemplateObj = t;
-                        break;
+            tl.forEach(function (t) {
+                if(Array.isArray(t.docIdx)) {
+                    t.docIdx.forEach(function (tDocIdx) {
+                        if(tDocIdx >= fromDocIdx) {
+                            setTemplateDocIdx(t, tDocIdx, parseInt(parseInt(tDocIdx) + parseInt(byVal)));
+                        }
+                    });
+                } else {
+                    if(parseInt(t.docIdx) >= fromDocIdx) {
+                        setTemplateDocIdx(t, t.docIdx, parseInt(parseInt(t.docIdx) + parseInt(byVal)));
                     }
                 }
+            });
+        }
+
+        function loadTemplates() {
+            var html = getHtml();
+            var idx = 0;
+            var lenDiff = 0;
+            while(true) {
+                if(idx >= html.length) {
+                    break;
+                }
+                var tt = findNextTemplateToken(idx+lenDiff,html);
+                if(tt == null) {
+                    break;
+                }
+                var ttIdx = tt.sIdx;
+                var ttLen = tt.length;
+                delete tt.sIdx;
+                delete tt.length;
+                idx = createTemplate(tt, idx, ttLen);
+                lenDiff = getHtml().length - html.length + ttLen;
+                html = getHtml();
             }
-            if (range.length == 0 && templateId == null) {
-                newTemplateObj['templateName'] = "Template #" + parseInt(tl.length + 1);
+        }
+
+        function findNextTemplateToken(fIdx, text, sToken = '{{', eToken = '}}', sep = ',') {
+            text = text.substring(fIdx);
+            var tsIdx = text.indexOf(sToken);
+            var teIdx = text.indexOf(eToken);
+
+            if (tsIdx < 0 || teIdx < 0) {
+                return null;
             }
 
-            quill.deleteText(range.index, range.length);
-            quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.API);
+            var templateSpan = text.substring(tsIdx + sToken.length, teIdx);
+            var templateParts = templateSpan.split(sep);
+
+            if(templateParts.length != 3) {
+                return null;
+            }
+            return {
+                templateId: templateParts[0],
+                templateName: templateParts[1],
+                templateColor: templateParts[2],
+                sIdx: fIdx + tsIdx,
+                length: teIdx - tsIdx + eToken.length
+            };
+        }
+
+        function createTemplate(templateObjOrId, idx, len) {
+            var templateObj = templateObjOrId;
+            if(templateObj === parseInt(templateObj, 10)) {
+                templateObj = getTemplateById(templateObjOrId);
+            }
+            var range = quill.getSelection(true);
+            if(idx != null && length != null) {
+                range = { index: idx, length: len };
+            }
+
+            var tl = getTemplates();
+            var isNew = templateObj == null;
+            var newTemplateObj = templateObj;
+            if(isNew) {
+                newTemplateObj = {
+                    templateId: getNewTemplateId(),
+                    templateColor: getRandomColor(),
+                    templateName: quill.getText(range.index, range.length).trim()
+                };
+            }
+            newTemplateObj.docIdx = range.index;
+            //if (templateId != null) {
+            //    for (var i = 0; i < tl.length; i++) {
+            //        var t = tl[i];
+            //        if (t['templateId'] == templateId) {
+            //            newTemplateObj = t;
+            //            break;
+            //        }
+            //    }
+            //}
+            if(range.length == 0 && isNew) {
+                newTemplateObj['templateName'] = getLowestAnonTemplateName();//"Template #" + parseInt(tl.length + 1);
+            }
+
+            quill.deleteText(range.index, range.length,Quill.sources.SILENT);
+            if(Math.abs(parseInt(range.length)) > 0) {
+                shiftTemplates(range.index, -range.length);
+            }
+            shiftTemplates(range.index, 1);
+            quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.SILENT);
             var eofIdx = quill.getLength();
             if (range.index + newTemplateObj['templateName'].length >= eofIdx) {
-                quill.insertText(range.index + 1, ' ', Quill.sources.API);
+                quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
             }
             quill.setSelection(range.index + 1, Quill.sources.API);
 
-            var tElml = document.getElementsByClassName("template_btn");
-            for (var i = 0; i < tElml.length; i++) {
-                var tElm = tElml[i];
-                if (tElm.getAttribute('templateId') == newTemplateObj['templateId']) {
-                    tElm.addEventListener('click', function (e) {
-                        wasLastClickOnTemplate = true;
-                        selectTemplate(tElm.getAttribute('templateId'), false);
-                    });
-                }
-            }
+            //var tElml = document.getElementsByClassName("template_btn");
+            //for (var i = 0; i < tElml.length; i++) {
+            //    var tElm = tElml[i];
+            //    if (tElm.getAttribute('templateId') == newTemplateObj['templateId']) {
+            //        tElm.addEventListener('click', function (e) {
+            //            wasLastClickOnTemplate = true;
+            //            selectTemplate(tElm.getAttribute('templateId'), false);
+            //        });
+            //    }
+            //}
             selectTemplate(newTemplateObj['templateId']);
+
+            console.log(getTemplates());
+            return range.index;
+        }
+
+        function getLowestAnonTemplateName(anonPrefix = 'Template #') {
+            var tl = getTemplates();
+            var maxNum = 0;
+            tl.forEach(function (t) {
+                if(t.templateName.startsWith(anonPrefix)) {
+                    var anonNum = parseInt(t.templateName.substring(anonPrefix.length));
+                    maxNum = Math.max(maxNum, anonNum);
+                }
+            });
+            return anonPrefix + (parseInt(maxNum) + 1);
+        }
+
+        function getNewTemplateId() {
+            var tl = getTemplates();
+            var minId = 0;
+            tl.forEach(function (t) {
+                minId = Math.min(minId, t.templateId);
+            });
+            return (parseInt(minId) - 1);
         }
 
         function clearTemplateSelection() {
@@ -734,6 +868,24 @@
             }
         }
 
+        function setTemplateDocIdx(t, oldIdx, newIdx) {
+            var domTemplates = document.getElementsByClassName("template_btn");
+            for(var i = 0; i < domTemplates.length; i++) {
+                var domTemplate = domTemplates[i];
+                var template = {
+                    templateId: domTemplate.getAttribute('templateId'),
+                    templateName: domTemplate.getAttribute('templateName'),
+                    templateColor: domTemplate.getAttribute('templateColor'),
+                    docIdx: domTemplate.getAttribute('docIdx'),
+                    templateText: domTemplate.innerText
+                }
+                if(template.templateId == t.templateId && template.docIdx == oldIdx) {
+                    domTemplate.setAttribute('docIdx', newIdx);
+                    return;
+                }
+            }
+        }
+
         function getTemplates() {
             var domTemplates = document.getElementsByClassName("template_btn");
             var templates = [];
@@ -743,20 +895,31 @@
                     templateId: domTemplate.getAttribute('templateId'),
                     templateName: domTemplate.getAttribute('templateName'),
                     templateColor: domTemplate.getAttribute('templateColor'),
+                    docIdx: domTemplate.getAttribute('docIdx'),
                     templateText: domTemplate.innerText
                 }
-                var isDup = false;
+                var curTemplateIdx = -1;
                 for (var j = 0; j < templates.length; j++) {
-                    if (templates[j]['templateId'] == template['templateId']) {
-                        isDup = true;
+                    if(templates[j]['templateId'] == template['templateId']) {
+                        curTemplateIdx = j;
                         break;
                     }
                 }
-                if (!isDup) {
+                if(curTemplateIdx >= 0) {
+                    if(Array.isArray(templates[curTemplateIdx].docIdx)) {
+                        templates[curTemplateIdx].docIdx.push(template.docIdx);
+                    } else {
+                        templates[curTemplateIdx].docIdx = [templates[curTemplateIdx].docIdx, template.docIdx];
+                    }
+                } else {
                     templates.push(template);
                 }
             }
             return templates;
+        }
+
+        function getTemplatesJson() {
+            return JSON.stringify(getTemplates());
         }
 
         function getTemplateById(templateId) {
@@ -777,9 +940,12 @@
             var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
             rgtClickContextMenuList.innerHTML = '';
 
+            
             var tl = getTemplates();
+            var listItemPrefix = 'templateListItem_';
             for (var i = 0; i < tl.length; i++) {
                 var t = tl[i];
+                var itemId = listItemPrefix + t.templateId;
                 var templateItem = '<li><a href="javascript:void(0);" onclick="createTemplate(' + t['templateId'] + ');">' +
                     '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
                     '<span style="font-family:arial;">' + t['templateName'] + '</span></a></li>';
@@ -1022,9 +1188,83 @@
             quill.root.innerHTML = html;
         }
 
+        function getContentsAsJson() {
+            return JSON.stringify(quill.getContents());
+        }
+
+        function setContents(jsonStr) {
+            quill.setContents(JSON.parse(jsonStr));
+        }
+
         function getText() {
             var text = quill.getText(0, quill.getLength() - 1);
             return text;
+        }
+
+        function getTextWithEmbedTokens() {
+            var text = getText().split('');
+            var otl = getTemplatesByDocOrder()
+            var outText = '';
+            var offset = 0;
+            otl.forEach(function (ot) {
+                offset += parseInt(ot.docIdx);
+                var embedStr = getTemplateEmbedStr(ot);
+                //text.splice(offset, 1);
+                for(var i = 0; i < embedStr.length; i++) {
+                    text.splice(offset + i, 0, embedStr[i]);
+                }
+                offset += (embedStr.length);
+            });
+            return text.join('');
+        }
+
+        function getTemplatesByDocOrder() {
+            var til = getTemplateInstances();
+            til.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
+            return til;
+        }
+
+        function getTemplateInstances() {
+            var til = [];
+            getTemplates().forEach(function (t) {
+                if(Array.isArray(t.docIdx)) {
+                    t.docIdx.forEach(function (tDocIdx) {
+                        var ti = new Object();
+                        var ti = Object.assign(ti, t);
+                        ti.docIdx = tDocIdx;
+                        til.push(ti);
+                    });
+                } else {
+                    til.push(t);
+                }
+            });
+            return til;
+        }
+
+        function getTemplateOffset(_t, idx) {
+            var _tDocIdx = Array.isArray(_t.docIdx) ? _t.docIdx[idx] : _t.docIdx;
+            var text = getText();
+            var tl = getTemplates();
+            var offset = 0;
+            tl.forEach(function (t) {
+                var embedStr = '{{' + t.templateId + '}}';
+                if(Array.isArray(t.docIdx)) {
+                    t.docIdx.forEach(function (tDocIdx) {
+                        if(tDocIdx < _tDocIdx) {
+                            offset += getTemplateEmbedStr(t).length;
+                        }
+                    });
+                } else {
+                    if(t.docIdx < _tDocIdx) {
+                        offset += getTemplateEmbedStr(t).length;
+                    }
+                }
+            });
+            return offset;
+        }
+
+        function getTemplateEmbedStr(t) {
+            return '{{' + t.templateId + '}}';
         }
 
         function getHtml() {
@@ -1058,9 +1298,9 @@
         function isBright(hex, brightThreshold = 150) {
             var c = hexToRgb(hex.toLowerCase());
             var grayVal = Math.sqrt(
-                (c.R * 1) * (c.R * 1) * .299 +
-                (c.G * 1) * (c.G * 1) * .587 +
-                (c.B * 1) * (c.B * 1) * .114);
+                c.R * c.R * .299 +
+                c.G * c.G * .587 +
+                c.B * c.B  * .114);
             return grayVal > brightThreshold;
         }
         function hexToRgb(hex) {
@@ -1070,18 +1310,6 @@
                 G: parseInt(result[2], 16),
                 B: parseInt(result[3], 16)
             } : null;
-        }
-
-        function createTemplateSpan(templateName) {
-            var range = quill.getSelection(true);
-            if (range) {
-                quill.deleteText(range.index, range.length);
-                var ts = '<span style="border-style:solid;border-color:orange;border-radius:10px;padding:15px;background-color:purple;color:white;font-size:15em">&lt;' + templateName + '&gt;</span>';
-                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
-
-                console.log('text:\n' + getText());
-                console.table('\nhtml:\n' + getHtml());
-            }
         }
 
         function createLink() {
