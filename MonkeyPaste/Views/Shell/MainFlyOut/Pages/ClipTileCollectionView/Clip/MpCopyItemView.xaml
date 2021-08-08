@@ -28,16 +28,25 @@
                                 iOS="10" />
             </Frame.Margin>
             <StackLayout Orientation="Horizontal">
-                <ff:CachedImage Aspect="AspectFit"
-                                    Margin="0,10,0,0"
-                                    VerticalOptions="Start"
-                                    WidthRequest="60"
-                                    HeightRequest="60"
+                <StackLayout Orientation="Vertical">
+                    <ff:CachedImage Aspect="AspectFit"
+                                    Margin="0,0,0,0"
+                                    VerticalOptions="StartAndExpand"
+                                    HorizontalOptions="FillAndExpand"
                                     CacheDuration="50"
                                     RetryCount="3"
                                     Source="{Binding IconImageSource}"
                                     RetryDelay="600"
                                     DownsampleToViewSize="true" />
+                    <Button x:Name="ContextMenuButton"
+                            BackgroundColor="Transparent"
+                            BorderWidth="0"
+                            Clicked="ContextMenuButton_Clicked"
+                            VerticalOptions="StartAndExpand"
+                            HeightRequest="25"
+                            WidthRequest="20"
+                            ImageSource="{StaticResource EllipsesHIcon}" />
+                </StackLayout>
                 <Grid Padding="0"
                           BackgroundColor="Transparent"
                           HorizontalOptions="FillAndExpand"
@@ -62,30 +71,28 @@
                     </Label.LineBreakMode>
                 </Label>
                 <BoxView Grid.Row="1"
-                                 HeightRequest="1"
-                                 HorizontalOptions="FillAndExpand"
-                                 Color="Gray" />
-                <Label Grid.Row="2"
+                            HeightRequest="1"
+                            HorizontalOptions="FillAndExpand"
+                            Color="Gray" />
+                    <Grid Grid.Row="2">
+                        <Grid>
+                            <local:MpWebView x:Name="ContentEditorWebView"
+                                             IsEnabled="{Binding IsExpanded}"
+                                             EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
+                                <local:MpWebView.Source>
+                                    <HtmlWebViewSource x:Name="HtmlSource"
+                                                       Html="{Binding EditorHtml}" />
+                                </local:MpWebView.Source>
+                            </local:MpWebView>
+                        </Grid>
+                    </Grid>
+                <!--<Label Grid.Row="2"
                                Padding="5"
                                FontSize="16"
                                Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
-                               TextColor="Black" />
+                               TextColor="Black" />-->
                 </Grid>
-                <Button x:Name="ContextMenuButton"
-                    BackgroundColor="Transparent"
-                    BorderWidth="0"
-                    Clicked="ContextMenuButton_Clicked"
-                    HeightRequest="25"
-                    WidthRequest="20"
-                    ImageSource="{StaticResource DotsIcon}"/>
             </StackLayout>
         </Frame>
-        <!--<Button BackgroundColor="Transparent"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Fill"
-                    BorderWidth="0"
-                    Command="{Binding CopyItemTileTappedCommand}">
-            </Button>
-        </Grid>]-->
     </ContentView.Content>
 </ContentView>

@@ -17,15 +17,19 @@ namespace MonkeyPaste {
         private int _itemsAdded = 0;
         private int _currentStartIndex = 0;
         private int _pageSize = 20;
-        
+
         #endregion
 
         #region Properties
-        
-        #region View Models
-        public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; }
 
-        public MpCopyItemViewModel SelectedCopyItemViewModel { get; set; }
+        #region View Models
+        public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; } = new ObservableCollection<MpCopyItemViewModel>();
+
+        public MpCopyItemViewModel SelectedCopyItemViewModel {
+            get {
+                return CopyItemViewModels.Where(x => x.IsSelected).FirstOrDefault();
+            }
+        }
         #endregion
 
         public string EmptyCollectionLableText { get; set; }
@@ -34,14 +38,14 @@ namespace MonkeyPaste {
 
         public bool IsEditButtonEnabled {
             get {
-                return SelectedCopyItemViewModel != null;
+                return true;//SelectedCopyItemViewModel != null;
             }
         }
 
         public ImageSource ClipboardToolbarIcon {
             get {
-                if(SelectedCopyItemViewModel == null) {
-                    return null;
+                if (SelectedCopyItemViewModel == null) {
+                    return Application.Current.Resources["HiddenIcon"] as FontImageSource;
                 }
                 if (SelectedCopyItemViewModel.WasSetToClipboard) {
                     return Application.Current.Resources["ClipboardSolidCheckedIcon"] as FontImageSource;
@@ -96,14 +100,17 @@ namespace MonkeyPaste {
             return ctvm;
         }
 
-        public void ClearSelection() {
+        public void ClearSelection(MpCopyItemViewModel ignoreVm = null) {
             foreach (var civm in CopyItemViewModels) {
+                if(civm == ignoreVm) {
+                    continue;
+                }
                 civm.IsSelected = false;
             }
         }
 
         public void OnSearchQueryChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var civmsh = sender as MpCopyItemViewModelSearchHandler;
+            var civmsh = sender as MpCopyItemViewModelSearchHandler; 
             switch(e.PropertyName) {
                 case nameof(civmsh.Query):
                     PerformSearchCommand.Execute(civmsh.Query);
@@ -128,15 +135,45 @@ namespace MonkeyPaste {
         private void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(SelectedCopyItemViewModel):
-                    var scivm = SelectedCopyItemViewModel;
-                    ClearSelection();
-                    if(scivm != null) {
-                        SelectedCopyItemViewModel = scivm;
-                    }
                     OnPropertyChanged(nameof(IsEditButtonEnabled));
+                    OnPropertyChanged(nameof(ClipboardToolbarIcon));
                     break;
             }
         }
+
+        private void CopyItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            //if (e.NewItems != null && e.NewItems.Count > 0) {
+            //    IsBusy = false;
+            //    CopyItemViewModels.CollectionChanged -= CopyItemViewModels_CollectionChanged;
+            //}
+            ClearSelection();
+        }
+
+        private void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            if (sender is MpCopyItemViewModel civm) {
+                switch (e.PropertyName) {
+                    case nameof(civm.IsSelected):
+                        if (civm.IsSelected) {
+                            ClearSelection(civm);
+                        }
+                        OnPropertyChanged(nameof(SelectedCopyItemViewModel));
+                        break;
+                }
+            }
+        }
+
+        //private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+        //    foreach (MpCopyItem CopyItem in args.NewItems) {
+        //        if(!CopyItemViewModels.Any(x=>x.CopyItem.Id == CopyItem.Id)) {
+        //            _itemsAdded++;
+        //            CopyItemViewModels.Add(CreateCopyItemViewModel(CopyItem));
+        //        }
+        //    }
+        //    if (_itemsAdded == _pageSize) {
+        //        var collection = (ObservableCollection<MpCopyItem>)sender;
+        //        collection.CollectionChanged -= Collection_CollectionChanged;
+        //    }
+        //}
 
         private void SearchBarViewModel_SearchTextChanged(object sender, string e) {
             PerformSearchCommand.Execute(e);
@@ -169,55 +206,8 @@ namespace MonkeyPaste {
                 }                
             }  
         }
-
-        //private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
-        //    foreach (MpCopyItem CopyItem in args.NewItems) {
-        //        if(!CopyItemViewModels.Any(x=>x.CopyItem.Id == CopyItem.Id)) {
-        //            _itemsAdded++;
-        //            CopyItemViewModels.Add(CreateCopyItemViewModel(CopyItem));
-        //        }
-        //    }
-        //    if (_itemsAdded == _pageSize) {
-        //        var collection = (ObservableCollection<MpCopyItem>)sender;
-        //        collection.CollectionChanged -= Collection_CollectionChanged;
-        //    }
-        //}
-
-        private void CopyItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            //if (e.NewItems != null && e.NewItems.Count > 0) {
-            //    IsBusy = false;
-            //    CopyItemViewModels.CollectionChanged -= CopyItemViewModels_CollectionChanged;
-            //}
-        }
-
-        private async void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (sender is MpCopyItemViewModel civm) {
-                switch (e.PropertyName) {
-                    case nameof(civm.IsSelected):
-                        if (civm.IsSelected) {
-                            if (SelectedCopyItemViewModel == civm) {
-                                //implies selection came from ui do nothing
-                                //SelectedCopyItemViewModel = civm;
-                            } else {
-                                if (SelectedCopyItemViewModel != null) {
-                                    SelectedCopyItemViewModel.IsSelected = false;
-                                }
-                                SelectedCopyItemViewModel = civm;
-                            }
-                        } else {
-                            if (SelectedCopyItemViewModel == civm) {
-                                SelectedCopyItemViewModel = null;
-                            }
-                        }
-                        break;
-                }
-
-                //await MpDb.Instance.UpdateItemAsync<MpCopyItem>(civm.CopyItem);
-            }
-        }
-
-       
         #endregion
+
         #endregion
 
         #region Commands
@@ -257,13 +247,13 @@ namespace MonkeyPaste {
 
         public ICommand SelectionChangedCommand => new Command<object>((args) => {
             if (args != null && args is MpCopyItemViewModel ttvm) {
-                SelectedCopyItemViewModel = args as MpCopyItemViewModel;
+                (args as MpCopyItemViewModel).IsSelected = true;
             }
         });
 
         public ICommand EditSelectedCopyItemCommand => new Command(() => {
             if (SelectedCopyItemViewModel != null) {
-                SelectedCopyItemViewModel.EditCopyItemCommand.Execute(null);
+                SelectedCopyItemViewModel.ExpandItemCommand.Execute(null);
             }
         });
 

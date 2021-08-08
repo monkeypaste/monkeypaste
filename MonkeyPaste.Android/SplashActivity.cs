@@ -14,7 +14,7 @@ namespace MonkeyPaste.Droid {
     [Activity(
         Label = "Monkey Paste", 
         Theme = "@style/Splash",
-        MainLauncher = true)]
+        MainLauncher = false)]
     public class SplashActivity : Activity {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);

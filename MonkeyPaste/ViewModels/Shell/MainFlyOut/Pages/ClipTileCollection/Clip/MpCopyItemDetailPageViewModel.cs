@@ -24,6 +24,8 @@ namespace MonkeyPaste {
         public string Text { get; set; }
         public string Templates { get; set; }
 
+        public bool IsEditorLoaded { get; set; }
+
         public System.Timers.Timer UpdateTimer { get; set; }
 
         #endregion
@@ -76,12 +78,12 @@ namespace MonkeyPaste {
             var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
-                string contentTag = @"<div id='editor'>";
-                var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
-                foreach(var cit in CopyItem.Templates) {
-                    data = data.Replace(cit.ToHtml(), cit.ToQuillEncoded());
-                }
-                html = html.Replace(contentTag, contentTag + data) ;
+                //string contentTag = @"<div id='editor'>";
+                //var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+                //foreach(var cit in CopyItem.Templates) {
+                //    data = data.Replace(cit.ToHtml(), cit.ToQuillEncoded());
+                //}
+                //html = html.Replace(contentTag, contentTag + data) ;
                 EditorHtml = html;
             }
             
@@ -106,6 +108,12 @@ namespace MonkeyPaste {
                 return;
             }
             Templates = await EvaluateEditorJavaScript($"getTemplates()");
+
+            if (EvaluateEditorJavaScript == null) {
+                return;
+            }
+            var test = await EvaluateEditorJavaScript($"isEditorLoaded()");
+            MpConsole.WriteLine(test);
         }
 
         public void Dispose() {

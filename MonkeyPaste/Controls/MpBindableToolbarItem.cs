@@ -10,7 +10,7 @@ namespace MonkeyPaste {
             typeof(bool), 
             typeof(MpBindableToolbarItem), 
             true, 
-            BindingMode.OneWay, 
+            BindingMode.TwoWay, 
             propertyChanged: OnIsVisibleChanged);
 
         public bool IsVisible {

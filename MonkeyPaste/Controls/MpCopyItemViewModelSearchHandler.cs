@@ -7,6 +7,17 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModelSearchHandler : SearchHandler {
+        protected override void OnBindingContextChanged() {
+            base.OnBindingContextChanged();
+            if(BindingContext != null) {
+                Focused += MpCopyItemViewModelSearchHandler_Focused;
+            }
+        }
+
+        private void MpCopyItemViewModelSearchHandler_Focused(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
         protected override void OnQueryChanged(string oldValue, string newValue) {
             base.OnQueryChanged(oldValue, newValue);
 

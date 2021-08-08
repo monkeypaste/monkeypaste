@@ -93,7 +93,7 @@
                     BorderWidth="0"
                     Clicked="ContextMenuButton_Clicked"
                     HeightRequest="25"
-                    ImageSource="{StaticResource DotsIcon}">
+                    ImageSource="{StaticResource EllipsesVIcon}">
                 <!--<Button.GestureRecognizers>
                     <TapGestureRecognizer NumberOfTapsRequired="1"
                                           Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"

@@ -11,7 +11,7 @@
              x:DataType="local:MpCopyItemTileCollectionPageViewModel">
     <Shell.SearchHandler>
         <local:MpCopyItemViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
-                                                Placeholder="Enter search term" IsSearchEnabled="False"
+                                                Placeholder="Enter search term" IsSearchEnabled="True"
                                                 SearchBoxVisibility="Collapsible"
                                                 ItemsSource="{Binding CopyItemViewModels}"
                                                 ShowsResults="False"
@@ -37,14 +37,8 @@
         </local:MpCopyItemViewModelSearchHandler>
     </Shell.SearchHandler>
     <ContentPage.ToolbarItems>
-        <local:MpBindableToolbarItem ItemId="1" 
-                                     IconImageSource="{StaticResource EditIcon}"
-                                     IsVisible="{Binding IsEditButtonEnabled}"
-                                     Command="{Binding EditSelectedCopyItemCommand}"/>
-        <local:MpBindableToolbarItem ItemId="2" 
-                                     IconImageSource="{Binding ClipboardToolbarIcon}"
-                                     IsVisible="{Binding IsEditButtonEnabled}"
-                                     Command="{Binding SetClipboardToSelectedCopyItemCommand}"/>
+        <ToolbarItem IconImageSource="{Binding ClipboardToolbarIcon}"
+                     Command="{Binding SetClipboardToSelectedCopyItemCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

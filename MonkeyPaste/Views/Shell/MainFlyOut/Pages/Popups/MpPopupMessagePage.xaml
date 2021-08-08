@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rg:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:rg="http://rotorgames.com"
+              x:Class="MonkeyPaste.MpPopupMessagePage"
+              x:Name="ThisPage"
+              BackgroundColor="Transparent"
+              BackgroundInputTransparent="True"
+              HasSystemPadding="True" 
+              SystemPaddingSides="All"              
+              CloseWhenBackgroundIsClicked="False">
+    <rg:PopupPage.Animation>
+        <rg:MoveAnimation  PositionIn="Bottom"
+                           PositionOut="Bottom" />
+    </rg:PopupPage.Animation>
+    <StackLayout VerticalOptions="End"
+                 BackgroundColor="#43A047">
+        <BoxView HeightRequest="{Binding Source={x:Reference ThisPage}, Path=SystemPadding.Top}" />
+        <Label x:Name="MessageLabel" 
+               Margin="10, 0, 0, 5"
+               TextColor="White"
+               VerticalOptions="Center" />
+    </StackLayout>
+</rg:PopupPage>

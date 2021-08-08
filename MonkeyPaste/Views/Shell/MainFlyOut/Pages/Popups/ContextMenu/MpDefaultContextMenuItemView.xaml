@@ -14,8 +14,6 @@
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding PerformContextCommand}"
                                       NumberOfTapsRequired="1" />
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                      Tapped="TapGestureRecognizer_Tapped" />
             </Frame.GestureRecognizers>
             <Grid>
                 <Grid.ColumnDefinitions>

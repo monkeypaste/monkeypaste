@@ -3,6 +3,7 @@ using FFImageLoading.Helpers.Exif;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -17,25 +18,39 @@ namespace MonkeyPaste {
 
         #region Properties
 
+        #region Models
+        public MpCopyItem CopyItem { get; set; }
+        #endregion
+
         #region View Models
         public MpContextMenuViewModel ContextMenuViewModel { get; set; }
         #endregion
 
+        public Func<string, Task<string>> EvaluateEditorJavaScript { get; set; }
+
+        public event EventHandler OnEditorLoaded;
+
+        public string EditorHtml { get; set; }
+
+        public string Html { get; set; }
+        public string Text { get; set; }
+        public string Templates { get; set; }
+
+        public MpJsProperty<bool> IsEditorLoaded { get; set; }
+
+        public System.Timers.Timer UpdateTimer { get; set; }
+
         public bool IsSelected { get; set; } = false;
 
-        public bool WasSetToClipboard { get; set; } = false;
+        public bool IsExpanded { get; set; } = false;
 
-        public MpCopyItem CopyItem { get; set; }
+        public bool WasSetToClipboard { get; set; } = false;
 
         public bool HasTemplates {
             get {
                 return CopyItem.Templates != null && CopyItem.Templates.Count > 0;
             }
         }
-
-        
-
-        public string StatusText { get; set; } = "Status";
 
         public bool IsFavorite {
             get {
@@ -83,7 +98,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private async Task Initialize() {
+        private void Initialize() {
             ContextMenuViewModel = new MpContextMenuViewModel();
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
                 Title = "Change Tags",
@@ -100,8 +115,42 @@ namespace MonkeyPaste {
                 Command = DeleteCopyItemCommand,
                 IconImageResourceName = "DeleteIcon"
             });
+
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
+            var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            using (var reader = new System.IO.StreamReader(stream)) {
+                var html = reader.ReadToEnd();
+                //string contentTag = @"<div id='editor'>";
+                //var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+                //foreach(var cit in CopyItem.Templates) {
+                //    data = data.Replace(cit.ToHtml(), cit.ToQuillEncoded());
+                //}
+                //html = html.Replace(contentTag, contentTag + data) ;
+                EditorHtml = html;
+            }            
+        }
+
+        private async Task<string> EvalJs(string js) {
+            while(EvaluateEditorJavaScript == null) {
+                await Task.Delay(100);
+            }
+            var result = await EvaluateEditorJavaScript(js);
+            return result;
         }
         #region Event Handlers
+
+        private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
+            Text = await EvaluateEditorJavaScript($"getText()");
+            Html = await EvaluateEditorJavaScript($"getHtml()");
+            Templates = await EvaluateEditorJavaScript($"getTemplates()");
+
+            var test = await EvaluateEditorJavaScript($"isEditorLoaded()");
+            if(test.ToLower().Contains("true")) {
+                OnEditorLoaded?.Invoke(this, null);
+            }
+            MpConsole.WriteLine(test);
+        }
+
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(CopyItem):
@@ -112,7 +161,8 @@ namespace MonkeyPaste {
                         //    await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}");
                         //});
                     } else {
-                        WasSetToClipboard = false;
+                        //WasSetToClipboard = false;
+                        UnexpandItemCommand.Execute(null);
                     }
                     break;
                 case nameof(IsTitleReadOnly):
@@ -120,6 +170,24 @@ namespace MonkeyPaste {
                         _orgTitle = CopyItem.Title;
                         MpDb.Instance.AddOrUpdate<MpCopyItem>(CopyItem);
                     }
+                    break;
+                case nameof(EvaluateEditorJavaScript):
+                    if(EvaluateEditorJavaScript != null) {
+                        IsEditorLoaded = new MpJsProperty<bool>(nameof(IsEditorLoaded),"isEditorLoaded", EvaluateEditorJavaScript);
+                        IsEditorLoaded.PropertyChanged += JsProperty_PropertyChanged;
+                    }
+                    break;
+            }
+        }
+
+        private void JsProperty_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsEditorLoaded):
+                    UpdateTimer = new System.Timers.Timer();
+                    UpdateTimer.Interval = 100;
+                    UpdateTimer.AutoReset = true;
+                    UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+                    UpdateTimer.Start();
                     break;
             }
         }
@@ -166,19 +234,32 @@ namespace MonkeyPaste {
                 }
                 await PopupNavigation.Instance.PopAllAsync();
             };
-            await PopupNavigation.Instance.PushAsync(renamePopupPage,false);
-            
+            await PopupNavigation.Instance.PushAsync(renamePopupPage, false);
+
         });
 
         public ICommand SelectCopyItemCommand => new Command(
-            () => IsSelected = true,
+            () => {
+                if(IsSelected) {
+                    ExpandItemCommand.Execute(null);
+                } else {
+                    IsSelected = true;
+                }
+            },
             ()=>IsVisible);
 
-        public ICommand EditCopyItemCommand => new Command(
+        public ICommand ExpandItemCommand => new Command(
             () => {
-                Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
+                //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
+                IsExpanded = true;
             },
             ()=>IsSelected);
+
+        public ICommand UnexpandItemCommand => new Command(
+            () => {
+                //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
+                IsExpanded = false;
+            });
 
         public ICommand FillOutTemplatesCommand => new Command(
             () => {
@@ -191,8 +272,9 @@ namespace MonkeyPaste {
             if(HasTemplates) {
                 FillOutTemplatesCommand.Execute(null);
             } else {
-                await Clipboard.SetTextAsync(CopyItem.ItemText);                
+                await Clipboard.SetTextAsync(CopyItem.ItemText);         
             }
+
             WasSetToClipboard = true;
             ItemStatusChanged?.Invoke(this, new EventArgs());
         });

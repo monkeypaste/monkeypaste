@@ -61,7 +61,12 @@
                 <On Platform="UWP"
                     Value="/Assets/FontAwesome5Regular.otf#Font Awesome 5 Free" />
             </OnPlatform>
-
+            <FontImageSource x:Key="HiddenIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf015;"
+                             Size="22"
+                             Color="Transparent" />
+            
             <FontImageSource x:Key="HomeIcon"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf015;"
@@ -211,7 +216,11 @@
                              Glyph="&#xf142;"
                              Size="22"
                              Color="Black" />
-
+            <FontImageSource x:Key="EllipsesHIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf141;"
+                             Size="22"
+                             Color="Black" />
             <FontImageSource x:Key="PlusIcon"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf067;"
@@ -229,12 +238,6 @@
                              Glyph="&#xf044;"
                              Size="22"
                              Color="DimGray" />
-
-            <FontImageSource x:Key="DotsIcon"
-                             FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="&#xf142;"
-                             Size="22"
-                             Color="Black" />
 
 
             <FontImageSource x:Key="CheckedIcon"

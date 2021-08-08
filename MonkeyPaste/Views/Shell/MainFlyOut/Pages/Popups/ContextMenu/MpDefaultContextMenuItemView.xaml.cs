@@ -13,5 +13,9 @@ namespace MonkeyPaste {
         public MpDefaultContextMenuItemView() {
             InitializeComponent();
         }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e) {
+
+        }
     }
 }

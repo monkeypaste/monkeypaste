@@ -57,6 +57,7 @@
 
         #editor {
             width: 100%;
+            height: auto;
         }
 
         .ql-toolbar {
@@ -68,17 +69,6 @@
             height: 15px;
             width: 15px;
             background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX/////wQf/vwD/24f/3Iz///3/vQD/ykL/yTj/yT3/0WH/0F7/0Fv/y0T/y0f/yTr/35T/wxT/8tP/6Lj/5az/7sj/9uX/46P/1G7/677/57P/2oL/xSj/8M//1nj//fb//O//4Zz/zVBsBjAmAAAEzklEQVR4nO2di3qiMBBGIUpa1168tFZ70933f8hl0KqVWCuZyfzhm/MAfJ7vhAmwCy0KwzAMwzAMwzAMwzAMwzAMWKq3QSzDyXymrXGe6ta7eLwvl8/aKmGqW1fy4Pz0SdsmAJ9g4zhaaAudwirYOIJl5Bas8QNtqWMEBLEURQRrRZiFKiRYK4KMGzHB0j1ouzXICdYR59p2haxg6d619YQF64gfPRcs3ae24KOsYOmmyoLCBUvtDSOBYOk176TEl2hjqHhdw1WwvuetOXcsN9ET5Cno/PJ1tvh4Gp9xdEM1QZ6C/m29O+Dmj4cyZCroV0fHfAkpahlyFfw+KEOKSoZcBU9//bh9WB1Dtn3w9MCbdkQVQ7Ztov3j71pH1jBk2+h9++n2UyuigiHfpZrftA7+AWDIeKnm162jL/QNOS+2Aw1n6oasF9uB83Cubch7uxS4qF4qz9JqxHq71L5/Xyvvh+z3g/40YjthUkOBG96TM7F9FiY1ZF6i25/vjhVXuvcWUv/4sl+o60/d+0OJglvF6XC2WS+eP53uPb7gUzV34TlNGkOxgpdJY5jiuaiqoWLBNIZJHvxqGuoKJjBUXaIpDDWHTBJD7YLihuoFxQ3VCwob6i9RacMbAEFJwwpCUNIQQ1DOEKSgoCHCkGkQMoQpKGUIsU3skDHEKShjiFRQxhCpoIQh0JBp4DcEE2Q3RCvIbwg1ZBp4DfEKMhtibRM7WA3vAQU5DRGXaMlqCFmQ0RC0IKMhqiCXYQW6REs2Q9iCXIa4BZkMgQvyGCIX5DCE3SZ2xBtiF4w3RC8YbwgvGGkIvNHviTPELxhpmEHBOMMcCkYZPmQh2H77q2cFS/dQ9bugu+laMIshE/Ntk1wEOxccB//POBzdC75lInjfVfC574LFNIuTMOIDSn+zSNh9yBRV3wsWrzkkjCgYeh8cj6iPmOWwSKMKBl4lhsPdd73YbsA/DeMKFsUEfZW6m6iCRTEAN4y4ksnDMLog+iqNLxh+XRqG2CHTgLxbcBSE3vFZChbBTzFhELnRH0A9EbkK1mirhGHYJvYEv/umDc+Q+eId70zkLFggbhi8BWsmYIqMQ+aLJZQie0EC6aG3GwkIFkX4W6EaMA8ZPEWBc/ALjIUqVpBAqChYkLhTV3QjwYKEdkXhgoRuRfGChGZF0SFzQG+iCm30bbQqJiqop5hgyBzQWKgJCxLpKyYtSKTeNJJsE99JWzF5QSJlRYWCRLqKiYfMgVQT1d0qCaaqqLRE0ym6R0XBFAtVWVC+ouoS3SK7aSgOmQOSFQEKEnIVIQoSUhVBChIyExWmICFREaggwa+ovg+ewr1Q4QS5K4It0S2cmwbUkDnAVxGyIMFVEbQgwVMRcMgc4JiowAWJ+IrQBYlYRfCCRNxCzUAwriL8Et3SfdPIoiDRtWImBYluFbMpSHSpmFFB4vqJmlVB4tqKmRUkrlPMriBxzULNUvCaihku0S2/3TQyLUj8rmK2BYnfVMy4IHG5YuaClydq9oKXKvZA8GfFXgj+tFB7Inj+hSLf+btqcEyCf7nXL7V/FyOz91ZGX660fxUvL+VxR+fdpDcrdM9q7Lx3jv7gtPv32j8/oprNJ8PB5HXWTz3DMAzDMAzDMAzDMAzDMHrEf9VjaGNa1FYRAAAAAElFTkSuQmCC");
-        }
-
-        span.template {
-            border-style: solid;
-            border-color: white;
-            border-radius: 10px;
-            padding: 7px;
-            background-color: purple;
-            color: white;
-            text-align: center;
-            font-size: medium;
         }
 
         /* maps font sizes to font drop down*/
@@ -94,6 +84,11 @@
         .ql-snow .ql-Table-Input .ql-picker-options {
             padding: 3px 5px;
             width: 152px;
+        }
+
+        .ql-editor {
+            height: auto;
+            padding: 2px 10px;
         }
 
         .ql-snow .ql-Table-Input .ql-picker-item {
@@ -124,7 +119,7 @@
             display: inline;
             padding: 1px;
             text-decoration: none;
-                color: #67c5ff;
+            color: #67c5ff;
             border-radius: 3px;
             transition: .4s;
             margin: 0 1px;
@@ -187,18 +182,17 @@
         /* Paste Template Toolbar */
         .paste-template-toolbar {
             display: none;
-            position: absolute;
             width: 100%;
-            height: 45px;
             background-color: lightyellow;
-            border: solid 2px dimgray;
+            border: solid 1px yellow;
             padding: 5px 10px;
         }
 
         .paste-template-toolbar-btn {
             display: inline-block;
-            padding: 5px;
+            padding: 2px 5px;
             text-decoration: none;
+            font-size:14px;
             border: 1px solid #CCC;
             color: white;
             border: solid 2px #67c5ff;
@@ -209,11 +203,9 @@
             cursor: pointer;
         }
 
-        paste-template-toolbar-btn:hover {
-            background-color: lightblue;
+        .paste-template-toolbar-btn:hover {
+            color:dimgray;
             transition: .4s; 
-            padding: 10px;
-            color: white;
             cursor: pointer;
         }
 
@@ -345,7 +337,8 @@
         var isLoaded = false;
         var isPastingTemplate = false;
         var isShowingPasteTemplateToolbar = false;
-        var templatesJson = "[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";
+        var isShowingToolbar = true;
+        var htmlContent = "[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";
         /*
          * var myArray = {id1: 100, id2: 200, "tag with spaces": 300};
             myArray.id3 = 400;
@@ -370,18 +363,22 @@
             loadQuill(fontFamilys, fontSizes, defaultFontIdx);
 
             isPastingTemplate = isFillingTemplates;
-            isLoaded = true;
 
             //html = "sdlikfjsdlkfj sdlfikjsdl;kfj {{5,Pokemon,#808080}}                 {{5,Pokemon,#808080}}      {{7,Pokemon334,#AA4433}}              {{3,Pokemon,#FF22BB}}";
             //moveToolbarTop(0);
+
+            if(htmlContent != null) {
+                //setContents(htmlContent);
+            }
             if (html != null) {
                 setHtml(html);
-                loadTemplates();
             }            
 
             if (isFillingTemplates) {
                 showPasteTemplateToolbar();
             }
+
+            isLoaded = true;
         }
 
         function registerTables() {
@@ -630,32 +627,32 @@
                 }
             });
 
-            quill.on('text-change', function (delta, oldDelta, source) {
-                var retainVal = 0;
-                var textDelta = 0;
-                var wasAddTemplate = false;
-                delta.ops.forEach(function (op) {
-                    if(op.insert != null && op.insert.templatespan != null) {
-                        //handle shifting in create template
-                        wasAddTemplate = true;
-                        return;
-                    }
-                    if(op.retain != null) {
-                        retainVal = op.retain;
-                    }
-                    if(op.insert != null && op.insert.templatespan == null) {
-                        textDelta += op.insert.length;
-                    }
-                    if(op.delete != null) {
-                        textDelta -= parseInt(op.delete);
-                    }
-                });
-                if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
-                    shiftTemplates(retainVal, textDelta);
-                    console.log(getTemplates());
-                } 
+            //quill.on('text-change', function (delta, oldDelta, source) {
+            //    var retainVal = 0;
+            //    var textDelta = 0;
+            //    var wasAddTemplate = false;
+            //    delta.ops.forEach(function (op) {
+            //        if(op.insert != null && op.insert.templatespan != null) {
+            //            //handle shifting in create template
+            //            wasAddTemplate = true;
+            //            return;
+            //        }
+            //        if(op.retain != null) {
+            //            retainVal = op.retain;
+            //        }
+            //        if(op.insert != null && op.insert.templatespan == null) {
+            //            textDelta += op.insert.length;
+            //        }
+            //        if(op.delete != null) {
+            //            textDelta -= parseInt(op.delete);
+            //        }
+            //    });
+            //    if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
+            //        shiftTemplates(retainVal, textDelta);
+            //        console.log(getTemplates());
+            //    } 
                 
-            });
+            //});
         }
 
         function shiftTemplates(fromDocIdx, byVal) {
@@ -843,6 +840,7 @@
                 }
             }
         }
+
         function eventFire(el, etype) {
             if (el.fireEvent) {
                 el.fireEvent('on' + etype);
@@ -973,9 +971,9 @@
         }
 
         function showPasteTemplateToolbar() {
+            isShowingPasteTemplateToolbar = true;
             var ptt = document.getElementById('pasteTemplateToolbar');
             ptt.style.display = 'inline-block';
-            $('#pasteTemplateToolbar').css('top', $(".ql-toolbar").outerHeight());
 
             document.getElementById('custom-select').innerHTML = '<select id="pasteTemplateToolbarMenuSelector"></select >';
 
@@ -994,53 +992,49 @@
             document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
                 gotoNextTemplate();
             });
-
             document.getElementById('nextTemplateButton').addEventListener('keydown', function (e) {
                 gotoNextTemplate();
             });
-
             document.getElementById('previousTemplateButton').addEventListener('click', function (e) {
                 gotoPrevTemplate();
             });
-
             document.getElementById('previousTemplateButton').addEventListener('keydown', function (e) {
                 gotoPrevTemplate();
             });
-
             document.getElementById('clearAllTemplateTextButton').addEventListener('click', function (e) {
                 clearAllTemplateText();
             });
             document.getElementById('clearAllTemplateTextButton').addEventListener('keydown', function (e) {
                 clearAllTemplateText();
             });
-
             document.getElementById('pasteTemplateButton').addEventListener('click', function (e) {
                 isCompleted = true;
             });
-
             document.getElementById('pasteTemplateButton').addEventListener('keydown', function (e) {
                 isCompleted = true;
             });
 
             createTemplateSelectorStyling(templateMenuSelector);
 
-            //var viewportBottom = window.scrollY + window.innerHeight;
-            //moveTemplateToolbarTop(viewportBottom);
 
-            $("#editor").css("position", "absolute");
-            $(".ql-toolbar").css("position", "absolute");
-            $("#pasteTemplateToolbar").css("position", "absolute");
-
-            let tbb = $(".ql-toolbar").outerHeight();
-            //let eb = $("#editor").css("bottom");
-            //
-            $("#pasteTemplateToolbar").css("top", tbb);
-            let pttbb = $(".ql-toolbar").outerHeight() + tbb;
-            $("#editor").css("margin-top", pttbb);
+            let tbb = isShowingToolbar ? $(".ql-toolbar").outerHeight() : 0;
+            moveToolbarTop(0);
+            moveTemplateToolbarTop(tbb);
+            moveEditorTop($("#pasteTemplateToolbar").outerHeight() + tbb);
 
             $('#templateTextArea').focus();
+        }
 
-            isShowingPasteTemplateToolbar = true;
+
+        function hidePasteTemplateToolbar() {
+            isShowingPasteTemplateToolbar = false;
+            var ptt = document.getElementById('pasteTemplateToolbar');
+            ptt.style.display = 'none';
+            if(isShowingToolbar) {
+                moveEditorTop($(".ql-toolbar").outerHeight());
+            } else {
+                moveEditorTop(0);                
+            }
         }
 
         function gotoNextTemplate() {
@@ -1057,6 +1051,7 @@
             }
             selectTemplate(tl[nextIdx]['templateId']);
         }
+
         function gotoPrevTemplate() {
             var curIdx = 0;
             for (var i = 0; i < tl.length; i++) {
@@ -1085,6 +1080,9 @@
             x = document.getElementsByClassName("custom-select");
             for (i = 0; i < x.length; i++) {
                 selElmnt = x[i].getElementsByTagName("select")[0];
+                if(selElmnt.options.length == 0) {
+                    continue;
+                }
                 var st = getTemplateById(selElmnt.options[selElmnt.selectedIndex].getAttribute('value'));
                 a = document.createElement("DIV");
                 a.setAttribute("class", "select-selected");
@@ -1167,11 +1165,6 @@
             h.click();
         }
 
-        function hidePasteTemplateToolbar() {
-            var ptt = document.getElementById('pasteTemplateToolbar');
-            ptt.style.display = 'none';
-            isShowingPasteTemplateToolbar = false;
-        }
 
         function getFontName(font) {
             // Generate code-friendly font names
@@ -1199,6 +1192,57 @@
         function getText() {
             var text = quill.getText(0, quill.getLength() - 1);
             return text;
+        }
+        
+        function isEditorLoaded() {
+            return isLoaded;
+        }
+
+        function hideToolbar() {
+            isShowingToolbar = false;
+            $(".ql-toolbar").css("display", "none");
+            if(isShowingPasteTemplateToolbar) {
+                moveTemplateToolbarTop(0);
+                let pttbh = $("#pasteTemplateToolbar").outerHeight();
+                moveEditorTop(pttbh);
+            } else {
+                moveEditorTop(0);
+            }
+        }
+
+        function showToolbar() {
+            isShowingToolbar = true;
+            $(".ql-toolbar").css("display", "inline-block");
+            let tbh = $(".ql-toolbar").outerHeight();
+            if(isShowingPasteTemplateToolbar) {
+                moveTemplateToolbarTop(tbh);
+                let pttbh = $("#pasteTemplateToolbar").outerHeight();
+                moveEditorTop(tbh + pttbh);
+            } else {
+                moveEditorTop(tbh);
+            }
+        }
+
+        function getEditorHeight() {
+            return parseInt($('.ql-editor').outerHeight());
+        }
+
+        function getToolbarHeight() {
+            return parseInt($('.ql-toolbar').outerHeight());
+        }
+
+        function isReadOnly() {
+            return $('.ql-editor').attr('contenteditable');
+        }
+
+        function enableReadOnly() {
+            $('.ql-editor').attr('contenteditable', false);
+            $('.ql-editor').css('caret-color', 'transparent');
+        }
+
+        function disableReadOnly() {
+            $('.ql-editor').attr('contenteditable', true);
+            $('.ql-editor').css('caret-color', 'black');
         }
 
         function getTextWithEmbedTokens() {
@@ -1326,31 +1370,37 @@
         }
 
         function moveToolbarTop(y) {
-            $("#editor").css("position", "absolute");
             $(".ql-toolbar").css("position", "absolute");
+            $(".ql-toolbar").css("top", y);
 
-            var viewportBottom = window.scrollY + window.innerHeight;
-            let tbh = $(".ql-toolbar").outerHeight();
-            if (y <= 0) {
-                //keyboard is not visible
-                $(".ql-toolbar").css("top", y);
-                $("#editor").css("top", y + tbh);
-            } else {
-                $(".ql-toolbar").css("top", y - tbh);
-                $("#editor").css("top", 0);
-            }
-            $("#editor").css("bottom", viewportBottom - tbh);
+            //var viewportBottom = window.scrollY + window.innerHeight;
+            //let tbh = $(".ql-toolbar").outerHeight();
+            //if (y <= 0) {
+            //    //keyboard is not visible
+            //    $(".ql-toolbar").css("top", y);
+            //    $("#editor").css("top", y + tbh);
+            //} else {
+            //    $(".ql-toolbar").css("top", y - tbh);
+            //    $("#editor").css("top", 0);
+            //}
+            //$("#editor").css("bottom", viewportBottom - tbh);
         }
 
         function moveTemplateToolbarTop(y) {
-            $("#editor").css("position", "absolute");
-            $(".ql-toolbar").css("position", "absolute");
             $("#pasteTemplateToolbar").css("position", "absolute");
+            $("#pasteTemplateToolbar").css("top", y);
+        }
 
-            let tbh = $("#pasteTemplateToolbar").outerHeight();
-            //let eb = $("#editor").css("bottom");
-            // $("#editor").css("bottom", eb - tbh);
-            $("#pasteTemplateToolbar").css("top", y - tbh - 20);
+        function moveEditorTop(y) {
+            $("#editor").css("position", "absolute");
+            $("#editor").css("top", y);
+        }
+        function getTemplateIconStr(isEnabled) {
+            if(isEnabled) {
+                return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX/////wQf/vwD/24f/3Iz///3/vQD/ykL/yTj/yT3/0WH/0F7/0Fv/y0T/y0f/yTr/35T/wxT/8tP/6Lj/5az/7sj/9uX/46P/1G7/677/57P/2oL/xSj/8M//1nj//fb//O//4Zz/zVBsBjAmAAAEzklEQVR4nO2di3qiMBBGIUpa1168tFZ70933f8hl0KqVWCuZyfzhm/MAfJ7vhAmwCy0KwzAMwzAMwzAMwzAMwzAMWKq3QSzDyXymrXGe6ta7eLwvl8/aKmGqW1fy4Pz0SdsmAJ9g4zhaaAudwirYOIJl5Bas8QNtqWMEBLEURQRrRZiFKiRYK4KMGzHB0j1ouzXICdYR59p2haxg6d619YQF64gfPRcs3ae24KOsYOmmyoLCBUvtDSOBYOk176TEl2hjqHhdw1WwvuetOXcsN9ET5Cno/PJ1tvh4Gp9xdEM1QZ6C/m29O+Dmj4cyZCroV0fHfAkpahlyFfw+KEOKSoZcBU9//bh9WB1Dtn3w9MCbdkQVQ7Ztov3j71pH1jBk2+h9++n2UyuigiHfpZrftA7+AWDIeKnm162jL/QNOS+2Aw1n6oasF9uB83Cubch7uxS4qF4qz9JqxHq71L5/Xyvvh+z3g/40YjthUkOBG96TM7F9FiY1ZF6i25/vjhVXuvcWUv/4sl+o60/d+0OJglvF6XC2WS+eP53uPb7gUzV34TlNGkOxgpdJY5jiuaiqoWLBNIZJHvxqGuoKJjBUXaIpDDWHTBJD7YLihuoFxQ3VCwob6i9RacMbAEFJwwpCUNIQQ1DOEKSgoCHCkGkQMoQpKGUIsU3skDHEKShjiFRQxhCpoIQh0JBp4DcEE2Q3RCvIbwg1ZBp4DfEKMhtibRM7WA3vAQU5DRGXaMlqCFmQ0RC0IKMhqiCXYQW6REs2Q9iCXIa4BZkMgQvyGCIX5DCE3SZ2xBtiF4w3RC8YbwgvGGkIvNHviTPELxhpmEHBOMMcCkYZPmQh2H77q2cFS/dQ9bugu+laMIshE/Ntk1wEOxccB//POBzdC75lInjfVfC574LFNIuTMOIDSn+zSNh9yBRV3wsWrzkkjCgYeh8cj6iPmOWwSKMKBl4lhsPdd73YbsA/DeMKFsUEfZW6m6iCRTEAN4y4ksnDMLog+iqNLxh+XRqG2CHTgLxbcBSE3vFZChbBTzFhELnRH0A9EbkK1mirhGHYJvYEv/umDc+Q+eId70zkLFggbhi8BWsmYIqMQ+aLJZQie0EC6aG3GwkIFkX4W6EaMA8ZPEWBc/ALjIUqVpBAqChYkLhTV3QjwYKEdkXhgoRuRfGChGZF0SFzQG+iCm30bbQqJiqop5hgyBzQWKgJCxLpKyYtSKTeNJJsE99JWzF5QSJlRYWCRLqKiYfMgVQT1d0qCaaqqLRE0ym6R0XBFAtVWVC+ouoS3SK7aSgOmQOSFQEKEnIVIQoSUhVBChIyExWmICFREaggwa+ovg+ewr1Q4QS5K4It0S2cmwbUkDnAVxGyIMFVEbQgwVMRcMgc4JiowAWJ+IrQBYlYRfCCRNxCzUAwriL8Et3SfdPIoiDRtWImBYluFbMpSHSpmFFB4vqJmlVB4tqKmRUkrlPMriBxzULNUvCaihku0S2/3TQyLUj8rmK2BYnfVMy4IHG5YuaClydq9oKXKvZA8GfFXgj+tFB7Inj+hSLf+btqcEyCf7nXL7V/FyOz91ZGX660fxUvL+VxR+fdpDcrdM9q7Lx3jv7gtPv32j8/oprNJ8PB5HXWTz3DMAzDMAzDMAzDMAzDMHrEf9VjaGNa1FYRAAAAAElFTkSuQmCC";
+            } else {
+                return 'data:image/png;base64,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';
+            }
         }
                     //==================================================================================================
         init(null, null, null, null, null);

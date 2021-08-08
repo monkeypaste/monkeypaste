@@ -24,7 +24,7 @@ namespace MonkeyPaste.Droid {
         Label = "MonkeyPaste",
         Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
-        MainLauncher = false, 
+        MainLauncher = true, 
         LaunchMode = LaunchMode.SingleInstance,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
