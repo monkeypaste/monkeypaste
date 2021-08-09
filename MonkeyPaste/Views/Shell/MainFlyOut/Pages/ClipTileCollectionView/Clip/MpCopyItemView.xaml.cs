@@ -54,18 +54,6 @@ namespace MonkeyPaste {
             civm.IsTitleReadOnly = false;
         }
 
-        //private void MpCopyItemView_OnGlobalTouch(object sender, EventArgs e) {
-        //    if (BindingContext == null) {
-        //        return;
-        //    }
-        //    var gtp = (e as MpTouchEventArgs<Point>).EventData.GetScreenPoint(this);
-        //    //gtp = gtp.GetScreenPoint(this);
-        //    var thisRect = this.Bounds;
-        //    if (thisRect.Contains(gtp)) {
-        //        (BindingContext as MpCopyItemViewModel).IsSelected = true;
-        //    }
-        //}
-
         private void ContextMenuButton_Clicked(object sender, EventArgs e) {
             Task.Run(async () => {
                 if (cm.IsMenuVisible) {

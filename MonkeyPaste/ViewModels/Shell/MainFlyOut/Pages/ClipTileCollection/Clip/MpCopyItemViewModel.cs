@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -14,6 +15,7 @@ namespace MonkeyPaste {
         #region Private Variables
         public event EventHandler ItemStatusChanged;
         private string _orgTitle = string.Empty;
+        private double _collapsedHeight = 100;
         #endregion
 
         #region Properties
@@ -38,11 +40,19 @@ namespace MonkeyPaste {
 
         public MpJsProperty<bool> IsEditorLoaded { get; set; }
 
+        public double EditorHeight { get; set; }
+
         public System.Timers.Timer UpdateTimer { get; set; }
 
         public bool IsSelected { get; set; } = false;
 
         public bool IsExpanded { get; set; } = false;
+
+        public bool ShowLeftMenu {
+            get {
+                return !IsExpanded;
+            }
+        }
 
         public bool WasSetToClipboard { get; set; } = false;
 
@@ -86,6 +96,7 @@ namespace MonkeyPaste {
 
         public MpCopyItemViewModel(MpCopyItem item) {
             PropertyChanged += MpCopyItemViewModel_PropertyChanged;
+            OnEditorLoaded += MpCopyItemViewModel_OnEditorLoaded;
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
             CopyItem = item;
             Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
@@ -93,8 +104,6 @@ namespace MonkeyPaste {
 
             Task.Run(Initialize);
         }
-
-
         #endregion
 
         #region Private Methods
@@ -116,39 +125,51 @@ namespace MonkeyPaste {
                 IconImageResourceName = "DeleteIcon"
             });
 
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
-            var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-            using (var reader = new System.IO.StreamReader(stream)) {
-                var html = reader.ReadToEnd();
-                //string contentTag = @"<div id='editor'>";
-                //var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
-                //foreach(var cit in CopyItem.Templates) {
-                //    data = data.Replace(cit.ToHtml(), cit.ToQuillEncoded());
-                //}
-                //html = html.Replace(contentTag, contentTag + data) ;
-                EditorHtml = html;
-            }            
+            Device.BeginInvokeOnMainThread(() => {
+                var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
+                var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+                using (var reader = new System.IO.StreamReader(stream)) {
+                    var html = reader.ReadToEnd();
+                    string contentTag = @"<div id='editor'>";
+                    var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+                    html = html.Replace(contentTag, contentTag + data);
+                    EditorHtml = html;
+                }
+            });
         }
 
         private async Task<string> EvalJs(string js) {
             while(EvaluateEditorJavaScript == null) {
                 await Task.Delay(100);
             }
-            var result = await EvaluateEditorJavaScript(js);
+            string result = string.Empty;
+            try {
+                result = await EvaluateEditorJavaScript(js);
+            }
+            catch(Exception ex) {
+                MpConsole.WriteTraceLine("EvalJs exception:" + ex);
+            }
             return result;
         }
         #region Event Handlers
+        private void MpCopyItemViewModel_OnEditorLoaded(object sender, EventArgs e) {
+            UpdateTimer = new System.Timers.Timer();
+            UpdateTimer.Interval = 100;
+            UpdateTimer.AutoReset = true;
+            UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+            UpdateTimer.Start();
+        }
 
         private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-            Text = await EvaluateEditorJavaScript($"getText()");
-            Html = await EvaluateEditorJavaScript($"getHtml()");
-            Templates = await EvaluateEditorJavaScript($"getTemplates()");
-
-            var test = await EvaluateEditorJavaScript($"isEditorLoaded()");
-            if(test.ToLower().Contains("true")) {
-                OnEditorLoaded?.Invoke(this, null);
+            Text = await EvalJs($"getText()");
+            Html = await EvalJs($"getHtml()");
+            Templates = await EvalJs($"getTemplates()");
+            var heightStr = await EvalJs($"getTotalHeight()");
+            if(!IsExpanded || string.IsNullOrEmpty(heightStr) || heightStr == "null") {
+                heightStr = _collapsedHeight.ToString();
             }
-            MpConsole.WriteLine(test);
+            EditorHeight = Convert.ToDouble(heightStr);
+            MpConsole.WriteLine("Editor Height: " + heightStr + " " + EditorHeight);
         }
 
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -173,8 +194,7 @@ namespace MonkeyPaste {
                     break;
                 case nameof(EvaluateEditorJavaScript):
                     if(EvaluateEditorJavaScript != null) {
-                        IsEditorLoaded = new MpJsProperty<bool>(nameof(IsEditorLoaded),"isEditorLoaded", EvaluateEditorJavaScript);
-                        IsEditorLoaded.PropertyChanged += JsProperty_PropertyChanged;
+                        OnEditorLoaded?.Invoke(this, null);
                     }
                     break;
             }
@@ -222,43 +242,51 @@ namespace MonkeyPaste {
 
         public ICommand RenameCopyItemCommand => new Command(async () => {
             _orgTitle = CopyItem.Title;
-
-            var renamePopupPage = new MpRenamePopupPageView(_orgTitle);
-            renamePopupPage.OnComplete += async (s, e) => {
-                if (renamePopupPage.WasCanceled) {
-                    CopyItem.Title = _orgTitle;
-                } else if (e != _orgTitle) {
-                    CopyItem.Title = e;
-                    OnPropertyChanged(nameof(CopyItem));
-                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
-                }
-                await PopupNavigation.Instance.PopAllAsync();
-            };
-            await PopupNavigation.Instance.PushAsync(renamePopupPage, false);
+            if(IsExpanded) {
+                IsTitleReadOnly = false;
+            } else {
+                var renamePopupPage = new MpRenamePopupPageView(_orgTitle);
+                renamePopupPage.OnComplete += async (s, e) => {
+                    if (renamePopupPage.WasCanceled) {
+                        CopyItem.Title = _orgTitle;
+                    } else if (e != _orgTitle) {
+                        CopyItem.Title = e;
+                        OnPropertyChanged(nameof(CopyItem));
+                        MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                    }
+                    await PopupNavigation.Instance.PopAllAsync();
+                };
+                await PopupNavigation.Instance.PushAsync(renamePopupPage, false);
+            }            
 
         });
 
         public ICommand SelectCopyItemCommand => new Command(
             () => {
                 if(IsSelected) {
-                    ExpandItemCommand.Execute(null);
+                    ExpandCommand.Execute(null);
                 } else {
                     IsSelected = true;
                 }
             },
             ()=>IsVisible);
 
-        public ICommand ExpandItemCommand => new Command(
-            () => {
+        public ICommand ExpandCommand => new Command<object>(
+            async (arg) => {
                 //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
                 IsExpanded = true;
+                OnPropertyChanged(nameof(ShowLeftMenu));
+                await EvalJs($"disableReadOnly()");
             },
-            ()=>IsSelected);
+            (arg)=>IsSelected);
 
         public ICommand UnexpandItemCommand => new Command(
-            () => {
+            async () => {
                 //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
                 IsExpanded = false;
+                OnPropertyChanged(nameof(ShowLeftMenu));
+
+                await EvalJs($"enableReadOnly()");
             });
 
         public ICommand FillOutTemplatesCommand => new Command(

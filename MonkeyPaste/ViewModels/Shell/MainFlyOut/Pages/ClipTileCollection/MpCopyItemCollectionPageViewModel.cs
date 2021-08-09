@@ -253,7 +253,7 @@ namespace MonkeyPaste {
 
         public ICommand EditSelectedCopyItemCommand => new Command(() => {
             if (SelectedCopyItemViewModel != null) {
-                SelectedCopyItemViewModel.ExpandItemCommand.Execute(null);
+                SelectedCopyItemViewModel.ExpandCommand.Execute(null);
             }
         });
 

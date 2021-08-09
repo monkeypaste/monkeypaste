@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView x:Class="MonkeyPaste.MpCopyItemView"
              xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              IsVisible="{Binding IsVisible}"
@@ -12,32 +13,34 @@
     </ContentView.GestureRecognizers>
     <ContentView.Content>
         <Frame Padding="0"
-                   BackgroundColor="White"
-                   HasShadow="True"
-                   HeightRequest="100"
-                   IsClippedToBounds="True">
-
+               BackgroundColor="White"               
+               HasShadow="True"
+               HeightRequest="{Binding EditorHeight}"
+               IsClippedToBounds="True">
             <Frame.OutlineColor>
                 <OnPlatform x:TypeArguments="Color"
-                                Android="Gray"
-                                iOS="Gray" />
+                            Android="Gray"
+                            iOS="Gray" />
             </Frame.OutlineColor>
             <Frame.Margin>
                 <OnPlatform x:TypeArguments="Thickness"
-                                Android="10"
-                                iOS="10" />
+                            Android="10"
+                            iOS="10" />
             </Frame.Margin>
-            <StackLayout Orientation="Horizontal">
-                <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Horizontal">                
+                <StackLayout Orientation="Vertical" 
+                             IsVisible="{Binding ShowLeftMenu}">
                     <ff:CachedImage Aspect="AspectFit"
                                     Margin="0,0,0,0"
                                     VerticalOptions="StartAndExpand"
                                     HorizontalOptions="FillAndExpand"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
                                     CacheDuration="50"
                                     RetryCount="3"
                                     Source="{Binding IconImageSource}"
                                     RetryDelay="600"
-                                    DownsampleToViewSize="true" />
+                                    DownsampleToViewSize="False" />
                     <Button x:Name="ContextMenuButton"
                             BackgroundColor="Transparent"
                             BorderWidth="0"
@@ -48,45 +51,51 @@
                             ImageSource="{StaticResource EllipsesHIcon}" />
                 </StackLayout>
                 <Grid Padding="0"
-                          BackgroundColor="Transparent"
-                          HorizontalOptions="FillAndExpand"
-                          VerticalOptions="CenterAndExpand">
+                      BackgroundColor="Transparent"
+                      HorizontalOptions="FillAndExpand"
+                      VerticalOptions="StartAndExpand">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
+                    <!-- Title Label -->
                     <Label Grid.Row="0"
-                               FontAttributes="Bold"
-                               Padding="0,5,0,0"
-                               FontSize="16"
-                               HorizontalTextAlignment="Start"
-                               Text="{Binding CopyItem.Title, Mode=TwoWay}"
-                               TextColor="Black"
-                               VerticalTextAlignment="End">
-                    <Label.LineBreakMode>
-                        <OnPlatform x:TypeArguments="LineBreakMode"
-                                            Android="NoWrap"
-                                            iOS="TailTruncation" />
-                    </Label.LineBreakMode>
-                </Label>
-                <BoxView Grid.Row="1"
-                            HeightRequest="1"
-                            HorizontalOptions="FillAndExpand"
-                            Color="Gray" />
-                    <Grid Grid.Row="2">
-                        <Grid>
-                            <local:MpWebView x:Name="ContentEditorWebView"
-                                             IsEnabled="{Binding IsExpanded}"
-                                             EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
-                                <local:MpWebView.Source>
-                                    <HtmlWebViewSource x:Name="HtmlSource"
-                                                       Html="{Binding EditorHtml}" />
-                                </local:MpWebView.Source>
-                            </local:MpWebView>
-                        </Grid>
+                           FontAttributes="Bold"
+                           HeightRequest="25"
+                           Padding="5,5,0,0"
+                           FontSize="16"
+                           VerticalOptions="Start"
+                           HorizontalTextAlignment="Start"
+                           Text="{Binding CopyItem.Title, Mode=TwoWay}"
+                           TextColor="Black"
+                           VerticalTextAlignment="End">
+                        <!--<Label.LineBreakMode>
+                            <OnPlatform x:TypeArguments="LineBreakMode"
+                                        Android="NoWrap"
+                                        iOS="TailTruncation" />
+                        </Label.LineBreakMode>-->
+                    </Label>
+                    <BoxView Grid.Row="1"
+                             HeightRequest="1"
+                             VerticalOptions="Start"
+                             HorizontalOptions="FillAndExpand"
+                             Color="Gray" />
+                    <Grid Grid.Row="2"
+                          Padding="0,0,0,0">
+                        <local:MpWebView x:Name="ContentEditorWebView"
+                                         VerticalOptions="Start"
+                                         MinimumHeightRequest="50"
+                                         BackgroundColor="Pink"
+                                         IsEnabled="{Binding IsExpanded}"
+                                         EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
+                            <local:MpWebView.Source>
+                                <HtmlWebViewSource x:Name="HtmlSource"
+                                                   Html="{Binding EditorHtml}" />
+                            </local:MpWebView.Source>
+                        </local:MpWebView>
                     </Grid>
-                <!--<Label Grid.Row="2"
+                    <!--<Label Grid.Row="2"
                                Padding="5"
                                FontSize="16"
                                Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
