@@ -1,13 +1,17 @@
 var curQuillDiv = $("#editor");
 var quill;
 
+const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 var clickCount = 0;
 var selectedTemplateId = 0;
 var wasLastClickOnTemplate = false;
 var isCompleted = false;
 var isLoaded = false;
 
+var enterKeyBindings = null;
+
 var isShowingTemplateContextMenu = false;
+var isShowingTemplateColorPaletteMenu = false;
 var isShowingTemplateToolbarMenu = false;
 var isShowingPasteTemplateToolbar = false;
 var isShowingToolbar = true;
@@ -123,7 +127,7 @@ function registerTemplateSpan() {
     const Parchment = Quill.imports.parchment;
     const Delta = Quill.imports.delta;
 
-    class TemplateSpan extends Parchment.EmbedBlot {
+    class TemplateSpanBlot extends Parchment.EmbedBlot {
         static create(value) {
             const node = super.create(value);
             let iId = getUniqueTemplateInstanceId(value.templateId);
@@ -137,11 +141,16 @@ function registerTemplateSpan() {
             node.setAttribute('instanceId', iId);
             node.setAttribute('docIdx', value.docIdx);
             node.setAttribute('isFocus', false);
+
+            node.setAttribute("spellcheck", "false");
             node.setAttribute('class', 'template_btn');
             node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
+
             node.addEventListener('click', function (e) {
                 focusTemplate(node);
             });
+
+            //node.addEventListener('keydown', logKeyDown);
             //this._addRemovalButton(node);
             return node;
         }
@@ -171,17 +180,18 @@ function registerTemplateSpan() {
             node.appendChild(span);
         }
     }
-    TemplateSpan.blotName = 'templatespan';
-    TemplateSpan.tagName = 'SPAN';
-    TemplateSpan.className = 'ql-templatespan';
+    TemplateSpanBlot.blotName = 'templatespan';
+    TemplateSpanBlot.tagName = 'SPAN';
+    TemplateSpanBlot.className = 'ql-templatespan';
 
-    Quill.register(TemplateSpan);
+    Quill.register(TemplateSpanBlot);
 }
 
 function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
     if(isLoaded) {
         return;
-    }
+    }    
+    
     Quill.register("modules/htmlEditButton", htmlEditButton);
     Quill.register({ 'modules/better-table': quillBetterTable }, true);
 
@@ -276,8 +286,12 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
         if(clickCount > 0) {
             if(isShowingTemplateToolbarMenu) {
                 hideTemplateToolbarContextMenu();
-            } else if(isShowingTemplateContextMenu) {
+            }
+            if(isShowingTemplateContextMenu) {
                 hideTemplateContextMenu();
+            }
+            if(isShowingTemplateColorPaletteMenu) {
+                hideTemplateColorPaletteMenu();
             }
         } else {
             clickCount++;
@@ -292,12 +306,66 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
         return;
     });
 
-    quill.on('selection-change', function (range, oldRange, source) {
-        if(isRenamingTemplate()) {
-            //endSetTemplateName();
+    const Parchment = Quill.import('parchment');
+
+    let lastClickEvent = null;
+
+    this.quill.root.addEventListener('click', (e) => {
+        lastClickEvent = e;
+
+        //let image = Parchment.find(ev.target);
+
+        //if(image instanceof ImageBlot) {
+        //    this.quill.setSelection(image.offset(this.quill.scroll), 1, 'user');
+        //}
+
+        if(isRenamingTemplate()) {      
+            if(e.target.getAttribute('templateId') == null ||
+               e.target.getAttribute('contenteditable') == false) {                
+                endSetTemplateName();
+            }      
+            
+            //let tl = getTemplatesFromRange(range);
+            //let isRenaming = false;
+            //tl.forEach(function (t) {
+            //    let tid = t.getAttribute('templateId');
+            //    let iid = t.getAttribute('instanceId');
+            //    let te = getTemplateElement(tid, iid);
+            //    let isEditable = te.getAttribute('contenteditable');
+            //    if(isEditable != null || isEditable == false) {
+            //        isRenaming = true;
+            //        return;
+            //    }
+            //})
+            //if(tl == null || !isRenaming) {
+            //    endSetTemplateName();
+            //}
             //clearTemplateFocus();
-            quill.setSelection(oldRange);
+            //quill.setSelection(oldRange);
         }
+    });
+
+    quill.on('selection-change', function (range, oldRange, source) {
+        //if(isRenamingTemplate()) {
+
+        //    // Given DOM node, find corresponding Blot.
+        //    // Bubbling is useful when searching for a Embed Blot with its corresponding
+        //    // DOM node's descendant nodes.
+        //    let s = Parchment.find(domNode: Node, bubble: boolean = false): Blot;
+
+        //    find(lastClickEvent.target);
+
+        //    if(s instanceof TemplateSpanBlot) {
+        //        // TODO make sure s has contenteditable or its a different template
+        //        return;
+        //    } else {
+        //        endSetTemplateName();
+        //    }
+            
+        //    //clearTemplateFocus();
+        //    //quill.setSelection(oldRange);
+        //}      
+        
 
         if(range) {
             if(range.length == 0) {
@@ -313,31 +381,29 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
     });
 
     quill.on('text-change', function (delta, oldDelta, source) {
-        
-
-        //var retainVal = 0;
-        //var textDelta = 0;
-        //var wasAddTemplate = false;
-        //delta.ops.forEach(function (op) {
-        //    if(op.insert != null && op.insert.templatespan != null) {
-        //        //handle shifting in create template
-        //        wasAddTemplate = true;
-        //        return;
-        //    }
-        //    if(op.retain != null) {
-        //        retainVal = op.retain;
-        //    }
-        //    if(op.insert != null && op.insert.templatespan == null) {
-        //        textDelta += op.insert.length;
-        //    }
-        //    if(op.delete != null) {
-        //        textDelta -= parseInt(op.delete);
-        //    }
-        //});
-        //if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
-        //    shiftTemplates(retainVal, textDelta);
-        //    console.log(getTemplates());
-        //}
+        var retainVal = 0;
+        var textDelta = 0;
+        var wasAddTemplate = false;
+        delta.ops.forEach(function (op) {
+            if(op.insert != null && op.insert.templatespan != null) {
+                //handle shifting in create template
+                wasAddTemplate = true;
+                return;
+            }
+            if(op.retain != null) {
+                retainVal = op.retain;
+            }
+            if(op.insert != null && op.insert.templatespan == null) {
+                textDelta += op.insert.length;
+            }
+            if(op.delete != null) {
+                textDelta -= parseInt(op.delete);
+            }
+        });
+        if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
+            shiftTemplates(retainVal, textDelta);
+            console.log(getTemplates());
+        }
     });
 }
 
@@ -356,6 +422,20 @@ function shiftTemplates(fromDocIdx, byVal) {
             }
         }
     });
+}
+
+function getTemplatesFromRange(range) {
+    if(range == null || range.index == null) {
+        console.log('invalid range: ' + range);
+    }
+    let tl = [];
+    getTemplatesByDocOrder().forEach(function (tn) {
+        let docIdx = tn.docIdx;
+        if(docIdx >= range.index && docIdx <= range.index + range.length) {
+            tl.push(tn);
+        }
+    });
+    return tl;
 }
 
 function loadTemplates() {
@@ -425,17 +505,9 @@ function createTemplate(templateObjOrId, idx, len) {
         };
     }
     newTemplateObj.docIdx = range.index;
-    //if (templateId != null) {
-    //    for (var i = 0; i < tl.length; i++) {
-    //        var t = tl[i];
-    //        if (t['templateId'] == templateId) {
-    //            newTemplateObj = t;
-    //            break;
-    //        }
-    //    }
-    //}
+
     if(range.length == 0 && isNew) {
-        newTemplateObj['templateName'] = getLowestAnonTemplateName();//"Template #" + parseInt(tl.length + 1);
+        newTemplateObj['templateName'] = getLowestAnonTemplateName();
     }
 
     quill.deleteText(range.index, range.length, Quill.sources.SILENT);
@@ -450,15 +522,6 @@ function createTemplate(templateObjOrId, idx, len) {
     }
     quill.setSelection(range.index + 1, Quill.sources.API);
 
-    //var tElml = document.getElementsByClassName("template_btn");
-    //for(var i = 0; i < tElml.length; i++) {
-    //    var tElm = tElml[i];
-    //    if(tElm.getAttribute('templateId') == newTemplateObj['templateId']) {
-    //        tElm.addEventListener('click', function (e) {
-    //            selectTemplate(tElm.getAttribute('templateId'), false);
-    //        });
-    //    }
-    //}
     selectTemplate(newTemplateObj['templateId'], true);
 
     console.log(getTemplates());
@@ -495,7 +558,7 @@ function clearTemplateSelection() {
 }
 
 function selectTemplate(templateId, fromDropDown, iId) {
-    if(templateId == null) {
+    if(templateId == null || isRenamingTemplate()) {
         return;
     }
 
@@ -533,23 +596,38 @@ function selectTemplate(templateId, fromDropDown, iId) {
         }
         //moved from quill embed constructor maybe causing selection issue on android
         wasLastClickOnTemplate = true;
+
+        hideAllContextMenus();
         showTemplateContextMenu(getFocusTemplateElement());
     }
 }
 
-function getTemplateElement(tId,iId) {
+function isTemplateSelected() {
+    var selectionHtml = getSelectedHtml();
+    return selectionHtml.includes('template_btn');
+}
+
+function getTemplateElement(tId, iId) {
+    var tel = [];
     var stl = document.getElementsByClassName("template_btn");
     for(var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if(t.getAttribute('templateId') == tId && t.getAttribute('instanceId') == iId) {
-            return t;
-        }
+        let t = stl[i];
+        let ctid = parseInt(t.getAttribute('templateId'));
+        let ciid = parseInt(t.getAttribute('instanceId'));
+        if(ctid == tId) {
+            if(iId == null) {
+                tel.push(t);
+            } else if(ciid == iId) {
+                return t;
+            }
+        }        
     }
-    return null;
+    return iId == null ? tel:null;
 }
 
 function focusTemplate(tn) {
     clearTemplateFocus();
+    hideAllContextMenus();
     let tId = tn.getAttribute('templateId');
     let iId = parseInt(tn.getAttribute('instanceId'));
     let te = getTemplateElement(tId,iId);
@@ -578,11 +656,27 @@ function getFocusTemplateElement() {
 }
 
 function renameTemplateClick(tId,iId) {
-    beginSetTemplateName(tId,iId);
+    startSetTemplateName(tId,iId);
 }
 
-function changeTemplateColorClick(tId) {
-    console.log('change color');
+function changeTemplateColorClick(tId, iId) {
+    hideTemplateContextMenu();
+
+    if(isShowingTemplateColorPaletteMenu) {
+        hideTemplateColorPaletteMenu();
+    }
+    let te = getTemplateElement(tId, iId);
+    showTemplateColorPaletteMenu(te);
+}
+
+function colorPaletteItemClick(tId, chex) {
+    let tel = getTemplateElement(tId);
+
+    for(var i = 0; i < tel.length; i++) {
+        var te = tel[i];
+        te.style.backgroundColor = chex;
+        te.setAttribute('templateColor', chex);
+    }
 }
 
 function deleteAllTemplateClick(tId) {
@@ -624,23 +718,35 @@ function setTemplateText(templateId, text) {
 function setTemplateName(tid,iid, name) {
     var stl = document.getElementsByClassName("template_btn");
     for(var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if(t.getAttribute('templateid') == tid && t.getAttribute('instanceId') != iid) {
-            t.innerText = name;
-            t.templateName = name;
+        var te = stl[i];
+        let ctid = parseInt(te.getAttribute('templateid'));
+        let ciid = parseInt(te.getAttribute('instanceId'));
+        if(ctid == tid) {
+            te.setAttribute('templateName',name);
+            if(ciid != iid) {
+                te.innerText = name;                
+            }
         }
     }
 }
 
 var origTemplateName = null;
 
-function beginSetTemplateName(tId,iId) {
+function startSetTemplateName(tId, iId) {
+    enterKeyBindings = disableKey('Enter');
+    document.addEventListener('keypress', logKeyPress);
+    document.addEventListener('keydown', logKeyDown);
+
     var stl = document.getElementsByClassName("template_btn");
     for(var i = 0; i < stl.length; i++) {
         let te = stl[i];
+        te.setAttribute('contentEditable', false);
+        te.style.cursor = "pointer";
+        te.style.caretColor = "transparent";
+
         let ctId = te.getAttribute('templateId');
         let ciId = te.getAttribute('instanceId');
-        if(ctId != tId) {
+        if(ctId != tId && ciId != iId) {
             continue;
         }
 
@@ -648,28 +754,10 @@ function beginSetTemplateName(tId,iId) {
         te.style.cursor = "text";
         te.style.caretColor = "black";
 
-        document.addEventListener('keyup', logKey);
-        
-        if(ciId == iId) {
-            origTemplateName = te.innerText;
-            selectText(te);
-        }
+        origTemplateName = te.innerText;
+        selectText(te);
     }
     hideTemplateContextMenu();
-}
-
-function logKey(e) {
-    if(e.code == "Escape") {
-        endSetTemplateName(true);
-        return;
-    }
-    if(e.code == "Enter") {
-        //end & remove listener
-        endSetTemplateName(false);
-        return;
-    }
-    let fte = getFocusTemplateElement();
-    setTemplateName(fte.getAttribute('templateId'),fte.getAttribute('instanceId'), fte.innerText);
 }
 
 function endSetTemplateName(wasCancel) {
@@ -685,8 +773,57 @@ function endSetTemplateName(wasCancel) {
             t.innerText = origTemplateName;
         }
     }
+    
+    reenableKey('Enter', enterKeyBindings);
+    enterKeyBindings = null;
+
     origTemplateName = null;
+    
+    document.removeEventListener('keypress', logKeyPress);
+    document.removeEventListener('keydown', logKeyDown);
 }
+
+function logKeyPress(e) {
+    let fte = getFocusTemplateElement();
+    setTemplateName(parseInt(fte.getAttribute('templateId')), parseInt(fte.getAttribute('instanceId')), fte.innerText);
+}
+
+
+function logKeyDown(e) {
+    if(!isRenamingTemplate) {
+        return;
+    }
+
+    if(e.code == "Escape") {
+        endSetTemplateName(true);
+        return;
+    }
+    if(e.code == "Enter") {
+        e.preventDefault();
+        endSetTemplateName(false);
+        return;
+    }
+
+    //if(!TEMPLATE_VALID_CHARS.includes(String.fromCharCode(e.keyCode))) {
+    //    e.preventDefault();
+    //}
+}
+
+function disableKey(keyName) {
+    var tempBindings = null;
+
+    var keyboard = quill.getModule('keyboard');
+    tempBindings = keyboard.bindings[keyName];
+    keyboard.bindings[keyName] = null;
+
+    return tempBindings;
+}
+
+function reenableKey(keyName, bindings) {
+    var keyboard = quill.getModule('keyboard');
+    keyboard.bindings[keyName] = bindings;
+}
+
 
 
 function selectText(elm) {
@@ -795,7 +932,7 @@ function showTemplateToolbarContextMenu(tb) {
     for(var i = 0; i < tl.length; i++) {
         var t = tl[i];
         var itemId = listItemPrefix + t.templateId;
-        var templateItem = '<li><a href="javascript:void(0);" onclick="createTemplate(' + t['templateId'] + ');">' +
+        var templateItem = '<li><a onclick="createTemplate(' + t['templateId'] + ');">' +
             '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
             '<span style="font-family:arial;">' + t['templateName'] + '</span></a></li>';
         rgtClickContextMenuList.innerHTML += templateItem;
@@ -840,6 +977,7 @@ function showTemplateContextMenu(te) {
         { icon_class: 'template_rename_icon', label: '   Rename', func:'renameTemplateClick' },
         { icon_class: 'template_color_icon', label: '   Change Color', func: 'changeTemplateColorClick' },
         { icon_class: 'template_delete_icon', label: '   Delete All', func: 'deleteAllTemplateClick' }];
+
     context_items.forEach(function (ci) {
         var context_item = '<li><a href="javascript:void(0);" onclick="'+ci.func+'(' + tId + ',' + iId + ');">' +
             '<div class="template_context_item ' + ci.icon_class + '"></div> ' +
@@ -863,6 +1001,62 @@ function hideTemplateContextMenu() {
 
     isShowingTemplateContextMenu = false;
 }
+
+function showTemplateColorPaletteMenu(te) {
+    if(te == null) {
+        return;
+    }
+    if(isShowingTemplateColorPaletteMenu) {
+        hideTemplateColorPaletteMenu();
+    }
+    clickCount = 0;
+    
+    let tId = te.getAttribute('templateId');
+    var palette_item = {
+        style_class: 'template_color_palette_item',
+        func: 'colorPaletteItemClick'
+    };
+       
+
+    let paletteHtml = '<table>';
+    for(var r = 0; r < 10; r++) {
+        paletteHtml += '<tr>';
+        for(var c = 0; c < 10; c++) {
+            let c = getRandomColor().trim();
+            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(' + tId + ',\'' + c + '\');">' +
+                '<div class="' + palette_item.style_class + '" style="background-color: ' + c + '" ></div></a></td > ';
+            paletteHtml += item;
+        }
+        paletteHtml += '</tr>';
+    }
+
+    var rgtClickColorPaletteMenu = document.getElementById('templateColorPaletteMenu');
+    rgtClickColorPaletteMenu.innerHTML = paletteHtml;
+
+
+    const rect = te.getBoundingClientRect();
+    const x = rect.left + 20;
+    const y = rect.bottom;
+    rgtClickColorPaletteMenu.style.left = `${x}px`;
+    rgtClickColorPaletteMenu.style.top = `${y}px`;
+    rgtClickColorPaletteMenu.style.display = 'block';
+
+    isShowingTemplateColorPaletteMenu = true;
+}
+
+function hideTemplateColorPaletteMenu() {
+    var rgtClickColorPaletteMenu = document.getElementById('templateColorPaletteMenu');
+    rgtClickColorPaletteMenu.style.display = 'none';
+
+    isShowingTemplateColorPaletteMenu = false;
+}
+
+function hideAllContextMenus() {
+    hideTemplateColorPaletteMenu();
+    hideTemplateContextMenu();
+    hideTemplateToolbarContextMenu();
+}
+
 
 function showPasteTemplateToolbar() {
     isShowingPasteTemplateToolbar = true;
@@ -1086,6 +1280,31 @@ function getText() {
     return text;
 }
 
+function getSelectedText() {
+    var selection = quill.getSelection();
+    return quill.getText(selection.index, selection.length);
+}
+function getHtml() {
+    //document.getElementsByClassName
+    //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+    clearTemplateSelection();
+    clearTemplateFocus();
+    var val = quill.root.innerHTML;
+    return unescape(val);
+}
+
+function getSelectedHtml() {
+    var selection = quill.getSelection();
+    var selectedContent = quill.getContents(selection.index, selection.length);
+    var tempContainer = document.createElement('div')
+    var tempQuill = new Quill(tempContainer);
+    tempQuill.setContents(selectedContent);
+    let result = tempContainer.querySelector('.ql-editor').innerHTML;
+    tempContainer.remove();
+    return result;
+}
+
+
 function isEditorLoaded() {
     return isLoaded;
 }
@@ -1243,14 +1462,7 @@ function getTemplateEmbedStr(t) {
     return '{{' + t.templateId + '}}';
 }
 
-function getHtml() {
-    //document.getElementsByClassName
-    //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
-    clearTemplateSelection();
-    clearTemplateFocus();
-    var val = quill.root.innerHTML;
-    return unescape(val);
-}
+
 
 function getTemplatesJson() {
     var val = JSON.stringify(getTemplates());
@@ -1341,5 +1553,6 @@ function getTemplateIconStr(isEnabled) {
         return 'data:image/png;base64,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';
     }
 }
+
 
 init(null, null, null, null, null);

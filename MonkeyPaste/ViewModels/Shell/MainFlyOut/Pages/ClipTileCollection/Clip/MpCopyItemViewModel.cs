@@ -6,9 +6,9 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {
@@ -124,17 +124,18 @@ namespace MonkeyPaste {
                 Command = DeleteCopyItemCommand,
                 IconImageResourceName = "DeleteIcon"
             });
-
             Device.BeginInvokeOnMainThread(() => {
-                var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
-                var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-                using (var reader = new System.IO.StreamReader(stream)) {
-                    var html = reader.ReadToEnd();
-                    string contentTag = @"<div id='editor'>";
-                    var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
-                    html = html.Replace(contentTag, contentTag + data);
-                    EditorHtml = html;
-                }
+                var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+                string contentTag = @"<div id='editor'>";
+                var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+                html = html.Replace(contentTag, contentTag + data);
+
+                var editor2Js = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
+                string editor2JsTag = @"<!-- Editor2.js --><script type='text/javascript' src='Editor2.js'></script>";
+                string cleanTag = @"<script type='text/javascript'>";
+                html = html.Replace(editor2JsTag, cleanTag + editor2Js + "</script>");
+
+                EditorHtml = html;
             });
         }
 

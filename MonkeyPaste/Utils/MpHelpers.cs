@@ -29,6 +29,7 @@ using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Crypto.Parameters;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
+using System.Reflection;
 
 namespace MonkeyPaste {
     public class MpHelpers {
@@ -44,6 +45,16 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         #region Documents
+
+        public string LoadFileResource(string resourcePath) {
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
+            var stream = assembly.GetManifestResourceStream(resourcePath);
+            using (var reader = new System.IO.StreamReader(stream)) {
+                var res = reader.ReadToEnd();
+                return res;
+            }
+        }
+
         public string GetCheckSum(string theString) {
             string hash;
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
