@@ -61,6 +61,7 @@ namespace MonkeyPaste {
             }
             
             IsLoaded = true;
+            
         }
 
         public SQLite.TableMapping GetTableMapping(string tableName) {

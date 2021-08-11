@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using FFImageLoading.Forms;
 using Java.IO;
+using Java.Lang;
 using Java.Nio;
 using Plugin.Media;
 using SkiaSharp;
@@ -28,6 +29,14 @@ namespace MonkeyPaste.Droid {
         Categories = new[] { Intent.CategoryDefault },
         DataMimeType =  "text/plain")]
     public class MpProcessTextActivity : Activity {
+        public static MpProcessTextActivity Current;
+
+        public static Window GetWindow() {
+            if(Current == null) {
+                return null;
+            }
+            return Current.Window;
+        }
 
         protected override async void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
@@ -44,7 +53,7 @@ namespace MonkeyPaste.Droid {
                     try {
                         var appInfo = this.ApplicationContext.PackageManager.GetApplicationInfo(this.Referrer.Host, 0);
                         hostAppName = appInfo != null ? this.ApplicationContext.PackageManager.GetApplicationLabel(appInfo) : "(unknown)";
-                    } catch (Exception ex) {
+                    } catch (System.Exception ex) {
                         MpConsole.WriteTraceLine(@"Android.ProcessTextActivity error finding app name for referrer: " + this.Referrer.Host);
                         MpConsole.WriteTraceLine(@"With Exception: " + ex);
                     }                    
@@ -66,6 +75,10 @@ namespace MonkeyPaste.Droid {
                 Finish();
             }            
         }
+
+
+
+        
 
         private byte[] GetByteArray(Bitmap bmp) {
             using (var stream = new MemoryStream()) {

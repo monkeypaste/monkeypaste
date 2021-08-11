@@ -11,7 +11,7 @@
                                           NumberOfTapsRequired="1" />
     </ContentView.GestureRecognizers>
     <ContentView.Content>
-        <Frame Padding="0"
+        <Frame Padding="0"               
                BackgroundColor="White"               
                HasShadow="True"
                HeightRequest="{Binding EditorHeight}"

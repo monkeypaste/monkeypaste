@@ -2582,7 +2582,7 @@ namespace MpWpfApp {
             var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
             var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml");
             var xamlContent = (string)convertRtfToXaml.Invoke(xamlRtfConverter, new object[] { rt });
-            return xamlContent;
+            return xamlContent; 
         }
 
         public string ConvertFlowDocumentToRichText(FlowDocument fd) {

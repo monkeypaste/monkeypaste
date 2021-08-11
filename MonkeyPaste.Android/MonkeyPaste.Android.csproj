@@ -115,6 +115,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MpAndroidInterfaceWrapper.cs" />
     <Compile Include="Services\MpScreenshot.cs" />
+    <Compile Include="Services\MpShellCommand.cs" />
     <Compile Include="Services\MpUiLocationFetcher.cs" />
     <Compile Include="Services\MpGlobalLayoutListener.cs" />
     <Compile Include="Services\MpGlobalTouch.cs" />

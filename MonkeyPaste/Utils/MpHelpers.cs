@@ -46,6 +46,21 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         #region Documents
+        public string Diff(string str1, string str2) {
+            if (str1 == null) {
+                return str2;
+            }
+            if (str2 == null) {
+                return str1;
+            }
+
+            List<string> set1 = str1.Split(' ').Distinct().ToList();
+            List<string> set2 = str2.Split(' ').Distinct().ToList();
+
+            var diff = set2.Count() > set1.Count() ? set2.Except(set1).ToList() : set1.Except(set2).ToList();
+
+            return string.Join("", diff);
+        }
 
         public string LoadFileResource(string resourcePath) {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;

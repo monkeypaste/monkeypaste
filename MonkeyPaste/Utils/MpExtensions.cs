@@ -20,6 +20,8 @@ namespace MonkeyPaste {
         public static string CheckSum(this string str) {
             return MpHelpers.Instance.GetCheckSum(str);
         }
+
+
         #endregion
 
         #region Visual

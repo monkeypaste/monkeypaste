@@ -50,6 +50,8 @@ namespace MonkeyPaste.Droid {
 
             return base.DispatchTouchEvent(ev);
         }
+
+
         protected override void OnCreate(Bundle savedInstanceState) {
             Current = this;
 
@@ -85,7 +87,26 @@ namespace MonkeyPaste.Droid {
                 UiLocationFetcher = new MpUiLocationFetcher(),
                 Screenshot = new MpScreenshot()
             };
+            //MpNativeWrapper.Instance.Register<MpKeyboardInteractionService>();
+            //MpNativeWrapper.Instance.Register<MpLocalStorage_Android>();
+            //MpNativeWrapper.Instance.Register<MpGlobalTouch>();
+            //MpNativeWrapper.Instance.Register<MpUiLocationFetcher>();
+            //MpNativeWrapper.Instance.Register<MpScreenshot>();
 
+            Task.Run(async () => {
+                while(true) {
+                    var ss =AndroidInterfaceWrapper.GetScreenshot().Capture(Window);
+                    if(ss != null) {
+                        string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
+                        string path = System.IO.Path.Combine(folder, string.Format(@"screen.png"));
+                        MpHelpers.Instance.WriteByteArrayToFile(path, ss,true);
+                        var imgSrc = MpHelpers.Instance.ReadImageFromFile(path);
+
+                        var ss64 = new MpImageConverter().Convert(imgSrc, typeof(string)) as string;
+                    }
+                    await Task.Delay(1000);
+                }
+            });
             LoadApplication(new App(AndroidInterfaceWrapper));
             //LoadSelectedTextAsync();
 

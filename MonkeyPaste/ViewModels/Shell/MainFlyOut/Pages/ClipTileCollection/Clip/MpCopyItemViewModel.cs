@@ -34,9 +34,10 @@ namespace MonkeyPaste {
 
         public string EditorHtml { get; set; }
 
-        public string Html { get; set; }
-        public string Text { get; set; }
-        public string Templates { get; set; }
+        public string edHtml { get; set; }
+        public string edText { get; set; }
+        public string edTemplates { get; set; }
+        public string edConsoleLog { get; set; }
 
         public MpJsProperty<bool> IsEditorLoaded { get; set; }
 
@@ -124,19 +125,27 @@ namespace MonkeyPaste {
                 Command = DeleteCopyItemCommand,
                 IconImageResourceName = "DeleteIcon"
             });
-            Device.BeginInvokeOnMainThread(() => {
-                var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-                string contentTag = @"<div id='editor'>";
-                var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
-                html = html.Replace(contentTag, contentTag + data);
+            Device.BeginInvokeOnMainThread(InitEditor);
+        }
 
-                var editor2Js = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
-                string editor2JsTag = @"<!-- Editor2.js --><script type='text/javascript' src='Editor2.js'></script>";
-                string cleanTag = @"<script type='text/javascript'>";
-                html = html.Replace(editor2JsTag, cleanTag + editor2Js + "</script>");
+        private void InitEditor() {
+            var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
 
-                EditorHtml = html;
-            });
+            string contentTag = @"<div id='editor'>";
+            var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+            html = html.Replace(contentTag, contentTag + data);
+
+            var editor2Js = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
+            string envTag = @"var envName = '';";
+            string envVal = @"var envName = 'android'";
+            editor2Js = editor2Js.Replace(envTag, envVal);
+
+
+            string editor2JsTag = @"<!-- Editor2.js --><script type='text/javascript' src='Editor2.js'></script>";
+            string cleanTag = @"<script type='text/javascript'>";
+            html = html.Replace(editor2JsTag, cleanTag + editor2Js + "</script>");
+
+            EditorHtml = html;
         }
 
         private async Task<string> EvalJs(string js) {
@@ -162,9 +171,15 @@ namespace MonkeyPaste {
         }
 
         private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-            Text = await EvalJs($"getText()");
-            Html = await EvalJs($"getHtml()");
-            Templates = await EvalJs($"getTemplates()");
+            var nl = await EvalJs($"getLog()");
+            if(nl != edConsoleLog) {
+                edConsoleLog = edConsoleLog.Replace(edConsoleLog, nl);
+                MpConsole.WriteLine(edConsoleLog);
+            }
+
+            edText = await EvalJs($"getText()");
+            edHtml = await EvalJs($"getHtml()");
+            edTemplates = await EvalJs($"getTemplates()");
             var heightStr = await EvalJs($"getTotalHeight()");
             if(!IsExpanded || string.IsNullOrEmpty(heightStr) || heightStr == "null") {
                 heightStr = _collapsedHeight.ToString();

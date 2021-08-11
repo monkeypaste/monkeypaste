@@ -8,6 +8,8 @@ var wasLastClickOnTemplate = false;
 var isCompleted = false;
 var isLoaded = false;
 
+var consolelog = '';
+
 var enterKeyBindings = null;
 
 var isShowingTemplateContextMenu = false;
@@ -15,8 +17,11 @@ var isShowingTemplateColorPaletteMenu = false;
 var isShowingTemplateToolbarMenu = false;
 var isShowingPasteTemplateToolbar = false;
 var isShowingToolbar = true;
+
+
 ////////////////////////////////////////////////////////////////////////////////
-/*  These var's are parsed and replaced with values from app */
+/*  These var's can be parsed and replaced with values from app */
+var envName = '';
 var isPastingTemplate = false;
 var fontFamilys = null;
 var fontSizes = null;
@@ -147,6 +152,7 @@ function registerTemplateSpan() {
             node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
 
             node.addEventListener('click', function (e) {
+                log(e);
                 focusTemplate(node);
             });
 
@@ -279,6 +285,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
     templateToolbarButton.attach(quill)
 
     document.addEventListener('click', function (e) {
+        log(e.target);
         //if(getFocusTemplateElement() == null) {
         //    hideTemplateToolbarContextMenu();
         //    hideTemplateContextMenu();
@@ -369,14 +376,14 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
 
         if(range) {
             if(range.length == 0) {
-                console.log('User cursor is on', range.index);
+                log('User cursor is on', range.index);
             } else {
                 var text = quill.getText(range.index, range.length);
-                console.log('User has highlighted', text);
+                log('User has highlighted', text);
             }
 
         } else {
-            console.log('Cursor not in the editor');
+            log('Cursor not in the editor');
         }
     });
 
@@ -402,7 +409,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
         });
         if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
             shiftTemplates(retainVal, textDelta);
-            console.log(getTemplates());
+            log(getTemplates());
         }
     });
 }
@@ -426,7 +433,7 @@ function shiftTemplates(fromDocIdx, byVal) {
 
 function getTemplatesFromRange(range) {
     if(range == null || range.index == null) {
-        console.log('invalid range: ' + range);
+        log('invalid range: ' + range);
     }
     let tl = [];
     getTemplatesByDocOrder().forEach(function (tn) {
@@ -524,7 +531,7 @@ function createTemplate(templateObjOrId, idx, len) {
 
     selectTemplate(newTemplateObj['templateId'], true);
 
-    console.log(getTemplates());
+    log(getTemplates());
     return range.index;
 }
 
@@ -724,7 +731,9 @@ function setTemplateName(tid,iid, name) {
         if(ctid == tid) {
             te.setAttribute('templateName',name);
             if(ciid != iid) {
-                te.innerText = name;                
+                //te.innerText = name;
+                te.innerHTML = name;
+                console.table(te);
             }
         }
     }
@@ -788,7 +797,6 @@ function logKeyPress(e) {
     setTemplateName(parseInt(fte.getAttribute('templateId')), parseInt(fte.getAttribute('instanceId')), fte.innerText);
 }
 
-
 function logKeyDown(e) {
     if(!isRenamingTemplate) {
         return;
@@ -823,8 +831,6 @@ function reenableKey(keyName, bindings) {
     var keyboard = quill.getModule('keyboard');
     keyboard.bindings[keyName] = bindings;
 }
-
-
 
 function selectText(elm) {
     if(document.body.createTextRange) {
@@ -1510,7 +1516,7 @@ function createLink() {
         var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
         quill.clipboard.dangerouslyPasteHTML(range.index, ts);
 
-        console.log('text:\n' + getText());
+        log('text:\n' + getText());
         console.table('\nhtml:\n' + getHtml());
     }
 }
@@ -1554,5 +1560,14 @@ function getTemplateIconStr(isEnabled) {
     }
 }
 
+
+function getLog() {
+    return consolelog;
+}
+
+function log(o) {
+    consolelog += o + '\r\n';
+    console.log(o);
+}
 
 init(null, null, null, null, null);
