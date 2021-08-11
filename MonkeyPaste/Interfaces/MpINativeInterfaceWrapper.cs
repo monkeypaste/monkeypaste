@@ -9,5 +9,6 @@ namespace MonkeyPaste {
         MpILocalStorage GetLocalStorageManager();
         MpIGlobalTouch GetGlobalTouch();
         MpIUiLocationFetcher GetLocationFetcher();
+        MpIScreenshot GetScreenshot();
     }
 }

@@ -82,7 +82,8 @@ namespace MonkeyPaste.Droid {
                 KeyboardService = new MpKeyboardInteractionService(),
                 StorageService = new MpLocalStorage_Android(),
                 TouchService = new MpGlobalTouch(),
-                UiLocationFetcher = new MpUiLocationFetcher()
+                UiLocationFetcher = new MpUiLocationFetcher(),
+                Screenshot = new MpScreenshot()
             };
 
             LoadApplication(new App(AndroidInterfaceWrapper));

@@ -170,7 +170,7 @@ namespace MonkeyPaste {
                 heightStr = _collapsedHeight.ToString();
             }
             EditorHeight = Convert.ToDouble(heightStr);
-            MpConsole.WriteLine("Editor Height: " + heightStr + " " + EditorHeight);
+            //MpConsole.WriteLine("Editor Height: " + heightStr + " " + EditorHeight);
         }
 
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

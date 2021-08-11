@@ -21,6 +21,7 @@
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Services\**" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
+    <Compile Remove="Views\MainWindow\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Popups\**" />
@@ -29,6 +30,7 @@
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
+    <EmbeddedResource Remove="Views\MainWindow\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Popups\**" />
@@ -37,6 +39,7 @@
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Services\**" />
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
+    <None Remove="Views\MainWindow\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <None Remove="Views\Shell\MainFlyOut\Popups\**" />

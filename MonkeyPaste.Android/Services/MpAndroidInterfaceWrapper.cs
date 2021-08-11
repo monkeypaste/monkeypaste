@@ -15,6 +15,7 @@ namespace MonkeyPaste.Droid {
         public MpLocalStorage_Android StorageService { private get; set; }
         public MpGlobalTouch TouchService { private get; set; }
         public MpUiLocationFetcher UiLocationFetcher { private get; set; }
+        public MpScreenshot Screenshot { private get; set; }
 
         public MpIGlobalTouch GetGlobalTouch() {
             return TouchService;
@@ -34,6 +35,10 @@ namespace MonkeyPaste.Droid {
 
         public MpIPhotoGalleryManager GetPhotoGalleryManager() {
             throw new NotImplementedException();
+        }
+
+        public MpIScreenshot GetScreenshot() {
+            return Screenshot;
         }
     }
 }

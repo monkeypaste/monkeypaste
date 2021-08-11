@@ -30,6 +30,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace MonkeyPaste {
     public class MpHelpers {
@@ -201,9 +202,70 @@ namespace MonkeyPaste {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
+        }
+
+        public async Task<byte[]> ReadBytesFromUri(string url) {
+            if(!Uri.IsWellFormedUriString(url,UriKind.Absolute)) {
+                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
+                return null;
+            }
+            using var httpClient = new HttpClient();
+            byte[] bytes = await httpClient.GetByteArrayAsync(url);
+
+            using var fs = new FileStream("favicon.ico", FileMode.Create);
+            fs.Write(bytes, 0, bytes.Length);
+
+            return bytes;
+        }
+
+        public byte[] ReadBytesFromFile(string filePath) {
+            if(!File.Exists(filePath)) {
+                return null;
+            }
+            try {
+                using var fs = new FileStream(filePath, FileMode.Open);
+
+                int c;
+                int i = 0;
+                var bytes = new List<byte>();
+
+                while ((c = fs.ReadByte()) != -1) {
+                    bytes.Add((byte)c);
+                }
+
+                return bytes.ToArray();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                return null;
+            }
+        }
+
+        public Xamarin.Forms.ImageSource ReadImageFromFile(string filePath) {
+            try {
+                var bytes = ReadBytesFromFile(filePath);
+                return new MpImageConverter().Convert(bytes.ToArray(), typeof(Xamarin.Forms.ImageSource)) as Xamarin.Forms.ImageSource;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                return null;
+            }
+        }
+
+        public bool DeleteFile(string filePath) {
+            if (File.Exists(filePath)) {
+                try {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                    return false;
+                }
+            }
+            return true;
         }
 
         public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
@@ -521,7 +583,7 @@ namespace MonkeyPaste {
 
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
                 return false;
             }
         }
@@ -589,7 +651,7 @@ namespace MonkeyPaste {
                 return url.Substring(domainStartIdx).Substring(0, domainEndIdx);
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
+                MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
             }
             return null;
         }

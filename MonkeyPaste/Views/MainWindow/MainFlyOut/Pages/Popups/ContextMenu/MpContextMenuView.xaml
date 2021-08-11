@@ -1,0 +1,109 @@
+﻿<rg:PopupPage
+    x:Class="MonkeyPaste.MpContextMenuView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:rga="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    x:DataType="local:MpContextMenuViewModel"
+    BackgroundColor="Transparent">
+    <rg:PopupPage.Resources>
+        <local:MpContextMenuTemplateSelector x:Key="ContextMenuTemplateSelector" />
+    </rg:PopupPage.Resources>
+    <AbsoluteLayout>
+        <ListView x:Name="ContextMenuListView"
+                  BackgroundColor="White"
+                  HeightRequest="{Binding Height}" 
+                  HorizontalOptions="End" 
+                  HasUnevenRows="True"
+                  ItemsSource="{Binding Items}"
+                  ItemTemplate="{StaticResource ContextMenuTemplateSelector}"
+                  VerticalOptions="Start"
+                  WidthRequest="{Binding Width}">
+            <ListView.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="DefaultMenuItem"
+                                  x:DataType="local:MpContextMenuItemViewModel">
+                        <ViewCell>
+                            <Frame Margin="1"
+                                   Padding="{Binding BindingContext.Padding, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                   BackgroundColor="White"
+                                   IsEnabled="{Binding IsEnabled}"
+                                   WidthRequest="{Binding BindingContext.ItemWidth, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                   HeightRequest="{Binding BindingContext.ItemHeight, Source={RelativeSource AncestorType={x:Type ListView}}}">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding PerformContextCommand}"
+                                                          NumberOfTapsRequired="1" />
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Tapped="TapGestureRecognizer_Tapped" />
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.3*" />
+                                        <ColumnDefinition Width="0.7*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0"
+                                           HeightRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                           Source="{Binding IconImageSource}"
+                                           WidthRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}" />
+                                    <Label Grid.Column="1"
+                                           HorizontalTextAlignment="End"
+                                           Margin="10,0,10,0"
+                                           FontSize="{Binding BindingContext.FontSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                           Text="{Binding Title}"
+                                           TextColor="{Binding TitleColor}"
+                                           FontAttributes="{Binding TitleAttributes}"
+                                           VerticalTextAlignment="Center" />
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ColorPalleteMenuItem"
+                                  x:DataType="local:MpColorChooserContextMenuItemViewModel">
+                        <ViewCell>
+                            <local:MpColorChooserContextMenuItemView />
+                        </ViewCell>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ListView.Resources>
+            <!--<ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:MpContextMenuItemViewModel">
+                    <ViewCell>
+                        <Frame Margin="1"
+                               Padding="{Binding BindingContext.Padding, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                               BackgroundColor="White"
+                               IsEnabled="{Binding IsEnabled}"
+                               WidthRequest="{Binding BindingContext.ItemWidth, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                               HeightRequest="{Binding BindingContext.ItemHeight, Source={RelativeSource AncestorType={x:Type ListView}}}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding PerformContextCommand}"
+                                                      NumberOfTapsRequired="1" />
+                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                      Tapped="TapGestureRecognizer_Tapped" />
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*" />
+                                    <ColumnDefinition Width="0.7*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0"
+                                       HeightRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                       Source="{Binding IconImageSource}"
+                                       WidthRequest="{Binding BindingContext.IconSize, Source={RelativeSource AncestorType={x:Type ListView}}}" />
+                                <Label Grid.Column="1"
+                                       HorizontalTextAlignment="End"
+                                       Margin="10,0,10,0" 
+                                       FontSize="{Binding BindingContext.FontSize, Source={RelativeSource AncestorType={x:Type ListView}}}"
+                                       Text="{Binding Title}"
+                                       TextColor="{Binding TitleColor}"
+                                       FontAttributes="{Binding TitleAttributes}"
+                                       VerticalTextAlignment="Center" />
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>-->
+        </ListView>
+    </AbsoluteLayout>
+</rg:PopupPage>

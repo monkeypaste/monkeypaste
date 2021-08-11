@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView x:Class="MonkeyPaste.MpTagTileView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MonkeyPaste"
+             local:MpSmartSelection.HasSmartSelection="True"
+             x:DataType="local:MpTagTileViewModel">
+    <ContentView.Content>
+        <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
+            <Grid.GestureRecognizers>
+                <DragGestureRecognizer x:Name="TagTileDragGestureRecognizer"
+                                       CanDrag="True"
+                                       DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragStartingCommandParameter="{Binding}" />
+                <DropGestureRecognizer AllowDrop="True"
+                                       DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragLeaveCommandParameter="{Binding}"
+                                       DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragOverCommandParameter="{Binding}"
+                                       Drop="DropGestureRecognizer_Drop"
+                                       DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DropCommandParameter="{Binding}" />
+            </Grid.GestureRecognizers>
+            <Grid.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}"
+                             TargetType="Grid"
+                             Value="True">
+                    <Setter Property="BackgroundColor"
+                            Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSelected}"
+                             TargetType="Grid"
+                             Value="False">
+                    <Setter Property="BackgroundColor"
+                            Value="LightYellow" />
+                </DataTrigger>
+            </Grid.Triggers>
+            <Grid>
+                <!--<Grid.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                          Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                          CommandParameter="{Binding}" />
+                </Grid.GestureRecognizers>-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <BoxView Margin="30,20,10,20"
+                         BackgroundColor="{Binding Tag.Color.Color}"
+                         HeightRequest="25"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         WidthRequest="25">
+                    <!--<BoxView.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1"
+                                              Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                              CommandParameter="{Binding}" />
+                    </BoxView.GestureRecognizers>-->
+                </BoxView>
+                <Label Grid.Row="0"
+                       Margin="20,0,0,0"
+                       BackgroundColor="Transparent"
+                       FontSize="Micro"
+                       HorizontalOptions="Center"
+                       Text="{Binding CopyItemCount}"
+                       TextColor="{Binding Tag.Color.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                       VerticalOptions="Center">
+                    <!--<Label.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1"
+                                              Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                              CommandParameter="{Binding}" />
+                    </Label.GestureRecognizers>-->
+                </Label>
+            </Grid>
+            <local:MpCustomEntry x:Name="TagNameEntry"
+                                 Grid.Column="1"
+                                 Background="{x:Null}"
+                                 BackgroundColor="Transparent"
+                                 Completed="TagNameEntry_Completed"
+                                 FontAttributes="Italic"
+                                 IsReadOnly="{Binding IsNameReadOnly}"
+                                 Text="{Binding Tag.TagName}"
+                                 TextColor="Black"
+                                 VerticalTextAlignment="Center">
+                <!--<local:MpCustomEntry.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                          Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                          CommandParameter="{Binding}" />
+                </local:MpCustomEntry.GestureRecognizers>-->
+            </local:MpCustomEntry>
+            <Button x:Name="ContextMenuButton"
+                    Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    Clicked="ContextMenuButton_Clicked"
+                    HeightRequest="25"
+                    ImageSource="{StaticResource EllipsesVIcon}">
+                <!--<Button.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                          Command="{Binding BindingContext.SelectionChangedCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                          CommandParameter="{Binding}" />
+                </Button.GestureRecognizers>-->
+            </Button>
+        </Grid>
+    </ContentView.Content>
+</ContentView>
