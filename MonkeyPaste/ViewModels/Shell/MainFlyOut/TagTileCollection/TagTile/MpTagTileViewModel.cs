@@ -154,24 +154,24 @@ namespace MonkeyPaste {
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            //Device.BeginInvokeOnMainThread(() => {
-            //    if (e is MpCopyItemTag dcit) {
-            //        if (dcit.TagId == Tag.Id) {
-            //            //when CopyItem unlinked
-            //            var ci = Tag.CopyItemList.Where(x => x.Id == dcit.CopyItemId).FirstOrDefault();
-            //            if (ci != null) {
-            //                Tag.CopyItemList.Remove(ci);
-            //                OnPropertyChanged(nameof(CopyItemCount));
-            //            }
-            //        }
-            //    } else if (e is MpCopyItem dci) {
-            //        //when copy item deleted
-            //        if (Tag.CopyItemList.Any(x=>x.Id == dci.Id)) {
-            //            Tag.CopyItemList.Remove(dci);
-            //            OnPropertyChanged(nameof(CopyItemCount));
-            //        }
-            //    }
-            //});
+            Device.BeginInvokeOnMainThread(() => {
+                if (e is MpCopyItemTag dcit) {
+                    if (dcit.TagId == Tag.Id) {
+                        //when CopyItem unlinked
+                        var ci = Tag.CopyItemList.Where(x => x.Id == dcit.CopyItemId).FirstOrDefault();
+                        if (ci != null) {
+                            Tag.CopyItemList.Remove(ci);
+                            OnPropertyChanged(nameof(CopyItemCount));
+                        }
+                    }
+                } else if (e is MpCopyItem dci) {
+                    //when copy item deleted
+                    if (Tag.CopyItemList.Any(x => x.Id == dci.Id)) {
+                        Tag.CopyItemList.Remove(dci);
+                        OnPropertyChanged(nameof(CopyItemCount));
+                    }
+                }
+            });
         }
         #endregion
 

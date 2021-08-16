@@ -21,7 +21,7 @@ namespace MonkeyPaste {
                 MpTempFileManager.Instance.Init();
                 //MpSocketClient.StartClient("192.168.43.209");
 
-                MpSyncManager.Instance.Init(MpDb.Instance);
+               // MpSyncManager.Instance.Init(MpDb.Instance);
 
                 TagCollectionViewModel = new MpTagTileCollectionViewModel();
             });

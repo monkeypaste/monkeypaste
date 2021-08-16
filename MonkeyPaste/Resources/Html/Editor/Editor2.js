@@ -42,7 +42,11 @@ function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillin
     }
     loadQuill(fontFamilys, fontSizes, defaultFontIdx);
 
-    //hideToolbar();
+    if(envName == '') {
+
+    } else {
+        hideToolbar();
+    }
 
     if(htmlContent != null) {
         setHtml(htmlContent);
@@ -53,6 +57,8 @@ function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillin
     }
 
     isLoaded = true;
+
+    console.log('Quill init called');
 }
 
 function registerTables() {
@@ -152,7 +158,7 @@ function registerTemplateSpan() {
             node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
 
             node.addEventListener('click', function (e) {
-                log(e);
+                console.log(e);
                 focusTemplate(node);
             });
 
@@ -285,7 +291,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
     templateToolbarButton.attach(quill)
 
     document.addEventListener('click', function (e) {
-        log(e.target);
+        console.log(e.target);
         //if(getFocusTemplateElement() == null) {
         //    hideTemplateToolbarContextMenu();
         //    hideTemplateContextMenu();
@@ -376,14 +382,14 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
 
         if(range) {
             if(range.length == 0) {
-                log('User cursor is on', range.index);
+                console.log('User cursor is on', range.index);
             } else {
                 var text = quill.getText(range.index, range.length);
-                log('User has highlighted', text);
+                console.log('User has highlighted', text);
             }
 
         } else {
-            log('Cursor not in the editor');
+            console.log('Cursor not in the editor');
         }
     });
 
@@ -409,7 +415,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
         });
         if(!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
             shiftTemplates(retainVal, textDelta);
-            log(getTemplates());
+            console.log(getTemplates());
         }
     });
 }
@@ -433,7 +439,7 @@ function shiftTemplates(fromDocIdx, byVal) {
 
 function getTemplatesFromRange(range) {
     if(range == null || range.index == null) {
-        log('invalid range: ' + range);
+        console.log('invalid range: ' + range);
     }
     let tl = [];
     getTemplatesByDocOrder().forEach(function (tn) {
@@ -531,7 +537,7 @@ function createTemplate(templateObjOrId, idx, len) {
 
     selectTemplate(newTemplateObj['templateId'], true);
 
-    log(getTemplates());
+    console.log(getTemplates());
     return range.index;
 }
 
@@ -1516,7 +1522,7 @@ function createLink() {
         var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
         quill.clipboard.dangerouslyPasteHTML(range.index, ts);
 
-        log('text:\n' + getText());
+        console.log('text:\n' + getText());
         console.table('\nhtml:\n' + getHtml());
     }
 }
@@ -1565,9 +1571,9 @@ function getLog() {
     return consolelog;
 }
 
-function log(o) {
+function console.log(o) {
     consolelog += o + '\r\n';
-    console.log(o);
+    console.console.log(o);
 }
 
 init(null, null, null, null, null);

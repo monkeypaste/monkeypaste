@@ -49,6 +49,15 @@ namespace MonkeyPaste {
 
         public bool IsExpanded { get; set; } = false;
 
+        public bool IsTitleVisible {
+            get {
+                if(CopyItem == null) {
+                    return false;
+                }
+                return IsExpanded || CopyItem.Title != "Untitled";
+            }
+        }
+
         public bool ShowLeftMenu {
             get {
                 return !IsExpanded;
@@ -100,10 +109,10 @@ namespace MonkeyPaste {
             OnEditorLoaded += MpCopyItemViewModel_OnEditorLoaded;
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
             CopyItem = item;
-            Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
+            //Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
             Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));
 
-            Task.Run(Initialize);
+            Device.BeginInvokeOnMainThread(Initialize);
         }
         #endregion
 
@@ -125,25 +134,18 @@ namespace MonkeyPaste {
                 Command = DeleteCopyItemCommand,
                 IconImageResourceName = "DeleteIcon"
             });
-            Device.BeginInvokeOnMainThread(InitEditor);
+            InitEditor();
         }
 
         private void InitEditor() {
             var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
 
             string contentTag = @"<div id='editor'>";
-            var data = CopyItem.ItemText;// string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+            var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
             html = html.Replace(contentTag, contentTag + data);
-
-            var editor2Js = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
             string envTag = @"var envName = '';";
             string envVal = @"var envName = 'android'";
-            editor2Js = editor2Js.Replace(envTag, envVal);
-
-
-            string editor2JsTag = @"<!-- Editor2.js --><script type='text/javascript' src='Editor2.js'></script>";
-            string cleanTag = @"<script type='text/javascript'>";
-            html = html.Replace(editor2JsTag, cleanTag + editor2Js + "</script>");
+            html = html.Replace(envTag, envVal);
 
             EditorHtml = html;
         }
@@ -153,12 +155,14 @@ namespace MonkeyPaste {
                 await Task.Delay(100);
             }
             string result = string.Empty;
-            try {
-                result = await EvaluateEditorJavaScript(js);
-            }
-            catch(Exception ex) {
-                MpConsole.WriteTraceLine("EvalJs exception:" + ex);
-            }
+            await Device.InvokeOnMainThreadAsync(async () => {
+                try {
+                    result = await EvaluateEditorJavaScript(js);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("EvalJs exception:" + ex);
+                }
+            });
             return result;
         }
         #region Event Handlers
@@ -171,11 +175,11 @@ namespace MonkeyPaste {
         }
 
         private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-            var nl = await EvalJs($"getLog()");
-            if(nl != edConsoleLog) {
-                edConsoleLog = edConsoleLog.Replace(edConsoleLog, nl);
-                MpConsole.WriteLine(edConsoleLog);
-            }
+            //var nl = await EvalJs($"getLog()");
+            //if(nl != edConsoleLog) {
+            //    edConsoleLog = edConsoleLog.Replace(edConsoleLog, nl);
+            //    MpConsole.WriteLine(edConsoleLog);
+            //}
 
             edText = await EvalJs($"getText()");
             edHtml = await EvalJs($"getHtml()");
@@ -191,6 +195,16 @@ namespace MonkeyPaste {
         private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(CopyItem):
+                    break;
+                case nameof(IsExpanded):
+                    OnPropertyChanged(nameof(IsTitleVisible));
+                    if(IsExpanded) {
+                        IsTitleReadOnly = false;
+                        UpdateTimer.Start();
+                    } else {
+                        IsTitleReadOnly = true;
+                        UpdateTimer.Stop();
+                    }
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
@@ -212,18 +226,6 @@ namespace MonkeyPaste {
                     if(EvaluateEditorJavaScript != null) {
                         OnEditorLoaded?.Invoke(this, null);
                     }
-                    break;
-            }
-        }
-
-        private void JsProperty_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(IsEditorLoaded):
-                    UpdateTimer = new System.Timers.Timer();
-                    UpdateTimer.Interval = 100;
-                    UpdateTimer.AutoReset = true;
-                    UpdateTimer.Elapsed += UpdateTimer_Elapsed;
-                    UpdateTimer.Start();
                     break;
             }
         }
@@ -256,25 +258,32 @@ namespace MonkeyPaste {
             //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithCopyItemAsync(CopyItem.Id);
         });
 
-        public ICommand RenameCopyItemCommand => new Command(async () => {
+        public ICommand RenameCopyItemCommand => new Command<object>(async (args) => {
+            if(!IsExpanded && args != null) {
+                return;
+            }
             _orgTitle = CopyItem.Title;
-            if(IsExpanded) {
-                IsTitleReadOnly = false;
-            } else {
-                var renamePopupPage = new MpRenamePopupPageView(_orgTitle);
-                renamePopupPage.OnComplete += async (s, e) => {
-                    if (renamePopupPage.WasCanceled) {
-                        CopyItem.Title = _orgTitle;
-                    } else if (e != _orgTitle) {
-                        CopyItem.Title = e;
-                        OnPropertyChanged(nameof(CopyItem));
-                        MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
-                    }
-                    await PopupNavigation.Instance.PopAllAsync();
-                };
-                await PopupNavigation.Instance.PushAsync(renamePopupPage, false);
-            }            
+            var renamePopupPage = new MpRenamePopupPageView(_orgTitle);
+            renamePopupPage.OnComplete += async (s, e) => {
+                if (renamePopupPage.WasCanceled) {
+                    CopyItem.Title = _orgTitle;
+                } else if (e != _orgTitle) {
+                    CopyItem.Title = e;
+                    OnPropertyChanged(nameof(CopyItem));
+                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                }
 
+                if (string.IsNullOrEmpty(CopyItem.Title)) {
+                    CopyItem.Title = "Untitled";
+                    OnPropertyChanged(nameof(CopyItem));
+                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                }
+
+                await PopupNavigation.Instance.PopAllAsync();
+
+                OnPropertyChanged(nameof(IsTitleVisible));
+            };
+            await PopupNavigation.Instance.PushAsync(renamePopupPage, false);
         });
 
         public ICommand SelectCopyItemCommand => new Command(
@@ -289,7 +298,6 @@ namespace MonkeyPaste {
 
         public ICommand ExpandCommand => new Command<object>(
             async (arg) => {
-                //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
                 IsExpanded = true;
                 OnPropertyChanged(nameof(ShowLeftMenu));
                 await EvalJs($"disableReadOnly()");
@@ -297,8 +305,7 @@ namespace MonkeyPaste {
             (arg)=>IsSelected);
 
         public ICommand UnexpandItemCommand => new Command(
-            async () => {
-                //Device.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync($"CopyItemdetails?CopyItemId={CopyItem.Id}&IsFillingOutTemplates=0"));
+            async () => {               
                 IsExpanded = false;
                 OnPropertyChanged(nameof(ShowLeftMenu));
 

@@ -63,12 +63,18 @@
                            FontAttributes="Bold"
                            HeightRequest="25"
                            Padding="5,5,0,0"
-                           FontSize="16"
+                           FontSize="16"                           
+                           IsVisible="{Binding IsTitleVisible}"
                            VerticalOptions="Start"
                            HorizontalTextAlignment="Start"
                            Text="{Binding CopyItem.Title, Mode=TwoWay}"
                            TextColor="Black"
                            VerticalTextAlignment="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                  Command="{Binding RenameCopyItemCommand}" 
+                                                  CommandParameter="{Binding .}"/>
+                        </Label.GestureRecognizers>
                         <!--<Label.LineBreakMode>
                             <OnPlatform x:TypeArguments="LineBreakMode"
                                         Android="NoWrap"
@@ -78,12 +84,14 @@
                     <BoxView Grid.Row="1"
                              HeightRequest="1"
                              VerticalOptions="Start"
+                             IsVisible="{Binding IsTitleVisible}"
                              HorizontalOptions="FillAndExpand"
                              Color="Gray" />
                     <Grid Grid.Row="2"
-                          Padding="0,0,0,0">
+                          Padding="3">
                         <local:MpWebView x:Name="ContentEditorWebView"
-                                         VerticalOptions="Start"
+                                         VerticalOptions="FillAndExpand"
+                                         HorizontalOptions="FillAndExpand"
                                          MinimumHeightRequest="50"
                                          BackgroundColor="Pink"
                                          IsEnabled="{Binding IsExpanded}"

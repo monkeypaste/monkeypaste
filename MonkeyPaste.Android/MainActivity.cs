@@ -93,20 +93,20 @@ namespace MonkeyPaste.Droid {
             //MpNativeWrapper.Instance.Register<MpUiLocationFetcher>();
             //MpNativeWrapper.Instance.Register<MpScreenshot>();
 
-            Task.Run(async () => {
-                while(true) {
-                    var ss =AndroidInterfaceWrapper.GetScreenshot().Capture(Window);
-                    if(ss != null) {
-                        string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
-                        string path = System.IO.Path.Combine(folder, string.Format(@"screen.png"));
-                        MpHelpers.Instance.WriteByteArrayToFile(path, ss,true);
-                        var imgSrc = MpHelpers.Instance.ReadImageFromFile(path);
+            //Task.Run(async () => {
+            //    while(true) {
+            //        var ss =AndroidInterfaceWrapper.GetScreenshot().Capture(Window);
+            //        if(ss != null) {
+            //            string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
+            //            string path = System.IO.Path.Combine(folder, string.Format(@"screen.png"));
+            //            MpHelpers.Instance.WriteByteArrayToFile(path, ss,true);
+            //            var imgSrc = MpHelpers.Instance.ReadImageFromFile(path);
 
-                        var ss64 = new MpImageConverter().Convert(imgSrc, typeof(string)) as string;
-                    }
-                    await Task.Delay(1000);
-                }
-            });
+            //            var ss64 = new MpImageConverter().Convert(imgSrc, typeof(string)) as string;
+            //        }
+            //        await Task.Delay(1000);
+            //    }
+            //});
             LoadApplication(new App(AndroidInterfaceWrapper));
             //LoadSelectedTextAsync();
 

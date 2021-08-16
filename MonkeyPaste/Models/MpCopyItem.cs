@@ -213,7 +213,7 @@ namespace MonkeyPaste {
 
             var newCopyItem = new MpCopyItem() {
                 CopyDateTime = DateTime.Now,
-                Title = "Text",
+                Title = "Untitled",
                 ItemText = itemPlainText,
                 ItemType = MpCopyItemType.RichText,
                 ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor()),
