@@ -158,6 +158,10 @@
     <Compile Include="Models\MpUrl.cs" />
     <Compile Include="Models\MpUrlDomain.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Plugins\Base\MpPlugin.cs" />
+    <Compile Include="Plugins\Base\MpPluginObjectBase.cs" />
+    <Compile Include="Plugins\Interfaces\MpIPlugin.cs" />
+    <Compile Include="Plugins\MpPluginManager.cs" />
     <Compile Include="Properties\DefaultUiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

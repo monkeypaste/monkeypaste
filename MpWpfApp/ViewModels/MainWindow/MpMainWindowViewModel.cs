@@ -279,10 +279,11 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
-
             MpMainWindowViewModel.IsApplicationLoading = true;
 
             MpHelpers.Instance.Init();
+
+            MpPluginManager.Instance.Init();
 
             SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };

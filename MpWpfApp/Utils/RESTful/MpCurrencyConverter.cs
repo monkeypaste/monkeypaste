@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -52,7 +53,7 @@ namespace MpWpfApp {
         public const string FreeBaseUrl = "https://free.currconv.com/api/v7/";
         public const string PremiumBaseUrl = "https://api.currconv.com/api/v7/";
 
-        public static List<MpCurrency> GetAllCurrencies(string apiKey = null) {
+        public static List<MpCurrency> GetAllCurrencies(string apiKey = null) { 
             //string url;
             //if (string.IsNullOrEmpty(apiKey))
             //    url = FreeBaseUrl + "currencies";

@@ -159,6 +159,16 @@ namespace MonkeyPaste {
         #endregion
 
         #region System
+
+        public int ParseEnumValue(Type enumType, string typeStr) {
+            for (int i = 0; i < Enum.GetValues(enumType).Length; i++) {
+                if (Enum.GetName(enumType, i).ToLower() == typeStr.ToLower()) {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
         public string AppStorageFilePath {
             get {
                 return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
