@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MonkeyPaste">
     <Application.Resources>
         <ResourceDictionary>
+            <local:MpBoolNegateConverter x:Key="BoolNegateConverter" />
             <local:MpStringToColorConverter x:Key="StringToColorConverter" />
             <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
             <local:MpImageConverter x:Key="ImageConverter" />

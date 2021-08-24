@@ -175,7 +175,11 @@ namespace MonkeyPaste {
             await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }               
             }
         }
 
@@ -199,7 +203,11 @@ namespace MonkeyPaste {
             _connection.InsertWithChildren(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -221,7 +229,11 @@ namespace MonkeyPaste {
             await _connectionAsync.UpdateWithChildrenAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -242,7 +254,11 @@ namespace MonkeyPaste {
             _connection.UpdateWithChildren(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -284,7 +300,11 @@ namespace MonkeyPaste {
             await _connectionAsync.DeleteAsync(item, true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase); 
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -305,7 +325,11 @@ namespace MonkeyPaste {
             _connection.Delete(item,true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
+                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
+                } else {
+                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -401,7 +425,7 @@ namespace MonkeyPaste {
 
             var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
             
-           //File.Delete(dbPath);
+           File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -653,17 +677,17 @@ namespace MonkeyPaste {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = typeof(MpDb).GetMethod(nameof(DeleteItemAsync));
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
-                //var dbo = await MpDb.Instance.GetObjDbRowAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
-                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
+                var dbo = await MpDb.Instance.GetDbObjectByTableGuidAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
+                //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var deleteTask = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await deleteTask;
             }
 
             foreach (var ckvp in addChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                //var dbo = Activator.CreateInstance(dbot);
-                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
-                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
+                var dbo = Activator.CreateInstance(dbot);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
                 var addTask = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
@@ -672,9 +696,9 @@ namespace MonkeyPaste {
 
             foreach (var ckvp in updateChanges) {
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
-                //var dbo = Activator.CreateInstance(dbot);
-                //dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
-                var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
+                var dbo = Activator.CreateInstance(dbot);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
+                //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod(nameof(UpdateItemAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
                 var updateTask = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });

@@ -263,5 +263,9 @@ namespace MonkeyPaste {
 
             return diffLookup;
         }
+
+        public bool DoesChangeTriggerSync() {
+            return true;
+        }
     }
 }

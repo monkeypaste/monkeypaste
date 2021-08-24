@@ -62,6 +62,7 @@ namespace MonkeyPaste {
                 ClientWebSocket cws = null;
 
                 while (IsRunning) {
+                    //Task.Run(PerformRemoteSyncLoop);
                     while(listener != null) {
                         //occurs when client has already sync with an available listener
                         await Task.Delay(500);
@@ -73,6 +74,7 @@ namespace MonkeyPaste {
                     ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint(localSync);
 
                     if (_localSync.IsConnectedToInternet()) {
+                        
                         //if(_localSync.IsWpf()) {
                         //    // for debugging disconnect all
                         //    await SessionManager.Disconnect(ThisEndpoint,true);
@@ -84,7 +86,7 @@ namespace MonkeyPaste {
                             _remoteDevices.Clear();
                         }
                         if (cws != null) {
-                            var webConnectResponse = await SendReceiveWebSocket(cws, MpStreamMessage.CreateWebDeviceRequest(ThisEndpoint));
+                            var webConnectResponse = await SendReceiveWebSocketAsync(cws, MpStreamMessage.CreateWebDeviceRequest(ThisEndpoint));
                             var availableDeviceList = ProcessWebConnectResponse(webConnectResponse.Content);
 
                             foreach (var rep in availableDeviceList) {
@@ -230,6 +232,10 @@ namespace MonkeyPaste {
                             await Task.Run(async () => {
                                 while (listener.Connected) {
                                     var dbLogResponse = ReceiveSocket(listener);
+                                    if(dbLogResponse == null) {
+                                        //listener is no longer connected or an error is on the socket so reiterate to establish current rd list
+                                        break;
+                                    }
                                     if(dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
                                         continue;
                                     }
@@ -244,11 +250,12 @@ namespace MonkeyPaste {
                         }
                         catch (Exception ex) {
                             if(ex is MpSyncException se) {
-                                if(_remoteDevices.Contains(se.RemoteDevice)) {
-                                    _remoteDevices.Remove(se.RemoteDevice);
-                                }
+                                //if(_remoteDevices.Contains(se.RemoteDevice)) {
+                                //    _remoteDevices.Remove(se.RemoteDevice);
+                                //}
                             }
-                            MpConsole.WriteTraceLine(@"Sync exception: ", ex);
+                            listener = null;
+                            MpConsole.WriteTraceLine(@"Sync socket exception: ", ex);
                         }
                     }
                 }
@@ -277,6 +284,7 @@ namespace MonkeyPaste {
 
         #region Network I/O
 
+        #region Generic socket i/o
         private async Task Send(MpRemoteDevice rep,MpStreamMessage msg) {
             if(rep.RemoteSocket == null) {
                 MpConsole.WriteTraceLine($"Error socket is null");
@@ -317,8 +325,9 @@ namespace MonkeyPaste {
 
             throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rep);
         }
+        #endregion
 
-        #region Private Network I/O 
+        #region TCP Sockets
         private Socket CreateLocalListener(MpDeviceEndpoint tep) {
             var listener = new Socket(tep.PrivateIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(tep.PrivateIPEndPoint);
@@ -393,11 +402,15 @@ namespace MonkeyPaste {
         private string ReceiveAllSocket(Socket socket) {
             var buffer = new List<byte>();
             string response = string.Empty;
+            bool isConnected = IsConnected(socket);
 
             while (socket.Available == 0) {
-                //if (!SocketConnected(socket)) {
-                //    throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, socket, @"Client not connected");
-                //}
+                if(!isConnected) {
+                    var rd = _remoteDevices.Where(x => x.RemoteSocket == (object)socket).FirstOrDefault();
+                    throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+                }
+                Thread.Sleep(100);
+                isConnected = IsConnected(socket);
             }
             while (response == string.Empty || response.IndexOf(MpStreamMessage.EofToken) < 0) {
                 while (socket.Available > 0) {
@@ -420,9 +433,28 @@ namespace MonkeyPaste {
             }
             return response;
         }
+
+        private bool IsConnected(Socket s) {
+            bool isConnected = true;
+            if(!s.Connected) {
+                return false;
+            }
+            if (!s.Poll(-1, SelectMode.SelectWrite)) {
+                //Console.WriteLine("This Socket is not writable.");
+                isConnected = false;
+            } else if (!s.Poll(-1, SelectMode.SelectRead)) {
+                //Console.WriteLine("This Socket is not readable.");
+                isConnected = false;
+            } 
+            //else if (s.Poll(-1, SelectMode.SelectError)) {
+            //    //Console.WriteLine("This Socket has an error.");
+            //    isConnected = false;
+            //}
+            return isConnected;
+        }
         #endregion
 
-        #region Public Network I/O
+        #region Web Socketse
 
         private List<MpDeviceEndpoint> ProcessWebConnectResponse(string response) {
             var repl = new List<MpDeviceEndpoint>();
@@ -450,13 +482,13 @@ namespace MonkeyPaste {
             return repl;
         }
 
-        public async Task<ClientWebSocket> ConnectWebSocket() {
+        private async Task<ClientWebSocket> ConnectWebSocket() {
             var serverIp = MpHelpers.Instance.GetIpForDomain("www.monkeypaste.com");
             var socket = new ClientWebSocket();
             try {
                 await socket.ConnectAsync(new Uri(@"ws://206.72.205.68:8080"), CancellationToken.None);
             }
-            catch(WebSocketException wsex) {
+            catch (WebSocketException wsex) {
                 Console.WriteLine($"ERROR - {wsex.Message}");
                 return null;
             }
@@ -468,44 +500,254 @@ namespace MonkeyPaste {
             return socket;
         }
 
-        public async Task SendWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
+        private async Task SendWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
             var bytes = Encoding.ASCII.GetBytes(smsg.SerializeDbObject());
             var buffer = new ArraySegment<Byte>(bytes, 0, bytes.Length);
 
+            if(!IsConnected(cws)) {
+                var rd = _remoteDevices.Where(x => x.RemoteSocket == (object)cws).FirstOrDefault();
+                throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+            }
             await cws.SendAsync(
                 buffer,
                 WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-
-        public async Task<MpStreamMessage> ReceiveWebSocketAsync(ClientWebSocket ws) {
+        private async Task<MpStreamMessage> ReceiveWebSocketAsync(ClientWebSocket cws) {
             var response = string.Empty;
             var buffer = new ArraySegment<byte>(new Byte[8192]);
             WebSocketReceiveResult result = null;
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var ct = cts.Token;
             while (!response.Contains(MpStreamMessage.EofToken)) {
-                using (var ms = new MemoryStream()) {                
+                Task.Run(async () => {
+                    while(IsConnected(cws)) {
+                        await Task.Delay(100);
+                    }
+                    cts.Cancel();
+                }, ct);
+                using (var ms = new MemoryStream()) {
                     do {
-                        result = await ws.ReceiveAsync(buffer, CancellationToken.None);
+                        result = await cws.ReceiveAsync(buffer, ct);
                         ms.Write(buffer.Array, buffer.Offset, result.Count);
                     }
                     while (!result.EndOfMessage);
 
-                    ms.Seek(0, SeekOrigin.Begin);
+                    if(!ct.IsCancellationRequested) {
+                        ms.Seek(0, SeekOrigin.Begin);
 
-                    using (var reader = new StreamReader(ms, Encoding.ASCII)) {
-                        response += reader.ReadToEnd();
-                        MpConsole.WriteLine(@"Received from server: " + response);
-
+                        using (var reader = new StreamReader(ms, Encoding.ASCII)) {
+                            response += reader.ReadToEnd();
+                            MpConsole.WriteLine(@"Received from server: " + response);
+                        }
+                    } else {
+                        //this will cancel the check connection thread if no connection problems
+                        cts.Cancel();
+                        return null;
                     }
+                    
                 }
             }
             return MpStreamMessage.Parse(response);
         }
 
-        private async Task<MpStreamMessage> SendReceiveWebSocket(ClientWebSocket cws, MpStreamMessage smsg) {
+        private async Task<MpStreamMessage> SendReceiveWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
             await SendWebSocketAsync(cws, smsg);
-            var responeStreamMsg = await ReceiveWebSocketAsync(cws);
-            return responeStreamMsg;
+            var responseStreamMsg = await ReceiveWebSocketAsync(cws);
+            if(responseStreamMsg == null) {
+                //means disconnected/error with web socket, throw sync exception to reiterate main sync loop
+                var rd = _remoteDevices.Where(x => x.RemoteSocket == (object)cws).FirstOrDefault();
+                throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+            }
+            return responseStreamMsg;
+        }
+
+        private bool IsConnected(ClientWebSocket cws) {
+            return cws != null && cws.State == WebSocketState.Open;
+        }
+
+        private void PerformRemoteSyncLoop() {
+            var cws = new ClientWebSocket();
+            var rdl = new List<MpRemoteDevice>();
+            Task.Run(async () => {
+                while (true) {
+                    while (ThisEndpoint == null) {
+                        await Task.Delay(10000);
+                    }
+
+                    if (_localSync.IsConnectedToInternet()) {
+
+                        //if(_localSync.IsWpf()) {
+                        //    // for debugging disconnect all
+                        //    await SessionManager.Disconnect(ThisEndpoint,true);
+                        //}
+                        // check-in w/ webserver and add non-local endpoints
+                        if (cws == null) {
+                            cws = await ConnectWebSocket();
+                        } else {
+                            rdl.Clear();
+                        }
+                        if (cws != null) {
+                            var webConnectResponse = await SendReceiveWebSocketAsync(cws, MpStreamMessage.CreateWebDeviceRequest(ThisEndpoint));
+                            var availableDeviceList = ProcessWebConnectResponse(webConnectResponse.Content);
+
+                            foreach (var rep in availableDeviceList) {
+                                if (rep.DeviceGuid == ThisEndpoint.DeviceGuid) {
+                                    continue;
+                                }
+
+                                try {
+                                    object deviceSocket = cws;
+                                    if (ThisEndpoint.IsLocal(rep)) {
+                                        continue;
+                                    }
+                                    rdl.Add(new MpRemoteDevice(deviceSocket, rep));
+                                }
+                                catch (Exception ex) {
+                                    MpConsole.WriteTraceLine(@"Could not connect to listener: " + rep.ToString() + " w/ exception: " + ex);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    if (!IsConnected(cws)) {
+                        //will need to finish main sync loop and retry connection
+                        var rd = _remoteDevices.Where(x => x.RemoteSocket == (object)cws).FirstOrDefault();
+                        throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+                    }
+                    /*if (listener == null) {
+                        Socket server = CreateLocalListener(ThisEndpoint);
+                        while (true) {
+                            Socket client = null;
+                            try {
+                                MpConsole.WriteLine("Waiting for connection...");
+                                client = server.Accept();
+
+                                MpConsole.WriteLine("Connection made");
+
+                                var handshakeRequest = ReceiveSocket(client);
+                                var oep = MpDeviceEndpoint.Parse(handshakeRequest.Content);
+                                foreach (var rd in _remoteDevices) {
+                                    //check known clients for this ip where this may be a reconnect so replace info with new if ip match
+                                    if (rd.RemoteEndpoint.PrimaryPrivateIp4Address == oep.PrimaryPrivateIp4Address) {
+                                        int rdIdx = _remoteDevices.IndexOf(rd);
+                                        _remoteDevices[rdIdx].RemoteEndpoint = oep;
+                                        _remoteDevices[rdIdx].RemoteSocket = client;
+                                    }
+                                }
+
+                                var handshakeResponse = MpStreamMessage.CreateHandshakeResponse(ThisEndpoint, oep.DeviceGuid);
+                                var dbLogRequest = SendReceiveSocket(client, handshakeResponse);
+                                var lastSyncForOther = DateTime.Parse(dbLogRequest.Content);
+                                var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncForOther);
+                                var dbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, oep.DeviceGuid, dbLogQueryResultStr);
+
+                                var flipRequest = SendReceiveSocket(client, dbLogResponse);
+                                var thisLastSyncDt = await _localSync.GetLastSyncForRemoteDevice(oep.DeviceGuid);
+                                var thisDbLogRequest = MpStreamMessage.CreateDbLogRequest(
+                                    ThisEndpoint,
+                                    oep.DeviceGuid,
+                                    thisLastSyncDt);
+                                SendSocket(client, thisDbLogRequest);
+
+                                Task.Run(async () => {
+                                    while (client.Connected) {
+                                        var dbLogResponse = ReceiveSocket(client);
+                                        if (dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
+                                            continue;
+                                        }
+                                        var remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                                        _localSync.PerformSync(
+                                            remoteChangesLookup,
+                                            oep.DeviceGuid);
+
+                                        var rep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
+                                        if (rep == null) {
+                                            _remoteDevices.Add(new MpRemoteDevice(client, oep));
+                                        } else {
+                                            var repIdx = _remoteDevices.IndexOf(rep);
+                                            if (repIdx < 0) {
+                                                throw new Exception("Unknown remote endpoint");
+                                            }
+                                        }
+                                    }
+                                    var cep = _remoteDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
+                                    if (cep != null) {
+                                        _remoteDevices.Remove(cep);
+                                        (cep.RemoteSocket as Socket).Close();
+                                    }
+                                });
+                            }
+                            catch (Exception ex) {
+                                if (ex is MpSyncException se) {
+                                    if (_remoteDevices.Contains(se.RemoteDevice)) {
+                                        _remoteDevices.Remove(se.RemoteDevice);
+                                    }
+                                    client.Shutdown(SocketShutdown.Both);
+                                    client.Dispose();
+                                    client = null;
+                                    MpConsole.WriteLine("Connection lost with client");
+                                }
+                            }
+                        }
+                    } else {*/
+                        try {
+                            var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
+                            var handshakeResponse = await SendReceiveWebSocketAsync(cws, handshakeRequest);
+                            var lep = MpDeviceEndpoint.Parse(handshakeResponse.Content);
+                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(lep.DeviceGuid);
+
+                            var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
+                                ThisEndpoint,
+                                lep.DeviceGuid,
+                                lastSyncDt);
+                            var dbLogResponse = await SendReceiveWebSocketAsync(cws, dbLogRequest);
+                            var remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                            var flipRequest = MpStreamMessage.CreateFlipRequest(
+                                ThisEndpoint,
+                                lep.DeviceGuid);
+
+                            var odbLogRequest = await SendReceiveWebSocketAsync(cws, flipRequest);
+                            var lastSyncForOther = DateTime.Parse(odbLogRequest.Content);
+                            var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncForOther);
+                            var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, lep.DeviceGuid, dbLogQueryResultStr);
+                            await SendWebSocketAsync(cws, thisdbLogResponse);
+
+                            await _localSync.PerformSync(
+                                remoteChangesLookup,
+                                lep.DeviceGuid);
+
+                            await Task.Run(async () => {
+                                while (IsConnected(cws)) {
+                                    var dbLogResponse = await ReceiveWebSocketAsync(cws);
+                                    if (dbLogResponse == null) {
+                                        //listener is no longer connected or an error is on the socket so reiterate to establish current rd list
+                                        break;
+                                    }
+                                    if (dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
+                                        continue;
+                                    }
+                                    remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                                    await _localSync.PerformSync(
+                                                remoteChangesLookup,
+                                                lep.DeviceGuid);
+                                }
+                                
+                                //remote sync loop will catch the non-connection to reconnect in main sync loop
+                            });
+                        }
+                        catch (Exception ex) {
+                            if (ex is MpSyncException se) {
+                                //if (_remoteDevices.Contains(se.RemoteDevice)) {
+                                //    _remoteDevices.Remove(se.RemoteDevice);
+                                //}
+                            }
+                            MpConsole.WriteTraceLine(@"Websocket Sync exception: ", ex);
+
+                        }
+                   // }
+                }
+            });
         }
         #endregion
 

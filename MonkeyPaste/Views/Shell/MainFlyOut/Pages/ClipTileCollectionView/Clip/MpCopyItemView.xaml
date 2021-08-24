@@ -101,12 +101,16 @@
                                                    Html="{Binding EditorHtml}" />
                             </local:MpWebView.Source>
                         </local:MpWebView>
-                    </Grid>
-                    <!--<Label Grid.Row="2"
-                               Padding="5"
+                        <!--<Label Padding="5"
+                               BackgroundColor="Pink"
+                               VerticalOptions="StartAndExpand"
+                               HorizontalOptions="FillAndExpand"
+                               MinimumHeightRequest="50"
                                FontSize="16"
+                               IsVisible="{Binding IsExpanded, Converter={StaticResource BoolNegateConverter}}"
                                Text="{Binding CopyItem.ItemText, Mode=TwoWay}"
                                TextColor="Black" />-->
+                    </Grid>
                 </Grid>
             </StackLayout>
         </Frame>

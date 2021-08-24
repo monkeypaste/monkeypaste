@@ -112,7 +112,9 @@ namespace MonkeyPaste {
             //Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
             Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));
 
-            Device.BeginInvokeOnMainThread(Initialize);
+            //Device.BeginInvokeOnMainThread(Initialize);
+
+            Initialize();
         }
         #endregion
 
@@ -144,9 +146,10 @@ namespace MonkeyPaste {
             var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
             html = html.Replace(contentTag, contentTag + data);
             string envTag = @"var envName = '';";
-            string envVal = @"var envName = 'android'";
+            string envVal = @"var envName = 'android';";
             html = html.Replace(envTag, envVal);
 
+            Console.Write(html);
             EditorHtml = html;
         }
 
@@ -171,7 +174,7 @@ namespace MonkeyPaste {
             UpdateTimer.Interval = 100;
             UpdateTimer.AutoReset = true;
             UpdateTimer.Elapsed += UpdateTimer_Elapsed;
-            UpdateTimer.Start();
+           // UpdateTimer.Start();
         }
 
         private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
@@ -300,7 +303,7 @@ namespace MonkeyPaste {
             async (arg) => {
                 IsExpanded = true;
                 OnPropertyChanged(nameof(ShowLeftMenu));
-                await EvalJs($"disableReadOnly()");
+                //await EvalJs($"disableReadOnly()");
             },
             (arg)=>IsSelected);
 
@@ -309,7 +312,7 @@ namespace MonkeyPaste {
                 IsExpanded = false;
                 OnPropertyChanged(nameof(ShowLeftMenu));
 
-                await EvalJs($"enableReadOnly()");
+                //await EvalJs($"enableReadOnly()");
             });
 
         public ICommand FillOutTemplatesCommand => new Command(

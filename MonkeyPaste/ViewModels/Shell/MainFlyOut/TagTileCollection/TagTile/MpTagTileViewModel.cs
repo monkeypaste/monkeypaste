@@ -188,8 +188,11 @@ namespace MonkeyPaste {
             });
 
         public ICommand ChangeColorCommand => new Command(async () => {
+            if(Tag.Color == null) {
+                Tag.Color = new MpColor();
+            }
             Tag.Color.Color = MpHelpers.Instance.GetRandomColor();
-            await MpDb.Instance.UpdateItemAsync<MpColor>(Tag.Color);
+            await MpDb.Instance.AddOrUpdateAsync<MpColor>(Tag.Color);
             OnPropertyChanged(nameof(Tag));
         });
 

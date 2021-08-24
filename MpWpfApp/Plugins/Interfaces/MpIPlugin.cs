@@ -9,7 +9,7 @@ namespace MonkeyPaste {
 
     }
 
-    public interface MpIClipboardItemPluginComponent {
+    public interface MpIContentPluginComponent {
         void Create(object dobj);
 
         object GetDataObject();
