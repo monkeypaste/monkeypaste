@@ -14,8 +14,12 @@ namespace MonkeyPaste {
                 null, BindingMode.OneWayToSource);
 
         public Func<string, Task<string>> EvaluateJavascript {
-            get { return (Func<string, Task<string>>)GetValue(EvaluateJavascriptProperty); }
-            set { SetValue(EvaluateJavascriptProperty, value); }
+            get { 
+                return (Func<string, Task<string>>)GetValue(EvaluateJavascriptProperty); 
+            }
+            set { 
+                SetValue(EvaluateJavascriptProperty, value); 
+            }
         }
     }
 }

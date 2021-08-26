@@ -182,9 +182,5 @@ namespace MonkeyPaste {
         public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
-
-        public bool DoesChangeTriggerSync() {
-            return false;
-        }
     }
 }

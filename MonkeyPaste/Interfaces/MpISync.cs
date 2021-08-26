@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ namespace MonkeyPaste {
 
         string GetDbFileAsBase64();
 
-        
+        ObservableCollection<MpRemoteDevice> GetRemoteDevices();
 
         event EventHandler<object> OnSyncableChange;
     }

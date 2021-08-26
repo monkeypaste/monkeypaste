@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Linq;
 
 namespace MpWpfApp {
     [Table("MpTag")]
@@ -48,14 +49,17 @@ namespace MpWpfApp {
         [ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
 
-        public MpTag() { }
-        public MpTag(string tagName, Color color, int tagSortIdx) {
+        public MpTag() {
+            Color = new MpColor();
+        }
+
+        public MpTag(string tagName, Color color, int tagSortIdx) : this() {
             TagGuid = System.Guid.NewGuid();
             TagName = tagName;
             Color = new MpColor((int)color.R, (int)color.G, (int)color.B, 255);
             TagSortIdx = tagSortIdx;
         }
-        public MpTag(int tagId) {
+        public MpTag(int tagId) : this() {
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpTag where pk_MpTagId=@tid",
                 new Dictionary<string, object> {
@@ -65,7 +69,7 @@ namespace MpWpfApp {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public MpTag(DataRow dr) {
+        public MpTag(DataRow dr) : this() {
             LoadDataRow(dr);
         }
         public static List<MpTag> GetAllTags() {
@@ -78,6 +82,11 @@ namespace MpWpfApp {
             }
             return tags;
         }
+
+        public static MpTag GetTagById(int tagId) {
+            return GetAllTags().Where(x => x.TagId == tagId).FirstOrDefault();
+        }
+
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
             if (dr["MpTagGuid"] == null || dr["MpTagGuid"].GetType() == typeof(System.DBNull)) {
@@ -122,13 +131,18 @@ namespace MpWpfApp {
                 });
             int SortOrderIdx = dt.Rows.Count + 1;
             var citg = System.Guid.NewGuid();
+            var cit = new MpCopyItemTag() {
+                CopyItemTagGuid = citg,
+                CopyItemId = ci.CopyItemId,
+                TagId = TagId
+            };
             MpDb.Instance.ExecuteWrite(
                 "insert into MpCopyItemTag(MpCopyItemTagGuid,fk_MpCopyItemId,fk_MpTagId) values(@citg,@ciid,@tid)",
                 new Dictionary<string, object> {
                     { "@citg", citg.ToString() },
                     { "@ciid", ci.CopyItemId },
                     { "@tid", TagId }
-                },citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+                },citg.ToString(), sourceClientGuid, cit, ignoreTracking, ignoreSyncing);
             var cistog = System.Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
                 "insert into MpCopyItemSortTypeOrder(MpCopyItemSortTypeOrderGuid,fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(@cistog,@ciid,@stid,@so)",
@@ -153,12 +167,13 @@ namespace MpWpfApp {
                     { "@tid", TagId } });
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
-                    var citg = System.Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
+                    var cit = new MpCopyItemTag(dr);
+                    //var citg = System.Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
                     MpDb.Instance.ExecuteWrite(
                     "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
-                        { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
-                        }, citg.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+                        { "@citid", cit.CopyItemTagId }
+                        }, cit.CopyItemTagGuid.ToString(), sourceClientGuid, cit, ignoreTracking, ignoreSyncing);
                 }
             }
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
@@ -351,10 +366,6 @@ namespace MpWpfApp {
             }
 
             return diffLookup;
-        }
-
-        public bool DoesChangeTriggerSync() {
-            return false;
         }
     }
 }

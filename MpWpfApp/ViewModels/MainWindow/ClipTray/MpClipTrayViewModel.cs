@@ -481,6 +481,10 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpClipTrayViewModel() : base() {
+
+            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
+            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
             ClipTileViewModels.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));                
@@ -1383,6 +1387,45 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        #region Model Sync Events
+        private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (sender is MpCopyItem ci) {
+                    var ctvmToRemove = ClipTileViewModels.Where(x => x.CopyItemId == ci.CopyItemId).FirstOrDefault();
+                    if (ctvmToRemove != null) {
+                        ctvmToRemove.CopyItem.StartSync(e.SourceGuid);
+                        //ctvmToRemove.CopyItem.Color.StartSync(e.SourceGuid);
+                        this.Remove(ctvmToRemove);
+                        ctvmToRemove.CopyItem.EndSync();
+                        //ctvmToRemove.CopyItem.Color.EndSync();
+                    }
+                }
+            }));
+        }
+
+        private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            }));
+        }
+
+        private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (sender is MpCopyItem ci) {
+                    ci.StartSync(e.SourceGuid);
+                    var dupCheck = ClipTileViewModels.Where(x => x.CopyItem.CopyItemGuid == ci.CopyItemGuid).FirstOrDefault();
+                    if (dupCheck == null) {
+                        this.Add(new MpClipTileViewModel(ci));
+                    } else {
+                        MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItemRichText + " ignoring and updating existing.");
+                        dupCheck.CopyItem = ci;
+                    }
+                    ci.EndSync();
+                }
+            }));
+        }
+
+        #endregion
         private void ClipTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null && e.NewItems.Count > 0) {
                 IsBusy = false;

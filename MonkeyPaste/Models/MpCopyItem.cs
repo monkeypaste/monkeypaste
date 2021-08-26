@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
@@ -8,7 +9,7 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     [Table("MpCopyItem")]
-    public class MpCopyItem : MpDbModelBase {
+    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject {
         #region Column Definitions
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemId")]
@@ -265,6 +266,150 @@ namespace MonkeyPaste {
 
         public override string ToString() {
             return $"Id:{Id} Text:{ItemText}" + Environment.NewLine;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpCopyItem() {
+                CopyItemGuid = System.Guid.Parse(objParts[0]),
+                Title = objParts[1],
+                CopyCount = Convert.ToInt32(objParts[2]),
+                CopyDateTime = DateTime.Parse(objParts[3]),
+                ItemText = objParts[4],
+                ItemRtf = objParts[5],
+                ItemHtml = objParts[6],
+                ItemDescription = objParts[7],
+                ItemCsv = objParts[8]
+            };
+            //TODO deserialize this once img and files added
+            dbLog.ItemType = MpCopyItemType.RichText;
+            return dbLog;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}",
+                ParseToken,
+                CopyItemGuid.ToString(),
+                Title,
+                CopyCount,
+                CopyDateTime.ToString(),
+                ItemText,
+                ItemRtf,
+                ItemHtml,
+                ItemDescription,
+                ItemCsv);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpCopyItem);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpCopyItem other = null;
+            if(drOrModel == null) {
+                other = new MpCopyItem();
+            } else if (drOrModel is MpCopyItem) {
+                other = drOrModel as MpCopyItem;
+            } else {
+                throw new Exception("Cannot compare xam model to local model");
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(
+                CopyItemGuid,
+                other.CopyItemGuid,
+                "MpCopyItemGuid",
+                diffLookup);
+            diffLookup = CheckValue(
+                Title,
+                other.Title,
+                "Title",
+                diffLookup);
+            diffLookup = CheckValue(
+                CopyCount,
+                other.CopyCount,
+                "CopyCount",
+                diffLookup);
+            diffLookup = CheckValue(
+                CopyDateTime,
+                other.CopyDateTime,
+                "CopyDateTime",
+                diffLookup);
+            diffLookup = CheckValue(
+                ItemText,
+                other.ItemText,
+                "ItemText",
+                diffLookup);
+            diffLookup = CheckValue(
+                ItemRtf,
+                other.ItemRtf,
+                "ItemRtf",
+                diffLookup);
+            diffLookup = CheckValue(
+                ItemHtml,
+                other.ItemHtml,
+                "ItemHtml",
+                diffLookup);
+            diffLookup = CheckValue(
+                ItemDescription,
+                other.ItemDescription,
+                "ItemDescription",
+                diffLookup);
+            diffLookup = CheckValue(
+                ItemCsv,
+                other.ItemCsv,
+                "ItemCsv",
+                diffLookup);
+
+            return diffLookup;
+        }
+
+        public async Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var cidr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItem", CopyItemGuid.ToString());
+            MpCopyItem newCopyItem = null;
+            if (cidr == null) {
+                newCopyItem = new MpCopyItem();
+            } else {
+                newCopyItem = cidr as MpCopyItem;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpCopyItemGuid":
+                        newCopyItem.CopyItemGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "Title":
+                        newCopyItem.Title = li.AffectedColumnValue;
+                        break;
+                    case "CopyCount":
+                        newCopyItem.CopyCount = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "CopyDateTime":
+                        newCopyItem.CopyDateTime = DateTime.Parse(li.AffectedColumnValue);
+                        break;
+                    case "ItemText":
+                        newCopyItem.ItemText = li.AffectedColumnValue;
+                        break;
+                    case "ItemRtf":
+                        newCopyItem.ItemRtf = li.AffectedColumnValue;
+                        break;
+                    case "ItemHtml":
+                        newCopyItem.ItemHtml = li.AffectedColumnValue;
+                        break;
+                    case "ItemDescription":
+                        newCopyItem.ItemDescription = li.AffectedColumnValue;
+                        break;
+                    case "ItemCsv":
+                        newCopyItem.ItemCsv = li.AffectedColumnValue;
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            //newTag.WriteToDatabase(fromClientGuid);
+            return newCopyItem;
         }
     }
 

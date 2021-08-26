@@ -258,9 +258,5 @@ namespace MpWpfApp {
         public Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
-
-        public bool DoesChangeTriggerSync() {
-            return false;
-        }
     }
 }

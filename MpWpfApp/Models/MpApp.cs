@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
+using MonkeyPaste;
+using SQLite;
 
 namespace MpWpfApp {
-
     public class MpApp : MpDbModelBase {
         private static List<MpApp> _AllAppList = null;
         public static int TotalAppCount = 0;

@@ -10,7 +10,6 @@ namespace MonkeyPaste {
         MpIGlobalTouch GetGlobalTouch();
         MpIUiLocationFetcher GetLocationFetcher();
         MpIScreenshot GetScreenshot();
-
         //void Register<T>(object so) where T : class;
 
         //T Get<T>() where T : class;

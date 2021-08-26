@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste.Utils.NetworkIO {
-    class MpWebSocket {
+namespace MonkeyPaste {
+    public interface MpISocket {
     }
 }

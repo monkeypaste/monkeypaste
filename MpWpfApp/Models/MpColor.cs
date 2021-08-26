@@ -343,8 +343,5 @@ namespace MpWpfApp {
 
             return diffLookup;
         }
-        public bool DoesChangeTriggerSync() {
-            return false;
-        }
     }
 }

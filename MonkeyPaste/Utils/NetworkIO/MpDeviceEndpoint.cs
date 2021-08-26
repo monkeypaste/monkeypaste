@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDeviceEndpoint : MpISyncableDbObject {
+    public class MpDeviceEndpoint : MpISyncableDbObject, IComparable {
         #region Private Variables
         #endregion
 
@@ -137,8 +137,15 @@ namespace MonkeyPaste {
         public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
-        public bool DoesChangeTriggerSync() {
-            return false;
+
+        public int CompareTo(object obj) {
+            if(obj != null && obj is MpDeviceEndpoint ode) {
+                if(ode.PrimaryPrivateIp4Address == PrimaryPrivateIp4Address && ode.PublicIp4Address == PublicIp4Address) {
+                    return 0;
+                }
+                return ConnectDateTime.CompareTo(ode.ConnectDateTime);
+            }
+            return -1;
         }
         #endregion
     }

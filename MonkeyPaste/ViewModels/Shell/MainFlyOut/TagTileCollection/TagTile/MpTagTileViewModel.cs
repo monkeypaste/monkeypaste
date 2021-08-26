@@ -118,7 +118,7 @@ namespace MonkeyPaste {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpCopyItemTag ncit) {
                     if (ncit.TagId == Tag.Id) {
-                        //occurs when item is linked to tag
+                        //occurs when copy item is linked to tag
                         var nci = await MpCopyItem.GetCopyItemById(ncit.CopyItemId);
                         if (!Tag.CopyItemList.Contains(nci)) {
                             Tag.CopyItemList.Add(nci);
@@ -141,11 +141,11 @@ namespace MonkeyPaste {
         private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpTag t) {
-                    if (t.Id == Tag.Id) {
+                    if (t.Guid == Tag.Guid) {
                         Tag = t;
                     }
                 } else if(e is MpColor c) {
-                    if(c.Id == Tag.ColorId) {
+                    if(c.Guid == Tag.Color.Guid) {
                         Tag.Color = await MpColor.GetColorByIdAsync(c.Id);
                         OnPropertyChanged(nameof(Tag));
                     }

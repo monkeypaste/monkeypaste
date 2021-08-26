@@ -17,6 +17,8 @@ using System.Xml.Linq;
 using Microsoft.Win32;
 using MonkeyPaste;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
 //using Xamarin.Forms;
 
 namespace MpWpfApp {
@@ -30,7 +32,7 @@ namespace MpWpfApp {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
 
-
+        private object _rdLock;
         //private int _passwordAttempts = 0;
 
         private bool _isLoaded = false;
@@ -224,13 +226,8 @@ namespace MpWpfApp {
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
-                if (actionType != MpDbLogActionType.None && !ignoreSyncing) {
-                    if (dbObject is MpISyncableDbObject && !(dbObject as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                        //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                    } else {
-                        OnSyncableChange?.Invoke(this, dbObjectGuid);
-                    }
-                    
+                if (actionType != MpDbLogActionType.None && !ignoreSyncing && dbObject is MpISyncableDbObject) {
+                    OnSyncableChange?.Invoke(this, dbObjectGuid);
                 } else if(dbObject != null) {
                     (dbObject as MpDbModelBase).NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
                 }
@@ -961,6 +958,13 @@ namespace MpWpfApp {
         public string GetDbFileAsBase64() {
             var bytes = File.ReadAllBytes(Properties.Settings.Default.DbPath);
             return Convert.ToBase64String(bytes);
+        }
+
+        public ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+            _rdLock = new object();
+            var rdoc = new ObservableCollection<MpRemoteDevice>();
+            BindingOperations.EnableCollectionSynchronization(rdoc, _rdLock);
+            return rdoc;
         }
         #endregion
     }

@@ -43,7 +43,7 @@ namespace MonkeyPaste {
         }
 
         [Column("SortIdx")]
-        public int TagSortIdx { get; set; } = -1;
+        public int TagSortIdx { get; set; } = 0;
 
         [ForeignKey(typeof(MpColor))]
         [Column("fk_MpColorId")]
@@ -78,7 +78,7 @@ namespace MonkeyPaste {
         //    }
         //}
 
-        public string TagName { get; set; }
+        public string TagName { get; set; } = string.Empty;
 
         //unused        
         //public int ParentTagId { get; set; }
@@ -86,13 +86,15 @@ namespace MonkeyPaste {
 
         #region Fk Objects
         [ManyToMany(typeof(MpCopyItemTag))]
-        public List<MpCopyItem> CopyItemList { get; set; }
+        public List<MpCopyItem> CopyItemList { get; set; } = new List<MpCopyItem>();
 
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpColor Color { get; set; }
         #endregion
 
-        public MpTag() { }
+        public MpTag() {
+            Color = new MpColor();
+        }
 
         public async Task<MpColor> GetColor() {
             if (ColorId > 0) {
@@ -164,40 +166,40 @@ namespace MonkeyPaste {
         //}
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            await Task.Delay(1);
-            return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
+            //await Task.Delay(1);
+            //return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
 
-            //var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
-            //MpTag newTag = null;
-            //if (cdr == null) {
-            //    newTag = new MpTag();
-            //} else {
-            //    newTag = cdr as MpTag;
-            //}
+            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
+            MpTag newTag = null;
+            if (cdr == null) {
+                newTag = new MpTag();
+            } else {
+                newTag = cdr as MpTag;
+            }
 
-            //foreach (var li in logs.OrderBy(x => x.LogActionDateTime)) {
-            //    switch (li.AffectedColumnName) {
-            //        case "MpTagGuid":
-            //            newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
-            //            break;
-            //        case "TagName":
-            //            newTag.TagName = li.AffectedColumnValue;
-            //            break;
-            //        //case "SortIdx":
-            //        //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
-            //        //    break;
-            //        case "fk_MpColorId":
-            //            //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
-            //            var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
-            //            newTag.ColorId = (color as MpColor).Id;
-            //            break;
-            //        default:
-            //            MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
-            //            break;
-            //    }
-            //}
-            ////await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
-            //return newTag;
+            foreach (var li in logs.OrderBy(x => x.LogActionDateTime)) {
+                switch (li.AffectedColumnName) {
+                    case "MpTagGuid":
+                        newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "TagName":
+                        newTag.TagName = li.AffectedColumnValue;
+                        break;
+                    //case "SortIdx":
+                    //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+                    //    break;
+                    case "fk_MpColorId":
+                        //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
+                        var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
+                        newTag.ColorId = (color as MpColor).Id;
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            //await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
+            return newTag;
         }
 
         public async Task<object> DeserializeDbObject(string objStr) {
@@ -262,10 +264,6 @@ namespace MonkeyPaste {
             }
 
             return diffLookup;
-        }
-
-        public bool DoesChangeTriggerSync() {
-            return true;
         }
     }
 }

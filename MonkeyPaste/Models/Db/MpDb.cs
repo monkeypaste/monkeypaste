@@ -14,6 +14,7 @@ using Xamarin.Forms;
 using System.IO;
 using Newtonsoft.Json;
 using Xamarin.Forms.PlatformConfiguration;
+using System.Collections;
 
 namespace MonkeyPaste {    
     public class MpDb : MpISync {
@@ -28,6 +29,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Variables
+        private object _rdLock;
         private SQLiteAsyncConnection _connectionAsync;
         private SQLiteConnection _connection;
         #endregion
@@ -174,12 +176,8 @@ namespace MonkeyPaste {
             }
             await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }               
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -202,12 +200,8 @@ namespace MonkeyPaste {
             }
             _connection.InsertWithChildren(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -228,12 +222,8 @@ namespace MonkeyPaste {
 
             await _connectionAsync.UpdateWithChildrenAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -253,12 +243,8 @@ namespace MonkeyPaste {
             }
             _connection.UpdateWithChildren(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -299,12 +285,8 @@ namespace MonkeyPaste {
 
             await _connectionAsync.DeleteAsync(item, true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase); 
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -324,12 +306,8 @@ namespace MonkeyPaste {
 
             _connection.Delete(item,true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing) {
-                if (item is MpISyncableDbObject && !(item as MpISyncableDbObject).DoesChangeTriggerSync()) {
-                    //ignore sub/dependent model changes for primary models (ignore like color, etc.)
-                } else {
-                    OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
-                }
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -688,7 +666,7 @@ namespace MonkeyPaste {
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
+                var addMethod = typeof(MpDb).GetMethod(nameof(AddItemAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
                 var addTask = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await addTask;
@@ -763,6 +741,19 @@ namespace MonkeyPaste {
             return Convert.ToBase64String(bytes);
         }
 
+        public ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+            _rdLock = new object();
+            var rdoc = new ObservableCollection<MpRemoteDevice>();
+            Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
+            return rdoc;
+        }
+
+        private void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
+            // `lock` ensures that only one thread access the collection at a time
+            lock (collection) {
+                accessMethod?.Invoke();
+            }
+        }
         #endregion
     }
 

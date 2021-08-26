@@ -2039,7 +2039,7 @@ namespace MpWpfApp {
             //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             int x = Rand.Next(0, _ContentColors.Count);
             int y = Rand.Next(0, _ContentColors[0].Count);
-            return ((SolidColorBrush)GetContentColor(x, y)).Color;
+            return ((SolidColorBrush)_ContentColors[x][y]).Color;
         }
 
         public Brush GetRandomBrushColor(byte alpha = 255) {
