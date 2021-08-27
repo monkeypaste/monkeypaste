@@ -102,10 +102,10 @@ namespace MonkeyPaste {
 
         #region Event Handlers
         private void MpTagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            Task.Run(async () => {
+            Device.InvokeOnMainThreadAsync(async () => {
                 switch (e.PropertyName) {
                     case nameof(IsNameReadOnly):
-                        if(IsNameReadOnly && Tag.TagName != _orgTagName) {
+                        if(IsNameReadOnly && (Tag.TagName != _orgTagName || Tag.Id == 0)) {
                             _orgTagName = Tag.TagName;
                             await MpDb.Instance.AddOrUpdateAsync<MpTag>(Tag);
                         }
@@ -144,12 +144,7 @@ namespace MonkeyPaste {
                     if (t.Guid == Tag.Guid) {
                         Tag = t;
                     }
-                } else if(e is MpColor c) {
-                    if(c.Guid == Tag.Color.Guid) {
-                        Tag.Color = await MpColor.GetColorByIdAsync(c.Id);
-                        OnPropertyChanged(nameof(Tag));
-                    }
-                }
+                } 
             });
         }
 
@@ -188,11 +183,8 @@ namespace MonkeyPaste {
             });
 
         public ICommand ChangeColorCommand => new Command(async () => {
-            if(Tag.Color == null) {
-                Tag.Color = new MpColor();
-            }
-            Tag.Color.Color = MpHelpers.Instance.GetRandomColor();
-            await MpDb.Instance.AddOrUpdateAsync<MpColor>(Tag.Color);
+            Tag.HexColor = MpHelpers.Instance.GetRandomColor().ToHex();
+            await MpDb.Instance.AddOrUpdateAsync<MpTag>(Tag);
             OnPropertyChanged(nameof(Tag));
         });
 

@@ -36,27 +36,23 @@ namespace MpWpfApp {
         [Column("SortIdx")]
         public int TagSortIdx { get; set; }
 
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId")]
-        public int ColorId { get; set; }
+        [Column("HexColor")]
+        public string HexColor { get; set; }
 
         public string TagName { get; set; }
 
-        [Ignore]
-        public MpColor Color { get; set; }
 
         [Column("fk_ParentTagId")]
         [ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
 
         public MpTag() {
-            Color = new MpColor();
         }
 
         public MpTag(string tagName, Color color, int tagSortIdx) : this() {
             TagGuid = System.Guid.NewGuid();
             TagName = tagName;
-            Color = new MpColor((int)color.R, (int)color.G, (int)color.B, 255);
+            HexColor = MpHelpers.Instance.ConvertColorToHex(color);
             TagSortIdx = tagSortIdx;
         }
         public MpTag(int tagId) : this() {
@@ -97,8 +93,7 @@ namespace MpWpfApp {
            
             TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
             TagName = dr["TagName"].ToString();
-            ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
-            Color = new MpColor(ColorId);
+            HexColor = dr["HexColor"].ToString();
         }
                 
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
@@ -191,37 +186,23 @@ namespace MpWpfApp {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
-            if (Color == null) {
-                //occurs with initial tag creation on first load
-                Color = MpColor.GetColorById(ColorId);
-                if (Color == null) {
-                    MpConsole.WriteTraceLine(@"Tag create error, Color should be defined already but so creating random one");
-                    //seems to be an intermittent problem maybe caused by SyncStart SyncEnd calls for color
-                    Color = new MpColor(MpHelpers.Instance.GetRandomColor());
-                }
-            }
             if (TagId == 0) {
-                
-                Color.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
-                ColorId = Color.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpTag(MpTagGuid,TagName,fk_MpColorId,SortIdx) values(@tg,@tn,@cid,@si)",
+                    "insert into MpTag(MpTagGuid,TagName,HexColor,SortIdx) values(@tg,@tn,@cid,@si)",
                     new Dictionary<string, object> {
                         { "@tg", TagGuid.ToString() },
                         { "@tn", TagName },
-                        { "@cid", ColorId },
+                        { "@cid", HexColor },
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
             } else {
-                Color.WriteToDatabase(sourceClientGuid,ignoreTracking,ignoreSyncing);
-                ColorId = Color.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "update MpTag set MpTagGuid=@tg, TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
+                    "update MpTag set MpTagGuid=@tg, TagName=@tn, HexColor=@cid, SortIdx=@si where pk_MpTagId=@tid",
                     new Dictionary<string, object> {
                         { "@tg", TagGuid.ToString() },
                         { "@tn", TagName },
-                        { "@cid", ColorId },
+                        { "@cid", HexColor },
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
                     }, TagGuid.ToString(),sourceClientGuid,this,ignoreTracking,ignoreSyncing);                
@@ -260,9 +241,6 @@ namespace MpWpfApp {
                         }, citg.ToString(),sourceClientGuid,ignoreTracking,ignoreSyncing);
                 }
             }
-            if(Color != null) {
-                Color.DeleteFromDatabase(sourceClientGuid, ignoreTracking, ignoreSyncing);
-            }
         }
         
         public void DeleteFromDatabase() {
@@ -293,9 +271,8 @@ namespace MpWpfApp {
                     //case "SortIdx":
                     //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
                     //    break;
-                    case "fk_MpColorId":
-                        var cdr = MpDb.Instance.GetDbDataRowByTableGuid("MpColor", li.AffectedColumnValue);
-                        newTag.ColorId = new MpColor(cdr).ColorId;
+                    case "HexColor":
+                        newTag.HexColor = li.AffectedColumnValue;
                         break;
                     default:
                         MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
@@ -313,7 +290,7 @@ namespace MpWpfApp {
                 TagGuid = System.Guid.Parse(objParts[0]),
                 TagName = objParts[1],
                 //TagSortIdx = Convert.ToInt32(objParts[2]),
-                ColorId = Convert.ToInt32(objParts[2])
+                HexColor = objParts[2]
             };
             return dbLog;
         }
@@ -325,7 +302,7 @@ namespace MpWpfApp {
                 TagGuid.ToString(),
                 TagName,
                 //TagSortIdx,
-                ColorId);
+                HexColor);
         }
 
         public Type GetDbObjectType() {
@@ -356,14 +333,10 @@ namespace MpWpfApp {
             //    TagSortIdx, other.TagSortIdx,
             //    "SortIdx",
             //    diffLookup);
-            if(Color != null) {
-                diffLookup = CheckValue(
-                ColorId, other.ColorId,
-                "fk_MpColorId",
-                diffLookup,
-                Color.ColorGuid
-                );
-            }
+            diffLookup = CheckValue(
+                HexColor, other.HexColor,
+                "HexColor",
+                diffLookup);
 
             return diffLookup;
         }

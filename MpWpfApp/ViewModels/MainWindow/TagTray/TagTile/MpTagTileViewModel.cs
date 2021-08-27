@@ -277,12 +277,15 @@ namespace MpWpfApp {
 
         public Brush Color {
             get {
-                return new SolidColorBrush(Tag.Color.Color);
+                if(Tag == null) {
+                    return Brushes.Red;
+                }
+                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor));
             }
             set {
-                if (new SolidColorBrush(Tag.Color.Color) != value) {
-                    Tag.Color.Color = ((SolidColorBrush)value).Color;
-                    Tag.Color.WriteToDatabase();
+                if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
+                    Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
+                    Tag.WriteToDatabase();
                     OnPropertyChanged(nameof(Color));
                     OnPropertyChanged(nameof(TagCountTextColor));
                 }
@@ -498,16 +501,7 @@ namespace MpWpfApp {
                         Tag = t;
                         t.EndSync();
                     }
-                } else if (sender is MpColor c) {
-                    if (Tag == null || Tag.Color == null) {
-                        return;
-                    }
-                    if (c.Guid == Tag.Color.Guid) {
-                        Tag.Color.StartSync(e.SourceGuid);
-                        Color = c.ColorBrush;
-                        Tag.Color.EndSync();
-                    }
-                }
+                } 
             }));
         }
 

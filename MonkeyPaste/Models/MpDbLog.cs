@@ -179,6 +179,12 @@ namespace MonkeyPaste {
             return outStr;
         }
 
+        public void PrintLog() {
+            foreach (var prop in GetType().GetProperties()) {
+                MpConsole.WriteLine(prop.Name + ": " + prop.GetValue(this));
+            }
+        }
+
         public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }

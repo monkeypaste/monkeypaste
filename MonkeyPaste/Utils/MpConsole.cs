@@ -65,6 +65,18 @@ namespace MonkeyPaste {
             }
         }
 
+        public static void WriteLine(string line) {
+            line = line == null ? string.Empty : line;
+            string str = line.ToString();
+            Console.WriteLine("");
+            Console.WriteLine(@"-----------------------------------------------------------------------");
+            Console.WriteLine("");
+            Console.WriteLine(str);
+            Console.WriteLine("");
+            Console.Write(@"-----------------------------------------------------------------------");
+            Console.WriteLine("");
+        }
+
         public static void WriteLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();

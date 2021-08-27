@@ -433,7 +433,6 @@ namespace MonkeyPaste {
             //await _connectionAsync.CreateTableAsync<MpCompositeCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
-            await _connectionAsync.CreateTableAsync<MpColor>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
@@ -449,47 +448,30 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(MpPreferences.Instance.ThisClientGuidStr)) {
                 MpPreferences.Instance.ThisClientGuidStr = System.Guid.NewGuid().ToString();
             }
-            var green = new MpColor(0, 255/255, 0, 255 / 255) {
-                ColorGuid = Guid.Parse("fec9579b-a580-4b02-af2f-d1b275812392")
-            };
-            var blue = new MpColor(0, 0, 255 / 255, 255 / 255) {
-                ColorGuid = Guid.Parse("8b30650f-c616-4972-b4a7-a88d1022ae15")
-            };
-            var yellow = new MpColor(255 / 255, 255 / 255, 0, 255 / 255) {
-                ColorGuid = Guid.Parse("bb666db2-1762-4b18-a1da-dd678a458f7a")
-            };
-            var orange = new MpColor(255 / 255, 165 / 255, 0, 255 / 255) {
-                ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
-            };
-            await AddItemAsync<MpColor>(green,"",true,true);
-            await AddItemAsync<MpColor>(blue, "", true, true);
-            await AddItemAsync<MpColor>(yellow, "", true, true);
-            await AddItemAsync<MpColor>(orange, "", true, true);
-
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
-                Color = green,
+                HexColor = Color.Green.ToHex(),
                 TagSortIdx = 0
             }, "", true, true);
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
-                Color = blue,
+                HexColor = Color.Blue.ToHex(),
                 TagSortIdx = 1
             }, "", true, true);
 
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
-                Color = yellow,
+                HexColor = Color.Yellow.ToHex(),
                 TagSortIdx = 2
             }, "", true, true);
 
             var helpTag = new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
-                Color = orange,
+                HexColor = Color.Orange.ToHex(),
                 TagSortIdx = 3
             };
             await AddItemAsync<MpTag>(helpTag, "", true, true);
@@ -633,25 +615,46 @@ namespace MonkeyPaste {
                                 break;
                         }
                     }                    
-                }
-                //ditch adds or modifies when a delete exists
-                foreach (var dc in deleteChanges) {
-                    if (addChanges.ContainsKey(dc.Key)) {
-                        addChanges.Remove(dc.Key);
-                    }
-                    if (updateChanges.ContainsKey(dc.Key)) {
-                        updateChanges.Remove(dc.Key);
-                    }
-                }
-
-                //sort 3 types by key references
-                addChanges = OrderByPrecedence(addChanges);
-                deleteChanges = OrderByPrecedence(deleteChanges);
-                updateChanges = OrderByPrecedence(updateChanges);
+                }                
             }
 
+            //ditch adds or modifies when a delete exists
+            foreach (var dc in deleteChanges) {
+                if (addChanges.ContainsKey(dc.Key)) {
+                    addChanges.Remove(dc.Key);
+                }
+                if (updateChanges.ContainsKey(dc.Key)) {
+                    updateChanges.Remove(dc.Key);
+                }
+            }
+
+            //move updates to adds when dbo doesn't exist
+            //foreach(var uc in updateChanges) {
+            //    var result = await MpDb.Instance.GetDbObjectByTableGuidAsync(uc.Value[0].DbTableName, uc.Key.ToString());
+            //    if(result == null) {
+
+            //    }
+            //}
+
+            //sort 3 types by key references
+            addChanges = OrderByPrecedence(addChanges);
+            deleteChanges = OrderByPrecedence(deleteChanges);
+            updateChanges = OrderByPrecedence(updateChanges);
+
+            MpConsole.WriteLine(
+                string.Format(
+                    @"{0} Received {1} adds {2} updates {3} deletes",
+                    DateTime.Now.ToString(),
+                    addChanges.Count,
+                    updateChanges.Count,
+                    deleteChanges.Count));
+
+            MpConsole.WriteLine(@"Deletes: ");
             // in delete, add, update order
-            foreach(var ckvp in deleteChanges) {
+            foreach (var ckvp in deleteChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = typeof(MpDb).GetMethod(nameof(DeleteItemAsync));
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
@@ -661,23 +664,31 @@ namespace MonkeyPaste {
                 await deleteTask;
             }
 
+            MpConsole.WriteLine(@"Adds: ");
             foreach (var ckvp in addChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var addMethod = typeof(MpDb).GetMethod(nameof(AddItemAsync));
+                var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
                 var addTask = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await addTask;
             }
 
+            MpConsole.WriteLine(@"Updates: ");
             foreach (var ckvp in updateChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var updateMethod = typeof(MpDb).GetMethod(nameof(UpdateItemAsync));
+                var updateMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
                 var updateTask = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
                 await updateTask;

@@ -47,26 +47,6 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_IconSelectedHighlightBorderDbImageId")]
         public int IconBorderHighlightSelectedImageId { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId1")]
-        public int Color1Id { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId2")]
-        public int Color2Id { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId3")]
-        public int Color3Id { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId4")]
-        public int Color4Id { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId5")]
-        public int Color5Id { get; set; }
         #endregion
 
         #region Fk Objects
@@ -82,29 +62,56 @@ namespace MonkeyPaste {
         [OneToOne(foreignKey: nameof(IconBorderHighlightSelectedImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderHighlightSelectedImage { get; set; }
 
-        [OneToOne(foreignKey: nameof(Color1Id), CascadeOperations = CascadeOperation.All)]
-        public MpColor Color1 { get; set; }
-
-        [OneToOne(foreignKey: nameof(Color2Id), CascadeOperations = CascadeOperation.All)]
-        public MpColor Color2 { get; set; }
-
-        [OneToOne(foreignKey: nameof(Color3Id), CascadeOperations = CascadeOperation.All)]
-        public MpColor Color3 { get; set; }
-
-        [OneToOne(foreignKey: nameof(Color4Id), CascadeOperations = CascadeOperation.All)]
-        public MpColor Color4 { get; set; }
-
-        [OneToOne(foreignKey: nameof(Color5Id), CascadeOperations = CascadeOperation.All)]
-        public MpColor Color5 { get; set; }
+        public string HexColor1 { get; set; }
+        public string HexColor2 { get; set; }
+        public string HexColor3 { get; set; }
+        public string HexColor4 { get; set; }
+        public string HexColor5 { get; set; }
         #endregion
+
+        public static async Task<List<string>> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+
+            var primaryIconColorList = new List<string>();
+            var hist = await MpImageHistogram.Instance.GetStatistics(skbmp);
+            foreach (var kvp in hist) {
+                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == listCount) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(c.ToHex());
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < listCount; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
+            }
+
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
 
         public static async Task<MpIcon> GetIconById(int id) {
             var allicons = await MpDb.Instance.GetItemsAsync<MpIcon>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public static async Task<MpIcon> Create(string iconImgBase64) {
-            
+        public static async Task<MpIcon> Create(string iconImgBase64) {            
             var newImage = new MpDbImage() {
                 //ImageBytes = iconImg
                 ImageBase64 = iconImgBase64
@@ -112,21 +119,16 @@ namespace MonkeyPaste {
             await MpDb.Instance.AddItemAsync<MpDbImage>(newImage);
             
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
-            var colorList = await MpColor.CreatePrimaryColorList(iconSkBmp);
+            var colorList = await CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
                 //IconImageId = newImage.Id,
                 IconImage = newImage,
-                Color1 = colorList[0],
-                Color1Id = colorList[0].Id,
-                Color2 = colorList[1],
-                Color2Id = colorList[1].Id,
-                Color3 = colorList[2],
-                Color3Id = colorList[2].Id,
-                Color4 = colorList[3],
-                Color4Id = colorList[3].Id,
-                Color5 = colorList[4],
-                Color5Id = colorList[4].Id,
+                HexColor1 = colorList[0],
+                HexColor2 = colorList[1],
+                HexColor3 = colorList[2],
+                HexColor4 = colorList[3],
+                HexColor5 = colorList[4],
             };
             await MpDb.Instance.AddItemAsync<MpIcon>(newIcon);
 
@@ -134,6 +136,8 @@ namespace MonkeyPaste {
         }
         public MpIcon() {
         }
+
+        
 
 
         //public override void DeleteFromDatabase() {

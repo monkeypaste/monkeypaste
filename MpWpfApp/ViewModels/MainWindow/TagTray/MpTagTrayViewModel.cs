@@ -76,28 +76,10 @@ namespace MpWpfApp {
             var allTags = MpTag.GetAllTags();
             if(allTags.Count == 0) {
                 //occurs on first load
-                var green = new MpColor(0, 255, 0, 255) {
-                    ColorGuid = Guid.Parse("fec9579b-a580-4b02-af2f-d1b275812392")
-                };
-                green.WriteToDatabase("",true,true);
-                var blue = new MpColor(0, 0, 255, 255) {
-                    ColorGuid = Guid.Parse("8b30650f-c616-4972-b4a7-a88d1022ae15")
-                };
-                blue.WriteToDatabase("", true, true);
-                var yellow = new MpColor(255, 255, 0, 255) {
-                    ColorGuid = Guid.Parse("bb666db2-1762-4b18-a1da-dd678a458f7a")
-                };
-                yellow.WriteToDatabase("", true, true);
-                var orange = new MpColor(255, 165, 0, 255) {
-                    ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
-                };
-                orange.WriteToDatabase("", true, true);
-
                 var t = new MpTag() {
                     TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                     TagName = "Recent",
-                    ColorId = green.ColorId,
-                    Color = green,
+                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Green),
                     TagSortIdx = 0
                 };
                 t.WriteToDatabase("", true, true);
@@ -106,8 +88,7 @@ namespace MpWpfApp {
                 t = new MpTag() {
                     TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                     TagName = "All",
-                    ColorId = blue.ColorId,
-                    Color = blue,
+                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Blue),
                     TagSortIdx = 1
                 };
                 t.WriteToDatabase("", true, true);
@@ -116,8 +97,7 @@ namespace MpWpfApp {
                 t = new MpTag() {
                     TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                     TagName = "Favorites",
-                    ColorId = yellow.ColorId,
-                    Color = yellow,
+                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Yellow),
                     TagSortIdx = 2
                 };
                 t.WriteToDatabase("", true, true);
@@ -126,8 +106,7 @@ namespace MpWpfApp {
                 t = new MpTag() {
                     TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                     TagName = "Help",
-                    ColorId = orange.ColorId,
-                    Color = orange,
+                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Orange),
                     TagSortIdx = 3
                 };
                 t.WriteToDatabase("", true, true);
@@ -418,13 +397,11 @@ namespace MpWpfApp {
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpTag t) {                    
-                    var ttvmToRemove = this.Where(x => x.TagId == t.TagId).FirstOrDefault();
+                    var ttvmToRemove = this.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
                         ttvmToRemove.Tag.StartSync(e.SourceGuid);
-                        ttvmToRemove.Tag.Color.StartSync(e.SourceGuid);
                         this.Remove(ttvmToRemove);
                         ttvmToRemove.Tag.EndSync();
-                        ttvmToRemove.Tag.Color.EndSync();
                     }
                 }
             }));

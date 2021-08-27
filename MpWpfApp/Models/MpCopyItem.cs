@@ -40,7 +40,7 @@ namespace MpWpfApp {
 
         public MpClient Client { get; set; }
 
-        public MpColor ItemColor { get; set; }
+        public string ItemColor { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
@@ -192,8 +192,8 @@ namespace MpWpfApp {
 
         public List<MpCopyItem> CompositeItemList { get; set; } = new List<MpCopyItem>();
 
-        public int CompositeCopyItemId { get; set; } = 0;
-        public Guid CompositeCopyItemGuid { get; set; }
+        //public int CompositeCopyItemId { get; set; } = 0;
+        //public Guid CompositeCopyItemGuid { get; set; }
         public int CompositeParentCopyItemId { get; set; } = -1;
         public int CompositeSortOrderIdx { get; set; } = -1;
 
@@ -517,7 +517,7 @@ namespace MpWpfApp {
                                 MpCopyItemType.Composite, 
                                 toItem.Title, 
                                 null, 
-                                toItem.ItemColor.Color, 
+                                MpHelpers.Instance.ConvertHexToColor(toItem.ItemColor), 
                                 IntPtr.Zero, 
                                 toItem.App);
                             compositeItem.WriteToDatabase();
@@ -530,7 +530,7 @@ namespace MpWpfApp {
                             compositeItem = toItem;
                             break;
                     }
-                    fromItem.ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
+                    fromItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor());
                     fromItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
                     fromItem.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
                     compositeItem.CompositeItemList.Add(fromItem);
@@ -550,7 +550,7 @@ namespace MpWpfApp {
                             break;
                         case MpCopyItemType.RichText:
                             //Composite->RichText = RichText
-                            compositeItem = new MpCopyItem(MpCopyItemType.Composite, toItem.Title, null, toItem.ItemColor.Color, IntPtr.Zero, toItem.App);
+                            compositeItem = new MpCopyItem(MpCopyItemType.Composite, toItem.Title, null, MpHelpers.Instance.ConvertHexToColor(toItem.ItemColor), IntPtr.Zero, toItem.App);
                             compositeItem.WriteToDatabase();
                             toItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
                             toItem.CompositeSortOrderIdx = 0;
@@ -674,13 +674,7 @@ namespace MpWpfApp {
                 App = app;
             }
 
-            var color = MpColor.GetAllColors().Where(x => x.Color == tileColor).ToList();
-            if(color == null || color.Count == 0) {
-                ItemColor = new MpColor(tileColor);
-                MpColor.GetAllColors().Add(ItemColor);
-            } else {
-                ItemColor = color[0];
-            }
+            ItemColor = MpHelpers.Instance.ConvertColorToHex(tileColor);
             ItemDbImage = new MpDbImage();
             DbImageScreenshot = new MpDbImage();
 
@@ -873,33 +867,33 @@ namespace MpWpfApp {
             return itemRichText;
         }
 
-        public int GetCompositeParentCopyItemId() {
-            //returns -1 if item is not a composite
-            //returns 0 if item is the parent composite item (so ITS pk is the ParentId for its children)
-            //returns N if item is part of a composite item
-            if(CopyItemId <= 0) {
-                return -1;
-            }
-            //first check if it is a composite item
-            var dt = MpDb.Instance.Execute(
-                    "select * from MpCompositeCopyItem where fk_ParentMpCopyItemId=@ciid",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                            { "@ciid", CopyItemId }
-                        });
-            if (dt != null && dt.Rows.Count > 0) {
-                return 0;
-            }
-            dt = MpDb.Instance.Execute(
-                    "select * from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                            { "@ciid", CopyItemId }
-                        });
-            if (dt != null && dt.Rows.Count > 0) {
-                return Convert.ToInt32(dt.Rows[0]["fk_ParentMpCopyItemId"].ToString());
-            }
+        //public int GetCompositeParentCopyItemId() {
+        //    //returns -1 if item is not a composite
+        //    //returns 0 if item is the parent composite item (so ITS pk is the ParentId for its children)
+        //    //returns N if item is part of a composite item
+        //    if(CopyItemId <= 0) {
+        //        return -1;
+        //    }
+        //    //first check if it is a composite item
+        //    var dt = MpDb.Instance.Execute(
+        //            "select * from MpCompositeCopyItem where fk_ParentMpCopyItemId=@ciid",
+        //            new System.Collections.Generic.Dictionary<string, object> {
+        //                    { "@ciid", CopyItemId }
+        //                });
+        //    if (dt != null && dt.Rows.Count > 0) {
+        //        return 0;
+        //    }
+        //    dt = MpDb.Instance.Execute(
+        //            "select * from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
+        //            new System.Collections.Generic.Dictionary<string, object> {
+        //                    { "@ciid", CopyItemId }
+        //                });
+        //    if (dt != null && dt.Rows.Count > 0) {
+        //        return Convert.ToInt32(dt.Rows[0]["fk_ParentMpCopyItemId"].ToString());
+        //    }
 
-            return -1;
-        }
+        //    return -1;
+        //}
 
         public List<string> GetFileList(string baseDir = "",MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
@@ -975,12 +969,12 @@ namespace MpWpfApp {
             if (!IsSubCompositeItem) {
                 return;
             }
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            CompositeCopyItemId = 0;
+            //MpDb.Instance.ExecuteWrite(
+            //    "delete from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
+            //    new System.Collections.Generic.Dictionary<string, object> {
+            //            { "@ciid", CopyItemId }
+            //        });
+            //CompositeCopyItemId = 0;
             CompositeParentCopyItemId = -1;
             CompositeSortOrderIdx = -1;
             WriteToDatabase();
@@ -1096,7 +1090,7 @@ namespace MpWpfApp {
             CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
             int clientId = Convert.ToInt32(dr["fk_MpClientId"].ToString());
             int appId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
-            int colorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
+            ItemColor = dr["HexColor"].ToString();
             CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
@@ -1115,11 +1109,6 @@ namespace MpWpfApp {
 
             Client = new MpClient(0, 0, MpHelpers.Instance.GetLocalIp4Address(), "unknown", DateTime.Now);
             App = MpApp.GetAppById(appId);
-            ItemColor = MpColor.GetColorById(colorId);
-            if(ItemColor == null) {
-                ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
-                ItemColor.WriteToDatabase();
-            }            
 
             if (CopyItemType == MpCopyItemType.Image) {
                 ItemPlainText = dr["ItemText"].ToString();
@@ -1147,24 +1136,9 @@ namespace MpWpfApp {
                 ItemUrl = MpUrl.GetUrlById(urlId);
             }
 
-            CompositeParentCopyItemId = GetCompositeParentCopyItemId();
-            if (CompositeParentCopyItemId <= 0) {
-                //only create title swirl for composite parent and non-composite items
-                //ItemTitleSwirl = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
-            } else {
-                //since this is a child of a composite element load all of its composite data
-                var dt = MpDb.Instance.Execute(
-                    "select * from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                            { "@ciid", CopyItemId }
-                        });
-                if (dt != null && dt.Rows.Count > 0) {
-                    DataRow cdr = dt.Rows[0];
-                    CompositeCopyItemId = Convert.ToInt32(cdr["pk_MpCompositeCopyItemId"].ToString());
-                    CompositeCopyItemGuid = Guid.Parse(cdr["MpCompositeCopyItemGuid"].ToString());
-                    CompositeSortOrderIdx = Convert.ToInt32(cdr["SortOrderIdx"].ToString());
-                    //IsInlineWithPreviousCompositeItem = Convert.ToInt32(cdr["IsInlineWithPreviousItem"].ToString()) > 0 ? true : false;
-                }
+            CompositeParentCopyItemId = Convert.ToInt32(dr["fk_ParentCopyItemId"].ToString());
+            if (CompositeParentCopyItemId > 0) {
+                CompositeSortOrderIdx = Convert.ToInt32(dr["CompositeSortOrderIdx"].ToString());
             }
             PasteCount = GetPasteCount();
         }
@@ -1280,28 +1254,6 @@ namespace MpWpfApp {
             }
         }
 
-        private bool IsAltered() {
-            var dt = MpDb.Instance.Execute(
-                "SELECT pk_MpCopyItemId FROM MpCopyItem WHERE MpCopyItemGuid=@cig AND PasteCount=@pc AND fk_MpUrlId=@uid AND ItemDescription=@id AND ItemCsv=@icsv AND fk_MpCopyItemTypeId=@citd AND fk_MpClientId=@cid AND fk_MpAppId=@aid AND fk_MpColorId=@clrId AND Title=@t AND CopyCount=@cc AND ItemText=@it AND ItemRtf=@irtf AND ItemHtml=@ihtml AND fk_MpDbImageId=@ii",
-                        new Dictionary<string, object> {
-                            { "@cig",CopyItemGuid.ToString() },
-                            { "@pc", PasteCount },
-                            { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
-                            { "@id", ItemDescription },
-                            { @"icsv",ItemCsv },
-                            { "@citd", (int)CopyItemType },
-                            { "@cid", Client.ClientId },
-                            { "@aid", App.AppId },
-                            { "@clrId", ItemColor.ColorId },
-                            { "@t", Title },
-                            { "@cc", CopyCount },
-                            { "@it", ItemPlainText },
-                            { "@irtf", ItemRichText },
-                            { "@ihtml", ItemHtml },
-                            { "@ii", ItemDbImageId}
-                        });
-            return dt.Rows.Count == 0;
-        }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
             if (IsSyncing) {
@@ -1311,10 +1263,7 @@ namespace MpWpfApp {
             }
         }
 
-        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if (!IsAltered()) {
-                return;
-            }
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {            
             if(CopyItemId < 0) {
                 //when CopyItemId == -1 it means its a placeholder clip tile and shouldn't affect database
                 return;
@@ -1333,7 +1282,6 @@ namespace MpWpfApp {
             }
 
             App.WriteToDatabase();
-            ItemColor.WriteToDatabase();
             Title = string.IsNullOrEmpty(Title) ? string.Empty : Title;
             string itemText = (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) ? ItemRichText : ItemPlainText;
             if(string.IsNullOrEmpty(itemText)) {
@@ -1343,8 +1291,10 @@ namespace MpWpfApp {
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set MpCopyItemGuid=@cig, PasteCount=@pc, fk_MpUrlId=@uid, ItemDescription=@id, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemRtf=@irtf, ItemHtml=@ihtml, fk_MpDbImageId=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set fk_ParentCopyItemId=@cpciid, CompositeSortOrderIdx=@csoi,MpCopyItemGuid=@cig, PasteCount=@pc, fk_MpUrlId=@uid, ItemDescription=@id, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, HexColor=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemRtf=@irtf, ItemHtml=@ihtml, fk_MpDbImageId=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
+                            { "@cpciid", CompositeParentCopyItemId },
+                            { "@csoi", CompositeSortOrderIdx },
                             { "@cig",CopyItemGuid.ToString() },
                             { "@pc", PasteCount },
                             { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
@@ -1353,7 +1303,7 @@ namespace MpWpfApp {
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
-                            { "@clrId", ItemColor.ColorId },
+                            { "@clrId", ItemColor },
                             { "@t", Title },
                             { "@cc", CopyCount },
                             { "@it", ItemPlainText },
@@ -1364,9 +1314,11 @@ namespace MpWpfApp {
                         },CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(ItemRtf,ItemHtml,MpCopyItemGuid,PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,fk_MpDbImageId) " + 
-                    "values (@irtf,@ihtml,@cig,@pc,@id,@uid,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(fk_ParentCopyItemId,CompositeSortOrderIdx,ItemRtf,ItemHtml,MpCopyItemGuid,PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,HexColor,Title,CopyDateTime,CopyCount,ItemText,fk_MpDbImageId) " +
+                    "values (@cpciid,@csoi,@irtf,@ihtml,@cig,@pc,@id,@uid,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
+                            { "@cpciid", CompositeParentCopyItemId },
+                            { "@csoi", CompositeSortOrderIdx },
                             { "@cig",CopyItemGuid.ToString() },
                             { "@pc", PasteCount },
                             { "@id", ItemDescription },
@@ -1377,7 +1329,7 @@ namespace MpWpfApp {
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
-                            { "@clrId", ItemColor.ColorId },
+                            { "@clrId", ItemColor },
                             { "@t", Title },
                             { "@cdt", CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                             { "@cc", CopyCount },
@@ -1386,32 +1338,6 @@ namespace MpWpfApp {
                             { "@ciid", CopyItemId},
                         }, CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  
-            }
-
-            if(CompositeParentCopyItemId > 0) {
-                //for composite children
-                if(CompositeCopyItemId == 0) {
-                    MpDb.Instance.ExecuteWrite(
-                    "insert into MpCompositeCopyItem(MpCompositeCopyItemGuid, fk_MpCopyItemId,fk_ParentMpCopyItemId,SortOrderIdx) " +
-                    "values (@ccig,@ciid,@pciid,@soidx)",
-                    new Dictionary<string, object> {
-                        { "@ccig", CompositeCopyItemGuid.ToString() },
-                            { @"ciid",CopyItemId },
-                            { "@pciid", CompositeParentCopyItemId },
-                            { "@soidx", CompositeSortOrderIdx }
-                        }, CompositeCopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
-                    CompositeCopyItemId = MpDb.Instance.GetLastRowId("MpCompositeCopyItem", "pk_MpCompositeCopyItemId");
-                } else {
-                    MpDb.Instance.ExecuteWrite(
-                        "update MpCompositeCopyItem set MpCompositeCopyItemGuid=@ccig,fk_MpCopyItemId=@ciid, fk_ParentMpCopyItemId=@pciid, SortOrderIdx=@soidx where pk_MpCompositeCopyItemId=@cciid",
-                        new Dictionary<string, object> {
-                        { "@ccig", CompositeCopyItemGuid.ToString() },
-                            { @"cciid", CompositeCopyItemId },
-                            { @"ciid",CopyItemId },
-                            { "@pciid", CompositeParentCopyItemId },
-                            { "@soidx", CompositeSortOrderIdx }
-                        },CompositeCopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
-                }
             }
 
             foreach (var cci in CompositeItemList) {
@@ -1444,7 +1370,7 @@ namespace MpWpfApp {
                 CopyItemType,
                 Title,
                 _itemData,
-                ItemColor.Color,
+                MpHelpers.Instance.ConvertHexToColor(ItemColor),
                 IntPtr.Zero,
                 App);
             newItem.CopyCount = CopyCount;

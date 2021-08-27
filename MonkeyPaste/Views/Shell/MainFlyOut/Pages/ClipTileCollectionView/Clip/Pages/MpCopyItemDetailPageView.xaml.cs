@@ -62,7 +62,7 @@ namespace MonkeyPaste {
                 var t = new MpCopyItemTemplate() {
                     Id = templateId > 0 ? templateId : 0,
                     CopyItem = cidpvm.CopyItem,
-                    Color = new MpColor(templateColor),
+                    HexColor = templateColor.ToHex(),
                     TemplateName = templateName,
                     TemplateText = templateText
                 };

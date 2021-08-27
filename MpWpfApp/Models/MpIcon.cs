@@ -25,17 +25,11 @@ namespace MpWpfApp {
         public MpDbImage DbIconBorderHighlightImage { get; set; } = new MpDbImage();
         public MpDbImage DbIconBorderHighlightSelectedImage { get; set; } = new MpDbImage();
 
-        public int Color1Id { get; set; }
-        public int Color2Id { get; set; }
-        public int Color3Id { get; set; }
-        public int Color4Id { get; set; }
-        public int Color5Id { get; set; }
-
-        public MpColor Color1 { get; set; }
-        public MpColor Color2 { get; set; }
-        public MpColor Color3 { get; set; }
-        public MpColor Color4 { get; set; }
-        public MpColor Color5 { get; set; }
+        public string HexColor1 { get; set; }
+        public string HexColor2 { get; set; }
+        public string HexColor3 { get; set; }
+        public string HexColor4 { get; set; }
+        public string HexColor5 { get; set; }
 
         public BitmapSource IconImage {
             get {
@@ -73,9 +67,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int[] ColorId = new int[5];
-
-        public MpObservableCollection<MpColor> PrimaryIconColorList = new MpObservableCollection<MpColor>();
+        public MpObservableCollection<string> PrimaryIconColorList = new MpObservableCollection<string>();
 
         public static List<MpIcon> GetAllIcons() {
             var iconList = new List<MpIcon>();
@@ -87,7 +79,7 @@ namespace MpWpfApp {
             }
             return iconList;
         }
-
+        
         public MpIcon() {
             IconId = 0;
             IconGuid = Guid.NewGuid();
@@ -115,7 +107,7 @@ namespace MpWpfApp {
                 //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
                 //IconBorderHighlightImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
                 //IconBorderHighlightSelectedImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
-                PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
+                PrimaryIconColorList = CreatePrimaryColorList(IconImage);
                 ++TotalIconCount;
             } else {
                 IconId = dupIcon.IconId;
@@ -164,28 +156,29 @@ namespace MpWpfApp {
 
             PrimaryIconColorList.Clear();
             for (int i = 0; i < 5; i++) {
-                ColorId[i] = Convert.ToInt32(dr["fk_MpColorId" + (i + 1)].ToString());
-                if (ColorId[i] > 0) {
-                    PrimaryIconColorList.Add(new MpColor(ColorId[i]));
+                string hexStr = dr[string.Format(@"HexColor{0}", (i + 1))].ToString();
+                if(string.IsNullOrEmpty(hexStr)) {
+                    hexStr = MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor());
                 }
+                PrimaryIconColorList.Add(hexStr);
             }
             //IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             //IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
         }
         private bool IsAltered() {
             var dt = MpDb.Instance.Execute(
-            @"SELECT pk_MpIconId FROM MpIcon WHERE MpIconGuid=@ig AND fk_IconDbImageId = @iiid AND fk_IconBorderDbImageId = @ibiid AND fk_IconSelectedHighlightBorderDbImageId = @ishiid AND fk_IconHighlightBorderDbImageId = @ihiid AND fk_MpColorId1 = @c1 AND fk_MpColorId2 = @c2 AND fk_MpColorId3 = @c3 AND fk_MpColorId4 = @c4 AND fk_MpColorId5 = @c5",
+            @"SELECT pk_MpIconId FROM MpIcon WHERE MpIconGuid=@ig AND fk_IconDbImageId = @iiid AND fk_IconBorderDbImageId = @ibiid AND fk_IconSelectedHighlightBorderDbImageId = @ishiid AND fk_IconHighlightBorderDbImageId = @ihiid AND HexColor1 = @c1 AND HexColor2 = @c2 AND HexColor3 = @c3 AND HexColor4 = @c4 AND HexColor5 = @c5",
                             new Dictionary<string, object> {
                         { "@ig", IconGuid.ToString() },
                         { "@iiid", DbIconImageId },
                         { "@ibiid", DbIconBorderImageId },
                         { "@ishiid", DbIconBorderHighlightSelectedImageId },
                         { "@ihiid", DbIconBorderHighlightImageId },
-                        { "@c1", ColorId[0] },
-                        { "@c2", ColorId[1] },
-                        { "@c3", ColorId[2] },
-                        { "@c4", ColorId[3] },
-                        { "@c5", ColorId[4] }
+                        { "@c1", PrimaryIconColorList[0] },
+                        { "@c2", PrimaryIconColorList[1] },
+                        { "@c3", PrimaryIconColorList[2] },
+                        { "@c4", PrimaryIconColorList[3] },
+                        { "@c5", PrimaryIconColorList[4] }
             });
             return dt.Rows.Count == 0;
         }
@@ -203,11 +196,6 @@ namespace MpWpfApp {
             if (IconImage == null) {
                 throw new Exception("Error creating MpIcon Image cannot be null");
             }
-            for (int i = 1; i <= PrimaryIconColorList.Count; i++) {
-                var c = PrimaryIconColorList[i - 1];
-                c.WriteToDatabase();
-                ColorId[i - 1] = c.ColorId;
-            }
 
             DbIconImage.WriteToDatabase();
             DbIconImageId = DbIconImage.DbImageId;
@@ -223,7 +211,7 @@ namespace MpWpfApp {
 
             if (IconId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                         "insert into MpIcon(MpIconGuid,fk_IconDbImageId,fk_IconBorderDbImageId,fk_IconSelectedHighlightBorderDbImageId,fk_IconHighlightBorderDbImageId,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) " +
+                         "insert into MpIcon(MpIconGuid,fk_IconDbImageId,fk_IconBorderDbImageId,fk_IconSelectedHighlightBorderDbImageId,fk_IconHighlightBorderDbImageId,HexColor1,HexColor2,HexColor3,HexColor4,HexColor5) " +
                          "values(@ig,@iiid,@ibiid,@ishiid,@ihiid,@c1,@c2,@c3,@c4,@c5)",
                          new Dictionary<string, object> {
                              { "@ig", IconGuid.ToString() },
@@ -231,27 +219,27 @@ namespace MpWpfApp {
                             { "@ibiid", DbIconBorderImageId },
                             { "@ishiid", DbIconBorderHighlightSelectedImageId },
                             { "@ihiid", DbIconBorderHighlightImageId },
-                            { "@c1", ColorId[0] },
-                            { "@c2", ColorId[1] },
-                            { "@c3", ColorId[2] },
-                            { "@c4", ColorId[3] },
-                            { "@c5", ColorId[4] }
+                            { "@c1", PrimaryIconColorList[0] },
+                            { "@c2", PrimaryIconColorList[1] },
+                            { "@c3", PrimaryIconColorList[2] },
+                            { "@c4", PrimaryIconColorList[3] },
+                            { "@c5", PrimaryIconColorList[4] }
                          }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpIcon set MpIconGuid=@ig, fk_IconDbImageId=@iiid,fk_IconBorderDbImageId=@ibiid,fk_IconSelectedHighlightBorderDbImageId=@ishiid,fk_IconHighlightBorderDbImageId=@ihiid, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpIconId=@iid",
+                    "update MpIcon set MpIconGuid=@ig, fk_IconDbImageId=@iiid,fk_IconBorderDbImageId=@ibiid,fk_IconSelectedHighlightBorderDbImageId=@ishiid,fk_IconHighlightBorderDbImageId=@ihiid, HexColor1=@c1,HexColor2=@c2,HexColor3=@c3,HexColor4=@c4,HexColor5=@c5 where pk_MpIconId=@iid",
                     new Dictionary<string, object> {
                         { "@ig", IconGuid.ToString() },
                         { "@iiid", DbIconImageId },
                         { "@ibiid", DbIconBorderImageId },
                         { "@ishiid", DbIconBorderHighlightSelectedImageId },
                         { "@ihiid", DbIconBorderHighlightImageId },
-                        { "@c1", ColorId[0] },
-                        { "@c2", ColorId[1] },
-                        { "@c3", ColorId[2] },
-                        { "@c4", ColorId[3] },
-                        { "@c5", ColorId[4] },
+                        { "@c1", PrimaryIconColorList[0] },
+                        { "@c2", PrimaryIconColorList[1] },
+                        { "@c3", PrimaryIconColorList[2] },
+                        { "@c4", PrimaryIconColorList[3] },
+                        { "@c5", PrimaryIconColorList[4] },
                         { "@iid", IconId }
                     }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
@@ -266,7 +254,6 @@ namespace MpWpfApp {
         }
 
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-
             if (IconId <= 0) {
                 return;
             }
@@ -276,17 +263,49 @@ namespace MpWpfApp {
             DbIconBorderHighlightImage.DeleteFromDatabase();
             DbIconBorderHighlightSelectedImage.DeleteFromDatabase();
 
-            Color1.DeleteFromDatabase();
-            Color2.DeleteFromDatabase();
-            Color3.DeleteFromDatabase();
-            Color4.DeleteFromDatabase();
-            Color5.DeleteFromDatabase();
-
             MpDb.Instance.ExecuteWrite(
                 "delete from MpIcon where pk_MpIconId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", IconId }
                 }, IconGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
         }
+
+        private MpObservableCollection<string> CreatePrimaryColorList(BitmapSource bmpSource) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+            var primaryIconColorList = new MpObservableCollection<string>();
+            var hist = MpImageHistogram.Instance.GetStatistics(bmpSource);
+            foreach (var kvp in hist) {
+                var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == 5) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(MpHelpers.Instance.ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(MpHelpers.Instance.ConvertColorToHex(c));
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < 5; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor()));
+            }
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
     }
+
+    
+
 }

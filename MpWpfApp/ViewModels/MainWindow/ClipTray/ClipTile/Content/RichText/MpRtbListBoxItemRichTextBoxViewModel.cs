@@ -427,8 +427,8 @@ namespace MpWpfApp {
                 return Brushes.Transparent;
             }
             set {
-                if (CopyItem != null && CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
-                    CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
+                if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
+                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
                     OnPropertyChanged(nameof(CopyItem));
@@ -1183,11 +1183,11 @@ namespace MpWpfApp {
                 if(CopyItem == null || CopyItem.ItemColor == null) {
                     return Brushes.Transparent;
                 }
-                return CopyItem.ItemColor.ColorBrush;
+                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(CopyItem.ItemColor));
             }
             set {
-                if(CopyItem.ItemColor.ColorBrush != value) {
-                    CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
+                if(new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(CopyItem.ItemColor)) != value) {
+                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemColorBrush));
                 }

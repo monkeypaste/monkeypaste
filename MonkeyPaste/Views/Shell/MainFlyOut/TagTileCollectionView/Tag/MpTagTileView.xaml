@@ -45,7 +45,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <BoxView Margin="30,20,10,20"
-                         BackgroundColor="{Binding Tag.Color.Color}"
+                         BackgroundColor="{Binding Tag.HexColor, Converter={StaticResource StringToColorConverter}}"
                          HeightRequest="25"
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
@@ -62,7 +62,7 @@
                        FontSize="Micro"
                        HorizontalOptions="Center"
                        Text="{Binding CopyItemCount}"
-                       TextColor="{Binding Tag.Color.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                       TextColor="{Binding Tag.HexColor, Converter={StaticResource TextColorFromBackgroundColorConverterFromString}}"
                        VerticalOptions="Center">
                     <!--<Label.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1"

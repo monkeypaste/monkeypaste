@@ -145,7 +145,6 @@
     <Compile Include="Models\MpCopyItemTag.cs" />
     <Compile Include="Models\MpSyncHistory.cs" />
     <Compile Include="Models\MpDbLog.cs" />
-    <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDbImage.cs" />

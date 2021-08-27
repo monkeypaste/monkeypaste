@@ -1874,12 +1874,21 @@ namespace MpWpfApp {
             if (hexString.IndexOf('#') != -1) {
                 hexString = hexString.Replace("#", string.Empty);
             }
+            //
+            int x = hexString.Length == 8 ? 2 : 0;
+            byte r = byte.Parse(hexString.Substring(x, 2), NumberStyles.AllowHexSpecifier);
+            byte g = byte.Parse(hexString.Substring(x+2, 2), NumberStyles.AllowHexSpecifier);
+            byte b = byte.Parse(hexString.Substring(x+4, 2), NumberStyles.AllowHexSpecifier);
+            byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
+            return Color.FromArgb(a, r, g, b);
+        }
 
-            byte r = byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier);
-            byte g = byte.Parse(hexString.Substring(2, 2), NumberStyles.AllowHexSpecifier);
-            byte b = byte.Parse(hexString.Substring(4, 2), NumberStyles.AllowHexSpecifier);
-
-            return Color.FromArgb(255, r, g, b);
+        public string ConvertColorToHex(Color c, byte forceAlpha = 255) {
+            if(c == null) {
+                return "#FF0000";
+            }
+            c.A = forceAlpha;
+            return c.ToString();
         }
 
         public BitmapSource GetIconImage(string sourcePath) {

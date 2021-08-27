@@ -69,6 +69,10 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private async Task Initialize() {
+            if(TagViewModels != null && TagViewModels.Count > 0) {
+                //occurs when tags are reloaded, like after a delete
+                await UpdateSort();
+            }
             IsBusy = true;
             var tags = await MpDb.Instance.GetItemsAsync<MpTag>();
             var tvms = tags.Select(x => CreateTagViewModel(x)).OrderBy(x=>x.Tag.TagSortIdx);
@@ -108,8 +112,14 @@ namespace MonkeyPaste {
 
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpTag t) {
-                var ttvm = CreateTagViewModel(t);
-                TagViewModels.Add(ttvm);          
+                var dupTag = TagViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
+                if(dupTag == null) {
+                    var ttvm = CreateTagViewModel(t);
+                    TagViewModels.Add(ttvm);
+                } else {
+                    TagViewModels[TagViewModels.IndexOf(dupTag)].Tag = t;
+                }
+                
             }
         }
 
@@ -216,19 +226,20 @@ namespace MonkeyPaste {
 
 
         public ICommand AddTagCommand => new Command<object>(async (args) => {
-            var Color = new MpColor(MpHelpers.Instance.GetRandomColor());
-            await MpDb.Instance.AddItemAsync<MpColor>(Color);
             var newTag = new MpTag() {
                 TagName = "Untitled",
                 TagSortIdx = TagViewModels.Count,
-                ColorId = Color.Id,
-                Color = Color
+                HexColor = MpHelpers.Instance.GetRandomColor().ToHex()
             };
             //await MpDb.Instance.AddItem<MpColor>(newTag.Color);
             //newTag.ColorId = newTag.Color.Id;
-            await MpDb.Instance.AddItemAsync<MpTag>(newTag);
+            //await MpDb.Instance.AddItemAsync<MpTag>(newTag);
+
+            //trigger db_onItemAdded instead of actually adding item because renaming is called automatically
+            Db_OnItemAdded(this, newTag);
             //delay to let DbItem_Added add tag to collection
             await Task.Delay(300);
+
             SelectedTagViewModel = TagViewModels[TagViewModels.Count - 1];
             SelectedTagViewModel.RenameTagCommand.Execute(null);
         });       

@@ -195,7 +195,7 @@ namespace MpWpfApp {
                 //con.CreateTable<MpClipComposite>();
                 //con.CreateTable<MpClipTag>();
                 //con.CreateTable<MpClipTemplate>();
-                con.CreateTable<MpColor>();
+                //con.CreateTable<MpColor>();
                 //con.CreateTable<MpDbImage>();
                 //con.CreateTable<MpIcon>();
                 //con.CreateTable<MpPasteHistory>();
@@ -397,9 +397,7 @@ namespace MpWpfApp {
                     , fk_ParentTagId integer default 0
                     , TagName text
                     , SortIdx integer
-                    , fk_MpColorId integer 
-                    , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_ParentTagId) REFERENCES MpTagType (pk_MpTagId)
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
+                    , HexColor text
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (
@@ -415,16 +413,11 @@ namespace MpWpfApp {
                     , fk_IconBorderDbImageId integer
                     , fk_IconSelectedHighlightBorderDbImageId integer
                     , fk_IconHighlightBorderDbImageId integer
-                    , fk_MpColorId1 integer default 0
-                    , fk_MpColorId2 integer default 0
-                    , fk_MpColorId3 integer default 0
-                    , fk_MpColorId4 integer default 0
-                    , fk_MpColorId5 integer default 0
-                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpIcon_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpIcon_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpIcon_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
+                    , HexColor1 text default 0
+                    , HexColor2 text default 0
+                    , HexColor3 text default 0
+                    , HexColor4 text default 0
+                    , HexColor5 text default 0
                     , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
                     , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
                     , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
@@ -534,15 +527,6 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpClient_0_0 FOREIGN KEY (fk_MpPlatformId) REFERENCES MpPlatform (pk_MpPlatformId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpColor (
-                       pk_MpColorId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    ,  MpColorGuid text
-                    ,  R integer not null default 255
-                    ,  G integer not null default 255
-                    ,  B integer not null default 255
-                    ,  A integer not null default 255
-                    );
-                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAppGuid text
@@ -584,11 +568,13 @@ namespace MpWpfApp {
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemGuid text
+                    , fk_ParentCopyItemId integer default 0
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
                     , fk_MpUrlId integer
-                    , fk_MpColorId integer
+                    , CompositeSortOrderIdx integer default 0
+                    , HexColor text
                     , Title text NULL 
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
@@ -604,20 +590,9 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
-                    , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId) 
                     , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId) 
                     , CONSTRAINT FK_MpCopyItem_5_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)
                     , CONSTRAINT FK_MpCopyItem_6_0 FOREIGN KEY (fk_SsMpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)    
-                    );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpCompositeCopyItem (
-                      pk_MpCompositeCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCompositeCopyItemGuid text
-                    , fk_MpCopyItemId INTEGER NOT NULL
-                    , fk_ParentMpCopyItemId INTEGER NOT NULL
-                    , SortOrderIdx INTEGER NOT NULL DEFAULT 0
-                    , CONSTRAINT FK_MpCompositeCopyItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCompositeCopyItem_1_0 FOREIGN KEY (fk_ParentMpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemTag (
@@ -645,10 +620,9 @@ namespace MpWpfApp {
                       pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemTemplateGuid text
                     , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpColorId integer default 2
+                    , HexColor text default '#0000FF'
                     , TemplateName text NOT NULL 
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
-                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)                    
                     );       
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
@@ -854,25 +828,38 @@ namespace MpWpfApp {
                                 break;
                         }
                     }
-                }
-                //ditch adds or modifies when a delete exists
-                foreach (var dc in deleteChanges) {
-                    if (addChanges.ContainsKey(dc.Key)) {
-                        addChanges.Remove(dc.Key);
-                    }
-                    if (updateChanges.ContainsKey(dc.Key)) {
-                        updateChanges.Remove(dc.Key);
-                    }
-                }
-
-                //sort 3 types by key references
-                addChanges = OrderByPrecedence(addChanges);
-                deleteChanges = OrderByPrecedence(deleteChanges);
-                updateChanges = OrderByPrecedence(updateChanges);
+                }                
             }
 
+            //ditch adds or modifies when a delete exists
+            foreach (var dc in deleteChanges) {
+                if (addChanges.ContainsKey(dc.Key)) {
+                    addChanges.Remove(dc.Key);
+                }
+                if (updateChanges.ContainsKey(dc.Key)) {
+                    updateChanges.Remove(dc.Key);
+                }
+            }
+
+            //sort 3 types by key references
+            addChanges = OrderByPrecedence(addChanges);
+            deleteChanges = OrderByPrecedence(deleteChanges);
+            updateChanges = OrderByPrecedence(updateChanges);
+
+            MpConsole.WriteLine(
+                string.Format(
+                    @"{0} Received {1} adds {2} updates {3} deletes",
+                    DateTime.Now.ToString(),
+                    addChanges.Count,
+                    updateChanges.Count,
+                    deleteChanges.Count));
+
+            MpConsole.WriteLine(@"Deletes: ");
             // in delete, add, update order
             foreach (var ckvp in deleteChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = dbot.GetMethod("DeleteFromDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
                 var dbo = Activator.CreateInstance(dbot);
@@ -881,7 +868,12 @@ namespace MpWpfApp {
                 deleteMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
+
+            MpConsole.WriteLine(@"Adds: ");
             foreach (var ckvp in addChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
@@ -890,7 +882,11 @@ namespace MpWpfApp {
                 writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
+            MpConsole.WriteLine(@"Updates: ");
             foreach (var ckvp in updateChanges) {
+                foreach (var dbl in ckvp.Value) {
+                    dbl.PrintLog();
+                }
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);

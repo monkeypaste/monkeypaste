@@ -1306,11 +1306,11 @@
                 if (CopyItem == null) {
                     return Brushes.Transparent;
                 }
-                return new SolidColorBrush(CopyItem.ItemColor.Color);
+                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(CopyItem.ItemColor));
             }
             set {
-                if (CopyItem != null && CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
-                    CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
+                if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
+                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(TitleBackgroundColor));
                 }
@@ -2469,13 +2469,17 @@
             int forceIdx = -1) {
             //IsBusy = true;
             foreach (var oci in ocil) {
+                if(oci == null) {
+                    continue;
+                }
                 if (oci.CopyItemId == CopyItemId) {
                     return;
                 }
                 var ovm = MainWindowViewModel.ClipTrayViewModel.GetCopyItemViewModelById(oci.CopyItemId);
                 if(ovm == null) {
-                    Console.WriteLine(@"ClipTIle.Merge error cannot find copy item w/ id: " + oci.CopyItemId+ " so ignoring" );
-                    continue;
+                    //Console.WriteLine(@"ClipTIle.Merge error cannot find copy item w/ id: " + oci.CopyItemId+ " so ignoring" );
+                    //continue;
+                    ovm = new MpClipTileViewModel(oci);
                 }
                 if (ovm is MpClipTileViewModel octvm) {
                     //if copyitem is an existing tile remove it

@@ -9,19 +9,18 @@ namespace MpWpfApp {
         public Guid CopyItemTemplateGuid { get; set; }
 
         public int CopyItemId { get; set; } = 0;
-        public int ColorId { get; set; } = 0;
 
-        public MpColor Color { get; set; }
+        public string HexColor { get; set; } = @"#0000FF";
 
         public Brush TemplateColor { 
             get {
-                if(Color == null) {
-                    Color = new MpColor(MpHelpers.Instance.GetRandomColor());
+                if(string.IsNullOrEmpty(HexColor)) {
+                    return Brushes.Red;
                 }
-                return Color.ColorBrush;
+                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(HexColor));
             }
             set {
-                Color = new MpColor((value as SolidColorBrush).Color);
+                HexColor = MpHelpers.Instance.ConvertColorToHex((value as SolidColorBrush).Color);
             }
         }
 
@@ -61,8 +60,7 @@ namespace MpWpfApp {
 
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
 
-            ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
-            Color = new MpColor(ColorId);
+            HexColor = dr["HexColor"].ToString();
             TemplateName = dr["TemplateName"].ToString(); 
             //TemplateColor = (Brush)new BrushConverter().ConvertFromString(dr["HexColor"].ToString());
         }
@@ -75,27 +73,24 @@ namespace MpWpfApp {
             }
         }
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            Color.WriteToDatabase();
-            ColorId = Color.ColorId;
-
             if (CopyItemTemplateId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpCopyItemTemplate(MpCopyItemTemplateGuid,fk_MpCopyItemId,fk_MpColorId,TemplateName) values(@citg,@ciid,@cid,@tn)",
+                        "insert into MpCopyItemTemplate(MpCopyItemTemplateGuid,fk_MpCopyItemId,HexColor,TemplateName) values(@citg,@ciid,@cid,@tn)",
                         new System.Collections.Generic.Dictionary<string, object> {
                             { "@citg", CopyItemTemplateGuid.ToString() },
                             { "@ciid", CopyItemId },
-                            { "@cid", ColorId},
+                            { "@cid", HexColor},
                             { "@tn", TemplateName }
                     },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpCopyItemTemplate set MpCopyItemTemplateGuid=@citg, fk_MpCopyItemId=@ciid, fk_MpColorId=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
+                    "update MpCopyItemTemplate set MpCopyItemTemplateGuid=@citg, fk_MpCopyItemId=@ciid, HexColor=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                             { "@citg", CopyItemTemplateGuid.ToString() },
                             { "@citid", CopyItemTemplateId },
                             { "@ciid", CopyItemId },
-                            { "@cid", ColorId },
+                            { "@cid", HexColor },
                             { "@tn", TemplateName }
                     },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
             }
@@ -108,9 +103,6 @@ namespace MpWpfApp {
             }
         }
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-
-            Color.DeleteFromDatabase();
-
             MpDb.Instance.ExecuteWrite(
                 "delete from MpCopyItemTemplate where pk_MpCopyItemTemplateId=@citid",
                 new Dictionary<string, object> {

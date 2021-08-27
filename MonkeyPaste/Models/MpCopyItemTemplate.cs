@@ -39,10 +39,7 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId")]
-        public int ColorId { get; set; }
-
+        public string HexColor { get; set; }
 
         [TextBlob(nameof(TemplateDocIdxsBlobbed))]
         public List<int> TemplateDocIdxs { get; set; }
@@ -57,21 +54,20 @@ namespace MonkeyPaste {
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpCopyItem CopyItem { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpColor Color { get; set; }
         #endregion
 
         public MpCopyItemTemplate() {
         }
 
         public string ToHtml() {
+            var c = string.IsNullOrEmpty(HexColor) ? Color.Red : Color.FromHex(HexColor);
             return string.Format(
                 @"<span class='template_btn' contenteditable='false' templatename='{0}' templatecolor='{1}' templateid='{2}' style='background-color: {3}; color: {4};'>{0}</span>",
                 TemplateName,
-                Color.Color.ToHex(),
+                HexColor,
                 Id,
-                string.Format(@"rgb({0},{1},{2})", Color.R, Color.G, Color.B),
-                MpHelpers.Instance.IsBright(Color.Color) ? "black" : "white");
+                string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B),
+                MpHelpers.Instance.IsBright(c) ? "black" : "white");
         }
 
         public string ToDocToken() {
@@ -79,7 +75,7 @@ namespace MonkeyPaste {
                 @"{{{0},{1},{2}}}",
                 Id,
                 TemplateName,
-                Color.Color.ToHex());
+                HexColor);
         }
 
         public string GetTokenName() {

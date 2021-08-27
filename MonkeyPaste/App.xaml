@@ -9,6 +9,7 @@
             <local:MpBoolNegateConverter x:Key="BoolNegateConverter" />
             <local:MpStringToColorConverter x:Key="StringToColorConverter" />
             <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
+            <local:MpTextColorFromBackgroundColorConverterFromString x:Key="TextColorFromBackgroundColorConverterFromString" />
             <local:MpImageConverter x:Key="ImageConverter" />
 
             <StyleSheet Source="/Css/Styles.css" />

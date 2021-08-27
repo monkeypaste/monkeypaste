@@ -45,38 +45,8 @@ namespace MonkeyPaste {
         [Column("SortIdx")]
         public int TagSortIdx { get; set; } = 0;
 
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId")]
-        public int ColorId { get; set; }
-
-        //private MpColor _color;
-        //[Ignore]
-        //public MpColor Color {
-        //    get {
-        //        if (_color == null && ColorId > 0) {
-        //            _color = MpColor.GetColorById(ColorId);
-        //        } else if (_color != null && _color.Id != ColorId) {
-        //            if (ColorId == 0) {
-        //                ColorId = _color.Id;
-        //            } else if (ColorId > 0) {
-        //                _color = MpColor.GetColorById(ColorId);
-        //            } else {
-        //                _color = new MpColor();
-        //            }
-        //        }
-        //        return _color;
-        //    }
-        //    set {
-        //        if (_color != value) {
-        //            _color = value;
-        //            if (_color != null) {
-        //                ColorId = _color.Id;
-        //            } else {
-        //                ColorId = 0;
-        //            }
-        //        }
-        //    }
-        //}
+        [Column("HexColor")]
+        public string HexColor { get; set; }
 
         public string TagName { get; set; } = string.Empty;
 
@@ -88,26 +58,11 @@ namespace MonkeyPaste {
         [ManyToMany(typeof(MpCopyItemTag))]
         public List<MpCopyItem> CopyItemList { get; set; } = new List<MpCopyItem>();
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpColor Color { get; set; }
         #endregion
 
         public MpTag() {
-            Color = new MpColor();
         }
 
-        public async Task<MpColor> GetColor() {
-            if (ColorId > 0) {
-                var tc = await MpColor.GetColorByIdAsync(ColorId);
-                return tc;
-            }
-
-            return null;
-        }
-
-        public void SetColor(int colorId) {
-            ColorId = colorId;
-        }
 
         public async Task<bool> IsLinkedWithCopyItemAsync(MpCopyItem clip) {
             if(clip == null) {
@@ -188,10 +143,8 @@ namespace MonkeyPaste {
                     //case "SortIdx":
                     //    newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
                     //    break;
-                    case "fk_MpColorId":
-                        //var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
-                        var color = await MpColor.GetColorByGuidAsync(li.AffectedColumnValue);
-                        newTag.ColorId = (color as MpColor).Id;
+                    case "HexColor":
+                        newTag.HexColor = li.AffectedColumnValue;
                         break;
                     default:
                         MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
@@ -209,7 +162,7 @@ namespace MonkeyPaste {
                 TagGuid = System.Guid.Parse(objParts[0]),
                 TagName = objParts[1],
                 //TagSortIdx = Convert.ToInt32(objParts[2]),
-                ColorId = Convert.ToInt32(objParts[2])
+                HexColor = objParts[2]
             };
             return dbLog;
         }
@@ -221,7 +174,7 @@ namespace MonkeyPaste {
                 TagGuid.ToString(),
                 TagName,
                 //TagSortIdx,
-                ColorId);
+                HexColor);
         }
 
         public Type GetDbObjectType() {
@@ -254,14 +207,10 @@ namespace MonkeyPaste {
             //    "SortIdx",
             //    diffLookup);
             //var c = await MpColor.GetColorById(ColorId);
-            if(Color != null) {
-                diffLookup = CheckValue(
-                ColorId, other.ColorId,
-                "fk_MpColorId",
-                diffLookup,
-                Color.ColorGuid
-                );
-            }
+            diffLookup = CheckValue(
+                HexColor, other.HexColor,
+                "HexColor",
+                diffLookup);
 
             return diffLookup;
         }

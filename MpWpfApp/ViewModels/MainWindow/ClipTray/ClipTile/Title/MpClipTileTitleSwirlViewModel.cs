@@ -118,13 +118,13 @@ namespace MpWpfApp {
         public MpClipTileTitleSwirlViewModel(MpClipTileViewModel ctvm) : this() {
             ClipTileViewModel = ctvm;
             AppViewModel = new MpAppViewModel(ClipTileViewModel.CopyItem.App);
-            var randomColorList = MpHelpers.Instance.GetRandomizedList<MpColor>(AppViewModel.PrimaryIconColorList);
+            var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(AppViewModel.PrimaryIconColorList);
             for (int i = 0; i < randomColorList.Count; i++) {
                 var c = AppViewModel.PrimaryIconColorList[i];
                 this.Add(
                     new MpSwirlLayerViewModel(
                         i,
-                        c.ColorBrush,
+                        new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(c)),
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
             }
         }

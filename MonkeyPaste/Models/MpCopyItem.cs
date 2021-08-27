@@ -42,10 +42,6 @@ namespace MonkeyPaste {
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
-        [ForeignKey(typeof(MpColor))]
-        [Column("fk_MpColorId")]
-        public int ColorId { get; set; }
-
         public string Title { get; set; }
 
         [Column("fk_MpCopyItemTypeId")]
@@ -107,8 +103,8 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpDbImage ItemDbImage { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpColor ItemColor { get; set; }
+        [Column("HexColor")]
+        public string ItemColor { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.CascadeDelete | CascadeOperation.CascadeRead)]
         public List<MpCopyItemTemplate> Templates { get; set; }
@@ -217,7 +213,7 @@ namespace MonkeyPaste {
                 Title = "Untitled",
                 ItemText = itemPlainText,
                 ItemType = MpCopyItemType.RichText,
-                ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor()),
+                ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
                 App = app,
                 CopyCount = 1
                 //ItemImage = hostAppImage

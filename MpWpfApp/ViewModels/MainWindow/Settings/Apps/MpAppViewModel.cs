@@ -99,10 +99,10 @@ namespace MpWpfApp {
             }
         }
 
-        public MpObservableCollection<MpColor> PrimaryIconColorList {
+        public MpObservableCollection<string> PrimaryIconColorList {
             get {
                 if(App == null) {
-                    return new MpObservableCollection<MpColor>();
+                    return new MpObservableCollection<string>();
                 }
                 return App.Icon.PrimaryIconColorList;
             }
