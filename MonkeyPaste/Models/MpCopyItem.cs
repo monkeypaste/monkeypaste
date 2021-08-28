@@ -121,8 +121,17 @@ namespace MonkeyPaste {
 
 
         #region Static Methods
-        public static async Task<MpCopyItem> GetCopyItemById(int CopyItemId) {
+        public static async Task<MpCopyItem> GetCopyItemByIdAsync(int CopyItemId) {
             var allItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
+            var udbpl = allItems.Where(x => x.Id == CopyItemId).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
+        public static MpCopyItem GetCopyItemById(int CopyItemId) {
+            var allItems = MpDb.Instance.GetItems<MpCopyItem>();
             var udbpl = allItems.Where(x => x.Id == CopyItemId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
@@ -133,7 +142,7 @@ namespace MonkeyPaste {
             var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(tagId);
             var cil = new List<MpCopyItem>();
             foreach (var cit in citl) {
-                var ci = await MpCopyItem.GetCopyItemById(cit.CopyItemId);
+                var ci = await MpCopyItem.GetCopyItemByIdAsync(cit.CopyItemId);
                 cil.Add(ci);
             }
             return cil;
@@ -229,7 +238,9 @@ namespace MonkeyPaste {
                 foreach (var tag in defaultTagList) {
                     var CopyItemTag = new MpCopyItemTag() {
                         CopyItemId = newCopyItem.Id,
-                        TagId = tag.Id
+                        CopyItemGuid = newCopyItem.Guid,
+                        TagId = tag.Id,
+                        TagGuid = tag.Guid
                     };
                     await MpDb.Instance.AddItemAsync<MpCopyItemTag>(CopyItemTag);
                 }

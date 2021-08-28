@@ -234,10 +234,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\ext\Rg.Plugins.Popup-develop\Rg.Plugins.Popup\Rg.Plugins.Popup.csproj">
-      <Project>{2286cbf6-6e2f-46e9-b4ea-41061d953a40}</Project>
-      <Name>Rg.Plugins.Popup</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste.iOS.KeyboardExtension\MonkeyPaste.iOS.KeyboardExtension.csproj">
       <Project>{7d6dfa97-af05-44a5-9c4b-eec0b107afc6}</Project>
       <Name>MonkeyPaste.iOS.KeyboardExtension</Name>

@@ -1219,7 +1219,10 @@ namespace MpWpfApp {
                     for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
                         var sctvm = SelectedClipTiles[i];
                         ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
-                        new MpPasteHistory(sctvm.CopyItem, MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+
+                        var a = MpApp.GetAppByHandle(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+                        var aid = a == null ? 0 : a.AppId;
+                        new MpPasteHistory(sctvm.CopyItem, aid);
                     }
                     //Refresh();
                 }

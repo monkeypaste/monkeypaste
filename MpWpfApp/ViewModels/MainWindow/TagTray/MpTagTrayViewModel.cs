@@ -83,7 +83,7 @@ namespace MpWpfApp {
                     TagSortIdx = 0
                 };
                 t.WriteToDatabase("", true, true);
-                allTags.Add(t);
+                //allTags.Add(t);
 
                 t = new MpTag() {
                     TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
@@ -92,7 +92,7 @@ namespace MpWpfApp {
                     TagSortIdx = 1
                 };
                 t.WriteToDatabase("", true, true);
-                allTags.Add(t);
+                //allTags.Add(t);
 
                 t = new MpTag() {
                     TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
@@ -101,7 +101,7 @@ namespace MpWpfApp {
                     TagSortIdx = 2
                 };
                 t.WriteToDatabase("", true, true);
-                allTags.Add(t);
+                //allTags.Add(t);
 
                 t = new MpTag() {
                     TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
@@ -111,10 +111,10 @@ namespace MpWpfApp {
                 };
                 t.WriteToDatabase("", true, true);
 
-                allTags.Add(t);
+                //allTags.Add(t);
             }
             //create tiles for all the tags
-            foreach (MpTag t in allTags) {
+            foreach (MpTag t in MpTag.GetAllTags()) {
                 this.Add(new MpTagTileViewModel(t));
             }
         }        

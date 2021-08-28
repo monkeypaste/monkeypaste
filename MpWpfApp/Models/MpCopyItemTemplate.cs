@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Media;
+using System.Linq;
 
 namespace MpWpfApp {
     public class MpCopyItemTemplate : MpDbModelBase {
+        private static List<MpCopyItemTemplate> _AllCopyItemTemplateList = null;
+
         public int CopyItemTemplateId { get; set; } = 0;
         public Guid CopyItemTemplateGuid { get; set; }
 
@@ -27,18 +30,21 @@ namespace MpWpfApp {
         public string TemplateName { get; set; } = String.Empty;
         //only set at runtime
         public string TemplateText { get; set; } = string.Empty;
-        public static List<MpCopyItemTemplate> GetAllTemplatesForCopyItem(int copyItemId) {
-            var copyItemTemplateList = new List<MpCopyItemTemplate>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTemplate where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                    { "@ciid", copyItemId }
-                });
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    copyItemTemplateList.Add(new MpCopyItemTemplate(dr));
+
+        public static List<MpCopyItemTemplate> GetAllTemplates() {
+            if (_AllCopyItemTemplateList == null) {
+                _AllCopyItemTemplateList = new List<MpCopyItemTemplate>();
+                DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTemplate", null);
+                if (dt != null && dt.Rows.Count > 0) {
+                    foreach (DataRow dr in dt.Rows) {
+                        _AllCopyItemTemplateList.Add(new MpCopyItemTemplate(dr));
+                    }
                 }
             }
-            return copyItemTemplateList;
+            return _AllCopyItemTemplateList;
+        }
+        public static List<MpCopyItemTemplate> GetAllTemplatesForCopyItem(int copyItemId) {
+            return GetAllTemplates().Where(x => x.CopyItemId == copyItemId).ToList();
         }
 
         public MpCopyItemTemplate() : this(0,MpHelpers.Instance.GetRandomBrushColor(),"Default Template Name") { }
@@ -83,6 +89,7 @@ namespace MpWpfApp {
                             { "@tn", TemplateName }
                     },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
+                GetAllTemplates().Add(this);
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpCopyItemTemplate set MpCopyItemTemplateGuid=@citg, fk_MpCopyItemId=@ciid, HexColor=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
@@ -93,6 +100,10 @@ namespace MpWpfApp {
                             { "@cid", HexColor },
                             { "@tn", TemplateName }
                     },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+                var cit = GetAllTemplates().Where(x => x.CopyItemTemplateId == CopyItemTemplateId).FirstOrDefault();
+                if (cit != null) {
+                    _AllCopyItemTemplateList[_AllCopyItemTemplateList.IndexOf(cit)] = this;
+                }
             }
         }
         public void DeleteFromDatabase() {
@@ -108,6 +119,8 @@ namespace MpWpfApp {
                 new Dictionary<string, object> {
                     { "@citid", CopyItemTemplateId }
                 },CopyItemTemplateGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+
+            GetAllTemplates().Remove(this);
         }
     }
 }

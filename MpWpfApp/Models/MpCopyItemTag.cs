@@ -13,7 +13,6 @@ namespace MpWpfApp {
     [Table("MpCopyItemTag")]
     public class MpCopyItemTag : MpDbModelBase, MpISyncableDbObject {
         private static List<MpCopyItemTag> _AllCopyItemTagList = null;
-        public static int TotalCopyItemTagCount = 0;
 
         #region Columns
         [PrimaryKey, AutoIncrement]
@@ -21,7 +20,7 @@ namespace MpWpfApp {
         public int CopyItemTagId { get; set; }
 
         [Column("MpCopyItemTagGuid")]
-        public  string Guid { get; set; }
+        public string Guid { get; set; }
 
         [Ignore]
         public Guid CopyItemTagGuid {
@@ -40,9 +39,15 @@ namespace MpWpfApp {
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
+        [Column("MpTagGuid")]
+        public string TagGuid { get; set; }
+
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
+
+        [Column("MpCopyItemGuid")]
+        public string CopyItemGuid { get; set; }
 
         public static List<MpCopyItemTag> GetAllCopyItemsForTagId(int tagId) {
             if (_AllCopyItemTagList == null) {
@@ -97,6 +102,13 @@ namespace MpWpfApp {
             return _AllCopyItemTagList.Where(x => x.TagId == tagId).ToList();
         }
 
+        public static List<MpCopyItemTag> GetCopyItemTagsByCopyItemId(int copyItemId) {
+            if (_AllCopyItemTagList == null) {
+                GetAllCopyItemTags();
+            }
+            return _AllCopyItemTagList.Where(x => x.CopyItemId == copyItemId).ToList();
+        }
+
         public static MpCopyItemTag GetCopyItemTagByGuid(string colorGuid) {
             if (_AllCopyItemTagList == null) {
                 GetAllCopyItemTags();
@@ -120,7 +132,9 @@ namespace MpWpfApp {
                 CopyItemTagGuid = System.Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
             }
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
+            CopyItemGuid = dr["MpCopyItemGuid"].ToString();
             TagId = Convert.ToInt32(dr["fk_MpTagId"].ToString());
+            TagGuid = dr["MpTagGuid"].ToString();
         }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
@@ -133,18 +147,22 @@ namespace MpWpfApp {
 
             if (CopyItemTagId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpCopyItemTag(MpCopyItemTagGuid,fk_MpCopyItemId,fk_MpTagId) values(@citg,@ciid,@tid)",
+                        "insert into MpCopyItemTag(MpCopyItemGuid,MpTagGuid,MpCopyItemTagGuid,fk_MpCopyItemId,fk_MpTagId) values(@cig,@tg,@citg,@ciid,@tid)",
                         new System.Collections.Generic.Dictionary<string, object> {
+                            { "@cig",CopyItemGuid },
+                            { "@tg", TagGuid },
                             { "@citg",CopyItemTagGuid.ToString() },
-                        { "@ciid", CopyItemId },
-                        { "@tid", TagId }
+                            { "@ciid", CopyItemId },
+                            { "@tid", TagId }
                     }, CopyItemTagGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemTagId = MpDb.Instance.GetLastRowId("MpCopyItemTag", "pk_MpCopyItemTagId");
                 GetAllCopyItemTags().Add(this);
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpCopyItemTag set MpCopyItemTagGuid=@citg, fk_MpCopyItemId=@ciid,fk_MpTagId=@tid where pk_MpCopyItemTagId=@citid",
+                    "update MpCopyItemTag set MpCopyItemGuid=@cig, MpTagGuid=@tg, MpCopyItemTagGuid=@citg, fk_MpCopyItemId=@ciid,fk_MpTagId=@tid where pk_MpCopyItemTagId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
+                        { "@cig",CopyItemGuid },
+                        { "@tg", TagGuid },
                         { "@citid",CopyItemTagId },
                         { "@citg",CopyItemTagGuid.ToString() },
                         { "@ciid", CopyItemId },
@@ -183,6 +201,8 @@ namespace MpWpfApp {
                 new Dictionary<string, object> {
                     { "@citid", CopyItemTagId }
                 }, CopyItemTagGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+
+            GetAllCopyItemTags().Remove(this);
         }
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
@@ -201,10 +221,12 @@ namespace MpWpfApp {
                         break;
                     case "fk_MpCopyItemId":
                         var cidr = MpDb.Instance.GetDbDataRowByTableGuid("MpCopyItem", li.AffectedColumnValue);
+                        newCopyItemTag.CopyItemGuid = li.AffectedColumnValue;
                         newCopyItemTag.CopyItemId = new MpCopyItem(cidr).CopyItemId;
                         break;
                     case "fk_MpTagId":
                         var tdr = MpDb.Instance.GetDbDataRowByTableGuid("MpTag", li.AffectedColumnValue);
+                        newCopyItemTag.TagGuid = li.AffectedColumnValue;
                         newCopyItemTag.TagId = new MpTag(tdr).TagId;
                         break;
                     default:
@@ -221,22 +243,19 @@ namespace MpWpfApp {
             await Task.Delay(0);
             var dbLog = new MpCopyItemTag() {
                 CopyItemTagGuid = System.Guid.Parse(objParts[0]),
-                CopyItemId = Convert.ToInt32(objParts[1]),
-                TagId = Convert.ToInt32(objParts[2]),
+                CopyItemGuid = objParts[1],
+                TagGuid = objParts[2]
             };
             return dbLog;
         }
 
         public string SerializeDbObject() {
-            var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
-            var tg = MpTag.GetTagById(TagId)?.TagGuid;
-
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
                 CopyItemTagGuid.ToString(),
-                cig,
-                tg);
+                CopyItemGuid,
+                TagGuid);
         }
 
         public Type GetDbObjectType() {
@@ -259,11 +278,11 @@ namespace MpWpfApp {
                 "MpCopyItemTagGuid",
                 diffLookup);
             diffLookup = CheckValue(CopyItemId, other.CopyItemId,
-                "fk_CopyItemId",
+                "fk_MpCopyItemId",
                 diffLookup,
                 cig);
             diffLookup = CheckValue(TagId, other.TagId,
-                "fk_TagId",
+                "fk_MpTagId",
                 diffLookup,
                 tg);
 

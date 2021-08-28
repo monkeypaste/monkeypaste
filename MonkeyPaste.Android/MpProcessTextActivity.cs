@@ -76,10 +76,6 @@ namespace MonkeyPaste.Droid {
             }            
         }
 
-
-
-        
-
         private byte[] GetByteArray(Bitmap bmp) {
             using (var stream = new MemoryStream()) {
                 bmp.Compress(Bitmap.CompressFormat.Png, 0, stream);

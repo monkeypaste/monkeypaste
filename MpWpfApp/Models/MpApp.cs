@@ -18,6 +18,9 @@ namespace MpWpfApp {
 
         public int AppId { get; set; } = 0;
         public Guid AppGuid { get; set; }
+
+        public int UserDeviceId { get; set; }
+
         public int IconId { get; set; }
 
         public string AppPath { get; set; } = string.Empty;
@@ -80,14 +83,12 @@ namespace MpWpfApp {
             return _AllAppList;
         }
         public static MpApp GetAppById(int appId) {
-            if (_AllAppList == null) {
-                GetAllApps();
-            }
-            var udbpl = _AllAppList.Where(x => x.AppId == appId).ToList();
-            if (udbpl.Count > 0) {
-                return udbpl[0];
-            }
-            return null;
+            return GetAllApps().Where(x => x.AppId == appId).FirstOrDefault();
+        }
+
+        public static MpApp GetAppByHandle(IntPtr handle) {
+            string appPath = MpHelpers.Instance.GetProcessPath(handle);
+            return GetAllApps().Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();
         }
 
         public static bool IsAppRejectedByHandle(IntPtr hwnd) {
@@ -105,17 +106,13 @@ namespace MpWpfApp {
         #endregion
 
         public MpApp(bool isAppRejected, IntPtr hwnd) : this() {
+            //used for for new app sources when copy item added from clipboard
             AppGuid = Guid.NewGuid();
             AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
             AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
             IsAppRejected = isAppRejected;
             Icon = new MpIcon(MpHelpers.Instance.GetIconImage(AppPath));
-
-            //IconImage = MpHelpers.Instance.GetIconImage(AppPath);
-            //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio,Colors.White);
-            //IconHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
-            //IconSelectedHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
-            //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
+            UserDeviceId = MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid).UserDeviceId;
         }
 
         public MpApp(string appPath) : this() {
@@ -124,26 +121,17 @@ namespace MpWpfApp {
             AppPath = appPath;
             AppName = appPath;
             IsAppRejected = true;
-            Icon = new MpIcon(MpHelpers.Instance.GetIconImage(AppPath));
-
-            //IconImage = MpHelpers.Instance.GetIconImage(AppPath);
-            //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
-            //IconHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
-            //IconSelectedHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
-            //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
+            Icon = new MpIcon(MpHelpers.Instance.GetIconImage(AppPath)); 
+            UserDeviceId = MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid).UserDeviceId;
         }
 
         public MpApp(string url, bool isDomainRejected) : this() {
+            //experimental, will be used to block url domains 
             AppGuid = Guid.NewGuid();
             AppPath = url;
             AppName = MpHelpers.Instance.GetUrlDomain(url);
             IsAppRejected = isDomainRejected;
             Icon = new MpIcon(MpHelpers.Instance.GetUrlFavicon(url));
-            //IconImage = MpHelpers.Instance.GetUrlFavicon(url);
-            //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
-            //IconHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
-            //IconSelectedHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink); 
-            //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
         }
 
         public MpApp() { }
@@ -154,37 +142,13 @@ namespace MpWpfApp {
         
         public override void LoadDataRow(DataRow dr) {
             AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
+            UserDeviceId = Convert.ToInt32(dr["fk_MpUserDeviceId"].ToString());
             AppGuid = Guid.Parse(dr["MpAppGuid"].ToString());
             AppPath = dr["SourcePath"].ToString();
             AppName = dr["AppName"].ToString();
             IconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
             Icon = new MpIcon(IconId);
-            //IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
-            //IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
-            //IconSelectedHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconSelectedHighlightBorderBlob"]);
-            //IconHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconHighlightBorderBlob"]);
             IsAppRejected = Convert.ToInt32(dr["IsAppRejected"].ToString()) == 1;
-
-            //PrimaryIconColorList.Clear();
-            //for (int i = 0; i < 5; i++) {
-            //    ColorId[i] = Convert.ToInt32(dr["fk_MpColorId"+(i+1)].ToString());
-            //    if(ColorId[i] > 0) {
-            //        PrimaryIconColorList.Add(new MpColor(ColorId[i]));
-            //    }
-            //}      
-        }
-
-        private bool IsAltered() {
-            var dt = MpDb.Instance.Execute(
-                @"SELECT pk_MpAppId FROM MpApp WHERE MpAppGuid=@ag AND SourcePath=@sp AND AppName=@an AND IsAppRejected=@iar AND fk_MpIconId=@iid",
-                new Dictionary<string, object> {
-                    { "@ag", AppGuid.ToString() },
-                    { "@sp", AppPath },
-                    { "@an", AppName },
-                    { "@iar", Convert.ToInt32(IsAppRejected) },
-                    { "@iid", IconId },
-                });
-            return dt.Rows.Count == 0;
         }
 
         public override void WriteToDatabase() {
@@ -195,45 +159,41 @@ namespace MpWpfApp {
             }
         }
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if (!HasChanged) {
-                return;
-            }
             Icon.WriteToDatabase();
             IconId = Icon.IconId;
 
             if (AppId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpApp(MpAppGuid,fk_MpIconId,SourcePath,IsAppRejected,AppName) " +
-                        "values (@ag,@iid,@sp,@iar,@an)",
+                        "insert into MpApp(fk_MpUserDeviceId,MpAppGuid,fk_MpIconId,SourcePath,IsAppRejected,AppName) " +
+                        "values (@udid,@ag,@iid,@sp,@iar,@an)",
                         new Dictionary<string, object> {
                             { "@ag", AppGuid.ToString() },
                             { "@iid", IconId },
+                            { "@udid", UserDeviceId },
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName },
                         },AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
-                AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
+                AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");
+                GetAllApps().Add(this);
             } else {
                 MpDb.Instance.ExecuteWrite(
                     //"update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
-                    "update MpApp set MpAppGuid=@ag,fk_MpIconId=@iid, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
+                    "update MpApp set fk_MpUserDeviceId=@udid, MpAppGuid=@ag,fk_MpIconId=@iid, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
-                        { "@ag", AppGuid.ToString() },
+                            { "@ag", AppGuid.ToString() },
                             { "@iid", IconId },
-                        { "@iar", Convert.ToInt32(IsAppRejected) },
-                        { "@sp", AppPath },
-                        { "@an", AppName },
-                        { "@aid", AppId }
+                            { "@udid", UserDeviceId },
+                            { "@iar", Convert.ToInt32(IsAppRejected) },
+                            { "@sp", AppPath },
+                            { "@an", AppName },
+                            { "@aid", AppId }
                     }, AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+                var cit = GetAllApps().Where(x => x.AppId == AppId).FirstOrDefault();
+                if (cit != null) {
+                    _AllAppList[_AllAppList.IndexOf(cit)] = this;
+                }
             }
-
-            var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
-            if (al.Count > 0) {
-                _AllAppList[_AllAppList.IndexOf(al[0])] = this;
-            } else {
-                _AllAppList.Add(this);
-            }
-
             MpAppCollectionViewModel.Instance.Refresh();
         }
         public void DeleteFromDatabase() {
@@ -245,7 +205,6 @@ namespace MpWpfApp {
         }
 
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-
             if (AppId <= 0) {
                 return;
             }
@@ -257,10 +216,7 @@ namespace MpWpfApp {
                     { "@aid", AppId }
                 }, AppGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
 
-            var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
-            if (al.Count > 0) {
-                _AllAppList.RemoveAt(_AllAppList.IndexOf(al[0]));
-            }
+            GetAllApps().Remove(this);
         }
 
         public string GetAppName() {

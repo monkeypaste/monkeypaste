@@ -141,7 +141,7 @@
     <Compile Include="Models\Base\MpObject.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpApp.cs" />
-    <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpUserDevice.cs" />
     <Compile Include="Models\MpCopyItemTag.cs" />
     <Compile Include="Models\MpSyncHistory.cs" />
     <Compile Include="Models\MpDbLog.cs" />

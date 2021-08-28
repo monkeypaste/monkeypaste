@@ -26,11 +26,11 @@ namespace MpWpfApp {
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
 
-        public MpClient Client { get; set; }
-        public MpUser User { get; set; }
+        //public MpUserDevice Client { get; set; }
+        //public MpUser User { get; set; }
 
-        public string IdentityToken { get; set; }
-        public string AccessToken { get; set; }
+        //public string IdentityToken { get; set; }
+        //public string AccessToken { get; set; }
 
         private object _rdLock;
         //private int _passwordAttempts = 0;
@@ -47,12 +47,7 @@ namespace MpWpfApp {
         public MpDb() {
             Init();
         }
-        private void Init() {
-            if(string.IsNullOrEmpty(Properties.Settings.Default.ThisClientGuid)) {
-                Properties.Settings.Default.ThisClientGuid = Guid.NewGuid().ToString();
-            }
-            InitUser(IdentityToken);
-            InitClient(AccessToken);
+        private void Init() {            
             InitDb();
             _isLoaded = true;
         }
@@ -76,12 +71,7 @@ namespace MpWpfApp {
             Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
         }
-        public void InitUser(string idToken) {
-            // User = new MpUser() { IdentityToken = idToken };
-        }
-        public void InitClient(string accessToken) {
-            Client = new MpClient(0, 3, MpHelpers.Instance.GetLocalIp4Address()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
-        }
+
         public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA, List<MpCopyItem> listB) {
             //sorts merged list by copy datetime
             List<MpCopyItem> mergedList = new List<MpCopyItem>();
@@ -367,6 +357,7 @@ namespace MpWpfApp {
         }
         private string GetCreateString() {
             return @"
+                    ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpSyncHistory (
                       pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , OtherClientGuid text
@@ -399,12 +390,6 @@ namespace MpWpfApp {
                     , SortIdx integer
                     , HexColor text
                     );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpPlatformType (
-                      pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , PlatformName text NOT NULL 
-                    );
-                    INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac'),('linux'),('web');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -479,52 +464,10 @@ namespace MpWpfApp {
                     );
                     INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
                     ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpDeviceType (
-                      pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , DeviceTypeName text NULL 
-                    );
-                    INSERT INTO MpDeviceType(DeviceTypeName) VALUES('pc'),('mac'),('android'),('iphone'),('ipad'),('tablet'),('web');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpPlatform (
-                      pk_MpPlatformId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpPlatformTypeId integer NOT NULL
-                    , fk_MpDeviceTypeId integer NOT NULL
-                    , Version text NULL 
-                    , CONSTRAINT FK_MpPlatform_0_0 FOREIGN KEY (fk_MpDeviceTypeId) REFERENCES MpDeviceType (pk_MpDeviceTypeId)
-                    , CONSTRAINT FK_MpPlatform_1_0 FOREIGN KEY (fk_MpPlatformTypeId) REFERENCES MpPlatformType (pk_MpPlatformTypeId)
-                    );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpCopyItemType (
-                      pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , TypeName text NULL 
-                    );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list'),('composite');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpSortType (
-                      pk_MpSortTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , SortTypeName text NULL 
-                    );
-                    INSERT INTO MpSortType(SortTypeName) VALUES('Date'),('Application'),('Title'),('Content'),('Type'),('Usage');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpCopyItemSortTypeOrder (
-                      pk_MpCopyItemSortTypeOrderId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemSortTypeOrderGuid text
-                    , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpSortTypeId integer NOT NULL
-                    , SortOrder integer NOT NULL 
-                    , CONSTRAINT FK_MpCopyItemSortTypeOrder_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCopyItemSortTypeOrder_1_0 FOREIGN KEY (fk_MpSortTypeId) REFERENCES MpSortType (pk_MpSortTypeId)
-                    );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpClient (
-                      pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpClientGuid text
-                    , fk_MpPlatformId integer NOT NULL
-                    , Ip4Address text NULL 
-                    , AccessToken text NULL 
-                    , LoginDateTime datetime NOT NULL
-                    , LogoutDateTime datetime NULL
-                    , CONSTRAINT FK_MpClient_0_0 FOREIGN KEY (fk_MpPlatformId) REFERENCES MpPlatform (pk_MpPlatformId)
+                    CREATE TABLE MpUserDevice (
+                      pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUserDeviceGuid text 
+                    , PlatformTypeId integer NOT NULL
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
@@ -533,8 +476,10 @@ namespace MpWpfApp {
                     , SourcePath text NOT NULL 
                     , AppName text 
                     , IsAppRejected integer NOT NULL   
+                    , fk_MpUserDeviceId integer
                     , fk_MpIconId integer
-                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
+                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
+                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     );   
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpUrlDomain (
@@ -570,7 +515,6 @@ namespace MpWpfApp {
                     , MpCopyItemGuid text
                     , fk_ParentCopyItemId integer default 0
                     , fk_MpCopyItemTypeId integer NOT NULL
-                    , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
                     , fk_MpUrlId integer
                     , CompositeSortOrderIdx integer default 0
@@ -585,11 +529,8 @@ namespace MpWpfApp {
                     , ItemHtml text 
                     , ItemDescription text
                     , ItemCsv text
-                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL          
-                    
+                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
-                    , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
-                    , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId) 
                     , CONSTRAINT FK_MpCopyItem_5_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)
                     , CONSTRAINT FK_MpCopyItem_6_0 FOREIGN KEY (fk_SsMpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)    
@@ -599,7 +540,9 @@ namespace MpWpfApp {
                       pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemTagGuid text
                     , fk_MpCopyItemId integer NOT NULL
+                    , MpCopyItemGuid text
                     , fk_MpTagId integer NOT NULL
+                    , MpTagGuid text
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
@@ -627,14 +570,14 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , SourceClientGuid text
+                    , MpPasteHistoryGuid text
                     , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpClientId integer NOT NULL
-                    , fk_MpAppId integer                     
-                    , fk_MpUrlId integer 
+                    , fk_MpUserDeviceId integer NOT NULL
+                    , fk_MpAppId integer default 0                    
+                    , fk_MpUrlId integer default 0
                     , PasteDateTime datetime NOT NULL
                     , CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
-                    , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
+                    , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
                     , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpPasteHistory_3_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
                     );
@@ -644,7 +587,7 @@ namespace MpWpfApp {
         private string GetAllData() {
             return @"   
                 select * from MpPlatform where pk_MpPlatformId > 0;
-                select * from MpClient where pk_MpClientId > 0;
+                select * from MpUserDevice where pk_MpUserDeviceId > 0;
                 select * from MpIcon where pk_MpIconId > 0;
                 select * from MpApp where pk_MpAppId > 0;
                 select * from MpCopyItem where pk_MpCopyItemId > 0;
@@ -662,7 +605,7 @@ namespace MpWpfApp {
         private string GetClearString() {
             return @"   
                 delete from MpPlatform where pk_MpPlatformId > 0;
-                delete from MpClient where pk_MpClientId > 0;
+                delete from MpUserDevice where pk_MpUserDeviceId > 0;
                 delete from MpIcon where pk_MpIconId > 0;
                 delete from MpApp where pk_MpAppId > 0;
                 delete from MpCopyItem where pk_MpCopyItemId > 0;
@@ -681,7 +624,7 @@ namespace MpWpfApp {
         private string GetDropString() {
             return @"   
                 drop table if exists MpPlatform;
-                drop table if exists MpClient;
+                drop table if exists MpUserDevice;
                 drop table if exists MpIcon;
                 drop table if exists MpApp;
                 drop table if exists MpCopyItem;

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
-    public class MpCopyItemTag : MpDbModelBase {
+    public class MpCopyItemTag : MpDbModelBase, MpISyncableDbObject {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTagId")]
@@ -35,9 +35,15 @@ namespace MonkeyPaste {
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
+        [Column("MpTagGuid")]
+        public string TagGuid { get; set; }
+
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
+
+        [Column("MpCopyItemGuid")]
+        public string CopyItemGuid { get; set; }
 
         public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagId(int tagId) {
             var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
@@ -58,6 +64,92 @@ namespace MonkeyPaste {
             foreach (var cit in citl) {
                 await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
             }
+        }
+
+        public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var citdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItemTag", tagGuid);
+            MpCopyItemTag newCopyItemTag = null;
+            if (citdr == null) {
+                newCopyItemTag = new MpCopyItemTag();
+            } else {
+                newCopyItemTag = citdr as MpCopyItemTag;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpCopyItemTagGuid":
+                        newCopyItemTag.CopyItemTagGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpCopyItemId":
+                        var cidr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItem", li.AffectedColumnValue) as MpCopyItem;
+                        newCopyItemTag.CopyItemGuid = cidr.Guid;
+                        newCopyItemTag.CopyItemId = cidr.Id;
+                        break;
+                    case "fk_MpTagId":
+                        var tdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", li.AffectedColumnValue) as MpTag;
+                        newCopyItemTag.TagGuid = tdr.Guid;
+                        newCopyItemTag.TagId = tdr.Id;
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            //newCopyItemTag.WriteToDatabase(fromClientGuid);
+            return newCopyItemTag;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpCopyItemTag() {
+                CopyItemTagGuid = System.Guid.Parse(objParts[0]),
+                CopyItemId = Convert.ToInt32(objParts[1]),
+                TagId = Convert.ToInt32(objParts[2]),
+            };
+            return dbLog;
+        }
+
+        public string SerializeDbObject() {
+            var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
+            var tg = MpTag.GetTagById(TagId)?.TagGuid;
+
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}",
+                ParseToken,
+                CopyItemTagGuid.ToString(),
+                cig,
+                tg);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpCopyItemTag);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
+            var tg = MpTag.GetTagById(TagId)?.TagGuid;
+            MpCopyItemTag other = null;
+            if (drOrModel is MpCopyItemTag) {
+                other = drOrModel as MpCopyItemTag;
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpCopyItemTag();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(CopyItemTagGuid, other.CopyItemTagGuid,
+                "MpCopyItemTagGuid",
+                diffLookup);
+            diffLookup = CheckValue(CopyItemId, other.CopyItemId,
+                "fk_MpCopyItemId",
+                diffLookup,
+                cig);
+            diffLookup = CheckValue(TagId, other.TagId,
+                "fk_MpTagId",
+                diffLookup,
+                tg);
+
+            return diffLookup;
         }
 
         #endregion

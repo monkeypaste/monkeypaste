@@ -413,7 +413,7 @@ namespace MonkeyPaste {
             string smsgStr = smsg.SerializeDbObject();
             Byte[] bytesSent = Encoding.ASCII.GetBytes(smsgStr);
 
-            MpConsole.WriteLine(@"{0} Sending {1}: " + smsgStr, DateTime.Now.ToString(), Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType));
+            MpConsole.WriteLine(string.Format(@"{0} Sending {1}: {2}", DateTime.Now.ToString(), Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType), smsgStr));
             try {
                 s.Send(bytesSent, bytesSent.Length, SocketFlags.None);
             }
@@ -435,7 +435,7 @@ namespace MonkeyPaste {
                 response = response.Replace(MpStreamMessage.EofToken, string.Empty);
             }
             var smsg = MpStreamMessage.Parse(response);
-            MpConsole.WriteLine(@"{0} Received {1}: " + response, DateTime.Now.ToString(), Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType));
+            MpConsole.WriteLine(string.Format(@"{0} Received {1}: {2}", DateTime.Now.ToString(), Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType), response));
             return smsg;
         }
 

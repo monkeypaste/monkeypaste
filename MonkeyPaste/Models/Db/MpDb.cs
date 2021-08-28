@@ -576,7 +576,7 @@ namespace MonkeyPaste {
 
         public async Task PerformSync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
-            string remoteClientGuid) {
+            string remoteClientGuid) {            
             var lastSyncDt = await MpDb.Instance.GetLastSyncForRemoteDevice(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MpDbLog>>();

@@ -119,7 +119,7 @@ namespace MonkeyPaste {
                 if (e is MpCopyItemTag ncit) {
                     if (ncit.TagId == Tag.Id) {
                         //occurs when copy item is linked to tag
-                        var nci = await MpCopyItem.GetCopyItemById(ncit.CopyItemId);
+                        var nci = await MpCopyItem.GetCopyItemByIdAsync(ncit.CopyItemId);
                         if (!Tag.CopyItemList.Contains(nci)) {
                             Tag.CopyItemList.Add(nci);
 
@@ -127,9 +127,12 @@ namespace MonkeyPaste {
                         }
                     }
                 } else if (e is MpCopyItem nci) {
-                    //occurs for all and recent
+                    //occurs for new/synced copy items
                     bool isLinked = await Tag.IsLinkedWithCopyItemAsync(nci);
-                    if (isLinked && !Tag.CopyItemList.Any(x=>x.Id == nci.Id)) {
+                    if(!isLinked && (Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId)) {
+                        isLinked = true;
+                    }
+                    if (isLinked && !Tag.CopyItemList.Any(x=>x.CopyItemGuid == nci.CopyItemGuid)) {
                         Tag.CopyItemList.Add(nci);
                         OnPropertyChanged(nameof(CopyItemCount));
                     }

@@ -114,7 +114,7 @@ namespace MonkeyPaste {
 
         private async void LoadCopyItem(int ciid) {
             try {
-                var ci = await MpCopyItem.GetCopyItemById(ciid);
+                var ci = await MpCopyItem.GetCopyItemByIdAsync(ciid);
                 BindingContext = new MpCopyItemDetailPageViewModel(ci);
 
             } catch (Exception) {

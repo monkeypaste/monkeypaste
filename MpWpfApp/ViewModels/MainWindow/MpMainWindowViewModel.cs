@@ -285,6 +285,14 @@ namespace MpWpfApp {
 
             MpPluginManager.Instance.Init();
 
+            if (string.IsNullOrEmpty(Properties.Settings.Default.ThisClientGuid)) {
+                Properties.Settings.Default.ThisClientGuid = Guid.NewGuid().ToString();                
+            }
+
+            if (MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid) == null) {
+                new MpUserDevice(Properties.Settings.Default.ThisClientGuid, MpUserDeviceType.Windows).WriteToDatabase();
+            }
+
             SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();
