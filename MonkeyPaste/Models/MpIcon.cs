@@ -8,9 +8,11 @@ using Xamarin.Forms;
 using FFImageLoading.Forms;
 using SkiaSharp;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace MonkeyPaste {
-    public class MpIcon : MpDbModelBase {
+    public class MpIcon : MpDbModelBase, MpISyncableDbObject {
         #region Columns
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpIconId")]
@@ -137,25 +139,151 @@ namespace MonkeyPaste {
         public MpIcon() {
         }
 
-        
+        public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var iconDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", iconGuid);
+            MpIcon icon = null;
+            if (iconDr == null) {
+                icon = new MpIcon();
+            } else {
+                icon = iconDr as MpIcon;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpIconGuid":
+                        icon.IconGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_IconDbImageId":
+                        icon.IconImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
+                        icon.IconImageId = icon.IconImage.Id;
+                        break;
+                    case "fk_IconBorderDbImageId":
+                        icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
+                        icon.IconBorderImageId = icon.IconBorderImage.Id;
+                        break;
+                    case "fk_IconSelectedHighlightBorderDbImageId":
+                        icon.IconBorderHighlightSelectedImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
+                        icon.IconBorderHighlightSelectedImageId = icon.IconBorderHighlightSelectedImage.Id;
+                        break;
+                    case "fk_IconHighlightBorderDbImageId":
+                        icon.IconBorderHighlightImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
+                        icon.IconBorderHighlightImageId = icon.IconBorderHighlightImage.Id;
+                        break;
+                    case "HexColor1":
+                        icon.HexColor1 = li.AffectedColumnValue;
+                        break;
+                    case "HexColor2":
+                        icon.HexColor2 = li.AffectedColumnValue;
+                        break;
+                    case "HexColor3":
+                        icon.HexColor3 = li.AffectedColumnValue;
+                        break;
+                    case "HexColor4":
+                        icon.HexColor4 = li.AffectedColumnValue;
+                        break;
+                    case "HexColor5":
+                        icon.HexColor5 = li.AffectedColumnValue;
+                        break;
+                    default:
+                        MonkeyPaste.MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return icon;
+        }
 
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var icon = new MpIcon() {
+                IconGuid = System.Guid.Parse(objParts[0])
+            };
+            icon.IconImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[1]) as MpDbImage;
+            icon.IconImageId = icon.IconImage.Id;
 
-        //public override void DeleteFromDatabase() {
-        //    throw new NotImplementedException();
-        //}
+            icon.IconBorderImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[2]) as MpDbImage;
+            icon.IconBorderImageId = icon.IconBorderImage.Id;
 
-        //public override string ToString() {
-        //    throw new NotImplementedException();
-        //}
+            icon.IconBorderHighlightSelectedImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[3]) as MpDbImage;
+            icon.IconBorderHighlightSelectedImageId = icon.IconBorderHighlightSelectedImage.Id;
 
-        //public override void WriteToDatabase() {
-        //    throw new NotImplementedException();
-        //}
+            icon.IconBorderHighlightImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[4]) as MpDbImage;
+            icon.IconBorderHighlightImageId = icon.IconBorderHighlightImage.Id;
 
-        //private BitmapSource CreateBorder(BitmapSource img, double scale) {
-        //    var border = MpHelpers.Instance.TintBitmapSource(img, Colors.White);
-        //    var borderSize = new Size(img.Width * scale, img.Height * scale);
-        //    return MpHelpers.Instance.ResizeBitmapSource(border, borderSize);
-        //}
+            icon.HexColor1 = objParts[5];
+            icon.HexColor2 = objParts[6];
+            icon.HexColor3 = objParts[7];
+            icon.HexColor4 = objParts[8];
+            icon.HexColor5 = objParts[9];
+
+            return icon;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}",
+                ParseToken,
+                IconGuid.ToString(),
+                IconImage.DbImageGuid.ToString(),
+                IconBorderImage.DbImageGuid.ToString(),
+                IconBorderHighlightSelectedImage.DbImageGuid.ToString(),
+                IconBorderHighlightImage.DbImageGuid.ToString(),
+                HexColor1,
+                HexColor2,
+                HexColor3,
+                HexColor4,
+                HexColor5);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpIcon);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpIcon other = null;
+            if (drOrModel is MpIcon) {
+                other = drOrModel as MpIcon;
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpIcon();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(IconGuid, other.IconGuid,
+                "MpIconGuid",
+                diffLookup,
+                IconGuid.ToString());
+            diffLookup = CheckValue(IconImageId, other.IconImageId,
+                "fk_IconDbImageId",
+                diffLookup,
+                IconImage.DbImageGuid.ToString());
+            diffLookup = CheckValue(IconBorderImageId, other.IconBorderImageId,
+                "fk_IconBorderDbImageId",
+                diffLookup,
+                IconBorderImage.DbImageGuid.ToString());
+            diffLookup = CheckValue(IconBorderHighlightSelectedImageId, other.IconBorderHighlightSelectedImageId,
+                "fk_IconSelectedHighlightBorderDbImageId",
+                diffLookup,
+                IconBorderHighlightSelectedImage.DbImageGuid.ToString());
+            diffLookup = CheckValue(IconBorderHighlightImageId, other.IconBorderHighlightImageId,
+                "fk_IconHighlightBorderDbImageId",
+                diffLookup,
+                IconBorderHighlightImage.DbImageGuid.ToString());
+            diffLookup = CheckValue(HexColor1, other.HexColor1,
+                "HexColor1",
+                diffLookup);
+            diffLookup = CheckValue(HexColor2, other.HexColor2,
+                "HexColor2",
+                diffLookup);
+            diffLookup = CheckValue(HexColor3, other.HexColor3,
+                "HexColor3",
+                diffLookup);
+            diffLookup = CheckValue(HexColor4, other.HexColor4,
+                "HexColor4",
+                diffLookup);
+            diffLookup = CheckValue(HexColor5, other.HexColor5,
+                "HexColor5",
+                diffLookup);
+            return diffLookup;
+        }
     }
 }

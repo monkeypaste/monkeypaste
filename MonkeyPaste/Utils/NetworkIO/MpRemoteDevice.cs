@@ -25,8 +25,15 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpRemoteDevice() { }
-        public MpRemoteDevice(object s, MpDeviceEndpoint rep) :this() {
+        public CancellationTokenSource Cts { get; set; }
+        public CancellationToken Ct { get; set; }
+
+        public MpRemoteDevice() {
+            Cts = new CancellationTokenSource();
+            Ct = Cts.Token;
+        }
+
+        public MpRemoteDevice(object s, MpDeviceEndpoint rep) : this() {
             RemoteSocket = s;
             RemoteEndpoint = rep;
         }

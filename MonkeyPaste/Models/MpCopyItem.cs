@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         #region Column Definitions
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemId")]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = 0;
 
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
@@ -238,9 +238,7 @@ namespace MonkeyPaste {
                 foreach (var tag in defaultTagList) {
                     var CopyItemTag = new MpCopyItemTag() {
                         CopyItemId = newCopyItem.Id,
-                        CopyItemGuid = newCopyItem.Guid,
-                        TagId = tag.Id,
-                        TagGuid = tag.Guid
+                        TagId = tag.Id
                     };
                     await MpDb.Instance.AddItemAsync<MpCopyItemTag>(CopyItemTag);
                 }

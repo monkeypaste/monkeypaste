@@ -216,8 +216,10 @@ namespace MpWpfApp {
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
-                if (actionType != MpDbLogActionType.None && !ignoreSyncing && dbObject is MpISyncableDbObject) {
-                    OnSyncableChange?.Invoke(this, dbObjectGuid);
+                if (actionType != MpDbLogActionType.None && 
+                    !ignoreSyncing && 
+                    dbObject is MpISyncableDbObject) {
+                    OnSyncableChange?.Invoke(dbObject, dbObjectGuid);
                 } else if(dbObject != null) {
                     (dbObject as MpDbModelBase).NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
                 }
@@ -261,29 +263,40 @@ namespace MpWpfApp {
             }
             return null;
         }
+
+
         public object GetDbObjectByTableGuid(string tableName, string objGuid) {
-            using (var con = SetConnectionPCL()) {
-                TableMapping qtm = null;
-                foreach (var tm in con.TableMappings) {
-                    if (tm.TableName.ToLower() == tableName.ToLower()) {
-                        qtm = tm;
-                        break;
-                    }
-                }
-                if (qtm == null) {
-                    return null;
-                }
-
-                var dt = con.Query(
-                    qtm,
-                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
-                objGuid);
-
-                if (dt != null && dt.Count > 0) {
-                    return dt[0];
-                }
-                return null;
+            var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(tableName);
+            var dr = GetDbDataRowByTableGuid(tableName, objGuid);
+            object dbo = null;
+            if (dr == null) {
+                dbo = Activator.CreateInstance(dbot);
+            } else {
+                dbo = Activator.CreateInstance(dbot, dr);
             }
+            return dbo;
+            //using (var con = SetConnectionPCL()) {
+            //    TableMapping qtm = null;
+            //    foreach (var tm in con.TableMappings) {
+            //        if (tm.TableName.ToLower() == tableName.ToLower()) {
+            //            qtm = tm;
+            //            break;
+            //        }
+            //    }
+            //    if (qtm == null) {
+            //        return null;
+            //    }
+
+            //    var dt = con.Query(
+            //        qtm,
+            //    string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
+            //    objGuid);
+
+            //    if (dt != null && dt.Count > 0) {
+            //        return dt[0];
+            //    }
+            //    return null;
+            //}
             
         }
 
@@ -379,7 +392,6 @@ namespace MpWpfApp {
                       pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpDbImageGuid text
                     , ImageBase64 text
-                    , ImageBlob image
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpTag (
@@ -540,9 +552,7 @@ namespace MpWpfApp {
                       pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemTagGuid text
                     , fk_MpCopyItemId integer NOT NULL
-                    , MpCopyItemGuid text
                     , fk_MpTagId integer NOT NULL
-                    , MpTagGuid text
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
@@ -865,16 +875,16 @@ namespace MpWpfApp {
                           "MpColor",
                           "MpDbImage",
                           "MpIcon",
+                          "MpUserDevice",
                           "MpUrl",
                           "MpUrlDomain",
                           "MpApp",
                           "MpSource",
-                          "MpCompositeCopyItem",
-                          "MpCopyItemTag",
-                          "MpCopyItemTemplate",
                           "MpCopyItem",
                           "MpTag",
-                          "MpClient" };
+                          "MpCompositeCopyItem",
+                          "MpCopyItemTemplate",
+                          "MpCopyItemTag"};
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -884,11 +894,6 @@ namespace MpWpfApp {
 
         public object GetMainThreadObj() {
             return Application.Current.MainWindow;
-        }
-
-        public async Task<object> GetDbObjectByGuid(string guid) {
-            var dbo = await MpDb.Instance.GetDbObjectByGuid(guid);
-            return dbo;
         }
 
         public MpIStringToSyncObjectTypeConverter GetTypeConverter() {

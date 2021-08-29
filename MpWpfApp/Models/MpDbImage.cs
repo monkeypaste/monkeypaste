@@ -6,15 +6,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Linq;
+using FFImageLoading.Helpers.Exif;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpDbImage : MpDbModelBase {
+    public class MpDbImage : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
+        private static List<MpDbImage> _AllImagesList = null;
+
         public int DbImageId { get; set; }
         public Guid DbImageGuid { get; set; }
 
         public BitmapSource DbImage { get; set; }
 
         public string DbImageBase64 { get; set; }
+
+
+        public static List<MpDbImage> GetAllImages() {
+            if (_AllImagesList == null) {
+                _AllImagesList = new List<MpDbImage>();
+                DataTable dt = MpDb.Instance.Execute("select * from MpDbImage", null);
+                if (dt != null && dt.Rows.Count > 0) {
+                    foreach (DataRow dr in dt.Rows) {
+                        _AllImagesList.Add(new MpDbImage(dr));
+                    }
+                }
+            }
+            return _AllImagesList;
+        }
+
+        public static MpDbImage GetImageById(int imgId) {
+            return GetAllImages().Where(x => x.DbImageId == imgId).FirstOrDefault();
+        }
+
 
         public MpDbImage() { }
 
@@ -47,19 +71,8 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             DbImageId = Convert.ToInt32(dr["pk_MpDbImageId"].ToString());
             DbImageGuid = Guid.Parse(dr["MpDbImageGuid"].ToString());
-            //DbImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ImageBlob"]);
             DbImageBase64 = dr["ImageBase64"].ToString();
             DbImage = MpHelpers.Instance.ConvertStringToBitmapSource(DbImageBase64);
-        }
-
-        private bool IsAltered() {
-            var dt = MpDb.Instance.Execute(
-                @"SELECT pk_MpDbImageId FROM MpDbImage WHERE MpDbImageGuid=@dbig AND ImageBase64=@ib64",
-                new Dictionary<string, object> {
-                    { "@dbig", DbImageGuid.ToString() },
-                    { "@ib64", DbImageBase64 }
-                });
-            return dt.Rows.Count == 0;
         }
 
         public override void WriteToDatabase() {
@@ -70,9 +83,6 @@ namespace MpWpfApp {
             }
         }
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if (!IsAltered()) {
-                return;
-            }
             string imgStr = DbImageBase64;//MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
             if (DbImageId == 0) {
                 MpDb.Instance.ExecuteWrite(
@@ -102,12 +112,81 @@ namespace MpWpfApp {
         }
 
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-
             MpDb.Instance.ExecuteWrite(
                 "delete from MpDbImage where pk_MpDbImageId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", DbImageId }
                 },DbImageGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
+        }
+
+        public async Task<object> CreateFromLogs(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            var imgDr = MpDb.Instance.GetDbDataRowByTableGuid("MpDbImage", imgGuid);
+            MpDbImage img = null;
+            if (imgDr == null) {
+                img = new MpDbImage();
+            } else {
+                img = new MpDbImage(imgDr);
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpDbImageGuid":
+                        img.DbImageGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "ImageBase64":
+                        img.DbImageBase64 = li.AffectedColumnValue;
+                        img.DbImage = MpHelpers.Instance.ConvertStringToBitmapSource(img.DbImageBase64);
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return img;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var img = new MpDbImage() {
+                DbImageGuid = System.Guid.Parse(objParts[0]),
+                DbImageBase64 = objParts[1]
+            };
+
+            img.DbImage = MpHelpers.Instance.ConvertStringToBitmapSource(DbImageBase64);
+            return img;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}",
+                ParseToken,
+                DbImageGuid.ToString(),
+                DbImageBase64);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpDbImage);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpDbImage other = null;
+            if (drOrModel is DataRow) {
+                other = new MpDbImage(drOrModel as DataRow);
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpDbImage();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(DbImageGuid, other.DbImageGuid,
+                "MpDbImageGuid",
+                diffLookup);
+            diffLookup = CheckValue(DbImageBase64, other.DbImageBase64,
+                "ImageBase64",
+                diffLookup);
+
+            return diffLookup;
         }
     }
 }

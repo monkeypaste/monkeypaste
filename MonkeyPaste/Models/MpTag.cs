@@ -49,9 +49,6 @@ namespace MonkeyPaste {
         public string HexColor { get; set; }
 
         public string TagName { get; set; } = string.Empty;
-
-        //unused        
-        //public int ParentTagId { get; set; }
         #endregion
 
         #region Fk Objects

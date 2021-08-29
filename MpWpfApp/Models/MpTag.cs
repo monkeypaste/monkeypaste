@@ -126,9 +126,7 @@ namespace MpWpfApp {
             var cit = new MpCopyItemTag() {
                 CopyItemTagGuid = System.Guid.NewGuid(),
                 CopyItemId = ci.CopyItemId,
-                CopyItemGuid = ci.CopyItemGuid.ToString(),
-                TagId = TagId,
-                TagGuid = TagGuid.ToString()
+                TagId = TagId
             };
 
             cit.WriteToDatabase(sourceClientGuid, ignoreTracking, ignoreSyncing);

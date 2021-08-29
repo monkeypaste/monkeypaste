@@ -10,9 +10,10 @@ using System.Windows.Media;
 using System.Diagnostics;
 using MonkeyPaste;
 using SQLite;
+using FFImageLoading.Helpers.Exif;
 
 namespace MpWpfApp {
-    public class MpApp : MpDbModelBase {
+    public class MpApp : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
         private static List<MpApp> _AllAppList = null;
         public static int TotalAppCount = 0;
 
@@ -61,13 +62,6 @@ namespace MpWpfApp {
                 Icon.IconBorderHighlightSelectedImage = value;
             }
         }
-        //public BitmapSource IconBorderImage { get; set; } = new BitmapImage();
-        //public BitmapSource IconHighlightBorderImage { get; set; } = new BitmapImage();
-        //public BitmapSource IconSelectedHighlightBorderImage { get; set; } = new BitmapImage();
-
-        //public int[] ColorId = new int[5];
-
-        //public MpObservableCollection<MpColor> PrimaryIconColorList = new MpObservableCollection<MpColor>();
 
         #region Static Methods
         public static List<MpApp> GetAllApps() {            
@@ -221,6 +215,117 @@ namespace MpWpfApp {
 
         public string GetAppName() {
             return AppPath == null || AppPath == string.Empty ? "None" : Path.GetFileNameWithoutExtension(AppPath);
+        }
+
+        public async Task<object> CreateFromLogs(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            var adr = MpDb.Instance.GetDbDataRowByTableGuid("MpApp", appGuid);
+            MpApp appFromLog = null;
+            if (adr == null) {
+                appFromLog = new MpApp();
+            } else {
+                appFromLog = new MpApp(adr);
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpAppGuid":
+                        appFromLog.AppGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpUserDeviceId":
+                        var uddr = MpDb.Instance.GetDbDataRowByTableGuid("MpUserDevice", li.AffectedColumnValue);
+                        appFromLog.UserDeviceId = new MpUserDevice(uddr).UserDeviceId;
+                        break;
+                    case "fk_MpIconId":
+                        var idr = MpDb.Instance.GetDbDataRowByTableGuid("MpIcon", li.AffectedColumnValue);
+                        appFromLog.Icon = new MpIcon(idr);
+                        appFromLog.IconId = appFromLog.Icon.IconId;
+                        break;
+                    case "SourcePath":
+                        appFromLog.AppPath = li.AffectedColumnValue;
+                        break;
+                    case "AppName":
+                        appFromLog.AppName = li.AffectedColumnValue;
+                        break;
+                    case "IsAppRejected":
+                        appFromLog.IsAppRejected = li.AffectedColumnValue == "1";
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            //newCopyItemTag.WriteToDatabase(fromClientGuid);
+            return appFromLog;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var a = new MpApp() {
+                AppGuid = System.Guid.Parse(objParts[0])
+            };
+            var ud = MpDb.Instance.GetDbObjectByTableGuid("MpUserDevice", objParts[1]) as MpUserDevice;
+            a.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[2]) as MpIcon;
+            a.UserDeviceId = ud.UserDeviceId;
+            a.IconId = a.Icon.IconId;
+
+            a.AppPath = objParts[3];
+            a.AppName = objParts[4];
+            a.IsAppRejected = objParts[5] == "1";
+            return a;
+        }
+
+        public string SerializeDbObject() {
+            var udg = MpUserDevice.GetUserDeviceById(UserDeviceId).UserDeviceGuid.ToString();
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
+                ParseToken,
+                AppGuid.ToString(),
+                udg,
+                Icon.IconGuid.ToString(),
+                AppPath,
+                AppName,
+                IsAppRejected ? "1":"0");
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpApp);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            var udg = MpUserDevice.GetUserDeviceById(UserDeviceId).UserDeviceGuid.ToString();
+            MpApp other = null;
+            if (drOrModel is DataRow) {
+                other = new MpApp(drOrModel as DataRow);
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpApp();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(AppGuid, other.AppGuid,
+                "MpAppGuid",
+                diffLookup,
+                AppGuid.ToString());
+            diffLookup = CheckValue(UserDeviceId, other.UserDeviceId,
+                "fk_MpUserDeviceId",
+                diffLookup,
+                udg);
+            diffLookup = CheckValue(IconId, other.IconId,
+                "fk_MpIconId",
+                diffLookup,
+                Icon.IconGuid.ToString());
+            diffLookup = CheckValue(AppPath, other.AppPath,
+                "SourcePath",
+                diffLookup);
+            diffLookup = CheckValue(AppName, other.AppName,
+                "AppName",
+                diffLookup);
+            diffLookup = CheckValue(IsAppRejected, other.IsAppRejected,
+                "IsAppRejected",
+                diffLookup,
+                IsAppRejected ? "1" : "0");
+            return diffLookup;
         }
     }
 }

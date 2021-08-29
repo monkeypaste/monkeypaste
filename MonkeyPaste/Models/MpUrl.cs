@@ -87,5 +87,91 @@ namespace MonkeyPaste {
         public bool IsSubSource => true;
 
         #endregion
+
+        public async Task<object> CreateFromLogs(string urlGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var urlDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrl", urlGuid);
+            MpUrl url = null;
+            if (urlDr == null) {
+                url = new MpUrl();
+            } else {
+                url = urlDr as MpUrl;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpUrlGuid":
+                        url.UrlGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpUrlDomainId":
+                        url.UrlDomain = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrlDomain", li.AffectedColumnValue) as MpUrlDomain;
+                        url.UrlDomainId = url.UrlDomain.Id;
+                        break;
+                    case "UrlPath":
+                        url.UrlPath = li.AffectedColumnValue;
+                        break;
+                    case "UrlTitle":
+                        url.UrlTitle = li.AffectedColumnValue;
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return url;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var url = new MpUrl() {
+                UrlGuid = System.Guid.Parse(objParts[0])
+            };
+
+            url.UrlDomain = MpDb.Instance.GetDbObjectByTableGuid("MpUrlDomain", objParts[1]) as MpUrlDomain;
+            url.UrlDomainId = url.UrlDomain.Id;
+            url.UrlPath = objParts[2];
+            url.UrlTitle = objParts[3];
+            return url;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                ParseToken,
+                UrlGuid.ToString(),
+                UrlDomain.UrlDomainGuid.ToString(),
+                UrlPath,
+                UrlTitle);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpUrl);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpUrl other = null;
+            if (drOrModel is MpUrl) {
+                other = drOrModel as MpUrl;
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpUrl();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(UrlGuid, other.UrlGuid,
+                "MpUrlGuid",
+                diffLookup,
+                UrlGuid.ToString());
+            diffLookup = CheckValue(UrlDomainId, other.UrlDomainId,
+                "fk_MpUrlDomainId",
+                diffLookup,
+                UrlDomain.UrlDomainGuid.ToString());
+            diffLookup = CheckValue(UrlPath, other.UrlPath,
+                "UrlPath",
+                diffLookup);
+            diffLookup = CheckValue(UrlTitle, other.UrlTitle,
+                "UrlTitle",
+                diffLookup);
+            return diffLookup;
+        }
     }
 }

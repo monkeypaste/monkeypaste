@@ -5,29 +5,24 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using SQLite;
+using MonkeyPaste;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public enum MpUserDeviceType {
-        None = 0,
-        Ios,
-        Android,
-        Windows,
-        Mac,
-        Linux,
-        Web,
-        Unknown
-    }
-
-    public class MpUserDevice : MpDbModelBase {
+    public class MpUserDevice : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
         private static List<MpUserDevice> _AllUserDeviceList = null;
 
         public int UserDeviceId { get; set; } = 0;
         public Guid UserDeviceGuid { get; set; }
 
-        public MpUserDeviceType PlatformTypeId { get; set; }
+        public MonkeyPaste.MpUserDeviceType PlatformTypeId { get; set; }
 
         public static MpUserDevice GetUserDeviceByGuid(string deviceGuid) {
             return GetAllUserDevices().Where(x => x.UserDeviceGuid.ToString() == deviceGuid).FirstOrDefault();
+        }
+
+        public static MpUserDevice GetUserDeviceById(int udid) {
+            return GetAllUserDevices().Where(x => x.UserDeviceId == udid).FirstOrDefault();
         }
 
         public static List<MpUserDevice> GetAllUserDevices() {
@@ -45,7 +40,7 @@ namespace MpWpfApp {
 
         public MpUserDevice() { }
 
-        public MpUserDevice(string deviceGuid, MpUserDeviceType platformTypeId) :this() {
+        public MpUserDevice(string deviceGuid, MonkeyPaste.MpUserDeviceType platformTypeId) :this() {
             UserDeviceGuid = System.Guid.Parse(deviceGuid);
             PlatformTypeId = platformTypeId;
         }
@@ -56,7 +51,7 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             UserDeviceId = Convert.ToInt32(dr["pk_MpUserDeviceId"].ToString());
             UserDeviceGuid = Guid.Parse(dr["MpUserDeviceGuid"].ToString());
-            PlatformTypeId = (MpUserDeviceType)Convert.ToInt32(dr["PlatformTypeId"].ToString());
+            PlatformTypeId = (MonkeyPaste.MpUserDeviceType)Convert.ToInt32(dr["PlatformTypeId"].ToString());
         }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
@@ -114,6 +109,70 @@ namespace MpWpfApp {
             } else {
                 DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
             }
+        }
+
+        public async Task<object> CreateFromLogs(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            var ud = MpDb.Instance.GetDbObjectByTableGuid("MpUserDevice", udGuid) as MpUserDevice;
+
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpUserDeviceGuid":
+                        ud.UserDeviceGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "PlatformTypeId":
+                        ud.PlatformTypeId = (MpUserDeviceType)Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return ud;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var ud = new MpUserDevice() {
+                UserDeviceGuid = System.Guid.Parse(objParts[0]),
+                PlatformTypeId = (MpUserDeviceType)Convert.ToInt32(objParts[1])
+            };
+            return ud;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}",
+                ParseToken,
+                UserDeviceGuid.ToString(),
+                (int)PlatformTypeId);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpUserDevice);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpUserDevice other = null;
+            if (drOrModel is DataRow) {
+                other = new MpUserDevice(drOrModel as DataRow);
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpUserDevice();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(UserDeviceGuid, other.UserDeviceGuid,
+                "MpUserDeviceGuid",
+                diffLookup,
+                UserDeviceGuid.ToString());
+            diffLookup = CheckValue(PlatformTypeId, other.PlatformTypeId,
+                "PlatformTypeId",
+                diffLookup,
+                ((int)PlatformTypeId).ToString());
+
+            return diffLookup;
         }
     }
 }

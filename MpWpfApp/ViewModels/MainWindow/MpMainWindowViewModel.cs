@@ -290,7 +290,7 @@ namespace MpWpfApp {
             }
 
             if (MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid) == null) {
-                new MpUserDevice(Properties.Settings.Default.ThisClientGuid, MpUserDeviceType.Windows).WriteToDatabase();
+                new MpUserDevice(Properties.Settings.Default.ThisClientGuid, MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
             }
 
             SystemTrayViewModel = new MpSystemTrayViewModel();

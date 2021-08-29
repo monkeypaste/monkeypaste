@@ -37,6 +37,9 @@ namespace MonkeyPaste {
 
         #region Private Variables
         private MpISync _localSync;
+
+        private CancellationTokenSource _cts;
+        private CancellationToken _ct;
         #endregion
 
         public event EventHandler<string> OnError;
@@ -67,6 +70,9 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public void Init(MpISync localSync) {
+            _cts = new CancellationTokenSource();
+            _ct = _cts.Token;
+
             _localSync = localSync;
 
             _localSync.OnSyncableChange += LocalSync_OnSyncableChange;
@@ -150,12 +156,12 @@ namespace MonkeyPaste {
                     }
 
                     if (listener == null) {
-                        Socket server = CreateLocalListener(ThisEndpoint);
+                        listener = CreateLocalListener(ThisEndpoint);
                         while (true) {
                             Socket client = null;
                             try {
                                 MpConsole.WriteLine("Waiting for connection...");
-                                client = server.Accept();
+                                client = listener.Accept();
 
                                 MpConsole.WriteLine("Connection made");
 
@@ -185,7 +191,7 @@ namespace MonkeyPaste {
                                 SendSocket(client, thisDbLogRequest);
 
                                 Task.Run(async () => {
-                                    while (client.Connected) {
+                                    while (IsConnected(client)) {
                                         try {
                                             var dbLogResponse = ReceiveSocket(client);
                                             if (dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
@@ -220,7 +226,7 @@ namespace MonkeyPaste {
                                         ConnectedDevices.Remove(cep);
                                         (cep.RemoteSocket as Socket).Close();
                                     }              
-                                });
+                                },_ct);
                             }
                             catch (Exception ex) {
                                 client.Shutdown(SocketShutdown.Both);
@@ -259,7 +265,7 @@ namespace MonkeyPaste {
                                 lep.DeviceGuid);                            
 
                             await Task.Run(async () => {
-                                while (listener.Connected) {
+                                while (IsConnected(listener)) {
                                     try {
                                         var dbLogResponse = ReceiveSocket(listener);
                                         if (dbLogResponse == null) {
@@ -284,7 +290,7 @@ namespace MonkeyPaste {
                                 listener.Close();
                                 listener.Dispose();
                                 listener = null;
-                            });
+                            },_ct);
                         }
                         catch (Exception ex) {
                             listener.Shutdown(SocketShutdown.Both);
@@ -308,22 +314,38 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void LocalSync_OnSyncableChange(object sender, object e) {
-            Task.Run(async () => {
-                if (e is string dboGuid) {
-                    var llogs = await _localSync.GetDbObjectLogs(dboGuid, DateTime.MinValue);
-                    if (llogs.Count == 0) {
-                        return;
-                    }
-                    foreach (var rep in ConnectedDevices) {
-                        var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
-                        var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncDt, rep.RemoteEndpoint.DeviceGuid);
-                        if (!string.IsNullOrEmpty(dbLogQueryResultStr)) {
-                            var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, rep.RemoteEndpoint.DeviceGuid, dbLogQueryResultStr);
-                            Send(rep, thisdbLogResponse);
+            if (sender == null) {
+                return;
+            }
+            string dboTypeStr = sender.GetType().ToString();
+            if(dboTypeStr.EndsWith(".MpTag") || dboTypeStr.EndsWith(".MpCopyItem")) {
+                Task.Run(async () => {
+                    if (e is string dboGuid) {
+                        //var llogs = await _localSync.GetDbObjectLogs(dboGuid, DateTime.MinValue);
+                        //if (llogs.Count == 0) {
+                        //    return;
+                        //}
+                        var disconnectedDevices = new List<MpRemoteDevice>();
+                        foreach (var rep in ConnectedDevices) {
+                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
+                            var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncDt, rep.RemoteEndpoint.DeviceGuid);
+                            if (!string.IsNullOrEmpty(dbLogQueryResultStr)) {
+                                var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, rep.RemoteEndpoint.DeviceGuid, dbLogQueryResultStr);
+                                try {
+                                    Send(rep, thisdbLogResponse);
+                                }
+                                catch (Exception) {
+                                    disconnectedDevices.Add(rep);
+                                    continue;
+                                }
+                            }
+                        }
+                        if (disconnectedDevices.Count > 0) {
+                            _cts.Cancel();
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
 
@@ -474,25 +496,26 @@ namespace MonkeyPaste {
         }
 
         private bool IsConnected(Socket s) {
-            if(s == null) {
+            int pt = 500000; //500000 microseconds is .5 seconds
+            if (s == null) {
                 return false;
             }
             //bool isConnected = true;
             if (!s.Connected) {
                 return false;
             }
-            if (!s.Poll(-1, SelectMode.SelectWrite)) {
+            if (!s.Poll(pt, SelectMode.SelectWrite)) {
                 //Console.WriteLine("This Socket is not writable.");
                 //isConnected = false;
                 return false;
-            } 
-            //else if (!s.Poll(-1, SelectMode.SelectRead)) {
+            }
+            //if (!s.Poll(pt, SelectMode.SelectRead)) {
             //    //Console.WriteLine("This Socket is not readable.");
-            //    isConnected = false;
+            //    return false;
             //}
-            //else if (s.Poll(-1, SelectMode.SelectError)) {
+            //if (s.Poll(pt, SelectMode.SelectError)) {
             //    //Console.WriteLine("This Socket has an error.");
-            //    isConnected = false;
+            //    return false;
             //}
             return true;
         }
@@ -561,23 +584,21 @@ namespace MonkeyPaste {
             var response = string.Empty;
             var buffer = new ArraySegment<byte>(new Byte[8192]);
             WebSocketReceiveResult result = null;
-            CancellationTokenSource cts = new CancellationTokenSource();
-            var ct = cts.Token;
             while (!response.Contains(MpStreamMessage.EofToken)) {
                 Task.Run(async () => {
                     while (IsConnected(cws)) {
                         await Task.Delay(100);
                     }
-                    cts.Cancel();
-                }, ct);
+                    _cts.Cancel();
+                }, _ct);
                 using (var ms = new MemoryStream()) {
                     do {
-                        result = await cws.ReceiveAsync(buffer, ct);
+                        result = await cws.ReceiveAsync(buffer, _ct);
                         ms.Write(buffer.Array, buffer.Offset, result.Count);
                     }
                     while (!result.EndOfMessage);
 
-                    if (!ct.IsCancellationRequested) {
+                    if (!_ct.IsCancellationRequested) {
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using (var reader = new StreamReader(ms, Encoding.ASCII)) {
@@ -586,7 +607,7 @@ namespace MonkeyPaste {
                         }
                     } else {
                         //this will cancel the check connection thread if no connection problems
-                        cts.Cancel();
+                        _cts.Cancel();
                         return null;
                     }
 

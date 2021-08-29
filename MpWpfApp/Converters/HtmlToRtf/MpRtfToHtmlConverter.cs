@@ -31,6 +31,9 @@ namespace MpWpfApp {
         #endregion
 
         public string ConvertRtfToHtml(string rtf) {
+            if(rtf == null) {
+                return string.Empty;
+            }
             var fd = rtf.ToFlowDocument();
             var sb = new StringBuilder();
             foreach(Block b in fd.Blocks) {

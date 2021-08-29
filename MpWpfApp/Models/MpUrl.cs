@@ -1,11 +1,13 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpUrl : MpDbModelBase {
+    public class MpUrl : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
         private static List<MpUrl> _AllUrlList = null;
         public static int TotalUrlCount = 0;
 
@@ -18,13 +20,15 @@ namespace MpWpfApp {
 
         public MpUrlDomain UrlDomain { get; set; }
 
-        public MpUrl(string urlPath, string urlTitle) {
+        public MpUrl() { }
+
+        public MpUrl(string urlPath, string urlTitle) : this() {
             UrlGuid = Guid.NewGuid();
             UrlPath = urlPath;
             UrlTitle = urlTitle;
             UrlDomain = MpUrlDomain.GetUrlDomainByPath(MpHelpers.Instance.GetUrlDomain(urlPath));            
         }
-        public MpUrl(int urlId) {
+        public MpUrl(int urlId) : this() {
             var dt = MpDb.Instance.Execute(
                 "select * from MpUrl where pk_MpUrlId=@urlid",
                 new Dictionary<string, object> {
@@ -126,6 +130,93 @@ namespace MpWpfApp {
             if (urldl.Count > 0) {
                 _AllUrlList.RemoveAt(_AllUrlList.IndexOf(urldl[0]));
             }
+        }
+
+        public async Task<object> CreateFromLogs(string urlGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            var urlDr = MpDb.Instance.GetDbDataRowByTableGuid("MpUrl", urlGuid);
+            MpUrl url = null;
+            if (urlDr == null) {
+                url = new MpUrl();
+            } else {
+                url = new MpUrl(urlDr);
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpUrlGuid":
+                        url.UrlGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpUrlDomainId":
+                        url.UrlDomain = MpDb.Instance.GetDbObjectByTableGuid("MpUrlDomain", li.AffectedColumnValue) as MpUrlDomain;
+                        url.UrlDomainId = url.UrlDomain.UrlDomainId;
+                        break;
+                    case "UrlPath":
+                        url.UrlPath = li.AffectedColumnValue;
+                        break;
+                    case "UrlTitle":
+                        url.UrlTitle = li.AffectedColumnValue;
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return url;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var url = new MpUrl() {
+                UrlGuid = System.Guid.Parse(objParts[0])
+            };
+
+            url.UrlDomain = MpDb.Instance.GetDbObjectByTableGuid("MpUrlDomain", objParts[1]) as MpUrlDomain;
+            url.UrlDomainId = url.UrlDomain.UrlDomainId;
+            url.UrlPath = objParts[2];
+            url.UrlTitle = objParts[3];
+            return url;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                ParseToken,
+                UrlGuid.ToString(),
+                UrlDomain.UrlDomainGuid.ToString(),
+                UrlPath,
+                UrlTitle);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpUrl);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpUrl other = null;
+            if (drOrModel is DataRow) {
+                other = new MpUrl(drOrModel as DataRow);
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpUrl();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(UrlGuid, other.UrlGuid,
+                "MpUrlGuid",
+                diffLookup,
+                UrlGuid.ToString());
+            diffLookup = CheckValue(UrlDomainId, other.UrlDomainId,
+                "fk_MpUrlDomainId",
+                diffLookup,
+                UrlDomain.UrlDomainGuid.ToString());
+            diffLookup = CheckValue(UrlPath, other.UrlPath,
+                "UrlPath",
+                diffLookup);
+            diffLookup = CheckValue(UrlTitle, other.UrlTitle,
+                "UrlTitle",
+                diffLookup);
+            return diffLookup;
         }
     }
 }

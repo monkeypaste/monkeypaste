@@ -30,7 +30,7 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpClient))]
+        [ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpClientId")]
         public int ClientId { get; set; }
 

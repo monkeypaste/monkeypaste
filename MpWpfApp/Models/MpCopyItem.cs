@@ -1227,6 +1227,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
+            ItemHtml = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(ItemRichText);
             //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {

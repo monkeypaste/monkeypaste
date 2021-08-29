@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-
-    public class MpUrlDomain : MpDbModelBase {
+    public class MpUrlDomain : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
         private static List<MpUrlDomain> _AllUrlDomainList = null;
 
         public static int TotalUrlDomainCount = 0;
@@ -230,6 +230,99 @@ namespace MpWpfApp {
 
         public string GetUrlDomainName() {
             return UrlDomainPath == null || UrlDomainPath == string.Empty ? "None" : Path.GetFileNameWithoutExtension(UrlDomainPath);
+        }
+
+        public async Task<object> CreateFromLogs(string urlDomainGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            await Task.Delay(1);
+            var urlDomain = MpDb.Instance.GetDbObjectByTableGuid("MpUrlDomain", urlDomainGuid) as MpUrlDomain;
+
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpUrlDomainGuid":
+                        urlDomain.UrlDomainGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpIconId":
+                        urlDomain.FavIcon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon",li.AffectedColumnValue) as MpIcon;
+                        urlDomain.FavIconId = urlDomain.FavIcon.IconId;
+                        break;
+                    case "UrlDomainPath":
+                        urlDomain.UrlDomainPath = li.AffectedColumnValue;
+                        break;
+                    case "UrlDomainTitle":
+                        urlDomain.UrlDomainTitle = li.AffectedColumnValue;
+                        break;
+                    case "IsUrlDomainRejected":
+                        urlDomain.IsUrlDomainRejected = li.AffectedColumnValue == "1";
+                        break;
+                    default:
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        break;
+                }
+            }
+            return urlDomain;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            await Task.Delay(0);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var urld = new MpUrlDomain() {
+                UrlDomainGuid = System.Guid.Parse(objParts[0])
+            };
+
+            urld.FavIcon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[1]) as MpIcon;
+            urld.FavIconId = urld.FavIcon.IconId;
+
+            urld.UrlDomainPath = objParts[2];
+            urld.UrlDomainTitle = objParts[3];
+            urld.IsUrlDomainRejected = objParts[4] == "1";
+            return urld;
+        }
+
+        public string SerializeDbObject() {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
+                ParseToken,
+                UrlDomainGuid.ToString(),
+                FavIcon.IconGuid.ToString(),
+                UrlDomainPath,
+                UrlDomainTitle,
+                IsUrlDomainRejected ? "1":"0");
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpUrlDomain);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpUrlDomain other = null;
+            if (drOrModel is DataRow) {
+                other = new MpUrlDomain(drOrModel as DataRow);
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpUrlDomain();
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(UrlDomainGuid, other.UrlDomainGuid,
+                "MpUrlDomainGuid",
+                diffLookup,
+                UrlDomainGuid.ToString());
+            diffLookup = CheckValue(FavIconId, other.FavIconId,
+                "fk_MpIconId",
+                diffLookup,
+                FavIcon.IconGuid.ToString());
+            diffLookup = CheckValue(UrlDomainPath, other.UrlDomainPath,
+                "UrlDomainPath",
+                diffLookup);
+            diffLookup = CheckValue(UrlDomainTitle, other.UrlDomainTitle,
+                "UrlDomainTitle",
+                diffLookup);
+            diffLookup = CheckValue(IsUrlDomainRejected, other.IsUrlDomainRejected,
+                "IsUrlDomainRejected",
+                diffLookup,
+                IsUrlDomainRejected ? "1":"0");
+
+            return diffLookup;
         }
     }
 }

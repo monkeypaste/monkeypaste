@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using SQLite;
-using SQLiteNetExtensions;
+﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
@@ -35,15 +33,9 @@ namespace MonkeyPaste {
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
-        [Column("MpTagGuid")]
-        public string TagGuid { get; set; }
-
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
-
-        [Column("MpCopyItemGuid")]
-        public string CopyItemGuid { get; set; }
 
         public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagId(int tagId) {
             var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
@@ -53,7 +45,7 @@ namespace MonkeyPaste {
         public static async Task DeleteAllCopyItemTagsForCopyItemId(int CopyItemId) {
             var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
             var citl = allCopyItemTagList.Where(x => x.CopyItemId == CopyItemId).ToList();
-            foreach(var cit in citl) {
+            foreach (var cit in citl) {
                 await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
             }
         }
@@ -81,12 +73,10 @@ namespace MonkeyPaste {
                         break;
                     case "fk_MpCopyItemId":
                         var cidr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItem", li.AffectedColumnValue) as MpCopyItem;
-                        newCopyItemTag.CopyItemGuid = cidr.Guid;
                         newCopyItemTag.CopyItemId = cidr.Id;
                         break;
                     case "fk_MpTagId":
                         var tdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", li.AffectedColumnValue) as MpTag;
-                        newCopyItemTag.TagGuid = tdr.Guid;
                         newCopyItemTag.TagId = tdr.Id;
                         break;
                     default:
@@ -99,20 +89,21 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> DeserializeDbObject(string objStr) {
-            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
-            var dbLog = new MpCopyItemTag() {
-                CopyItemTagGuid = System.Guid.Parse(objParts[0]),
-                CopyItemId = Convert.ToInt32(objParts[1]),
-                TagId = Convert.ToInt32(objParts[2]),
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var cit = new MpCopyItemTag() {
+                CopyItemTagGuid = System.Guid.Parse(objParts[0])
             };
-            return dbLog;
+            var ci = MpDb.Instance.GetDbObjectByTableGuid("MpCopyItem", objParts[1]) as MpCopyItem;
+            var t = MpDb.Instance.GetDbObjectByTableGuid("MpTag", objParts[2]) as MpTag;
+            cit.CopyItemId = ci.Id;
+            cit.TagId = t.Id;
+            return cit;
         }
 
         public string SerializeDbObject() {
             var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
             var tg = MpTag.GetTagById(TagId)?.TagGuid;
-
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
@@ -154,7 +145,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpCopyItemTag() {
-        }
+        public MpCopyItemTag() { }
     }
 }

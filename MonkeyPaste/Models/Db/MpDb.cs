@@ -177,7 +177,7 @@ namespace MonkeyPaste {
             await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -201,7 +201,7 @@ namespace MonkeyPaste {
             _connection.InsertWithChildren(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -223,7 +223,7 @@ namespace MonkeyPaste {
             await _connectionAsync.UpdateWithChildrenAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -244,7 +244,7 @@ namespace MonkeyPaste {
             _connection.UpdateWithChildren(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -252,7 +252,7 @@ namespace MonkeyPaste {
         public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
             if ((item as MpDbModelBase).Id == 0 || 
-                (string.IsNullOrEmpty((item as MpDbModelBase).Guid))) {
+                (string.IsNullOrEmpty((item as MpDbModelBase).Guid) && item is MpISyncableDbObject)) {
                 await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
             } else {
                 await UpdateItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
@@ -262,7 +262,7 @@ namespace MonkeyPaste {
         public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
             if ((item as MpDbModelBase).Id == 0 ||
-                (string.IsNullOrEmpty((item as MpDbModelBase).Guid))) {
+                (string.IsNullOrEmpty((item as MpDbModelBase).Guid) && item is MpISyncableDbObject)) {
                 AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             } else {
                 UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
@@ -286,7 +286,7 @@ namespace MonkeyPaste {
             await _connectionAsync.DeleteAsync(item, true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase); 
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -307,7 +307,7 @@ namespace MonkeyPaste {
             _connection.Delete(item,true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(this, (item as MpDbModelBase).Guid);
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
@@ -320,7 +320,10 @@ namespace MonkeyPaste {
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
-            return null;
+            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+
+            var dbo = Activator.CreateInstance(dbot);
+            return dbo;
         }
 
         public object GetDbObjectByTableGuid(string tableName, string objGuid) {
@@ -332,7 +335,10 @@ namespace MonkeyPaste {
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
-            return null;
+            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+
+            var dbo = Activator.CreateInstance(dbot);
+            return dbo;
         }
 
         //public async Task UpdateWithChildren(MpDbObject dbo) {
@@ -427,10 +433,8 @@ namespace MonkeyPaste {
         }
         private async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpApp>();
-            await _connectionAsync.CreateTableAsync<MpClient>();
-            await _connectionAsync.CreateTableAsync<MpClientPlatform>();
+            await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
-            //await _connectionAsync.CreateTableAsync<MpCompositeCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
@@ -694,12 +698,17 @@ namespace MonkeyPaste {
                 await updateTask;
             }
 
+            var sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(remoteClientGuid);
+            if(sh == null) {
+                sh = new MpSyncHistory() {
+                    OtherClientGuid = remoteClientGuid
+                };
+            }
+            sh.SyncDateTime = DateTime.UtcNow;
+            await MpDb.Instance.AddOrUpdateAsync<MpSyncHistory>(sh,"",true,true);
 
-            var newSyncHistory = new MpSyncHistory() {
-                OtherClientGuid = System.Guid.Parse(remoteClientGuid),
-                SyncDateTime = DateTime.UtcNow
-            };
-            await MpDb.Instance.AddItemAsync<MpSyncHistory>(newSyncHistory,"",true,true);
+            var shl = MpDb.Instance.GetItems<MpSyncHistory>();
+            return;
         }
 
         private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
@@ -719,19 +728,18 @@ namespace MonkeyPaste {
 
         private int GetDbTableOrder(MpDbLog log) {
             var orderedLogs = new List<string>() {
-                          "MpColor",
                           "MpDbImage",
                           "MpIcon",
+                          "MpUserDevice",
                           "MpUrl",
                           "MpUrlDomain",
                           "MpApp",
                           "MpSource",
                           "MpCompositeCopyItem",
-                          "MpCopyItemTag",
                           "MpCopyItemTemplate",
                           "MpCopyItem",
                           "MpTag",
-                          "MpClient" };
+                          "MpCopyItemTag" };
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -781,12 +789,12 @@ namespace MonkeyPaste {
                           "MpUrlDomain",
                           "MpApp",
                           "MpSource",
+                          "MpCopyItem",
+                          "MpTag",
                           "MpCompositeCopyItem",
                           "MpCopyItemTag",
                           "MpCopyItemTemplate",
-                          "MpCopyItem",
-                          "MpTag",
-                          "MpClient" };
+                          "MpUserDevice" };
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if(idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
