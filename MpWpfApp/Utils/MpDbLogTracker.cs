@@ -16,7 +16,7 @@ namespace MpWpfApp {
             }
 
             Guid objectGuid = Guid.Parse(objGuid);
-            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(Properties.Settings.Default.ThisClientGuid) : Guid.Parse(clientGuid);
+            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(Properties.Settings.Default.ThisDeviceGuid) : Guid.Parse(clientGuid);
             string tableName = "UnknownTableName";
             var actionType = MonkeyPaste.MpDbLogActionType.None;
             var actionDateTime = DateTime.UtcNow;

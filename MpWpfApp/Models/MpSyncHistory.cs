@@ -100,7 +100,7 @@ namespace MpWpfApp {
             }
         }
         public override void WriteToDatabase() {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, true, true);
+            WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid, true, true);
         }
     }
 }

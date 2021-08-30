@@ -17,6 +17,21 @@ namespace MpWpfApp {
 
         public MonkeyPaste.MpUserDeviceType PlatformTypeId { get; set; }
 
+        public bool IsThisDevice {
+            get {
+                if(UserDeviceGuid == null) {
+                    return false;
+                }
+                return UserDeviceGuid.ToString() == Properties.Settings.Default.ThisDeviceGuid;
+            }
+        }
+
+        public bool IsThisPlatform {
+            get {
+                return PlatformTypeId == MpUserDeviceType.Windows;
+            }
+        }
+
         public static MpUserDevice GetUserDeviceByGuid(string deviceGuid) {
             return GetAllUserDevices().Where(x => x.UserDeviceGuid.ToString() == deviceGuid).FirstOrDefault();
         }
@@ -82,16 +97,16 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+                WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
         public void WriteToDatabase(bool ignoreTracking, bool ignoreSyncing) {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, ignoreTracking, ignoreSyncing);
+            WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid, ignoreTracking, ignoreSyncing);
         }
 
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (string.IsNullOrEmpty(sourceClientGuid)) {
-                sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
+                sourceClientGuid = Properties.Settings.Default.ThisDeviceGuid;
             }
 
             MpDb.Instance.ExecuteWrite(
@@ -107,7 +122,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+                DeleteFromDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
 

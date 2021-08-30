@@ -53,6 +53,7 @@ namespace MpWpfApp {
         private BitmapSource _defaultFavIcon = null;
         //private YoloWrapper yoloWrapper = null;
         public void Init() {
+            Rand = new Random((int)DateTime.Now.Ticks);
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
             _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }
@@ -758,7 +759,7 @@ namespace MpWpfApp {
             BindingOperations.SetBinding(target, targetProperty, b);
         }
 
-        public Random Rand { get; set; } = new Random();
+        public Random Rand { get; set; } = null;
 
         public bool IsInDesignMode {
             get {
@@ -1438,7 +1439,7 @@ namespace MpWpfApp {
             return randomList;
         }
 
-        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
+        private List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
                     new SolidColorBrush(Color.FromRgb(243, 69, 68)),
@@ -2046,9 +2047,12 @@ namespace MpWpfApp {
             //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             //}
             //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-            int x = Rand.Next(0, _ContentColors.Count);
-            int y = Rand.Next(0, _ContentColors[0].Count);
-            return ((SolidColorBrush)_ContentColors[x][y]).Color;
+
+            //int x = Rand.Next(0, _ContentColors.Count);
+            //int y = Rand.Next(0, _ContentColors[0].Count);
+            //return ((SolidColorBrush)_ContentColors[x][y]).Color;
+
+            return new MpContentColors().GetRandomColor();
         }
 
         public Brush GetRandomBrushColor(byte alpha = 255) {
@@ -2462,7 +2466,7 @@ namespace MpWpfApp {
 
         public string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
-               try {
+                try {
                     RichTextBox rtb = new RichTextBox();
                     rtb.SetRtf(richText);
                     var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
@@ -2473,7 +2477,7 @@ namespace MpWpfApp {
                     }
                     return pt;
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     Console.WriteLine("ConvertRichTextToPlainText Exception, fallingt back to WinForms Rtb...");
                     Console.WriteLine("Exception was: " + ex.ToString());
                     //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
@@ -2482,7 +2486,7 @@ namespace MpWpfApp {
                         wf_rtb.Rtf = richText;
                         return wf_rtb.Text;
                     }
-                    
+
                 }
             } else {
                 return richText;

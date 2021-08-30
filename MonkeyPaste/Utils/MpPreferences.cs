@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpPreferences : MpIPreferences {
@@ -34,6 +35,24 @@ namespace MonkeyPaste {
         public string DbName { get; set; } = "Mp.db";
         public int MinDbPasswordLength { get; set; } = 12;
         public int MaxDbPasswordLength { get; set; } = 18;
+
+        public MpUserDeviceType ThisDeviceType {
+            get {
+                switch(Device.RuntimePlatform) {
+                    case Device.iOS:
+                        return MpUserDeviceType.Ios;
+                    case Device.Android:
+                        return MpUserDeviceType.Android;
+                    case Device.macOS:
+                        return MpUserDeviceType.Mac;
+                    case Device.GTK:
+                        return MpUserDeviceType.Linux;
+                    default:
+                        MpConsole.WriteTraceLine($"Unknown platform: {Device.RuntimePlatform.ToString()}");
+                        return MpUserDeviceType.Unknown;
+                }
+            }
+        }
 
         public string LocalStoragePath {
             get {
@@ -118,12 +137,12 @@ namespace MonkeyPaste {
             }
         }
 
-        public string ThisClientGuidStr {
+        public string ThisDeviceGuid {
             get {
-                return Preferences.Get(nameof(ThisClientGuidStr), string.Empty);
+                return Preferences.Get(nameof(ThisDeviceGuid), string.Empty);
             }
             set {
-                Preferences.Set(nameof(ThisClientGuidStr), value);
+                Preferences.Set(nameof(ThisDeviceGuid), value);
             }
         }
 

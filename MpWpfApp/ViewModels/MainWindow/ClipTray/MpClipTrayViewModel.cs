@@ -661,6 +661,7 @@ namespace MpWpfApp {
 
             //MpHtmlToRtfConverter.Instance.Test();
             //MpRtfToHtmlConverter.Instance.Test();
+
             MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance);
         }
 
@@ -702,7 +703,11 @@ namespace MpWpfApp {
         }
 
         public void AddNewTiles() {
-            foreach(var nctvm in _newTileList) {
+            //Application.Current.Dispatcher.Invoke((Action)delegate {
+            //    MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
+            //    MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
+            //});
+            foreach (var nctvm in _newTileList) {
                 Add(nctvm, 0);
             }
             _newTileList.Clear();
@@ -839,8 +844,11 @@ namespace MpWpfApp {
                     }
                 }
             }
-            MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
-            MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
+                MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
+            });
+            
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
@@ -906,20 +914,22 @@ namespace MpWpfApp {
             return null;
         }
 
-        public async Task AddItemFromClipboard() {
+        private MpClipTileViewModel _nctvm = null;
+
+        private void AddTileThread() {
             var sw = new Stopwatch();
-            sw.Start();          
+            sw.Start();
 
             var ncisw = new Stopwatch();
             ncisw.Start();
-            var newCopyItem = await MpCopyItem.CreateFromClipboardAsync(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+            var newCopyItem = MpCopyItem.CreateFromClipboard(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
             ncisw.Stop();
             Console.WriteLine("CreateFromClipboardAsync: " + ncisw.ElapsedMilliseconds + "ms");
 
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format
                 return;
-            }          
+            }
 
             if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                 //when in append mode just append the new items text to selecteditem
@@ -956,9 +966,13 @@ namespace MpWpfApp {
                     existingClipTile.IsSelected = true;
                 }
             } else {
+                newCopyItem.WriteToDatabase();
                 var nctvm = new MpClipTileViewModel(newCopyItem);
                 _newTileList.Add(nctvm);
-                
+                //Application.Current.Dispatcher.Invoke((Action)delegate {
+                //    _newTileList.Add(new MpClipTileViewModel(newCopyItem));
+                //});
+
 
                 if (Properties.Settings.Default.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
@@ -977,6 +991,15 @@ namespace MpWpfApp {
             sw.Stop();
             Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
         }
+        public void AddItemFromClipboard() {
+            //_nctvm = new MpClipTileViewModel();
+            //var addTileThread = new Thread(new ThreadStart(AddTileThread));
+            //addTileThread.SetApartmentState(ApartmentState.STA);
+            //addTileThread.IsBackground = false;
+            //addTileThread.Start();
+
+            AddTileThread();
+        }
                
 
         public void Refresh() {
@@ -985,6 +1008,10 @@ namespace MpWpfApp {
             ClipTileViewModels.ListBox?.Items.Refresh();
             sw.Stop();
             Console.WriteLine("ClipTray Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+        }
+
+        public MpClipTileViewModel CreateClipTileViewModel(MpCopyItem ci) {
+            return new MpClipTileViewModel(ci);
         }
 
         public void Add(MpClipTileViewModel ctvm, int forceIdx = 0) {                
@@ -1015,11 +1042,25 @@ namespace MpWpfApp {
             //ClipTileViewModels[forceIdx].RichTextBoxViewModelCollection[0].CopyItem = ctvm.CopyItem;
 
             //var tempCtvml = ClipTileViewModels.ToList();
+
+
+            //forceIdx = Math.Max(Math.Min(ClipTileViewModels.Count, forceIdx), 0);
+
+            //var cil = MpCopyItem.GetPage(
+            //    MainWindowViewModel.TagTrayViewModel.SelectedTagTile.TagId,
+            //    0,
+            //    _pageSize,
+            //    "CopyDateTime",
+            //    true);
+
+            //ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(cil.Select(x => CreateClipTileViewModel(x)));
+
             if (forceIdx >= 0 && forceIdx < ClipTileViewModels.Count) {
                 ClipTileViewModels.Insert(forceIdx, ctvm);
             } else {
                 ClipTileViewModels.Add(ctvm);
             }
+
             //var lb = ClipTileViewModels.ListBox;
             //var sv = ClipTileViewModels.ScrollViewer;
             //ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(tempCtvml);
@@ -1370,7 +1411,7 @@ namespace MpWpfApp {
             return -1;
         }
 
-        public async Task SetTag(int tagId) {
+        public void SetTag(int tagId) {
             TagId = tagId;
             var lb = ClipTileViewModels.ListBox;
             var sv = ClipTileViewModels.ScrollViewer;
@@ -1378,7 +1419,7 @@ namespace MpWpfApp {
             ClipTileViewModels.ListBox = lb;
             ClipTileViewModels.ScrollViewer = sv;
 
-            var cil = await MpCopyItem.GetPage(TagId, 0, _pageSize);
+            var cil = MpCopyItem.GetPage(TagId, 0, _pageSize);
             foreach (var ci in cil) {
                 var ctvm = new MpClipTileViewModel(ci);
                 ClipTileViewModels.Add(ctvm);
@@ -2135,11 +2176,11 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand LoadMoreClipsCommand => new RelayCommand(async () => {
+        public ICommand LoadMoreClipsCommand => new RelayCommand(() => {
             _currentStartIndex += _pageSize;
             _itemsAdded = 0;
-            var collection = await MpCopyItem.GetPage(TagId, _currentStartIndex, _pageSize);
-            collection.CollectionChanged += Collection_CollectionChanged;
+            var collection = MpCopyItem.GetPage(TagId, _currentStartIndex, _pageSize);
+            //collection.CollectionChanged += Collection_CollectionChanged;
         });
         #endregion
 

@@ -17,7 +17,10 @@ namespace MonkeyPaste {
         private int _itemsAdded = 0;
         private int _currentStartIndex = 0;
         private int _pageSize = 20;
+        #endregion
 
+        #region Statics
+        public static bool IsAnyItemExpanded { get; set; } = false;
         #endregion
 
         #region Properties
@@ -69,18 +72,11 @@ namespace MonkeyPaste {
         }
 
         public async Task SetTag(int tagId) {
-            TagId = tagId;
-            await MainThread.InvokeOnMainThreadAsync(async () => {
-                CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>();
+            TagId = tagId; 
+            await Device.InvokeOnMainThreadAsync(async () => {
+                
                 var clips = await MpCopyItem.GetPage(TagId, 0, _pageSize);
-                foreach(var c in clips) {
-                    if(CopyItemViewModels.Any(x=>x.CopyItem.Id == c.Id)) {
-                        continue;
-                    }
-                    var ctvm = CreateCopyItemViewModel(c);
-                    CopyItemViewModels.Add(ctvm);
-                    //ctvm.OnPropertyChanged(nameof(ctvm.IconImageSource));
-                }
+                CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
                     var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
                     var t = tl.Where(x => x.Id == TagId).FirstOrDefault();

@@ -158,6 +158,7 @@ namespace MonkeyPaste {
         }
 
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await Init();
             }
@@ -182,6 +183,7 @@ namespace MonkeyPaste {
         }
 
         public void AddItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connection == null) {
                 CreateConnection();
             }
@@ -198,7 +200,7 @@ namespace MonkeyPaste {
                 }
 
             }
-            _connection.InsertWithChildren(item);
+            _connection.InsertWithChildren(item,true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
@@ -206,6 +208,7 @@ namespace MonkeyPaste {
         }
 
         public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await Init();
             }
@@ -228,6 +231,7 @@ namespace MonkeyPaste {
         }
 
         public void UpdateItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connection == null) {
                 CreateConnection();
             }
@@ -248,49 +252,30 @@ namespace MonkeyPaste {
             }
         }
 
-
-        public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
-            if ((item as MpDbModelBase).Id == 0 || 
-                (string.IsNullOrEmpty((item as MpDbModelBase).Guid) && item is MpISyncableDbObject)) {
-                await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
-            } else {
-                await UpdateItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
-            }
-        }
-
-        public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
-            if ((item as MpDbModelBase).Id == 0 ||
-                (string.IsNullOrEmpty((item as MpDbModelBase).Guid) && item is MpISyncableDbObject)) {
-                AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-            } else {
-                UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-            }
-        }
-
-        public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T: new() {
+        public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await Init();
             }
-            if(item == null) {
+            if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
                 return;
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                if(!ignoreTracking) {
-                   await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+                if (!ignoreTracking) {
+                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
                 }
             }
 
             await _connectionAsync.DeleteAsync(item, true);
-            OnItemDeleted?.Invoke(this, item as MpDbModelBase); 
+            OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
         public void DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connection == null) {
                 CreateConnection();
             }
@@ -304,12 +289,31 @@ namespace MonkeyPaste {
                 }
             }
 
-            _connection.Delete(item,true);
+            _connection.Delete(item, true);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
+
+
+        public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
+            if ((item as MpDbModelBase).Id == 0) {
+                await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
+            } else {
+                await UpdateItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
+            }
+        }
+
+        public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            if ((item as MpDbModelBase).Id == 0) {
+                AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+            } else {
+                UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+            }
+        }
+
+        
 
         public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
@@ -326,6 +330,24 @@ namespace MonkeyPaste {
             return dbo;
         }
 
+        public async Task<T> GetDbObjectByTableGuidAsync<T>(string objGuid) where T : new() {
+            string tableName = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            var dt = await QueryAsync(
+                tableName,
+                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
+                objGuid);
+
+            if (dt != null && dt.Count > 0) {
+                var item = await GetItemAsync<T>((dt[0] as MpDbModelBase).Id);
+                return item;
+                //return dbo;
+                //return dt[0];
+            }
+
+            var dbo = Activator.CreateInstance(typeof(T));
+            return (T)dbo;
+        }
+
         public object GetDbObjectByTableGuid(string tableName, string objGuid) {
             var dt = Query(
                 tableName,
@@ -339,6 +361,23 @@ namespace MonkeyPaste {
 
             var dbo = Activator.CreateInstance(dbot);
             return dbo;
+        }
+
+        public T GetDbObjectByTableGuid<T>(string objGuid) where T : new() {
+            string tableName = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            var dt = Query(
+                tableName,
+                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
+                objGuid);
+
+            if (dt != null && dt.Count > 0) {
+                return GetItem<T>((dt[0] as MpDbModelBase).Id);
+                //return dbo;
+                //return dt[0];
+            }
+
+            var dbo = Activator.CreateInstance(typeof(T));
+            return (T)dbo;
         }
 
         //public async Task UpdateWithChildren(MpDbObject dbo) {
@@ -427,7 +466,7 @@ namespace MonkeyPaste {
             }
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
-            MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisClientGuidStr);
+            MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
 
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
@@ -449,8 +488,15 @@ namespace MonkeyPaste {
         }
 
         private async Task InitDefaultDataAsync() {
-            if(string.IsNullOrEmpty(MpPreferences.Instance.ThisClientGuidStr)) {
-                MpPreferences.Instance.ThisClientGuidStr = System.Guid.NewGuid().ToString();
+            if(string.IsNullOrEmpty(MpPreferences.Instance.ThisDeviceGuid)) {
+                MpPreferences.Instance.ThisDeviceGuid = System.Guid.NewGuid().ToString();
+            }
+            if(MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
+                var thisDevice = new MpUserDevice() {
+                    UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
+                    PlatformType = MpPreferences.Instance.ThisDeviceType
+                };
+                await AddItemAsync<MpUserDevice>(thisDevice);
             }
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
@@ -500,7 +546,7 @@ namespace MonkeyPaste {
             return 44381;
         }
         public string GetThisClientGuid() {
-            return MpPreferences.Instance.ThisClientGuidStr;
+            return MpPreferences.Instance.ThisDeviceGuid;
         }
         public string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
@@ -698,17 +744,22 @@ namespace MonkeyPaste {
                 await updateTask;
             }
 
-            var sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(remoteClientGuid);
-            if(sh == null) {
-                sh = new MpSyncHistory() {
-                    OtherClientGuid = remoteClientGuid
-                };
-            }
-            sh.SyncDateTime = DateTime.UtcNow;
-            await MpDb.Instance.AddOrUpdateAsync<MpSyncHistory>(sh,"",true,true);
-
-            var shl = MpDb.Instance.GetItems<MpSyncHistory>();
             return;
+        }
+
+        public void UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
+            MpSyncHistory sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+
+            if (sh == null) {
+                sh = new MpSyncHistory() {
+                    OtherClientGuid = otherDeviceGuid,
+                    SyncDateTime = utcDtSentLocalChanges
+                };
+            } else {
+                sh.SyncDateTime = utcDtSentLocalChanges;
+            }
+
+            MpDb.Instance.AddOrUpdate<MpSyncHistory>(sh);
         }
 
         private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
@@ -727,19 +778,7 @@ namespace MonkeyPaste {
         }
 
         private int GetDbTableOrder(MpDbLog log) {
-            var orderedLogs = new List<string>() {
-                          "MpDbImage",
-                          "MpIcon",
-                          "MpUserDevice",
-                          "MpUrl",
-                          "MpUrlDomain",
-                          "MpApp",
-                          "MpSource",
-                          "MpCompositeCopyItem",
-                          "MpCopyItemTemplate",
-                          "MpCopyItem",
-                          "MpTag",
-                          "MpCopyItemTag" };
+            var orderedLogs = MpSyncManager.Instance.DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);

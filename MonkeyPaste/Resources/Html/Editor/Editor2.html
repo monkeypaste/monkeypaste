@@ -4,30 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <title>Yo this is a title</title>
-    <link href="https://cdn.quilljs.com/2.0.0-dev.4/quill.snow.css"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" />
-    <link type="text/css" href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" />
+    <link href="https://cdn.quilljs.com/2.0.0-dev.4/quill.snow.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" type="text/css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
-    <script charset="UTF-8"
-            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js" charset="UTF-8"></script>
     <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>
-
-
-    <script src="https://cdn.quilljs.com/2.0.0-dev.3/quill.js"></script>
     <script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>
-    <link type="text/css" href="https://cdn.quilljs.com/2.0.0-dev.3/quill.snow.css" rel="stylesheet">
-    <link type="text/css" href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" />
-
-    <script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/gh/T-vK/DynamicQuillTools@master/DynamicQuillTools.js"></script>
 
     <style>
@@ -35,7 +20,7 @@
             margin: 0px;
             padding: 0px;
             font-family: Arial;
-            background-color:transparent;
+            background-color: transparent;
         }
 
         .btn {
@@ -129,8 +114,8 @@
             border-radius: 3px;
             transition: .4s;
             margin: 0 1px;
-            cursor:pointer;
-            caret-color:transparent;
+            cursor: pointer;
+            caret-color: transparent;
         }
 
             .template_btn:hover {
@@ -190,8 +175,8 @@
             display: none;
         }
 
-            .cls-context-menu ul  {
-                display:inline-block;
+            .cls-context-menu ul {
+                display: inline-block;
                 list-style: none;
                 margin: 0;
                 padding: 0;
@@ -211,6 +196,7 @@
                 text-decoration: none;
                 color: blue;
             }
+
                 .cls-context-menu li:last-child {
                     border: none;
                 }
@@ -227,7 +213,7 @@
                 color: blue;
             }
 
-                
+
 
         /* Paste Template Toolbar */
         .paste-template-toolbar {
@@ -242,7 +228,7 @@
             display: inline-block;
             padding: 2px 5px;
             text-decoration: none;
-            font-size:14px;
+            font-size: 14px;
             border: 1px solid #CCC;
             color: white;
             border: solid 2px #67c5ff;
@@ -253,11 +239,11 @@
             cursor: pointer;
         }
 
-        .paste-template-toolbar-btn:hover {
-            color:dimgray;
-            transition: .4s; 
-            cursor: pointer;
-        }
+            .paste-template-toolbar-btn:hover {
+                color: dimgray;
+                transition: .4s;
+                cursor: pointer;
+            }
 
         /* Custom Selector style*/
         .Select-menu-outer {
@@ -442,7 +428,7 @@
 
             isLoaded = true;
 
-            console.log('Quill init called');
+            //console.log('Quill init called');
         }
 
         function registerTables() {
@@ -1731,23 +1717,28 @@
         }
 
         function getEditorHeight() {
-            return parseInt($('.ql-editor').outerHeight());
+            var editorHeight = parseInt($('.ql-editor').outerHeight());
+            return editorHeight;
         }
 
         function getToolbarHeight() {
-            return parseInt($('.ql-toolbar').outerHeight());
+            var toolbarHeight = parseInt($('.ql-toolbar').outerHeight());
+            return toolbarHeight;
         }
 
         function getTemplateToolbarHeight() {
-            return $("#pasteTemplateToolbar").outerHeight();
+            var templateToolbarHeight = parseInt($("#pasteTemplateToolbar").outerHeight());
+            return templateToolbarHeight;
         }
 
         function getTotalHeight() {
-            return getToolbarHeight() + getEditorHeight() + getTemplateToolbarHeight();
+            var totalHeight = getToolbarHeight() + getEditorHeight() + getTemplateToolbarHeight();
+            return totalHeight;
         }
 
         function isReadOnly() {
-            return $('.ql-editor').attr('contenteditable');
+            var isEditable = $('.ql-editor').attr('contenteditable');
+            return !isEditable;
         }
 
         function enableReadOnly() {
@@ -1855,7 +1846,8 @@
         }
 
         function getTemplateEmbedStr(t) {
-            return '{{' + t.templateId + '}}';
+            var templateStr = '{{' + t.templateId + '}}';
+            return templateStr;
         }
 
 

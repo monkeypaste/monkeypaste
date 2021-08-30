@@ -19,6 +19,7 @@
     <Compile Remove="Bootstrapper\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
+    <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Services\**" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <Compile Remove="Views\MainWindow\**" />
@@ -28,6 +29,7 @@
     <EmbeddedResource Remove="Bootstrapper\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
+    <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\MainWindow\**" />
@@ -37,6 +39,7 @@
     <None Remove="Bootstrapper\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
+    <None Remove="Resources\Html\temp\**" />
     <None Remove="Services\**" />
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <None Remove="Views\MainWindow\**" />
@@ -78,7 +81,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
-    <EmbeddedResource Include="Resources\Html\Editor\Editor2.js" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
   </ItemGroup>
 

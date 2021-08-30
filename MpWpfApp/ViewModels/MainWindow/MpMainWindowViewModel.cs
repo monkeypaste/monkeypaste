@@ -285,12 +285,12 @@ namespace MpWpfApp {
 
             MpPluginManager.Instance.Init();
 
-            if (string.IsNullOrEmpty(Properties.Settings.Default.ThisClientGuid)) {
-                Properties.Settings.Default.ThisClientGuid = Guid.NewGuid().ToString();                
+            if (string.IsNullOrEmpty(Properties.Settings.Default.ThisDeviceGuid)) {
+                Properties.Settings.Default.ThisDeviceGuid = Guid.NewGuid().ToString();                
             }
 
-            if (MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid) == null) {
-                new MpUserDevice(Properties.Settings.Default.ThisClientGuid, MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
+            if (MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisDeviceGuid) == null) {
+                new MpUserDevice(Properties.Settings.Default.ThisDeviceGuid, MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
             }
 
             SystemTrayViewModel = new MpSystemTrayViewModel();

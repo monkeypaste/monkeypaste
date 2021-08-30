@@ -109,7 +109,7 @@ namespace MpWpfApp {
                 var neavm = AppViewModels.GetAppViewModelByProcessPath(appPath);
                 if (neavm == null) {
                     //if unknown app just add it with rejection flag
-                    neavm = new MpAppViewModel(new MpApp(appPath));
+                    neavm = new MpAppViewModel(MpApp.Create(appPath,true));
                     MpAppCollectionViewModel.Instance.Add(neavm);
                 } else if (neavm.IsAppRejected) {
                     //if app is already rejected set it to selected in grid

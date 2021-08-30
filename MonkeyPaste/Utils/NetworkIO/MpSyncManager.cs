@@ -22,9 +22,12 @@ namespace MonkeyPaste {
     public class MpSyncException : Exception {
         public MpSyncMesageType ErrorType { get; set; }
         public MpRemoteDevice RemoteDevice { get; set; }
-        public MpSyncException(MpSyncMesageType errorType, MpRemoteDevice rd) : base() {
+        public MpSyncException(MpSyncMesageType errorType, MpRemoteDevice rd, Exception bex = null) : base() {
             ErrorType = errorType;
             RemoteDevice = rd;
+            if(bex != null) {
+                MpConsole.WriteTraceLine(bex);
+            }
         }
     }
     #endregion
@@ -45,6 +48,21 @@ namespace MonkeyPaste {
         public event EventHandler<string> OnError;
 
         #region Properties
+        public string[] DbTableSyncOrder { get; private set; } = new string[] {
+            "MpDbImage",
+            "MpIcon",
+            "MpUserDevice",
+            "MpUrl",
+            "MpUrlDomain",
+            "MpApp",
+            "MpSource",
+            "MpCopyItem",
+            "MpTag",
+            "MpCompositeCopyItem",
+            "MpCopyItemTemplate",
+            "MpCopyItemTag"
+        };
+
         public MpDeviceEndpoint ThisEndpoint { get; set; }
 
         public ObservableCollection<MpRemoteDevice> ConnectedDevices { get; set; }
@@ -191,7 +209,7 @@ namespace MonkeyPaste {
                                 SendSocket(client, thisDbLogRequest);
 
                                 Task.Run(async () => {
-                                    while (IsConnected(client)) {
+                                    while (IsConnected(client,false)) {
                                         try {
                                             var dbLogResponse = ReceiveSocket(client);
                                             if (dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
@@ -265,7 +283,7 @@ namespace MonkeyPaste {
                                 lep.DeviceGuid);                            
 
                             await Task.Run(async () => {
-                                while (IsConnected(listener)) {
+                                while (IsConnected(listener,false)) {
                                     try {
                                         var dbLogResponse = ReceiveSocket(listener);
                                         if (dbLogResponse == null) {
@@ -318,7 +336,7 @@ namespace MonkeyPaste {
                 return;
             }
             string dboTypeStr = sender.GetType().ToString();
-            if(dboTypeStr.EndsWith(".MpTag") || dboTypeStr.EndsWith(".MpCopyItem")) {
+            if(dboTypeStr.EndsWith(".MpTag") || dboTypeStr.EndsWith(".MpCopyItemTag")) {
                 Task.Run(async () => {
                     if (e is string dboGuid) {
                         //var llogs = await _localSync.GetDbObjectLogs(dboGuid, DateTime.MinValue);
@@ -428,7 +446,7 @@ namespace MonkeyPaste {
         }
 
         private MpStreamMessage SendSocket(Socket s, MpStreamMessage smsg) {
-            if (!IsConnected(s)) {
+            if (!IsConnected(s,true)) {
                 var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)s).FirstOrDefault();
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
             }
@@ -443,6 +461,11 @@ namespace MonkeyPaste {
                 var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)s).FirstOrDefault();
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
             }
+
+            if(smsg.Header.MessageType == MpSyncMesageType.DbLogResponse) {
+                _localSync.UpdateSyncHistory(smsg.Header.ToGuid, DateTime.UtcNow);
+            }
+
             MpConsole.WriteLine(@"{0} Sent: {1} bytes", DateTime.Now.ToString(), bytesSent.Length);
             return null;
         }
@@ -464,7 +487,7 @@ namespace MonkeyPaste {
         private string ReceiveAllSocket(Socket socket) {
             var buffer = new List<byte>();
             string response = string.Empty;
-            bool isConnected = IsConnected(socket);
+            bool isConnected = IsConnected(socket,false);
 
             while (socket.Available == 0) {
                 if (!isConnected) {
@@ -472,7 +495,7 @@ namespace MonkeyPaste {
                     throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
                 }
                 Thread.Sleep(100);
-                isConnected = IsConnected(socket);
+                isConnected = IsConnected(socket,false);
             }
             while (response == string.Empty || response.IndexOf(MpStreamMessage.EofToken) < 0) {
                 while (socket.Available > 0) {
@@ -495,7 +518,8 @@ namespace MonkeyPaste {
             return response;
         }
 
-        private bool IsConnected(Socket s) {
+        private bool IsConnected(Socket s, bool isWrite) {
+            return true;
             int pt = 500000; //500000 microseconds is .5 seconds
             if (s == null) {
                 return false;
@@ -504,15 +528,15 @@ namespace MonkeyPaste {
             if (!s.Connected) {
                 return false;
             }
-            if (!s.Poll(pt, SelectMode.SelectWrite)) {
-                //Console.WriteLine("This Socket is not writable.");
+            if (isWrite && !s.Poll(pt, SelectMode.SelectWrite)) {
+                Console.WriteLine("This Socket is not writable.");
                 //isConnected = false;
                 return false;
             }
-            //if (!s.Poll(pt, SelectMode.SelectRead)) {
-            //    //Console.WriteLine("This Socket is not readable.");
-            //    return false;
-            //}
+            if (!isWrite && !s.Poll(pt, SelectMode.SelectRead)) {
+                //Console.WriteLine("This Socket is not readable.");
+                return false;
+            }
             //if (s.Poll(pt, SelectMode.SelectError)) {
             //    //Console.WriteLine("This Socket has an error.");
             //    return false;

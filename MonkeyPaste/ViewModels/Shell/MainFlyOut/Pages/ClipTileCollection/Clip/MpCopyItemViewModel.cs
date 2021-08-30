@@ -15,7 +15,7 @@ namespace MonkeyPaste {
         #region Private Variables
         public event EventHandler ItemStatusChanged;
         private string _orgTitle = string.Empty;
-        private double _collapsedHeight = 100;
+        private const double _collapsedHeight = 100;
         #endregion
 
         #region Properties
@@ -41,7 +41,7 @@ namespace MonkeyPaste {
 
         public MpJsProperty<bool> IsEditorLoaded { get; set; }
 
-        public double EditorHeight { get; set; }
+        public double EditorHeight { get; set; } = _collapsedHeight;
 
         public System.Timers.Timer UpdateTimer { get; set; }
 
@@ -51,6 +51,8 @@ namespace MonkeyPaste {
 
         public bool IsTitleVisible {
             get {
+                return true;
+
                 if(CopyItem == null) {
                     return false;
                 }
@@ -112,9 +114,9 @@ namespace MonkeyPaste {
             //Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
             Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));
 
-            //Device.BeginInvokeOnMainThread(Initialize);
+            Device.BeginInvokeOnMainThread(Initialize);
 
-            Initialize();
+            //Initialize();
         }
         #endregion
 
@@ -141,15 +143,15 @@ namespace MonkeyPaste {
 
         private void InitEditor() {
             var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-
+            
             string contentTag = @"<div id='editor'>";
             var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
             html = html.Replace(contentTag, contentTag + data);
+
             string envTag = @"var envName = '';";
             string envVal = @"var envName = 'android';";
             html = html.Replace(envTag, envVal);
 
-            Console.Write(html);
             EditorHtml = html;
         }
 
@@ -174,7 +176,6 @@ namespace MonkeyPaste {
             UpdateTimer.Interval = 100;
             UpdateTimer.AutoReset = true;
             UpdateTimer.Elapsed += UpdateTimer_Elapsed;
-           // UpdateTimer.Start();
         }
 
         private async void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
@@ -184,14 +185,15 @@ namespace MonkeyPaste {
             //    MpConsole.WriteLine(edConsoleLog);
             //}
 
-            edText = await EvalJs($"getText()");
-            edHtml = await EvalJs($"getHtml()");
-            edTemplates = await EvalJs($"getTemplates()");
+            //edText = await EvalJs($"getText()");
+            //edHtml = await EvalJs($"getHtml()");
+            //edTemplates = await EvalJs($"getTemplates()");
+
             var heightStr = await EvalJs($"getTotalHeight()");
             if(!IsExpanded || string.IsNullOrEmpty(heightStr) || heightStr == "null") {
                 heightStr = _collapsedHeight.ToString();
             }
-            EditorHeight = Convert.ToDouble(heightStr);
+            EditorHeight = Math.Max(_collapsedHeight,Convert.ToDouble(heightStr));
             //MpConsole.WriteLine("Editor Height: " + heightStr + " " + EditorHeight);
         }
 
@@ -301,18 +303,20 @@ namespace MonkeyPaste {
 
         public ICommand ExpandCommand => new Command<object>(
             async (arg) => {
+                MpCopyItemTileCollectionPageViewModel.IsAnyItemExpanded = true;
                 IsExpanded = true;
                 OnPropertyChanged(nameof(ShowLeftMenu));
-                //await EvalJs($"disableReadOnly()");
+                await EvalJs($"disableReadOnly()");
             },
             (arg)=>IsSelected);
 
         public ICommand UnexpandItemCommand => new Command(
-            async () => {               
+            async () => {
+                MpCopyItemTileCollectionPageViewModel.IsAnyItemExpanded = false;
                 IsExpanded = false;
                 OnPropertyChanged(nameof(ShowLeftMenu));
 
-                //await EvalJs($"enableReadOnly()");
+                await EvalJs($"enableReadOnly()");
             });
 
         public ICommand FillOutTemplatesCommand => new Command(

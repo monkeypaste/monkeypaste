@@ -131,7 +131,7 @@ namespace MpWpfApp {
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (string.IsNullOrEmpty(sourceClientGuid)) {
-                sourceClientGuid = Properties.Settings.Default.ThisClientGuid;
+                sourceClientGuid = Properties.Settings.Default.ThisDeviceGuid;
             }
             if (CopyItemTagGuid == System.Guid.Empty) {
                 CopyItemTagGuid = System.Guid.NewGuid();
@@ -166,17 +166,17 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+                WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
         public void WriteToDatabase(bool isFirstLoad) {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, isFirstLoad);
+            WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid, isFirstLoad);
         }
         public void DeleteFromDatabase() {
             if (IsSyncing) {
                 DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+                DeleteFromDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
         public override void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {

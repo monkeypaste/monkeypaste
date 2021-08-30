@@ -212,7 +212,7 @@ namespace MonkeyPaste {
             var hostAppImage = (args as object[])[3] as byte[];
             var hostAppImageBase64 = (args as object[])[4] as string;
 
-            MpApp app = await MpApp.GetAppByPath(hostPackageName);
+            MpApp app = MpApp.GetAppByPath(hostPackageName);
             if (app == null) {
                 app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
             }

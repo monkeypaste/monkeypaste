@@ -202,7 +202,7 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, false, false);
+            WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid, false, false);
         }
 
         public void DeleteFromDatabase() {

@@ -1322,12 +1322,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ThisClientGuid {
+        public string ThisDeviceGuid {
             get {
-                return ((string)(this["ThisClientGuid"]));
+                return ((string)(this["ThisDeviceGuid"]));
             }
             set {
-                this["ThisClientGuid"] = value;
+                this["ThisDeviceGuid"] = value;
             }
         }
         
@@ -1346,6 +1346,18 @@ namespace MpWpfApp.Properties {
         public string XamNamespace {
             get {
                 return ((string)(this["XamNamespace"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double ThisAppDpi {
+            get {
+                return ((double)(this["ThisAppDpi"]));
+            }
+            set {
+                this["ThisAppDpi"] = value;
             }
         }
     }

@@ -364,7 +364,7 @@
     <Setting Name="DomainFavIconEndpoint" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&amp;domain_url=</Value>
     </Setting>
-    <Setting Name="ThisClientGuid" Type="System.String" Scope="User">
+    <Setting Name="ThisDeviceGuid" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="WpfNamespaceName" Type="System.String" Scope="Application">
@@ -372,6 +372,9 @@
     </Setting>
     <Setting Name="XamNamespace" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MonkeyPaste</Value>
+    </Setting>
+    <Setting Name="ThisAppDpi" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -209,7 +209,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Factory Methods
-        public static async Task<ObservableCollection<MpCopyItem>> GetPage(
+        public static List<MpCopyItem> GetPage(
             int tagId,
             int start,
             int count,
@@ -224,19 +224,18 @@ namespace MpWpfApp {
             //ORDER BY user_uid LIMIT { 5}
             //OFFSET { 6}
             //Where { 5} is page size and { 6 } is page number * page size.
-            await Task.Delay(1);
             var result = MpDb.Instance.Execute(
-                                @"SELECT * from MpCopyItem
-                                      WHERE pk_MpCopyItemId in 
-                                        (SELECT fk_MpCopyItemId FROM MpCopyItemTag 
-                                         WHERE fk_MpTagId=@tid)
-                                      ORDER BY @sc @sd LIMIT @c OFFSET @s",
+                                string.Format(@"SELECT * from MpCopyItem " +
+                                      "WHERE pk_MpCopyItemId in " +
+                                        "(SELECT fk_MpCopyItemId FROM MpCopyItemTag " +
+                                         "WHERE fk_MpTagId=@tid) " +
+                                      "ORDER BY {0} {1} LIMIT {2} OFFSET {3}",
+                                      sortColumn, 
+                                      (isDescending ? "DESC" : "ASC"),
+                                      count,
+                                      start),
                                 new Dictionary<string, object> {
-                                    { "@tid",tagId },
-                                    { "@sc",sortColumn },
-                                    { "@sd",(isDescending ? "DESC" : "ASC") },
-                                    { "@c",count },
-                                    { "@s",start }
+                                    { "@tid",tagId }
                                 });
 
             var cil = new List<MpCopyItem>();
@@ -245,7 +244,7 @@ namespace MpWpfApp {
                     cil.Add(new MpCopyItem((DataRow)dr));
                 }
             }
-            return new ObservableCollection<MpCopyItem>(cil);
+            return cil;
         }
 
         public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, int remainingRetryCount = 5, DispatcherPriority priority = DispatcherPriority.Background) {
@@ -615,13 +614,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         #region Constructors
-        public MpCopyItem() : this(
-            MpCopyItemType.RichText,
-            @"Loading",
-            @"Default",
-            MpHelpers.Instance.GetRandomColor(),
-            IntPtr.Zero,
-            new MpApp()) { }
+        public MpCopyItem() { }
 
         public MpCopyItem(
             MpCopyItemType itemType,
@@ -655,7 +648,7 @@ namespace MpWpfApp {
                 //occurs for items added from clipboard
                 App = MpApp.GetAppByHandle(hwnd);
                 if (App == null) {
-                    App = new MpApp(false, hwnd);
+                    App = MpApp.Create(hwnd);
                     //MpApp.GetAllApps().Add(App);
                 } 
 
@@ -1140,7 +1133,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+                DeleteFromDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
 
@@ -1199,7 +1192,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+                WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
 
@@ -1228,6 +1221,7 @@ namespace MpWpfApp {
                 itemText = string.Empty;
             }
             ItemHtml = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(ItemRichText);
+
             //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
@@ -1292,6 +1286,16 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
+
+            new MpCopyItemTag() {
+                CopyItemId = this.CopyItemId,
+                TagId = 1 //all tag
+            }.WriteToDatabase();
+
+            new MpCopyItemTag() {
+                CopyItemId = this.CopyItemId,
+                TagId = 2 //recent tag
+            }.WriteToDatabase();
 
             var cil = GetAllCopyItems(out int count).Where(x => x.CopyItemId == CopyItemId).ToList();
             if (cil.Count > 0) {

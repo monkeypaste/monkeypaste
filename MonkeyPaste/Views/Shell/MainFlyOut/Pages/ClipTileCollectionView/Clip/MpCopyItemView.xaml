@@ -14,6 +14,7 @@
         <Frame Padding="0"               
                BackgroundColor="White"               
                HasShadow="True"
+               MinimumHeightRequest="70"
                HeightRequest="{Binding EditorHeight}"
                IsClippedToBounds="True">
             <Frame.OutlineColor>
@@ -52,7 +53,7 @@
                 <Grid Padding="0"
                       BackgroundColor="Transparent"
                       HorizontalOptions="FillAndExpand"
-                      VerticalOptions="StartAndExpand">
+                      VerticalOptions="FillAndExpand">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto" />

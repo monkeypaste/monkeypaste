@@ -79,7 +79,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+                WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
@@ -107,7 +107,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+                DeleteFromDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
 

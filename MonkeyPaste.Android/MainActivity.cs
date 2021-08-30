@@ -123,6 +123,14 @@ namespace MonkeyPaste.Droid {
             //}
         }
 
+        public override void OnActionModeStarted(ActionMode mode) { 
+            if(MonkeyPaste.MpCopyItemTileCollectionPageViewModel.IsAnyItemExpanded) {
+                IMenu menu = mode.Menu;
+                menu.Clear();
+            }
+            base.OnActionModeStarted(mode); 
+        }
+
 
         void CreateCbNotificationChannel() {
             if (Build.VERSION.SdkInt < BuildVersionCodes.O) {

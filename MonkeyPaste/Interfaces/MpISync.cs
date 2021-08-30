@@ -26,6 +26,8 @@ namespace MonkeyPaste {
 
         Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "");
 
+        void UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges);
+
         Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr);
 
         Task PerformSync(

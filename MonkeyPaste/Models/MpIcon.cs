@@ -114,18 +114,42 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpIcon> Create(string iconImgBase64) {            
-            var newImage = new MpDbImage() {
+            var iconImage = new MpDbImage() {
                 //ImageBytes = iconImg
                 ImageBase64 = iconImgBase64
             };
-            await MpDb.Instance.AddItemAsync<MpDbImage>(newImage);
-            
+
+            // TODO add image manipulation stuff like in wpf or get rid of this crap
+            var iconBorderImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightSelectedImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+
+            await MpDb.Instance.AddItemAsync<MpDbImage>(iconImage);
+            await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderImage);
+            await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightImage);
+            await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightSelectedImage);
+
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
             var colorList = await CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
-                //IconImageId = newImage.Id,
-                IconImage = newImage,
+                IconImageId = iconImage.Id,
+                IconImage = iconImage,
+                IconBorderImageId = iconBorderImage.Id,
+                IconBorderImage = iconBorderImage,
+                IconBorderHighlightImageId = iconBorderHighlightImage.Id,
+                IconBorderHighlightImage = iconBorderHighlightImage,
+                IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.Id,
+                IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage,
                 HexColor1 = colorList[0],
                 HexColor2 = colorList[1],
                 HexColor3 = colorList[2],
@@ -140,13 +164,8 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var iconDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", iconGuid);
-            MpIcon icon = null;
-            if (iconDr == null) {
-                icon = new MpIcon();
-            } else {
-                icon = iconDr as MpIcon;
-            }
+            var icon = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
+
             foreach (var li in logs) {
                 switch (li.AffectedColumnName) {
                     case "MpIconGuid":

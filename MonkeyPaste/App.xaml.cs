@@ -23,17 +23,17 @@ namespace MonkeyPaste {
             NativeInterfaceWrapper = niw;
             MainPage = new MpMainShell(niw);
 
-            string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
-            string path = System.IO.Path.Combine(folder, string.Format(@"Editor2.html"));
+            //string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
+            //string path = System.IO.Path.Combine(folder, string.Format(@"Editor2.html"));
 
-            var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-            MpHelpers.Instance.WriteTextToFile(path, html);
-            MpConsole.WriteLine(@"Editor written to: " + path);
+            //var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            //MpHelpers.Instance.WriteTextToFile(path, html);
+            //MpConsole.WriteLine(@"Editor written to: " + path);
 
-            path = path.Replace("Editor2.html", "Editor2.js");
-            html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
-            MpHelpers.Instance.WriteTextToFile(path, html);
-            MpConsole.WriteLine(@"Editor js written to: " + path);
+            //path = path.Replace("Editor2.html", "Editor2.js");
+            //html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
+            //MpHelpers.Instance.WriteTextToFile(path, html);
+            //MpConsole.WriteLine(@"Editor js written to: " + path);
         }
 
         protected override void OnStart() {

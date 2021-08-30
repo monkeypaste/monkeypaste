@@ -110,15 +110,20 @@ namespace MpWpfApp {
         }
 
         private static string GetResponse(string url) {
-            string jsonString;
+            string jsonString = string.Empty;
 
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip;
+            try {
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.AutomaticDecompression = DecompressionMethods.GZip;
 
-            using (var response = (HttpWebResponse)request.GetResponse())
-            using (var stream = response.GetResponseStream())
-            using (var reader = new StreamReader(stream)) {
-                jsonString = reader.ReadToEnd();
+                using (var response = (HttpWebResponse)request.GetResponse())
+                using (var stream = response.GetResponseStream())
+                using (var reader = new StreamReader(stream)) {
+                    jsonString = reader.ReadToEnd();
+                }
+            }
+            catch(Exception) {
+
             }
 
             return jsonString;

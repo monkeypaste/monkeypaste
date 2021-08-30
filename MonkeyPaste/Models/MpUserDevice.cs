@@ -55,8 +55,29 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public bool IsThisDevice {
+            get {
+                if (UserDeviceGuid == null) {
+                    return false;
+                }
+                return UserDeviceGuid.ToString() == MpPreferences.Instance.ThisDeviceGuid;
+            }
+        }
+
+        [Ignore]
+        public bool IsThisPlatform {
+            get {
+                return PlatformType == MpPreferences.Instance.ThisDeviceType;
+            }
+        }
+
         public static MpUserDevice GetUserDeviceByGuid(string deviceGuid) {
             return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.UserDeviceGuid.ToString() == deviceGuid).FirstOrDefault();
+        }
+
+        public static MpUserDevice GetUserDeviceById(int udid) {
+            return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.Id == udid).FirstOrDefault();
         }
 
         public MpUserDevice() { }

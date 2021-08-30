@@ -117,7 +117,8 @@ namespace MonkeyPaste {
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpCopyItemTag ncit) {
-                    if (ncit.TagId == Tag.Id) {
+                    //if (ncit.Guid == Tag.Guid) {
+                    if(true) { 
                         //occurs when copy item is linked to tag
                         var nci = await MpCopyItem.GetCopyItemByIdAsync(ncit.CopyItemId);
                         if (!Tag.CopyItemList.Contains(nci)) {
@@ -129,10 +130,9 @@ namespace MonkeyPaste {
                 } else if (e is MpCopyItem nci) {
                     //occurs for new/synced copy items
                     bool isLinked = await Tag.IsLinkedWithCopyItemAsync(nci);
-                    if(!isLinked && (Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId)) {
-                        isLinked = true;
-                    }
-                    if (isLinked && !Tag.CopyItemList.Any(x=>x.CopyItemGuid == nci.CopyItemGuid)) {
+                    if (!isLinked && (Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId)) {
+                        await Tag.LinkWithCopyItemAsync(nci);
+                    } else if (isLinked && !Tag.CopyItemList.Any(x=>x.CopyItemGuid == nci.CopyItemGuid)) {
                         Tag.CopyItemList.Add(nci);
                         OnPropertyChanged(nameof(CopyItemCount));
                     }

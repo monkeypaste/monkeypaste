@@ -85,6 +85,17 @@ namespace MpWpfApp {
             return GetAllApps().Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();
         }
 
+        public static MpApp GetAppByPath(string appPath, string deviceGuid = "") {
+            if(string.IsNullOrEmpty(deviceGuid)) {
+                deviceGuid = Properties.Settings.Default.ThisDeviceGuid;
+            }
+            var device = MpUserDevice.GetUserDeviceByGuid(deviceGuid);
+            if(device == null) {
+                return null;
+            }
+            return GetAllApps().Where(x => x.AppPath.ToLower() == appPath.ToLower() && x.UserDeviceId == device.UserDeviceId).FirstOrDefault();
+        }
+
         public static bool IsAppRejectedByHandle(IntPtr hwnd) {
             string appPath = MpHelpers.Instance.GetProcessPath(hwnd);
             foreach(MpApp app in GetAllApps()) {
@@ -97,36 +108,44 @@ namespace MpWpfApp {
         public static List<MpApp> GetAllRejectedApps() {
             return GetAllApps().Where(x => x.IsAppRejected == true).ToList();
         }
-        #endregion
 
-        public MpApp(bool isAppRejected, IntPtr hwnd) : this() {
+        public static MpApp Create(object source, bool isAppRejected = false) {
+            MpApp newApp = new MpApp();
+
+            if (source == null) {
+                newApp.AppPath = MpHelpers.Instance.GetApplicationProcessPath();
+                newApp.AppName = Properties.Settings.Default.ApplicationName;
+            } else if (source is string) {
+                newApp.AppPath = source as string;
+                if (MpHelpers.Instance.IsValidUrl(newApp.AppPath)) {
+                    newApp.AppName = MpHelpers.Instance.GetUrlDomain(newApp.AppPath);
+                    newApp.Icon = new MpIcon(MpHelpers.Instance.GetUrlFavicon(newApp.AppPath));
+                } else {
+                    newApp.AppName = Path.GetFileNameWithoutExtension(newApp.AppPath);
+                }
+            } else if (source is IntPtr hwnd) {
+                newApp.AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
+                newApp.AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
+            }
+
+            var dupApp = MpApp.GetAppByPath(newApp.AppPath);
+            if(dupApp != null) {
+                if(dupApp.IsAppRejected != isAppRejected) {
+                    dupApp.IsAppRejected = isAppRejected;
+                }
+                return dupApp;
+            }
             //used for for new app sources when copy item added from clipboard
-            AppGuid = Guid.NewGuid();
-            AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
-            AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
-            IsAppRejected = isAppRejected;
-            Icon = new MpIcon(MpHelpers.Instance.GetIconImage(AppPath));
-            UserDeviceId = MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid).UserDeviceId;
-        }
+            newApp.AppGuid = Guid.NewGuid();
+            newApp.IsAppRejected = isAppRejected;
+            if (newApp.Icon == null) {
+                newApp.Icon = new MpIcon(MpHelpers.Instance.GetIconImage(newApp.AppPath));
+            }
+            newApp.UserDeviceId = MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisDeviceGuid).UserDeviceId;
 
-        public MpApp(string appPath) : this() {
-            //only called when user selects rejected app in settings
-            AppGuid = Guid.NewGuid();
-            AppPath = appPath;
-            AppName = appPath;
-            IsAppRejected = true;
-            Icon = new MpIcon(MpHelpers.Instance.GetIconImage(AppPath)); 
-            UserDeviceId = MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisClientGuid).UserDeviceId;
+            return newApp;
         }
-
-        public MpApp(string url, bool isDomainRejected) : this() {
-            //experimental, will be used to block url domains 
-            AppGuid = Guid.NewGuid();
-            AppPath = url;
-            AppName = MpHelpers.Instance.GetUrlDomain(url);
-            IsAppRejected = isDomainRejected;
-            Icon = new MpIcon(MpHelpers.Instance.GetUrlFavicon(url));
-        }
+        #endregion
 
         public MpApp() { }
 
@@ -149,7 +168,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+                WriteToDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
@@ -194,7 +213,7 @@ namespace MpWpfApp {
             if (IsSyncing) {
                 DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+                DeleteFromDatabase(Properties.Settings.Default.ThisDeviceGuid);
             }
         }
 

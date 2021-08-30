@@ -68,9 +68,15 @@ namespace MonkeyPaste {
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUserDevice UserDevice { get; set; }
 
-        public static async Task<MpApp> GetAppByPath(string appPath) {
-            var allApps = await MpDb.Instance.GetItemsAsync<MpApp>();
-            return allApps.Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();
+        public static MpApp GetAppByPath(string appPath, string deviceGuid = "") {
+            if (string.IsNullOrEmpty(deviceGuid)) {
+                deviceGuid = MpPreferences.Instance.ThisDeviceGuid;
+            }
+            var device = MpUserDevice.GetUserDeviceByGuid(deviceGuid);
+            if (device == null) {
+                return null;
+            }
+            return MpDb.Instance.GetItems<MpApp>().Where(x => x.AppPath.ToLower() == appPath.ToLower() && x.UserDeviceId == device.Id).FirstOrDefault();
         }
 
         public static async Task<MpApp> GetAppById(int appId) {
@@ -84,23 +90,30 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpApp> Create(string appPath,string appName, string appIconBase64) {
+            var dupApp = MpApp.GetAppByPath(appPath);
+            if(dupApp != null) {
+                return dupApp;
+            }
             //if app doesn't exist create image,icon,app and source
 
             var newIcon = await MpIcon.Create(appIconBase64);
+
+            var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
             var newApp = new MpApp() {
                 AppPath = appPath,
                 AppName = appName,
                 IconId = newIcon.Id,
-                Icon = newIcon
+                Icon = newIcon,
+                UserDeviceId = thisDevice.Id,
+                UserDevice = thisDevice
             };
 
             await MpDb.Instance.AddItemAsync<MpApp>(newApp);
 
             return newApp;
         }
-        public MpApp() {
-        }
+        public MpApp() { }
 
         #region MpICopyItemSource Implementation
         public MpIcon SourceIcon => Icon;

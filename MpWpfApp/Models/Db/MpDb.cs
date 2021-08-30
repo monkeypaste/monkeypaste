@@ -303,7 +303,7 @@ namespace MpWpfApp {
         public async Task<int> ExecuteWriteAsync(string query, Dictionary<string, object> args) {
             int numberOfRowsAffected;
             using (var con = SetConnection()) {
-                con.Open();
+                await con.OpenAsync();
                 using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (var pair in args) {
@@ -321,7 +321,7 @@ namespace MpWpfApp {
                 return null;
             }
             using (var con = SetConnection()) {
-                con.Open();
+                await con.OpenAsync();
                 using (var cmd = new System.Data.SQLite.SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (KeyValuePair<string, object> entry in args) {
@@ -668,7 +668,7 @@ namespace MpWpfApp {
             return 44381;
         }
         public string GetThisClientGuid() {
-            return Properties.Settings.Default.ThisClientGuid;
+            return Properties.Settings.Default.ThisDeviceGuid;
         }
         public string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
@@ -848,11 +848,22 @@ namespace MpWpfApp {
                 writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
-            var newSyncHistory = new MpSyncHistory() {
-                OtherClientGuid = System.Guid.Parse(remoteClientGuid),
-                SyncDateTime = DateTime.UtcNow
-            };
-            newSyncHistory.WriteToDatabase();
+            
+        }
+
+        public void UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
+            MpSyncHistory sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
+
+            if(sh == null) {
+                sh = new MpSyncHistory() {
+                    OtherClientGuid = System.Guid.Parse(otherDeviceGuid),
+                    SyncDateTime = utcDtSentLocalChanges
+                };
+            } else {
+                sh.SyncDateTime = utcDtSentLocalChanges;
+            }
+            
+            sh.WriteToDatabase();
         }
 
         private Dictionary<Guid, List<MonkeyPaste.MpDbLog>> OrderByPrecedence(Dictionary<Guid, List<MonkeyPaste.MpDbLog>> dict) {
@@ -871,20 +882,7 @@ namespace MpWpfApp {
         }
 
         private int GetDbTableOrder(MonkeyPaste.MpDbLog log) {
-            var orderedLogs = new List<string>() {
-                          "MpColor",
-                          "MpDbImage",
-                          "MpIcon",
-                          "MpUserDevice",
-                          "MpUrl",
-                          "MpUrlDomain",
-                          "MpApp",
-                          "MpSource",
-                          "MpCopyItem",
-                          "MpTag",
-                          "MpCompositeCopyItem",
-                          "MpCopyItemTemplate",
-                          "MpCopyItemTag"};
+            var orderedLogs = MpSyncManager.Instance.DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
