@@ -115,7 +115,7 @@ namespace MpWpfApp {
         }
 
         private void grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            (this.DataContext as MpViewModelBase).MainWindowViewModel.ShowWindowCommand.Execute(null);
+            MpViewModelBase.MainWindowViewModel.ShowWindowCommand.Execute(null);
         }
     }
 }

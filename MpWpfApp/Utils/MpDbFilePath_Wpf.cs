@@ -9,8 +9,8 @@ using System.Text;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MpDbFilePath_Wpf))]
 namespace MpWpfApp {
-    public class MpDbFilePath_Wpf : MonkeyPaste.MpIDbFilePath {
-        public string DbFilePath() {
+    public class MpDbFilePath_Wpf : MonkeyPaste.MpIDbInfo {
+        public string GetDbFilePath() {
             if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) ||
                 !File.Exists(Properties.Settings.Default.DbPath)) {
                 Console.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
@@ -20,6 +20,14 @@ namespace MpWpfApp {
                 SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
             }
             return Properties.Settings.Default.DbPath;
+        }
+
+        public string GetDbName() {
+            return "Mp.db";
+        }
+
+        public string GetDbPassword() {
+            return string.Empty;
         }
     }
 }

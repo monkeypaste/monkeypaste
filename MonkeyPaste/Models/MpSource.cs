@@ -11,14 +11,33 @@ namespace MonkeyPaste {
         private static List<MpSource> _AllSources = null;
 
         [PrimaryKey,AutoIncrement]
+        [Column("pk_MpSourceId")]
         public override int Id { get; set; }
 
+        [Column("MpSourceGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid SourceGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpUrl))]
+        [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
         [Ignore]
         public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpApp))]
+        [Column("fk_MpAppId")]
         public int AppId { get; set; }
         [Ignore]
         public MpApp App { get; set; }

@@ -15,6 +15,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Xamarin.Forms.PlatformConfiguration;
 using System.Collections;
+using System.Reflection;
 
 namespace MonkeyPaste {    
     public class MpDb : MpISync {
@@ -29,6 +30,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Variables
+        private MpIDbInfo _dbInfo;
         private object _rdLock;
         private SQLiteAsyncConnection _connectionAsync;
         private SQLiteConnection _connection;
@@ -49,21 +51,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public async Task Init(bool isWpf = false) {
-            if (_connectionAsync != null) {
-                return;
-            }
-            InitUser(IdentityToken);
-            InitClient(AccessToken);
-
-            if(isWpf) {
-                //CreateConnection();
-            } else {
-                await InitDbAsync();
-            }
-            
-            IsLoaded = true;
-            
+        public void Init(MpIDbInfo dbInfo) {
+            _dbInfo = dbInfo;
+            InitDb();            
+            IsLoaded = true;            
         }
 
         public SQLite.TableMapping GetTableMapping(string tableName) {
@@ -77,7 +68,7 @@ namespace MonkeyPaste {
 
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             var result = await _connectionAsync.QueryAsync<T>(query, args);
             return result;
@@ -93,7 +84,7 @@ namespace MonkeyPaste {
 
         public async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             TableMapping qtm = null;
             foreach(var tm in _connectionAsync.TableMappings) {
@@ -129,7 +120,7 @@ namespace MonkeyPaste {
 
         public async Task<List<T>> GetItemsAsync<T>() where T : new() {
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             //return await _connectionAsync.Table<T>().ToListAsync();
             var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
@@ -144,7 +135,7 @@ namespace MonkeyPaste {
         }
         public async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
             return dbo;
@@ -160,7 +151,7 @@ namespace MonkeyPaste {
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
@@ -172,9 +163,13 @@ namespace MonkeyPaste {
                 }
                 if (!ignoreTracking) {
                     await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
-                }
-                
+                }                
             }
+            if(item is MpCopyItemTag cit) {
+                if(cit.CopyItemId == 0 && cit.TagId == 0) {
+                    return;
+                }
+            } 
             await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
@@ -210,7 +205,7 @@ namespace MonkeyPaste {
         public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
 
             if (item == null) {
@@ -255,7 +250,7 @@ namespace MonkeyPaste {
         public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                await Init();
+                InitDb();
             }
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
@@ -296,7 +291,6 @@ namespace MonkeyPaste {
             }
         }
 
-
         public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
             if ((item as MpDbModelBase).Id == 0) {
                 await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
@@ -305,16 +299,14 @@ namespace MonkeyPaste {
             }
         }
 
-        public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
             if ((item as MpDbModelBase).Id == 0) {
                 AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             } else {
                 UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             }
         }
-
         
-
         public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
@@ -380,96 +372,225 @@ namespace MonkeyPaste {
             return (T)dbo;
         }
 
-        //public async Task UpdateWithChildren(MpDbObject dbo) {
-        //    await _connectionAsync.UpdateWithChildrenAsync(dbo);
-        //}
-
-        //public async Task<T> GetWithChildren<T>(T item) where T : new() {
-        //    return await _connectionAsync.GetWithChildrenAsync<T>((item as MpDbObject).Id);
-        //}
-
-        //public async Task<List<T>> GetAllWithChildren<T>() where T : new() {
-        //    return await _connectionAsync.GetAllWithChildrenAsync<T>();
-        //}
-
-        public void InitUser(string idToken) {
-            // User = new MpUser() { IdentityToken = idToken };
-        }
-        public void InitClient(string accessToken) {
-            //Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
-        }
-
         public byte[] GetDbFileBytes() {
-            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+            var dbPath = _dbInfo.GetDbFilePath();
             return File.ReadAllBytes(dbPath);
+        }
+
+        #region Wpf backwards compatability
+        private string GetTableName(string query) {
+            string tableName = "UnknownTableName";
+
+            if (query.ToLower().StartsWith("select")) {
+                string preStr = "from ";
+                int tableNameStartIdx = query.IndexOf(preStr) + preStr.Length;
+                int tableNameEndIdx = query.Substring(tableNameStartIdx).IndexOf(" ");
+                int tableNameLength = tableNameEndIdx > 0 ?
+                    query.Substring(tableNameStartIdx).Length - tableNameEndIdx :
+                    query.Length - tableNameStartIdx;
+                tableName = query.Substring(tableNameStartIdx, tableNameLength);
+            } else if (query.ToLower().StartsWith("insert")) {
+                string preStr = "insert into ";
+                int tableNameLength = query.IndexOf(@"(") - preStr.Length;
+                tableName = query.Substring(preStr.Length, tableNameLength);
+            } else if (query.ToLower().StartsWith("update")) {
+                string preStr = "update ";
+                int tableNameLength = query.Substring(preStr.Length).IndexOf(@" ");
+                tableName = query.Substring(preStr.Length, tableNameLength);
+            } else if (query.ToLower().StartsWith("delete")) {
+                string preStr = "delete from ";
+                int tableNameLength = query.Substring(preStr.Length).IndexOf(@" ");
+                tableName = query.Substring(preStr.Length, tableNameLength);
+            } else {
+                throw new Exception(@"Unknown query format: " + query);
+            }
+
+            return tableName;
+        }
+        private Tuple<string,object[]> PrepareQuery(string query, Dictionary<string, object> args) {
+            if (string.IsNullOrEmpty(query.Trim())) {
+                return null;
+            }
+
+            string newQuery = query;
+            object[] newArgs = null;
+            //var sb = new StringBuilder();
+
+            if (args != null) {
+                var newArgDict = new Dictionary<int, object>();
+                foreach (var arg in args) {
+                    int argStartIdx = query.IndexOf(arg.Key);
+                    if (argStartIdx < 0) {
+                        throw new Exception(@"Error with query: " + query);
+                    }
+                    newArgDict.Add(argStartIdx, arg.Value);
+                    newQuery = newQuery.Replace(arg.Key, "?");
+                }
+                var sortedArgs = from pair in newArgDict
+                                 orderby pair.Key ascending
+                                 select pair.Value;
+                newArgs = sortedArgs.ToArray();
+            }
+            return new Tuple<string, object[]>(newQuery, newArgs);
+        }
+        public MpDataTable Execute(string query, Dictionary<string, object> args) {
+            if(_connection == null) {
+                CreateConnection();
+            }
+
+            string tn = GetTableName(query);
+            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tn);
+
+            var tuple = PrepareQuery(query, args);
+
+            var queryMethod = _connection.GetType().GetMethod("Query");
+            var queryByDboTypeMethod = queryMethod.MakeGenericMethod(new[] { dbot });
+            var result = queryByDboTypeMethod.Invoke(_connection, new object[] { tuple.Item1, tuple.Item2 }) as IList;
+
+            var dt = new MpDataTable();
+
+            foreach(var row in result) {
+                var dr = new MpDataRow();
+                foreach (var rowProp in row.GetType().GetProperties()) {
+                    dr.AddColumn(rowProp.Name, rowProp.GetValue(row));
+                }
+                dt.Rows.Add(dr);
+            }
+
+            return dt;
+        }
+
+        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+
+            var tuple = PrepareQuery(query, args);
+
+            if(tuple.Item2 == null) {
+                return _connection.Execute(tuple.Item1);
+            }
+            return _connection.Execute(tuple.Item1, tuple.Item2);
+        }
+        public int GetLastRowId(string tableName, string pkName) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+
+            MpDataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;", null);
+            if (dt.Rows.Count > 0) {
+                return Convert.ToInt32(dt.Rows[0][0].ToString());
+            }
+            return -1;
         }
         #endregion
 
+        #endregion
+
         #region Private Methods  
-        private async Task CreateConnectionAsync() {
-            await Task.Delay(1);
-            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
-
-            var connStr = new SQLiteConnectionString(
-                databasePath: dbPath,
-                storeDateTimeAsTicks: false,
-                //key: MpPreferences.Instance.DbPassword,
-                openFlags: SQLiteOpenFlags.ReadWrite |
-                           SQLiteOpenFlags.Create |
-                           SQLiteOpenFlags.SharedCache |
-                           SQLiteOpenFlags.FullMutex
-                );
-
-
-            _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
-        }
-
         private void CreateConnection() {
-            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
 
-            var connStr = new SQLiteConnectionString(
-                databasePath: dbPath,
-                storeDateTimeAsTicks: false,
-                //key: MpPreferences.Instance.DbPassword,
-                openFlags: SQLiteOpenFlags.ReadWrite |
-                           SQLiteOpenFlags.Create |
-                           SQLiteOpenFlags.SharedCache |
-                           SQLiteOpenFlags.FullMutex
-                );
+            SQLiteConnectionString connStr = null;
 
-
-            _connection = new SQLiteConnection(connStr) { Trace = true };
+            if(string.IsNullOrEmpty(_dbInfo.GetDbPassword())) {
+                connStr = new SQLiteConnectionString(
+                    databasePath: _dbInfo.GetDbFilePath(),
+                    storeDateTimeAsTicks: false,
+                    openFlags: SQLiteOpenFlags.ReadWrite |
+                               SQLiteOpenFlags.Create |
+                               SQLiteOpenFlags.SharedCache |
+                               SQLiteOpenFlags.FullMutex
+                    );
+            } else {
+                connStr = new SQLiteConnectionString(
+                    databasePath: _dbInfo.GetDbPassword(),
+                    storeDateTimeAsTicks: false,
+                    key: MpPreferences.Instance.DbPassword,
+                    openFlags: SQLiteOpenFlags.ReadWrite |
+                               SQLiteOpenFlags.Create |
+                               SQLiteOpenFlags.SharedCache |
+                               SQLiteOpenFlags.FullMutex
+                    );
+            }
+            if(_connection == null) {
+                _connection = new SQLiteConnection(connStr) { Trace = true };
+            }
+            
+            if(_connectionAsync == null) {
+                _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
+            }
+            
         }
 
-        private async Task InitDbAsync() {
-            if (_connectionAsync != null) {
-                return;
-            }
-
-            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+        private void InitDb() {
+            var dbPath = _dbInfo.GetDbFilePath();
             
-           File.Delete(dbPath);
+            File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
-            await CreateConnectionAsync();
+            CreateConnection();
 
-            await InitTablesAsync();
-
-            if (isNewDb) {
-                await InitDefaultDataAsync();
+            if(isNewDb) {
+                foreach (var c in GetCreateString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries)) {
+                    if (string.IsNullOrEmpty(c.Trim().Replace(Environment.NewLine, string.Empty))) {
+                        continue;
+                    }
+                    ExecuteWrite(c + ";", null);
+                }
             }
 
-            if (_connectionAsync != null && UseWAL) {
+
+            if (UseWAL) {
                 // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
+                if(_connection != null) {
+                    _connection.EnableWriteAheadLogging();
+                }
+
+                if (_connectionAsync != null) {
+                    Task.Run(async () => {
+                        await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
+                    });
+                }
             }
+            InitTables();
+
+            if(isNewDb) {
+                InitDefaultData();
+            }
+
+            //if (isNewDb) {
+            //    await InitDefaultDataAsync();
+            //}
+
+            //if (_connectionAsync != null && UseWAL) {
+            //    // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
+            //    await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
+            //}
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
 
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
+
+        private void InitTables() {
+            _connection.CreateTable<MpApp>();
+            _connection.CreateTable<MpUserDevice>();
+            _connection.CreateTable<MpCopyItem>();
+            _connection.CreateTable<MpCopyItemTag>();
+            _connection.CreateTable<MpCopyItemTemplate>();
+            _connection.CreateTable<MpDbImage>();
+            _connection.CreateTable<MpIcon>();
+            _connection.CreateTable<MpPasteHistory>();
+            _connection.CreateTable<MpSource>();
+            _connection.CreateTable<MpTag>();
+            _connection.CreateTable<MpUrl>();
+            _connection.CreateTable<MpUrlDomain>();
+            _connection.CreateTable<MpDbLog>();
+            _connection.CreateTable<MpSyncHistory>();
+        }
+
         private async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
@@ -487,7 +608,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
         }
 
-        private async Task InitDefaultDataAsync() {
+        private void InitDefaultData() {
             if(string.IsNullOrEmpty(MpPreferences.Instance.ThisDeviceGuid)) {
                 MpPreferences.Instance.ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
@@ -496,22 +617,22 @@ namespace MonkeyPaste {
                     UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
                     PlatformType = MpPreferences.Instance.ThisDeviceType
                 };
-                await AddItemAsync<MpUserDevice>(thisDevice);
+                AddItem<MpUserDevice>(thisDevice);
             }
-            await AddItemAsync<MpTag>(new MpTag() {
+            AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
                 HexColor = Color.Green.ToHex(),
                 TagSortIdx = 0
             }, "", true, true);
-            await AddItemAsync<MpTag>(new MpTag() {
+            AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 HexColor = Color.Blue.ToHex(),
                 TagSortIdx = 1
             }, "", true, true);
 
-            await AddItemAsync<MpTag>(new MpTag() {
+            AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
                 HexColor = Color.Yellow.ToHex(),
@@ -524,9 +645,233 @@ namespace MonkeyPaste {
                 HexColor = Color.Orange.ToHex(),
                 TagSortIdx = 3
             };
-            await AddItemAsync<MpTag>(helpTag, "", true, true);
+            AddItem<MpTag>(helpTag, "", true, true);
 
             MpConsole.WriteTraceLine(@"Create all default tables");
+        }
+
+
+        private string GetCreateString() {
+            return @"                    
+                    CREATE TABLE MpSyncHistory (
+                      pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , OtherClientGuid text
+                    , SyncDateTime datetime
+                    );
+                    
+                    CREATE TABLE MpDbLog (
+                      pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , DbObjectGuid text
+                    , DbTableName text
+                    , AffectedColumnName text
+                    , AffectedColumnValue text
+                    , LogActionType integer default 0
+                    , LogActionDateTime datetime
+                    , SourceClientGuid text
+                    );
+                    
+                    CREATE TABLE MpDbImage (
+                      pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpDbImageGuid text
+                    , ImageBase64 text
+                    );
+                                        
+                    CREATE TABLE MpTag (
+                      pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpTagGuid text
+                    , fk_ParentTagId integer default 0
+                    , TagName text
+                    , SortIdx integer
+                    , HexColor text
+                    );
+                    
+                    CREATE TABLE MpIcon (
+                      pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpIconGuid text
+                    , fk_IconDbImageId integer
+                    , fk_IconBorderDbImageId integer
+                    , fk_IconSelectedHighlightBorderDbImageId integer
+                    , fk_IconHighlightBorderDbImageId integer
+                    , HexColor1 text '#FFFF0000'
+                    , HexColor2 text '#FFFF0000'
+                    , HexColor3 text '#FFFF0000'
+                    , HexColor4 text '#FFFF0000'
+                    , HexColor5 text '#FFFF0000'
+                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
+                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+                    );
+                                        
+                    
+                    
+                    CREATE TABLE MpPasteToAppPath (
+                      pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , AppPath text NOT NULL
+                    , AppName text
+                    , Args text
+                    , Label text
+                    , fk_MpDbImageId integer 
+                    , WindowState integer default 1
+                    , IsSilent integer NOT NULL default 0
+                    , IsAdmin integer NOT NULL default 0
+                    , PressEnter integer NOT NULL default 0
+                    , CONSTRAINT FK_MpPasteToAppPath_0_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                    
+                    );
+                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
+                    
+                    CREATE TABLE MpUserDevice (
+                      pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUserDeviceGuid text 
+                    , PlatformTypeId integer NOT NULL
+                    );
+                    
+                    CREATE TABLE MpApp (
+                      pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAppGuid text
+                    , SourcePath text NOT NULL 
+                    , AppName text 
+                    , IsAppRejected integer NOT NULL   
+                    , fk_MpUserDeviceId integer
+                    , fk_MpIconId integer
+                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
+                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
+                    );   
+                    
+                    CREATE TABLE MpUrlDomain (
+                      pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUrlDomainGuid text
+                    , UrlDomainPath text NOT NULL 
+                    , UrlDomainTitle text
+                    , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
+                    , fk_MpIconId integer
+                    , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
+                    );  
+                    
+                    CREATE TABLE MpUrl (
+                      pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUrlGuid text
+                    , UrlPath text NOT NULL 
+                    , UrlTitle text
+                    , fk_MpUrlDomainId int NOT NULL
+                    , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlDomainId) REFERENCES MpUrlDomain (pk_MpUrlDomainId)
+                    ); 
+                    
+                    CREATE TABLE MpSource (
+                      pk_MpSourceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpSourceGuid text
+                    , fk_MpUrlId integer
+                    , fk_MpAppId integer NOT NULL
+                    , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
+                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
+                    ); 
+                    
+                    CREATE TABLE MpCopyItem (
+                      pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemGuid text
+                    , fk_ParentCopyItemId integer
+                    , fk_MpCopyItemTypeId integer NOT NULL default 0
+                    , fk_MpAppId integer NOT NULL
+                    , fk_MpUrlId integer
+                    , CompositeSortOrderIdx integer default 0
+                    , HexColor text
+                    , Title text NULL 
+                    , CopyCount integer not null default 1
+                    , PasteCount integer not null default 0
+                    , fk_MpDbImageId integer
+                    , fk_SsMpDbImageId integer
+                    , ItemText text 
+                    , ItemRtf text 
+                    , ItemHtml text 
+                    , ItemDescription text
+                    , ItemCsv text
+                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
+                    , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)   
+                    );
+                    
+                    CREATE TABLE MpCopyItemTag (
+                      pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemTagGuid text
+                    , fk_MpCopyItemId integer NOT NULL
+                    , fk_MpTagId integer NOT NULL
+                    , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
+                    );
+
+                    CREATE TABLE MpShortcut (
+                      pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId INTEGER DEFAULT 0
+                    , fk_MpTagId INTEGER DEFAULT 0
+                    , ShortcutName text NOT NULL                    
+                    , KeyString text NULL       
+                    , DefaultKeyString text NULL
+                    , RoutingType integer NOT NULL DEFAULT 0 
+                    );
+                    INSERT INTO MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
+                    ('Show Window',2,'Control+Shift+D','Control+Shift+D')
+                    ,('Hide Window',1,'Escape','Escape')
+                    ,('Append Mode',2,'Control+Shift+A','Control+Shift+A')
+                    ,('Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
+                    ,('Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
+                    ,('Paste Selected Clip',1,'Enter','Enter')
+                    ,('Delete Selected Clip',1,'Delete','Delete')
+                    ,('Select Next',1,'Right','Right')
+                    ,('Select Previous',1,'Left','Left')
+                    ,('Select All',1,'Control+A','Control+A')
+                    ,('Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
+                    ,('Bring to front',1,'Control+Home','Control+Home')
+                    ,('Send to back',1,'Control+End','Control+End')
+                    ,('Assign Hotkey',1,'A','A')
+                    ,('Change Color',1,'C','C')
+                    ,('Say',1,'S','S')
+                    ,('Merge',1,'M','M')
+                    ,('Undo',1,'Control+Z','Control+Z')
+                    ,('Redo',1,'Control+Y','Control+Y')
+                    ,('Edit',1,'Control+E','Control+E')
+                    ,('Rename',1,'F2','F2')
+                    ,('Duplicate',1,'Control+D','Control+D')
+                    ,('Email',1,'Control+E','Control+E')
+                    ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
+                    ,('Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
+                    ,('Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
+                    ,('Copy Selection',1,'Control+C','Control+C');
+                    
+                    CREATE TABLE MpDetectedImageObject (
+                      pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId integer NOT NULL
+                    , Confidence real NOT NULL
+                    , X real NOT NULL
+                    , Y real NOT NULL
+                    , Width real NOT NULL
+                    , Height real NOT NULL                    
+                    , ObjectTypeName text
+                    , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    );
+                    
+                    CREATE TABLE MpCopyItemTemplate (
+                      pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemTemplateGuid text
+                    , fk_MpCopyItemId integer NOT NULL
+                    , HexColor text default '#0000FF'
+                    , TemplateName text NOT NULL 
+                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
+                    );       
+                    
+                    CREATE TABLE MpPasteHistory (
+                      pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpPasteHistoryGuid text
+                    , fk_MpCopyItemId integer NOT NULL
+                    , fk_MpUserDeviceId integer NOT NULL
+                    , fk_MpAppId integer default 0                    
+                    , fk_MpUrlId integer default 0
+                    , PasteDateTime datetime NOT NULL
+                    , CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
+                    , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
+                    , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpPasteHistory_3_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
+                    );
+                                        
+            ";
         }
         #endregion
 
@@ -748,18 +1093,20 @@ namespace MonkeyPaste {
         }
 
         public void UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
-            MpSyncHistory sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+            Task.Run(async () => {
+                MpSyncHistory sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
 
-            if (sh == null) {
-                sh = new MpSyncHistory() {
-                    OtherClientGuid = otherDeviceGuid,
-                    SyncDateTime = utcDtSentLocalChanges
-                };
-            } else {
-                sh.SyncDateTime = utcDtSentLocalChanges;
-            }
+                if (sh == null) {
+                    sh = new MpSyncHistory() {
+                        OtherClientGuid = otherDeviceGuid,
+                        SyncDateTime = utcDtSentLocalChanges
+                    };
+                } else {
+                    sh.SyncDateTime = utcDtSentLocalChanges;
+                }
 
-            MpDb.Instance.AddOrUpdate<MpSyncHistory>(sh);
+                await MpDb.Instance.AddOrUpdateAsync<MpSyncHistory>(sh);
+            });
         }
 
         private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
@@ -795,7 +1142,7 @@ namespace MonkeyPaste {
         }
 
         public string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(DependencyService.Get<MpIDbFilePath>().DbFilePath());
+            var bytes = File.ReadAllBytes(_dbInfo.GetDbFilePath());
             return Convert.ToBase64String(bytes);
         }
 
@@ -839,6 +1186,48 @@ namespace MonkeyPaste {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
             }
             return idx;
+        }
+    }
+
+    public class MpDataTable {
+        public List<MpDataRow> Rows { get; set; } = new List<MpDataRow>();
+    }
+
+    public class MpDataRow {
+        private Dictionary<string, object> _columns = new Dictionary<string, object>();
+
+        #region Property Reflection Referencer
+        public object this[string colName] {
+            get {
+                if(!_columns.ContainsKey(colName)) {
+                    throw new Exception("Unable to find property: " + colName);
+                }
+                return _columns[colName];
+            }
+            set {
+                if (!_columns.ContainsKey(colName)) {
+                    throw new Exception("Unable to find property: " + colName);
+                }
+                _columns[colName] = value;
+            }
+        }
+
+        public object this[int idx] {
+            get {
+                if (_columns.Count >= idx) {
+                    throw new Exception("Index out of bounds: "+idx);
+                }
+                return _columns.ToArray()[idx].Value;
+            }
+        }
+        #endregion        
+
+        public void AddColumn(string colName,object value = null) {
+            if (_columns.ContainsKey(colName)) {
+                _columns[colName] = value;
+            } else {
+                _columns.Add(colName, value);
+            }
         }
     }
 }

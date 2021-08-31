@@ -16,7 +16,7 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpMainShellViewModel() {
             Task.Run(async () => {
-                await MpDb.Instance.Init();
+                MpDb.Instance.Init(MpMainShell.NativeWrapper.GetDbInfo());
 
                 MpTempFileManager.Instance.Init();
                 //MpSocketClient.StartClient("192.168.43.209");

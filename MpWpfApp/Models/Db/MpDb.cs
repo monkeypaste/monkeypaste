@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using MonkeyPaste;
+//using MonkeyPaste;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
@@ -53,7 +53,7 @@ namespace MpWpfApp {
         }
         private void InitDb() {
             if(File.Exists(Properties.Settings.Default.DbPath)) {
-                File.Delete(Properties.Settings.Default.DbPath);
+                //File.Delete(Properties.Settings.Default.DbPath);
             }
 
             //if db does not exist create it with a random password and set its path and password properties
@@ -199,8 +199,8 @@ namespace MpWpfApp {
         }
 
         public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            MpDbLogActionType actionType = MpDbLogActionType.None;
-            if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking && dbObject != null && dbObject is MpISyncableDbObject) {
+            MonkeyPaste.MpDbLogActionType actionType = MonkeyPaste.MpDbLogActionType.None;
+            if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking && dbObject != null && dbObject is MonkeyPaste.MpISyncableDbObject) {
                 //only track objects providing a guid
                 actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);                 
             }
@@ -216,11 +216,16 @@ namespace MpWpfApp {
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
-                if (actionType != MpDbLogActionType.None && 
+                if (actionType != MonkeyPaste.MpDbLogActionType.None && 
                     !ignoreSyncing && 
-                    dbObject is MpISyncableDbObject) {
+                    dbObject is MonkeyPaste.MpISyncableDbObject) {
                     OnSyncableChange?.Invoke(dbObject, dbObjectGuid);
                 } else if(dbObject != null) {
+                    //dbObject will only be non-null when this write is coming from perform sync
+                    string tableName = dbObject.GetType().ToString().Replace("MpWpfApp.", string.Empty);
+                    string pkPropName = dbObject.GetType().ToString().Replace("MpWpfApp.Mp", string.Empty)+"Id";
+                    int pk = GetLastRowId(tableName, "pk_Mp"+pkPropName);
+                    dbObject.GetType().GetProperty(pkPropName).SetValue(dbObject, pk);
                     (dbObject as MpDbModelBase).NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
                 }
                 return numberOfRowsAffected;
@@ -410,11 +415,11 @@ namespace MpWpfApp {
                     , fk_IconBorderDbImageId integer
                     , fk_IconSelectedHighlightBorderDbImageId integer
                     , fk_IconHighlightBorderDbImageId integer
-                    , HexColor1 text default 0
-                    , HexColor2 text default 0
-                    , HexColor3 text default 0
-                    , HexColor4 text default 0
-                    , HexColor5 text default 0
+                    , HexColor1 text '#FFFF0000'
+                    , HexColor2 text '#FFFF0000'
+                    , HexColor3 text '#FFFF0000'
+                    , HexColor4 text '#FFFF0000'
+                    , HexColor5 text '#FFFF0000'
                     , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
                     , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
                     , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
@@ -467,7 +472,7 @@ namespace MpWpfApp {
                     , AppName text
                     , Args text
                     , Label text
-                    , fk_MpDbImageId integer default 0
+                    , fk_MpDbImageId integer 
                     , WindowState integer default 1
                     , IsSilent integer NOT NULL default 0
                     , IsAdmin integer NOT NULL default 0
@@ -500,7 +505,7 @@ namespace MpWpfApp {
                     , UrlDomainPath text NOT NULL 
                     , UrlDomainTitle text
                     , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
-                    , fk_MpIconId integer default 0
+                    , fk_MpIconId integer 
                     , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     );  
                     ---------------------------------------------------------------------------------------------------------------------
@@ -525,7 +530,7 @@ namespace MpWpfApp {
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemGuid text
-                    , fk_ParentCopyItemId integer default 0
+                    , fk_ParentCopyItemId integer
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
                     , fk_MpUrlId integer
@@ -708,20 +713,20 @@ namespace MpWpfApp {
 
         public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
             var logItems = MpDbLog.GetAllDbLogs().Where(x => x.LogActionDateTime > fromDateTime).ToList();
-            var dbol = new List<MpISyncableDbObject>();
+            var dbol = new List<MonkeyPaste.MpISyncableDbObject>();
             foreach (var li in logItems) {
                 if (li.SourceClientGuid.ToString() == ignoreGuid) {
                     continue;
                 }
-                dbol.Add(li as MpISyncableDbObject);
+                dbol.Add(li as MonkeyPaste.MpISyncableDbObject);
             }
-            var dbMsgStr = MpDbMessage.Create(dbol);
+            var dbMsgStr = MonkeyPaste.MpDbMessage.Create(dbol);
             await Task.Delay(1);
             return dbMsgStr;
         }
 
         public async Task<Dictionary<Guid, List<MonkeyPaste.MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
-            var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
+            var dbLogMessage = MonkeyPaste.MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
             var remoteDbLogs = new List<MonkeyPaste.MpDbLog>();
             var dbLogWorker = new MonkeyPaste.MpDbLog();
@@ -758,21 +763,21 @@ namespace MpWpfApp {
                     //seperate changes into 3 types
                     foreach (var l in rlogs.OrderBy(x => x.LogActionDateTime).ToList()) {
                         switch (l.LogActionType) {
-                            case MpDbLogActionType.Create:
+                            case MonkeyPaste.MpDbLogActionType.Create:
                                 if (!addChanges.ContainsKey(ckvp.Key)) {
                                     addChanges.Add(ckvp.Key, new List<MonkeyPaste.MpDbLog>() { l });
                                 } else {
                                     addChanges[ckvp.Key].Add(l);
                                 }
                                 break;
-                            case MpDbLogActionType.Modify:
+                            case MonkeyPaste.MpDbLogActionType.Modify:
                                 if (!updateChanges.ContainsKey(ckvp.Key)) {
                                     updateChanges.Add(ckvp.Key, new List<MonkeyPaste.MpDbLog>() { l });
                                 } else {
                                     updateChanges[ckvp.Key].Add(l);
                                 }
                                 break;
-                            case MpDbLogActionType.Delete:
+                            case MonkeyPaste.MpDbLogActionType.Delete:
                                 if (!deleteChanges.ContainsKey(ckvp.Key)) {
                                     deleteChanges.Add(ckvp.Key, new List<MonkeyPaste.MpDbLog>() { l });
                                 } else {
@@ -794,12 +799,34 @@ namespace MpWpfApp {
                 }
             }
 
+            var missingUpdates = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
+            //find missing updates 
+            foreach(var uc in updateChanges) {
+                var udbo = GetDbDataRowByTableGuid(uc.Value[0].DbTableName, uc.Key.ToString());
+                if(udbo == null) {
+                    if(missingUpdates.ContainsKey(uc.Key)) {
+                        missingUpdates[uc.Key].AddRange(uc.Value);
+                    } else {
+                        missingUpdates.Add(uc.Key, uc.Value);
+                    }
+                }
+            }
+            //remove missing updates from updateChanges and add to addChanges
+            foreach(var mu in missingUpdates) {
+                updateChanges.Remove(mu.Key);
+                if (addChanges.ContainsKey(mu.Key)) {
+                    addChanges[mu.Key].AddRange(mu.Value);
+                } else {
+                    addChanges.Add(mu.Key, mu.Value);
+                }
+            }
+
             //sort 3 types by key references
             addChanges = OrderByPrecedence(addChanges);
             deleteChanges = OrderByPrecedence(deleteChanges);
             updateChanges = OrderByPrecedence(updateChanges);
 
-            MpConsole.WriteLine(
+            MonkeyPaste.MpConsole.WriteLine(
                 string.Format(
                     @"{0} Received {1} adds {2} updates {3} deletes",
                     DateTime.Now.ToString(),
@@ -807,7 +834,7 @@ namespace MpWpfApp {
                     updateChanges.Count,
                     deleteChanges.Count));
 
-            MpConsole.WriteLine(@"Deletes: ");
+            MonkeyPaste.MpConsole.WriteLine(@"Deletes: ");
             // in delete, add, update order
             foreach (var ckvp in deleteChanges) {
                 foreach (var dbl in ckvp.Value) {
@@ -816,33 +843,33 @@ namespace MpWpfApp {
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = dbot.GetMethod("DeleteFromDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MonkeyPaste.MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 deleteMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
 
-            MpConsole.WriteLine(@"Adds: ");
+            MonkeyPaste.MpConsole.WriteLine(@"Adds: ");
             foreach (var ckvp in addChanges) {
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MonkeyPaste.MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
                 writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
             }
 
-            MpConsole.WriteLine(@"Updates: ");
+            MonkeyPaste.MpConsole.WriteLine(@"Updates: ");
             foreach (var ckvp in updateChanges) {
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
                 var dbot = new MpWpfStringToDbObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MonkeyPaste.MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var writeMethod = dbot.GetMethod("WriteToDatabase", new Type[] { typeof(string), typeof(bool), typeof(bool) });
                 writeMethod.Invoke(dbo, new object[] { remoteClientGuid, false, true });
@@ -882,7 +909,7 @@ namespace MpWpfApp {
         }
 
         private int GetDbTableOrder(MonkeyPaste.MpDbLog log) {
-            var orderedLogs = MpSyncManager.Instance.DbTableSyncOrder.ToList();
+            var orderedLogs = MonkeyPaste.MpSyncManager.Instance.DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -894,7 +921,7 @@ namespace MpWpfApp {
             return Application.Current.MainWindow;
         }
 
-        public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
+        public MonkeyPaste.MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpWpfStringToDbObjectTypeConverter();
         }
         public string GetDbFileAsBase64() {
@@ -902,9 +929,9 @@ namespace MpWpfApp {
             return Convert.ToBase64String(bytes);
         }
 
-        public ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+        public ObservableCollection<MonkeyPaste.MpRemoteDevice> GetRemoteDevices() {
             _rdLock = new object();
-            var rdoc = new ObservableCollection<MpRemoteDevice>();
+            var rdoc = new ObservableCollection<MonkeyPaste.MpRemoteDevice>();
             BindingOperations.EnableCollectionSynchronization(rdoc, _rdLock);
             return rdoc;
         }

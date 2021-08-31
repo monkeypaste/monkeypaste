@@ -1352,12 +1352,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double ThisAppDpi {
+        public double ThisAppDip {
             get {
-                return ((double)(this["ThisAppDpi"]));
+                return ((double)(this["ThisAppDip"]));
             }
             set {
-                this["ThisAppDpi"] = value;
+                this["ThisAppDip"] = value;
             }
         }
     }

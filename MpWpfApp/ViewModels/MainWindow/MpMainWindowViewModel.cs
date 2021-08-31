@@ -279,6 +279,8 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
+            MpViewModelBase.MainWindowViewModel = this;
+
             MpMainWindowViewModel.IsApplicationLoading = true;
 
             MpHelpers.Instance.Init();
@@ -303,6 +305,8 @@ namespace MpWpfApp {
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
             var mw = (MpMainWindow)Application.Current.MainWindow;
+            Properties.Settings.Default.ThisAppDip = VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+
             MainWindowCanvas = (Canvas)mw.FindName("MainWindowCanvas");
             MainWindowGrid = (Grid)mw.FindName("MainWindowGrid");
 

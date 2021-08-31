@@ -667,7 +667,7 @@ namespace MpWpfApp {
               doc.FontSize,
               doc.Foreground,
               new NumberSubstitution(),
-              VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
+              Properties.Settings.Default.ThisAppDip);
 
             int offset = 0;
             var runsAndParagraphsList = doc.GetRunsAndParagraphs().ToList();

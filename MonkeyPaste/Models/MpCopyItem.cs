@@ -212,9 +212,17 @@ namespace MonkeyPaste {
             var hostAppImage = (args as object[])[3] as byte[];
             var hostAppImageBase64 = (args as object[])[4] as string;
 
+
+            MpIcon icon = null;
             MpApp app = MpApp.GetAppByPath(hostPackageName);
             if (app == null) {
-                app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
+                icon = await MpIcon.GetIconByImageStrAsync(hostAppImageBase64);
+                if (icon == null) {
+                    icon = await MpIcon.Create(hostAppImageBase64);
+                }
+                app = await MpApp.Create(hostPackageName, hostAppName, icon);
+            } else {
+                icon = app.Icon;
             }
 
             var newCopyItem = new MpCopyItem() {
@@ -223,6 +231,7 @@ namespace MonkeyPaste {
                 ItemText = itemPlainText,
                 ItemType = MpCopyItemType.RichText,
                 ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
+                AppId = app.Id,
                 App = app,
                 CopyCount = 1
                 //ItemImage = hostAppImage
@@ -276,7 +285,7 @@ namespace MonkeyPaste {
         public async Task<object> DeserializeDbObject(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
-            var dbLog = new MpCopyItem() {
+            var ci = new MpCopyItem() {
                 CopyItemGuid = System.Guid.Parse(objParts[0]),
                 Title = objParts[1],
                 CopyCount = Convert.ToInt32(objParts[2]),
@@ -285,16 +294,18 @@ namespace MonkeyPaste {
                 ItemRtf = objParts[5],
                 ItemHtml = objParts[6],
                 ItemDescription = objParts[7],
-                ItemCsv = objParts[8]
+                ItemCsv = objParts[8],
+                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[9])
             };
+            ci.App = MpDb.Instance.GetDbObjectByTableGuid("MpApp", objParts[10]) as MpApp;
             //TODO deserialize this once img and files added
-            dbLog.ItemType = MpCopyItemType.RichText;
-            return dbLog;
+            //ci.ItemType = MpCopyItemType.RichText;
+            return ci;
         }
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}",
                 ParseToken,
                 CopyItemGuid.ToString(),
                 Title,
@@ -304,7 +315,10 @@ namespace MonkeyPaste {
                 ItemRtf,
                 ItemHtml,
                 ItemDescription,
-                ItemCsv);
+                ItemCsv,
+                ((int)ItemType).ToString(),
+                App.AppGuid.ToString()
+                );
         }
 
         public Type GetDbObjectType() {
@@ -367,6 +381,19 @@ namespace MonkeyPaste {
                 other.ItemCsv,
                 "ItemCsv",
                 diffLookup);
+            diffLookup = CheckValue(
+                AppId,
+                other.AppId,
+                "fk_MpAppId",
+                diffLookup,
+                App.AppGuid.ToString());
+            diffLookup = CheckValue(
+                ItemType,
+                other.ItemType,
+                "fk_MpCopyItemTypeId",
+                diffLookup,
+                ((int)ItemType).ToString());
+
 
             return diffLookup;
         }
@@ -408,12 +435,22 @@ namespace MonkeyPaste {
                     case "ItemCsv":
                         newCopyItem.ItemCsv = li.AffectedColumnValue;
                         break;
+                    case "fk_MpAppId":
+                        newCopyItem.App = await MpApp.GetAppByGuid(li.AffectedColumnValue);
+                        newCopyItem.AppId = Convert.ToInt32(newCopyItem.App.Id);
+                        break;
+                    case "fk_MpCopyItemTypeId":
+                        newCopyItem.ItemType = (MpCopyItemType)Convert.ToInt32(li.AffectedColumnValue);
+                        break;
                     default:
                         MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                         break;
                 }
             }
-            //newTag.WriteToDatabase(fromClientGuid);
+            if (string.IsNullOrEmpty(newCopyItem.ItemHtml) &&
+               !string.IsNullOrEmpty(newCopyItem.ItemText)) {
+                newCopyItem.ItemHtml = newCopyItem.ItemText;
+            }
             return newCopyItem;
         }
     }

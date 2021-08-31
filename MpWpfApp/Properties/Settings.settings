@@ -373,7 +373,7 @@
     <Setting Name="XamNamespace" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MonkeyPaste</Value>
     </Setting>
-    <Setting Name="ThisAppDpi" Type="System.Double" Scope="User">
+    <Setting Name="ThisAppDip" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

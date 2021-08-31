@@ -138,7 +138,7 @@ namespace MpWpfApp {
                         ApplyHighlightingCommand.Execute(null);
                         break;
                     case nameof(HighlightTaskCount):
-                        MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsSearching = HighlightTaskCount > 0;
+                        MainWindowViewModel.SearchBoxViewModel.IsSearching = HighlightTaskCount > 0;
                         if (HighlightTaskCount < 0) {
                             HighlightTaskCount = 0;
                         }

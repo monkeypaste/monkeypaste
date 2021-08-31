@@ -15,8 +15,9 @@ namespace MonkeyPaste {
         public MpIKeyboardInteractionService LayoutService { get; set; }
         public MpILocalStorage StorageService { get; set; }
         public MpIGlobalTouch GlobalTouchService { get; set; }
-        public MpINativeInterfaceWrapper NativeWrapper { get; set; }
-        
+        public static MpINativeInterfaceWrapper NativeWrapper { get; set; }
+        public MpIDbInfo DbInfo { get; set; }
+
         public event EventHandler<object> OnShellDisappearing;
 
         public MpMainShell() {
@@ -25,11 +26,16 @@ namespace MonkeyPaste {
         }
 
 
-        public MpMainShell(MpINativeInterfaceWrapper niw) : this() {
+        public MpMainShell(MpINativeInterfaceWrapper niw) {
+            IsLoaded = true;
+
             NativeWrapper = niw;
             GlobalTouchService = niw.GetGlobalTouch();
             LayoutService = niw.GetKeyboardInteractionService();
             StorageService = niw.GetLocalStorageManager();
+            DbInfo = niw.GetDbInfo();
+
+            InitializeComponent();
         }
 
         public ICommand OpenSettingsPageCommand => new Command(async () => {

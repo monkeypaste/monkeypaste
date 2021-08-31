@@ -707,10 +707,12 @@ namespace MpWpfApp {
             //    MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
             //    MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
             //});
-            foreach (var nctvm in _newTileList) {
-                Add(nctvm, 0);
-            }
-            _newTileList.Clear();
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                foreach (var nctvm in _newTileList) {
+                    Add(nctvm, 0);
+                }
+                _newTileList.Clear();
+            }),DispatcherPriority.Background);
         }
 
         public void AutoScrollByMouse() {
@@ -1457,16 +1459,36 @@ namespace MpWpfApp {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
-                    var dupCheck = ClipTileViewModels.Where(x => x.CopyItem.CopyItemGuid == ci.CopyItemGuid).FirstOrDefault();
+                    ci.App.StartSync(e.SourceGuid);
+                    ci.App.Icon.StartSync(e.SourceGuid);
+                    ci.App.Icon.DbIconImage.StartSync(e.SourceGuid);
+                    ci.App.Icon.DbIconBorderImage.StartSync(e.SourceGuid);
+                    ci.App.Icon.DbIconBorderHighlightImage.StartSync(e.SourceGuid);
+                    ci.App.Icon.DbIconBorderHighlightSelectedImage.StartSync(e.SourceGuid);
+
+                    var dupCheck = ClipTileViewModels.Where(x => x.CopyItem.CopyItemId == ci.CopyItemId).FirstOrDefault();
                     if (dupCheck == null) {
-                        this.Add(new MpClipTileViewModel(ci));
+                        if (ci.CopyItemId == 0) {
+                            ci.WriteToDatabase();
+                        }
+                        var nctvm = new MpClipTileViewModel(ci);
+                        _newTileList.Add(nctvm);
+                        //AddNewTiles();
                     } else {
                         MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItemRichText + " ignoring and updating existing.");
                         dupCheck.CopyItem = ci;
                     }
+                    ci.App.EndSync();
+                    ci.App.Icon.EndSync();
+                    ci.App.Icon.DbIconImage.EndSync();
+                    ci.App.Icon.DbIconBorderImage.EndSync();
+                    ci.App.Icon.DbIconBorderHighlightImage.EndSync();
+                    ci.App.Icon.DbIconBorderHighlightSelectedImage.EndSync();
                     ci.EndSync();
+
+                    ResetClipSelection();
                 }
-            }));
+            }), DispatcherPriority.Background);
         }
 
         #endregion

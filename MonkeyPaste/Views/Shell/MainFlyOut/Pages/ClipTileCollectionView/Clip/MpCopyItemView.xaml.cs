@@ -62,8 +62,11 @@ namespace MonkeyPaste {
                 var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
                 var location = locationFetcher.GetCoordinates(sender as VisualElement);
                 if(cm.BindingContext == null) {
-                    MpConsole.WriteTraceLine("Context menu is null...");
-                    return;
+                    var civm = (sender as BindableObject).BindingContext as MpCopyItemViewModel;
+                    cm.BindingContext = civm.ContextMenuViewModel;
+
+                    //MpConsole.WriteTraceLine("Context menu is null...");
+                    //return;
                 }
                 var cmvm = cm.BindingContext as MpContextMenuViewModel;
                 var w = cmvm.Width;

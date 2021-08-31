@@ -85,7 +85,8 @@ namespace MonkeyPaste.Droid {
                 StorageService = new MpLocalStorage_Android(),
                 TouchService = new MpGlobalTouch(),
                 UiLocationFetcher = new MpUiLocationFetcher(),
-                Screenshot = new MpScreenshot()
+                Screenshot = new MpScreenshot(),
+                DbInfo = new MpDbFilePath_Android()
             };
             //MpNativeWrapper.Instance.Register<MpKeyboardInteractionService>();
             //MpNativeWrapper.Instance.Register<MpLocalStorage_Android>();

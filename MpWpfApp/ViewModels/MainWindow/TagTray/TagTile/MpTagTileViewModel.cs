@@ -506,10 +506,22 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            //throw new NotImplementedException();
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (sender is MpCopyItemTag cit) {
+                    if(TagId == cit.TagId) {
+                        cit.StartSync(e.SourceGuid);
+                        var dupCheck = MpCopyItemTag.GetCopyItemTagById(cit.TagId, cit.CopyItemId);
+                        if (dupCheck != null) {
+                            MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
+                        }
+                        cit.WriteToDatabase();
+                        cit.EndSync();
+                    }                    
+                }
+            }));
         }
 
-        
+
 
         #endregion
 

@@ -126,7 +126,7 @@
         public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
             get {
                 _tagMenuItems.Clear();
-                foreach (var tagTile in MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
+                foreach (var tagTile in MpViewModelBase.MainWindowViewModel.TagTrayViewModel) {
                     if (tagTile.IsSudoTag) {
                         continue;
                     }

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
+        public static MpMainWindowViewModel MainWindowViewModel { get; set; }
         #region Private Variables
 
         #endregion        
@@ -17,16 +18,24 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel {
-            get {
-                return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-                //object mwvm = null;
-                //Application.Current.Dispatcher.Invoke((Action)delegate {
-                //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-                //});
-                //return mwvm as MpMainWindowViewModel;
-            }
-        }
+        //private MpMainWindowViewModel _mainWindowViewModel;
+        //public MpMainWindowViewModel MainWindowViewModel {
+        //    get {
+        //        return _mainWindowViewModel;
+        //        //return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+        //        //object mwvm = null;
+        //        //MpHelpers.Instance.RunOnMainThread((Action)(() => {
+        //        //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+        //        //}));
+        //        //return mwvm as MpMainWindowViewModel;
+        //    }
+        //    set {
+        //        if(_mainWindowViewModel != value) {
+        //            _mainWindowViewModel = value;
+        //            OnPropertyChanged(nameof(MainWindowViewModel));
+        //        }
+        //    }
+        //}
         #endregion
 
 
@@ -130,6 +139,10 @@ namespace MpWpfApp {
         #region Protected Methods
         protected MpViewModelBase() {
             //OnInitialize();
+            //if(MainWindowViewModel == null) {
+            //    MainWindowViewModel = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+            //}
+            
         }
 
         protected virtual void OnInitialize() {

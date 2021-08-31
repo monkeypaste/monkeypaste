@@ -33,15 +33,9 @@ namespace MonkeyPaste {
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
-        [OneToOne]
-        public MpTag Tag { get; set; }
-
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
-
-        [OneToOne]
-        public MpCopyItem CopyItem { get; set; }
 
         #endregion
 

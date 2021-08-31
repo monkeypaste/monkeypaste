@@ -14,11 +14,19 @@ using System.Text;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MpDbFilePath_Android))]
 namespace MonkeyPaste.Droid {
-    public class MpDbFilePath_Android : MonkeyPaste.MpIDbFilePath {
-        public string DbFilePath() {
+    public class MpDbFilePath_Android : MonkeyPaste.MpIDbInfo {
+        public string GetDbFilePath() {
             return Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), 
                 MonkeyPaste.MpPreferences.Instance.DbName);
+        }
+
+        public string GetDbName() {
+            return "Mp.db";
+        }
+
+        public string GetDbPassword() {
+            return string.Empty;
         }
     }
 }

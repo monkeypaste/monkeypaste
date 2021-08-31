@@ -80,6 +80,10 @@ namespace MpWpfApp {
             return GetAllApps().Where(x => x.AppId == appId).FirstOrDefault();
         }
 
+        public static MpApp GetAppByGuid(string appGuid) {
+            return GetAllApps().Where(x => x.AppGuid.ToString() == appGuid).FirstOrDefault();
+        }
+
         public static MpApp GetAppByHandle(IntPtr handle) {
             string appPath = MpHelpers.Instance.GetProcessPath(handle);
             return GetAllApps().Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();

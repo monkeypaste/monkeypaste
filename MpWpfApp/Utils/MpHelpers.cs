@@ -620,11 +620,11 @@ namespace MpWpfApp {
 
         #region System
         public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(action, priority);
+            Application.Current.Dispatcher.Invoke(action, priority);
         }
 
-        public async Task RunOnMainThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
-            await System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(action, priority);
+        public DispatcherOperation RunOnMainThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
+            return Application.Current.Dispatcher.InvokeAsync(action, priority);
         }
 
         public string GetTempFileNameWithExtension(string ext) {

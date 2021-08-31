@@ -27,8 +27,11 @@ namespace MonkeyPaste.Droid {
         public MpGlobalTouch TouchService { private get; set; }
         public MpUiLocationFetcher UiLocationFetcher { private get; set; }
         public MpScreenshot Screenshot { private get; set; }
+        public MpDbFilePath_Android DbInfo { private get; set; }
 
-
+        public MpIDbInfo GetDbInfo() {
+            return DbInfo;
+        }
 
         public MpIGlobalTouch GetGlobalTouch() {
             return TouchService;

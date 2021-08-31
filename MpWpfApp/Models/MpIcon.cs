@@ -112,6 +112,12 @@ namespace MpWpfApp {
                 //IconBorderHighlightImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
                 //IconBorderHighlightSelectedImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
                 PrimaryIconColorList = CreatePrimaryColorList(IconImage);
+
+                HexColor1 = PrimaryIconColorList[0];
+                HexColor2 = PrimaryIconColorList[1];
+                HexColor3 = PrimaryIconColorList[2];
+                HexColor4 = PrimaryIconColorList[3];
+                HexColor5 = PrimaryIconColorList[4];
                 ++TotalIconCount;
             } else {
                 IconId = dupIcon.IconId;
@@ -125,6 +131,15 @@ namespace MpWpfApp {
                 DbIconBorderImage = dupIcon.DbIconBorderImage;
                 DbIconBorderHighlightImage = dupIcon.DbIconBorderHighlightImage;
                 DbIconBorderHighlightSelectedImage = dupIcon.DbIconBorderHighlightSelectedImage;
+
+                PrimaryIconColorList = dupIcon.PrimaryIconColorList;
+
+
+                HexColor1 = dupIcon.PrimaryIconColorList[0];
+                HexColor2 = dupIcon.PrimaryIconColorList[1];
+                HexColor3 = dupIcon.PrimaryIconColorList[2];
+                HexColor4 = dupIcon.PrimaryIconColorList[3];
+                HexColor5 = dupIcon.PrimaryIconColorList[4];
             }
 
         }
@@ -166,6 +181,11 @@ namespace MpWpfApp {
                 }
                 PrimaryIconColorList.Add(hexStr);
             }
+            HexColor1 = PrimaryIconColorList[0];
+            HexColor2 = PrimaryIconColorList[1];
+            HexColor3 = PrimaryIconColorList[2];
+            HexColor4 = PrimaryIconColorList[3];
+            HexColor5 = PrimaryIconColorList[4];
             //IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             //IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
         }
@@ -352,18 +372,13 @@ namespace MpWpfApp {
                 }
             }
 
-            icon.PrimaryIconColorList.Clear();
-            for (int i = 0; i < 5; i++) {
-                string hexStr = icon.GetType()
-                                    .GetProperties()
-                                    .Where(x=>x.Name == string.Format(@"HexColor{0}", (i + 1)))
-                                    .FirstOrDefault()
-                                    .GetValue(icon) as string;
-                if (string.IsNullOrEmpty(hexStr)) {
-                    hexStr = MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor());
-                }
-                icon.PrimaryIconColorList.Add(hexStr);
-            }
+            icon.PrimaryIconColorList = new MpObservableCollection<string>() {
+                icon.HexColor1,
+                icon.HexColor2,
+                icon.HexColor3,
+                icon.HexColor4,
+                icon.HexColor5
+            };
             return icon;
         }
 

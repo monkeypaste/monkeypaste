@@ -108,6 +108,16 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
+        public static async Task<MpIcon> GetIconByImageStrAsync(string imgStr) {
+            var iconImg = await MpDb.Instance.GetItemsAsync<MpDbImage>();
+            var img = iconImg.Where(x => x.ImageBase64 == imgStr).FirstOrDefault();
+            if(img == null) {
+                return null;
+            }
+            var allicons = await MpDb.Instance.GetItemsAsync<MpIcon>();
+            return allicons.Where(x => x.IconImageId == img.Id).FirstOrDefault();
+        }
+
         public static async Task<MpIcon> GetIconById(int id) {
             var allicons = await MpDb.Instance.GetItemsAsync<MpIcon>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
