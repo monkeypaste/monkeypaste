@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -1095,9 +1094,9 @@ namespace MpWpfApp {
             CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
-            ItemDescription = dr["ItemDescription"].ToString();
-            ItemRichText = dr["ItemRtf"].ToString();
-            ItemHtml = dr["ItemHtml"].ToString();
+            ItemDescription = (dr["ItemDescription"] ?? string.Empty).ToString();
+            ItemRichText = (dr["ItemRtf"] ?? string.Empty).ToString();
+            ItemHtml = (dr["ItemHtml"] ?? string.Empty).ToString();
             PasteCount = Convert.ToInt32(dr["PasteCount"].ToString());
 
             ItemDbImageId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
@@ -1106,12 +1105,12 @@ namespace MpWpfApp {
             DbImageScreenshotId = Convert.ToInt32(dr["fk_SsMpDbImageId"].ToString());
             DbImageScreenshot = new MpDbImage(DbImageScreenshotId);
 
-            ItemCsv = dr["ItemCsv"].ToString();
+            ItemCsv = (dr["ItemCsv"] ?? string.Empty).ToString();
 
             App = MpApp.GetAppById(appId);
 
             if (CopyItemType == MpCopyItemType.Image) {
-                ItemPlainText = dr["ItemText"].ToString();
+                ItemPlainText = (dr["ItemText"] ?? string.Empty).ToString();
                 //SetData(MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
                 //ItemCsv = ItemPlainText;
             } else if(CopyItemType == MpCopyItemType.Composite) {
@@ -1136,9 +1135,9 @@ namespace MpWpfApp {
                 ItemUrl = MpUrl.GetUrlById(urlId);
             }
 
-            CompositeParentCopyItemId = Convert.ToInt32(dr["fk_ParentCopyItemId"].ToString());
+            CompositeParentCopyItemId = Convert.ToInt32((dr["fk_ParentCopyItemId"] ?? 0).ToString());
             if (CompositeParentCopyItemId > 0) {
-                CompositeSortOrderIdx = Convert.ToInt32(dr["CompositeSortOrderIdx"].ToString());
+                CompositeSortOrderIdx = Convert.ToInt32((dr["CompositeSortOrderIdx"] ?? 0).ToString());
             }
             PasteCount = GetPasteCount();
         }
@@ -1255,7 +1254,7 @@ namespace MpWpfApp {
                             { "@pc", PasteCount },
                             { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
                             { "@id", ItemDescription },
-                            { @"icsv",ItemCsv },
+                            { "@icsv",ItemCsv },
                             { "@citd", (int)CopyItemType },
                             { "@aid", App == null ? AppId: App.AppId },
                             { "@clrId", ItemColor },
@@ -1288,8 +1287,7 @@ namespace MpWpfApp {
                             { "@cdt", CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                             { "@cc", CopyCount },
                             { "@it", itemText },
-                            { "@ii", ItemDbImageId},
-                            { "@ciid", CopyItemId},
+                            { "@ii", ItemDbImageId}
                         }, CopyItemGuid.ToString(), sourceClientGuid, this, ignoreTracking, ignoreSyncing);
                 CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  
             }

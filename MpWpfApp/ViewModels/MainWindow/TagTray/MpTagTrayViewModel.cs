@@ -69,9 +69,9 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpTagTrayViewModel() : base() {
-            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
-            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
+            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
             var allTags = MpTag.GetAllTags();
             if(allTags.Count == 0) {

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data;
+using MonkeyPaste;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
-using MonkeyPaste;
 using SQLite;
-using FFImageLoading.Helpers.Exif;
 
 namespace MpWpfApp {
     public class MpApp : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {

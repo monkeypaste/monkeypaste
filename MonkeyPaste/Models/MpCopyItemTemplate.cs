@@ -56,8 +56,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpCopyItemTemplate() {
-        }
+        public MpCopyItemTemplate() : base() { }
 
         public string ToHtml() {
             var c = string.IsNullOrEmpty(HexColor) ? Color.Red : Color.FromHex(HexColor);

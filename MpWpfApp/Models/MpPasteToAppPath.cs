@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using MonkeyPaste;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -100,8 +100,8 @@ namespace MpWpfApp {
             DbIconImageId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
             DbIconImage = new MpDbImage(DbIconImageId);
 
-            Label = dr["Label"].ToString();
-            Args = dr["Args"].ToString();
+            Label = (dr["Label"] ?? AppName).ToString();
+            Args = (dr["Args"] ?? string.Empty).ToString();
         }
 
         public void DeleteFromDatabase() {

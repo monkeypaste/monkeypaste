@@ -481,10 +481,10 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpClipTrayViewModel() : base() {
+            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
-            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
-            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
             ClipTileViewModels.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));                
@@ -659,10 +659,11 @@ namespace MpWpfApp {
             }
 
 
+            OnViewModelLoaded();
             //MpHtmlToRtfConverter.Instance.Test();
             //MpRtfToHtmlConverter.Instance.Test();
 
-            MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance);
+            //MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance);
         }
 
         private int GetDropIdx(Point mp) {

@@ -48,6 +48,10 @@ namespace MonkeyPaste {
         public event EventHandler<MpDbModelBase> OnItemUpdated;
         public event EventHandler<MpDbModelBase> OnItemDeleted;
         public event EventHandler<object> OnSyncableChange;
+
+        public event EventHandler<MpDbSyncEventArgs> SyncAdd;
+        public event EventHandler<MpDbSyncEventArgs> SyncUpdate;
+        public event EventHandler<MpDbSyncEventArgs> SyncDelete;
         #endregion
 
         #region Public Methods
@@ -385,9 +389,11 @@ namespace MonkeyPaste {
                 string preStr = "from ";
                 int tableNameStartIdx = query.IndexOf(preStr) + preStr.Length;
                 int tableNameEndIdx = query.Substring(tableNameStartIdx).IndexOf(" ");
-                int tableNameLength = tableNameEndIdx > 0 ?
-                    query.Substring(tableNameStartIdx).Length - tableNameEndIdx :
-                    query.Length - tableNameStartIdx;
+                int tableNameLength = query.Length - tableNameStartIdx;
+                if(tableNameEndIdx >= 0) {
+                    tableNameEndIdx += tableNameStartIdx;
+                    tableNameLength = tableNameEndIdx - tableNameStartIdx;
+                }
                 tableName = query.Substring(tableNameStartIdx, tableNameLength);
             } else if (query.ToLower().StartsWith("insert")) {
                 string preStr = "insert into ";
@@ -413,7 +419,7 @@ namespace MonkeyPaste {
             }
 
             string newQuery = query;
-            object[] newArgs = null;
+            object[] newArgs = new object[] { };
             //var sb = new StringBuilder();
 
             if (args != null) {
@@ -433,8 +439,12 @@ namespace MonkeyPaste {
             }
             return new Tuple<string, object[]>(newQuery, newArgs);
         }
-        public MpDataTable Execute(string query, Dictionary<string, object> args) {
-            if(_connection == null) {
+
+        public DataTable Execute(string query, Dictionary<string, object> args) {
+            if (string.IsNullOrEmpty(query.Trim())) {
+                return null;
+            }
+            if (_connection == null) {
                 CreateConnection();
             }
 
@@ -443,16 +453,22 @@ namespace MonkeyPaste {
 
             var tuple = PrepareQuery(query, args);
 
-            var queryMethod = _connection.GetType().GetMethod("Query");
+            var queryMethod = _connection.GetType().GetMethod("Query",new Type[] {typeof(string), typeof(object[]) });
             var queryByDboTypeMethod = queryMethod.MakeGenericMethod(new[] { dbot });
-            var result = queryByDboTypeMethod.Invoke(_connection, new object[] { tuple.Item1, tuple.Item2 }) as IList;
+            var resultObj = queryByDboTypeMethod.Invoke(_connection, new object[] { tuple.Item1, tuple.Item2 });
 
-            var dt = new MpDataTable();
+            var result = Activator.CreateInstance(typeof(List<>).MakeGenericType(dbot), resultObj);
+            var dt = new DataTable();
 
-            foreach(var row in result) {
-                var dr = new MpDataRow();
+            var tm = GetTableMapping(tn);
+            foreach(var row in result as IList) {
+                var dr = new DataRow(); 
                 foreach (var rowProp in row.GetType().GetProperties()) {
-                    dr.AddColumn(rowProp.Name, rowProp.GetValue(row));
+                    if(rowProp.GetAttribute<SQLite.IgnoreAttribute>() != null) {
+                        continue;
+                    }
+                    string cn = tm.FindColumnWithPropertyName(rowProp.Name).Name;
+                    dr.AddColumn(cn, rowProp.GetValue(row));
                 }
                 dt.Rows.Add(dr);
             }
@@ -464,24 +480,53 @@ namespace MonkeyPaste {
             if (_connection == null) {
                 CreateConnection();
             }
+            MpDbLogActionType actionType = MonkeyPaste.MpDbLogActionType.None;
+            if (!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking && dbObject != null && dbObject is MonkeyPaste.MpISyncableDbObject) {
+                //only track objects providing a guid
+                actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);
+            }
 
             var tuple = PrepareQuery(query, args);
 
             if(tuple.Item2 == null) {
                 return _connection.Execute(tuple.Item1);
             }
-            return _connection.Execute(tuple.Item1, tuple.Item2);
+            int rowsAffected = _connection.Execute(tuple.Item1, tuple.Item2);
+
+            if (actionType != MonkeyPaste.MpDbLogActionType.None &&
+                    !ignoreSyncing &&
+                    dbObject is MonkeyPaste.MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(dbObject, dbObjectGuid);
+            } else if (dbObject != null) {
+                //dbObject will only be non-null when this write is coming from perform sync
+                string tableName = dbObject.GetType().ToString().Replace("MpWpfApp.", string.Empty);
+                string pkPropName = dbObject.GetType().ToString().Replace("MpWpfApp.Mp", string.Empty) + "Id";
+                int pk = GetLastRowId(tableName, "pk_Mp" + pkPropName);
+                dbObject.GetType().GetProperty(pkPropName).SetValue(dbObject, pk);
+
+                NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
+            }
+            return rowsAffected;
         }
         public int GetLastRowId(string tableName, string pkName) {
             if (_connection == null) {
                 CreateConnection();
             }
 
-            MpDataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;", null);
+            DataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;", null);
             if (dt.Rows.Count > 0) {
                 return Convert.ToInt32(dt.Rows[0][0].ToString());
             }
             return -1;
+        }
+
+        public DataRow GetDbDataRowByTableGuid(string tableName, string objGuid) {
+            var dt = MpDb.Instance.Execute(
+                "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
+            if (dt != null && dt.Rows.Count > 0) {
+                return dt.Rows[0];
+            }
+            return null;
         }
         #endregion
 
@@ -525,7 +570,7 @@ namespace MonkeyPaste {
         private void InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
-            File.Delete(dbPath);
+            //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -608,10 +653,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
         }
 
-        private void InitDefaultData() {
-            if(string.IsNullOrEmpty(MpPreferences.Instance.ThisDeviceGuid)) {
-                MpPreferences.Instance.ThisDeviceGuid = System.Guid.NewGuid().ToString();
-            }
+        private void InitDefaultData() {            
             if(MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
                 var thisDevice = new MpUserDevice() {
                     UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
@@ -650,6 +692,24 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine(@"Create all default tables");
         }
 
+        private void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {
+            var eventArgs = new MpDbSyncEventArgs() {
+                DbObject = dbo,
+                EventType = actionType,
+                SourceGuid = sourceClientGuid
+            };
+            switch (actionType) {
+                case MpDbLogActionType.Create:
+                    SyncAdd?.Invoke(dbo, eventArgs);
+                    break;
+                case MpDbLogActionType.Modify:
+                    SyncUpdate?.Invoke(dbo, eventArgs);
+                    break;
+                case MpDbLogActionType.Delete:
+                    SyncDelete?.Invoke(dbo, eventArgs);
+                    break;
+            }
+        }
 
         private string GetCreateString() {
             return @"                    
@@ -701,16 +761,16 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
                     , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
                     , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
-                    );
-                                        
+                    );                                       
                     
                     
                     CREATE TABLE MpPasteToAppPath (
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpPasteToAppPathGuid text
                     , AppPath text NOT NULL
-                    , AppName text
-                    , Args text
-                    , Label text
+                    , AppName text default ''
+                    , Args text default ''
+                    , Label text default ''
                     , fk_MpDbImageId integer 
                     , WindowState integer default 1
                     , IsSilent integer NOT NULL default 0
@@ -718,7 +778,7 @@ namespace MonkeyPaste {
                     , PressEnter integer NOT NULL default 0
                     , CONSTRAINT FK_MpPasteToAppPath_0_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                    
                     );
-                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
+                    INSERT INTO MpPasteToAppPath(AppName,MpPasteToAppPathGuid,AppPath,IsAdmin) VALUES ('Command Prompt','0b9d1b30-abce-4407-b745-95f9cde57135','%windir%\System32\cmd.exe',0);
                     
                     CREATE TABLE MpUserDevice (
                       pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -769,22 +829,22 @@ namespace MonkeyPaste {
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemGuid text
-                    , fk_ParentCopyItemId integer
+                    , fk_ParentCopyItemId integer default 0
                     , fk_MpCopyItemTypeId integer NOT NULL default 0
                     , fk_MpAppId integer NOT NULL
                     , fk_MpUrlId integer
                     , CompositeSortOrderIdx integer default 0
-                    , HexColor text
-                    , Title text NULL 
+                    , HexColor text default '#FFFF0000'
+                    , Title text NULL default ''
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
                     , fk_MpDbImageId integer
                     , fk_SsMpDbImageId integer
-                    , ItemText text 
-                    , ItemRtf text 
-                    , ItemHtml text 
-                    , ItemDescription text
-                    , ItemCsv text
+                    , ItemText text default ''
+                    , ItemRtf text default ''
+                    , ItemHtml text default ''
+                    , ItemDescription text default ''
+                    , ItemCsv text default ''
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)   
                     );
@@ -800,6 +860,7 @@ namespace MonkeyPaste {
 
                     CREATE TABLE MpShortcut (
                       pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpShortcutGuid text
                     , fk_MpCopyItemId INTEGER DEFAULT 0
                     , fk_MpTagId INTEGER DEFAULT 0
                     , ShortcutName text NOT NULL                    
@@ -807,34 +868,34 @@ namespace MonkeyPaste {
                     , DefaultKeyString text NULL
                     , RoutingType integer NOT NULL DEFAULT 0 
                     );
-                    INSERT INTO MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
-                    ('Show Window',2,'Control+Shift+D','Control+Shift+D')
-                    ,('Hide Window',1,'Escape','Escape')
-                    ,('Append Mode',2,'Control+Shift+A','Control+Shift+A')
-                    ,('Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
-                    ,('Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
-                    ,('Paste Selected Clip',1,'Enter','Enter')
-                    ,('Delete Selected Clip',1,'Delete','Delete')
-                    ,('Select Next',1,'Right','Right')
-                    ,('Select Previous',1,'Left','Left')
-                    ,('Select All',1,'Control+A','Control+A')
-                    ,('Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
-                    ,('Bring to front',1,'Control+Home','Control+Home')
-                    ,('Send to back',1,'Control+End','Control+End')
-                    ,('Assign Hotkey',1,'A','A')
-                    ,('Change Color',1,'C','C')
-                    ,('Say',1,'S','S')
-                    ,('Merge',1,'M','M')
-                    ,('Undo',1,'Control+Z','Control+Z')
-                    ,('Redo',1,'Control+Y','Control+Y')
-                    ,('Edit',1,'Control+E','Control+E')
-                    ,('Rename',1,'F2','F2')
-                    ,('Duplicate',1,'Control+D','Control+D')
-                    ,('Email',1,'Control+E','Control+E')
-                    ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
-                    ,('Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
-                    ,('Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
-                    ,('Copy Selection',1,'Control+C','Control+C');
+                    INSERT INTO MpShortcut(MpShortcutGuid,ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
+                    ('5dff238e-770e-4665-93f5-419e48326f01','Show Window',2,'Control+Shift+D','Control+Shift+D')
+                    ,('cb807500-9121-4e41-80d3-8c3682ce90d9','Hide Window',1,'Escape','Escape')
+                    ,('a41aeed8-d4f3-47de-86c5-f9ca296fb103','Append Mode',2,'Control+Shift+A','Control+Shift+A')
+                    ,('892bf7d7-ba8e-4db1-b2ca-62b41ff6614c','Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
+                    ,('a12c4211-ab1f-4b97-98ff-fbeb514e9a1c','Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
+                    ,('1d212ca5-fb2a-4962-8f58-24ed9a5d007d','Paste Selected Clip',1,'Enter','Enter')
+                    ,('e94ca4f3-4c6e-40dc-8941-c476a81543c7','Delete Selected Clip',1,'Delete','Delete')
+                    ,('7fe24929-6c9e-49c0-a880-2f49780dfb3a','Select Next',1,'Right','Right')
+                    ,('ee657845-f1dc-40cf-848d-6768c0081670','Select Previous',1,'Left','Left')
+                    ,('5480f103-eabd-4e40-983c-ebae81645a10','Select All',1,'Control+A','Control+A')
+                    ,('39a6b8b5-a585-455b-af83-015fd97ac3fa','Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
+                    ,('166abd7e-7295-47f2-bbae-c96c03aa6082','Bring to front',1,'Control+Home','Control+Home')
+                    ,('84c11b86-3acc-4d22-b8e9-3bd785446f72','Send to back',1,'Control+End','Control+End')
+                    ,('6487f6ff-da0c-475b-a2ae-ef1484233de0','Assign Hotkey',1,'A','A')
+                    ,('837e0c20-04b8-4211-ada0-3b4236da0821','Change Color',1,'C','C')
+                    ,('4a567aff-33a8-4a1f-8484-038196812849','Say',1,'S','S')
+                    ,('330afa20-25c3-425c-8e18-f1423eda9066','Merge',1,'M','M')
+                    ,('118a2ca6-7021-47a0-8458-7ebc31094329','Undo',1,'Control+Z','Control+Z')
+                    ,('3980efcc-933b-423f-9cad-09e455c6824a','Redo',1,'Control+Y','Control+Y')
+                    ,('7a7580d1-4129-432d-a623-2fff0dc21408','Edit',1,'Control+E','Control+E')
+                    ,('085338fb-f297-497a-abb7-eeb7310dc6f3','Rename',1,'F2','F2')
+                    ,('e22faafd-4313-441a-b361-16910fc7e9d3','Duplicate',1,'Control+D','Control+D')
+                    ,('4906a01e-b2f7-43f0-af1e-fb99d55c9778','Email',1,'Control+E','Control+E')
+                    ,('c7248087-2031-406d-b4ab-a9007fbd4bc4','Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
+                    ,('777367e6-c161-4e93-93e0-9bf12221f7ff','Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
+                    ,('97e29b06-0ec4-4c55-a393-8442d7695038','Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
+                    ,('ee74dd92-d18b-46cf-91b7-3946ab55427c','Copy Selection',1,'Control+C','Control+C');
                     
                     CREATE TABLE MpDetectedImageObject (
                       pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -1189,18 +1250,22 @@ namespace MonkeyPaste {
         }
     }
 
-    public class MpDataTable {
-        public List<MpDataRow> Rows { get; set; } = new List<MpDataRow>();
+    public class DataTable {
+        public List<DataRow> Rows { get; set; } = new List<DataRow>();
     }
 
-    public class MpDataRow {
+    public class DataRow {
         private Dictionary<string, object> _columns = new Dictionary<string, object>();
 
         #region Property Reflection Referencer
         public object this[string colName] {
             get {
                 if(!_columns.ContainsKey(colName)) {
-                    throw new Exception("Unable to find property: " + colName);
+                    if (colName.StartsWith("pk_") || colName.StartsWith("fk_") || colName.Contains("Id")) {
+                        return 0;
+                    }
+                    return null;
+                    //throw new Exception("Unable to find property: " + colName);
                 }
                 return _columns[colName];
             }
@@ -1214,7 +1279,7 @@ namespace MonkeyPaste {
 
         public object this[int idx] {
             get {
-                if (_columns.Count >= idx) {
+                if (idx >= _columns.Count) {
                     throw new Exception("Index out of bounds: "+idx);
                 }
                 return _columns.ToArray()[idx].Value;

@@ -16,6 +16,7 @@ using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
@@ -279,6 +280,7 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
+
             MpViewModelBase.MainWindowViewModel = this;
 
             MpMainWindowViewModel.IsApplicationLoading = true;
@@ -349,9 +351,10 @@ namespace MpWpfApp {
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
+            int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
             MpStandardBalloonViewModel.ShowBalloon(
                 "Monkey Paste",
-                "Successfully loaded w/ " + MpCopyItem.GetTotalItemCount() + " items",
+                "Successfully loaded w/ " + totalItems + " items",
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);

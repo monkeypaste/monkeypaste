@@ -1,21 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpPasteToAppPath : MpDbObject {
-        public int PasteToAppPathId { get; set; }
+    public class MpPasteToAppPath : MpDbModelBase {
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpPasteToAppPathId")]
+        public override int Id { get; set; }
+
+        [Column("MpPasteToAppPathGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid PasteToAppPathGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        [Ignore]
+        public int PasteToAppPathId {
+            get {
+                return Id;
+            }
+            set {
+                Id = value;
+            }
+        }
+
         public string AppPath { get; set; }
         public string AppName { get; set; }
-        public bool IsAdmin { get; set; }
-        public bool IsSilent { get; set; }
-        public bool PressEnter { get; set; }
+
+        [Column("IsAdmin")]
+        public int Admin { get; set; }
+
+        [Ignore]
+        public bool IsAdmin { 
+            get {
+                return Admin == 1;
+            }
+            set {
+                Admin = value == true ? 1 : 0;
+            }
+        }
+
+        [Column("IsSilent")]
+        public int Silent { get; set; }
+
+        [Ignore]
+        public bool IsSilent { 
+            get {
+                return Silent == 1;
+            } 
+            set {
+                Silent = value == true ? 1 : 0;
+            }
+        }
+
+        [Column("PressEnter")]
+        public int Enter { get; set; }
+
+        [Ignore]
+        public bool PressEnter {
+            get {
+                return Enter == 1;
+            }
+            set {
+                Enter = value == true ? 1 : 0;
+            }
+        }
         public string Args { get; set; }
         public string Label { get; set; }
-        public BitmapSource Icon { get; set; } = new BitmapImage();
-        public WinApi.ShowWindowCommands WindowState { get; set; }
+
+        [Column("fk_MpDbImageId")]
+        [ForeignKey(typeof(MpDbImage))]
+        public int AvatarId { get; set; }
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpDbImage AvatarDbImage { get; set; }
+
+        public int WindowState { get; set; }
+
 
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
             var pasteToAppPathList = new List<MpPasteToAppPath>();
@@ -39,14 +111,26 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "", string args = "", BitmapSource icon = null, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal, bool pressEnter = false) {
+        public MpPasteToAppPath(
+            string appPath, 
+            string appName, 
+            bool isAdmin, 
+            bool isSilent = false, 
+            string label = "", 
+            string args = "", 
+            string iconStr = "", 
+            int windowState = 1, 
+            bool pressEnter = false) {
             AppPath = appPath;
             AppName = appName;
             IsAdmin = isAdmin;
             IsSilent = isSilent;
             Label = label;
             Args = args;
-            Icon = icon;
+            AvatarDbImage = new MpDbImage() {
+                DbImageGuid = System.Guid.NewGuid(),
+                ImageBase64 = iconStr
+            };
             WindowState = windowState;
             PressEnter = pressEnter;
         }
@@ -55,19 +139,17 @@ namespace MonkeyPaste {
         public MpPasteToAppPath(DataRow dr) {
             LoadDataRow(dr);
         }
-        public override void LoadDataRow(DataRow dr) {
+        public void LoadDataRow(DataRow dr) {
             PasteToAppPathId = Convert.ToInt32(dr["pk_MpPasteToAppPathId"].ToString());
             AppPath = dr["AppPath"].ToString();
             AppName = dr["AppName"].ToString();
             IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
             IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
             PressEnter = Convert.ToInt32(dr["PressEnter"].ToString()) > 0 ? true : false;
-            WindowState = (WinApi.ShowWindowCommands)Convert.ToInt32(dr["WindowState"].ToString());
-            if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
-                Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
-            } else {
-                Icon = null;
-            }
+            WindowState = Convert.ToInt32(dr["WindowState"].ToString());
+
+            AvatarId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
+            AvatarDbImage = MpDbImage.GetDbImageById(AvatarId);
             Label = dr["Label"].ToString();
             Args = dr["Args"].ToString();
         }
@@ -84,7 +166,8 @@ namespace MonkeyPaste {
                 });
         }
 
-        public override void WriteToDatabase() {
+        public void WriteToDatabase() {
+            //AvatarDbImage.WriteToDatabase
             if (PasteToAppPathId == 0) {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
@@ -98,14 +181,15 @@ namespace MonkeyPaste {
                     PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
+                        "insert into MpPasteToAppPath(MpPasteToAppPathGuid,AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@apg,@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
                         new System.Collections.Generic.Dictionary<string, object> {
+                            { "@apg", PasteToAppPathGuid.ToString() },
                         { "@ap", AppPath },
                         { "@an",AppName },
                         { "@ia", IsAdmin ? 1:0 },
                         { "@l", Label },
                         { "@a", Args },
-                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
                         { "@is", IsSilent ? 1:0 },
                         { "@ws", (int)WindowState },
                         {"@pe", PressEnter ? 1:0 }
@@ -122,7 +206,7 @@ namespace MonkeyPaste {
                         { "@cid", PasteToAppPathId },
                         { "@l", Label },
                         { "@a", Args },
-                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
                         { "@is", IsSilent ? 1:0 },
                         { "@ws", (int)WindowState },
                         { "@pe", PressEnter ? 1:0 }

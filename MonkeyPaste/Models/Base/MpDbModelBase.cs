@@ -1,18 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FFImageLoading.Helpers.Exif;
 using SQLite;
+using SQLiteNetExtensions.Extensions;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
 
+        #region Wpf Compatibility
+
+        [Ignore]
         protected string SyncingWithDeviceGuid { get; set; } = string.Empty;
 
+        [Ignore]
         public bool IsSyncing => !string.IsNullOrEmpty(SyncingWithDeviceGuid);
 
         public void StartSync(string sourceGuid) {
@@ -22,6 +30,75 @@ namespace MonkeyPaste {
         public void EndSync() {
             SyncingWithDeviceGuid = string.Empty;
         }
+
+        public MpDbModelBase() { }
+
+        public MpDbModelBase(DataRow dr) {
+            LoadDataRow(dr);
+        }
+
+        private void LoadDataRow(DataRow dr) {
+            var tn = GetType().ToString().Replace("MonkeyPaste.", string.Empty);
+            var tm = MpDb.Instance.GetTableMapping(tn);
+
+            foreach (var rowProp in dr.GetType().GetProperties()) {
+                if (rowProp.GetAttribute<SQLite.IgnoreAttribute>() != null) {
+                    continue;
+                }
+                string cn = tm.FindColumnWithPropertyName(rowProp.Name).Name;
+
+                rowProp.SetValue(this, dr[cn]);
+            }
+        }
+
+        public void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (string.IsNullOrEmpty(sourceClientGuid)) {
+                sourceClientGuid = MpPreferences.Instance.ThisDeviceGuid;
+            }
+            if (string.IsNullOrEmpty(Guid)) {
+                Guid = System.Guid.NewGuid().ToString();
+            }
+
+            var dbot = GetType();
+            var dbo = Activator.CreateInstance(dbot);
+            var addOrUpdateMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.AddOrUpdate));
+            var addOrUpdateByDboTypeMethod = addOrUpdateMethod.MakeGenericMethod(new[] { dbot });
+            addOrUpdateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo, sourceClientGuid, ignoreTracking, ignoreSyncing });
+        }
+
+        public void WriteToDatabase() {
+            if (IsSyncing) {
+                WriteToDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                WriteToDatabase(MpPreferences.Instance.ThisDeviceGuid);
+            }
+        }
+
+        public void WriteToDatabase(bool isFirstLoad) {
+            WriteToDatabase(MpPreferences.Instance.ThisDeviceGuid, isFirstLoad);
+        }
+
+        public void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(MpPreferences.Instance.ThisDeviceGuid);
+            }
+        }
+
+        public void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (Id <= 0) {
+                return;
+            }
+
+            var dbot = GetType();
+            var dbo = Activator.CreateInstance(dbot);
+            var deleteItemMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.DeleteItem));
+            var deleteItemByDboTypeMethod = deleteItemMethod.MakeGenericMethod(new[] { dbot });
+            deleteItemByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo, sourceClientGuid, ignoreTracking, ignoreSyncing });
+        }
+        #endregion
+
 
         [Ignore]
         public string Guid { get; set; }

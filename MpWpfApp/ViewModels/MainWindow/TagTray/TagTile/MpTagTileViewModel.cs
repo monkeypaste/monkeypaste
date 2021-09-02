@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
@@ -315,9 +316,9 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
-            MpDbModelBase.SyncAdd += MpDbObject_SyncAdd;
-            MpDbModelBase.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDbModelBase.SyncDelete += MpDbObject_SyncDelete;
+            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {

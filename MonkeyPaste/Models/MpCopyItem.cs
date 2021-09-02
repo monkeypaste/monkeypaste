@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
@@ -42,7 +41,7 @@ namespace MonkeyPaste {
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Column("fk_MpCopyItemTypeId")]
         public int TypeId { get; set; } = 0;
@@ -61,13 +60,13 @@ namespace MonkeyPaste {
 
         public DateTime CopyDateTime { get; set; }
 
-        public string ItemText { get; set; }
+        public string ItemText { get; set; } = string.Empty;
 
-        public string ItemRtf { get; set; }
+        public string ItemRtf { get; set; } = string.Empty;
 
-        public string ItemHtml { get; set; }
+        public string ItemHtml { get; set; } = string.Empty;
 
-        public string ItemCsv { get; set; }
+        public string ItemCsv { get; set; } = string.Empty;
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_MpDbImageId")]
@@ -78,11 +77,11 @@ namespace MonkeyPaste {
         [Column("fk_SsMpDbImageId")]
         public int SsDbImageId { get; set; }
 
-        public string ItemDescription { get; set; }
+        public string ItemDescription { get; set; } = string.Empty;
 
-        public int CopyCount { get; set; }
+        public int CopyCount { get; set; } = 0;
 
-        public int PasteCount { get; set; }
+        public int PasteCount { get; set; } = 0;
 
         //public string Host { get; set; }
         #endregion

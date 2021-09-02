@@ -2,7 +2,6 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,28 +16,28 @@ namespace MpWpfApp {
             return MpDb.Instance.GetTableMapping(GetType().ToString().Replace(@"MpWpfApp.",string.Empty));
         }
 
-        public static event EventHandler<MpDbSyncEventArgs> SyncAdd;
-        public static event EventHandler<MpDbSyncEventArgs> SyncUpdate;
-        public static event EventHandler<MpDbSyncEventArgs> SyncDelete;
+        //public static event EventHandler<MpDbSyncEventArgs> SyncAdd;
+        //public static event EventHandler<MpDbSyncEventArgs> SyncUpdate;
+        //public static event EventHandler<MpDbSyncEventArgs> SyncDelete;
 
-        public void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {
-            var eventArgs = new MpDbSyncEventArgs() {
-                DbObject = dbo,
-                EventType = actionType,
-                SourceGuid = sourceClientGuid
-            };
-            switch(actionType) {
-                case MpDbLogActionType.Create:
-                    SyncAdd?.Invoke(dbo, eventArgs);
-                    break;
-                case MpDbLogActionType.Modify:
-                    SyncUpdate?.Invoke(dbo, eventArgs);
-                    break;
-                case MpDbLogActionType.Delete:
-                    SyncDelete?.Invoke(dbo, eventArgs);
-                    break;
-            }
-        }
+        //public void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {
+        //    var eventArgs = new MpDbSyncEventArgs() {
+        //        DbObject = dbo,
+        //        EventType = actionType,
+        //        SourceGuid = sourceClientGuid
+        //    };
+        //    switch(actionType) {
+        //        case MpDbLogActionType.Create:
+        //            SyncAdd?.Invoke(dbo, eventArgs);
+        //            break;
+        //        case MpDbLogActionType.Modify:
+        //            SyncUpdate?.Invoke(dbo, eventArgs);
+        //            break;
+        //        case MpDbLogActionType.Delete:
+        //            SyncDelete?.Invoke(dbo, eventArgs);
+        //            break;
+        //    }
+        //}
 
         [Ignore]
         public string SyncingWithDeviceGuid { get; set; } = string.Empty;

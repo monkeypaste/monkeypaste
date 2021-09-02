@@ -29,6 +29,8 @@ namespace MonkeyPaste {
         public MpMainShell(MpINativeInterfaceWrapper niw) {
             IsLoaded = true;
 
+            MpPreferences.Instance.Init(new MpXamPreferences());
+
             NativeWrapper = niw;
             GlobalTouchService = niw.GetGlobalTouch();
             LayoutService = niw.GetKeyboardInteractionService();

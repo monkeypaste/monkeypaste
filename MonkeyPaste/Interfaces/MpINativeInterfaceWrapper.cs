@@ -12,6 +12,7 @@ namespace MonkeyPaste {
         MpIScreenshot GetScreenshot();
         MpIDbInfo GetDbInfo();
         
+        
         //void Register<T>(object so) where T : class;
 
         //T Get<T>() where T : class;

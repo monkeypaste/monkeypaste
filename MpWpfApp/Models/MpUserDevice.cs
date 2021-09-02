@@ -2,10 +2,9 @@
 using FFImageLoading.Helpers.Exif;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using MonkeyPaste;
 using System.Linq;
 using SQLite;
-using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {

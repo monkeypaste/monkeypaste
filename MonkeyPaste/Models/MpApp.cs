@@ -5,7 +5,6 @@ using System.Text;
 using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Data;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpICopyItemSource, MpISyncableDbObject {
@@ -114,14 +113,19 @@ namespace MonkeyPaste {
         public MpApp() { }
 
         #region MpICopyItemSource Implementation
+        [Ignore]
         public MpIcon SourceIcon => Icon;
 
+        [Ignore]
         public string SourcePath => AppPath;
 
+        [Ignore]
         public string SourceName => AppName;
 
+        [Ignore]
         public int RootId => Id;
 
+        [Ignore]
         public bool IsSubSource => false;
         #endregion
 

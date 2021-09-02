@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using MonkeyPaste;
 using System.Globalization;
 using System.Linq;
 
@@ -64,13 +64,11 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            // TODO use _destHandle to find app but this tracking paste history is not critical so leaving DestAppId to null for now
-            MpDb.Instance.ExecuteWrite(
+           MpDb.Instance.ExecuteWrite(
                 "insert into MpPasteHistory(MpPasteHistoryGuid,fk_MpCopyItemId,fk_MpUserDeviceId,fk_MpAppId,fk_MpUrlId,PasteDateTime) values (@phg,@ciid, @udid, @aid,@uid,@pdt)",
                 new Dictionary<string, object> {
                     { "@phg", PasteHistoryGuid.ToString() },
                     { "@ciid", CopyItemId },
-                    { "@udid", UserDeviceId },
                     { "@udid", UserDeviceId },
                     { "@aid", DestAppId },
                     { "@uid", DestUrlId },

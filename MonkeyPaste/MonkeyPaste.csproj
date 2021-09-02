@@ -67,8 +67,6 @@
 
   <ItemGroup>
     <Compile Remove="MainPage.xaml.cs" />
-    <Compile Remove="Models\MpPasteToAppPath.cs" />
-    <Compile Remove="Models\MpShortcut.cs" />
   </ItemGroup>
 
   <ItemGroup>
