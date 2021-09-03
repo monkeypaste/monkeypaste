@@ -506,12 +506,14 @@ namespace MpWpfApp {
             //}
 
             var allItems = MpCopyItem.GetAllCopyItems(out int _totalEntryCount);
-            foreach (var ci in allItems) {
-                if (ci.IsSubCompositeItem) {
-                    continue;
-                }
-                Add(new MpClipTileViewModel(ci));
-            }
+            ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(
+                allItems.Select(x => new MpClipTileViewModel(x)).ToList());
+            //foreach (var ci in allItems) {
+            //    if (ci.IsSubCompositeItem) {
+            //        continue;
+            //    }
+            //    Add(new MpClipTileViewModel(ci));
+            //}
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
@@ -657,12 +659,6 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.IsInitialLoad) {
                 InitIntroItems();
             }
-
-
-            OnViewModelLoaded();
-            //MpHtmlToRtfConverter.Instance.Test();
-            //MpRtfToHtmlConverter.Instance.Test();
-
             //MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance);
         }
 

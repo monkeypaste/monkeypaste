@@ -1,0 +1,218 @@
+﻿CREATE TABLE MpSyncHistory (
+    pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, OtherClientGuid text
+, SyncDateTime datetime
+);
+                    
+CREATE TABLE MpDbLog (
+    pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, DbObjectGuid text
+, DbTableName text
+, AffectedColumnName text
+, AffectedColumnValue text
+, LogActionType integer default 0
+, LogActionDateTime datetime
+, SourceClientGuid text
+);
+                    
+CREATE TABLE MpDbImage (
+    pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpDbImageGuid text
+, ImageBase64 text
+);
+                                        
+CREATE TABLE MpTag (
+    pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpTagGuid text
+, fk_ParentTagId integer default 0
+, TagName text
+, SortIdx integer
+, HexColor text
+);
+                    
+CREATE TABLE MpIcon (
+    pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpIconGuid text
+, fk_IconDbImageId integer
+, fk_IconBorderDbImageId integer
+, fk_IconSelectedHighlightBorderDbImageId integer
+, fk_IconHighlightBorderDbImageId integer
+, HexColor1 text '#FFFF0000'
+, HexColor2 text '#FFFF0000'
+, HexColor3 text '#FFFF0000'
+, HexColor4 text '#FFFF0000'
+, HexColor5 text '#FFFF0000'
+, CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+, CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
+, CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+, CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+);                                       
+                    
+                    
+CREATE TABLE MpPasteToAppPath (
+    pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpPasteToAppPathGuid text
+, AppPath text NOT NULL
+, AppName text default ''
+, Args text default ''
+, Label text default ''
+, fk_MpDbImageId integer 
+, WindowState integer default 1
+, IsSilent integer NOT NULL default 0
+, IsAdmin integer NOT NULL default 0
+, PressEnter integer NOT NULL default 0
+, CONSTRAINT FK_MpPasteToAppPath_0_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                    
+);
+INSERT INTO MpPasteToAppPath(AppName,MpPasteToAppPathGuid,AppPath,IsAdmin) VALUES ('Command Prompt','0b9d1b30-abce-4407-b745-95f9cde57135','%windir%\System32\cmd.exe',0);
+                    
+CREATE TABLE MpUserDevice (
+    pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpUserDeviceGuid text 
+, PlatformTypeId integer NOT NULL
+);
+                    
+CREATE TABLE MpApp (
+    pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpAppGuid text
+, SourcePath text NOT NULL 
+, AppName text 
+, IsAppRejected integer NOT NULL   
+, fk_MpUserDeviceId integer
+, fk_MpIconId integer
+, CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
+, CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
+);   
+                    
+CREATE TABLE MpUrlDomain (
+    pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpUrlDomainGuid text
+, UrlDomainPath text NOT NULL 
+, UrlDomainTitle text
+, IsUrlDomainRejected integer NOT NULL DEFAULT 0   
+, fk_MpIconId integer
+, CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
+);  
+                    
+CREATE TABLE MpUrl (
+    pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpUrlGuid text
+, UrlPath text NOT NULL 
+, UrlTitle text
+, fk_MpUrlDomainId int NOT NULL
+, CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlDomainId) REFERENCES MpUrlDomain (pk_MpUrlDomainId)
+); 
+                    
+CREATE TABLE MpSource (
+    pk_MpSourceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpSourceGuid text
+, fk_MpUrlId integer
+, fk_MpAppId integer NOT NULL
+, CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
+, CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
+); 
+                    
+CREATE TABLE MpCopyItem (
+    pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpCopyItemGuid text
+, fk_ParentCopyItemId integer default 0
+, fk_MpCopyItemTypeId integer NOT NULL default 0
+, fk_MpAppId integer NOT NULL
+, fk_MpUrlId integer
+, CompositeSortOrderIdx integer default 0
+, HexColor text default '#FFFF0000'
+, Title text NULL default ''
+, CopyCount integer not null default 1
+, PasteCount integer not null default 0
+, fk_MpDbImageId integer
+, fk_SsMpDbImageId integer
+, ItemText text default ''
+, ItemRtf text default ''
+, ItemHtml text default ''
+, ItemDescription text default ''
+, ItemCsv text default ''
+, CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
+, CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)   
+);
+                    
+CREATE TABLE MpCopyItemTag (
+    pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpCopyItemTagGuid text
+, fk_MpCopyItemId integer NOT NULL
+, fk_MpTagId integer NOT NULL
+, CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+, CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
+);
+
+CREATE TABLE MpShortcut (
+    pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpShortcutGuid text
+, fk_MpCopyItemId INTEGER DEFAULT 0
+, fk_MpTagId INTEGER DEFAULT 0
+, ShortcutName text NOT NULL                    
+, KeyString text NULL       
+, DefaultKeyString text NULL
+, RoutingType integer NOT NULL DEFAULT 0 
+);
+INSERT INTO MpShortcut(MpShortcutGuid,ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
+('5dff238e-770e-4665-93f5-419e48326f01','Show Window',2,'Control+Shift+D','Control+Shift+D')
+,('cb807500-9121-4e41-80d3-8c3682ce90d9','Hide Window',1,'Escape','Escape')
+,('a41aeed8-d4f3-47de-86c5-f9ca296fb103','Append Mode',2,'Control+Shift+A','Control+Shift+A')
+,('892bf7d7-ba8e-4db1-b2ca-62b41ff6614c','Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
+,('a12c4211-ab1f-4b97-98ff-fbeb514e9a1c','Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
+,('1d212ca5-fb2a-4962-8f58-24ed9a5d007d','Paste Selected Clip',1,'Enter','Enter')
+,('e94ca4f3-4c6e-40dc-8941-c476a81543c7','Delete Selected Clip',1,'Delete','Delete')
+,('7fe24929-6c9e-49c0-a880-2f49780dfb3a','Select Next',1,'Right','Right')
+,('ee657845-f1dc-40cf-848d-6768c0081670','Select Previous',1,'Left','Left')
+,('5480f103-eabd-4e40-983c-ebae81645a10','Select All',1,'Control+A','Control+A')
+,('39a6b8b5-a585-455b-af83-015fd97ac3fa','Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
+,('166abd7e-7295-47f2-bbae-c96c03aa6082','Bring to front',1,'Control+Home','Control+Home')
+,('84c11b86-3acc-4d22-b8e9-3bd785446f72','Send to back',1,'Control+End','Control+End')
+,('6487f6ff-da0c-475b-a2ae-ef1484233de0','Assign Hotkey',1,'A','A')
+,('837e0c20-04b8-4211-ada0-3b4236da0821','Change Color',1,'C','C')
+,('4a567aff-33a8-4a1f-8484-038196812849','Say',1,'S','S')
+,('330afa20-25c3-425c-8e18-f1423eda9066','Merge',1,'M','M')
+,('118a2ca6-7021-47a0-8458-7ebc31094329','Undo',1,'Control+Z','Control+Z')
+,('3980efcc-933b-423f-9cad-09e455c6824a','Redo',1,'Control+Y','Control+Y')
+,('7a7580d1-4129-432d-a623-2fff0dc21408','Edit',1,'Control+E','Control+E')
+,('085338fb-f297-497a-abb7-eeb7310dc6f3','Rename',1,'F2','F2')
+,('e22faafd-4313-441a-b361-16910fc7e9d3','Duplicate',1,'Control+D','Control+D')
+,('4906a01e-b2f7-43f0-af1e-fb99d55c9778','Email',1,'Control+E','Control+E')
+,('c7248087-2031-406d-b4ab-a9007fbd4bc4','Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
+,('777367e6-c161-4e93-93e0-9bf12221f7ff','Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
+,('97e29b06-0ec4-4c55-a393-8442d7695038','Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
+,('ee74dd92-d18b-46cf-91b7-3946ab55427c','Copy Selection',1,'Control+C','Control+C');
+                    
+CREATE TABLE MpDetectedImageObject (
+    pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, fk_MpCopyItemId integer NOT NULL
+, Confidence real NOT NULL
+, X real NOT NULL
+, Y real NOT NULL
+, Width real NOT NULL
+, Height real NOT NULL                    
+, ObjectTypeName text
+, CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+);
+                    
+CREATE TABLE MpCopyItemTemplate (
+    pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpCopyItemTemplateGuid text
+, fk_MpCopyItemId integer NOT NULL
+, HexColor text default '#0000FF'
+, TemplateName text NOT NULL 
+, CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
+);       
+                    
+CREATE TABLE MpPasteHistory (
+    pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpPasteHistoryGuid text
+, fk_MpCopyItemId integer NOT NULL
+, fk_MpUserDeviceId integer NOT NULL
+, fk_MpAppId integer default 0                    
+, fk_MpUrlId integer default 0
+, PasteDateTime datetime NOT NULL
+, CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
+, CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
+, CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+, CONSTRAINT FK_MpPasteHistory_3_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
+);

@@ -37,7 +37,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = true;
+        public bool UseWAL { get; set; } = false;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -534,7 +534,6 @@ namespace MonkeyPaste {
 
         #region Private Methods  
         private void CreateConnection() {
-
             SQLiteConnectionString connStr = null;
 
             if(string.IsNullOrEmpty(_dbInfo.GetDbPassword())) {
@@ -557,11 +556,11 @@ namespace MonkeyPaste {
                                SQLiteOpenFlags.FullMutex
                     );
             }
-            if(_connection == null) {
+            if (_connection == null) {
                 _connection = new SQLiteConnection(connStr) { Trace = true };
             }
-            
-            if(_connectionAsync == null) {
+
+            if (_connectionAsync == null) {
                 _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
             }
             
@@ -598,20 +597,16 @@ namespace MonkeyPaste {
                     });
                 }
             }
-            InitTables();
+            InitTables(); 
+            Task.Run(async () => {
+                await InitTablesAsync();
+            });
+            
 
             if(isNewDb) {
                 InitDefaultData();
             }
 
-            //if (isNewDb) {
-            //    await InitDefaultDataAsync();
-            //}
-
-            //if (_connectionAsync != null && UseWAL) {
-            //    // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-            //    await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
-            //}
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
@@ -621,36 +616,40 @@ namespace MonkeyPaste {
 
         private void InitTables() {
             _connection.CreateTable<MpApp>();
-            _connection.CreateTable<MpUserDevice>();
             _connection.CreateTable<MpCopyItem>();
             _connection.CreateTable<MpCopyItemTag>();
             _connection.CreateTable<MpCopyItemTemplate>();
             _connection.CreateTable<MpDbImage>();
+            _connection.CreateTable<MpDbLog>();
             _connection.CreateTable<MpIcon>();
             _connection.CreateTable<MpPasteHistory>();
+            _connection.CreateTable<MpPasteToAppPath>(); 
+            _connection.CreateTable<MpShortcut>();
             _connection.CreateTable<MpSource>();
+            _connection.CreateTable<MpSyncHistory>();
             _connection.CreateTable<MpTag>();
             _connection.CreateTable<MpUrl>();
             _connection.CreateTable<MpUrlDomain>();
-            _connection.CreateTable<MpDbLog>();
-            _connection.CreateTable<MpSyncHistory>();
+            _connection.CreateTable<MpUserDevice>();
         }
 
         private async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpApp>();
-            await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
+            await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
+            await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
+            await _connectionAsync.CreateTableAsync<MpShortcut>();
             await _connectionAsync.CreateTableAsync<MpSource>();
+            await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUrlDomain>();
-            await _connectionAsync.CreateTableAsync<MpDbLog>();
-            await _connectionAsync.CreateTableAsync<MpSyncHistory>();
+            await _connectionAsync.CreateTableAsync<MpUserDevice>();
         }
 
         private void InitDefaultData() {            

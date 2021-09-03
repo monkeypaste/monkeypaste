@@ -299,6 +299,10 @@ namespace MpWpfApp {
                     itemData = (BitmapSource)Clipboard.GetImage();
                 } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
                     itemType = MpCopyItemType.RichText;
+                    if (iData.GetDataPresent(DataFormats.Html)) {
+                        var test = (string)iData.GetData(DataFormats.Html);
+                    }
+                    
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
                 } else {
                     Console.WriteLine("MpData error clipboard data is not known format");
@@ -1089,7 +1093,7 @@ namespace MpWpfApp {
             CopyItemId = Convert.ToInt32(dr["pk_MpCopyItemId"].ToString());
             CopyItemGuid = Guid.Parse(dr["MpCopyItemGuid"].ToString());
             CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
-            int appId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
+            AppId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
             ItemColor = dr["HexColor"].ToString();
             CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             Title = dr["Title"].ToString();
@@ -1107,7 +1111,7 @@ namespace MpWpfApp {
 
             ItemCsv = (dr["ItemCsv"] ?? string.Empty).ToString();
 
-            App = MpApp.GetAppById(appId);
+            App = MpApp.GetAppById(AppId);
 
             if (CopyItemType == MpCopyItemType.Image) {
                 ItemPlainText = (dr["ItemText"] ?? string.Empty).ToString();

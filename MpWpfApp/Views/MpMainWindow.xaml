@@ -24,6 +24,9 @@
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
+        Loaded="MainWindow_Loaded"
+        Initialized="MainWindow_Initialized"
+        RequestBringIntoView="MainWindow_RequestBringIntoView"
         Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
         DataContext="{StaticResource MainWindowViewModel}">
@@ -78,11 +81,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
     </Window.Resources>
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
+        <i:EventTrigger EventName="RequestBringIntoView">
             <i:CallMethodAction MethodName="MainWindow_Loaded"
                                 TargetObject="{Binding}" />
         </i:EventTrigger>

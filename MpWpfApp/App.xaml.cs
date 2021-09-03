@@ -14,10 +14,6 @@ namespace MpWpfApp {
             PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
-
-            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
-            MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
-
             base.OnStartup(e);
         }
 

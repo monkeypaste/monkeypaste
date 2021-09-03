@@ -285,6 +285,9 @@ namespace MpWpfApp {
 
             MpMainWindowViewModel.IsApplicationLoading = true;
 
+            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
+            MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+
             MpHelpers.Instance.Init();
 
             MpPluginManager.Instance.Init();
@@ -306,6 +309,9 @@ namespace MpWpfApp {
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+            if(!IsApplicationLoading) {
+                return;
+            }
             var mw = (MpMainWindow)Application.Current.MainWindow;
             Properties.Settings.Default.ThisAppDip = VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
@@ -358,7 +364,7 @@ namespace MpWpfApp {
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
-            MpMainWindowViewModel.IsApplicationLoading = false;
+            IsApplicationLoading = false;
         }
 
         public void ClearEdits() {
