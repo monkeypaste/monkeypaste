@@ -10,7 +10,6 @@ using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
-        public static MpMainWindowViewModel MainWindowViewModel { get; set; }
         #region Private Variables
 
         #endregion        
@@ -18,24 +17,16 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        //private MpMainWindowViewModel _mainWindowViewModel;
-        //public MpMainWindowViewModel MainWindowViewModel {
-        //    get {
-        //        return _mainWindowViewModel;
-        //        //return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-        //        //object mwvm = null;
-        //        //MpHelpers.Instance.RunOnMainThread((Action)(() => {
-        //        //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-        //        //}));
-        //        //return mwvm as MpMainWindowViewModel;
-        //    }
-        //    set {
-        //        if(_mainWindowViewModel != value) {
-        //            _mainWindowViewModel = value;
-        //            OnPropertyChanged(nameof(MainWindowViewModel));
-        //        }
-        //    }
-        //}
+        public MpMainWindowViewModel MainWindowViewModel {
+            get {
+                return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+                //object mwvm = null;
+                //Application.Current.Dispatcher.Invoke((Action)delegate {
+                //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+                //});
+                //return mwvm as MpMainWindowViewModel;
+            }
+        }
         #endregion
 
 

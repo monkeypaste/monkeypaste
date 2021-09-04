@@ -4,7 +4,7 @@
              xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              xmlns:local="clr-namespace:MpWpfApp" 
              x:Class="MpWpfApp.App" 
-             StartupUri="Views\MpMainWindow.xaml"           
+             StartupUri="Views\MainWindow\MpMainWindow.xaml"           
              Exit="Application_Exit"             
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 

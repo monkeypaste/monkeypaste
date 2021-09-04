@@ -88,7 +88,30 @@ namespace MonkeyPaste {
             return allApps.Where(x => x.Guid == appGuid).FirstOrDefault();
         }
 
-        public static async Task<MpApp> Create(string appPath,string appName, MpIcon icon) {
+        public static MpApp Create(string appPath, string appName, MpIcon icon) {
+            var dupApp = MpApp.GetAppByPath(appPath);
+            if (dupApp != null) {
+                return dupApp;
+            }
+            //if app doesn't exist create image,icon,app and source
+
+            var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+
+            var newApp = new MpApp() {
+                AppPath = appPath,
+                AppName = appName,
+                IconId = icon.Id,
+                Icon = icon,
+                UserDeviceId = thisDevice.Id,
+                UserDevice = thisDevice
+            };
+
+            MpDb.Instance.AddItem<MpApp>(newApp);
+
+            return newApp;
+        }
+
+        public static async Task<MpApp> CreateAsync(string appPath,string appName, MpIcon icon) {
             var dupApp = MpApp.GetAppByPath(appPath);
             if(dupApp != null) {
                 return dupApp;

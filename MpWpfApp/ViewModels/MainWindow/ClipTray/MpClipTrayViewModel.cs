@@ -23,6 +23,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpUndoableViewModelBase<MpClipTrayViewModel>/*, IDropTarget*/ {
@@ -506,14 +507,15 @@ namespace MpWpfApp {
             //}
 
             var allItems = MpCopyItem.GetAllCopyItems(out int _totalEntryCount);
-            ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(
-                allItems.Select(x => new MpClipTileViewModel(x)).ToList());
-            //foreach (var ci in allItems) {
-            //    if (ci.IsSubCompositeItem) {
-            //        continue;
-            //    }
-            //    Add(new MpClipTileViewModel(ci));
-            //}
+            //ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(
+            //    allItems.Select(x => new MpClipTileViewModel(x)).ToList());
+
+            foreach (var ci in allItems) {
+                if (ci.IsSubCompositeItem) {
+                    continue;
+                }
+                Add(new MpClipTileViewModel(ci));
+            }
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
@@ -659,6 +661,7 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.IsInitialLoad) {
                 InitIntroItems();
             }
+
             //MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance);
         }
 

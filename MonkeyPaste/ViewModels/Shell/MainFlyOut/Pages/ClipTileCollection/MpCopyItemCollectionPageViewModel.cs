@@ -73,9 +73,8 @@ namespace MonkeyPaste {
 
         public async Task SetTag(int tagId) {
             TagId = tagId; 
-            await Device.InvokeOnMainThreadAsync(async () => {
-                
-                var clips = await MpCopyItem.GetPage(TagId, 0, _pageSize);
+            await Device.InvokeOnMainThreadAsync(async () => {                
+                var clips = await MpCopyItem.GetPageAsync(TagId, 0, _pageSize);
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
                     var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
@@ -123,7 +122,7 @@ namespace MonkeyPaste {
             }
 
             await SetTag(tagId);
-            await Task.Delay(300);
+            //await Task.Delay(300);
             IsBusy = false;
         }
 

@@ -118,7 +118,6 @@ namespace MonkeyPaste {
         public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
 
-
         #region Static Methods
         public static async Task<MpCopyItem> GetCopyItemByIdAsync(int CopyItemId) {
             var allItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
@@ -147,7 +146,7 @@ namespace MonkeyPaste {
             return cil;
         }
 
-        public static async Task<ObservableCollection<MpCopyItem>> GetPage(
+        public static async Task<ObservableCollection<MpCopyItem>> GetPageAsync(
             int tagId, 
             int start, 
             int count, 
@@ -185,7 +184,7 @@ namespace MonkeyPaste {
             return results;
         }
 
-        public static async Task<ObservableCollection<MpCopyItem>> Search(int tagId, string searchString) {
+        public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
             var allCopyItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
             var allCopyItemTags = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
 
@@ -198,8 +197,47 @@ namespace MonkeyPaste {
             return new ObservableCollection<MpCopyItem>(searchResult);
         }
 
+        public static MpCopyItem Create(string sourcePath, string sourceName, string sourceIconImg64, string data, MpCopyItemType itemType) {
+            MpApp app = MpApp.GetAppByPath(sourcePath);
+            if (app == null) {
+                var icon = MpIcon.GetIconByImageStr(sourceIconImg64);
+                if (icon == null) {
+                    icon = MpIcon.Create(sourceIconImg64);
+                }
+                app = MpApp.Create(sourcePath, sourceName, icon);
+            } 
 
-        public static async Task<MpCopyItem> Create(object args) {
+            var newCopyItem = new MpCopyItem() { 
+                CopyDateTime = DateTime.Now,
+                Title = "Untitled",
+                ItemText = data,
+                ItemType = itemType,
+                ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
+                AppId = app.Id,
+                App = app,
+                CopyCount = 1
+                //ItemImage = hostAppImage
+            };
+
+            MpDb.Instance.AddOrUpdate<MpCopyItem>(newCopyItem);
+
+            //add CopyItem to default tags
+            //var defaultTagList = MpDb.Instance.Query<MpTag>(
+            //    "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", MpTag.AllTagId, MpTag.RecentTagId);
+
+            //if (defaultTagList != null) {
+            //    foreach (var tag in defaultTagList) {
+            //        var CopyItemTag = new MpCopyItemTag() {
+            //            CopyItemId = newCopyItem.Id,
+            //            TagId = tag.Id
+            //        };
+            //        MpDb.Instance.AddItem<MpCopyItemTag>(CopyItemTag);
+            //    }
+            //}
+            return newCopyItem;
+        }
+
+        public static async Task<MpCopyItem> CreateAsync(object args) {
             if (args == null) {
                 return null;
             }
@@ -217,9 +255,9 @@ namespace MonkeyPaste {
             if (app == null) {
                 icon = await MpIcon.GetIconByImageStrAsync(hostAppImageBase64);
                 if (icon == null) {
-                    icon = await MpIcon.Create(hostAppImageBase64);
+                    icon = await MpIcon.CreateAsync(hostAppImageBase64);
                 }
-                app = await MpApp.Create(hostPackageName, hostAppName, icon);
+                app = await MpApp.CreateAsync(hostPackageName, hostAppName, icon);
             } else {
                 icon = app.Icon;
             }
@@ -255,19 +293,7 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        public MpCopyItem() {
-        }
-
-        public MpCopyItem(object data, string sourceInfo) : this() {
-            if(data == null) {
-                return;
-            }
-        }
-        public MpCopyItem(string title, string itemPlainText) : this() {
-            Title = title;
-            ItemText = itemPlainText;
-            CopyDateTime = DateTime.Now;
-        }
+        public MpCopyItem() : base() { }
 
         //public override void DeleteFromDatabase() {
         //    throw new NotImplementedException();

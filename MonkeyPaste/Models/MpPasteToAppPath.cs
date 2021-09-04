@@ -154,64 +154,64 @@ namespace MonkeyPaste {
             Args = dr["Args"].ToString();
         }
 
-        public void DeleteFromDatabase() {
-            if (PasteToAppPathId <= 0) {
-                return;
-            }
+        //public void DeleteFromDatabase() {
+        //    if (PasteToAppPathId <= 0) {
+        //        return;
+        //    }
 
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpPasteToAppPath where pk_MpPasteToAppPathId=@cid",
-                new Dictionary<string, object> {
-                    { "@cid", PasteToAppPathId }
-                });
-        }
+        //    MpDb.Instance.ExecuteWrite(
+        //        "delete from MpPasteToAppPath where pk_MpPasteToAppPathId=@cid",
+        //        new Dictionary<string, object> {
+        //            { "@cid", PasteToAppPathId }
+        //        });
+        //}
 
-        public void WriteToDatabase() {
-            //AvatarDbImage.WriteToDatabase
-            if (PasteToAppPathId == 0) {
-                DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ap", AppPath },
-                        { "@ia", IsAdmin ? 1:0 },
-                        { "@a", Args },
-                        { "@is", IsSilent ? 1:0 }
-                    });
-                if (dt != null && dt.Rows.Count > 0) {
-                    PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
-                } else {
-                    MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(MpPasteToAppPathGuid,AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@apg,@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
-                        new System.Collections.Generic.Dictionary<string, object> {
-                            { "@apg", PasteToAppPathGuid.ToString() },
-                        { "@ap", AppPath },
-                        { "@an",AppName },
-                        { "@ia", IsAdmin ? 1:0 },
-                        { "@l", Label },
-                        { "@a", Args },
-                        //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
-                        { "@is", IsSilent ? 1:0 },
-                        { "@ws", (int)WindowState },
-                        {"@pe", PressEnter ? 1:0 }
-                    });
-                    PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
-                }
-            } else {
-                MpDb.Instance.ExecuteWrite(
-                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ap", AppPath },
-                        { "@an",AppName },
-                        { "@ia", IsAdmin ? 1:0 },
-                        { "@cid", PasteToAppPathId },
-                        { "@l", Label },
-                        { "@a", Args },
-                        //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
-                        { "@is", IsSilent ? 1:0 },
-                        { "@ws", (int)WindowState },
-                        { "@pe", PressEnter ? 1:0 }
-                    });
-            }
-        }
+        //public void WriteToDatabase() {
+        //    //AvatarDbImage.WriteToDatabase
+        //    if (PasteToAppPathId == 0) {
+        //        DataTable dt = MpDb.Instance.Execute(
+        //            "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
+        //            new System.Collections.Generic.Dictionary<string, object> {
+        //                { "@ap", AppPath },
+        //                { "@ia", IsAdmin ? 1:0 },
+        //                { "@a", Args },
+        //                { "@is", IsSilent ? 1:0 }
+        //            });
+        //        if (dt != null && dt.Rows.Count > 0) {
+        //            PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
+        //        } else {
+        //            MpDb.Instance.ExecuteWrite(
+        //                "insert into MpPasteToAppPath(MpPasteToAppPathGuid,AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@apg,@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
+        //                new System.Collections.Generic.Dictionary<string, object> {
+        //                    { "@apg", PasteToAppPathGuid.ToString() },
+        //                { "@ap", AppPath },
+        //                { "@an",AppName },
+        //                { "@ia", IsAdmin ? 1:0 },
+        //                { "@l", Label },
+        //                { "@a", Args },
+        //                //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+        //                { "@is", IsSilent ? 1:0 },
+        //                { "@ws", (int)WindowState },
+        //                {"@pe", PressEnter ? 1:0 }
+        //            });
+        //            PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
+        //        }
+        //    } else {
+        //        MpDb.Instance.ExecuteWrite(
+        //            "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
+        //            new System.Collections.Generic.Dictionary<string, object> {
+        //                { "@ap", AppPath },
+        //                { "@an",AppName },
+        //                { "@ia", IsAdmin ? 1:0 },
+        //                { "@cid", PasteToAppPathId },
+        //                { "@l", Label },
+        //                { "@a", Args },
+        //                //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+        //                { "@is", IsSilent ? 1:0 },
+        //                { "@ws", (int)WindowState },
+        //                { "@pe", PressEnter ? 1:0 }
+        //            });
+        //    }
+        //}
     }
 }

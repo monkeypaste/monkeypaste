@@ -133,9 +133,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-        public Canvas MainWindowCanvas { get; set; }
+        //public Canvas MainWindowCanvas { get; set; }
 
-        public Grid MainWindowGrid { get; set; }
+        //public Grid MainWindowGrid { get; set; }
         #endregion
 
         #region State
@@ -280,25 +280,17 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
-
-            MpViewModelBase.MainWindowViewModel = this;
+            //MpViewModelBase.MainWindowViewModel = this;
 
             MpMainWindowViewModel.IsApplicationLoading = true;
 
+
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
+            MpHelpers.Instance.Init();            
+
             MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
 
-            MpHelpers.Instance.Init();
-
             MpPluginManager.Instance.Init();
-
-            if (string.IsNullOrEmpty(Properties.Settings.Default.ThisDeviceGuid)) {
-                Properties.Settings.Default.ThisDeviceGuid = Guid.NewGuid().ToString();                
-            }
-
-            if (MpUserDevice.GetUserDeviceByGuid(Properties.Settings.Default.ThisDeviceGuid) == null) {
-                new MpUserDevice(Properties.Settings.Default.ThisDeviceGuid, MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
-            }
 
             SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
@@ -309,52 +301,8 @@ namespace MpWpfApp {
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            if(!IsApplicationLoading) {
-                return;
-            }
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            Properties.Settings.Default.ThisAppDip = VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
-
-            MainWindowCanvas = (Canvas)mw.FindName("MainWindowCanvas");
-            MainWindowGrid = (Grid)mw.FindName("MainWindowGrid");
-
-            InitDefaultProperties();
-
-            mw.Deactivated += (s, e2) => {
-                HideWindowCommand.Execute(null);
-            };
-            ClipTrayViewModel.ItemsVisibilityChanged += (s1, e7) => {
-                if (ClipTrayViewModel.VisibileClipTiles.Count == 0 && 
-                    SearchBoxViewModel.HasText) {
-                    SearchBoxViewModel.IsTextValid = false;
-                } else {
-                    SearchBoxViewModel.IsTextValid = true;
-                }
-            };
-
-            MainWindowCanvas.MouseLeftButtonDown += (s, e3) => {
-                var hitTest = VisualTreeHelper.HitTest(MainWindowCanvas, e3.GetPosition(MainWindowCanvas));
-                if(hitTest != null && hitTest.VisualHit != null) {
-                    if(hitTest.VisualHit == MainWindowCanvas) {
-                        HideWindowCommand.Execute(null);
-                    }
-                }
-                
-            };
-
-            SetupMainWindowRect();
-
-            InitWindowStyle();
-
             MpShortcutCollectionViewModel.Instance.Init();
 
-#if DEBUG
-            //ShowWindowCommand.Execute(null);
-            //HideWindowCommand.Execute(null);
-#else
-            //HideWindowCommand.Execute(null);
-#endif
-            var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
             int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
@@ -364,6 +312,7 @@ namespace MpWpfApp {
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
+
             IsApplicationLoading = false;
         }
 
@@ -412,29 +361,12 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
         }
 
-        #endregion
-
-        #region Private Methods
-        private void Resize(double deltaHeight) {
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            MainWindowGridTop -= deltaHeight;
-            MainWindowGridHeight += deltaHeight;
-            mw.UpdateLayout();
-        }
-
-        private void InitDefaultProperties() {
-            if (Properties.Settings.Default.DoFindBrowserUrlForCopy) {
-                Properties.Settings.Default.UserDefaultBrowserProcessPath = MpHelpers.Instance.GetSystemDefaultBrowserProcessPath();
-            }
-            Properties.Settings.Default.UserCultureInfoName = CultureInfo.CurrentCulture.Name;
-        }
-
-        private void SetupMainWindowRect() {
+        public void SetupMainWindowRect() {
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
             mw.Left = SystemParameters.WorkArea.Left;
             //mw.Height = MpMeasurements.Instance.MainWindowMinHeight;
-            
+
             _startMainWindowTop = SystemParameters.WorkArea.Bottom;
             if (SystemParameters.WorkArea.Top == 0) {
                 //if taskbar is at the bottom
@@ -458,23 +390,15 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(MainWindowWidth));
             OnPropertyChanged(nameof(MainWindowHeight));
-            //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
         }
+        #endregion
 
-        private void InitWindowStyle() {
-            WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
-            int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
-            exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-            WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
-
-            SystemParameters.StaticPropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(SystemParameters.WorkArea)) {
-                    this.Dispatcher.Invoke(() => {
-                        SetupMainWindowRect();
-                    });
-                }
-            };
+        #region Private Methods
+        private void Resize(double deltaHeight) {
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            MainWindowGridTop -= deltaHeight;
+            MainWindowGridHeight += deltaHeight;
+            mw.UpdateLayout();
         }
 
         public void AddTempFile(string fp) {
@@ -573,7 +497,6 @@ namespace MpWpfApp {
                     MainWindowGridTop = _endMainWindowTop;
                     timer.Stop();
                     IsShowingMainWindow = false;
-                    //SearchBoxViewModel.IsTextBoxFocused = true;
                 }
             };
             ClipTrayViewModel.AddNewTiles();

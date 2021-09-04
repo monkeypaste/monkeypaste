@@ -21,12 +21,12 @@
         Background="Transparent"
         Top="0"
         Visibility="Visible"
+        Loaded="MainWindow_Loaded"
+        DataContextChanged="MainWindow_DataContextChanged"
+        Deactivated="MainWindow_Deactivated"
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
-        Loaded="MainWindow_Loaded"
-        Initialized="MainWindow_Initialized"
-        RequestBringIntoView="MainWindow_RequestBringIntoView"
         Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
         DataContext="{StaticResource MainWindowViewModel}">
@@ -83,13 +83,14 @@
         </Style>
     </Window.Resources>
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="RequestBringIntoView">
+        <i:EventTrigger EventName="Loaded">
             <i:CallMethodAction MethodName="MainWindow_Loaded"
                                 TargetObject="{Binding}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Canvas x:Name="MainWindowCanvas"
             AllowDrop="True"
+            MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{Binding MainWindowHeight}"
             Width="{Binding MainWindowWidth}"
             Background="Transparent">

@@ -1,11 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpWpfPreferences : MonkeyPaste.MpIPreferenceIO {
+
+        #region Public Methods
+        public MpWpfPreferences() {
+            if (Properties.Settings.Default.DoFindBrowserUrlForCopy) {
+                Properties.Settings.Default.UserDefaultBrowserProcessPath = MpHelpers.Instance.GetSystemDefaultBrowserProcessPath();
+            }
+            Properties.Settings.Default.UserCultureInfoName = CultureInfo.CurrentCulture.Name;
+        }
+        #endregion
+
+        #region MpIPreferenceIo Implementation
+
         public bool Get(string key, bool defValue) {
             object pref = Properties.Settings.Default[key];
             if(pref == null) {
@@ -71,5 +84,8 @@ namespace MpWpfApp {
 
             Properties.Settings.Default.Save();
         }
+
+        #endregion
+
     }
 }

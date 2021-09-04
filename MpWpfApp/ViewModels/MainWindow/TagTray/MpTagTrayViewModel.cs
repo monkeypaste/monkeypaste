@@ -27,8 +27,6 @@ namespace MpWpfApp {
                 return null;
             }
         }
-
-        public new MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
 
         #region Properties
@@ -142,7 +140,6 @@ namespace MpWpfApp {
         }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            MainWindowViewModel = base.MainWindowViewModel;
             var tagTrayGrid = (Grid)sender;
             var tagTray = (ListBox)tagTrayGrid.FindName("TagTray");
             var leftButton = (RepeatButton)tagTrayGrid.FindName("TagTrayNavLeftButton");

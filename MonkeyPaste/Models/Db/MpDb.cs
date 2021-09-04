@@ -37,7 +37,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = false;
+        public bool UseWAL { get; set; } = true;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -562,14 +562,13 @@ namespace MonkeyPaste {
 
             if (_connectionAsync == null) {
                 _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
-            }
-            
+            }            
         }
 
         private void InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
-            //File.Delete(dbPath);
+            File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -584,7 +583,6 @@ namespace MonkeyPaste {
                 }
             }
 
-
             if (UseWAL) {
                 // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
                 if(_connection != null) {
@@ -597,7 +595,9 @@ namespace MonkeyPaste {
                     });
                 }
             }
-            InitTables(); 
+
+            InitTables();
+
             Task.Run(async () => {
                 await InitTablesAsync();
             });
@@ -652,8 +652,17 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
         }
 
-        private void InitDefaultData() {            
-            if(MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
+        private void InitDefaultData() {
+            if (string.IsNullOrEmpty(MpPreferences.Instance.ThisDeviceGuid)) {
+                MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
+            }
+
+            //if (MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
+            //    new MpUserDevice(
+            //        MpPreferences.Instance.ThisDeviceGuid, 
+            //        MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
+            //}
+            if (MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
                 var thisDevice = new MpUserDevice() {
                     UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
                     PlatformType = MpPreferences.Instance.ThisDeviceType
@@ -714,43 +723,43 @@ namespace MonkeyPaste {
             return @"                    
                     CREATE TABLE MpSyncHistory (
                       pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , OtherClientGuid text
-                    , SyncDateTime datetime
+                    , OtherClientGuid text not null
+                    , SyncDateTime datetime not null
                     );
                     
                     CREATE TABLE MpDbLog (
                       pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , DbObjectGuid text
-                    , DbTableName text
-                    , AffectedColumnName text
-                    , AffectedColumnValue text
+                    , DbObjectGuid text not null
+                    , DbTableName text not null
+                    , AffectedColumnName text not null
+                    , AffectedColumnValue text not null default ''
                     , LogActionType integer default 0
-                    , LogActionDateTime datetime
-                    , SourceClientGuid text
+                    , LogActionDateTime datetime not null
+                    , SourceClientGuid text not null
                     );
                     
                     CREATE TABLE MpDbImage (
                       pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpDbImageGuid text
-                    , ImageBase64 text
+                    , MpDbImageGuid text not null
+                    , ImageBase64 text not null
                     );
                                         
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpTagGuid text
+                    , MpTagGuid text not null
                     , fk_ParentTagId integer default 0
                     , TagName text
                     , SortIdx integer
-                    , HexColor text
+                    , HexColor text not null default '#FFFF0000'
                     );
                     
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpIconGuid text
-                    , fk_IconDbImageId integer
-                    , fk_IconBorderDbImageId integer
-                    , fk_IconSelectedHighlightBorderDbImageId integer
-                    , fk_IconHighlightBorderDbImageId integer
+                    , MpIconGuid text not null
+                    , fk_IconDbImageId integer not null
+                    , fk_IconBorderDbImageId integer not null
+                    , fk_IconSelectedHighlightBorderDbImageId integer not null
+                    , fk_IconHighlightBorderDbImageId integer not null
                     , HexColor1 text '#FFFF0000'
                     , HexColor2 text '#FFFF0000'
                     , HexColor3 text '#FFFF0000'
@@ -765,7 +774,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpPasteToAppPath (
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpPasteToAppPathGuid text
+                    , MpPasteToAppPathGuid text not null
                     , AppPath text NOT NULL
                     , AppName text default ''
                     , Args text default ''
@@ -781,17 +790,17 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpUserDevice (
                       pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUserDeviceGuid text 
+                    , MpUserDeviceGuid text not null
                     , PlatformTypeId integer NOT NULL
                     );
                     
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAppGuid text
+                    , MpAppGuid text not null
                     , SourcePath text NOT NULL 
                     , AppName text 
                     , IsAppRejected integer NOT NULL   
-                    , fk_MpUserDeviceId integer
+                    , fk_MpUserDeviceId integer not null
                     , fk_MpIconId integer
                     , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
@@ -799,7 +808,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpUrlDomain (
                       pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUrlDomainGuid text
+                    , MpUrlDomainGuid text not null
                     , UrlDomainPath text NOT NULL 
                     , UrlDomainTitle text
                     , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
@@ -809,7 +818,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpUrl (
                       pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUrlGuid text
+                    , MpUrlGuid text not null
                     , UrlPath text NOT NULL 
                     , UrlTitle text
                     , fk_MpUrlDomainId int NOT NULL
@@ -818,16 +827,17 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpSource (
                       pk_MpSourceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpSourceGuid text
+                    , MpSourceGuid text not null
                     , fk_MpUrlId integer
                     , fk_MpAppId integer NOT NULL
                     , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     ); 
+
                     
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemGuid text
+                    , MpCopyItemGuid text not null
                     , fk_ParentCopyItemId integer default 0
                     , fk_MpCopyItemTypeId integer NOT NULL default 0
                     , fk_MpAppId integer NOT NULL
@@ -848,9 +858,18 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)   
                     );
                     
+                    CREATE TABLE MpCopyItemContent (
+                      pk_MpCopyItemContentId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemContentGuid text not null
+                    , fk_MpCopyItemId integer not null
+                    , ContentText text
+                    , ContentTypeId integer default 0
+                    , CONSTRAINT FK_MpCopyItemContent_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)   
+                    );
+
                     CREATE TABLE MpCopyItemTag (
                       pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemTagGuid text
+                    , MpCopyItemTagGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpTagId integer NOT NULL
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
@@ -859,7 +878,7 @@ namespace MonkeyPaste {
 
                     CREATE TABLE MpShortcut (
                       pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpShortcutGuid text
+                    , MpShortcutGuid text not null
                     , fk_MpCopyItemId INTEGER DEFAULT 0
                     , fk_MpTagId INTEGER DEFAULT 0
                     , ShortcutName text NOT NULL                    
@@ -910,7 +929,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpCopyItemTemplate (
                       pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemTemplateGuid text
+                    , MpCopyItemTemplateGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , HexColor text default '#0000FF'
                     , TemplateName text NOT NULL 
@@ -919,7 +938,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpPasteHistoryGuid text
+                    , MpPasteHistoryGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpUserDeviceId integer NOT NULL
                     , fk_MpAppId integer default 0                    

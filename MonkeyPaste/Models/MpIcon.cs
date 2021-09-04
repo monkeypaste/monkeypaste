@@ -71,12 +71,49 @@ namespace MonkeyPaste {
         public string HexColor5 { get; set; }
         #endregion
 
-        public static async Task<List<string>> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
+        public static List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
 
             var primaryIconColorList = new List<string>();
-            var hist = await MpImageHistogram.Instance.GetStatistics(skbmp);
+            var hist = MpImageHistogram.Instance.GetStatistics(skbmp);
+            foreach (var kvp in hist) {
+                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == listCount) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(c.ToHex());
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < listCount; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
+            }
+
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
+
+        public static async Task<List<string>> CreatePrimaryColorListAsync(SKBitmap skbmp, int listCount = 5) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+
+            var primaryIconColorList = new List<string>();
+            var hist = await MpImageHistogram.Instance.GetStatisticsAsync(skbmp);
             foreach (var kvp in hist) {
                 var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
 
@@ -118,12 +155,70 @@ namespace MonkeyPaste {
             return allicons.Where(x => x.IconImageId == img.Id).FirstOrDefault();
         }
 
+        public static MpIcon GetIconByImageStr(string imgStr) {
+            var iconImg = MpDb.Instance.GetItems<MpDbImage>();
+            var img = iconImg.Where(x => x.ImageBase64 == imgStr).FirstOrDefault();
+            if (img == null) {
+                return null;
+            }
+            var allicons =  MpDb.Instance.GetItems<MpIcon>();
+            return allicons.Where(x => x.IconImageId == img.Id).FirstOrDefault();
+        }
+
         public static async Task<MpIcon> GetIconById(int id) {
             var allicons = await MpDb.Instance.GetItemsAsync<MpIcon>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public static async Task<MpIcon> Create(string iconImgBase64) {            
+        public static MpIcon Create(string iconImgBase64) {
+            var iconImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+
+            // TODO add image manipulation stuff like in wpf or get rid of this crap
+            var iconBorderImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightSelectedImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
+            };
+
+            MpDb.Instance.AddItem<MpDbImage>(iconImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderHighlightImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderHighlightSelectedImage);
+
+            var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
+            var colorList = CreatePrimaryColorList(iconSkBmp);
+            // TODO create border images here
+            var newIcon = new MpIcon() {
+                IconImageId = iconImage.Id,
+                IconImage = iconImage,
+                IconBorderImageId = iconBorderImage.Id,
+                IconBorderImage = iconBorderImage,
+                IconBorderHighlightImageId = iconBorderHighlightImage.Id,
+                IconBorderHighlightImage = iconBorderHighlightImage,
+                IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.Id,
+                IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage,
+                HexColor1 = colorList[0],
+                HexColor2 = colorList[1],
+                HexColor3 = colorList[2],
+                HexColor4 = colorList[3],
+                HexColor5 = colorList[4],
+            };
+            MpDb.Instance.AddItem<MpIcon>(newIcon);
+
+            return newIcon;
+        }
+
+        public static async Task<MpIcon> CreateAsync(string iconImgBase64) {            
             var iconImage = new MpDbImage() {
                 //ImageBytes = iconImg
                 ImageBase64 = iconImgBase64
@@ -149,7 +244,7 @@ namespace MonkeyPaste {
             await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightSelectedImage);
 
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
-            var colorList = await CreatePrimaryColorList(iconSkBmp);
+            var colorList = await CreatePrimaryColorListAsync(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
                 IconImageId = iconImage.Id,

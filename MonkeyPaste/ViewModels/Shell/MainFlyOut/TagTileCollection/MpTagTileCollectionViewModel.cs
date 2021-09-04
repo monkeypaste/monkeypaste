@@ -118,56 +118,25 @@ namespace MonkeyPaste {
                     TagViewModels.Add(ttvm);
                 } else {
                     TagViewModels[TagViewModels.IndexOf(dupTag)].Tag = t;
-                }
-                
-            }
+                }                
+            } 
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            //Device.InvokeOnMainThreadAsync(async () => {
-            //    if (e is MpTag t) {
-            //        var ttvmToRemove = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
-            //        if (ttvmToRemove != null) {
-            //            //remove tag and update sort order
-            //            int removedIdx = TagViewModels.IndexOf(ttvmToRemove);
-            //            TagViewModels.Remove(ttvmToRemove);
-            //            await UpdateSort();
-            //        }
-            //    }
-            //});
-
             if (e is MpTag) {
                 Device.InvokeOnMainThreadAsync(async () => {
-                    //await Task.Delay(1000);
                     await Task.Run(Initialize);
                 });
             }
         }
 
         private void Db_OnItemUpdated(object sender, MpDbModelBase e) {
-            //Device.InvokeOnMainThreadAsync(async () => {
-            //    if (e is MpTag t) {
-            //        var ttvmToUpdate = TagViewModels.Where(x => x.Tag.Id == t.Id).FirstOrDefault();
-            //        if (ttvmToUpdate != null) {
-            //            ttvmToUpdate.Tag.ColorId = t.ColorId;                        
-            //            ttvmToUpdate.Tag.TagName = t.TagName;
-            //            if(ttvmToUpdate.Tag.TagSortIdx != t.TagSortIdx) {
-
-            //            }
-            //            OnPropertyChanged(nameof(Tag));
-            //        }
-            //    }
-            //});
-
             if (e is MpTag t) {
                 if(SelectedTagViewModel.Tag.Id == t.Id) {
                     if(CopyItemCollectionViewModel.CopyItemViewModels.Count == 0) {
                         CopyItemCollectionViewModel.EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);                       
                     }
                 }
-                //Device.InvokeOnMainThreadAsync(async () => {
-                //    await Task.Run(Initialize);
-                //});
             }
         }
 
@@ -180,7 +149,6 @@ namespace MonkeyPaste {
                         }
                         break;
                 }
-                //await MpDb.Instance.UpdateItemAsync<MpTag>(ttvm.Tag);
             }
         }
         #endregion

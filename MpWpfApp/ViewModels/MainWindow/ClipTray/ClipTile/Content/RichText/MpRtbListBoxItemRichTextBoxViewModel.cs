@@ -1342,8 +1342,8 @@ namespace MpWpfApp {
                                        !rtbvm.HostClipTileViewModel.IsContextMenuOpened && 
                                        !rtbvm.IsSubContextMenuOpened &&
                                        !rtbvm.HostClipTileViewModel.IsClipDragging &&
-                                       !MpViewModelBase.MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey &&
-                                       !MpViewModelBase.MainWindowViewModel.ClipTrayViewModel.IsPastingSelected &&
+                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey &&
+                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingSelected &&
                                        MpMainWindowViewModel.IsMainWindowOpen) {
                                 Console.WriteLine(@"RtbItem Selection was rejected");
                                 rtbvm.IsSubSelected = false;

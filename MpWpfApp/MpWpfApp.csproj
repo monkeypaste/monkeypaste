@@ -289,6 +289,9 @@
     <Compile Include="Views\Analytics\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\MpMainWindow.xaml.cs">
+      <DependentUpon>MpMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MpLoadingWindow.xaml.cs">
       <DependentUpon>MpLoadingWindow.xaml</DependentUpon>
     </Compile>
@@ -335,6 +338,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\MpMainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -346,10 +353,6 @@
     <Page Include="Views\MpStandardBalloonControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MpMainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -392,9 +395,6 @@
   <ItemGroup>
     <Compile Include="Views\MpAssignHotkeyModalWindow.xaml.cs">
       <DependentUpon>MpAssignHotkeyModalWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MpMainWindow.xaml.cs">
-      <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

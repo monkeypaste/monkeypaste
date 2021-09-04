@@ -6,7 +6,7 @@ using Xamarin.Forms.PlatformConfiguration;
 
 namespace MonkeyPaste {
     public static class MpExtensions {
-        #region Documents
+        #region Strings
         public static bool ContainsByUserSensitivity(this string str, string ostr) {
             if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {
                 return false;
@@ -21,7 +21,68 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetCheckSum(str);
         }
 
+        public static bool IsBase64String(this string str) {
+            try {
+                // If no exception is caught, then it is possibly a base64 encoded string
+                byte[] data = Convert.FromBase64String(str);
+                // The part that checks if the string was properly padded to the
+                // correct length was borrowed from d@anish's solution
+                return (str.Replace(" ", "").Length % 4 == 0);
+            }
+            catch {
+                // If exception is caught, then it is not a base64 encoded string
+                return false;
+            }
+        }
 
+        public static bool IsStringCsv(this string text) {
+            if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
+                return false;
+            }
+            return text.Contains(",");
+        }
+
+        public static bool IsStringRichText(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"{\rtf");
+        }
+
+        public static bool IsStringXaml(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
+        }
+
+        public static bool IsStringSpan(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Span xmlns=");
+        }
+
+        public static bool IsStringSection(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Section xmlns=");
+        }
+
+        public static bool IsStringPlainText(this string text) {
+            //returns true for csv
+            if (text == null) {
+                return false;
+            }
+            if (text == string.Empty) {
+                return true;
+            }
+            if (IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Visual
