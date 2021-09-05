@@ -15,11 +15,14 @@ namespace MonkeyPaste {
         public override int Id { get; set; } = 0;
 
         [ForeignKey(typeof(MpCopyItem))]
-        [Column("fk_MpCopyItemId")]
-        public int CompositeParentCopyItemId { get; set; }
+        [Column("fk_ParentCopyItemId")]
+        public int CompositeParentCopyItemId { get; set; } = 0;
+
+        public int CompositeSortOrderIdx { get; set; } = 0;
 
         [Column("MpCopyItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
         [Ignore]
         public Guid CopyItemGuid {
             get {
@@ -33,13 +36,9 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpApp))]
-        [Column("fk_MpAppId")]
-        public int AppId { get; set; }
-
-        [ForeignKey(typeof(MpUrl))]
-        [Column("fk_MpUrlId")]
-        public int UrlId { get; set; }
+        [ForeignKey(typeof(MpSource))]
+        [Column("fk_MpSourceId")]
+        public int SourceId { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
@@ -60,18 +59,11 @@ namespace MonkeyPaste {
 
         public DateTime CopyDateTime { get; set; }
 
-        public string ItemText { get; set; } = string.Empty;
-
-        public string ItemRtf { get; set; } = string.Empty;
-
-        public string ItemHtml { get; set; } = string.Empty;
-
-        public string ItemCsv { get; set; } = string.Empty;
+        public string ItemData { get; set; } = string.Empty;
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_MpDbImageId")]
         public int ItemImageId { get; set; }
-
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_SsMpDbImageId")]
@@ -83,18 +75,12 @@ namespace MonkeyPaste {
 
         public int PasteCount { get; set; } = 0;
 
-        //public string Host { get; set; }
         #endregion
 
         #region Fk Objects
-        //[ManyToMany(typeof(MpCopyItemTag))]
-        //public List<MpTag> Tags { get; set; }
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
-        public MpApp App { get; set; }
-
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
-        public MpUrl Url { get; set; }
+        public MpSource Source { get; set; }
 
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpDbImage SsDbImage { get; set; }
@@ -136,14 +122,50 @@ namespace MonkeyPaste {
             }
             return null;
         }
+
+        public static MpCopyItem GetCopyItemByData(string data) {
+            var allItems = MpDb.Instance.GetItems<MpCopyItem>();
+            return allItems.Where(x => x.ItemData == data).FirstOrDefault();
+        }
+
         public static async Task<List<MpCopyItem>> GetAllCopyItemsByTagId(int tagId) {
-            var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(tagId);
+            var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
             var cil = new List<MpCopyItem>();
             foreach (var cit in citl) {
                 var ci = await MpCopyItem.GetCopyItemByIdAsync(cit.CopyItemId);
                 cil.Add(ci);
             }
             return cil;
+        }
+
+        public static List<MpCopyItem> GetCompositeChildren(MpCopyItem ci) {
+            if (ci == null || ci.Id == 0) {
+                return new List<MpCopyItem>();
+            }
+            return MpDb.Instance.GetItems<MpCopyItem>().Where(x => x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+        }
+
+        public static MpCopyItem Merge(
+            MpCopyItem fromItem,
+            MpCopyItem toItem,
+            bool useFileData = false,
+            bool isFileDataMerged = false,
+            int forceIdx = -1) {
+            if (toItem == null) {
+                return fromItem;
+            }
+            if (fromItem.ItemType == MpCopyItemType.Image || toItem.ItemType == MpCopyItemType.Image) {
+                // for now, do not allow combining with image types
+                return null;
+            }
+
+            if (fromItem == toItem) {
+                return toItem;
+            }
+
+            toItem.LinkCompositeChild(fromItem, forceIdx);
+
+            return toItem;
         }
 
         public static async Task<ObservableCollection<MpCopyItem>> GetPageAsync(
@@ -184,6 +206,44 @@ namespace MonkeyPaste {
             return results;
         }
 
+        public static ObservableCollection<MpCopyItem> GetPage(
+            int tagId,
+            int start,
+            int count,
+            string sortColumn = "pk_MpCopyItemId",
+            bool isDescending = false) {
+            //SELECT
+            //user_number,
+            //user_name
+            //FROM user_table
+            //WHERE(user_name LIKE '%{1}%' OR user_number LIKE '%{2}%')
+            //AND user_category = { 3 } OR user_category = { 4 }
+            //ORDER BY user_uid LIMIT { 5}
+            //OFFSET { 6}
+            //Where { 5} is page size and { 6 } is page number * page size.
+
+            var result = MpDb.Instance.Query<MpCopyItem>(
+                                string.Format(
+                                    @"SELECT * from MpCopyItem
+                                      WHERE pk_MpCopyItemId in 
+                                        (SELECT fk_MpCopyItemId FROM MpCopyItemTag 
+                                         WHERE fk_MpTagId=?)
+                                      ORDER BY {0} {1} LIMIT ? OFFSET ?",
+                                    sortColumn,
+                                    (isDescending ? "DESC" : "ASC")),
+                                tagId,
+                                count,
+                                start);
+
+            var results = new ObservableCollection<MpCopyItem>();
+            foreach (var r in result) {
+                var ci = MpDb.Instance.GetItem<MpCopyItem>(r.Id);
+                results.Add(ci);
+            }
+
+            return results;
+        }
+
         public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
             var allCopyItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
             var allCopyItemTags = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
@@ -191,120 +251,48 @@ namespace MonkeyPaste {
             var searchResult = (from ci in allCopyItems
                                 join cit in allCopyItemTags on
                                 tagId equals cit.TagId
-                                where ci.ItemText.ContainsByUserSensitivity(searchString)
+                                where ci.ItemData.ContainsByUserSensitivity(searchString)
                                 select ci);//.Skip(2).Take(2);
 
             return new ObservableCollection<MpCopyItem>(searchResult);
         }
 
-        public static MpCopyItem Create(string sourcePath, string sourceName, string sourceIconImg64, string data, MpCopyItemType itemType) {
-            MpApp app = MpApp.GetAppByPath(sourcePath);
-            if (app == null) {
-                var icon = MpIcon.GetIconByImageStr(sourceIconImg64);
-                if (icon == null) {
-                    icon = MpIcon.Create(sourceIconImg64);
-                }
-                app = MpApp.Create(sourcePath, sourceName, icon);
-            } 
-
+        public static MpCopyItem Create(MpSource source, string data, MpCopyItemType itemType) {
             var newCopyItem = new MpCopyItem() { 
+                CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
                 Title = "Untitled",
-                ItemText = data,
+                ItemData = data,
                 ItemType = itemType,
                 ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
-                AppId = app.Id,
-                App = app,
+                SourceId = source.Id,
+                Source = source,
                 CopyCount = 1
-                //ItemImage = hostAppImage
             };
 
             MpDb.Instance.AddOrUpdate<MpCopyItem>(newCopyItem);
-
-            //add CopyItem to default tags
-            //var defaultTagList = MpDb.Instance.Query<MpTag>(
-            //    "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", MpTag.AllTagId, MpTag.RecentTagId);
-
-            //if (defaultTagList != null) {
-            //    foreach (var tag in defaultTagList) {
-            //        var CopyItemTag = new MpCopyItemTag() {
-            //            CopyItemId = newCopyItem.Id,
-            //            TagId = tag.Id
-            //        };
-            //        MpDb.Instance.AddItem<MpCopyItemTag>(CopyItemTag);
-            //    }
-            //}
             return newCopyItem;
         }
 
-        public static async Task<MpCopyItem> CreateAsync(object args) {
-            if (args == null) {
-                return null;
-            }
-
-            //create CopyItem
-            string hostPackageName = (args as object[])[0] as string;
-            string itemPlainText = (args as object[])[1] as string;
-            var hostAppName = (args as object[])[2] as string;
-            var hostAppImage = (args as object[])[3] as byte[];
-            var hostAppImageBase64 = (args as object[])[4] as string;
-
-
-            MpIcon icon = null;
-            MpApp app = MpApp.GetAppByPath(hostPackageName);
-            if (app == null) {
-                icon = await MpIcon.GetIconByImageStrAsync(hostAppImageBase64);
-                if (icon == null) {
-                    icon = await MpIcon.CreateAsync(hostAppImageBase64);
-                }
-                app = await MpApp.CreateAsync(hostPackageName, hostAppName, icon);
-            } else {
-                icon = app.Icon;
-            }
-
-            var newCopyItem = new MpCopyItem() {
-                CopyDateTime = DateTime.Now,
-                Title = "Untitled",
-                ItemText = itemPlainText,
-                ItemType = MpCopyItemType.RichText,
-                ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
-                AppId = app.Id,
-                App = app,
-                CopyCount = 1
-                //ItemImage = hostAppImage
-            };
-
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(newCopyItem);
-
-            //add CopyItem to default tags
-            var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
-                "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", MpTag.AllTagId, MpTag.RecentTagId);
-
-            if (defaultTagList != null) {
-                foreach (var tag in defaultTagList) {
-                    var CopyItemTag = new MpCopyItemTag() {
-                        CopyItemId = newCopyItem.Id,
-                        TagId = tag.Id
-                    };
-                    await MpDb.Instance.AddItemAsync<MpCopyItemTag>(CopyItemTag);
-                }
-            }
-            return newCopyItem;
-        }
-        #endregion
+         #endregion
 
         public MpCopyItem() : base() { }
 
-        //public override void DeleteFromDatabase() {
-        //    throw new NotImplementedException();
-        //}
+        public void UnlinkCompositeChild(MpCopyItem cci) {
+            cci.CompositeParentCopyItemId = 0;
+            cci.WriteToDatabase();
+        }
 
-        //public override string ToString() {
-        //    throw new NotImplementedException();
-        //}
+        public MpCopyItem LinkCompositeChild(MpCopyItem cci, int forceIdx = -1) {
+            cci.CompositeParentCopyItemId = Id;
+            var compList = MpCopyItem.GetCompositeChildren(this);
+            cci.CompositeSortOrderIdx = forceIdx < 0 ? compList.Count : forceIdx < compList.Count ? forceIdx : compList.Count;
+            cci.WriteToDatabase();
+            return cci;
+        }
 
         public override string ToString() {
-            return $"Id:{Id} Text:{ItemText}" + Environment.NewLine;
+            return $"Id:{Id} Text:{ItemData}" + Environment.NewLine;
         }
 
         public async Task<object> DeserializeDbObject(string objStr) {
@@ -315,14 +303,11 @@ namespace MonkeyPaste {
                 Title = objParts[1],
                 CopyCount = Convert.ToInt32(objParts[2]),
                 CopyDateTime = DateTime.Parse(objParts[3]),
-                ItemText = objParts[4],
-                ItemRtf = objParts[5],
-                ItemHtml = objParts[6],
-                ItemDescription = objParts[7],
-                ItemCsv = objParts[8],
-                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[9])
+                ItemData = objParts[4],
+                ItemDescription = objParts[5],
+                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6])
             };
-            ci.App = MpDb.Instance.GetDbObjectByTableGuid("MpApp", objParts[10]) as MpApp;
+            ci.Source = MpDb.Instance.GetDbObjectByTableGuid("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added
             //ci.ItemType = MpCopyItemType.RichText;
             return ci;
@@ -330,19 +315,16 @@ namespace MonkeyPaste {
 
         public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}",
                 ParseToken,
                 CopyItemGuid.ToString(),
                 Title,
                 CopyCount,
                 CopyDateTime.ToString(),
-                ItemText,
-                ItemRtf,
-                ItemHtml,
+                ItemData,
                 ItemDescription,
-                ItemCsv,
                 ((int)ItemType).ToString(),
-                App.AppGuid.ToString()
+                Source.SourceGuid.ToString()
                 );
         }
 
@@ -382,19 +364,9 @@ namespace MonkeyPaste {
                 "CopyDateTime",
                 diffLookup);
             diffLookup = CheckValue(
-                ItemText,
-                other.ItemText,
-                "ItemText",
-                diffLookup);
-            diffLookup = CheckValue(
-                ItemRtf,
-                other.ItemRtf,
-                "ItemRtf",
-                diffLookup);
-            diffLookup = CheckValue(
-                ItemHtml,
-                other.ItemHtml,
-                "ItemHtml",
+                ItemData,
+                other.ItemData,
+                "ItemData",
                 diffLookup);
             diffLookup = CheckValue(
                 ItemDescription,
@@ -402,23 +374,17 @@ namespace MonkeyPaste {
                 "ItemDescription",
                 diffLookup);
             diffLookup = CheckValue(
-                ItemCsv,
-                other.ItemCsv,
-                "ItemCsv",
-                diffLookup);
-            diffLookup = CheckValue(
-                AppId,
-                other.AppId,
-                "fk_MpAppId",
+                SourceId,
+                other.SourceId,
+                "fk_MpSourceId",
                 diffLookup,
-                App.AppGuid.ToString());
+                Source.SourceGuid.ToString());
             diffLookup = CheckValue(
                 ItemType,
                 other.ItemType,
                 "fk_MpCopyItemTypeId",
                 diffLookup,
                 ((int)ItemType).ToString());
-
 
             return diffLookup;
         }
@@ -445,24 +411,15 @@ namespace MonkeyPaste {
                     case "CopyDateTime":
                         newCopyItem.CopyDateTime = DateTime.Parse(li.AffectedColumnValue);
                         break;
-                    case "ItemText":
-                        newCopyItem.ItemText = li.AffectedColumnValue;
-                        break;
-                    case "ItemRtf":
-                        newCopyItem.ItemRtf = li.AffectedColumnValue;
-                        break;
-                    case "ItemHtml":
-                        newCopyItem.ItemHtml = li.AffectedColumnValue;
+                    case "ItemData":
+                        newCopyItem.ItemData = li.AffectedColumnValue;
                         break;
                     case "ItemDescription":
                         newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
-                    case "ItemCsv":
-                        newCopyItem.ItemCsv = li.AffectedColumnValue;
-                        break;
-                    case "fk_MpAppId":
-                        newCopyItem.App = await MpApp.GetAppByGuid(li.AffectedColumnValue);
-                        newCopyItem.AppId = Convert.ToInt32(newCopyItem.App.Id);
+                    case "fk_MpSourceId":
+                        newCopyItem.Source = await MpSource.GetSourceByGuid(li.AffectedColumnValue);
+                        newCopyItem.SourceId = Convert.ToInt32(newCopyItem.Source.Id);
                         break;
                     case "fk_MpCopyItemTypeId":
                         newCopyItem.ItemType = (MpCopyItemType)Convert.ToInt32(li.AffectedColumnValue);
@@ -472,11 +429,34 @@ namespace MonkeyPaste {
                         break;
                 }
             }
-            if (string.IsNullOrEmpty(newCopyItem.ItemHtml) &&
-               !string.IsNullOrEmpty(newCopyItem.ItemText)) {
-                newCopyItem.ItemHtml = newCopyItem.ItemText;
-            }
             return newCopyItem;
+        }
+
+        public object Clone() {
+            var newItem = new MpCopyItem() {
+                ItemType = this.ItemType,
+                Title = this.Title,
+                ItemData = this.ItemData,
+                ItemColor = this.ItemColor,
+                Source = this.Source,
+                CopyCount = this.CopyCount,
+                CopyDateTime = this.CopyDateTime,
+                Id = 0
+            };
+
+            newItem.WriteToDatabase();
+
+            foreach (var cit in MpDb.Instance.GetItems<MpCopyItemTag>().Where(x=>x.CopyItemId == this.Id).ToList()) {
+                var ncit = new MpCopyItemTag() {
+                    CopyItemId = newItem.Id,
+                    TagId = cit.TagId
+                };
+                ncit.WriteToDatabase();
+            }
+            foreach (var cci in MpCopyItem.GetCompositeChildren(this)) {
+                newItem = MpCopyItem.Merge((MpCopyItem)cci.Clone(), newItem);
+            }
+            return newItem;
         }
     }
 
@@ -492,7 +472,7 @@ namespace MonkeyPaste {
         RichText,
         Image,
         FileList,
-        Composite,
+        //Composite,
         Csv //this is only used during runtime
     }
 }

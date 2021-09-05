@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
 using WindowsInput;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase {
@@ -260,7 +261,14 @@ namespace MpWpfApp {
                 if(Shortcut == null) {
                     return new List<List<Key>>();
                 }
-                return Shortcut.KeyList;
+                var kl = new List<List<Key>>();
+                for (int i = 0; i < Shortcut.KeyList.Count; i++) {
+                    kl.Add(new List<Key>());
+                    for (int j = 0; j < Shortcut.KeyList[i].Count; j++) {
+                        kl[i].Add((Key)Shortcut.KeyList[i][j]);
+                    }
+                }
+                return kl;
             }
         }
 
@@ -360,13 +368,13 @@ namespace MpWpfApp {
                                         Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
-                                    var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.CopyItemId);
+                                    var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
                                     rtbvm.ShortcutKeyString = Shortcut.KeyString;
                                 } else {
                                     ctvm.ShortcutKeyString = Shortcut.KeyString;
                                 }
                             } else {
-                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();
+                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.Id == Shortcut.TagId).Single();
                                 ttvm.ShortcutKeyString = Shortcut.KeyString;
                             }
                         }
@@ -395,7 +403,7 @@ namespace MpWpfApp {
                     var hook = RoutingType == MpRoutingType.Internal ? MpShortcutCollectionViewModel.Instance.ApplicationHook : MpShortcutCollectionViewModel.Instance.GlobalHook;
                     
                     if (IsSequence()) {
-                        if(MpMainWindowViewModel.IsApplicationLoading) {
+                        if(MpMainWindowViewModel.IsMainWindowLoading) {
                             //only register sequences at startup
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {

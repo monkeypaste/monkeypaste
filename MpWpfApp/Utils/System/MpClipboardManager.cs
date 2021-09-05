@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WindowsInput;
 using WindowsInput.Native;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipboardManager : IDisposable {
@@ -122,7 +123,7 @@ namespace MpWpfApp {
                         if(((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AppModeViewModel.IsAppPaused) {
                             Console.WriteLine("App Paused, ignoring copy");
                         }
-                        else if(MpApp.IsAppRejectedByHandle(LastWindowWatcher.LastHandle)) {
+                        else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
                             Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
                             Application.Current.Dispatcher.BeginInvoke((Action)(() => {

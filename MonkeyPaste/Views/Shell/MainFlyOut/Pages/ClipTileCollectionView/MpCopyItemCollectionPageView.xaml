@@ -23,13 +23,13 @@
                         <Image Margin="0,10,0,0"
                                Aspect="AspectFit"
                                HeightRequest="60"
-                               Source="{Binding CopyItem.App.Icon.IconImage, Converter={StaticResource ImageConverter}}"
+                               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource ImageConverter}}"
                                VerticalOptions="Start"
                                WidthRequest="60">
                         </Image>
                         <Label FontSize="14"
                                FontAttributes="Italic"
-                               Text="{Binding CopyItem.ItemText}"
+                               Text="{Binding CopyItem.ItemData}"
                                TextColor="Black" />
                     </Grid>
                 </DataTemplate>

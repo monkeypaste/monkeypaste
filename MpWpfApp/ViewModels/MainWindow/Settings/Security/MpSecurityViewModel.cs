@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpSecurityViewModel : MpViewModelBase {
@@ -109,7 +110,7 @@ namespace MpWpfApp {
                 var neavm = AppViewModels.GetAppViewModelByProcessPath(appPath);
                 if (neavm == null) {
                     //if unknown app just add it with rejection flag
-                    neavm = new MpAppViewModel(MpApp.Create(appPath,true));
+                    neavm = new MpAppViewModel(MpApp.Create(appPath,string.Empty,null));
                     MpAppCollectionViewModel.Instance.Add(neavm);
                 } else if (neavm.IsAppRejected) {
                     //if app is already rejected set it to selected in grid

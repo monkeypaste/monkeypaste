@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpWpfStringToDbObjectTypeConverter : MonkeyPaste.MpIStringToSyncObjectTypeConverter {

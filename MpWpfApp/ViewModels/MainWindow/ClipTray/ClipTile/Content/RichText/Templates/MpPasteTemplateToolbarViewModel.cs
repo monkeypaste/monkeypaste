@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpPasteTemplateToolbarViewModel : MpUndoableViewModelBase<MpPasteTemplateToolbarViewModel>, IDisposable {
@@ -334,8 +335,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && 
-                HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
+            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
                 return;
             }
             _borderGrid = (Grid)sender;           

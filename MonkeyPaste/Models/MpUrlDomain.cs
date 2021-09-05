@@ -117,6 +117,27 @@ namespace MonkeyPaste {
             }
         }
 
+        public static MpUrlDomain Create(string domainStr, string domainTitle = "") {
+            if(string.IsNullOrEmpty(domainStr)) {
+                return null;
+            }
+            var dupCheck = MpDb.Instance.GetItems<MpUrlDomain>().Where(x => x.UrlDomainPath == domainStr).FirstOrDefault();
+            if(dupCheck != null) {
+                return dupCheck;
+            }
+            var newUrlDomain = new MpUrlDomain() {
+                UrlDomainPath = domainStr,
+                UrlDomainTitle = domainTitle
+            };
+            var favIconImg64 = MpHelpers.Instance.GetUrlFavicon(domainStr);
+            if(!string.IsNullOrEmpty(favIconImg64)) {
+                newUrlDomain.FavIcon = MpIcon.Create(favIconImg64);
+            }
+            
+            MpDb.Instance.AddItem<MpUrlDomain>(newUrlDomain);
+            return newUrlDomain;
+        }
+
         public async Task<object> CreateFromLogs(string urlDomainGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var urlDomain = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrlDomain", urlDomainGuid) as MpUrlDomain;
 

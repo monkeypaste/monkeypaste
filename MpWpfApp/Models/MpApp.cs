@@ -11,7 +11,7 @@ using System.Diagnostics;
 using SQLite;
 
 namespace MpWpfApp {
-    public class MpApp : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
+    public class MpApp : MpDbModelBase, MonkeyPaste.MpISyncableDbObject, MonkeyPaste.MpICopyItemSource {
         private static List<MpApp> _AllAppList = null;
         public static int TotalAppCount = 0;
 
@@ -60,6 +60,30 @@ namespace MpWpfApp {
                 Icon.IconBorderHighlightSelectedImage = value;
             }
         }
+
+        #region MpICopyItemSource Implementation
+        [Ignore]
+        public string SourceIconBase64 {
+            get {
+                if (Icon == null || Icon.IconImage == null) {
+                    return string.Empty;
+                }
+                return Icon.DbIconImage.DbImageBase64;
+            }
+        }
+
+        [Ignore]
+        public string SourcePath => AppPath;
+
+        [Ignore]
+        public string SourceName => AppName;
+
+        [Ignore]
+        public int RootId => AppId;
+
+        [Ignore]
+        public bool IsSubSource => false;
+        #endregion
 
         #region Static Methods
         public static List<MpApp> GetAllApps() {            

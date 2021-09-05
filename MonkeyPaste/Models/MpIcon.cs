@@ -70,81 +70,6 @@ namespace MonkeyPaste {
         public string HexColor4 { get; set; }
         public string HexColor5 { get; set; }
         #endregion
-
-        public static List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
-            //var sw = new Stopwatch();
-            //sw.Start();
-
-            var primaryIconColorList = new List<string>();
-            var hist = MpImageHistogram.Instance.GetStatistics(skbmp);
-            foreach (var kvp in hist) {
-                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
-
-                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == listCount) {
-                    break;
-                }
-                //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.R - (int)c.G);
-                var rbDiff = Math.Abs((int)c.R - (int)c.B);
-                var gbDiff = Math.Abs((int)c.G - (int)c.B);
-                var totalDiff = rgDiff + rbDiff + gbDiff;
-
-                //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(c.ToHex());
-                }
-            }
-
-            //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < listCount; i++) {
-                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
-            }
-
-            //sw.Stop();
-            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
-            return primaryIconColorList;
-        }
-
-        public static async Task<List<string>> CreatePrimaryColorListAsync(SKBitmap skbmp, int listCount = 5) {
-            //var sw = new Stopwatch();
-            //sw.Start();
-
-            var primaryIconColorList = new List<string>();
-            var hist = await MpImageHistogram.Instance.GetStatisticsAsync(skbmp);
-            foreach (var kvp in hist) {
-                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
-
-                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == listCount) {
-                    break;
-                }
-                //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.R - (int)c.G);
-                var rbDiff = Math.Abs((int)c.R - (int)c.B);
-                var gbDiff = Math.Abs((int)c.G - (int)c.B);
-                var totalDiff = rgDiff + rbDiff + gbDiff;
-
-                //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(c.ToHex());
-                }
-            }
-
-            //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < listCount; i++) {
-                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
-            }
-
-            //sw.Stop();
-            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
-            return primaryIconColorList;
-        }
-
         public static async Task<MpIcon> GetIconByImageStrAsync(string imgStr) {
             var iconImg = await MpDb.Instance.GetItemsAsync<MpDbImage>();
             var img = iconImg.Where(x => x.ImageBase64 == imgStr).FirstOrDefault();
@@ -196,9 +121,10 @@ namespace MonkeyPaste {
             MpDb.Instance.AddItem<MpDbImage>(iconBorderHighlightSelectedImage);
 
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
-            var colorList = CreatePrimaryColorList(iconSkBmp);
+            var colorList = MpHelpers.Instance.CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
+                IconGuid = System.Guid.NewGuid(),
                 IconImageId = iconImage.Id,
                 IconImage = iconImage,
                 IconBorderImageId = iconBorderImage.Id,
@@ -244,9 +170,10 @@ namespace MonkeyPaste {
             await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightSelectedImage);
 
             var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
-            var colorList = await CreatePrimaryColorListAsync(iconSkBmp);
+            var colorList = MpHelpers.Instance.CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {
+                IconGuid = System.Guid.NewGuid(),
                 IconImageId = iconImage.Id,
                 IconImage = iconImage,
                 IconBorderImageId = iconBorderImage.Id,

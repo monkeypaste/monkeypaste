@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "MonkeyPaste.Maui.WinUI": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

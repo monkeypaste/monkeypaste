@@ -21,6 +21,7 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetCheckSum(str);
         }
 
+
         public static bool IsBase64String(this string str) {
             try {
                 // If no exception is caught, then it is possibly a base64 encoded string
@@ -33,6 +34,10 @@ namespace MonkeyPaste {
                 // If exception is caught, then it is not a base64 encoded string
                 return false;
             }
+        }
+
+        public static bool IsStringQuillText(this string text) {
+            return MpHelpers.Instance.IsStringQuillText(text);
         }
 
         public static bool IsStringCsv(this string text) {

@@ -39,7 +39,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagId(int tagId) {
+        public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagIdAsync(int tagId) {
             var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
             return allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
         }
@@ -58,6 +58,22 @@ namespace MonkeyPaste {
             foreach (var cit in citl) {
                 await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
             }
+        }
+
+        public static MpCopyItemTag Create(int tagId,int copyItemId) {
+            var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
+            if(dupCheck != null) {
+                return dupCheck;
+            }
+            var newCopyItemTag = new MpCopyItemTag() {
+                CopyItemTagGuid = System.Guid.NewGuid(),
+                TagId = tagId,
+                CopyItemId = copyItemId
+            };
+
+            MpDb.Instance.AddItem<MpCopyItemTag>(newCopyItemTag);
+
+            return newCopyItemTag;
         }
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

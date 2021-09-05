@@ -15,7 +15,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public MpMainShellViewModel() {
-            Task.Run(async () => {
+            Task.Run(() => {
                 MpDb.Instance.Init(MpMainShell.NativeWrapper.GetDbInfo());
 
                 MpTempFileManager.Instance.Init();

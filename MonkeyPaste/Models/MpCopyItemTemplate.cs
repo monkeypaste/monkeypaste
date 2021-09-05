@@ -56,6 +56,22 @@ namespace MonkeyPaste {
 
         #endregion
 
+        public static MpCopyItemTemplate Create(int copyItemId,string templateName) {
+            var dupCheck = MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
+            if (dupCheck != null) {
+                return dupCheck;
+            }
+            var newCopyItemTemplate = new MpCopyItemTemplate() {
+                CopyItemTemplateGuid = System.Guid.NewGuid(),
+                CopyItemId = copyItemId,
+                TemplateName = templateName
+            };
+
+            MpDb.Instance.AddItem<MpCopyItemTemplate>(newCopyItemTemplate);
+
+            return newCopyItemTemplate;
+        }
+
         public MpCopyItemTemplate() : base() { }
 
         public string ToHtml() {

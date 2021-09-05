@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpHighlightTextRangeViewModelCollection : MpObservableCollectionViewModel<MpHighlightTextRangeViewModel>, IDisposable {
@@ -171,7 +172,7 @@ namespace MpWpfApp {
 
             ClearHighlightingCommand.Execute(null);
 
-            if (MpMainWindowViewModel.IsApplicationLoading || ClipTileViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsMainWindowLoading || ClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
                 return VisibilityDictionary;
             }
@@ -305,8 +306,7 @@ namespace MpWpfApp {
                         }
                     }
                     switch (ClipTileViewModel.CopyItemType) {
-                        case MpCopyItemType.RichText:
-                        case MpCopyItemType.Composite:                            
+                        case MpCopyItemType.RichText:                   
                             if (cc) {
                                 foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {                             
                                     var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.Rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);

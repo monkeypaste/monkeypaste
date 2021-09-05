@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public enum MpHighlightType {
@@ -136,7 +137,6 @@ namespace MpWpfApp {
                                 characterRect = Range.End.GetCharacterRect(LogicalDirection.Forward);
                             }
                             switch (HostClipTileViewModel.CopyItemType) {
-                                case MpCopyItemType.Composite:
                                 case MpCopyItemType.RichText:
                                     var rtb = RtbItemViewModel.Rtb;
                                     HostClipTileViewModel.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(rtb);

@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     // + Account

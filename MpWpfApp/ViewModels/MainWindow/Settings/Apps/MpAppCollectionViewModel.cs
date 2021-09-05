@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : MpObservableCollectionViewModel<MpAppViewModel> {
@@ -60,7 +61,7 @@ namespace MpWpfApp {
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
                                 var clipTilesToRemove = new List<MpClipTileViewModel>();
                                 foreach (MpClipTileViewModel ctvm in clipsFromApp) {
-                                    if (ctvm.CopyItemAppId == appToReject.AppId) {
+                                    if (ctvm.CopyItemAppId == appToReject.Id) {
                                         clipTilesToRemove.Add(ctvm);
                                     }
                                 }
@@ -81,12 +82,12 @@ namespace MpWpfApp {
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
                 foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
-                    if (ctvm.CopyItem.App.AppId == this[appIdx].AppId) {
-                        ctvm.CopyItem.App = this[appIdx].App;
+                    if (ctvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
+                        ctvm.CopyItem.Source.App = this[appIdx].App;
                     }
                     foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                        if (rtbvm.CopyItem.App.AppId == this[appIdx].AppId) {
-                            rtbvm.CopyItem.App = this[appIdx].App;
+                        if (rtbvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
+                            rtbvm.CopyItem.Source.App = this[appIdx].App;
                         }
                     }
                 }
@@ -111,7 +112,7 @@ namespace MpWpfApp {
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
                                 var clipTilesToRemove = new List<MpClipTileViewModel>();
                                 foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
-                                    if (ctvm.CopyItemAppId == appToReject.AppId) {
+                                    if (ctvm.CopyItemAppId == appToReject.Id) {
                                         clipTilesToRemove.Add(ctvm);
                                     }
                                 }
@@ -139,7 +140,7 @@ namespace MpWpfApp {
 
         public void Refresh() {
             this.Clear();
-            foreach (var app in MpApp.GetAllApps()) {
+            foreach (var app in MpDb.Instance.GetItems<MpApp>()) {
                 base.Add(new MpAppViewModel(app));
             }
         }

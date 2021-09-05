@@ -46,6 +46,19 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         #region Documents
+        public bool IsStringQuillText(string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return false;
+            }
+            str = str.ToLower();
+            foreach (var quillTag in _quillTags) {
+                if (str.Contains($"</{quillTag}>")) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public string Diff(string str1, string str2) {
             if (str1 == null) {
                 return str2;
@@ -63,7 +76,7 @@ namespace MonkeyPaste {
         }
 
         public string LoadFileResource(string resourcePath) {
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItemDetailPageViewModel)).Assembly;
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItem)).Assembly;
             var stream = assembly.GetManifestResourceStream(resourcePath);
             using (var reader = new System.IO.StreamReader(stream)) {
                 var res = reader.ReadToEnd();
@@ -156,6 +169,20 @@ namespace MonkeyPaste {
             }
             return true;
         }
+
+        private string[] _quillTags = new string[] {
+            "p",
+            "ol",
+            "li",
+            "#text",
+            "img",
+            "em",
+            "span",
+            "strong",
+            "u",
+            "br",
+            "a"
+        };
         #endregion
 
         #region System
@@ -442,6 +469,80 @@ namespace MonkeyPaste {
             return _ContentColors[c][r];
         }
 
+        public List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+
+            var primaryIconColorList = new List<string>();
+            var hist = MpImageHistogram.Instance.GetStatistics(skbmp);
+            foreach (var kvp in hist) {
+                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == listCount) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(c.ToHex());
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < listCount; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
+            }
+
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
+
+        public static async Task<List<string>> CreatePrimaryColorListAsync(SKBitmap skbmp, int listCount = 5) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+
+            var primaryIconColorList = new List<string>();
+            var hist = await MpImageHistogram.Instance.GetStatisticsAsync(skbmp);
+            foreach (var kvp in hist) {
+                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == listCount) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(c.ToHex());
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < listCount; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
+            }
+
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
+
         public double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)e1.R + (long)e2.R) / 2;
@@ -680,9 +781,28 @@ namespace MonkeyPaste {
             }
             return null;
         }
-        #endregion
 
-        #region Converters
-        #endregion
-    }
+        public string GetUrlFavicon(String url) {
+            try {
+                string urlDomain = GetUrlDomain(url);
+                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
+                var img = new Image() {
+                    Aspect = Aspect.AspectFit,
+                    Source = Xamarin.Forms.ImageSource.FromUri(favicon),
+                };
+                if (img == null) {
+                    return string.Empty;
+                }
+                return new MpImageConverter().Convert(img, typeof(string)) as string;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
+                return string.Empty;
+            }
+        }
+            #endregion
+
+            #region Converters
+            #endregion
+        }
 }

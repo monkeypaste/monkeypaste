@@ -60,10 +60,9 @@ namespace MonkeyPaste {
             }
 
             var dbot = GetType();
-            var dbo = Activator.CreateInstance(dbot);
             var addOrUpdateMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.AddOrUpdate));
             var addOrUpdateByDboTypeMethod = addOrUpdateMethod.MakeGenericMethod(new[] { dbot });
-            addOrUpdateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo, sourceClientGuid, ignoreTracking, ignoreSyncing });
+            addOrUpdateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
         }
 
         public void WriteToDatabase() {
@@ -92,10 +91,9 @@ namespace MonkeyPaste {
             }
 
             var dbot = GetType();
-            var dbo = Activator.CreateInstance(dbot);
             var deleteItemMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.DeleteItem));
             var deleteItemByDboTypeMethod = deleteItemMethod.MakeGenericMethod(new[] { dbot });
-            deleteItemByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo, sourceClientGuid, ignoreTracking, ignoreSyncing });
+            deleteItemByDboTypeMethod.Invoke(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
         }
         #endregion
 

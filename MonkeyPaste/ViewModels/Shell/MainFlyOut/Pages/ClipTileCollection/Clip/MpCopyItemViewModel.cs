@@ -53,7 +53,7 @@ namespace MonkeyPaste {
             get {
                 return true;
 
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return false;
                 }
                 return IsExpanded || CopyItem.Title != "Untitled";
@@ -89,12 +89,21 @@ namespace MonkeyPaste {
             }
         }
 
+        //public MpApp App {
+        //    get {
+        //        if(CopyItem == null || CopyItem.Source == null || CopyItem.Source.App == null) {
+        //            return null;
+        //        }
+        //        return CopyItem.Source.App;
+        //    }
+        //}
+
         public ImageSource IconImageSource {
             get {
                 if (CopyItem == null) {
                     return null;
                 }
-                return (StreamImageSource)new MpImageConverter().Convert(CopyItem.App.Icon.IconImage.ImageBase64, typeof(ImageSource));
+                return (StreamImageSource)new MpImageConverter().Convert(CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, typeof(ImageSource));
             }
         }
 
@@ -145,7 +154,7 @@ namespace MonkeyPaste {
             var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             
             string contentTag = @"<div id='editor'>";
-            var data = string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
+            var data = CopyItem.ItemData; //string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
             html = html.Replace(contentTag, contentTag + data);
 
             string envTag = @"var envName = '';";
@@ -330,7 +339,7 @@ namespace MonkeyPaste {
             if(HasTemplates) {
                 FillOutTemplatesCommand.Execute(null);
             } else {
-                await Clipboard.SetTextAsync(CopyItem.ItemText);         
+                await Clipboard.SetTextAsync(CopyItem.ItemData);         
             }
 
             WasSetToClipboard = true;

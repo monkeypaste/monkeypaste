@@ -29,7 +29,8 @@ namespace MonkeyPaste.iOS {
             CachedImageRenderer.Init();
             CachedImageRenderer.InitImageSourceHandler();
             IosInterfaceWrapper = new MpIosInterfaceWrapper() {
-                KeyboardService = new MpKeyboardInteractionService()
+                KeyboardService = new MpKeyboardInteractionService(),
+                
             };
             LoadApplication(new App(IosInterfaceWrapper));
 

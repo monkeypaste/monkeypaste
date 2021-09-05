@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpEditTemplateToolbarViewModel : MpUndoableViewModelBase<MpEditTemplateToolbarViewModel>, IDisposable {
@@ -161,7 +162,7 @@ namespace MpWpfApp {
         }
 
         public void EditTemplateToolbarBorderGrid_Loaded(object sender, RoutedEventArgs args) {
-            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
+            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
                 return;
             }
             _borderGrid = (Grid)sender;                 

@@ -106,24 +106,27 @@ namespace MpWpfApp {
             }
             bool wasStackChanged = false;
             processName = processName.ToLower();
-            if (CurrentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
-                //if process is already being tracked 
-                if (CurrentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
-                    //remove the handle if it is also being tracked
-                    CurrentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
+            lock (CurrentProcessWindowHandleStackDictionary) {
+                if (CurrentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
+                    //if process is already being tracked 
+                    if (CurrentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
+                        //remove the handle if it is also being tracked
+                        CurrentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
+                    }
+                    //set fg handle to the top of its process list
+                    CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
+                    wasStackChanged = true;
+                    ActiveProcessPath = processName;
+                    //Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+                } else {
+                    //if its a new process create a new list with this handle as its element
+                    CurrentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
+                    wasStackChanged = true;
+                    ActiveProcessPath = processName;
+                    //Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
                 }
-                //set fg handle to the top of its process list
-                CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
-                wasStackChanged = true;
-                ActiveProcessPath = processName;
-                //Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
-            } else {
-                //if its a new process create a new list with this handle as its element
-                CurrentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
-                wasStackChanged = true;
-                ActiveProcessPath = processName;
-                //Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             }
+            
             if (wasStackChanged) {
                 OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
 

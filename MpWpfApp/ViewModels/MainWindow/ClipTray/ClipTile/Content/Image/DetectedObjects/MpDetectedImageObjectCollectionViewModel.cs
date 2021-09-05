@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectCollectionViewModel : MpObservableCollectionViewModel<MpDetectedImageObjectViewModel> {
@@ -54,6 +55,7 @@ namespace MpWpfApp {
             }
         }
 
+
         public ImageBrush CopyItemBmpImageBrush {
             get {
                 if (CopyItemBmp == null) {
@@ -69,7 +71,7 @@ namespace MpWpfApp {
         }
         public MpDetectedImageObjectCollectionViewModel(MpCopyItem ci, bool isEnabled = false) : base() {
             _isEnabled = isEnabled;
-            if(ci.CopyItemType != MpCopyItemType.Image) {
+            if(ci.ItemType != MpCopyItemType.Image) {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
             }

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpPasteToAppPathViewModel : MpUndoableViewModelBase<MpPasteToAppPathViewModel>, IDisposable {
@@ -147,11 +148,11 @@ namespace MpWpfApp {
                 if(PasteToAppPath == null) {
                     return WinApi.ShowWindowCommands.Normal;
                 }
-                return PasteToAppPath.WindowState;
+                return (WinApi.ShowWindowCommands)PasteToAppPath.WindowState;
             }
             set {
-                if (PasteToAppPath.WindowState != value) {
-                    PasteToAppPath.WindowState = value;
+                if (PasteToAppPath.WindowState != (int)value) {
+                    PasteToAppPath.WindowState = (int)value;
                     PasteToAppPath.WriteToDatabase();
                     OnPropertyChanged(nameof(WindowState));
                 }
@@ -162,14 +163,14 @@ namespace MpWpfApp {
                 if (PasteToAppPath == null) {
                     return new BitmapImage();
                 }
-                if(PasteToAppPath.Icon != null) {
-                    return PasteToAppPath.Icon;
+                if(PasteToAppPath.AvatarDbImage != null) {
+                    return PasteToAppPath.AvatarDbImage.ImageBase64.ToBitmapSource();
                 }
                 return MpHelpers.Instance.GetIconImage(AppPath);
             }
             set {
-                if(PasteToAppPath != null && AppIcon != PasteToAppPath.Icon) {
-                    PasteToAppPath.Icon = value;
+                if(PasteToAppPath != null) {
+                    PasteToAppPath.AvatarDbImage.ImageBase64 = value.ToBase64String();
                     PasteToAppPath.WriteToDatabase();
                     OnPropertyChanged(nameof(AppIcon));
                 }

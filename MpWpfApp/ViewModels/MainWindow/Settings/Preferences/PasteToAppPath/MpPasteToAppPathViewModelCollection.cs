@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpPasteToAppPathViewModelCollection : MpObservableCollectionViewModel<MpPasteToAppPathViewModel> {

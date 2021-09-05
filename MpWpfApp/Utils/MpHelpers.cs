@@ -59,6 +59,7 @@ namespace MpWpfApp {
         }
 
         #region Documents    
+
         public List<int> IndexListOfAll(string text, string matchStr) {
             var idxList = new List<int>();
             int curIdx = text.IndexOf(matchStr);
@@ -347,6 +348,20 @@ namespace MpWpfApp {
                 }
             }
             return sb.ToString();
+        }
+
+
+        public bool IsStringQuillText(string str) {
+            if(string.IsNullOrEmpty(str)) {
+                return false;
+            }
+            str = str.ToLower();
+            foreach (var quillTag in _quillTags) {
+                if (str.Contains($"</{quillTag}>")) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsStringCsv(string text) {
@@ -1386,6 +1401,40 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public MpObservableCollection<string> CreatePrimaryColorList(BitmapSource bmpSource) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+            var primaryIconColorList = new MpObservableCollection<string>();
+            var hist = MpImageHistogram.Instance.GetStatistics(bmpSource);
+            foreach (var kvp in hist) {
+                var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == 5) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.R - (int)c.G);
+                var rbDiff = Math.Abs((int)c.R - (int)c.B);
+                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(MpHelpers.Instance.ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(MpHelpers.Instance.ConvertColorToHex(c));
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < 5; i++) {
+                primaryIconColorList.Add(MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor()));
+            }
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
+        }
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
@@ -1608,7 +1657,7 @@ namespace MpWpfApp {
             cmic.Background = Brushes.Transparent;
             cmi.Header = cmic;
             cmi.Height = h;
-            cmi.Style = (Style)Application.Current.MainWindow.FindResource("MenuItemStyle");
+            cmi.Style = (Style)Application.Current.MainWindow.FindResource("ColorPalleteMenuItemStyle");
             cm.Width = 300;
         }
 
@@ -2962,7 +3011,7 @@ namespace MpWpfApp {
         }
 
         public BitmapSource ConvertStringToBitmapSource(string base64Str) {
-            if(string.IsNullOrEmpty(base64Str)) {
+            if(string.IsNullOrEmpty(base64Str) || !base64Str.IsBase64String()) {
                 return new BitmapImage();
             }
             var bytes = System.Convert.FromBase64String(base64Str);
@@ -3024,6 +3073,20 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+        private string[] _quillTags = new string[] {
+            "p",
+            "ol",
+            "li",
+            "#text",
+            "img",
+            "em",
+            "span",
+            "strong",
+            "u",
+            "br",
+            "a"
+        };
 
         private string[] _domainExtensions = new string[] {
             // TODO try to sort these by common use to make more efficient

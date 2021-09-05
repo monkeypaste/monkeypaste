@@ -32,7 +32,7 @@ namespace MpWpfApp {
         #region State
         public bool IsNew {
             get {
-                return Tag == null || Tag.TagId <= 0;
+                return Tag == null || Tag.Id <= 0;
             }
         }
 
@@ -47,7 +47,7 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.TagId == 1 || Tag.TagId == 2 || Tag.TagId == 4;
+                return Tag.Id == 1 || Tag.Id == 2 || Tag.Id == 4;
             }
         }
 
@@ -56,7 +56,7 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.TagId == 2;
+                return Tag.Id == 2;
             }
         }
 
@@ -65,7 +65,7 @@ namespace MpWpfApp {
                 if (Tag == null) {
                     return false;
                 }
-                return Tag.TagId == 1;
+                return Tag.Id == 1;
             }
         }
 
@@ -236,11 +236,11 @@ namespace MpWpfApp {
         #region Model
         public int TagId {
             get {
-                return Tag.TagId;
+                return Tag.Id;
             }
             set {
-                if (Tag.TagId != value) {
-                    Tag.TagId = value;
+                if (Tag.Id != value) {
+                    Tag.Id = value;
                     Tag.WriteToDatabase();
                     OnPropertyChanged(nameof(TagId));
                 }
@@ -448,7 +448,7 @@ namespace MpWpfApp {
                 ctvm.CopyItem == null || 
                 ctvm.CopyItemId == 0 || 
                 Tag == null || 
-                Tag.TagId == 0) {
+                Tag.Id == 0) {
                 return false;
             }
             if(IsAllTag) {
@@ -468,7 +468,7 @@ namespace MpWpfApp {
                 rtbvm.CopyItem == null ||
                 rtbvm.CopyItemId == 0 ||
                 Tag == null ||
-                Tag.TagId == 0) {
+                Tag.Id == 0) {
                 return false;
             }
             if (IsAllTag) {
@@ -511,7 +511,7 @@ namespace MpWpfApp {
                 if (sender is MpCopyItemTag cit) {
                     if(TagId == cit.TagId) {
                         cit.StartSync(e.SourceGuid);
-                        var dupCheck = MpCopyItemTag.GetCopyItemTagById(cit.TagId, cit.CopyItemId);
+                        var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x=>x.TagId == cit.TagId && x.CopyItemId == cit.CopyItemId).FirstOrDefault();
                         if (dupCheck != null) {
                             MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
                         }

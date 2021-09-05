@@ -1,4 +1,5 @@
 ﻿using AppKit;
+using FFImageLoading.Forms.Platform;
 using Foundation;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
@@ -8,6 +9,7 @@ namespace MonkeyPaste.Mac
     [Register("AppDelegate")]
     public class AppDelegate : FormsApplicationDelegate
     {
+        public MpINativeInterfaceWrapper MacInterfaceWrapper { get; set; }
         NSWindow window;
         public AppDelegate() {
             var style = NSWindowStyle.Closable | NSWindowStyle.Resizable | NSWindowStyle.Titled;
@@ -23,8 +25,21 @@ namespace MonkeyPaste.Mac
         }
 
         public override void DidFinishLaunching(NSNotification notification) {
+            Rg.Plugins.Popup.Popup.Init();
+
+            global::Xamarin.Forms.Forms.Init();
+
+            CachedImageRenderer.Init();
+            CachedImageRenderer.InitImageSourceHandler();
+
             Forms.Init();
-            LoadApplication(new App());
+
+            MacInterfaceWrapper = new MpMacInterfaceWrapper() {
+                DbInfo = new MpDbFilePath_Mac(),
+                UiLocationFetcher = new MpUiLocationFetcher(),
+                TouchService = new MpGlobalTouch()
+            };
+            LoadApplication(new App(MacInterfaceWrapper));
             base.DidFinishLaunching(notification);
         }
     }

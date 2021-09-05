@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Xml;
-using Xamarin.Forms;
 using HtmlAgilityPack;
 using System.Reflection;
 

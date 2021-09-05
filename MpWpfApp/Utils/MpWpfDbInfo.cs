@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-[assembly: Xamarin.Forms.Dependency(typeof(MpWpfDbInfo))]
 namespace MpWpfApp {
     public class MpWpfDbInfo : MonkeyPaste.MpIDbInfo {
         public string GetDbFilePath() {

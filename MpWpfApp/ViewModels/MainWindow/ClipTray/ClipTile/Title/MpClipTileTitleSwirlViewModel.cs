@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTileTitleSwirlViewModel : MpUndoableObservableCollectionViewModel<MpClipTileTitleSwirlViewModel,MpSwirlLayerViewModel> {
@@ -117,7 +118,7 @@ namespace MpWpfApp {
 
         public MpClipTileTitleSwirlViewModel(MpClipTileViewModel ctvm) : this() {
             ClipTileViewModel = ctvm;
-            AppViewModel = new MpAppViewModel(ClipTileViewModel.CopyItem.App);
+            AppViewModel = new MpAppViewModel(ClipTileViewModel.CopyItem.Source.App);
             var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(AppViewModel.PrimaryIconColorList);
             for (int i = 0; i < randomColorList.Count; i++) {
                 var c = AppViewModel.PrimaryIconColorList[i];

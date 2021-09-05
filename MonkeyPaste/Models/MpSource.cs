@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpSource : MpDbModelBase {
-        private static List<MpSource> _AllSources = null;
-
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpSourceId")]
         public override int Id { get; set; }
@@ -33,13 +31,15 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
-        [Ignore]
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
         public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
-        [Ignore]
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
         public MpApp App { get; set; }
 
         [Ignore]
@@ -69,28 +69,45 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<List<MpSource>> GetAllSources() {
-            if(_AllSources == null) {
-                _AllSources = await MpDb.Instance.GetItemsAsync<MpSource>();
-            }
-            return _AllSources;
+        public static async Task<List<MpSource>> GetAllSourcesAsync() {
+            var allSources = await MpDb.Instance.GetItemsAsync<MpSource>();
+            return allSources;
         }
+
+        public static List<MpSource> GetAllSources() {
+            return MpDb.Instance.GetItems<MpSource>();
+        }
+
         public static async Task<MpSource> GetSourceById(int appId,int urlId) {
-            var allSources = await GetAllSources();
+            var allSources = await GetAllSourcesAsync();
             return allSources.Where(x => x.AppId == appId && x.UrlId == urlId).FirstOrDefault();
         }
 
-        //public static async Task<MpSource> GetOrCreateSource(string appPath,string urlPath) {
-        //    var app = await MpApp.GetAppByPath(appPath);
-        //    var url = await MpUrl.GetUrlByPath(urlPath);
-        //    if(url == null) {
-        //        if(app == null) {
+        public static async Task<MpSource> GetSourceByGuid(string guid) {
+            var allSources = await GetAllSourcesAsync();
+            return allSources.Where(x => x.SourceGuid.ToString() == guid).FirstOrDefault();
+        }
 
-        //        }
-        //    }
-        //    var allSources = await GetAllSources();
+        public static MpSource Create(MpApp app, MpUrl url) {
+            if(app == null) {
+                throw new Exception("Source must have an app associated");
+            }
+            int urlId = url == null ? 0 : url.Id;
+            MpSource dupCheck = GetAllSources().Where(x => x.AppId == app.Id && x.UrlId == urlId).FirstOrDefault();
+            if(dupCheck != null) {
+                return dupCheck;
+            }
+            var source = new MpSource() {
+                SourceGuid = System.Guid.NewGuid(),
+                App = app,
+                AppId = app.Id,
+                Url = url,
+                UrlId = urlId
+            };
 
-        //}
+            MpDb.Instance.AddItem<MpSource>(source);
+            return source;
+        }
         public MpSource() { }
     }
 }

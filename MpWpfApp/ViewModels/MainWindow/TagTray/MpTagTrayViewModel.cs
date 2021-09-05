@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpTagTrayViewModel : MpUndoableObservableCollectionViewModel<MpTagTrayViewModel,MpTagTileViewModel> {
@@ -71,7 +72,7 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
-            var allTags = MpTag.GetAllTags();
+            var allTags = MpDb.Instance.GetItems<MpTag>();
             if(allTags.Count == 0) {
                 //occurs on first load
                 var t = new MpTag() {
@@ -112,7 +113,7 @@ namespace MpWpfApp {
                 //allTags.Add(t);
             }
             //create tiles for all the tags
-            foreach (MpTag t in MpTag.GetAllTags()) {
+            foreach (MpTag t in MpDb.Instance.GetItems<MpTag>()) {
                 this.Add(new MpTagTileViewModel(t));
             }
         }        
@@ -284,7 +285,8 @@ namespace MpWpfApp {
                                         //if composite parent is linked show all children
                                         rtbvm.SubItemVisibility = Visibility.Visible;
                                     }
-                                } else if (ctvm.CopyItemType == MpCopyItemType.Composite) {
+                                } //below was for composite but fixing just to compile right now
+                                    if (ctvm.CopyItemType == MpCopyItemType.RichText) {
                                     bool hasSubLink = false;
                                     foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                                         if (newTagTile.IsLinkedWithRtbItem(rtbvm)) {
@@ -380,11 +382,11 @@ namespace MpWpfApp {
         }
 
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
-            return this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
+            return this.Where(tt => tt.Tag.Id == MpTag.AllTagId).ToList()[0];
         }
 
         public MpTagTileViewModel GetRecentTagTileViewModel() {
-            return this.Where(tt => tt.Tag.TagId == 2).ToList()[0];
+            return this.Where(tt => tt.Tag.Id == MpTag.RecentTagId).ToList()[0];
         }
         #endregion
 
@@ -461,7 +463,11 @@ namespace MpWpfApp {
         }
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
-            MpTag newTag = new MpTag("Untitled", MpHelpers.Instance.GetRandomColor(),this.Count);
+            MpTag newTag = new MpTag() {
+                TagName = "Untitled",
+                HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
+                TagSortIdx = this.Count
+            };
             this.Add(new MpTagTileViewModel(newTag));
         }
 

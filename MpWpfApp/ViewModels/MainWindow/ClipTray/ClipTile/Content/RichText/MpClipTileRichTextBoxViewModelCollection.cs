@@ -20,6 +20,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTileRichTextBoxViewModelCollection : MpUndoableObservableCollectionViewModel<MpClipTileRichTextBoxViewModelCollection,MpRtbListBoxItemRichTextBoxViewModel>, ICloneable,/* IDropTarget, */IDisposable {
@@ -119,7 +120,7 @@ namespace MpWpfApp {
                 }
                 var sb = new StringBuilder();
                 foreach (var srtbvm in SubSelectedClipItems) {
-                    sb.Append(srtbvm.CopyItem.ItemPlainText + ",");
+                    sb.Append(srtbvm.CopyItem.ItemData + ",");
                 }
                 if (wasEmptySelection) {
                     ClearSubSelection();
@@ -562,21 +563,18 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
             var hci = HostClipTileViewModel.CopyItem;
-            if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
-                //this.Clear();
-                foreach (var cci in hci.CompositeItemList) {
-                    var rtbvm = this.Where(x => x.CopyItemId == cci.CopyItemId).FirstOrDefault();
-                    if(rtbvm == null) {
-                        this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
-                    }
-                }
-                UpdateSortOrder(true);
-            } else if(HostClipTileViewModel.CopyItemType == MpCopyItemType.RichText) {
-                var rtbvm = this.Where(x => x.CopyItemId == hci.CopyItemId).FirstOrDefault();
-                if(rtbvm == null) {
-                    this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, hci));                    
-                } 
+            var rtbvm = this.Where(x => x.CopyItemId == hci.Id).FirstOrDefault();
+            if (rtbvm == null) {
+                this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, hci));
             }
+            //below was supposed to be for composite types but pulled out to compile
+            foreach (var cci in MpCopyItem.GetCompositeChildren(hci)) {
+                rtbvm = this.Where(x => x.CopyItemId == cci.Id).FirstOrDefault();
+                if (rtbvm == null) {
+                    this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
+                }
+            }
+            UpdateSortOrder(true);
             //Refresh();
             UpdateLayout();
             sw.Stop();
@@ -635,7 +633,7 @@ namespace MpWpfApp {
 
             HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
 
-            if(this.Count == 0 && HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+            if(this.Count == 0) {
                 //remove empty composite or RichText container
                 HostClipTileViewModel.Dispose();
                 return;
@@ -646,7 +644,7 @@ namespace MpWpfApp {
                 HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
 
                 //now since tile is a single clip update the tiles shortcut button
-                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.CopyItemId).ToList();
+                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.Id).ToList();
                 if (scvml.Count > 0) {
                     HostClipTileViewModel.ShortcutKeyString = scvml[0].KeyString;
                 } else {
@@ -656,7 +654,7 @@ namespace MpWpfApp {
                 //update composite sort order without removed item
                 UpdateSortOrder();
             }
-            HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.CopyItem.GetSeparatedCompositeFlowDocument().ToBitmapSource();
+            HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
 
             if (!isMerge) {
                 rtbvm.Dispose();
@@ -805,7 +803,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanToggleEditSubSelectedItem(object args) {
-            if (MpMainWindowViewModel.IsApplicationLoading) {
+            if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
@@ -943,7 +941,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanBringSubSelectedClipTilesToFront(object arg) {
-            if (IsBusy || MpMainWindowViewModel.IsApplicationLoading || VisibleSubRtbViewModels.Count == 0) {
+            if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
             bool canBringForward = false;
@@ -985,7 +983,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanSendSubSelectedClipTilesToBack(object args) {
-            if (IsBusy || MpMainWindowViewModel.IsApplicationLoading || VisibleSubRtbViewModels.Count == 0) {
+            if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
             bool canSendBack = false;

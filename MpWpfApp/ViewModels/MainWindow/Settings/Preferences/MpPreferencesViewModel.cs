@@ -153,7 +153,7 @@ namespace MpWpfApp {
                     _showItemPreview = value;
                     Properties.Settings.Default.ShowItemPreview = _showItemPreview;
                     Properties.Settings.Default.Save();
-                    if(!MpMainWindowViewModel.IsApplicationLoading) {
+                    if(!MpMainWindowViewModel.IsMainWindowLoading) {
                         foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
                             foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {

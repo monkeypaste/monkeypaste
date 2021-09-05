@@ -38,6 +38,19 @@ namespace MonkeyPaste {
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
 
+        public static MpUrl Create(string urlPath,string urlTitle) {
+            var dupCheck = MpDb.Instance.GetItems<MpUrl>().Where(x => x.UrlPath == urlPath).FirstOrDefault();
+            if(dupCheck != null) {
+                return dupCheck;
+            }
+            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
+            var newUrl = new MpUrl();
+            newUrl.UrlDomain = MpUrlDomain.Create(domainStr);
+
+            MpDb.Instance.AddItem<MpUrl>(newUrl);
+            
+            return newUrl;
+        }
         public MpUrl() {
         }
         public MpUrl(string urlPath, string urlTitle) : this() {
@@ -62,19 +75,23 @@ namespace MonkeyPaste {
 
 
         #region MpICopyItemSource Implementation
+        [Ignore]
         public MpIcon SourceIcon {
             get {
-                if (UrlDomain == null) {
+                if (UrlDomain == null || UrlDomain.FavIcon == null) {
                     return null;
                 }
                 return UrlDomain.FavIcon;
             }
         }
 
+        [Ignore]
         public string SourcePath => UrlPath;
 
+        [Ignore]
         public string SourceName => UrlTitle;
 
+        [Ignore]
         public int RootId {
             get {
                 if (UrlDomain == null) {
@@ -84,6 +101,7 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
         public bool IsSubSource => true;
 
         #endregion

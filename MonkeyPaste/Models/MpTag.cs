@@ -72,8 +72,15 @@ namespace MonkeyPaste {
             if(clip == null) {
                 return false;
             }
-            var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(Id);
+            var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(Id);
             return citl.Any(x => x.CopyItemId == clip.Id);
+        }
+
+        public bool IsLinkedWithCopyItem(MpCopyItem clip) {
+            if (clip == null) {
+                return false;
+            }
+            return MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id && x.CopyItemId == clip.Id).FirstOrDefault() != null;
         }
 
         public async Task<bool> LinkWithCopyItemAsync(MpCopyItem clip) {
@@ -92,6 +99,24 @@ namespace MonkeyPaste {
             Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
             return true;
         }
+
+        public bool LinkWithCopyItem(MpCopyItem clip) {
+            if (clip == null) {
+                return false;
+            }
+            //returns FALSE if CopyItem is already linked to maintain correct counts
+            bool isLinked = IsLinkedWithCopyItem(clip);
+            if (isLinked) {
+                return false;
+            }
+
+            MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id });
+
+            //CopyItemList.Add(clip);
+            Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
+            return true;
+        }
+
         public async Task UnlinkWithCopyItemAsync(MpCopyItem clip) {
             if(clip == null) {
                 return;
@@ -110,18 +135,36 @@ namespace MonkeyPaste {
             Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
         }
 
-        //public async Task DeleteFromDatabaseAsync() {
-            //await MpDb.Instance.ExecuteWriteAsync<MpTag>(
-            //    "delete from MpTag where Id=@tid",
-            //    new Dictionary<string, object> {
-            //        { "@tid", Id }
-            //    });
+        public void UnlinkWithCopyItem(MpCopyItem clip) {
+            if (clip == null) {
+                return;
+            }
+            bool isLinked = IsLinkedWithCopyItem(clip);
+            if (!isLinked) {
+                return;
+            }
+            var result = MpDb.Instance.Query<MpCopyItemTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
+            MpDb.Instance.DeleteItem<MpCopyItemTag>(result[0]);
 
-            //await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
-            //    "delete from MpCopyItemTag where TagId=@tid",
-            //    new Dictionary<string, object> {
-            //        { "@tid", Id }
-            //    });
+            //var clipToRemove = CopyItemList.Where(x => x.Id == clip.Id).FirstOrDefault();
+            //if(clipToRemove != null) {
+            //    CopyItemList.Remove(clipToRemove);
+            //}
+            Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
+        }
+
+        //public async Task DeleteFromDatabaseAsync() {
+        //await MpDb.Instance.ExecuteWriteAsync<MpTag>(
+        //    "delete from MpTag where Id=@tid",
+        //    new Dictionary<string, object> {
+        //        { "@tid", Id }
+        //    });
+
+        //await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
+        //    "delete from MpCopyItemTag where TagId=@tid",
+        //    new Dictionary<string, object> {
+        //        { "@tid", Id }
+        //    });
         //}
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using static System.Data.Entity.Infrastructure.Design.Executor;
 using System.Threading.Tasks;
+using SkiaSharp;
 
 namespace MpWpfApp {
     public class MpIcon : MpDbModelBase,MonkeyPaste.MpISyncableDbObject {
@@ -18,10 +19,10 @@ namespace MpWpfApp {
         public int IconId { get; set; }
         public Guid IconGuid { get; set; }
 
-        public int DbIconImageId { get; set; }
-        public int DbIconBorderImageId { get; set; }
-        public int DbIconBorderHighlightImageId { get; set; }
-        public int DbIconBorderHighlightSelectedImageId { get; set; }
+        public int IconImageId { get; set; }
+        public int IconBorderImageId { get; set; }
+        public int IconBorderHighlightImageId { get; set; }
+        public int IconBorderHighlightSelectedImageId { get; set; }
 
         public MpDbImage DbIconImage { get; set; } = new MpDbImage();
         public MpDbImage DbIconBorderImage { get; set; } = new MpDbImage();
@@ -84,7 +85,65 @@ namespace MpWpfApp {
             }
             return _AllIconList;
         }
-        
+
+        public static MpIcon GetIconByImageStr(string imgStr) {
+            var iconImg = MpDb.Instance.GetItems<MpDbImage>();
+            var img = iconImg.Where(x => x.DbImageBase64 == imgStr).FirstOrDefault();
+            if (img == null) {
+                return null;
+            }
+            var allicons = MpDb.Instance.GetItems<MpIcon>();
+            return allicons.Where(x => x.IconImageId == img.DbImageId).FirstOrDefault();
+        }
+
+        public static MpIcon Create(string iconImgBase64) {
+            var iconImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                DbImageBase64 = iconImgBase64
+            };
+
+            // TODO add image manipulation stuff like in wpf or get rid of this crap
+            var iconBorderImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                DbImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                DbImageBase64 = iconImgBase64
+            };
+            var iconBorderHighlightSelectedImage = new MpDbImage() {
+                //ImageBytes = iconImg
+                DbImageBase64 = iconImgBase64
+            };
+
+            MpDb.Instance.AddItem<MpDbImage>(iconImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderHighlightImage);
+            MpDb.Instance.AddItem<MpDbImage>(iconBorderHighlightSelectedImage);
+
+            var iconBmp = iconImgBase64.ToBitmapSource();
+            var colorList = CreatePrimaryColorList(iconBmp);
+            // TODO create border images here
+            var newIcon = new MpIcon() {
+                IconImageId = iconImage.DbImageId,
+                IconImage = iconImage.DbImage,
+                IconBorderImageId = iconBorderImage.DbImageId,
+                IconBorderImage = iconBorderImage.DbImage,
+                IconBorderHighlightImageId = iconBorderHighlightImage.DbImageId,
+                IconBorderHighlightImage = iconBorderHighlightImage.DbImage,
+                IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.DbImageId,
+                IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage.DbImage,
+                HexColor1 = colorList[0],
+                HexColor2 = colorList[1],
+                HexColor3 = colorList[2],
+                HexColor4 = colorList[3],
+                HexColor5 = colorList[4],
+            };
+            MpDb.Instance.AddItem<MpIcon>(newIcon);
+
+            return newIcon;
+        }
+
         public MpIcon() {
             IconId = 0;
             IconGuid = Guid.NewGuid();
@@ -92,6 +151,7 @@ namespace MpWpfApp {
             IconBorderImage = null;
             ++TotalIconCount;
         }
+
         public MpIcon(BitmapSource iconImage) : this() {
             MpIcon dupIcon = null;
             //foreach (var i in GetAllIcons()) {
@@ -122,10 +182,10 @@ namespace MpWpfApp {
             } else {
                 IconId = dupIcon.IconId;
                 IconGuid = dupIcon.IconGuid;
-                DbIconImageId = dupIcon.DbIconImageId;
-                DbIconBorderImageId = dupIcon.DbIconBorderImageId;
-                DbIconBorderHighlightImageId = dupIcon.DbIconBorderHighlightImageId;
-                DbIconBorderHighlightSelectedImageId = dupIcon.DbIconBorderHighlightSelectedImageId;
+                IconImageId = dupIcon.IconImageId;
+                IconBorderImageId = dupIcon.IconBorderImageId;
+                IconBorderHighlightImageId = dupIcon.IconBorderHighlightImageId;
+                IconBorderHighlightSelectedImageId = dupIcon.IconBorderHighlightSelectedImageId;
 
                 DbIconImage = dupIcon.DbIconImage;
                 DbIconBorderImage = dupIcon.DbIconBorderImage;
@@ -163,15 +223,15 @@ namespace MpWpfApp {
             IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
             IconGuid = Guid.Parse(dr["MpIconGuid"].ToString());
 
-            DbIconImageId = Convert.ToInt32(dr["fk_IconDbImageId"].ToString());
-            DbIconBorderImageId = Convert.ToInt32(dr["fk_IconBorderDbImageId"].ToString());
-            DbIconBorderHighlightImageId = Convert.ToInt32(dr["fk_IconSelectedHighlightBorderDbImageId"].ToString());
-            DbIconBorderHighlightSelectedImageId = Convert.ToInt32(dr["fk_IconHighlightBorderDbImageId"].ToString());
+            IconImageId = Convert.ToInt32(dr["fk_IconDbImageId"].ToString());
+            IconBorderImageId = Convert.ToInt32(dr["fk_IconBorderDbImageId"].ToString());
+            IconBorderHighlightImageId = Convert.ToInt32(dr["fk_IconSelectedHighlightBorderDbImageId"].ToString());
+            IconBorderHighlightSelectedImageId = Convert.ToInt32(dr["fk_IconHighlightBorderDbImageId"].ToString());
 
-            DbIconImage = new MpDbImage(DbIconImageId);
-            DbIconBorderImage = new MpDbImage(DbIconBorderImageId);
-            DbIconBorderHighlightImage = new MpDbImage(DbIconBorderHighlightImageId);
-            DbIconBorderHighlightSelectedImage = new MpDbImage(DbIconBorderHighlightSelectedImageId);
+            DbIconImage = new MpDbImage(IconImageId);
+            DbIconBorderImage = new MpDbImage(IconBorderImageId);
+            DbIconBorderHighlightImage = new MpDbImage(IconBorderHighlightImageId);
+            DbIconBorderHighlightSelectedImage = new MpDbImage(IconBorderHighlightSelectedImageId);
 
             PrimaryIconColorList.Clear();
             for (int i = 0; i < 5; i++) {
@@ -202,16 +262,16 @@ namespace MpWpfApp {
             }
 
             DbIconImage.WriteToDatabase();
-            DbIconImageId = DbIconImage.DbImageId;
+            IconImageId = DbIconImage.DbImageId;
 
             DbIconBorderImage.WriteToDatabase();
-            DbIconBorderImageId = DbIconBorderImage.DbImageId;
+            IconBorderImageId = DbIconBorderImage.DbImageId;
 
             DbIconBorderHighlightImage.WriteToDatabase();
-            DbIconBorderHighlightImageId = DbIconBorderHighlightImage.DbImageId;
+            IconBorderHighlightImageId = DbIconBorderHighlightImage.DbImageId;
 
             DbIconBorderHighlightSelectedImage.WriteToDatabase();
-            DbIconBorderHighlightSelectedImageId = DbIconBorderHighlightSelectedImage.DbImageId;
+            IconBorderHighlightSelectedImageId = DbIconBorderHighlightSelectedImage.DbImageId;
 
             if (IconId == 0) {
                 MpDb.Instance.ExecuteWrite(
@@ -219,10 +279,10 @@ namespace MpWpfApp {
                          "values(@ig,@iiid,@ibiid,@ishiid,@ihiid,@c1,@c2,@c3,@c4,@c5)",
                          new Dictionary<string, object> {
                              { "@ig", IconGuid.ToString() },
-                            { "@iiid", DbIconImageId },
-                            { "@ibiid", DbIconBorderImageId },
-                            { "@ishiid", DbIconBorderHighlightSelectedImageId },
-                            { "@ihiid", DbIconBorderHighlightImageId },
+                            { "@iiid", IconImageId },
+                            { "@ibiid", IconBorderImageId },
+                            { "@ishiid", IconBorderHighlightSelectedImageId },
+                            { "@ihiid", IconBorderHighlightImageId },
                             { "@c1", PrimaryIconColorList[0] },
                             { "@c2", PrimaryIconColorList[1] },
                             { "@c3", PrimaryIconColorList[2] },
@@ -236,10 +296,10 @@ namespace MpWpfApp {
                     "update MpIcon set MpIconGuid=@ig, fk_IconDbImageId=@iiid,fk_IconBorderDbImageId=@ibiid,fk_IconSelectedHighlightBorderDbImageId=@ishiid,fk_IconHighlightBorderDbImageId=@ihiid, HexColor1=@c1,HexColor2=@c2,HexColor3=@c3,HexColor4=@c4,HexColor5=@c5 where pk_MpIconId=@iid",
                     new Dictionary<string, object> {
                         { "@ig", IconGuid.ToString() },
-                        { "@iiid", DbIconImageId },
-                        { "@ibiid", DbIconBorderImageId },
-                        { "@ishiid", DbIconBorderHighlightSelectedImageId },
-                        { "@ihiid", DbIconBorderHighlightImageId },
+                        { "@iiid", IconImageId },
+                        { "@ibiid", IconBorderImageId },
+                        { "@ishiid", IconBorderHighlightSelectedImageId },
+                        { "@ihiid", IconBorderHighlightImageId },
                         { "@c1", PrimaryIconColorList[0] },
                         { "@c2", PrimaryIconColorList[1] },
                         { "@c3", PrimaryIconColorList[2] },
@@ -281,7 +341,7 @@ namespace MpWpfApp {
             GetAllIcons().Remove(this);
         }
 
-        private MpObservableCollection<string> CreatePrimaryColorList(BitmapSource bmpSource) {
+        private static MpObservableCollection<string> CreatePrimaryColorList(BitmapSource bmpSource) {
             //var sw = new Stopwatch();
             //sw.Start();
             var primaryIconColorList = new MpObservableCollection<string>();
@@ -334,22 +394,22 @@ namespace MpWpfApp {
                     case "fk_IconDbImageId":
                         tidr = MpDb.Instance.GetDbDataRowByTableGuid("MpDbImage", li.AffectedColumnValue);
                         icon.DbIconImage = new MpDbImage(tidr);
-                        icon.DbIconImageId = icon.DbIconImage.DbImageId;
+                        icon.IconImageId = icon.DbIconImage.DbImageId;
                         break;
                     case "fk_IconBorderDbImageId":
                         tidr = MpDb.Instance.GetDbDataRowByTableGuid("MpDbImage", li.AffectedColumnValue);
                         icon.DbIconBorderImage = new MpDbImage(tidr);
-                        icon.DbIconBorderImageId = icon.DbIconBorderImage.DbImageId;
+                        icon.IconBorderImageId = icon.DbIconBorderImage.DbImageId;
                         break;
                     case "fk_IconSelectedHighlightBorderDbImageId":
                         tidr = MpDb.Instance.GetDbDataRowByTableGuid("MpDbImage", li.AffectedColumnValue);
                         icon.DbIconBorderHighlightSelectedImage = new MpDbImage(tidr);
-                        icon.DbIconBorderHighlightSelectedImageId = icon.DbIconBorderHighlightSelectedImage.DbImageId;
+                        icon.IconBorderHighlightSelectedImageId = icon.DbIconBorderHighlightSelectedImage.DbImageId;
                         break;
                     case "fk_IconHighlightBorderDbImageId":
                         tidr = MpDb.Instance.GetDbDataRowByTableGuid("MpDbImage", li.AffectedColumnValue);
                         icon.DbIconBorderHighlightImage = new MpDbImage(tidr);
-                        icon.DbIconBorderHighlightImageId = icon.DbIconBorderHighlightImage.DbImageId;
+                        icon.IconBorderHighlightImageId = icon.DbIconBorderHighlightImage.DbImageId;
                         break;
                     case "HexColor1":
                         icon.HexColor1 = li.AffectedColumnValue;
@@ -389,16 +449,16 @@ namespace MpWpfApp {
                 IconGuid = System.Guid.Parse(objParts[0])
             };
             icon.DbIconImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[1]) as MpDbImage;
-            icon.DbIconImageId = icon.DbIconImage.DbImageId;
+            icon.IconImageId = icon.DbIconImage.DbImageId;
 
             icon.DbIconBorderImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[2]) as MpDbImage;
-            icon.DbIconBorderImageId = icon.DbIconBorderImage.DbImageId;
+            icon.IconBorderImageId = icon.DbIconBorderImage.DbImageId;
 
             icon.DbIconBorderHighlightSelectedImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[3]) as MpDbImage;
-            icon.DbIconBorderHighlightSelectedImageId = icon.DbIconBorderHighlightSelectedImage.DbImageId;
+            icon.IconBorderHighlightSelectedImageId = icon.DbIconBorderHighlightSelectedImage.DbImageId;
 
             icon.DbIconBorderHighlightImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[4]) as MpDbImage;
-            icon.DbIconBorderHighlightImageId = icon.DbIconBorderHighlightImage.DbImageId;
+            icon.IconBorderHighlightImageId = icon.DbIconBorderHighlightImage.DbImageId;
 
             icon.HexColor1 = objParts[5];
             icon.HexColor2 = objParts[6];
@@ -450,19 +510,19 @@ namespace MpWpfApp {
                 "MpIconGuid",
                 diffLookup,
                 IconGuid.ToString());
-            diffLookup = CheckValue(DbIconImageId, other.DbIconImageId,
+            diffLookup = CheckValue(IconImageId, other.IconImageId,
                 "fk_IconDbImageId",
                 diffLookup,
                 DbIconImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(DbIconBorderImageId, other.DbIconBorderImageId,
+            diffLookup = CheckValue(IconBorderImageId, other.IconBorderImageId,
                 "fk_IconBorderDbImageId",
                 diffLookup,
                 DbIconBorderImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(DbIconBorderHighlightSelectedImageId, other.DbIconBorderHighlightSelectedImageId,
+            diffLookup = CheckValue(IconBorderHighlightSelectedImageId, other.IconBorderHighlightSelectedImageId,
                 "fk_IconSelectedHighlightBorderDbImageId",
                 diffLookup,
                 DbIconBorderHighlightSelectedImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(DbIconBorderHighlightImageId, other.DbIconBorderHighlightImageId,
+            diffLookup = CheckValue(IconBorderHighlightImageId, other.IconBorderHighlightImageId,
                 "fk_IconHighlightBorderDbImageId",
                 diffLookup,
                 DbIconBorderHighlightImage.DbImageGuid.ToString());

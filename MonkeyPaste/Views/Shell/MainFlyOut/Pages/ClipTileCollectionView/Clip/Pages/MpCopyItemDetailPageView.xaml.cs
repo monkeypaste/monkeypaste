@@ -45,8 +45,8 @@ namespace MonkeyPaste {
             }
             cidpvm.UpdateTimer.Stop();
 
-            cidpvm.CopyItem.ItemText = cidpvm.Text; 
-            cidpvm.CopyItem.ItemText = cidpvm.CopyItem.ItemText.Replace("\"", string.Empty);
+            cidpvm.CopyItem.ItemData = cidpvm.Text; 
+            cidpvm.CopyItem.ItemData = cidpvm.CopyItem.ItemData.Replace("\"", string.Empty);
 
             var templatesStr = cidpvm.Templates.Replace("\"", string.Empty);
             templatesStr = templatesStr.Substring(1, templatesStr.Length - 2);

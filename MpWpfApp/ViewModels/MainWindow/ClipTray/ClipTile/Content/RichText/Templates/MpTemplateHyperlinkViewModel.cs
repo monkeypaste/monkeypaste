@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public enum MpCurrencyType {
@@ -264,7 +265,7 @@ namespace MpWpfApp {
                 if (CopyItemTemplate == null) {
                     return 0;
                 }
-                return CopyItemTemplate.CopyItemTemplateId;
+                return CopyItemTemplate.Id;
             }
         }
 
@@ -313,12 +314,11 @@ namespace MpWpfApp {
                 if (CopyItemTemplate == null) {
                     return Brushes.Pink;
                 }
-                return CopyItemTemplate.TemplateColor;
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString(CopyItemTemplate.HexColor));
             }
             set {
-                if (CopyItemTemplate != null &&
-                    CopyItemTemplate.TemplateColor != value) {
-                    CopyItemTemplate.TemplateColor = value;                    
+                if (CopyItemTemplate != null) {
+                    CopyItemTemplate.HexColor = value.ToString();                    
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
@@ -438,11 +438,14 @@ namespace MpWpfApp {
                        HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
-                Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //while (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
                 //    randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //}
-                cit = new MpCopyItemTemplate(rtbvm.CopyItemId, randColor, namePrefix + uniqueIdx + ">");
+                cit = new MpCopyItemTemplate() {
+                    CopyItemId = rtbvm.CopyItemId,
+                    HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
+                    TemplateName = namePrefix + uniqueIdx + ">"
+                };
             }
             CopyItemTemplate = cit;         
         }

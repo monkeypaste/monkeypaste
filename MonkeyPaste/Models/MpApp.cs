@@ -88,6 +88,14 @@ namespace MonkeyPaste {
             return allApps.Where(x => x.Guid == appGuid).FirstOrDefault();
         }
 
+        public static bool IsAppRejectedByPath(string appPath, string deviceGuid = "") {
+            var app = GetAppByPath(appPath,deviceGuid);
+            if(app == null) {
+                return false;
+            }
+            return app.IsAppRejected;
+        }
+
         public static MpApp Create(string appPath, string appName, MpIcon icon) {
             var dupApp = MpApp.GetAppByPath(appPath);
             if (dupApp != null) {
@@ -98,6 +106,7 @@ namespace MonkeyPaste {
             var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
             var newApp = new MpApp() {
+                AppGuid = System.Guid.NewGuid(),
                 AppPath = appPath,
                 AppName = appName,
                 IconId = icon.Id,
@@ -121,6 +130,7 @@ namespace MonkeyPaste {
             var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
             var newApp = new MpApp() {
+                AppGuid = System.Guid.NewGuid(),
                 AppPath = appPath,
                 AppName = appName,
                 IconId = icon.Id,

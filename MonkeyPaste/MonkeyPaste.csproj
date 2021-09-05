@@ -53,9 +53,11 @@
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="ViewModels\Bases\MpUndoableViewModelBase.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpCopyItemDetailPageViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
+    <Compile Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Html\Editor.html" />
@@ -74,6 +76,7 @@
     <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml" />
   </ItemGroup>
 

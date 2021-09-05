@@ -557,7 +557,11 @@ namespace MonkeyPaste {
                     );
             }
             if (_connection == null) {
-                _connection = new SQLiteConnection(connStr) { Trace = true };
+                try {
+                    _connection = new SQLiteConnection(connStr);
+                }catch(Exception ex) {
+                    Console.WriteLine(ex);
+                }
             }
 
             if (_connectionAsync == null) {
@@ -828,9 +832,8 @@ namespace MonkeyPaste {
                     CREATE TABLE MpSource (
                       pk_MpSourceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpSourceGuid text not null
-                    , fk_MpUrlId integer
+                    , fk_MpUrlId integer default 0
                     , fk_MpAppId integer NOT NULL
-                    , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     ); 
 
@@ -840,8 +843,7 @@ namespace MonkeyPaste {
                     , MpCopyItemGuid text not null
                     , fk_ParentCopyItemId integer default 0
                     , fk_MpCopyItemTypeId integer NOT NULL default 0
-                    , fk_MpAppId integer NOT NULL
-                    , fk_MpUrlId integer
+                    , fk_MpSourceId integer NOT NULL
                     , CompositeSortOrderIdx integer default 0
                     , HexColor text default '#FFFF0000'
                     , Title text NULL default ''
@@ -849,13 +851,10 @@ namespace MonkeyPaste {
                     , PasteCount integer not null default 0
                     , fk_MpDbImageId integer
                     , fk_SsMpDbImageId integer
-                    , ItemText text default ''
-                    , ItemRtf text default ''
-                    , ItemHtml text default ''
+                    , ItemData text default ''
                     , ItemDescription text default ''
-                    , ItemCsv text default ''
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
-                    , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)   
+                    , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpSourceId) REFERENCES MpSource (pk_MpSourceId)   
                     );
                     
                     CREATE TABLE MpCopyItemContent (

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
 
@@ -198,8 +199,7 @@ namespace MpWpfApp {
             if(HostClipTileViewModel == null) {
                 return;
             }
-            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && 
-                HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
+            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
                 return;
             }
             BorderStackPanel = (StackPanel)sender;

@@ -38,8 +38,7 @@ namespace MonkeyPaste {
         public static MpDbImage GetDbImageById(int id) {
             return MpDb.Instance.GetItems<MpDbImage>().Where(x => x.Id == id).FirstOrDefault();
         }
-        public MpDbImage() {
-        }
+        public MpDbImage() { }
 
         public async Task<object> CreateFromLogs(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
             var imgDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", imgGuid);

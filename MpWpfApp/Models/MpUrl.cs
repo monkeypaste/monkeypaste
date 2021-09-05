@@ -5,9 +5,10 @@ using MonkeyPaste;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using SQLite;
 
 namespace MpWpfApp {
-    public class MpUrl : MpDbModelBase, MonkeyPaste.MpISyncableDbObject {
+    public class MpUrl : MpDbModelBase, MonkeyPaste.MpISyncableDbObject, MonkeyPaste.MpICopyItemSource {
         private static List<MpUrl> _AllUrlList = null;
         public static int TotalUrlCount = 0;
 
@@ -218,5 +219,37 @@ namespace MpWpfApp {
                 diffLookup);
             return diffLookup;
         }
+
+        #region MpICopyItemSource Implementation
+        [Ignore]
+        public string SourceIconBase64 {
+            get {
+                if (UrlDomain == null || UrlDomain.FavIcon == null || UrlDomain.FavIcon.IconImage == null) {
+                    return string.Empty;
+                }
+                return UrlDomain.FavIcon.DbIconImage.DbImageBase64;
+            }
+        }
+
+        [Ignore]
+        public string SourcePath => UrlPath;
+
+        [Ignore]
+        public string SourceName => UrlTitle;
+
+        [Ignore]
+        public int RootId {
+            get {
+                if (UrlDomain == null) {
+                    return 0;
+                }
+                return UrlDomain.UrlDomainId;
+            }
+        }
+
+        [Ignore]
+        public bool IsSubSource => true;
+
+        #endregion
     }
 }

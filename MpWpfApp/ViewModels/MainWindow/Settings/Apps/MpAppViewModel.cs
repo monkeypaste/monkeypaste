@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpAppViewModel : MpViewModelBase {
@@ -51,7 +53,7 @@ namespace MpWpfApp {
                 if(App == null) {
                     return 0;
                 }
-                return App.AppId;
+                return App.Id;
             }
         }
 
@@ -95,23 +97,23 @@ namespace MpWpfApp {
                 if (App == null) {
                     return new BitmapImage();
                 }
-                return App.IconImage;
+                return App.Icon.IconImage.ImageBase64.ToBitmapSource();
             }
         }
 
-        public MpObservableCollection<string> PrimaryIconColorList {
+        public ObservableCollection<string> PrimaryIconColorList {
             get {
-                if(App == null) {
-                    return new MpObservableCollection<string>();
+                if(App == null || App.Icon == null) {
+                    return new ObservableCollection<string>();
                 }
-                return App.Icon.PrimaryIconColorList;
+                return new ObservableCollection<string>() { App.Icon.HexColor1, App.Icon.HexColor2, App.Icon.HexColor3, App.Icon.HexColor4, App.Icon.HexColor5 };
             }
-            set {
-                if(App != null && App.Icon.PrimaryIconColorList != value) {
-                    App.Icon.PrimaryIconColorList = value;
-                    OnPropertyChanged(nameof(PrimaryIconColorList));
-                }
-            }
+            //set {
+            //    if(App != null && PrimaryIconColorList != value) {
+            //        App.Icon.PrimaryIconColorList = value;
+            //        OnPropertyChanged(nameof(PrimaryIconColorList));
+            //    }
+            //}
         }
 
         private MpApp _app;

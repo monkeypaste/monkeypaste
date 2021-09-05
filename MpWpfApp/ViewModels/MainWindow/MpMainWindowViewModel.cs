@@ -21,6 +21,9 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
         #region Statics
+        public static bool IsMainWindowLoading { get; set; } = true;
+        public static bool IsMainWindowOpening { get; set; } = false;
+
         public static bool IsMainWindowOpen {
             get {
                 return Application.Current.MainWindow.DataContext != null && 
@@ -28,11 +31,6 @@ namespace MpWpfApp {
                     ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowGridTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
             }
         }
-
-        public static bool IsShowingMainWindow { get; set; } = false;
-
-        public static bool IsApplicationLoading { get; set; } = true;
-        //public static bool IsMainWindowOpen { get; private set; } = false;
         #endregion
 
         #region Private Variables
@@ -282,7 +280,7 @@ namespace MpWpfApp {
         public MpMainWindowViewModel() : base() {
             //MpViewModelBase.MainWindowViewModel = this;
 
-            MpMainWindowViewModel.IsApplicationLoading = true;
+            MpMainWindowViewModel.IsMainWindowLoading = true;
 
 
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
@@ -313,7 +311,7 @@ namespace MpWpfApp {
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
 
-            IsApplicationLoading = false;
+            IsMainWindowLoading = false;
         }
 
         public void ClearEdits() {
@@ -460,11 +458,11 @@ namespace MpWpfApp {
         private bool CanShowWindow() {
             return (Application.Current.MainWindow == null ||
                 //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                MpMainWindowViewModel.IsApplicationLoading ||
-                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsShowingMainWindow;
+                MpMainWindowViewModel.IsMainWindowLoading ||
+                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
         }
         private void ShowWindow() {
-            IsShowingMainWindow = true;
+            IsMainWindowOpening = true;
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
@@ -477,8 +475,8 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            if (MpMainWindowViewModel.IsApplicationLoading) {
-                MpMainWindowViewModel.IsApplicationLoading = false;
+            if (MpMainWindowViewModel.IsMainWindowLoading) {
+                MpMainWindowViewModel.IsMainWindowLoading = false;
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
             } else {
             }
@@ -496,7 +494,7 @@ namespace MpWpfApp {
                 } else {
                     MainWindowGridTop = _endMainWindowTop;
                     timer.Stop();
-                    IsShowingMainWindow = false;
+                    IsMainWindowOpening = false;
                 }
             };
             ClipTrayViewModel.AddNewTiles();
@@ -516,7 +514,7 @@ namespace MpWpfApp {
             ///return false;
             return (Application.Current.MainWindow != null &&
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsShowingMainWindow)  || args != null;
+                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsMainWindowOpening)  || args != null;
         }
         private async void HideWindow(object args) {
             IDataObject pasteDataObject = null;

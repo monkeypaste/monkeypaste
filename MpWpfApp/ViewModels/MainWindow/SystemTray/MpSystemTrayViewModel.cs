@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
@@ -57,7 +58,7 @@ namespace MpWpfApp {
 
         public string TotalItemCount {
             get {
-                return MpCopyItem.GetTotalItemCount().ToString() + " total entries";
+                return MpDb.Instance.GetItems<MpCopyItem>().Count.ToString() + " total entries";
             }
         }
 
@@ -164,10 +165,10 @@ namespace MpWpfApp {
             if(args is int) {
                 tabIdx = (int)args;
             } else if (args is MpClipTileViewModel) {
-                args = (args as MpClipTileViewModel).CopyItem.App;
+                args = (args as MpClipTileViewModel).CopyItem.Source.App;
                 tabIdx = 1;
             } else if (args is MpRtbListBoxItemRichTextBoxViewModel) {
-                args = (args as MpRtbListBoxItemRichTextBoxViewModel).CopyItem.App;
+                args = (args as MpRtbListBoxItemRichTextBoxViewModel).CopyItem.Source.App;
                 tabIdx = 1;
             }
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
