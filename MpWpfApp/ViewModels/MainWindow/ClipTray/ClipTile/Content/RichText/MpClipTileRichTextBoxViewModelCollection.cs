@@ -1163,12 +1163,15 @@ namespace MpWpfApp {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                 var speechSynthesizer = new SpeechSynthesizer();
                 speechSynthesizer.SetOutputToDefaultAudioDevice();
-                if(string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
-                    speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
-                } else {
-                    speechSynthesizer.SelectVoice(Properties.Settings.Default.SpeechSynthVoiceName);
+                string voiceName = speechSynthesizer.GetInstalledVoices()[3].VoiceInfo.Name;
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
+                    var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(Properties.Settings.Default.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
+                    if(voice != null) {
+                        voiceName = voice.VoiceInfo.Name;
+                    }
                 }
-                
+                speechSynthesizer.SelectVoice(voiceName);
+
                 speechSynthesizer.Rate = 0;
                 speechSynthesizer.SpeakCompleted += (s, e) => {
                     speechSynthesizer.Dispose();

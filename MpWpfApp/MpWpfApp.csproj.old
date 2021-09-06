@@ -1,0 +1,1814 @@
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
+  </PropertyGroup>
+  <!--<PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AB141214-C52C-4390-B86B-1491D5F24E51}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MpWpfApp</RootNamespace>
+    <AssemblyName>MpWpfApp</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UserSecretsId>25171628-2f30-4eee-ab06-a57ab0d7b632</UserSecretsId>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TRACE_DATASOURCE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetPlatformVersion>8.0</TargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Icons\monkey %282%29.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>MpWpfApp.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpRtbSelection.cs" />
+    <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
+    <Compile Include="AttachedProperties\MpSpanOperations.cs" />
+    <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
+    <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
+    <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
+    <Compile Include="Behaviors\MpKineticBehavior.cs" />
+    <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
+    <Compile Include="Controls\Adorners\MpRtbListBoxAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpClipTrayAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpRtbListBoxItemAdorner.cs" />
+    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
+    <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
+    <Compile Include="Controls\MpClipBorder.cs" />
+    <Compile Include="AttachedProperties\MpPagingListBox.cs" />
+    <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
+    <Compile Include="Controls\MpRichTextBox.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
+    <Compile Include="Converters\MpPointCollectionConverter.cs" />
+    <Compile Include="Converters\MpRichTextToImageConverter.cs" />
+    <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
+    <Compile Include="Converters\MpStringToImageConverter.cs" />
+    <Compile Include="Converters\MpStringToIconConverter.cs" />
+    <Compile Include="Converters\MpStringToBrushConverter.cs" />
+    <Compile Include="Plugins\Base\MpPlugin.cs" />
+    <Compile Include="Plugins\Base\MpPluginObjectBase.cs" />
+    <Compile Include="Plugins\Interfaces\MpIPlugin.cs" />
+    <Compile Include="Plugins\MpPluginManager.cs" />
+    <Compile Include="Properties\DefaultUiStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>DefaultUiStrings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UserUiStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>UserUiStrings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\DataVirtualization\DescriptionList.cs" />
+    <Compile Include="Utils\DataVirtualization\FilterDescription.cs" />
+    <Compile Include="Utils\DataVirtualization\FilterDescriptionList.cs" />
+    <Compile Include="Utils\DataVirtualization\IFilteredSortedSourceProviderAsync.cs" />
+    <Compile Include="Utils\DataVirtualization\IFilterOrderDescription.cs" />
+    <Compile Include="Utils\DataVirtualization\MemberPathFilterText.cs" />
+    <Compile Include="Utils\DataVirtualization\MemberPathSortingDirection.cs" />
+    <Compile Include="Utils\DataVirtualization\ParentOfTypeExtensions.cs" />
+    <Compile Include="Utils\DataVirtualization\SortDescription.cs" />
+    <Compile Include="Utils\DataVirtualization\SortDescriptionList.cs" />
+    <Compile Include="Utils\FlowDocuments\MpAttached.cs" />
+    <Compile Include="Utils\FlowDocuments\MpBindableRun.cs" />
+    <Compile Include="Utils\FlowDocuments\MpBlockTemplateContent.cs" />
+    <Compile Include="Utils\FlowDocuments\MpFlowDocumentHelpers.cs" />
+    <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
+    <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
+    <Compile Include="Utils\MpContentColors.cs" />
+    <Compile Include="Utils\MpCopyItemFactory.cs" />
+    <Compile Include="Utils\MpWpfDbInfo.cs" />
+    <Compile Include="Utils\MpImageHistogram.cs" />
+    <Compile Include="Utils\MpBrowserUrlDetector.cs" />
+    <Compile Include="Utils\MpRegEx.cs" />
+    <Compile Include="Utils\MpSettingsBindingExtension.cs" />
+    <Compile Include="Utils\MpVisualUtility.cs" />
+    <Compile Include="Utils\MpWpfPreferences.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpImageAnalysis.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
+    <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
+    <Compile Include="Utils\System\MpDebugTraceListener.cs" />
+    <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
+    <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
+    <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
+    <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
+    <Compile Include="Utils\RESTful\Base\MpRestfulApi.cs" />
+    <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
+    <Compile Include="Utils\RESTful\MpImageAnalyzer.cs" />
+    <Compile Include="Utils\RESTful\MpImageOcr.cs" />
+    <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
+    <Compile Include="Utils\RESTful\MpMinifyUrl.cs" />
+    <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />
+    <Compile Include="Utils\System\MpClipboardManager.cs" />
+    <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
+    <Compile Include="Utils\System\MpLastWindowWatcher.cs" />
+    <Compile Include="Utils\System\MpMouseKeyHook.cs" />
+    <Compile Include="Utils\System\MpScreenInformation.cs" />
+    <Compile Include="Utils\System\WinApi.cs" />
+    <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
+    <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
+    <Compile Include="Converters\MpStringToFlowDocumentConverter.cs" />
+    <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
+    <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
+    <Compile Include="Converters\MpIntToStringConverter.cs" />
+    <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Utils\MpExtensions.cs" />
+    <Compile Include="Utils\MpHelpers.cs" />
+    <Compile Include="Utils\MpMeasurements.cs" />
+    <Compile Include="Utils\UndoRedo\MpRangeObservableCollection.cs" />
+    <Compile Include="Utils\UndoRedo\MpUndoableProperty.cs" />
+    <Compile Include="Utils\UndoRedo\MpUndoManager.cs" />
+    <Compile Include="Utils\MpTypeHelper.cs" />
+    <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpPagingUndoableObservableCollection.cs" />
+    <Compile Include="ViewModels\Base\MpUndoableObservableCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpEditTemplateToolbarViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpPasteTemplateToolbarViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchElementViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Help\MpHelpViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Security\MpSecurityViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutKeyViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutPanelViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Sort\MpClipTileSortViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Sort\MpSortTypeComboBoxItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
+    <Compile Include="Views\Analytics\MpTextAnalysisDocument.xaml.cs">
+      <DependentUpon>MpTextAnalysisDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Analytics\MpImageAnalysisDocument.xaml.cs">
+      <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
+      <DependentUpon>MpClipTrayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\MpMainWindow.xaml.cs">
+      <DependentUpon>MpMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\TagTray\MpTagTrayView.xaml.cs">
+      <DependentUpon>MpTagTrayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
+      <DependentUpon>MpAppModeButtonGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpLoadingWindow.xaml.cs">
+      <DependentUpon>MpLoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
+      <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpSettingsWindow.xaml.cs">
+      <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerApple.xaml.cs">
+      <DependentUpon>ucSpinnerApple.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerCogs.xaml.cs">
+      <DependentUpon>ucSpinnerCogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerDotCircle.xaml.cs">
+      <DependentUpon>ucSpinnerDotCircle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerPiston.xaml.cs">
+      <DependentUpon>ucSpinnerPiston.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerSwirl.xaml.cs">
+      <DependentUpon>ucSpinnerSwirl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucTail.xaml.cs">
+      <DependentUpon>ucTail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SwirlTest.xaml.cs">
+      <DependentUpon>SwirlTest.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Styles\ResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Analytics\MpTextAnalysisDocument.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Analytics\MpImageAnalysisDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\MpMainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\TagTray\MpTagTrayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpLoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpStandardBalloonControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
+    <Page Include="Views\MpSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerApple.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerCogs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerDotCircle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerPiston.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerSwirl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucTail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SwirlTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Views\MpAssignHotkeyModalWindow.xaml.cs">
+      <DependentUpon>MpAssignHotkeyModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="BrowserExtensions\Chrome\manifest.json" />
+    <None Include="Properties\DefaultUiStrings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DefaultUiStrings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\UserUiStrings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserUiStrings.Designer.cs</LastGenOutput>
+    </None>
+    <Resource Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\add2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\add3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\add4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\close2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doubleSidedArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doubleSidedArrow2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\info2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\minus2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\monkey %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\monkey %282%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\monkey %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\monkey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\MonkeyIcon1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Sounds\MonkeySound1.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\star_filled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\star_outline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\texture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\transparent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tshadowdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tshadowdownleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tshadowdownright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tshadowright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tshadowtopright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\user2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\asc_black.png" />
+    <Resource Include="Resources\Images\asc_white.png" />
+    <Resource Include="Resources\Images\desc_black.png" />
+    <Resource Include="Resources\Images\desc_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\title_swirl0001.png" />
+    <Resource Include="Resources\Images\title_swirl0002.png" />
+    <Resource Include="Resources\Images\title_swirl0003.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\title_swirl0004.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM">
+      <Version>6.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="AsyncFixer">
+      <Version>1.5.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Autofac">
+      <Version>6.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Azure.AI.TextAnalytics">
+      <Version>5.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="gong-wpf-dragdrop">
+      <Version>2.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
+      <Version>1.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="HtmlAgilityPack">
+      <Version>1.11.36</Version>
+    </PackageReference>
+    <PackageReference Include="InputSimulatorPlus">
+      <Version>1.0.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp">
+      <Version>4.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.9" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.2.12</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts">
+      <Version>10.0.19041.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.31</Version>
+    </PackageReference>
+    <PackageReference Include="MouseKeyHook">
+      <Version>5.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="MouseKeyHook.Rx">
+      <Version>5.6.0-alpha</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmLight">
+      <Version>5.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmLightLibs">
+      <Version>5.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody">
+      <Version>3.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="QRCoder">
+      <Version>1.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.7.335</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-sqlcipher">
+      <Version>1.7.335</Version>
+    </PackageReference>
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3">
+      <Version>2.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite">
+      <Version>1.0.115</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.115</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Linq">
+      <Version>1.0.115</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Linq">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime">
+      <Version>4.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.Extensions">
+      <Version>4.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.InteropServices">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks.Extensions">
+      <Version>4.5.4</Version>
+    </PackageReference>
+    <PackageReference Include="UACHelper">
+      <Version>1.3.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="UwpDesktop-Updated">
+      <Version>10.0.17763.132</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsAPICodePack-Core">
+      <Version>1.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsAPICodePack-Shell">
+      <Version>1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.7.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample1.html" />
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample2.html" />
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample3.html" />
+    <Resource Include="Resources\Icons\Bulb.ico" />
+    <Resource Include="Resources\Icons\Computers.ico" />
+    <Resource Include="Resources\Icons\Error.ico" />
+    <Resource Include="Resources\Icons\Inactive.ico" />
+    <Resource Include="Resources\Icons\NetDrives.ico" />
+    <Resource Include="Resources\Images\Preferences.png" />
+    <Resource Include="Resources\Images\Remove.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\aligncenter.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignjustify.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignleft.PNG" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignright.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\codeblock.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\codeinline.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editcopy.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editcut.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editpaste.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editredo.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editundo.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\filesave.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontbold.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontgrow.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontitalic.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontshrink.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontunderline.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\indentdecrease.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\indentincrease.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\listbullets.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\listnumbers.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\normaltext.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\separator.png" />
+    <Content Include="BrowserExtensions\Chrome\options.html" />
+    <Content Include="BrowserExtensions\Chrome\options.js" />
+    <Content Include="BrowserExtensions\Chrome\popup.js" />
+    <Content Include="BrowserExtensions\Chrome\background.js" />
+    <Resource Include="BrowserExtensions\Chrome\images\get_started128.png" />
+    <Resource Include="BrowserExtensions\Chrome\images\get_started16.png" />
+    <Resource Include="BrowserExtensions\Chrome\images\get_started32.png" />
+    <Resource Include="BrowserExtensions\Chrome\images\get_started48.png" />
+    <Content Include="BrowserExtensions\Chrome\popup.html" />
+    <Resource Include="Resources\Images\MpRichTextBox\templateadd.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\templateremove.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\templaterename.png" />
+    <Resource Include="Resources\Images\forward_black.png" />
+    <Resource Include="Resources\Images\back_black.png" />
+    <Resource Include="Resources\Images\close1.png" />
+    <Resource Include="Resources\Images\catdog.jpg" />
+    <Resource Include="Resources\Images\wrench.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Backcolor.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Print.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Strikeout.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Textcolor.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\arrow_refresh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\accept.png" />
+    <Resource Include="Resources\Icons\Silk\icons\add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\anchor.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_cascade.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_double.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_form.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_form_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_form_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_form_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_form_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_get.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_home.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_osx.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_osx_terminal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_put.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_side_boxes.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_side_contract.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_side_expand.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_side_list.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_side_tree.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_split.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_tile_horizontal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_tile_vertical.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_columns.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_detail.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_gallery.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_icons.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_list.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_view_tile.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_xp.png" />
+    <Resource Include="Resources\Icons\Silk\icons\application_xp_terminal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_branch.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_divide.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_down.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_in.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_inout.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_join.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_left.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_merge.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_out.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_redo.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_refresh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_refresh_small.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_right.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_rotate_anticlockwise.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_rotate_clockwise.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_switch.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_turn_left.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_turn_right.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_undo.png" />
+    <Resource Include="Resources\Icons\Silk\icons\arrow_up.png" />
+    <Resource Include="Resources\Icons\Silk\icons\asterisk_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\asterisk_yellow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\attach.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_bronze_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_bronze_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_bronze_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_gold_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_gold_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_gold_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_silver_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_silver_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\award_star_silver_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_put.png" />
+    <Resource Include="Resources\Icons\Silk\icons\basket_remove.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bell_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bin.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bin_closed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bin_empty.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bomb.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_addresses.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_next.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_open.png" />
+    <Resource Include="Resources\Icons\Silk\icons\book_previous.png" />
+    <Resource Include="Resources\Icons\Silk\icons\box.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bricks.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\brick_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\briefcase.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bug_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\building_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_arrow_bottom.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_arrow_down.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_arrow_top.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_arrow_up.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_black.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_disk.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_feed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_picture.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_pink.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_purple.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_star.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_toggle_minus.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_toggle_plus.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_white.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_wrench.png" />
+    <Resource Include="Resources\Icons\Silk\icons\bullet_yellow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cake.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calculator_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_view_day.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_view_month.png" />
+    <Resource Include="Resources\Icons\Silk\icons\calendar_view_week.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\camera_small.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cancel.png" />
+    <Resource Include="Resources\Icons\Silk\icons\car.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_put.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cart_remove.png" />
+    <Resource Include="Resources\Icons\Silk\icons\car_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\car_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_burn.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_eject.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cd_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_bar_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_curve_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_line_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_organisation.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_organisation_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_organisation_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\chart_pie_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_pause.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_play.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\clock_stop.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cog_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\coins.png" />
+    <Resource Include="Resources\Icons\Silk\icons\coins_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\coins_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\color_swatch.png" />
+    <Resource Include="Resources\Icons\Silk\icons\color_wheel.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comment.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comments.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comments_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comments_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comment_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comment_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\comment_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\compress.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\computer_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\connect.png" />
+    <Resource Include="Resources\Icons\Silk\icons\contrast.png" />
+    <Resource Include="Resources\Icons\Silk\icons\contrast_decrease.png" />
+    <Resource Include="Resources\Icons\Silk\icons\contrast_high.png" />
+    <Resource Include="Resources\Icons\Silk\icons\contrast_increase.png" />
+    <Resource Include="Resources\Icons\Silk\icons\contrast_low.png" />
+    <Resource Include="Resources\Icons\Silk\icons\controller.png" />
+    <Resource Include="Resources\Icons\Silk\icons\controller_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\controller_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\controller_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_eject.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_eject_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_end.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_end_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_equalizer.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_equalizer_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_fastforward.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_fastforward_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_pause.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_pause_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_play.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_play_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_repeat.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_repeat_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_rewind.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_rewind_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_start.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_start_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_stop.png" />
+    <Resource Include="Resources\Icons\Silk\icons\control_stop_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\creditcards.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cross.png" />
+    <Resource Include="Resources\Icons\Silk\icons\css.png" />
+    <Resource Include="Resources\Icons\Silk\icons\css_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\css_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\css_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\css_valid.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cup_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cursor.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cut.png" />
+    <Resource Include="Resources\Icons\Silk\icons\cut_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_connect.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_refresh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\database_table.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_next.png" />
+    <Resource Include="Resources\Icons\Silk\icons\date_previous.png" />
+    <Resource Include="Resources\Icons\Silk\icons\delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\disconnect.png" />
+    <Resource Include="Resources\Icons\Silk\icons\disk.png" />
+    <Resource Include="Resources\Icons\Silk\icons\disk_multiple.png" />
+    <Resource Include="Resources\Icons\Silk\icons\door.png" />
+    <Resource Include="Resources\Icons\Silk\icons\door_in.png" />
+    <Resource Include="Resources\Icons\Silk\icons\door_open.png" />
+    <Resource Include="Resources\Icons\Silk\icons\door_out.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drink.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drink_empty.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_burn.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_cd.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_cd_empty.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_disk.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_network.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_rename.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_user.png" />
+    <Resource Include="Resources\Icons\Silk\icons\drive_web.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\dvd_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_attach.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_open.png" />
+    <Resource Include="Resources\Icons\Silk\icons\email_open_image.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_evilgrin.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_grin.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_happy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_smile.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_surprised.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_tongue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_unhappy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_waii.png" />
+    <Resource Include="Resources\Icons\Silk\icons\emoticon_wink.png" />
+    <Resource Include="Resources\Icons\Silk\icons\error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\error_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\error_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\error_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\exclamation.png" />
+    <Resource Include="Resources\Icons\Silk\icons\eye.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_disk.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\feed_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\female.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\film_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\find.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_pink.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_purple.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\flag_yellow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_bell.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_brick.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_bug.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_camera.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_database.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_explore.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_feed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_find.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_heart.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_image.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_lightbulb.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_page.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_page_white.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_palette.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_picture.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_star.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_table.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_user.png" />
+    <Resource Include="Resources\Icons\Silk\icons\folder_wrench.png" />
+    <Resource Include="Resources\Icons\Silk\icons\font.png" />
+    <Resource Include="Resources\Icons\Silk\icons\font_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\font_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\font_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\group_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\heart.png" />
+    <Resource Include="Resources\Icons\Silk\icons\heart_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\heart_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\help.png" />
+    <Resource Include="Resources\Icons\Silk\icons\hourglass.png" />
+    <Resource Include="Resources\Icons\Silk\icons\hourglass_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\hourglass_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\hourglass_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\hourglass_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\house.png" />
+    <Resource Include="Resources\Icons\Silk\icons\house_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\house_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\html.png" />
+    <Resource Include="Resources\Icons\Silk\icons\html_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\html_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\html_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\html_valid.png" />
+    <Resource Include="Resources\Icons\Silk\icons\image.png" />
+    <Resource Include="Resources\Icons\Silk\icons\images.png" />
+    <Resource Include="Resources\Icons\Silk\icons\image_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\image_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\image_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\image_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\information.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ipod.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ipod_cast.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ipod_cast_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ipod_cast_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ipod_sound.png" />
+    <Resource Include="Resources\Icons\Silk\icons\joystick.png" />
+    <Resource Include="Resources\Icons\Silk\icons\joystick_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\joystick_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\joystick_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\keyboard.png" />
+    <Resource Include="Resources\Icons\Silk\icons\keyboard_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\keyboard_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\keyboard_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\key_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\key_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\key_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layers.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_content.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_header.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\layout_sidebar.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightbulb.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightbulb_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightbulb_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightbulb_off.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightning_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightning_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lightning_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_break.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\link_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_break.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lock_open.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_flatbed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\lorry_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\magifier_zoom_out.png" />
+    <Resource Include="Resources\Icons\Silk\icons\magnifier.png" />
+    <Resource Include="Resources\Icons\Silk\icons\magnifier_zoom_in.png" />
+    <Resource Include="Resources\Icons\Silk\icons\male.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\map_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_bronze_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_bronze_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_bronze_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_bronze_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_bronze_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_gold_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_gold_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_gold_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_gold_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_gold_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_silver_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_silver_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_silver_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_silver_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\medal_silver_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_dollar.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_euro.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_pound.png" />
+    <Resource Include="Resources\Icons\Silk\icons\money_yen.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\monitor_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\mouse.png" />
+    <Resource Include="Resources\Icons\Silk\icons\mouse_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\mouse_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\mouse_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\music.png" />
+    <Resource Include="Resources\Icons\Silk\icons\new.png" />
+    <Resource Include="Resources\Icons\Silk\icons\newspaper.png" />
+    <Resource Include="Resources\Icons\Silk\icons\newspaper_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\newspaper_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\newspaper_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\newspaper_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\note_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\overlays.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\package_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_attach.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_code.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_copy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_excel.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_find.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_paintbrush.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_paste.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_refresh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_acrobat.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_actionscript.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_c.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_camera.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_cd.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_code.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_code_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_coldfusion.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_compressed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_copy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_cplusplus.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_csharp.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_cup.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_database.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_dvd.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_excel.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_find.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_flash.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_freehand.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_get.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_h.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_horizontal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_medal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_office.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_paint.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_paintbrush.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_paste.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_php.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_picture.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_powerpoint.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_put.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_ruby.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_stack.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_star.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_swoosh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_text.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_text_width.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_tux.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_vector.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_visualstudio.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_width.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_word.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_world.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_wrench.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_white_zip.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_word.png" />
+    <Resource Include="Resources\Icons\Silk\icons\page_world.png" />
+    <Resource Include="Resources\Icons\Silk\icons\paintbrush.png" />
+    <Resource Include="Resources\Icons\Silk\icons\paintcan.png" />
+    <Resource Include="Resources\Icons\Silk\icons\palette.png" />
+    <Resource Include="Resources\Icons\Silk\icons\paste_plain.png" />
+    <Resource Include="Resources\Icons\Silk\icons\paste_word.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pencil.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pencil_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pencil_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pencil_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\phone.png" />
+    <Resource Include="Resources\Icons\Silk\icons\phone_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\phone_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\phone_sound.png" />
+    <Resource Include="Resources\Icons\Silk\icons\photo.png" />
+    <Resource Include="Resources\Icons\Silk\icons\photos.png" />
+    <Resource Include="Resources\Icons\Silk\icons\photo_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\photo_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\photo_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pictures.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_empty.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\picture_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pilcrow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pill.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pill_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pill_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\pill_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_disabled.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\plugin_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\printer.png" />
+    <Resource Include="Resources\Icons\Silk\icons\printer_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\printer_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\printer_empty.png" />
+    <Resource Include="Resources\Icons\Silk\icons\printer_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rainbow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_disk.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_magnify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_picture.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_user.png" />
+    <Resource Include="Resources\Icons\Silk\icons\report_word.png" />
+    <Resource Include="Resources\Icons\Silk\icons\resultset_first.png" />
+    <Resource Include="Resources\Icons\Silk\icons\resultset_last.png" />
+    <Resource Include="Resources\Icons\Silk\icons\resultset_next.png" />
+    <Resource Include="Resources\Icons\Silk\icons\resultset_previous.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rosette.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rss.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rss_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rss_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rss_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\rss_valid.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_get.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\ruby_put.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_code.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_code_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_palette.png" />
+    <Resource Include="Resources\Icons\Silk\icons\script_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_chart.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_compressed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_connect.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_database.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\server_uncompressed.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shading.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_bottom.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_center.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_left.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_middle.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_right.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_align_top.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_flip_horizontal.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_flip_vertical.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_group.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_handles.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_move_back.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_move_backwards.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_move_forwards.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_move_front.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_rotate_anticlockwise.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_rotate_clockwise.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_square_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shape_ungroup.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shield.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shield_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shield_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\shield_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sitemap.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sitemap_color.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound_low.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound_mute.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sound_none.png" />
+    <Resource Include="Resources\Icons\Silk\icons\spellcheck.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_8ball.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_basketball.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_football.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_golf.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_raquet.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_shuttlecock.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_soccer.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sport_tennis.png" />
+    <Resource Include="Resources\Icons\Silk\icons\star.png" />
+    <Resource Include="Resources\Icons\Silk\icons\status_away.png" />
+    <Resource Include="Resources\Icons\Silk\icons\status_busy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\status_offline.png" />
+    <Resource Include="Resources\Icons\Silk\icons\status_online.png" />
+    <Resource Include="Resources\Icons\Silk\icons\stop.png" />
+    <Resource Include="Resources\Icons\Silk\icons\style.png" />
+    <Resource Include="Resources\Icons\Silk\icons\style_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\style_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\style_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\style_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\sum.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tab.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_gear.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_multiple.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_refresh.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_relationship.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_row_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_row_insert.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_save.png" />
+    <Resource Include="Resources\Icons\Silk\icons\table_sort.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tab_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tab_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tab_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tab_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_blue_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_blue_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_blue_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_pink.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_purple.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tag_yellow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\telephone_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\television.png" />
+    <Resource Include="Resources\Icons\Silk\icons\television_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\television_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\textfield.png" />
+    <Resource Include="Resources\Icons\Silk\icons\textfield_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\textfield_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\textfield_key.png" />
+    <Resource Include="Resources\Icons\Silk\icons\textfield_rename.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_align_center.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_align_justify.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_align_left.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_align_right.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_allcaps.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_bold.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_columns.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_dropcaps.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_1.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_2.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_3.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_4.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_5.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_heading_6.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_horizontalrule.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_indent.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_indent_remove.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_italic.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_kerning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_letterspacing.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_letter_omega.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_linespacing.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_list_bullets.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_list_numbers.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_lowercase.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_padding_bottom.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_padding_left.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_padding_right.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_padding_top.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_replace.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_signature.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_smallcaps.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_strikethrough.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_subscript.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_superscript.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_underline.png" />
+    <Resource Include="Resources\Icons\Silk\icons\text_uppercase.png" />
+    <Resource Include="Resources\Icons\Silk\icons\thumb_down.png" />
+    <Resource Include="Resources\Icons\Silk\icons\thumb_up.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tick.png" />
+    <Resource Include="Resources\Icons\Silk\icons\time.png" />
+    <Resource Include="Resources\Icons\Silk\icons\timeline_marker.png" />
+    <Resource Include="Resources\Icons\Silk\icons\time_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\time_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\time_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_blue.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\transmit_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\tux.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_comment.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_female.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_gray.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_green.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_red.png" />
+    <Resource Include="Resources\Icons\Silk\icons\user_suit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vcard.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vcard_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vcard_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vcard_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vector.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vector_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\vector_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\wand.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_clouds.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_cloudy.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_lightning.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_rain.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_snow.png" />
+    <Resource Include="Resources\Icons\Silk\icons\weather_sun.png" />
+    <Resource Include="Resources\Icons\Silk\icons\webcam.png" />
+    <Resource Include="Resources\Icons\Silk\icons\webcam_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\webcam_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\webcam_error.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world_edit.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\world_link.png" />
+    <Resource Include="Resources\Icons\Silk\icons\wrench.png" />
+    <Resource Include="Resources\Icons\Silk\icons\wrench_orange.png" />
+    <Resource Include="Resources\Icons\Silk\icons\xhtml.png" />
+    <Resource Include="Resources\Icons\Silk\icons\xhtml_add.png" />
+    <Resource Include="Resources\Icons\Silk\icons\xhtml_delete.png" />
+    <Resource Include="Resources\Icons\Silk\icons\xhtml_go.png" />
+    <Resource Include="Resources\Icons\Silk\icons\xhtml_valid.png" />
+    <Resource Include="Resources\Icons\Silk\icons\zoom.png" />
+    <Resource Include="Resources\Icons\Silk\icons\zoom_in.png" />
+    <Resource Include="Resources\Icons\Silk\icons\zoom_out.png" />
+    <Resource Include="Resources\Images\lock.png" />
+    <Resource Include="Resources\Images\eye_closed.png" />
+    <Resource Include="Resources\Images\eye.png" />
+    <Resource Include="Resources\Images\delete.png" />
+    <Resource Include="Resources\Images\image_icon.png" />
+    <Resource Include="Resources\Images\drag.png" />
+    <Resource Include="Resources\Images\burger.png" />
+    <Resource Include="Resources\Images\edit.png" />
+    <Resource Include="Resources\Images\cog.png" />
+    <Resource Include="Resources\Images\paste.png" />
+    <Resource Include="Resources\Images\bringToFront.png" />
+    <Resource Include="Resources\Images\sendToBack.png" />
+    <Resource Include="Resources\Images\duplicate.png" />
+    <Resource Include="Resources\Images\selection.png" />
+    <Resource Include="Resources\Images\selectall.png" />
+    <Resource Include="Resources\Images\invertSelection.png" />
+    <Resource Include="Resources\Images\tools.png" />
+    <Resource Include="Resources\Images\caret.png" />
+    <Resource Include="Resources\Images\rename.png" />
+    <Resource Include="Resources\Images\merge.png" />
+    <Resource Include="Resources\Images\email.png" />
+    <Resource Include="Resources\Images\deletebw.png" />
+    <Resource Include="Resources\Images\speak.png" />
+    <Resource Include="Resources\Images\web.png" />
+    <Resource Include="Resources\Images\translate.png" />
+    <Resource Include="Resources\Images\hotkey.png" />
+    <Resource Include="Resources\Images\bullseye.png" />
+    <Resource Include="Resources\Images\qr.png" />
+    <Resource Include="Resources\Images\tag.png" />
+    <Resource Include="Resources\Images\bingIcon.png" />
+    <Resource Include="Resources\Images\duckduckgoIcon.png" />
+    <Resource Include="Resources\Images\googleIcon.png" />
+    <Resource Include="Resources\Images\yandexIcon.png" />
+    <Resource Include="Resources\Images\delete2.png" />
+    <Resource Include="Resources\Images\play.png" />
+    <Resource Include="Resources\Images\pause.png" />
+    <Resource Include="Resources\Images\help.png" />
+    <Resource Include="Resources\Images\brain.png" />
+    <Resource Include="Resources\Images\leftclick.png" />
+    <Resource Include="Resources\Images\rightclick.png" />
+    <Resource Include="Resources\Images\append.png" />
+    <Resource Include="Resources\Images\spellcheck.png" />
+    <Resource Include="Resources\Images\joystick.png" />
+    <Resource Include="Resources\Images\noentry.png" />
+    <Resource Include="Resources\Images\robotclaw.png" />
+    <Resource Include="Resources\Images\joystickactive.png" />
+    <Resource Include="Resources\Images\sliders.png" />
+    <Resource Include="Resources\Images\shield.png" />
+    <Resource Include="Resources\Images\signout.png" />
+    <Resource Include="Resources\Images\whitecircle.png" />
+    <Resource Include="Resources\Images\warning.png" />
+    <Resource Include="Resources\Images\check.png" />
+    <Resource Include="Resources\Images\checkgray.png" />
+    <Resource Include="Resources\Images\textureborder.png" />
+    <Resource Include="Resources\Images\defaultfavicon.png" />
+    <Resource Include="Resources\Images\copy.png" />
+    <Resource Include="FodyWeavers.xml" />
+    <Content Include="Resources\Sounds\alert.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\blip.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\blip2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\chime.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\ting.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Data\" />
+    <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
+      <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
+      <Name>MonkeyPaste</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

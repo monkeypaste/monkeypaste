@@ -44,8 +44,12 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
             var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
-            var newUrl = new MpUrl();
-            newUrl.UrlDomain = MpUrlDomain.Create(domainStr);
+            var newUrl = new MpUrl() {
+                UrlGuid = System.Guid.NewGuid(),
+                UrlDomain = MpUrlDomain.Create(domainStr),
+                UrlPath = urlPath
+            };
+            newUrl.UrlDomainId = newUrl.UrlDomain.Id;
 
             MpDb.Instance.AddItem<MpUrl>(newUrl);
             

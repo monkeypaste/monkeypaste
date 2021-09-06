@@ -572,7 +572,7 @@ namespace MonkeyPaste {
         private void InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
-            File.Delete(dbPath);
+            //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -768,12 +768,7 @@ namespace MonkeyPaste {
                     , HexColor2 text '#FFFF0000'
                     , HexColor3 text '#FFFF0000'
                     , HexColor4 text '#FFFF0000'
-                    , HexColor5 text '#FFFF0000'
-                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
-                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
-                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
-                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
-                    );                                       
+                    , HexColor5 text '#FFFF0000');                                       
                     
                     
                     CREATE TABLE MpPasteToAppPath (
@@ -788,7 +783,6 @@ namespace MonkeyPaste {
                     , IsSilent integer NOT NULL default 0
                     , IsAdmin integer NOT NULL default 0
                     , PressEnter integer NOT NULL default 0
-                    , CONSTRAINT FK_MpPasteToAppPath_0_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                    
                     );
                     INSERT INTO MpPasteToAppPath(AppName,MpPasteToAppPathGuid,AppPath,IsAdmin) VALUES ('Command Prompt','0b9d1b30-abce-4407-b745-95f9cde57135','%windir%\System32\cmd.exe',0);
                     
@@ -805,10 +799,7 @@ namespace MonkeyPaste {
                     , AppName text 
                     , IsAppRejected integer NOT NULL   
                     , fk_MpUserDeviceId integer not null
-                    , fk_MpIconId integer
-                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
-                    );   
+                    , fk_MpIconId integer);   
                     
                     CREATE TABLE MpUrlDomain (
                       pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -816,9 +807,7 @@ namespace MonkeyPaste {
                     , UrlDomainPath text NOT NULL 
                     , UrlDomainTitle text
                     , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
-                    , fk_MpIconId integer
-                    , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
-                    );  
+                    , fk_MpIconId integer);  
                     
                     CREATE TABLE MpUrl (
                       pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -826,7 +815,6 @@ namespace MonkeyPaste {
                     , UrlPath text NOT NULL 
                     , UrlTitle text
                     , fk_MpUrlDomainId int NOT NULL
-                    , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlDomainId) REFERENCES MpUrlDomain (pk_MpUrlDomainId)
                     ); 
                     
                     CREATE TABLE MpSource (
@@ -834,7 +822,6 @@ namespace MonkeyPaste {
                     , MpSourceGuid text not null
                     , fk_MpUrlId integer default 0
                     , fk_MpAppId integer NOT NULL
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     ); 
 
                     
@@ -854,7 +841,6 @@ namespace MonkeyPaste {
                     , ItemData text default ''
                     , ItemDescription text default ''
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
-                    , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpSourceId) REFERENCES MpSource (pk_MpSourceId)   
                     );
                     
                     CREATE TABLE MpCopyItemContent (
@@ -871,8 +857,6 @@ namespace MonkeyPaste {
                     , MpCopyItemTagGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpTagId integer NOT NULL
-                    , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
 
                     CREATE TABLE MpShortcut (
@@ -923,7 +907,6 @@ namespace MonkeyPaste {
                     , Width real NOT NULL
                     , Height real NOT NULL                    
                     , ObjectTypeName text
-                    , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     
                     CREATE TABLE MpCopyItemTemplate (
@@ -932,7 +915,6 @@ namespace MonkeyPaste {
                     , fk_MpCopyItemId integer NOT NULL
                     , HexColor text default '#0000FF'
                     , TemplateName text NOT NULL 
-                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
                     );       
                     
                     CREATE TABLE MpPasteHistory (
@@ -943,10 +925,6 @@ namespace MonkeyPaste {
                     , fk_MpAppId integer default 0                    
                     , fk_MpUrlId integer default 0
                     , PasteDateTime datetime NOT NULL
-                    , CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
-                    , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpUserDeviceId) REFERENCES MpUserDevice (pk_MpUserDeviceId)
-                    , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpPasteHistory_3_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
                     );
                                         
             ";

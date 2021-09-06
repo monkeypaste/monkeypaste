@@ -113,12 +113,12 @@ namespace MonkeyPaste {
 
         public MpPasteToAppPath(
             string appPath, 
-            string appName, 
-            bool isAdmin, 
+            string appName,
+            string iconStr = "",
+            bool isAdmin = false, 
             bool isSilent = false, 
             string label = "", 
             string args = "", 
-            string iconStr = "", 
             int windowState = 1, 
             bool pressEnter = false) {
             AppPath = appPath;
@@ -134,7 +134,7 @@ namespace MonkeyPaste {
             WindowState = windowState;
             PressEnter = pressEnter;
         }
-        public MpPasteToAppPath() : this(string.Empty,string.Empty,false) { }
+        public MpPasteToAppPath() : this(string.Empty,string.Empty) { }
 
         public MpPasteToAppPath(DataRow dr) {
             LoadDataRow(dr);

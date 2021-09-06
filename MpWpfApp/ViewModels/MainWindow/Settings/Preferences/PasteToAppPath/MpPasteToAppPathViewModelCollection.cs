@@ -42,6 +42,7 @@ namespace MpWpfApp {
                                     new MpPasteToAppPath(
                                         processPath,
                                         MpHelpers.Instance.GetProcessMainWindowTitle(handle),
+                                        MpHelpers.Instance.GetIconImage(processPath).ToBase64String(),
                                         MpHelpers.Instance.IsProcessAdmin(handle)), 
                                     handle));
                         }
@@ -299,8 +300,12 @@ namespace MpWpfApp {
                     }
                 }
             }
-            
-            var nptapvm = new MpPasteToAppPathViewModel(new MpPasteToAppPath(appPath, string.Empty, false));
+
+            var nptapvm = new MpPasteToAppPathViewModel(
+                new MpPasteToAppPath(
+                    appPath, 
+                    string.Empty, 
+                    MpHelpers.Instance.GetIconImage(appPath).ToBase64String()));
             nptapvm.PasteToAppPath.WriteToDatabase();
             this.Add(nptapvm);
 

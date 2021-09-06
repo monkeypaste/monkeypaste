@@ -362,6 +362,9 @@ namespace MpWpfApp {
         }
 
         public static bool IsBase64String(this string str) {
+            if (str.IsStringRichText()) {
+                return false;
+            }
             try {
                 // If no exception is caught, then it is possibly a base64 encoded string
                 byte[] data = Convert.FromBase64String(str);

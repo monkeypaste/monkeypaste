@@ -259,13 +259,27 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<byte[]> ReadBytesFromUri(string url) {
+        public async Task<byte[]> ReadBytesFromUriAsync(string url) {
             if(!Uri.IsWellFormedUriString(url,UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
             }
             using var httpClient = new HttpClient();
             byte[] bytes = await httpClient.GetByteArrayAsync(url);
+
+            using var fs = new FileStream("favicon.ico", FileMode.Create);
+            fs.Write(bytes, 0, bytes.Length);
+
+            return bytes;
+        }
+
+        public byte[] ReadBytesFromUri(string url) {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
+                return null;
+            }
+            using var httpClient = new HttpClient();
+            byte[] bytes = httpClient.GetByteArrayAsync(url).Result;
 
             using var fs = new FileStream("favicon.ico", FileMode.Create);
             fs.Write(bytes, 0, bytes.Length);
@@ -483,15 +497,15 @@ namespace MonkeyPaste {
                     break;
                 }
                 //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.R - (int)c.G);
-                var rbDiff = Math.Abs((int)c.R - (int)c.B);
-                var gbDiff = Math.Abs((int)c.G - (int)c.B);
+                var rgDiff = Math.Abs(c.R - c.G);
+                var rbDiff = Math.Abs(c.R - c.B);
+                var gbDiff = Math.Abs(c.G - c.B);
                 var totalDiff = rgDiff + rbDiff + gbDiff;
 
                 //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
+                var grayScaleValue = 0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B;
                 var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                if (totalDiff > 50/255 && grayScaleValue < 200/255 && relativeDist > 0.15) {
                     primaryIconColorList.Add(c.ToHex());
                 }
             }
@@ -545,10 +559,10 @@ namespace MonkeyPaste {
 
         public double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)e1.R + (long)e2.R) / 2;
-            long r = (long)e1.R - (long)e2.R;
-            long g = (long)e1.G - (long)e2.G;
-            long b = (long)e1.B - (long)e2.B;
+            long rmean = ((long)(e1.R*255) + (long)(e2.R*255)) / 2;
+            long r = (long)(e1.R * 255) - (long)(e2.R * 255);
+            long g = (long)(e1.G * 255) - (long)(e2.G * 255);
+            long b = (long)(e1.B * 255) - (long)(e2.B * 255);
             double max = 764.83331517396653;
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;
@@ -786,14 +800,15 @@ namespace MonkeyPaste {
             try {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
-                var img = new Image() {
-                    Aspect = Aspect.AspectFit,
-                    Source = Xamarin.Forms.ImageSource.FromUri(favicon),
-                };
-                if (img == null) {
-                    return string.Empty;
-                }
-                return new MpImageConverter().Convert(img, typeof(string)) as string;
+                //var img = new Image() {
+                //    Aspect = Aspect.AspectFit,
+                //    Source = Xamarin.Forms.ImageSource.FromUri(favicon),
+                //};
+                //if (img == null) {
+                //    return string.Empty;
+                //}
+                var bytes = ReadBytesFromUri(favicon.AbsoluteUri);
+                return new MpImageConverter().Convert(bytes, typeof(string)) as string;
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);

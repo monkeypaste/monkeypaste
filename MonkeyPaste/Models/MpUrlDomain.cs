@@ -126,12 +126,14 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
             var newUrlDomain = new MpUrlDomain() {
+                UrlDomainGuid = System.Guid.NewGuid(),
                 UrlDomainPath = domainStr,
                 UrlDomainTitle = domainTitle
             };
             var favIconImg64 = MpHelpers.Instance.GetUrlFavicon(domainStr);
             if(!string.IsNullOrEmpty(favIconImg64)) {
                 newUrlDomain.FavIcon = MpIcon.Create(favIconImg64);
+                newUrlDomain.FavIconId = newUrlDomain.FavIcon.Id;
             }
             
             MpDb.Instance.AddItem<MpUrlDomain>(newUrlDomain);

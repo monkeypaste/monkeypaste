@@ -32,11 +32,6 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext == null) {
-                return;
-            }
-            var mwvm = DataContext as MpMainWindowViewModel;
-            mwvm.MainWindow_Loaded(this, null);
         }
 
         private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
