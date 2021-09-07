@@ -163,10 +163,10 @@ namespace MpWpfApp {
         }
 
         public void HighlightRange() {
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
+           // HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
             foreach (var rtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection) {
                 rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
-                rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
+                //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
             }
             if (HighlightType == MpHighlightType.App || HighlightType == MpHighlightType.Image) {
                 

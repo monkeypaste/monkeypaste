@@ -133,6 +133,7 @@
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
+    <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpIClipTileContentViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />

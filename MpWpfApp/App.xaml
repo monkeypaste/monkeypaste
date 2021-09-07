@@ -1003,7 +1003,7 @@
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
-        
+        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
     </Application.Resources>
 </Application>

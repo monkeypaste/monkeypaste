@@ -12,6 +12,7 @@ namespace MonkeyPaste {
         DateTime Get(string key, DateTime defValue);
         long Get(string key, long defValue);
         string Get(string key, string defValue);
+        Int32[] Get(string key, Int32[] defValue);
 
         void Set(string key, object newValue);
 

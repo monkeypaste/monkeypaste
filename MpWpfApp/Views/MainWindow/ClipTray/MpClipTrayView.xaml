@@ -473,7 +473,7 @@
                                         <Image x:Name="ClipTileAppIconHighlightedBorderImage"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
-                                               Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                                                Stretch="Fill"
                                                Visibility="{Binding AppIconHighlightBorderVisibility}"
                                                Width="{Binding TileTitleIconBorderSize}"
@@ -505,7 +505,7 @@
                                                 </Button.ContextMenu>
                                                 <Grid>
                                                     <Image x:Name="ClipTileAppIconBorderImage"
-                                                           Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                                                            Stretch="Fill"
                                                            RenderTransformOrigin="0.5, 0.5"
                                                            Visibility="Hidden"
@@ -516,7 +516,7 @@
                                                         </Image.RenderTransform>
                                                     </Image>
                                                     <Image x:Name="ClipTileAppIconImage"
-                                                           Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                                                            Stretch="Fill"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"
@@ -1221,7 +1221,7 @@
                                                                                                 Margin="0,0,25,0"
                                                                                                 Visibility="{Binding SubItemOverlayVisibility}">
                                                                                             <Image x:Name="RtbItemAppIconHighlightedBorderImage"
-                                                                                                   Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                                   Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                                                                                                    Stretch="Fill"
                                                                                                    Visibility="{Binding AppIconHighlightBorderVisibility}"
                                                                                                    Width="{Binding SubItemAppIconBorderSize}"
@@ -1247,7 +1247,7 @@
                                                                                                 <Grid>
                                                                                                     <Image x:Name="RtbItemAppIconImage"
                                                                                                            Visibility="{Binding AppIconImageVisibility}"
-                                                                                                           Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                                                                                                            Stretch="Fill"
                                                                                                            Width="{Binding SubItemAppIconSize}"
                                                                                                            Height="{Binding SubItemAppIconSize}" />

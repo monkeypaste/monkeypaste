@@ -273,7 +273,7 @@ namespace MpWpfApp {
                         } else if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
                             //this else if prevents filtered out tiles from being shown while searching and an item is 
                             //added while main window is locked
-                            MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
+                            //MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
                             MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
 
                             foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {

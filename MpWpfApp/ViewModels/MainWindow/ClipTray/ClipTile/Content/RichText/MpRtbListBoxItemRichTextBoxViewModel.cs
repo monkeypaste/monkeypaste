@@ -25,7 +25,7 @@ using System.IO;
 
 namespace MpWpfApp {
     [Serializable]
-    public class MpRtbListBoxItemRichTextBoxViewModel : MpUndoableViewModelBase<MpRtbListBoxItemRichTextBoxViewModel> , ICloneable, IDisposable {
+    public class MpRtbListBoxItemRichTextBoxViewModel : MpUndoableViewModelBase<MpRtbListBoxItemRichTextBoxViewModel> , ICloneable {
         #region Private Variables
         #endregion
 
@@ -147,22 +147,23 @@ namespace MpWpfApp {
                 return ShortcutKeyString;
             }
         }
-        public BitmapSource AppIcon {
-            get {
-                if (MainWindowViewModel == null ||
-                   MainWindowViewModel.ClipTrayViewModel == null ||
-                  !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
-                    if (CopyItem == null) {
-                        return new BitmapImage();
-                    }
-                    if(CopyItemFavIcon != null) {
-                        return CopyItemFavIcon;
-                    }
-                    return CopyItemAppIcon;
-                }
-                return MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon;
-            }
-        }
+
+        //public BitmapSource AppIcon {
+        //    get {
+        //        if (MainWindowViewModel == null ||
+        //           MainWindowViewModel.ClipTrayViewModel == null ||
+        //          !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
+        //            if (CopyItem == null) {
+        //                return new BitmapImage();
+        //            }
+        //            if(CopyItemFavIcon != null) {
+        //                return CopyItemFavIcon;
+        //            }
+        //            return CopyItemAppIcon;
+        //        }
+        //        return MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon;
+        //    }
+        //}
         public Cursor RtbListBoxItemCursor {
             get {
                 if (HostClipTileViewModel == null) {
@@ -938,10 +939,10 @@ namespace MpWpfApp {
 
         public bool IsCompositeChild {
             get {
-                if(CopyItem == null) {
+                if(CopyItem == null || HostClipTileViewModel == null) {
                     return false;
                 }
-                return CopyItem.CompositeParentCopyItemId > 0;
+                return CopyItem.CompositeParentCopyItemId > 0 || HostClipTileViewModel.RichTextBoxViewModelCollection.Count > 1;
             }
         }
         #endregion
@@ -961,58 +962,58 @@ namespace MpWpfApp {
                 CopyItem.ItemData = (value as FlowDocument).ToRichText();
             }
         }
-        public BitmapSource CopyItemFavIcon {
-            get {
-                if (CopyItemUrlDomain == null) {
-                    return null;
-                }
-                return CopyItemUrlDomain.FavIcon.IconImage.ImageBase64.ToBitmapSource();
-            }
-            set {
-                if (CopyItemUrlDomain != null) {
-                    CopyItemUrlDomain.FavIcon.IconImage.ImageBase64 = value.ToBase64String();
-                    CopyItemUrlDomain.FavIcon.IconImage.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItemFavIcon));
-                    OnPropertyChanged(nameof(AppIcon));
-                }
-            }
-        }
+        //public BitmapSource CopyItemFavIcon {
+        //    get {
+        //        if (CopyItemUrlDomain == null) {
+        //            return null;
+        //        }
+        //        return CopyItemUrlDomain.FavIcon.IconImage.ImageBase64.ToBitmapSource();
+        //    }
+        //    set {
+        //        if (CopyItemUrlDomain != null) {
+        //            CopyItemUrlDomain.FavIcon.IconImage.ImageBase64 = value.ToBase64String();
+        //            CopyItemUrlDomain.FavIcon.IconImage.WriteToDatabase();
+        //            OnPropertyChanged(nameof(CopyItemFavIcon));
+        //            //OnPropertyChanged(nameof(AppIcon));
+        //        }
+        //    }
+        //}
 
-        public BitmapSource CopyItemAppIconHighlightBorder {
-            get {
-                if (CopyItem == null || HostClipTileViewModel == null || CopyItem.Source == null || CopyItem.Source.App == null) {
-                    return new BitmapImage();
-                }
-                OnPropertyChanged(nameof(AppIconHighlightBorderVisibility));
-                if (AppIconHighlightBorderVisibility == Visibility.Visible) {
-                    if (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
-                       HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App &&
-                       HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel == this) {
-                        return CopyItem.Source.App.Icon.IconBorderHighlightSelectedImage.ImageBase64.ToBitmapSource();
-                    }
-                    return CopyItem.Source.App.Icon.IconBorderHighlightImage.ImageBase64.ToBitmapSource(); 
-                }
-                return CopyItem.Source.App.Icon.IconBorderHighlightImage.ImageBase64.ToBitmapSource();
-            }
-        }
+        //public BitmapSource CopyItemAppIconHighlightBorder {
+        //    get {
+        //        if (CopyItem == null || HostClipTileViewModel == null || CopyItem.Source == null || CopyItem.Source.App == null) {
+        //            return new BitmapImage();
+        //        }
+        //        OnPropertyChanged(nameof(AppIconHighlightBorderVisibility));
+        //        if (AppIconHighlightBorderVisibility == Visibility.Visible) {
+        //            if (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
+        //               HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App &&
+        //               HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel == this) {
+        //                return CopyItem.Source.App.Icon.IconBorderHighlightSelectedImage.ImageBase64.ToBitmapSource();
+        //            }
+        //            return CopyItem.Source.App.Icon.IconBorderHighlightImage.ImageBase64.ToBitmapSource(); 
+        //        }
+        //        return CopyItem.Source.App.Icon.IconBorderHighlightImage.ImageBase64.ToBitmapSource();
+        //    }
+        //}
 
-        public BitmapSource CopyItemAppIconBorder {
-            get {
-                if (CopyItem == null || CopyItem.Source == null) {
-                    return new BitmapImage();
-                }
-                return CopyItem.Source.App.Icon.IconBorderImage.ImageBase64.ToBitmapSource();
-            }
-        }
+        //public BitmapSource CopyItemAppIconBorder {
+        //    get {
+        //        if (CopyItem == null || CopyItem.Source == null) {
+        //            return new BitmapImage();
+        //        }
+        //        return CopyItem.Source.App.Icon.IconBorderImage.ImageBase64.ToBitmapSource();
+        //    }
+        //}
 
-        public BitmapSource CopyItemAppIcon {
-            get {
-                if (CopyItem == null) {
-                    return new BitmapImage();
-                }
-                return CopyItem.Source.App.Icon.IconImage.ImageBase64.ToBitmapSource();
-            }
-        }
+        //public BitmapSource CopyItemAppIcon {
+        //    get {
+        //        if (CopyItem == null) {
+        //            return new BitmapImage();
+        //        }
+        //        return CopyItem.Source.App.Icon.IconImage.ImageBase64.ToBitmapSource();
+        //    }
+        //}
 
         public MpCopyItemType CopyItemType {
             get {
@@ -1032,14 +1033,14 @@ namespace MpWpfApp {
             }
         }
 
-        public BitmapSource CopyItemBmp {
-            get {
-                if (CopyItem == null) {
-                    return new BitmapImage();
-                }
-                return CopyItem.ItemData.ToBitmapSource();
-            }
-        }
+        //public BitmapSource CopyItemBmp {
+        //    get {
+        //        if (CopyItem == null) {
+        //            return new BitmapImage();
+        //        }
+        //        return CopyItem.ItemData.ToBitmapSource();
+        //    }
+        //}
 
         private string _detailText = string.Empty;
         public string DetailText {
@@ -1236,7 +1237,7 @@ namespace MpWpfApp {
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemUrl));
                     OnPropertyChanged(nameof(CopyItemUrlDomain));
-                    OnPropertyChanged(nameof(AppIcon));
+                    //OnPropertyChanged(nameof(AppIcon));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1340,10 +1341,10 @@ namespace MpWpfApp {
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemRichText));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemPlainText));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemTitle));
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemBmp));
+                        //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemBmp));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemUrl));
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemFavIcon));
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIcon));
+                        //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemFavIcon));
+                        //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIcon));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.PasteCount));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppName));
                         rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemUrl));
@@ -1429,14 +1430,14 @@ namespace MpWpfApp {
                 }
             };
 
-            ViewModelLoaded += async (s, e) => {
+            ViewModelLoaded += (s, e) => {
                 var rtbvm = s as MpRtbListBoxItemRichTextBoxViewModel;
                 if (!MpMainWindowViewModel.IsMainWindowLoading) {
-                    await rtbvm.GatherAnalytics();
+                    //Task.Run(rtbvm.GatherAnalytics);
                 } else {
                     if (rtbvm.RichTextBoxViewModelCollection.IndexOf(rtbvm) == 0) {
-                        Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                            rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.AppIcon));
+                        MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                            //rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.AppIcon));
                             rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.TileTitleIconSize));
                             rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.TileTitleIconBorderSize));
                         }), DispatcherPriority.Render);
@@ -1628,7 +1629,7 @@ namespace MpWpfApp {
                     }
                 }
                 //this triggers clip tray to swap out the app icons for the filtered app
-                MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = rtbvm.CopyItemAppIcon;
+                //MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = rtbvm.CopyItemAppIcon;
                 MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
             };
             #endregion
@@ -1825,7 +1826,7 @@ namespace MpWpfApp {
             var cipcsw = new Stopwatch();
             cipcsw.Start();
 
-            HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
+            //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
             //OnPropertyChanged(nameof(CopyItem));
             cipcsw.Stop();
             Console.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
@@ -1839,7 +1840,7 @@ namespace MpWpfApp {
             var fileList = new List<string>();
             if (CopyItemType == MpCopyItemType.FileList) {
                 if (forceType == MpCopyItemType.Image) {
-                    fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItemBmp));
+                    fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
                 } else if (forceType == MpCopyItemType.RichText) {
                     fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), CopyItemRichText));
                 } else {
@@ -1860,13 +1861,13 @@ namespace MpWpfApp {
                 switch (CopyItemType) {
                     case MpCopyItemType.RichText:
                         if (forceType == MpCopyItemType.Image) {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItemBmp));
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         } else {
                             fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItemRichText));
                         }
                         foreach (var cci in MpCopyItem.GetCompositeChildren(CopyItem)) {
                             if (forceType == MpCopyItemType.Image) {
-                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItemBmp));
+                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                             } else {
                                 fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItemRichText));
                             }
@@ -1877,7 +1878,7 @@ namespace MpWpfApp {
                         if (forceType == MpCopyItemType.RichText) {
                             fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItemPlainText));
                         } else {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItemBmp));
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         }
                         break;
                 }
@@ -2159,9 +2160,8 @@ namespace MpWpfApp {
             double ds;
             switch (CopyItem.ItemType) {
                 case MpCopyItemType.Image:
-                    if (CopyItemBmp != null) {
-                        itemSize = new Size(CopyItemBmp.Width, CopyItemBmp.Height);
-                    }
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
                     break;
                 case MpCopyItemType.FileList:
                     fc = GetFileList().Count;
@@ -2181,9 +2181,8 @@ namespace MpWpfApp {
             double ds = 0;
             switch (CopyItem.ItemType) {
                 case MpCopyItemType.Image:
-                    if (CopyItemBmp != null) {
-                        itemSize = new Size(CopyItemBmp.Width, CopyItemBmp.Height);
-                    }
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
                     break;
                 case MpCopyItemType.FileList:
                     fc = GetFileList().Count;
@@ -2205,7 +2204,8 @@ namespace MpWpfApp {
                 //chars/lines
                 case MpCopyItemDetailType.DataSize:
                     if (CopyItem.ItemType == MpCopyItemType.Image) {
-                        info = "(" + (int)CopyItemBmp.Width + "px) x (" + (int)CopyItemBmp.Height + "px)";
+                        var bmp = CopyItem.ItemData.ToBitmapSource();
+                        info = "(" + (int)bmp.Width + "px) x (" + (int)bmp.Height + "px)";
                     } else if (CopyItem.ItemType == MpCopyItemType.RichText) {
                         info = cc + " chars | " + lc + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {
@@ -2379,7 +2379,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        public void Dispose() {
+        public void Dispose(bool isMerge = false) {
             if(RichTextBoxViewModelCollection.Contains(this)) {
                 RichTextBoxViewModelCollection.Remove(this);
             }
@@ -2390,7 +2390,10 @@ namespace MpWpfApp {
             foreach (var scvmToRemove in scvmToRemoveList) {
                 MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
-            CopyItem.DeleteFromDatabase();
+            if (!isMerge) {
+                CopyItem.DeleteFromDatabase();
+            }
+            
             Rtb = null;
             RtbListBoxItemOverlayDockPanel = null;
             RtbListBoxItemClipBorder = null;

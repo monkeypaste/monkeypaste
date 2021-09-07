@@ -31,7 +31,7 @@ namespace MpWpfApp {
         }
 
         public static void Sort<TSource, TKey>(
-            this MpObservableCollection<TSource> source,
+            this ObservableCollection<TSource> source,
             Func<TSource, TKey> keySelector,
             bool desc = false) where TSource : class {
             if (source == null) {

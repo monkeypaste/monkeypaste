@@ -129,13 +129,18 @@ namespace MpWpfApp {
                             MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
                         }
                     }
-                    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                    if(_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
+                        WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                    }
+                    
                     break;
                 case WM_CHANGECBCHAIN:
                     if (wParam == _nextClipboardViewer) {
                         _nextClipboardViewer = lParam;
                     } else {
-                        WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                        if (_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
+                            WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                        }                            
                     }
                     break;
             }

@@ -21,9 +21,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxViewModelCollection : MpUndoableObservableCollectionViewModel<MpClipTileRichTextBoxViewModelCollection,MpRtbListBoxItemRichTextBoxViewModel>, ICloneable,/* IDropTarget, */IDisposable {
+    public class MpClipTileRichTextBoxViewModelCollection : MpUndoableObservableCollectionViewModel<MpClipTileRichTextBoxViewModelCollection,MpRtbListBoxItemRichTextBoxViewModel>, MpIClipTileContentViewModelBase {  //MpUndoableObservableCollectionViewModel<MpClipTileRichTextBoxViewModelCollection,MpRtbListBoxItemRichTextBoxViewModel>, ICloneable,/* IDropTarget, */IDisposable {
         #region Private Variables
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
@@ -46,7 +47,25 @@ namespace MpWpfApp {
                 }
             }
         }
+
         
+
+        //private ObservableCollection<MpRtbListBoxItemRichTextBoxViewModel> _rtbListBoxItemViewModels = new ObservableCollection<MpRtbListBoxItemRichTextBoxViewModel>();
+        public ObservableCollection<MpRtbListBoxItemRichTextBoxViewModel> RtbListBoxItemRichTextBoxViewModels {
+            get {
+                return this;
+            }
+            set {
+                if(this != value) {
+                    this.Clear();
+                    foreach(var rtbvm in value) {
+                        this.Add(rtbvm);
+                    }
+                    OnPropertyChanged(nameof(RtbListBoxItemRichTextBoxViewModels));
+                }
+            }
+        }
+
         public MpEventEnabledFlowDocument FullDocument {
             get {
                 return GetFullDocument();
@@ -55,7 +74,7 @@ namespace MpWpfApp {
 
         public List<MpRtbListBoxItemRichTextBoxViewModel> VisibleSubRtbViewModels {
             get {
-                return this.Where(x => x.SubItemVisibility == Visibility.Visible).ToList();
+                return RtbListBoxItemRichTextBoxViewModels.Where(x => x.SubItemVisibility == Visibility.Visible).ToList();
             }
         }
 
@@ -73,7 +92,7 @@ namespace MpWpfApp {
 
         public List<MpRtbListBoxItemRichTextBoxViewModel> SubSelectedClipItems {
             get {
-                return this.Where(x => x.IsSubSelected).OrderBy(x => x.LastSubSelectedDateTime).ToList();
+                return RtbListBoxItemRichTextBoxViewModels.Where(x => x.IsSubSelected).OrderBy(x => x.LastSubSelectedDateTime).ToList();
             }
         }
 
@@ -250,6 +269,10 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public ListBox ListBox { get; set; }
+
+        public ScrollViewer ScrollViewer { get; set; }
         #endregion
 
         #region Appearance
@@ -291,7 +314,7 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel.DetailGridVisibility != Visibility.Visible) {
                     ch += HostClipTileViewModel.TileDetailHeight;
                 }
-                if (this.Count == 1) {
+                if (RtbListBoxItemRichTextBoxViewModels.Count == 1) {
                     return ch;
                 }
                 return Math.Max(RtbLbScrollViewerHeight, Math.Max(ch,TotalItemHeight));
@@ -301,7 +324,7 @@ namespace MpWpfApp {
         public double RelativeWidthMax {
             get {
                 double maxWidth = 0;
-                foreach(var rtbvm in this) {
+                foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                     maxWidth = Math.Max(maxWidth, rtbvm.RtbRelativeWidthMax);
                 }
                 return maxWidth;
@@ -314,7 +337,7 @@ namespace MpWpfApp {
                     return 0;
                 }
                 double totalHeight = 0;
-                foreach (var rtbvm in this) {
+                foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                     totalHeight += rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom; ;
                 }                
                 return totalHeight;
@@ -391,18 +414,28 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
+        public bool HasTemplate {
+            get {
+                foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                    if (rtbvm.HasTemplate) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region State
         public bool IsAnyEditingContent {
             get {
-                return this.Any(x => x.IsEditingContent);
+                return RtbListBoxItemRichTextBoxViewModels.Any(x => x.IsEditingContent);
             }
         }
 
         public bool IsAnyEditingTitle {
             get {
-                return this.Any(x => x.IsEditingSubTitle);
+                return RtbListBoxItemRichTextBoxViewModels.Any(x => x.IsEditingSubTitle);
             }
         }
 
@@ -414,7 +447,7 @@ namespace MpWpfApp {
 
         public bool IsAnyPastingTemplate {
             get {
-                return this.Any(x => x.IsPastingTemplate);
+                return RtbListBoxItemRichTextBoxViewModels.Any(x => x.IsPastingTemplate);
             }
         }
         #endregion
@@ -436,12 +469,12 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            SyncItemsWithModel();
+            //SyncItemsWithModel();
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
             ListBox = (ListBox)sender;
-            IsHorizontal = false;
+            //IsHorizontal = false;
             RtbContainerGrid = ListBox.GetVisualAncestor<Grid>();
             RtbListBoxCanvas = ListBox.GetVisualAncestor<Canvas>();
             ScrollViewer = ListBox.GetVisualAncestor<ScrollViewer>();//(ScrollViewer)HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
@@ -488,8 +521,9 @@ namespace MpWpfApp {
         
         public void Refresh() {
             var sw = new Stopwatch();
-            sw.Start();            
+            sw.Start();
             ListBox?.Items.Refresh();
+            //MpConsole.WriteLine("Refresh is commented out");
             sw.Stop();
             //Console.WriteLine("Rtblb(HVIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -528,7 +562,7 @@ namespace MpWpfApp {
         }
 
         public MpRtbListBoxItemRichTextBoxViewModel GetRtbItemByCopyItemId(int copyItemId) {
-            foreach(var rtbvm in this) {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 if(rtbvm.CopyItemId == copyItemId) {
                     return rtbvm;
                 }
@@ -563,13 +597,13 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
             var hci = HostClipTileViewModel.CopyItem;
-            var rtbvm = this.Where(x => x.CopyItemId == hci.Id).FirstOrDefault();
+            var rtbvm = RtbListBoxItemRichTextBoxViewModels.Where(x => x.CopyItemId == hci.Id).FirstOrDefault();
             if (rtbvm == null) {
                 this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, hci));
             }
             //below was supposed to be for composite types but pulled out to compile
             foreach (var cci in MpCopyItem.GetCompositeChildren(hci)) {
-                rtbvm = this.Where(x => x.CopyItemId == cci.Id).FirstOrDefault();
+                rtbvm = RtbListBoxItemRichTextBoxViewModels.Where(x => x.CopyItemId == cci.Id).FirstOrDefault();
                 if (rtbvm == null) {
                     this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
                 }
@@ -583,11 +617,11 @@ namespace MpWpfApp {
 
         public void UpdateSortOrder(bool fromModel = false) {
             if(fromModel) {
-                this.Sort(x => x.CompositeSortOrderIdx);
+                RtbListBoxItemRichTextBoxViewModels.Sort(x => x.CompositeSortOrderIdx);
             } else {
-                foreach (var rtbvm in this) {
+                foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                     rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
-                    rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
+                    rtbvm.CompositeSortOrderIdx = RtbListBoxItemRichTextBoxViewModels.IndexOf(rtbvm);
                     rtbvm.CopyItem.WriteToDatabase();
                     rtbvm.RtbListBoxItemAdornerLayer?.Update();
                 }
@@ -595,16 +629,16 @@ namespace MpWpfApp {
         }
         public void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm, int forceIdx = 0, bool isMerge = false) {    
             if(isMerge) {
-                HostClipTileViewModel.CopyItem = HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
+                HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
             }
             if (forceIdx >= 0) {
-                if (forceIdx >= this.Count) {
-                    base.Add(rtbvm);
+                if (forceIdx >= RtbListBoxItemRichTextBoxViewModels.Count) {
+                    RtbListBoxItemRichTextBoxViewModels.Add(rtbvm);
                 } else {
-                    base.Insert(forceIdx, rtbvm);
+                    RtbListBoxItemRichTextBoxViewModels.Insert(forceIdx, rtbvm);
                 }
             } else {
-                base.Add(rtbvm);
+                RtbListBoxItemRichTextBoxViewModels.Add(rtbvm);
             }
             rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItem));
             HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
@@ -612,14 +646,10 @@ namespace MpWpfApp {
             UpdateAdorners();
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
-        public async Task AddAsync(MpRtbListBoxItemRichTextBoxViewModel rtbvm,DispatcherPriority priority) {
-            await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                this.Add(rtbvm);
-            }), priority);
-        }
+
         
         public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMerge = false) {
-            base.Remove(rtbvm);
+            RtbListBoxItemRichTextBoxViewModels.Remove(rtbvm);
             if (rtbvm.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
@@ -629,16 +659,18 @@ namespace MpWpfApp {
                 rtbvm.HostClipTileViewModel.IsClipDragging = false;
                 rtbvm.IsSubDragging = false;
                 UpdateAdorners();
-            } 
+            } else {
 
-            HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
+                HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
+            }
 
-            if(this.Count == 0) {
+
+            if(RtbListBoxItemRichTextBoxViewModels.Count == 0) {
                 //remove empty composite or RichText container
-                HostClipTileViewModel.Dispose();
+                HostClipTileViewModel.Dispose(isMerge);
                 return;
-            } else if(this.Count == 1) {
-                var loneCompositeCopyItem = this[0].CopyItem;
+            } else if(RtbListBoxItemRichTextBoxViewModels.Count == 1) {
+                var loneCompositeCopyItem = RtbListBoxItemRichTextBoxViewModels[0].CopyItem;
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
                 HostClipTileViewModel.CopyItem.DeleteFromDatabase();
                 HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
@@ -654,28 +686,249 @@ namespace MpWpfApp {
                 //update composite sort order without removed item
                 UpdateSortOrder();
             }
-            HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
+            //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
 
             if (!isMerge) {
-                rtbvm.Dispose();
+                rtbvm.Dispose(isMerge);
             }
             //Refresh();
             UpdateAdorners();
         }
 
-        public async Task RemoveAsync(
-            MpRtbListBoxItemRichTextBoxViewModel rtbvm, 
-            bool isMerge = false, 
-            DispatcherPriority priority = DispatcherPriority.Background) {
-            await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                this.Remove(rtbvm, isMerge);
-            }), priority);
+
+        #region Old Observable Vm stuff
+        private bool _isMouseOverVerticalScrollBar = false;
+        public bool IsMouseOverVerticalScrollBar {
+            get {
+                return _isMouseOverVerticalScrollBar;
+            }
+            set {
+                if (_isMouseOverVerticalScrollBar != value) {
+                    _isMouseOverVerticalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverVerticalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
         }
+
+        private bool _isMouseOverHorizontalScrollBar = false;
+        public bool IsMouseOverHorizontalScrollBar {
+            get {
+                return _isMouseOverHorizontalScrollBar;
+            }
+            set {
+                if (_isMouseOverHorizontalScrollBar != value) {
+                    _isMouseOverHorizontalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverHorizontalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
+        }
+        public bool IsMouseOverScrollBar {
+            get {
+                return IsMouseOverHorizontalScrollBar || IsMouseOverVerticalScrollBar;
+            }
+        }
+        public bool IsListBoxItemVisible(int index) {
+            var lbi = GetListBoxItem(index);
+            if (lbi != null && lbi.Visibility == Visibility.Visible) {
+                if (GetListBoxItemRect(index).Left < ScrollViewer.HorizontalOffset) {
+                    return false;
+                }
+                if (GetListBoxItemRect(index).Right > GetListBoxRect().Right + ScrollViewer.HorizontalOffset) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public ListBoxItem GetListBoxItem(int index) {
+            if (this.ListBox == null) {
+                return null;
+            }
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+                return null;
+            }
+            if (index < 0 || index >= this.ListBox.Items.Count) {
+                return null;
+            }
+            return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+        }
+
+        public ListBoxItem GetListBoxItem(MpRtbListBoxItemRichTextBoxViewModel item) {
+            if (this.ListBox == null) {
+                return null;
+            }
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+                return null;
+            }
+            if (!ListBox.Items.Contains(item)) {
+                return null;
+            }
+            return GetListBoxItem(ListBox.Items.IndexOf(item));
+        }
+
+        public Rect GetListBoxRect() {
+            if (ListBox == null) {
+                return new Rect();
+            }
+            return new Rect(new Point(0, 0), new Size(ListBox.ActualWidth, ListBox.ActualHeight));
+        }
+
+        public Rect GetListBoxItemRect(int index) {
+            var lbi = GetListBoxItem(index);
+            if (lbi == null || lbi.Visibility != Visibility.Visible) {
+                return new Rect();
+            }
+            Point origin = new Point();
+            if (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0) {
+                origin = lbi.TranslatePoint(new Point(0, 0), ScrollViewer);
+            } else {
+                origin = lbi.TranslatePoint(new Point(0, 0), ListBox);
+            }
+            //origin.X -= ScrollViewer.HorizontalOffset;
+            //origin.Y -= ScrollViewer.VerticalOffset;
+            return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
+        }
+
+        public Point[] GetAdornerPoints(int index) {
+            var points = new Point[2];
+            var itemRect = index >= RtbListBoxItemRichTextBoxViewModels.Count ? GetListBoxItemRect(RtbListBoxItemRichTextBoxViewModels.Count - 1) : GetListBoxItemRect(index);
+            bool IsHorizontal = false;
+            if (!IsHorizontal) {
+                itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+            }
+            if (IsHorizontal) {
+                if (index < RtbListBoxItemRichTextBoxViewModels.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.BottomLeft;
+                } else {
+                    points[0] = itemRect.TopRight;
+                    points[1] = itemRect.BottomRight;
+                }
+            } else {
+                if (index < RtbListBoxItemRichTextBoxViewModels.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.TopRight;
+                } else {
+                    points[0] = itemRect.BottomLeft;
+                    points[1] = itemRect.BottomRight;
+                }
+            }
+            if (ScrollViewer != null &&
+                (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0)) {
+                points[0].X += ScrollViewer.Margin.Right;
+                //points[0].Y += ScrollViewer.VerticalOffset;
+                points[1].X += ScrollViewer.Margin.Right;
+                //points[1].Y += ScrollViewer.VerticalOffset;
+            }
+            return points;
+        }
+
+        public void UpdateExtendedSelection(int index) {
+            /*
+            1    if the target item is not selected, select it
+            2    if Ctrl key is down, add target item to selection 
+            3    if Shift key is down
+            4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
+            5    else add item and all previous items
+            6    if the target item is selected de-select only if Ctrl key is down         
+            7    if neither ctrl nor shift are pressed clear any other selection
+            8    if the target item is selected
+            9    if Ctrl key is down, remove item from selection
+            10   if Shift key is down
+            11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
+            12   else remove any other item from selection
+            */
+            //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
+            //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
+            //    MainWindowViewModel.ClipTrayViewModel.UpdateExtendedSelection(MainWindowViewModel.ClipTrayViewModel.IndexOf(hctvm));
+            //}
+            bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
+            bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
+            var lbi = GetListBoxItem(index);
+            if (!lbi.IsSelected) {
+                ListBoxItem lastSelectedItem = null;
+                if (ListBox.SelectedItems.Count > 0) {
+                    // NOTE this maybe the wrong item
+                    lastSelectedItem = (ListBoxItem)GetListBoxItem((MpRtbListBoxItemRichTextBoxViewModel)ListBox.SelectedItems[ListBox.SelectedItems.Count - 1]);
+                }
+                if (isShiftDown) {
+                    if (lastSelectedItem == null) {
+                        //5 else add item and all previous items
+                        for (int i = 0; i <= index; i++) {
+                            GetListBoxItem(i).IsSelected = true;
+                        }
+                        return;
+                    } else {
+                        //4 if there is a previously selected item, add all items between target
+                        //  item and most recently selected item to selection, clearing any others
+                        ListBox.SelectedItems.Clear();
+
+                        int lastIdx = ListBox.Items.IndexOf(lastSelectedItem.DataContext);
+                        if (lastIdx < index) {
+                            for (int i = lastIdx; i <= index; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                        } else {
+                            for (int i = index; i <= lastIdx; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                        }
+                    }
+                } else if (isCtrlDown) {
+                    //2    if Ctrl key is down, add target item to selection 
+                    //6    if the target item is selected de-select only if Ctrl key is down
+
+                    lbi.IsSelected = !lbi.IsSelected;
+                } else {
+                    //7    if neither ctrl nor shift are pressed clear any other selection
+                    // MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    ListBox.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            } else if (lbi.IsSelected) {
+                if (isShiftDown) {
+                    //10   if Shift key is down
+                    if (ListBox.SelectedItems.Count > 0) {
+                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
+                        var firstSelectedItem = GetListBoxItem((MpRtbListBoxItemRichTextBoxViewModel)ListBox.SelectedItems[0]);
+                        int firstIdx = ListBox.Items.IndexOf(firstSelectedItem.DataContext);
+                        ListBox.SelectedItems.Clear();
+                        if (firstIdx < index) {
+                            for (int i = firstIdx; i <= index; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        } else {
+                            for (int i = index; i <= firstIdx; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        }
+                    }
+
+                } else if (isCtrlDown) {
+                    //9    if Ctrl key is down, remove item from selection
+                    lbi.IsSelected = false;
+                } else {
+                    //12   else remove any other item from selection
+
+                    //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    ListBox.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            }
+        }
+        #endregion
 
         public void UpdateAdorners() {
             //if(!HostClipTileViewModel.IsClipDropping) 
                 {
-                foreach (var rtbvm in this) {
+                foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                     rtbvm.RtbListBoxItemAdornerLayer?.Update();
                 }
             }
@@ -691,7 +944,7 @@ namespace MpWpfApp {
         }
 
         public void UpdateLayout() {
-            foreach (var rtbvm in this) {
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 rtbvm.UpdateLayout();
             }
 
@@ -706,10 +959,10 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(VerticalScrollbarVisibility));
             OnPropertyChanged(nameof(RtbLbWidth));
 
-            if (base.ListBox != null) {
-                base.ListBox.Height = RtbListBoxHeight;
-                base.ListBox.Width = RtbLbWidth;
-                base.ListBox.UpdateLayout();
+            if (ListBox != null) {
+                ListBox.Height = RtbListBoxHeight;
+                ListBox.Width = RtbLbWidth;
+                ListBox.UpdateLayout();
             }
             if (ScrollViewer != null) {
                 ScrollViewer.Width = RtbLbScrollViewerWidth;
@@ -719,12 +972,12 @@ namespace MpWpfApp {
         }
         
         public void SubSelectAll() {
-            foreach(var rtbvm in this) {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 rtbvm.IsSubSelected = true;
             }
         }
         public void ClearSubSelection(bool clearEditing = true) {
-            foreach(var rtbvm in this) {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 rtbvm.IsPrimarySubSelected = false;
                 rtbvm.IsSubHovering = false;
                 rtbvm.IsSubSelected = false;
@@ -734,40 +987,126 @@ namespace MpWpfApp {
 
         public void ResetSubSelection() {
             ClearSubSelection();
-            if(this.Count > 0) {
-                this[0].IsSubSelected = true;
+            if(RtbListBoxItemRichTextBoxViewModels.Count > 0) {
+                RtbListBoxItemRichTextBoxViewModels[0].IsSubSelected = true;
                 if(ListBox != null) {
-                    ((ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(this[0]))?.Focus();
+                    ((ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(RtbListBoxItemRichTextBoxViewModels[0]))?.Focus();
                 }
             }
         }
 
         public void ClearAllHyperlinks() {
-            foreach(var rtbvm in this) {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 rtbvm.ClearHyperlinks();
             }
         }
 
         public void CreateAllHyperlinks() {
-            foreach (var rtbvm in this) {
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 rtbvm.CreateHyperlinks();
             }
         }
 
         public object Clone() {
             var nrtbvmc = new MpClipTileRichTextBoxViewModelCollection(HostClipTileViewModel);
-            foreach(var rtbvm in this) {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 nrtbvmc.Add((MpRtbListBoxItemRichTextBoxViewModel)rtbvm.Clone());
             }
             return nrtbvmc;
         }
+
+        #region ClipTileContent Overrides
+        public void SetModel(MpCopyItem newModel) {
+            if(RtbListBoxItemRichTextBoxViewModels == null) {
+                RtbListBoxItemRichTextBoxViewModels = new ObservableCollection<MpRtbListBoxItemRichTextBoxViewModel>();
+            } else {
+                RtbListBoxItemRichTextBoxViewModels.Clear();
+            }
+            RtbListBoxItemRichTextBoxViewModels.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel,newModel));
+        }
+
+        public MpCopyItem GetModel() {
+            if(RtbListBoxItemRichTextBoxViewModels == null || RtbListBoxItemRichTextBoxViewModels.Count == 0) {
+                return null;
+            }
+            return RtbListBoxItemRichTextBoxViewModels[0].CopyItem;
+        }
+
+        public bool IsAnySubDragging() {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                if(rtbvm.IsSubDragging) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsAnySubSelected() {
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                if (rtbvm.IsSubSelected) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ClearSubSelection() {
+            foreach(var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                rtbvm.IsSubSelected = false;
+            }
+        }
+
+        public void ClearHovering() {
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                rtbvm.IsSubHovering = false;
+            }
+        }
+
+        public FrameworkElement GetFrameworkElement() {
+            return ListBox;
+        }
+
+        public List<string> GetFileDropList() {
+            var subSelectedCompositeItemList = new List<string>();
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
+                if (rtbvm.IsSubSelected) {
+                    subSelectedCompositeItemList.Add(rtbvm.CopyItemFileDropList[0]);
+                }
+            }
+            return subSelectedCompositeItemList;
+        }
+
+        public string GetDetail(int detailIdx) {
+            if(RtbListBoxItemRichTextBoxViewModels.Count > 0) {
+                return RtbListBoxItemRichTextBoxViewModels[0].GetDetail((MpCopyItemDetailType)detailIdx);
+            }
+            return string.Empty;
+        }
+
+        public Size GetContentSize() {
+            return new Size(RelativeWidthMax, TotalItemHeight);
+        }
+
+        public bool IsContextMenuOpened() {
+            return RtbListBoxItemRichTextBoxViewModels.Any(x => x.IsSubContextMenuOpened && RtbListBoxItemRichTextBoxViewModels.Count > 1);
+        }
+
+        public void Save() {
+            throw new NotImplementedException();
+        }
+
+        public void Delete() {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #endregion
 
         #region Private Methods       
 
         private MpEventEnabledFlowDocument GetFullDocument() {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();
-            foreach (var rtbvm in this) {
+            foreach (var rtbvm in RtbListBoxItemRichTextBoxViewModels) {
                 MpEventEnabledFlowDocument fd;
                 if (rtbvm.Rtb == null) {
                     fd = rtbvm.CopyItemRichText.ToFlowDocument();
@@ -782,8 +1121,7 @@ namespace MpWpfApp {
             return fullDocument;
         }
 
-        public new void Dispose() {
-            base.Dispose();
+        public void Dispose() {
             RtbListBoxCanvas = null;
             RtbContainerGrid = null;
             ListBox = null;
@@ -963,10 +1301,10 @@ namespace MpWpfApp {
                             ClearSubSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
-                                this.Move(this.IndexOf(sctvm), 0);
+                                RtbListBoxItemRichTextBoxViewModels.Move(RtbListBoxItemRichTextBoxViewModels.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;
                             }
-                            base.ListBox.ScrollIntoView(SubSelectedClipItems[0]);
+                            ListBox.ScrollIntoView(SubSelectedClipItems[0]);
                         }));
             } finally {
                 IsBusy = false;
@@ -1005,10 +1343,10 @@ namespace MpWpfApp {
                             ClearSubSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
-                                this.Move(this.IndexOf(sctvm), this.Count - 1);
+                                RtbListBoxItemRichTextBoxViewModels.Move(RtbListBoxItemRichTextBoxViewModels.IndexOf(sctvm), RtbListBoxItemRichTextBoxViewModels.Count - 1);
                                 sctvm.IsSelected = true;
                             }
-                            base.ListBox.ScrollIntoView(SubSelectedClipItems[SubSelectedClipItems.Count - 1]);
+                            ListBox.ScrollIntoView(SubSelectedClipItems[SubSelectedClipItems.Count - 1]);
                         }));
             } finally {
                 IsBusy = false;

@@ -18,7 +18,7 @@ namespace MpWpfApp {
         }
 
         private void Initialize() {
-            this.Source = Properties.Settings.Default;
+            this.Source = MonkeyPaste.MpPreferences.Instance;
             this.Mode = BindingMode.TwoWay;
         }
     }

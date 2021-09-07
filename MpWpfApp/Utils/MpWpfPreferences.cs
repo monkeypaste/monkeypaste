@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace MpWpfApp {
     public class MpWpfPreferences : MonkeyPaste.MpIPreferenceIO {
@@ -73,6 +74,19 @@ namespace MpWpfApp {
                 return defValue;
             }
             return (string)pref;
+        }
+
+        public Int32[] Get(string key, Int32[] defValue) {
+            var sb = new StringBuilder();
+            foreach (var val in (Int32[])defValue) {
+                sb.AppendLine(val.ToString());
+            }
+            var intStr = Preferences.Get(key, sb.ToString());
+            var intList = new List<Int32>();
+            foreach (var val in intStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
+                intList.Add(Convert.ToInt32(val));
+            }
+            return intList.ToArray();
         }
 
         public MonkeyPaste.MpUserDeviceType GetDeviceType() {

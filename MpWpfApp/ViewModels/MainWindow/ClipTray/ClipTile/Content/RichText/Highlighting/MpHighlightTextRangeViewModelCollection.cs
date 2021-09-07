@@ -264,8 +264,8 @@ namespace MpWpfApp {
                         }
                     }
 
-                    if (Properties.Settings.Default.SearchBySourceUrl && ClipTileViewModel.CopyItemUrl != null) {
-                        uc = ClipTileViewModel.CopyItemUrl.UrlPath.ContainsByCaseSetting(hlt);
+                    if (Properties.Settings.Default.SearchBySourceUrl && ClipTileViewModel.CopyItem.Source.Url != null) {
+                        uc = ClipTileViewModel.CopyItem.Source.Url.UrlPath.ContainsByCaseSetting(hlt);
                         if (uc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
                         }

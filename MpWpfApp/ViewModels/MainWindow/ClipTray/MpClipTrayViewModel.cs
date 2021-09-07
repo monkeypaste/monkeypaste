@@ -257,21 +257,21 @@ namespace MpWpfApp {
             }
         }
 
-        private BitmapSource _filterByAppIcon = null;
-        public BitmapSource FilterByAppIcon {
-            get {
-                if(_filterByAppIcon == null) {
-                    return new BitmapImage();
-                }
-                return _filterByAppIcon;
-            }
-            set {
-                if(_filterByAppIcon != value) {
-                    _filterByAppIcon = value;
-                    OnPropertyChanged(nameof(FilterByAppIcon));
-                }
-            }
-        }
+        //private BitmapSource _filterByAppIcon = null;
+        //public BitmapSource FilterByAppIcon {
+        //    get {
+        //        if(_filterByAppIcon == null) {
+        //            return new BitmapImage();
+        //        }
+        //        return _filterByAppIcon;
+        //    }
+        //    set {
+        //        if(_filterByAppIcon != value) {
+        //            _filterByAppIcon = value;
+        //            OnPropertyChanged(nameof(FilterByAppIcon));
+        //        }
+        //    }
+        //}
 
         public bool IsTrayDropping { get; set; } = false;
 
@@ -490,7 +490,7 @@ namespace MpWpfApp {
                 switch(e.PropertyName) {
                     case nameof(IsFilteringByApp):
                         foreach (var ctvm in VisibileClipTiles) {
-                            ctvm.OnPropertyChanged(nameof(ctvm.AppIcon));
+                            //ctvm.OnPropertyChanged(nameof(ctvm.AppIcon));
                         }
                         break;
                 }
@@ -1175,8 +1175,8 @@ namespace MpWpfApp {
                 }
 
                 //set image
-                if (SelectedClipTiles.Count == 1 && SelectedClipTiles[0].CopyItemBmp != null) {
-                    d.SetData(DataFormats.Bitmap, SelectedClipTiles[0].CopyItemBmp);
+                if (SelectedClipTiles.Count == 1 && SelectedClipTiles[0].CopyItemType == MpCopyItemType.Image) {
+                    d.SetData(DataFormats.Bitmap, SelectedClipTiles[0].CopyItem.ItemData.ToBitmapSource());
                 }
 
                 //set csv
@@ -1257,7 +1257,8 @@ namespace MpWpfApp {
                         var aid = a == null ? 0 : a.Id;
                         new MpPasteHistory() {
                             AppId = aid,
-                           CopyItemId = sctvm.CopyItemId 
+                           CopyItemId = sctvm.CopyItemId,
+                           UserDeviceId = MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid).Id
                         }.WriteToDatabase();
                     }
                     //Refresh();

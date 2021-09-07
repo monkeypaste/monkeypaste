@@ -27,6 +27,18 @@ namespace MonkeyPaste {
         public string Get(string key, string defValue) {
             return Preferences.Get(key, (string)defValue);
         }
+        public Int32[] Get(string key, Int32[] defValue) {
+            var sb = new StringBuilder();
+            foreach (var val in (Int32[])defValue) {
+                sb.AppendLine(val.ToString());
+            }
+            var intStr = Preferences.Get(key, sb.ToString());
+            var intList = new List<Int32>();
+            foreach(var val in intStr.Split(new string[] {Environment.NewLine},StringSplitOptions.RemoveEmptyEntries)) {
+                intList.Add(Convert.ToInt32(val));
+            }
+            return intList.ToArray();
+        }
 
         public MpUserDeviceType GetDeviceType() {
             switch (Device.RuntimePlatform) {
@@ -59,6 +71,12 @@ namespace MonkeyPaste {
                 Preferences.Set(key, (long)newValue);
             } else if (newValue.GetType() == typeof(string)) {
                 Preferences.Set(key, (string)newValue);
+            } else if (newValue.GetType() == typeof(Int32[])) {
+                var sb = new StringBuilder();
+                foreach(var val in (Int32[])newValue) {
+                    sb.AppendLine(val.ToString());
+                }
+                Preferences.Set(key, sb.ToString());
             } else {
                 throw new Exception($"Uknown property type {newValue.GetType()} for key {key}");
             }

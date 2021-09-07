@@ -103,15 +103,6 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("All")]
-        public string HistoryTagTitle {
-            get {
-                return ((string)(this["HistoryTagTitle"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Monkey Paste")]
         public string ApplicationName {
             get {
@@ -212,15 +203,6 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public double ClipTileMoveAnimationDurationMs {
-            get {
-                return ((double)(this["ClipTileMoveAnimationDurationMs"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Show Window")]
@@ -254,78 +236,6 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["CmdNameAppendMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Auto-Copy Mode")]
-        public string CmdNameAutoCopyMode {
-            get {
-                return ((string)(this["CmdNameAutoCopyMode"]));
-            }
-            set {
-                this["CmdNameAutoCopyMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Right-Click Paste Mode")]
-        public string CmdNameRightClickPasteMode {
-            get {
-                return ((string)(this["CmdNameRightClickPasteMode"]));
-            }
-            set {
-                this["CmdNameRightClickPasteMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Paste Selected Clip")]
-        public string CmdNamePasteSelectedClip {
-            get {
-                return ((string)(this["CmdNamePasteSelectedClip"]));
-            }
-            set {
-                this["CmdNamePasteSelectedClip"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Delete Selected Clip")]
-        public string CmdNameDeleteSelectedClip {
-            get {
-                return ((string)(this["CmdNameDeleteSelectedClip"]));
-            }
-            set {
-                this["CmdNameDeleteSelectedClip"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Search")]
-        public string CmdNameSearch {
-            get {
-                return ((string)(this["CmdNameSearch"]));
-            }
-            set {
-                this["CmdNameSearch"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Select Next")]
-        public string CmdNameSelectNext {
-            get {
-                return ((string)(this["CmdNameSelectNext"]));
-            }
-            set {
-                this["CmdNameSelectNext"] = value;
             }
         }
         
@@ -470,15 +380,6 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/chime.wav")]
-        public string NotificationCopySound2Path {
-            get {
-                return ((string)(this["NotificationCopySound2Path"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Sounds/blip.wav")]
@@ -529,64 +430,10 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("@0")]
-        public string DbParameterBinary {
-            get {
-                return ((string)(this["DbParameterBinary"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("@1")]
-        public string DbParameterString {
-            get {
-                return ((string)(this["DbParameterString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("@2")]
-        public string DbParameterInt {
-            get {
-                return ((string)(this["DbParameterInt"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("@3")]
-        public string DbParameterDateTime {
-            get {
-                return ((string)(this["DbParameterDateTime"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("mp.db")]
         public string DbName {
             get {
                 return ((string)(this["DbName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Љ")]
-        public string TemplateTokenMarker {
-            get {
-                return ((string)(this["TemplateTokenMarker"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://www.template.com")]
-        public string TemplateTokenUri {
-            get {
-                return ((string)(this["TemplateTokenUri"]));
             }
         }
         
@@ -957,18 +804,6 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
-        public double DetectedImageMinConfidence {
-            get {
-                return ((double)(this["DetectedImageMinConfidence"]));
-            }
-            set {
-                this["DetectedImageMinConfidence"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("pack://application:,,,/Resources")]
@@ -1023,30 +858,6 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["NotificationDoLoadedSound"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Windows\\System32\\cmd.exe")]
-        public string PathToTerminal {
-            get {
-                return ((string)(this["PathToTerminal"]));
-            }
-            set {
-                this["PathToTerminal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsTerminalAdministrator {
-            get {
-                return ((bool)(this["IsTerminalAdministrator"]));
-            }
-            set {
-                this["IsTerminalAdministrator"] = value;
             }
         }
         
@@ -1328,24 +1139,6 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["ThisDeviceGuid"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MpWpf")]
-        public string WpfNamespaceName {
-            get {
-                return ((string)(this["WpfNamespaceName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MonkeyPaste")]
-        public string XamNamespace {
-            get {
-                return ((string)(this["XamNamespace"]));
             }
         }
         

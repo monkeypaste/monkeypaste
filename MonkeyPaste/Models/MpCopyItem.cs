@@ -16,9 +16,9 @@ namespace MonkeyPaste {
 
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_ParentCopyItemId")]
-        public int CompositeParentCopyItemId { get; set; } = 0;
+        public int CompositeParentCopyItemId { get; set; }
 
-        public int CompositeSortOrderIdx { get; set; } = 0;
+        public int CompositeSortOrderIdx { get; set; }
 
         [Column("MpCopyItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
@@ -93,12 +93,6 @@ namespace MonkeyPaste {
 
         [OneToMany(CascadeOperations = CascadeOperation.CascadeDelete | CascadeOperation.CascadeRead)]
         public List<MpCopyItemTemplate> Templates { get; set; }
-
-        [OneToMany(inverseProperty:nameof(CompositeParentCopyItem), CascadeOperations = CascadeOperation.All)]
-        public List<MpCopyItem> CompositeSubItems { get; set; }
-
-        [ManyToOne(inverseProperty:nameof(CompositeSubItems), CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpCopyItem CompositeParentCopyItem { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpPasteHistory> PasteHistoryList { get; set; }
@@ -283,12 +277,12 @@ namespace MonkeyPaste {
             cci.WriteToDatabase();
         }
 
-        public MpCopyItem LinkCompositeChild(MpCopyItem cci, int forceIdx = -1) {
+        public void LinkCompositeChild(MpCopyItem cci, int forceIdx = -1) {
             cci.CompositeParentCopyItemId = Id;
             var compList = MpCopyItem.GetCompositeChildren(this);
             cci.CompositeSortOrderIdx = forceIdx < 0 ? compList.Count : forceIdx < compList.Count ? forceIdx : compList.Count;
             cci.WriteToDatabase();
-            return cci;
+            WriteToDatabase();
         }
 
         public override string ToString() {

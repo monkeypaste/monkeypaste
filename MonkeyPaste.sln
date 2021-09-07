@@ -48,7 +48,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Maui", "MonkeyP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Maui.WinUI", "MonkeyPaste.Maui\MonkeyPaste.Maui.WinUI\MonkeyPaste.Maui.WinUI.csproj", "{E85D1086-3738-4496-9476-A001899BE789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.WinCore", "MonkeyPaste.WinCore\MonkeyPaste.WinCore.csproj", "{07B6D5E0-9A59-4D73-9121-A3B2F6F5490C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.WinCore", "MonkeyPaste.WinCore\MonkeyPaste.WinCore.csproj", "{07B6D5E0-9A59-4D73-9121-A3B2F6F5490C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA} = {EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
