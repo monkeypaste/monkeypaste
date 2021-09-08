@@ -50,43 +50,36 @@ namespace MpWpfApp {
         #region Properties       
 
         #region View Models
-        private MpSystemTrayViewModel _systemTrayViewModel = null;
         public MpSystemTrayViewModel SystemTrayViewModel {
             get {
-                return _systemTrayViewModel;
-            }
-            set {
-                if (_systemTrayViewModel != value) {
-                    _systemTrayViewModel = value;
-                    OnPropertyChanged(nameof(SystemTrayViewModel));
-                }
+                return MpSystemTrayViewModel.Instance;
             }
         }
 
-        private MpClipTrayViewModel _clipTrayViewModel = null;
+        //private MpClipTrayViewModel _clipTrayViewModel = null;
         public MpClipTrayViewModel ClipTrayViewModel {
             get {
-                return _clipTrayViewModel;
+                return MpClipTrayViewModel.Instance;
             }
-            set {
-                if (_clipTrayViewModel != value) {
-                    _clipTrayViewModel = value;
-                    OnPropertyChanged(nameof(ClipTrayViewModel));
-                }
-            }
+            //set {
+            //    if (_clipTrayViewModel != value) {
+            //        _clipTrayViewModel = value;
+            //        OnPropertyChanged(nameof(ClipTrayViewModel));
+            //    }
+            //}
         }
 
-        private MpTagTrayViewModel _tagTrayViewModel = null;
+        //private MpTagTrayViewModel _tagTrayViewModel = null;
         public MpTagTrayViewModel TagTrayViewModel {
             get {
-                return _tagTrayViewModel;
+                return MpTagTrayViewModel.Instance;
             }
-            set {
-                if (_tagTrayViewModel != value) {
-                    _tagTrayViewModel = value;
-                    OnPropertyChanged(nameof(TagTrayViewModel));
-                }
-            }
+            //set {
+            //    if (_tagTrayViewModel != value) {
+            //        _tagTrayViewModel = value;
+            //        OnPropertyChanged(nameof(TagTrayViewModel));
+            //    }
+            //}
         }
 
         private MpClipTileSortViewModel _clipTileSortViewModel = null;
@@ -102,30 +95,24 @@ namespace MpWpfApp {
             }
         }
 
-        private MpSearchBoxViewModel _searchBoxViewModel = null;
+        //private MpSearchBoxViewModel _searchBoxViewModel = null;
         public MpSearchBoxViewModel SearchBoxViewModel {
             get {
-                return _searchBoxViewModel;
+                return MpSearchBoxViewModel.Instance;
             }
-            set {
-                if (_searchBoxViewModel != value) {
-                    _searchBoxViewModel = value;
-                    OnPropertyChanged(nameof(SearchBoxViewModel));
-                }
-            }
+            //set {
+            //    if (_searchBoxViewModel != value) {
+            //        _searchBoxViewModel = value;
+            //        OnPropertyChanged(nameof(SearchBoxViewModel));
+            //    }
+            //}
         }
 
-        private MpAppModeViewModel _appModeViewModel = null;
+        //private MpAppModeViewModel _appModeViewModel = null;
         public MpAppModeViewModel AppModeViewModel {
             get {
-                return _appModeViewModel;
-            }
-            set {
-                if (_appModeViewModel != value) {
-                    _appModeViewModel = value;
-                    OnPropertyChanged(nameof(AppModeViewModel));
-                }
-            }
+                return MpAppModeViewModel.Instance;
+            }            
         }
 
         #endregion
@@ -147,7 +134,7 @@ namespace MpWpfApp {
                     _isMainWindowLocked = value;
                     OnPropertyChanged(nameof(IsMainWindowLocked));
                     if(IsMainWindowLocked) {
-                        SystemTrayViewModel.ShowLogDialogCommand.Execute(null);
+                        MpSystemTrayViewModel.Instance.ShowLogDialogCommand.Execute(null);
                     }
                 }
             }
@@ -290,14 +277,15 @@ namespace MpWpfApp {
 
             MpPluginManager.Instance.Init();
 
-            SystemTrayViewModel = new MpSystemTrayViewModel();
-            SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
-            //MpClipTrayViewModel.Instance.Init();
-            ClipTrayViewModel = new MpClipTrayViewModel();
+            MpSystemTrayViewModel.Instance.Init();
+            //SearchBoxViewModel = new MpSearchBoxViewModel() {  };
+            MpSearchBoxViewModel.Instance.Init();
+            MpClipTrayViewModel.Instance.Init();
+            //ClipTrayViewModel = new MpClipTrayViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
-            //MpAppModeViewModel.Instance.Init();
-            AppModeViewModel = new MpAppModeViewModel();
-            TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
+            MpAppModeViewModel.Instance.Init();
+            MpTagTrayViewModel.Instance.Init();
+            //TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -329,7 +317,7 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
-            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
@@ -357,7 +345,7 @@ namespace MpWpfApp {
 
             ClipTrayViewModel.RestoreVisibleTiles();
 
-            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
         }
 

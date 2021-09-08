@@ -9,12 +9,12 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpAppModeViewModel : MpViewModelBase {
-        //#region Singleton Definition
-        //private static readonly Lazy<MpAppModeViewModel> _Lazy = new Lazy<MpAppModeViewModel>(() => new MpAppModeViewModel());
-        //public static MpAppModeViewModel Instance { get { return _Lazy.Value; } }
+        #region Singleton Definition
+        private static readonly Lazy<MpAppModeViewModel> _Lazy = new Lazy<MpAppModeViewModel>(() => new MpAppModeViewModel());
+        public static MpAppModeViewModel Instance { get { return _Lazy.Value; } }
 
-        //public void Init() { }
-        //#endregion
+        public void Init() { }
+        #endregion
 
         #region Properties
 
@@ -180,13 +180,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAppModeViewModel() : base() {
+        private MpAppModeViewModel() : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsAppPaused):
                         ShowNotifcation("App", IsAppPaused ? "PAUSED" : "ACTIVE", IsAppPaused);
-                        MainWindowViewModel.SystemTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader));
-                        MainWindowViewModel.SystemTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource));
+                        MpSystemTrayViewModel.Instance.OnPropertyChanged(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayHeader));
+                        MpSystemTrayViewModel.Instance.OnPropertyChanged(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayIconSource));
                         break;
                     case nameof(IsRightClickPasteMode):
                         ShowNotifcation("Right-Click Paste Mode", IsRightClickPasteMode ? "ON" : "OFF", IsRightClickPasteMode);

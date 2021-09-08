@@ -110,8 +110,7 @@ namespace MpWpfApp {
         private void PropertiesButton_Click(object sender, RoutedEventArgs e) {
             TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
             taskbarIcon.CloseBalloon();
-            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            mwvm.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
+            MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
         }
 
         private void grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

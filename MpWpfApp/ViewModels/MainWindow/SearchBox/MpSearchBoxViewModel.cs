@@ -18,11 +18,18 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpUndoableObservableCollectionViewModel<MpSearchBoxViewModel,MpSearchElementViewModel> {
+        #region Singleton Definition
+        private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
+        public static MpSearchBoxViewModel Instance { get { return _Lazy.Value; } }
+
+        public void Init() { }
+        #endregion
+
         #region Private Variables
-        #endregion        
+        #endregion
 
         #region Properties     
-        
+
         #region Controls
         public TextBox SearchTextBox { get; set; } = null;
         #endregion
@@ -359,6 +366,7 @@ namespace MpWpfApp {
                         break;
                 }
             };
+            PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText;
         }
 
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {

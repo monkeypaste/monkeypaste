@@ -8,6 +8,13 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
+        #region Singleton Definition
+        private static readonly Lazy<MpSystemTrayViewModel> _Lazy = new Lazy<MpSystemTrayViewModel>(() => new MpSystemTrayViewModel());
+        public static MpSystemTrayViewModel Instance { get { return _Lazy.Value; } }
+
+        public void Init() { }
+        #endregion
+
         #region View Models
         private MpSettingsWindowViewModel _settingsWindowViewModel = null;
         public MpSettingsWindowViewModel SettingsWindowViewModel {
@@ -46,7 +53,7 @@ namespace MpWpfApp {
                 if(MainWindowViewModel == null) {
                     return string.Empty;
                 }
-                return @"Monkey Paste [" + (MainWindowViewModel.AppModeViewModel.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
+                return @"Monkey Paste [" + (MpAppModeViewModel.Instance.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
             }
         }
 
@@ -70,10 +77,10 @@ namespace MpWpfApp {
 
         public string PauseOrPlayIconSource {
             get {
-                if(MainWindowViewModel == null || MainWindowViewModel.AppModeViewModel == null) {
+                if(MainWindowViewModel == null || MpAppModeViewModel.Instance == null) {
                     return string.Empty;
                 }
-                if(MainWindowViewModel.AppModeViewModel.IsAppPaused) {
+                if(MpAppModeViewModel.Instance.IsAppPaused) {
                     return @"/Images/play.png";
                 }
                 return @"/Images/pause.png";
@@ -82,10 +89,10 @@ namespace MpWpfApp {
 
         public string PauseOrPlayHeader {
             get {
-                if (MainWindowViewModel == null || MainWindowViewModel.AppModeViewModel == null) {
+                if (MainWindowViewModel == null || MpAppModeViewModel.Instance == null) {
                     return string.Empty;
                 }
-                if (MainWindowViewModel.AppModeViewModel.IsAppPaused) {
+                if (MpAppModeViewModel.Instance.IsAppPaused) {
                     return @"Resume";
                 }
                 return @"Pause";
@@ -94,7 +101,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSystemTrayViewModel() : base() {
+        private MpSystemTrayViewModel() : base() {
             SettingsWindowViewModel = new MpSettingsWindowViewModel();
         }
 

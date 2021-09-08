@@ -15,6 +15,13 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpTagTrayViewModel : MpUndoableObservableCollectionViewModel<MpTagTrayViewModel,MpTagTileViewModel> {
+        #region Singleton Definition
+        private static readonly Lazy<MpTagTrayViewModel> _Lazy = new Lazy<MpTagTrayViewModel>(() => new MpTagTrayViewModel());
+        public static MpTagTrayViewModel Instance { get { return _Lazy.Value; } }
+
+        public void Init() { }
+        #endregion
+
         #region Private Variables
         #endregion
 
@@ -116,6 +123,26 @@ namespace MpWpfApp {
             foreach (MpTag t in MpDb.Instance.GetItems<MpTag>()) {
                 this.Add(new MpTagTileViewModel(t));
             }
+
+            CollectionChanged += (s, e) => {
+                UpdateSortOrder();
+            };
+
+            MpClipTrayViewModel.Instance.ClipTileViewModels.CollectionChanged += (s, e) => {
+                if (MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
+                    return;
+                }
+                if (e.NewItems != null) {
+                    foreach (MpClipTileViewModel ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
+                        AddClipToSudoTags(ctvm);
+                    }
+                    RefreshRecentTag();
+                }
+                if (e.OldItems != null && e.NewItems == null) {
+                    RefreshAllCounts();
+                    RefreshRecentTag();
+                }
+            };
         }        
 
         public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {

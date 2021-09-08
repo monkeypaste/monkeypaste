@@ -226,7 +226,7 @@ namespace MpWpfApp {
             addNewMenuItem.Header = "Add Application...";
             addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
             addNewMenuItem.Click += (s, e3) => {
-                MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
+                MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
             };
             ptamir.Items.Add(addNewMenuItem);
 

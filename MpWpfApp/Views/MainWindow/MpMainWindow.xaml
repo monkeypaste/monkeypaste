@@ -595,7 +595,7 @@
                                   ToolTip="{Binding IsAppPausedTooltip}"
                                   Padding="10"
                                   IsChecked="{Binding IsAppPaused}">
-                        <Image Source="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
+                        <Image Source="{Binding  MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </ToggleButton>

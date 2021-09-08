@@ -120,7 +120,7 @@ namespace MpWpfApp {
                     if (IgnoreClipboardChangeEvent) {
                         //do nothing
                     } else {
-                        if(((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AppModeViewModel.IsAppPaused) {
+                        if(MpAppModeViewModel.Instance.IsAppPaused) {
                             Console.WriteLine("App Paused, ignoring copy");
                         }
                         else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
