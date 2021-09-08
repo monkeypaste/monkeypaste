@@ -126,7 +126,8 @@ namespace MpWpfApp {
                         else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
                             Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
-                            MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
+                            //MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
+                            Task.Run(OnClipboardChanged);
                         }
                     }
                     if(_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {

@@ -350,7 +350,7 @@ namespace MpWpfApp {
         }
 
         public void SetSubItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
-            MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox.ScrollIntoView(HostClipTileViewModel);
+            MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox.ScrollIntoView(HostClipTileViewModel);
             if (HostClipTileViewModel.IsPastingTemplate) {
                 InitWithRichTextBox(rtbvm.Rtb);
             } else {
@@ -358,7 +358,7 @@ namespace MpWpfApp {
                 //so that tile content is resized 'right'
                 ClearAllTemplates();
                 HostClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ScrollViewer.ScrollToHome();
+                MpClipTrayViewModel.Instance.ClipTileViewModels.ScrollViewer.ScrollToHome();
             }
         }
         #endregion
@@ -372,7 +372,7 @@ namespace MpWpfApp {
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
-            var clipTray = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox;
+            var clipTray = MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox;
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");

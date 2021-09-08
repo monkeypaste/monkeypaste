@@ -292,8 +292,10 @@ namespace MpWpfApp {
 
             SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
+            //MpClipTrayViewModel.Instance.Init();
             ClipTrayViewModel = new MpClipTrayViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
+            //MpAppModeViewModel.Instance.Init();
             AppModeViewModel = new MpAppModeViewModel();
             TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
         }
@@ -496,8 +498,7 @@ namespace MpWpfApp {
                     timer.Stop();
                     IsMainWindowOpening = false;
                 }
-            };
-            ClipTrayViewModel.AddNewTiles();
+            };            
             timer.Start();
         }
 

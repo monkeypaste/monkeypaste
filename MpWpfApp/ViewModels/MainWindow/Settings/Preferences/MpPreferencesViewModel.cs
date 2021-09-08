@@ -154,7 +154,7 @@ namespace MpWpfApp {
                     Properties.Settings.Default.ShowItemPreview = _showItemPreview;
                     Properties.Settings.Default.Save();
                     if(!MpMainWindowViewModel.IsMainWindowLoading) {
-                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                        foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
                             foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                                 rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));
@@ -252,7 +252,7 @@ namespace MpWpfApp {
             }
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = MpHelpers.Instance.GetApplicationDirectory();// MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath;
+            string appPath = MpHelpers.Instance.GetApplicationDirectory();// MpClipTrayViewModel.Instance.ClipboardManager.LastWindowWatcher.ThisAppPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {

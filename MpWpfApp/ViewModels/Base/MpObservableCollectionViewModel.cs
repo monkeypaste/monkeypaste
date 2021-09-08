@@ -440,7 +440,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             */
             //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
             //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
-            //    MainWindowViewModel.ClipTrayViewModel.UpdateExtendedSelection(MainWindowViewModel.ClipTrayViewModel.IndexOf(hctvm));
+            //    MpClipTrayViewModel.Instance.UpdateExtendedSelection(MpClipTrayViewModel.Instance.IndexOf(hctvm));
             //}
             bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
             bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
@@ -481,7 +481,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                     lbi.IsSelected = !lbi.IsSelected;
                 } else {
                     //7    if neither ctrl nor shift are pressed clear any other selection
-                    // MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    // MpClipTrayViewModel.Instance.ClearClipSelection(false);
                     //HostClipTileViewModel.IsSelected = true;
                     ListBox.SelectedItems.Clear();
                     lbi.IsSelected = true;
@@ -513,7 +513,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                 } else {
                     //12   else remove any other item from selection
 
-                    //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    //MpClipTrayViewModel.Instance.ClearClipSelection(false);
                     //HostClipTileViewModel.IsSelected = true;
                     ListBox.SelectedItems.Clear();
                     lbi.IsSelected = true;

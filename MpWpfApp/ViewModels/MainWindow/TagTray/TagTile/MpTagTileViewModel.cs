@@ -21,10 +21,10 @@ namespace MpWpfApp {
         #region View Models
         public List<MpClipTileViewModel> LinkedClipTiles {
             get {
-                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || Tag == null) {
+                if(MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || Tag == null) {
                     return new List<MpClipTileViewModel>();
                 }
-                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => IsLinkedWithClipTile(x)).ToList();
+                return MpClipTrayViewModel.Instance.ClipTileViewModels.Where(x => IsLinkedWithClipTile(x)).ToList();
             }
         }
         #endregion
@@ -76,7 +76,7 @@ namespace MpWpfApp {
             }
             set {
                 MpHelpers.Instance.RunOnMainThread((Action)(() => {
-                    if (_isSelected != value || MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
+                    if (_isSelected != value || MpClipTrayViewModel.Instance.IsFilteringByApp) {
                         _isSelected = value;
                         OnPropertyChanged(nameof(IsSelected));
                         OnPropertyChanged(nameof(TagBorderBackgroundBrush));
@@ -455,7 +455,7 @@ namespace MpWpfApp {
                 return true;
             }
             if(IsRecentTag) {
-                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.
+                return MpClipTrayViewModel.Instance.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
                     Take(Properties.Settings.Default.MaxRecentClipItems).
                     Contains(ctvm);
@@ -475,7 +475,7 @@ namespace MpWpfApp {
                 return true;
             }
             if (IsRecentTag) {
-                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.
+                return MpClipTrayViewModel.Instance.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
                     Take(Properties.Settings.Default.MaxRecentClipItems).
                     Contains(rtbvm.HostClipTileViewModel);
@@ -593,7 +593,7 @@ namespace MpWpfApp {
         private void SelectTag() {
             MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
-            //((MpClipTileViewModelPagedSourceProvider)MainWindowViewModel.ClipTrayViewModel.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
+            //((MpClipTileViewModelPagedSourceProvider)MpClipTrayViewModel.Instance.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
             //IsTextBoxFocused = true;
         }
         #endregion

@@ -143,7 +143,7 @@ namespace MpWpfApp {
             if (cm.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
                 pasteCommand = (cm.DataContext as MpRtbListBoxItemRichTextBoxViewModel).RichTextBoxViewModelCollection.PasteSubSelectedClipsCommand;
             } else {
-                pasteCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                pasteCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
             }
             ptamir.Items.Clear();
             bool addedSeperator = false;
@@ -198,7 +198,7 @@ namespace MpWpfApp {
 
                         ptami.Header = sp;
                         ptami.Icon = new Image() { Source = ptamivm.AppIcon };
-                        //ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                        //ptami.Command = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
                         //ptami.CommandParameter = ptamivm.Handle;
                         ptami.Click += (s, e2) => {
                             if (!isOverButton) {

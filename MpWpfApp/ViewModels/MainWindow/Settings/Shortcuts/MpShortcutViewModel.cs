@@ -356,14 +356,14 @@ namespace MpWpfApp {
                     case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
-                                var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(Shortcut.CopyItemId);
+                                var ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(Shortcut.CopyItemId);
                                 if (ctvm == null) {
                                     var ci = MpCopyItem.GetCopyItemById(Shortcut.CopyItemId);
                                     if (ci == null) {
                                         Console.WriteLine("SHortcut init error cannot find copy item w/ id: " + Shortcut.CopyItemId);
                                         break;
                                     }
-                                    ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
+                                    ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
                                     if (ctvm == null) {
                                         Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
@@ -499,9 +499,9 @@ namespace MpWpfApp {
             //never perform shortcuts in the following states
             if(MpAssignShortcutModalWindowViewModel.IsOpen ||
                MpSettingsWindowViewModel.IsOpen ||
-               MainWindowViewModel.ClipTrayViewModel.IsPastingTemplate ||
-               MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
-               MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
+               MpClipTrayViewModel.Instance.IsPastingTemplate ||
+               MpClipTrayViewModel.Instance.IsEditingClipTile ||
+               MpClipTrayViewModel.Instance.IsEditingClipTitle ||
                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
                MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                 return false;

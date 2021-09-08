@@ -153,7 +153,7 @@ namespace MpWpfApp {
 
 
             tagTrayGrid.PreviewMouseDown += (s, e10) => {
-                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                MpClipTrayViewModel.Instance.ResetClipSelection();
             };
             tagTray.Drop += (s, e2) => {
                 return;
@@ -193,7 +193,7 @@ namespace MpWpfApp {
         public void RefreshAllCounts() {
             foreach(var ttvm in this) {
                 ttvm.TagClipCount = 0;
-                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                     if(ttvm.IsLinkedWithClipTile(ctvm) /*&& ctvm.CopyItemType != MpCopyItemType.Composite*/) {
                         ttvm.TagClipCount++;
                     }
@@ -216,7 +216,7 @@ namespace MpWpfApp {
             if (GetRecentTagTileViewModel().TagClipCount >= Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                     if (rtvm.IsLinkedWithClipTile(ctvm)) {
                         rctvml.Add(ctvm);
                     }
@@ -235,7 +235,7 @@ namespace MpWpfApp {
             } else if (GetRecentTagTileViewModel().TagClipCount < Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                     if (rtvm.IsLinkedWithClipTile(ctvm)) {
                         rctvml.Add(ctvm);
                     }
@@ -273,10 +273,10 @@ namespace MpWpfApp {
                         } else if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
                             //this else if prevents filtered out tiles from being shown while searching and an item is 
                             //added while main window is locked
-                            //MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
-                            MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
+                            //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
+                            MpClipTrayViewModel.Instance.IsFilteringByApp = false;
 
-                            foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                            foreach (MpClipTileViewModel ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 //ctvm.IsSelected = false;
                                 if (newTagTile.IsLinkedWithClipTile(ctvm)) {
@@ -302,14 +302,14 @@ namespace MpWpfApp {
                                     ctvm.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if (MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox != null) {
+                            if (MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox != null) {
                                 //this ensures visibility takes affect if filtering by app
-                                //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
+                                //MpClipTrayViewModel.Instance.GetTray().Items.Refresh();
                             }
 
-                            if (MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0 &&
-                                !MainWindowViewModel.ClipTrayViewModel.IsAnyContextMenuOpened) {
-                                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                            if (MpClipTrayViewModel.Instance.VisibileClipTiles.Count > 0 &&
+                                !MpClipTrayViewModel.Instance.IsAnyContextMenuOpened) {
+                                MpClipTrayViewModel.Instance.ResetClipSelection();
                             }
 
                         }
@@ -366,7 +366,7 @@ namespace MpWpfApp {
                 }
 
                 bool isTagLinkedToAnySelectedClips = false;
-                foreach (var sctvm in MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles) {
+                foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedClipTiles) {
                     if (ttvm.IsLinkedWithClipTile(sctvm)) {
                         isTagLinkedToAnySelectedClips = true;
                     }
@@ -376,7 +376,7 @@ namespace MpWpfApp {
                         }
                     }
                 }
-                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 0;
+                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 0;
 
             }
         }

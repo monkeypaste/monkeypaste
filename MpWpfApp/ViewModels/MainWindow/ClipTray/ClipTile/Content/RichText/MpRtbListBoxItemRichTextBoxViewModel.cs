@@ -151,8 +151,8 @@ namespace MpWpfApp {
         //public BitmapSource AppIcon {
         //    get {
         //        if (MainWindowViewModel == null ||
-        //           MainWindowViewModel.ClipTrayViewModel == null ||
-        //          !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
+        //           MpClipTrayViewModel.Instance == null ||
+        //          !MpClipTrayViewModel.Instance.IsFilteringByApp) {
         //            if (CopyItem == null) {
         //                return new BitmapImage();
         //            }
@@ -161,7 +161,7 @@ namespace MpWpfApp {
         //            }
         //            return CopyItemAppIcon;
         //        }
-        //        return MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon;
+        //        return MpClipTrayViewModel.Instance.FilterByAppIcon;
         //    }
         //}
         public Cursor RtbListBoxItemCursor {
@@ -473,11 +473,11 @@ namespace MpWpfApp {
         #region Visibility
         public Visibility MultiSelectOrderMarkerVisibility {
             get {
-                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
                     return Visibility.Hidden;
                 }
                 if (IsSubSelected && 
-                    (MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1 ||
+                    (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 ||
                      RichTextBoxViewModelCollection.SubSelectedClipItems.Count > 1)) {
                     return Visibility.Visible;
                 }
@@ -512,7 +512,7 @@ namespace MpWpfApp {
                 if (CopyItem == null || !Properties.Settings.Default.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
-                return (MainWindowViewModel.ClipTrayViewModel.IsScrolling || IsSubSelected || HostClipTileViewModel.IsExpanded) ? Visibility.Collapsed : Visibility.Visible;
+                return (MpClipTrayViewModel.Instance.IsScrolling || IsSubSelected || HostClipTileViewModel.IsExpanded) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -593,10 +593,10 @@ namespace MpWpfApp {
 
         public Visibility AppIconImageVisibility {
             get {
-                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSelected) {
+                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
                     return Visibility.Visible;
                 }
-                if (MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1 &&
+                if (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 &&
                    !IsSubHovering) {
                     return Visibility.Hidden;
                 }
@@ -700,10 +700,10 @@ namespace MpWpfApp {
 
         public string MultiSelectedOrderIdxDisplayValue {
             get {
-                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSubSelected) {
+                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSubSelected) {
                     return string.Empty;
                 }
-                int multiIdx = MainWindowViewModel.ClipTrayViewModel.GetSelectionOrderIdxForItem(this);
+                int multiIdx = MpClipTrayViewModel.Instance.GetSelectionOrderIdxForItem(this);
                 if (multiIdx < 0) {
                     return string.Empty;
                 }
@@ -1146,7 +1146,7 @@ namespace MpWpfApp {
         private string _copyItemFilePath = string.Empty;
         public string CopyItemFilePath {
             get {
-                if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                if (CopyItem == null || MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
                     return string.Empty;
                 }
                 if(string.IsNullOrEmpty(_copyItemFilePath)) {
@@ -1182,11 +1182,11 @@ namespace MpWpfApp {
 
         public  List<string> CopyItemFileDropList {
             get {
-                if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                if (CopyItem == null || MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
                     return new List<string>();
                 }
                 // TODO add file list stuff
-                return new List<string>(); //return CopyItem.GetFileList();// string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
+                return new List<string>(); //return CopyItem.GetFileList();// string.Empty, MpClipTrayViewModel.Instance.GetTargetFileType());
             }
         }
 
@@ -1379,8 +1379,8 @@ namespace MpWpfApp {
                                        !rtbvm.HostClipTileViewModel.IsContextMenuOpened && 
                                        !rtbvm.IsSubContextMenuOpened &&
                                        !rtbvm.HostClipTileViewModel.IsClipDragging &&
-                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey &&
-                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingSelected &&
+                                       !MpClipTrayViewModel.Instance.IsPastingHotKey &&
+                                       !MpClipTrayViewModel.Instance.IsPastingSelected &&
                                        MpMainWindowViewModel.IsMainWindowOpen) {
                                 Console.WriteLine(@"RtbItem Selection was rejected");
                                 rtbvm.IsSubSelected = false;
@@ -1399,7 +1399,7 @@ namespace MpWpfApp {
                         break;
                     case nameof(rtbvm.IsSubHovering):
                         if(rtbvm.IsSubHovering) {
-                            if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
+                            if (MpClipTrayViewModel.Instance.IsScrolling) {
                                 rtbvm.IsSubHovering = false;
                             }
                             foreach (var ortbvm in rtbvm.RichTextBoxViewModelCollection) {
@@ -1522,7 +1522,7 @@ namespace MpWpfApp {
                     rtbvm.IsSubDragging = true;
                     rtbvm.IsSubSelected = true;
                     if(rtbvm.DragDataObject == null) {
-                        rtbvm.DragDataObject = MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true,false).Result;//RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
+                        rtbvm.DragDataObject = MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true,false).Result;//RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
                     }
                     DragDrop.DoDragDrop(
                                 rtbvm.Rtbc,
@@ -1611,7 +1611,7 @@ namespace MpWpfApp {
                 rtbvm.RichTextBoxViewModelCollection.ClearSubSelection();
                 rtbvm.IsSubSelected = true;
 
-                foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                foreach (var vctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
                     if (vctvm.CopyItemAppId != rtbvm.CopyItemAppId) {
                         bool hasSubItemWithApp = false;
                         if (vctvm.RichTextBoxViewModelCollection.Count > 1) {
@@ -1629,8 +1629,8 @@ namespace MpWpfApp {
                     }
                 }
                 //this triggers clip tray to swap out the app icons for the filtered app
-                //MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = rtbvm.CopyItemAppIcon;
-                MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
+                //MpClipTrayViewModel.Instance.FilterByAppIcon = rtbvm.CopyItemAppIcon;
+                MpClipTrayViewModel.Instance.IsFilteringByApp = true;
             };
             #endregion
 
@@ -1759,7 +1759,7 @@ namespace MpWpfApp {
         }
 
         public void RefreshAsyncCommands() {
-            MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand.RaiseCanExecuteChanged();
+            MpClipTrayViewModel.Instance.HotkeyPasteCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SendSubSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SpeakSubSelectedClipsAsyncCommand.RaiseCanExecuteChanged();            
@@ -2241,7 +2241,7 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
                    RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
         }
         private void EditSubTitle() {
@@ -2261,7 +2261,7 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
                    RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
         }
         private void EditSubContent() {
@@ -2286,7 +2286,7 @@ namespace MpWpfApp {
         }
         private void SendSubSelectedToEmail() {
             MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
-            //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+            //MpClipTrayViewModel.Instance.ClearClipSelection();
             //IsSelected = true;
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
@@ -2337,7 +2337,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanExcludeSubSelectedItemApplication() {
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1;
         }
         private void ExcludeSubSelectedItemApplication() {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
@@ -2353,11 +2353,11 @@ namespace MpWpfApp {
             }
         }
         private void PasteSubItem() {
-            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+            MpClipTrayViewModel.Instance.ClearClipSelection();
             HostClipTileViewModel.IsSelected = true;
             HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
             IsSubSelected = true;
-            MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
+            MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
 
         private RelayCommand _assignHotkeyToSubSelectedItemCommand;
@@ -2374,7 +2374,7 @@ namespace MpWpfApp {
                 this,
                 "Paste " + CopyItemTitle,
                 ShortcutKeyString,
-                 MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand, CopyItemId);
+                 MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItemId);
         }
         #endregion
 

@@ -383,7 +383,7 @@ namespace MpWpfApp {
                 }
 
                 IsTextBoxFocused = true;
-                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection(false);
+                MpClipTrayViewModel.Instance.ResetClipSelection(false);
                 OnPropertyChanged(nameof(TextBoxFontStyle));
                 OnPropertyChanged(nameof(TextBoxTextBrush));
             };
@@ -496,7 +496,7 @@ namespace MpWpfApp {
             Text = string.Empty;
             SearchText = Text;
             SearchTextBox.Focus();
-            MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+            MpClipTrayViewModel.Instance.ResetClipSelection();
             //IsSearching = true;
         }
 
@@ -514,7 +514,7 @@ namespace MpWpfApp {
             if(!HasText) {
                 IsTextValid = true;
             }
-            var ct = MainWindowViewModel.ClipTrayViewModel;
+            var ct = MpClipTrayViewModel.Instance;
             //wait till all highlighting is complete then hide non-matching tiles at the same time
             var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
             bool showMatchNav = false;
@@ -561,7 +561,7 @@ namespace MpWpfApp {
             }
         }
         private void NextMatch() {
-            foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+            foreach(var ctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
                 ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
             }
         }
@@ -576,7 +576,7 @@ namespace MpWpfApp {
             }
         }
         private void PrevMatch() {
-            foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+            foreach (var ctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
                 ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
             }
         }

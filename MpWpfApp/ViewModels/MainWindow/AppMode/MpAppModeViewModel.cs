@@ -9,6 +9,12 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpAppModeViewModel : MpViewModelBase {
+        //#region Singleton Definition
+        //private static readonly Lazy<MpAppModeViewModel> _Lazy = new Lazy<MpAppModeViewModel>(() => new MpAppModeViewModel());
+        //public static MpAppModeViewModel Instance { get { return _Lazy.Value; } }
+
+        //public void Init() { }
+        //#endregion
 
         #region Properties
 

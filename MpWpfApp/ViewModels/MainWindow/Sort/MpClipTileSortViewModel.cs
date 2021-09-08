@@ -169,7 +169,7 @@ namespace MpWpfApp {
                 return;
             }
             IsSorting = true;
-            var ct = MainWindowViewModel.ClipTrayViewModel;
+            var ct = MpClipTrayViewModel.Instance;
             var sw = new Stopwatch();
             sw.Start();
 

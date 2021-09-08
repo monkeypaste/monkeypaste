@@ -200,7 +200,7 @@ namespace MonkeyPaste {
             return results;
         }
 
-        public static ObservableCollection<MpCopyItem> GetPage(
+        public static List<MpCopyItem> GetPage(
             int tagId,
             int start,
             int count,
@@ -216,26 +216,94 @@ namespace MonkeyPaste {
             //OFFSET { 6}
             //Where { 5} is page size and { 6 } is page number * page size.
 
-            var result = MpDb.Instance.Query<MpCopyItem>(
-                                string.Format(
-                                    @"SELECT * from MpCopyItem
-                                      WHERE pk_MpCopyItemId in 
-                                        (SELECT fk_MpCopyItemId FROM MpCopyItemTag 
-                                         WHERE fk_MpTagId=?)
-                                      ORDER BY {0} {1} LIMIT ? OFFSET ?",
-                                    sortColumn,
-                                    (isDescending ? "DESC" : "ASC")),
-                                tagId,
-                                count,
-                                start);
+            List<MpCopyItem> result = new List<MpCopyItem>();
 
-            var results = new ObservableCollection<MpCopyItem>();
-            foreach (var r in result) {
-                var ci = MpDb.Instance.GetItem<MpCopyItem>(r.Id);
-                results.Add(ci);
+            switch(tagId) {
+                case MpTag.AllTagId:
+                    result = MpDb.Instance.Query<MpCopyItem>(
+                            @"SELECT * from MpCopyItem " +
+                            "ORDER BY ? " + (isDescending ? "DESC" : "ASC") +
+                            " LIMIT ? OFFSET ?",
+                            sortColumn,
+                            count,
+                            start);
+                    break;
+                case MpTag.RecentTagId:
+                    //query = string.Format(
+                    //            @"SELECT * from MpCopyItem " +
+                    //                "ORDER BY {0} {1} LIMIT ? OFFSET ?",
+                    //            "CopyDateTime",
+                    //            (isDescending ? "DESC" : "ASC"));
+
+                    //sortColumn = "CopyDateTime";
+                    //query = @"SELECT * from MpCopyItem " +
+                    //         "ORDER BY ? " + (isDescending ? "DESC" : "ASC") + " LIMIT ? OFFSET ?";
+
+
+                    //var test = MpDb.Instance.Execute(
+                    //                query,
+                    //                new Dictionary<string, object>() {
+                    //                    { "@orderBy", "CopyDateTime" },
+                    //                    //{ "@descOrAscend", isDescending ? "DESC" : "ASC" },
+                    //                    { "@limit", count },
+                    //                    { "@offset", start }
+                    //                });
+                    //break;
+                    sortColumn = "CopyDateTime";
+                    //result = MpDb.Instance.Query<MpCopyItem>(
+                    //        @"SELECT * from MpCopyItem " +
+                    //        "ORDER BY ? " + (isDescending ? "DESC" : "ASC") +
+                    //        " LIMIT ? OFFSET ?",
+                    //        sortColumn,
+                    //        count,
+                    //        start);
+                    if(isDescending) {
+                        result = MpDb.Instance.GetItems<MpCopyItem>()
+                                 .OrderByDescending(x => x.CopyDateTime)
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    } else {
+                        result = MpDb.Instance.GetItems<MpCopyItem>()
+                                 .OrderBy(x => x.CopyDateTime)
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    }
+                    
+                             
+                    break;
+                // Add other sudo tags here
+
+                default:
+                    //query = string.Format(
+                    //            @"SELECT * from MpCopyItem " +
+                    //                "WHERE pk_MpCopyItemId in " +
+                    //                "(SELECT fk_MpCopyItemId FROM MpCopyItemTag " +
+                    //                    "WHERE fk_MpTagId=?) " +
+                    //                "ORDER BY {0} {1} LIMIT ? OFFSET ?",
+                    //            sortColumn,
+                    //            (isDescending ? "DESC" : "ASC"));
+                    //break;
+                    result = MpDb.Instance.Query<MpCopyItem>(
+                             @"SELECT * from MpCopyItem " +
+                                    "WHERE pk_MpCopyItemId in " +
+                                    "(SELECT fk_MpCopyItemId FROM MpCopyItemTag " +
+                                        "WHERE fk_MpTagId=?) " +
+                                    "ORDER BY {0} " + (isDescending ? "DESC" : "ASC") + " LIMIT ? OFFSET ?",
+                            sortColumn,
+                            count,
+                            start);
+                    break;
             }
 
-            return results;
+            return result;
+            //foreach (var r in result) {
+            //    var ci = MpDb.Instance.GetItem<MpCopyItem>(r.Id);
+            //    results.Add(ci);
+            //}
+
+            //return results;
         }
 
         public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {

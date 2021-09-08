@@ -177,7 +177,7 @@ namespace MpWpfApp {
                 return VisibilityDictionary;
             }
             
-            if(MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded && !ClipTileViewModel.IsExpanded) {
+            if(MpClipTrayViewModel.Instance.IsAnyTileExpanded && !ClipTileViewModel.IsExpanded) {
                 HighlightTaskCount--;
                 return new Dictionary<object, Visibility> { { ClipTileViewModel, Visibility.Collapsed } };
             }

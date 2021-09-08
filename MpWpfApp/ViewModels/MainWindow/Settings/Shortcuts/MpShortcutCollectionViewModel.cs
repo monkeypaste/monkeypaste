@@ -164,11 +164,11 @@ namespace MpWpfApp {
             if(scvm.IsCustom()) {
                 scvm.Shortcut.DeleteFromDatabase();
                 if (scvm.Shortcut.CopyItemId > 0) {
-                    var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(scvm.Shortcut.CopyItemId);
+                    var ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(scvm.Shortcut.CopyItemId);
                     if(ctvm != null) {
                         ctvm.ShortcutKeyString = string.Empty;
                     } else {
-                        foreach(var ctvm1 in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                        foreach(var ctvm1 in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                             foreach(var rtbvm in ctvm1.RichTextBoxViewModelCollection) {
                                 if(rtbvm.CopyItemId == scvm.CopyItemId) {
                                     rtbvm.ShortcutKeyString = string.Empty;
@@ -249,8 +249,8 @@ namespace MpWpfApp {
 
                 ApplicationHook.MouseWheel += (s, e) => {
                     if (!MpMainWindowViewModel.IsMainWindowLoading &&
-                        MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
-                        var rtbvm = MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection;
+                        MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                        var rtbvm = MpClipTrayViewModel.Instance.SelectedClipTiles[0].RichTextBoxViewModelCollection;
                         var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
                         sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
                     }
@@ -264,7 +264,7 @@ namespace MpWpfApp {
                                 string cbText = Clipboard.GetText();
                                 if(!string.IsNullOrEmpty(cbText)) {
                                     Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
-                                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                                        foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                                             if(ctvm.CopyItemPlainText == cbText && !ctvm.IsTextItem) {
                                                 ctvm.PasteCount++;
                                             }
@@ -284,7 +284,7 @@ namespace MpWpfApp {
                 }});
 
                 ApplicationHook.KeyPress += (s, e) => {
-                    if (MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
+                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                         return;
                     }
                     if (MainWindowViewModel.SearchBoxViewModel != null && MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
@@ -293,7 +293,7 @@ namespace MpWpfApp {
                     if (MainWindowViewModel.TagTrayViewModel != null && MainWindowViewModel.TagTrayViewModel.IsEditingTagName) {
                         return;
                     }
-                    if (MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle) {
+                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsEditingClipTitle) {
                         return;
                     }
                     if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
@@ -345,42 +345,42 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleRightClickPasteCommand;
                         break;
                     case 6:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
                         commandParameter = true;
                         break;
                     case 7:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.DeleteSelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
                         commandParameter = true;
                         break;
                     case 8:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectNextItemCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SelectNextItemCommand;
                         break;
                     case 9:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectPreviousItemCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SelectPreviousItemCommand;
                         break;
                     case 10:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectAllCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SelectAllCommand;
                         break;
                     case 11:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.InvertSelectionCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.InvertSelectionCommand;
                         break;
                     case 12:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand;
                         break;
                     case 13:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand;
                         break;
                     case 14:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.AssignHotkeyCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.AssignHotkeyCommand;
                         break;
                     case 15:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
                         break;
                     case 16:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SpeakSelectedClipsAsyncCommand;
                         break;
                     case 17:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.MergeSelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.MergeSelectedClipsCommand;
                         break;
                     case 18:
                         shortcutCommand = MainWindowViewModel.UndoCommand;
@@ -389,19 +389,19 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.RedoCommand;
                         break;
                     case 20:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.EditSelectedContentCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedContentCommand;
                         break;
                     case 21:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.EditSelectedTitleCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedTitleCommand;
                         break;
                     case 22:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.DuplicateSelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
                         break;
                     case 23:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SendSelectedClipsToEmailCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SendSelectedClipsToEmailCommand;
                         break;
                     case 24:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.CreateQrCodeFromSelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;
                         break;
                     case 25:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAutoAnalysisModeCommand;
@@ -410,31 +410,31 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand;
                         break;
                     case 27:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.CopySelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
                         break;
                     default:
                         try {
                             if (sc.CopyItemId > 0) {
-                                var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(sc.CopyItemId);
+                                var ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(sc.CopyItemId);
                                 if(ctvm == null) {
                                     var ci = MpCopyItem.GetCopyItemById(sc.CopyItemId);
                                     if(ci == null) {
                                         Console.WriteLine("SHortcut init error cannot find copy item w/ id: " + sc.CopyItemId);
                                         break;
                                     }
-                                    ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
+                                    ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
                                     if(ctvm == null) {
                                         Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
                                     var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
                                     rtbvm.ShortcutKeyString = sc.KeyString;
-                                    shortcutCommand = MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand;
+                                    shortcutCommand = MpClipTrayViewModel.Instance.HotkeyPasteCommand;
                                     commandParameter = rtbvm.CopyItemId;
                                 } else {
                                     ctvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = ctvm.PasteClipCommand;
-                                    shortcutCommand = MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand;
+                                    shortcutCommand = MpClipTrayViewModel.Instance.HotkeyPasteCommand;
                                     commandParameter = ctvm.CopyItemId;
                                 }
                             } else if (sc.TagId > 0) {

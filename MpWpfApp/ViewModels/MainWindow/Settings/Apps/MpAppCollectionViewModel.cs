@@ -50,7 +50,7 @@ namespace MpWpfApp {
             if (this.Contains(app)) {
                 bool wasCanceled = false;
                 if (rejectApp) {
-                    var ctrvm = MainWindowViewModel.ClipTrayViewModel;
+                    var ctrvm = MpClipTrayViewModel.Instance;
                     var clipsFromApp = ctrvm.GetClipTilesByAppId(app.AppId);
                     if (clipsFromApp != null && clipsFromApp.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + app.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
@@ -81,7 +81,7 @@ namespace MpWpfApp {
                 this[appIdx].App.WriteToDatabase();
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                     if (ctvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
                         ctvm.CopyItem.Source.App = this[appIdx].App;
                     }
@@ -101,7 +101,7 @@ namespace MpWpfApp {
             if(avm.IsAppRejected && avm.App != null) {
                 var dupList = this.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {
-                    var ctrvm = MainWindowViewModel.ClipTrayViewModel;
+                    var ctrvm = MpClipTrayViewModel.Instance;
                     var ctvms = ctrvm.GetClipTilesByAppId(dupList[0].AppId);
                     if(ctvms != null && ctvms.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + avm.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
