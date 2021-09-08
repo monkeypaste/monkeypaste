@@ -457,6 +457,15 @@ namespace MpWpfApp {
                 Application.Current.MainWindow = new MpMainWindow();
             }
 
+            if (ClipTrayViewModel.WasItemAdded) {
+                Task.Run(() => {
+                    MpHelpers.Instance.RunOnMainThread(() => {
+                        ClipTrayViewModel.RefreshClips();
+                        ClipTrayViewModel.WasItemAdded = false;
+                    }, DispatcherPriority.Normal);
+                });
+            }
+
             SetupMainWindowRect();
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
@@ -484,7 +493,7 @@ namespace MpWpfApp {
                 } else {
                     MainWindowGridTop = _endMainWindowTop;
                     timer.Stop();
-                    IsMainWindowOpening = false;
+                    IsMainWindowOpening = false;                    
                 }
             };            
             timer.Start();

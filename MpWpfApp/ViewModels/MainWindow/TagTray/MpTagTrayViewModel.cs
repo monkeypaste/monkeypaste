@@ -128,44 +128,31 @@ namespace MpWpfApp {
                 UpdateSortOrder();
             };
 
-            MpClipTrayViewModel.Instance.ClipTileViewModels.CollectionChanged += (s, e) => {
+            //MpClipTrayViewModel.Instance.ClipTileViewModels.CollectionChanged += (s, e) => {
+            //    if (MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
+            //        return;
+            //    }
+            //    if (e.NewItems != null) {
+            //        foreach (MpClipTileViewModel ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
+            //            AddClipToSudoTags(ctvm);
+            //        }
+            //        RefreshRecentTag();
+            //    }
+            //    if (e.OldItems != null && e.NewItems == null) {
+            //        RefreshAllCounts();
+            //        RefreshRecentTag();
+            //    }
+            //};
+
+            MpClipTrayViewModel.Instance.OnTilesChanged += (s, e) => {
                 if (MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
                     return;
                 }
-                if (e.NewItems != null) {
-                    foreach (MpClipTileViewModel ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                        AddClipToSudoTags(ctvm);
-                    }
-                    RefreshRecentTag();
-                }
-                if (e.OldItems != null && e.NewItems == null) {
-                    RefreshAllCounts();
-                    RefreshRecentTag();
-                }
+
+                RefreshAllCounts();
+                RefreshRecentTag();
             };
         }        
-
-        public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
-            CollectionChanged += (s, e) => {
-                UpdateSortOrder();
-            };
-            ctrvm.ClipTileViewModels.CollectionChanged += (s, e) => {
-                if(MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
-                    return;
-                }
-                if (e.NewItems != null) {
-                    foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
-                        AddClipToSudoTags(ctvm);
-                    }
-                    RefreshRecentTag();
-                }
-                if (e.OldItems != null && e.NewItems == null) {
-                    RefreshAllCounts();
-                    RefreshRecentTag();
-                }
-            };
-
-        }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
             var tagTrayGrid = (Grid)sender;

@@ -97,7 +97,7 @@
             }
         }
 
-        private MpClipTileRichTextBoxViewModelCollection _rtbListBoxItemRichTextBoxViewModels = null;
+        private MpClipTileRichTextBoxViewModelCollection _rtbListBoxItemRichTextBoxViewModels = new MpClipTileRichTextBoxViewModelCollection();
         public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
             get {
                 return _rtbListBoxItemRichTextBoxViewModels;
@@ -3002,22 +3002,21 @@
             if (MpClipTrayViewModel.Instance.ClipTileViewModels.Contains(this)) {
                 MpClipTrayViewModel.Instance.Remove(this);
             }
-            var rtbvmToRemove = RichTextBoxViewModelCollection;
-            //RichTextBoxViewModelCollection.Clear();
-            foreach (var rtbvm in rtbvmToRemove) {
-                rtbvm.Dispose();
-            }
-            //remove any shortcuts associated with clip
-            var scvmToRemoveList = new List<MpShortcutViewModel>();
-            foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList()) {
-                scvmToRemoveList.Add(scvmToRemove);
-            }
-            foreach (var scvmToRemove in scvmToRemoveList) {
-                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-            }
             if(!isMerge) {
-              //  CopyItem.DeleteFromDatabase();
+                foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                    //remove any shortcuts associated with clip
+                    var scvmToRemoveList = new List<MpShortcutViewModel>();
+                    foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == rtbvm.CopyItemId).ToList()) {
+                        scvmToRemoveList.Add(scvmToRemove);
+                    }
+                    foreach (var scvmToRemove in scvmToRemoveList) {
+                        MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
+                    }
+                    rtbvm.CopyItem.DeleteFromDatabase();
+                }
             }
+            
+
             
             ClipBorder = null;
             TitleTextBox = null;

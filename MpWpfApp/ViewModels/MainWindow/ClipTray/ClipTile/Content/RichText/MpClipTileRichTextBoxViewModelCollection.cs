@@ -629,7 +629,6 @@ namespace MpWpfApp {
 
         
         public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMerge = false) {
-            base.Remove(rtbvm);
             if (rtbvm.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
@@ -645,7 +644,8 @@ namespace MpWpfApp {
             }
 
 
-            if(this.Count == 0) {
+            base.Remove(rtbvm);
+            if (this.Count == 0) {
                 //remove empty composite or RichText container
                 HostClipTileViewModel.Dispose(isMerge);
                 return;

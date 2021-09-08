@@ -9,7 +9,7 @@ namespace MpWpfApp {
         public double MainWindowToScreenHeightRatio = 0.35;
 
         private MpMeasurements() {
-            Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles * 2;
+            Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles;
             Properties.Settings.Default.Save();
         }
 

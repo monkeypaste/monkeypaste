@@ -2381,7 +2381,7 @@ namespace MpWpfApp {
         #region Overrides
         public void Dispose(bool isMerge = false) {
             if(RichTextBoxViewModelCollection.Contains(this)) {
-                RichTextBoxViewModelCollection.Remove(this);
+                RichTextBoxViewModelCollection.Remove(this,isMerge);
             }
             var scvmToRemoveList = new List<MpShortcutViewModel>();
             foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList()) {
