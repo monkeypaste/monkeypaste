@@ -34,7 +34,7 @@ namespace MonkeyPaste {
             IsMenuVisible = true;
 
             OnGlobalTouch += MpContextMenuViewModel_OnGlobalTouch;
-            (Application.Current.MainPage as MpMainShell).GlobalTouchService.Subscribe(OnGlobalTouch);
+            (Application.Current.MainPage as MpMainPage).GlobalTouchService.Subscribe(OnGlobalTouch);
         }
 
         protected override void OnDisappearing() {
@@ -42,7 +42,7 @@ namespace MonkeyPaste {
             IsMenuVisible = false;
 
             OnGlobalTouch -= MpContextMenuViewModel_OnGlobalTouch;
-            (Application.Current.MainPage as MpMainShell).GlobalTouchService.Unsubscribe(OnGlobalTouch);
+            (Application.Current.MainPage as MpMainPage).GlobalTouchService.Unsubscribe(OnGlobalTouch);
         }
 
         private void MpContextMenuViewModel_OnGlobalTouch(object sender, EventArgs e) {

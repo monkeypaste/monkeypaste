@@ -174,7 +174,7 @@ namespace MonkeyPaste {
                     return;
                 }
             } 
-            await _connectionAsync.InsertWithChildrenAsync(item, recursive: true);
+            await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
@@ -199,7 +199,7 @@ namespace MonkeyPaste {
                 }
 
             }
-            _connection.InsertWithChildren(item,true);
+            _connection.InsertOrReplaceWithChildren(item,true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
@@ -572,7 +572,7 @@ namespace MonkeyPaste {
         private void InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
-            //File.Delete(dbPath);
+            File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 

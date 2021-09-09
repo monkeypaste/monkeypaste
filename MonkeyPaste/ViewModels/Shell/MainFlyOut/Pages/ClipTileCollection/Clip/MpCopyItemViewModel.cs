@@ -100,7 +100,7 @@ namespace MonkeyPaste {
 
         public ImageSource IconImageSource {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || CopyItem.Source == null) {
                     return null;
                 }
                 return (StreamImageSource)new MpImageConverter().Convert(CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, typeof(ImageSource));
@@ -341,7 +341,7 @@ namespace MonkeyPaste {
             } else {
                 await Clipboard.SetTextAsync(CopyItem.ItemData);         
             }
-
+            
             WasSetToClipboard = true;
             ItemStatusChanged?.Invoke(this, new EventArgs());
         });

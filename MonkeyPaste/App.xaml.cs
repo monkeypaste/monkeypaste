@@ -21,7 +21,9 @@ namespace MonkeyPaste {
         public App(MpINativeInterfaceWrapper niw)  {            
             InitializeComponent();
             NativeInterfaceWrapper = niw;
-            MainPage = new MpMainShell(niw);
+            //MainPage = new MpMainShell(niw);
+
+            MainPage = new MpMainPage(niw);
 
             //string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
             //string path = System.IO.Path.Combine(folder, string.Format(@"Editor2.html"));

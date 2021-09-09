@@ -98,13 +98,13 @@ namespace MonkeyPaste {
 
         #region Event Handlers
 
-        private async void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedTagViewModel):
                     if (SelectedTagViewModel != null && CopyItemCollectionViewModel != null) {
                         ClearSelection();
                         SelectedTagViewModel.IsSelected = true;
-                        await CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+                        CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
                     }
                     break;
             }

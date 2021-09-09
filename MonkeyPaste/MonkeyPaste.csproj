@@ -55,10 +55,12 @@
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpCopyItemDetailPageViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
+    <Compile Remove="ViewModels\Shell\MpMainShellViewModel.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
+    <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
@@ -78,6 +80,7 @@
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml" />
+    <EmbeddedResource Remove="Views\Shell\MpMainShell.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,6 +95,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
     <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
@@ -127,6 +131,9 @@
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\MpMainFlyoutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpRenamePopupPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -158,6 +165,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTray\TagTag\MpTagViewTag.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MpMainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -218,9 +228,8 @@
     <Compile Update="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml.cs">
       <DependentUpon>MpTagTileView.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ext\Rg.Plugins.Popup-develop\Rg.Plugins.Popup\Rg.Plugins.Popup.csproj" />
+    <Compile Update="Views\Shell\MpMainPage.xaml.cs">
+      <DependentUpon>MpMainPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

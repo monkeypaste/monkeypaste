@@ -13,6 +13,9 @@ namespace MpWpfApp {
         //public readonly SynchronizationContext SyncContext;
         public MpMainWindow() {
             InitializeComponent();
+
+            //Forms.Init();
+            //LoadApplication(new Monkey.App());
             //SyncContext = SynchronizationContext.Current;
         }
 

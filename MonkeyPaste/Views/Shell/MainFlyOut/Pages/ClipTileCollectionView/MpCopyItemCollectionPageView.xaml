@@ -9,35 +9,23 @@
              Title="Monkey Paste"
              x:Name="CopyItemCollectionView"
              x:DataType="local:MpCopyItemTileCollectionPageViewModel">
-    <Shell.SearchHandler>
-        <local:MpCopyItemViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
-                                                Placeholder="Enter search term" IsSearchEnabled="True"
-                                                SearchBoxVisibility="Collapsible"
-                                                ItemsSource="{Binding CopyItemViewModels}"
-                                                ShowsResults="False"
-                                                DisplayMemberName="CopyItem.ItemPlainText">
-            <local:MpCopyItemViewModelSearchHandler.ItemTemplate>
-                <DataTemplate x:DataType="local:MpCopyItemViewModel">
-                    <Grid Padding="10"
-                          ColumnDefinitions="0.15*,0.85*">
-                        <Image Margin="0,10,0,0"
-                               Aspect="AspectFit"
-                               HeightRequest="60"
-                               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource ImageConverter}}"
-                               VerticalOptions="Start"
-                               WidthRequest="60">
-                        </Image>
-                        <Label FontSize="14"
-                               FontAttributes="Italic"
-                               Text="{Binding CopyItem.ItemData}"
-                               TextColor="Black" />
-                    </Grid>
-                </DataTemplate>
-            </local:MpCopyItemViewModelSearchHandler.ItemTemplate>
-        </local:MpCopyItemViewModelSearchHandler>
-    </Shell.SearchHandler>
+    <NavigationPage.TitleView>
+        <StackLayout x:Name="NavStack" Orientation="Vertical">
+            <SearchBar x:Name="SearchBar"
+                       IsVisible="False"
+                       BackgroundColor="LightYellow"
+                       PlaceholderColor="DimGray"
+                       Placeholder="Search..."
+                       Unfocused="SearchBar_Unfocused"
+                       TextChanged="SearchBar_TextChanged"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{Binding ClipboardToolbarIcon}"
+        <ToolbarItem x:Name="SearchToolbarItem"                      
+                     IconImageSource="{StaticResource SearchIcon}"
+                     Clicked="Search_Clicked"/>
+        <ToolbarItem x:Name="SetItemToClipboardToolbarItem" 
+                     IconImageSource="{Binding ClipboardToolbarIcon}"
                      Command="{Binding SetClipboardToSelectedCopyItemCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -47,6 +35,7 @@
                             ItemsSource="{Binding CopyItemViewModels}"
                             RemainingItemsThreshold="5"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCopyItemsCommand}"
+                            SelectionChanged="CopyItemViewModels_SelectionChanged"
                             SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding SelectionChangedCommand}"

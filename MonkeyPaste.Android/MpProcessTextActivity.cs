@@ -68,16 +68,10 @@ namespace MonkeyPaste.Droid {
                 if (!string.IsNullOrWhiteSpace(selectedText)) {
                     await Clipboard.SetTextAsync(selectedText);
 
-                    MonkeyPaste.MpCopyItem.Create(
-                        MpSource.Create(
-                            MpApp.Create(
-                                hostPackageName,
-                                hostAppName,
-                                MpIcon.Create(
-                                    hostAppIconBase64)),
-                            null),
-                        selectedText,
-                        MpCopyItemType.RichText);
+                    var icon = MpIcon.Create(hostAppIconBase64);
+                    var app = MpApp.Create(hostPackageName,hostAppName,icon);
+                    var source = MpSource.Create(app, null);
+                    MonkeyPaste.MpCopyItem.Create(source, selectedText,MpCopyItemType.RichText);
                         //new object[] { hostPackageName, selectedText, hostAppName, hostIconByteArray, hostAppIconBase64 });
                 }
                 

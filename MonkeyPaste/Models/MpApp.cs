@@ -115,7 +115,7 @@ namespace MonkeyPaste {
                 UserDevice = thisDevice
             };
 
-            MpDb.Instance.AddItem<MpApp>(newApp);
+            MpDb.Instance.AddOrUpdate<MpApp>(newApp);
 
             return newApp;
         }

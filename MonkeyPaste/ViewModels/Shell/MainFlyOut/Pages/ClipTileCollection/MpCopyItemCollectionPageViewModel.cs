@@ -35,6 +35,8 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        public ObservableCollection<string> SearchResults { get; set; } = new ObservableCollection<string>();
+
         public string EmptyCollectionLableText { get; set; }
 
         public int TagId { get; set; }
@@ -71,13 +73,13 @@ namespace MonkeyPaste {
             _ = Task.Run(() => Initialize(tagId));
         }
 
-        public async Task SetTag(int tagId) {
+        public void SetTag(int tagId) {
             TagId = tagId; 
-            await Device.InvokeOnMainThreadAsync(async () => {                
-                var clips = await MpCopyItem.GetPageAsync(TagId, 0, _pageSize);
+            Device.BeginInvokeOnMainThread(() => {                
+                var clips = MpCopyItem.GetPage(TagId, 0, _pageSize);
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
-                    var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
+                    var tl = MpDb.Instance.GetItems<MpTag>();
                     var t = tl.Where(x => x.Id == TagId).FirstOrDefault();
                     if(t != null) {
                         EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);
@@ -115,13 +117,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private async Task Initialize(int tagId) {
+        private void Initialize(int tagId) {
             IsBusy = true;
-            while(!MpDb.Instance.IsLoaded) {
-                Thread.Sleep(50);
-            }
 
-            await SetTag(tagId);
+            SetTag(tagId);
             //await Task.Delay(300);
             IsBusy = false;
         }
@@ -199,13 +198,18 @@ namespace MonkeyPaste {
                 if(citg.TagId == TagId && !CopyItemViewModels.Any(x => x.CopyItem.Id == citg.CopyItemId)) {
                     _ = Task.Run(() => Initialize(TagId));
                 }                
-            }  
+            } else if(e is MpCopyItem ci) {
+                if(TagId == MpTag.RecentTagId || TagId == MpTag.AllTagId) {
+                    _ = Task.Run(() => Initialize(TagId));
+                }
+            }
         }
         #endregion
 
         #endregion
 
         #region Commands
+
         public ICommand PerformSearchCommand => new Command<string>((string query) => {
             if(CopyItemViewModels == null) {
                 return;
@@ -220,6 +224,11 @@ namespace MonkeyPaste {
             }
             foreach(var civm in CopyItemViewModels) {
                 civm.IsVisible = searchResult.Contains(civm);
+            }
+
+            SearchResults.Clear();
+            foreach(var sr in searchResult) {
+                SearchResults.Add(sr.CopyItem.Id.ToString());
             }
         });
 

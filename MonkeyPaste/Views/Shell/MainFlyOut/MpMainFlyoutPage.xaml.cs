@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace MonkeyPaste {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MpMainFlyoutPage : ContentPage {
+        public MpMainFlyoutPage() {
+            InitializeComponent();
+        }
+
+        private void StackLayout_LayoutChanged(object sender, EventArgs e) {
+
+        }
+    }
+}

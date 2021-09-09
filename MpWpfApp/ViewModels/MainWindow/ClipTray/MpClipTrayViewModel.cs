@@ -308,9 +308,6 @@ namespace MpWpfApp {
                 return false;
             }
         }
-
-        public Point StartDragPoint;
-
         public bool IsAnyTileExpanded {
             get {
                 foreach (var ctvm in ClipTileViewModels) {
@@ -347,30 +344,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        //private bool _isLoading = true;
-        //public bool IsLoading {
-        //    get {
-        //        return _isLoading;
-        //    }
-        //    set {
-        //        if (_isLoading != value) {
-        //            _isLoading = value;
-        //            OnPropertyChanged(nameof(IsLoading));
-        //        }
-        //    }
-        //}
-
-        //public bool IsItemLoading {
-        //    get {
-        //        foreach(var ctvm in this) {
-        //            if(ctvm.IsLoading) {
-        //                return true;
-        //            }
-        //        }
-        //        return false;
-        //    }
-        //}
 
         public bool IsAnyHovering {
             get {

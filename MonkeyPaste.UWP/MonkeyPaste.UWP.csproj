@@ -173,10 +173,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ext\Rg.Plugins.Popup-develop\Rg.Plugins.Popup\Rg.Plugins.Popup.csproj">
-      <Project>{2286cbf6-6e2f-46e9-b4ea-41061d953a40}</Project>
-      <Name>Rg.Plugins.Popup</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>

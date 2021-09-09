@@ -1867,64 +1867,6 @@
 
             #region Drag/Drop
 
-            #region Template Drag/Drop (Disabled)
-            //IDataObject templateDataObject = null;
-            //IntPtr lastWindowHandle = IntPtr.Zero;
-            //bool isExternalTemplateDrag = false;
-            
-            //MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp += async (s, e7) => {
-            //    return;
-            //    if (!isExternalTemplateDrag) {
-            //        return;
-            //    }
-            //    var ctvm = MpClipTrayViewModel.Instance.SelectedClipTiles[0];
-            //    Thread.Sleep(100);
-            //    ((MpMainWindow)Application.Current.MainWindow).SyncContext.Post(x => {
-            //        Application.Current.MainWindow.Activate();
-            //        Application.Current.MainWindow.IsManipulationEnabled = true;
-            //        Application.Current.MainWindow.Focus();
-            //        ctvm.DragDataObject = MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true).Result;
-            //        DragDrop.DoDragDrop(
-            //                   ((FrameworkElement)s),
-            //                   ctvm.DragDataObject,
-            //                   DragDropEffects.Copy);
-            //    }, null);
-
-                //WinApi.SetActiveWindow(MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle);
-                //WinApi.SetForegroundWindow(MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle);
-                
-                //return;
-                //await ctvm.ClipBorder.Dispatcher.BeginInvoke((Action)(async () => {
-                //    ctvm.DragDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true, lastWindowHandle);
-                //    DragDrop.DoDragDrop(
-                //               ctvm.ClipBorder,
-                //               ctvm.DragDataObject,
-                //               DragDropEffects.Copy);
-                //}), DispatcherPriority.Normal);
-            //};
-
-            //ClipBorder.PreviewQueryContinueDrag +=  (s, e0) => {
-            //    isExternalTemplateDrag = MpHelpers.Instance.GetMousePosition(MainWindowViewModel.MainWindowGrid).Y < 0 && 
-            //                             MpClipTrayViewModel.Instance.SelectedClipTiles.Any(x => x.HasTemplate);
-            //    if (isExternalTemplateDrag && !e0.KeyStates.HasFlag(DragDropKeyStates.LeftMouseButton)) {
-            //        Console.WriteLine(@"Replacing drag drop");
-            //        e0.Action = DragAction.Cancel;
-            //        //e0.Handled = true;
-            //        ((MpMainWindow)Application.Current.MainWindow).SyncContext.Post(x => {
-            //            var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
-            //            Application.Current.MainWindow.Activate();
-            //            Application.Current.MainWindow.IsManipulationEnabled = true;
-            //            Application.Current.MainWindow.Focus();
-            //            ctvm.DragDataObject = MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true).Result;
-            //            DragDrop.DoDragDrop(
-            //                       ((FrameworkElement)s),
-            //                       ctvm.DragDataObject,
-            //                       DragDropEffects.Copy);
-            //        }, null);
-            //    }
-            //};
-            #endregion
-
             ClipBorder.PreviewMouseUp += (s, e9) => {
                 Application.Current.MainWindow.ForceCursor = false;
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
@@ -3015,8 +2957,6 @@
                     rtbvm.CopyItem.DeleteFromDatabase();
                 }
             }
-            
-
             
             ClipBorder = null;
             TitleTextBox = null;

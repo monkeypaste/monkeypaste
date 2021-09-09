@@ -97,21 +97,21 @@ namespace MonkeyPaste {
 
         public static MpIcon Create(string iconImgBase64) {
             var iconImage = new MpDbImage() {
-                //ImageBytes = iconImg
+                DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = iconImgBase64
             };
 
             // TODO add image manipulation stuff like in wpf or get rid of this crap
             var iconBorderImage = new MpDbImage() {
-                //ImageBytes = iconImg
+                DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = iconImgBase64
             };
             var iconBorderHighlightImage = new MpDbImage() {
-                //ImageBytes = iconImg
+                DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = iconImgBase64
             };
             var iconBorderHighlightSelectedImage = new MpDbImage() {
-                //ImageBytes = iconImg
+                DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = iconImgBase64
             };
 

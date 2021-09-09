@@ -31,6 +31,7 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpUrlDomain))]
         [Column("fk_MpUrlDomainId")]
         public int UrlDomainId { get; set; }
+
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
         public MpUrlDomain UrlDomain { get; set; }
 
@@ -47,7 +48,8 @@ namespace MonkeyPaste {
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
                 UrlDomain = MpUrlDomain.Create(domainStr),
-                UrlPath = urlPath
+                UrlPath = urlPath,
+                UrlTitle = urlTitle
             };
             newUrl.UrlDomainId = newUrl.UrlDomain.Id;
 

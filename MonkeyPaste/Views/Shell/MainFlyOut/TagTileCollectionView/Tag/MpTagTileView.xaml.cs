@@ -37,10 +37,10 @@ namespace MonkeyPaste {
                 cm.BindingContext = (BindingContext as MpTagTileViewModel).ContextMenuViewModel;
 
                 OnGlobalTouch += MpTagTileView_OnGlobalTouch;
-                (Application.Current.MainPage as MpMainShell).GlobalTouchService.Subscribe(OnGlobalTouch);
+                (Application.Current.MainPage as MpMainPage).GlobalTouchService.Subscribe(OnGlobalTouch);
             } else {
                 OnGlobalTouch -= MpTagTileView_OnGlobalTouch;
-                (Application.Current.MainPage as MpMainShell).GlobalTouchService.Unsubscribe(OnGlobalTouch);
+                (Application.Current.MainPage as MpMainPage).GlobalTouchService.Unsubscribe(OnGlobalTouch);
             }
         }
 

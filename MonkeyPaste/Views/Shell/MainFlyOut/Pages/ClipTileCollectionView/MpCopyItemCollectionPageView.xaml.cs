@@ -21,7 +21,6 @@ namespace MonkeyPaste {
         }
         public MpCopyItemCollectionPageView() {
             InitializeComponent();
-
             BindingContextChanged += MpCopyItemCollectionPageView_BindingContextChanged;
         }
 
@@ -36,8 +35,8 @@ namespace MonkeyPaste {
                 return;
             }
 
-            CopyItemViewModelSearchHandler.PropertyChanged += cicpvm.OnSearchQueryChanged;
-            CopyItemViewModelSearchHandler.Focused += CopyItemViewModelSearchHandler_Focused;
+            //CopyItemViewModelSearchHandler.PropertyChanged += cicpvm.OnSearchQueryChanged;
+            //CopyItemViewModelSearchHandler.Focused += CopyItemViewModelSearchHandler_Focused;
             Clipboard.ClipboardContentChanged += Clipboard_ClipboardContentChanged;
         }
 
@@ -53,7 +52,38 @@ namespace MonkeyPaste {
                 cicpvm.SetTag(cicpvm.TagId);
                 if(scivm != null) {
                     scivm.IsSelected = true;
+                } else {
+
+                    ToolbarItems.Remove(SetItemToClipboardToolbarItem);
                 }
+            }
+        }
+
+        private void Search_Clicked(object sender, EventArgs e) {
+            ToolbarItems.Remove(SearchToolbarItem);
+            SearchBar.IsVisible = true;
+            SearchBar.Focus();
+        }
+
+        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e) {
+            cicpvm.PerformSearchCommand.Execute(SearchBar.Text);
+        }
+
+        private void SearchBar_Unfocused(object sender, FocusEventArgs e) {
+            SearchBar.IsVisible = false;
+            ToolbarItems.Add(SearchToolbarItem);
+        }
+
+        private void CopyItemViewModels_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(e.CurrentSelection.Count > 0) {
+                if(!ToolbarItems.Contains(SetItemToClipboardToolbarItem)) {
+                    ToolbarItems.Add(SetItemToClipboardToolbarItem);
+                    var civm = e.CurrentSelection[0] as MpCopyItemViewModel;
+                    cicpvm.OnPropertyChanged(nameof(cicpvm.ClipboardToolbarIcon));
+                }
+                
+            } else {
+                ToolbarItems.Remove(SetItemToClipboardToolbarItem);
             }
         }
     }

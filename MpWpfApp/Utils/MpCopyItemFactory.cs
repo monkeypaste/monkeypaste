@@ -72,11 +72,8 @@ namespace MpWpfApp {
                 } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
                     itemType = MpCopyItemType.RichText;
                     if (iData.GetDataPresent(DataFormats.Html)) {
-                        // TODO parse html to get source url and html content
-                        url = MpUrl.Create("https://www.google.com", "Parse Html source here");
-                        var test = (string)iData.GetData(DataFormats.Html);
-                        MonkeyPaste.MpConsole.WriteLine("Html clipboard data: ");
-                        MonkeyPaste.MpConsole.WriteLine(test);
+                        var htmlData = (string)iData.GetData(DataFormats.Html);
+                        url = MpUrlFactory.CreateFromHtmlData(htmlData);
                     }
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
                 } else {
@@ -109,7 +106,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                if(app == null) {
+                if(app == null) { 
                     throw new Exception("Error creating copy item no source discovered");
                 }
                 var source = MpSource.Create(app, url);
