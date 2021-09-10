@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="MpWpfApp.MpClipTileTrialExpiredOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:spinners="clr-namespace:xamlSpinnersWPF"
+             xmlns:local="clr-namespace:MpWpfApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="TrialExpiredOverlayGrid"
+          Background="Gray"
+          Opacity="0.5"
+          Visibility="{Binding TrialOverlayVisibility}">
+        <Viewbox HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Width="{Binding LoadingSpinnerSize}"
+                 Height="{Binding LoadingSpinnerSize}">
+            <Image Source="/Resources/Images/lock.png"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </Viewbox>
+    </Grid>
+</UserControl>

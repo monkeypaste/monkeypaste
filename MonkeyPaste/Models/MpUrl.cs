@@ -32,7 +32,7 @@ namespace MonkeyPaste {
         [Column("fk_MpUrlDomainId")]
         public int UrlDomainId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
+        [ManyToOne]
         public MpUrlDomain UrlDomain { get; set; }
 
         [Indexed]

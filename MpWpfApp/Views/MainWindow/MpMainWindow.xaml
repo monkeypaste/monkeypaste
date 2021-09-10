@@ -320,6 +320,7 @@
                                                     VerticalAlignment="Stretch"
                                                     Background="{Binding TagBorderBackgroundBrush}"
                                                     BorderBrush="{Binding TagBorderBrush}"
+                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                                     BorderThickness="1.5"
                                                     Height="{Binding TagHeight}">
                                     <local:MpClipBorder.Resources>
@@ -350,18 +351,18 @@
                                             </i:Interaction.Triggers>
                                             <MenuItem Header="Rename"
                                                       Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      Command="{Binding Data.RenameTagCommand, Source={StaticResource TagTileProxy}}" />
+                                                      Command="{Binding PlacementTarget.Tag.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
                                             <MenuItem Header="Assign Hotkey"
                                                       Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      InputGestureText="{Binding Data.ShortcutKeyString, Source={StaticResource TagTileProxy}}"
-                                                      Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource TagTileProxy}}" />
+                                                      InputGestureText="{Binding PlacementTarget.Tag.ShortcutKeyString, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                      Command="{Binding PlacementTarget.Tag.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
                                             <Separator />
                                             <MenuItem x:Name="ClipTileColorContextMenuItem"
                                                       Style="{StaticResource ColorPalleteMenuItemStyle}" />
                                             <Separator />
                                             <MenuItem Header="Delete"
                                                       Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      Command="{Binding Data.MainWindowViewModel.TagTrayViewModel.DeleteTagCommand, Source={StaticResource TagTileProxy}}" />
+                                                      Command="{Binding DeleteTagCommand, Source={StaticResource TagTrayViewModel}}" />
                                         </ContextMenu>
                                     </local:MpClipBorder.ContextMenu>
                                     <Grid>

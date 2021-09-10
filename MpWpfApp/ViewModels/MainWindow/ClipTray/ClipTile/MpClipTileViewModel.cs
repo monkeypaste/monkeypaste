@@ -97,7 +97,7 @@
             }
         }
 
-        private MpClipTileRichTextBoxViewModelCollection _rtbListBoxItemRichTextBoxViewModels = new MpClipTileRichTextBoxViewModelCollection();
+        private MpClipTileRichTextBoxViewModelCollection _rtbListBoxItemRichTextBoxViewModels = null;
         public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
             get {
                 return _rtbListBoxItemRichTextBoxViewModels;
@@ -155,10 +155,10 @@
         public MpFileListItemCollectionViewModel FileListCollectionViewModel {
             get {
                 if (CopyItem == null || CopyItemType != MpCopyItemType.FileList) {
-                    return new MpFileListItemCollectionViewModel();
+                    return new MpFileListItemCollectionViewModel(this);
                 }
                 if (_fileListCollectionViewModel == null) {
-                    _fileListCollectionViewModel = new MpFileListItemCollectionViewModel();
+                    _fileListCollectionViewModel = new MpFileListItemCollectionViewModel(this);
                     foreach (var path in GetFileList()) {
                         _fileListCollectionViewModel.Add(new MpFileListItemViewModel(this, path));
                     }
@@ -2228,7 +2228,7 @@
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
-            var ctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
+            var ctvm = (((FrameworkElement)sender).DataContext as MpFileListItemCollectionViewModel).HostClipTileViewModel;
             if (ctvm.FileListVisibility == Visibility.Collapsed) {
                 return;
             }

@@ -814,7 +814,7 @@ namespace MonkeyPaste {
                     , MpUrlGuid text not null
                     , UrlPath text NOT NULL 
                     , UrlTitle text
-                    , fk_MpUrlDomainId int NOT NULL
+                    , fk_MpUrlDomainId int 
                     ); 
                     
                     CREATE TABLE MpSource (

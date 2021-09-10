@@ -286,6 +286,9 @@ namespace MpWpfApp {
             MpAppModeViewModel.Instance.Init();
             MpTagTrayViewModel.Instance.Init();
             //TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
+
+            Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
+            Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {

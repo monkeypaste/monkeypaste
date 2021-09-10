@@ -273,6 +273,48 @@
     <Compile Include="Views\Analytics\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListCollectionView.xaml.cs">
+      <DependentUpon>MpFileListCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemView.xaml.cs">
+      <DependentUpon>MpFileListItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml.cs">
+      <DependentUpon>MpImageItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Overlays\MpRtbItemOverlayView.xaml.cs">
+      <DependentUpon>MpRtbItemOverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml.cs">
+      <DependentUpon>MpRtbEditToolbarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemCollectionVIew.xaml.cs">
+      <DependentUpon>MpRtbItemCollectionVIew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemVIew.xaml.cs">
+      <DependentUpon>MpRtbItemVIew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpEditTemplateToolbarView.xaml.cs">
+      <DependentUpon>MpEditTemplateToolbarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpPasteTemplateToolbarView.xaml.cs">
+      <DependentUpon>MpPasteTemplateToolbarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Detail\MpClipTileDetailView.xaml.cs">
+      <DependentUpon>MpClipTileDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileView.xaml.cs">
+      <DependentUpon>MpClipTileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileLoadingOverlayView.xaml.cs">
+      <DependentUpon>MpClipTileLoadingOverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileTrialExpiredOverlay.xaml.cs">
+      <DependentUpon>MpClipTileTrialExpiredOverlay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleView.xaml.cs">
+      <DependentUpon>MpClipTileTitleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
@@ -328,6 +370,62 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Analytics\MpImageAnalysisDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Overlays\MpRtbItemOverlayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemCollectionVIew.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemVIew.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpEditTemplateToolbarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpPasteTemplateToolbarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Detail\MpClipTileDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileLoadingOverlayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileTrialExpiredOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

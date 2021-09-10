@@ -7,20 +7,18 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpFileListItemViewModel : MpViewModelBase {
-
-
         #region Properties
 
         #region View Models
-        private MpClipTileViewModel _clipTileViewModel = null;
-        public MpClipTileViewModel ClipTileViewModel {
+        private MpClipTileViewModel _hostClipTileViewModel = null;
+        public MpClipTileViewModel HostClipTileViewModel {
             get {
-                return _clipTileViewModel;
+                return _hostClipTileViewModel;
             }
             set {
-                if (_clipTileViewModel != value) {
-                    _clipTileViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileViewModel));
+                if (_hostClipTileViewModel != value) {
+                    _hostClipTileViewModel = value;
+                    OnPropertyChanged(nameof(HostClipTileViewModel));
                 }
             }
         }
@@ -115,7 +113,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpFileListItemViewModel(MpClipTileViewModel parent, string path) : base() {
-            ClipTileViewModel = parent;
+            HostClipTileViewModel = parent;
             ItemPath = path;
             ItemUri = new Uri(ItemPath,UriKind.Absolute);
             ItemName = Path.GetFileName(ItemUri.LocalPath);
@@ -138,7 +136,7 @@ namespace MpWpfApp {
         }
 
         public void FileItemWebBrowser_Loaded(object sender, RoutedEventArgs e) {
-            if (ClipTileViewModel.WebBrowserFileViewerVisibility == Visibility.Collapsed) {
+            if (HostClipTileViewModel.WebBrowserFileViewerVisibility == Visibility.Collapsed) {
                 return;
             }
             FileWebBrowser = (WebBrowser)sender;
