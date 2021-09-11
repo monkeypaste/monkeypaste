@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -120,6 +121,28 @@ namespace MonkeyPaste {
             var myHexString =  $"#{red:X2}{green:X2}{blue:X2}{alpha:X2}";
             var hexString = color.ToHex(); 
             return hexString;
+        }
+
+        public static SKColor ToGrayScale(this SKColor c) {
+            // from https://stackoverflow.com/a/3968341/105028
+            byte intensity = (byte)((double)c.Blue * 0.11 + (double)c.Green * 0.59 + (double)c.Red * 0.3);
+            return new SKColor(intensity, intensity, intensity);
+        }
+
+        public static int ColorDistance(this SKColor a, SKColor b) {
+            // from https://stackoverflow.com/a/3968341/105028
+
+            byte a_intensity = a.ToGrayScale().Red;
+            byte b_intensity = b.ToGrayScale().Red;
+            return (int)(((a_intensity - b_intensity) * 100) / 255);
+        }
+
+        public static SKColor ToSkColor(this string hexColor) {
+            return Color.FromHex(hexColor).ToSKColor();
+        }
+
+        public static SKColor ToSKColor(this Color c) {
+            return new SKColor((byte)(c.R * 255), (byte)(c.G * 255), (byte)(c.B * 255),(byte)(c.A * 255));
         }
 
         public static Color GetColor(this string hexString) {

@@ -2,12 +2,14 @@
 using FFImageLoading.Helpers.Exif;
 using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
@@ -70,7 +72,7 @@ namespace MonkeyPaste {
 
         public bool HasTemplates {
             get {
-                return CopyItem.Templates != null && CopyItem.Templates.Count > 0;
+                return GetTemplates().Count > 0;
             }
         }
 
@@ -151,7 +153,7 @@ namespace MonkeyPaste {
         }
 
         private void InitEditor() {
-            var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            var html = MpHelpers.Instance.LoadTextResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             
             string contentTag = @"<div id='editor'>";
             var data = CopyItem.ItemData; //string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
@@ -162,6 +164,16 @@ namespace MonkeyPaste {
             html = html.Replace(envTag, envVal);
 
             EditorHtml = html;
+        }
+
+        private List<MpCopyItemTemplate> GetTemplates() {
+            var tl = new List<MpCopyItemTemplate>();
+            if(CopyItem == null) {
+                return tl;
+            }
+            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
+                                .Where(x => x.CopyItemId == CopyItem.Id)
+                                .ToList();
         }
 
         private async Task<string> EvalJs(string js) {

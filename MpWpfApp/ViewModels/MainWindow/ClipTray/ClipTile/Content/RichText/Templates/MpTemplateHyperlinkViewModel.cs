@@ -349,6 +349,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        public static event EventHandler OnTemplateSelected;
+
         #region Factory Methods
         public static Hyperlink CreateTemplateHyperlink(MpRtbListBoxItemRichTextBoxViewModel rtbvm, MpCopyItemTemplate cit, TextRange tr) {
             var thlvm = new MpTemplateHyperlinkViewModel(rtbvm, cit);
@@ -414,7 +416,9 @@ namespace MpWpfApp {
                 switch(e.PropertyName) {
                     case nameof(IsSelected):
                         if(IsSelected && HostRtbItemViewModel.IsEditingContent) {
-                            HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(HostRtbItemViewModel.Rtb);
+                            //HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(HostRtbItemViewModel.Rtb);
+
+                            OnTemplateSelected?.Invoke(this, null);
                         }
                         //if(!IsSelected && HostRtbItemViewModel.IsPastingTemplate && !string.IsNullOrEmpty(TemplateText) && HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
                         //    //occurs during template paste after a template has been navigated away from it and 
@@ -441,11 +445,11 @@ namespace MpWpfApp {
                 //while (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
                 //    randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //}
-                cit = new MpCopyItemTemplate() {
-                    CopyItemId = rtbvm.CopyItemId,
-                    HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
-                    TemplateName = namePrefix + uniqueIdx + ">"
-                };
+                cit = MpCopyItemTemplate.Create(
+                    rtbvm.CopyItem.Id,
+                    namePrefix + uniqueIdx + ">",
+                    MpHelpers.Instance.GetRandomColor().ToString()
+                );
             }
             CopyItemTemplate = cit;         
         }

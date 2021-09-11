@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="MpWpfApp.MpSystemTrayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:tb="http://www.hardcodet.net/taskbar"
+             xmlns:local="clr-namespace:MpWpfApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
+                    IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
+                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
+                    ToolTipText="{Binding SystemTrayIconToolTipText}">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:CallMethodAction MethodName="SystemTrayTaskbarIcon_Loaded"
+                                    TargetObject="{Binding}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <tb:TaskbarIcon.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Settings"
+                          Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                          Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+                          CommandParameter="{StaticResource SettingsTabAccount}" />
+                <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                          Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}, Source={StaticResource SystemTrayViewModel}}"
+                          Command="{Binding AppModeViewModel.ToggleIsAppPausedCommand, Source={StaticResource MainWindowViewModel}}" />
+                <MenuItem Header="Help"
+                          Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                          Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+                          CommandParameter="{StaticResource SettingsTabHelp}" />
+                <MenuItem Header="Log..."
+                          Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="Exit"
+                          Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                          Command="{Binding PlacementTarget.Tag.ExitApplicationCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
+            </ContextMenu>
+        </tb:TaskbarIcon.ContextMenu>
+        <tb:TaskbarIcon.TrayToolTip>
+            <Border DataContext="{StaticResource SystemTrayViewModel}" 
+                    Background="{StaticResource AppColorDark}"
+                    BorderBrush="{StaticResource AppColorLight}"
+                    BorderThickness="2"
+                    Padding="10"
+                    CornerRadius="4"
+                    Opacity="0.8">
+                <StackPanel>
+                    <TextBlock Text="{Binding AppStatus}"
+                               Foreground="White"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding AccountStatus}"
+                               Foreground="White"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding TotalItemCount}"
+                               Foreground="White"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding DbSizeInMbs}"
+                               Foreground="White"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </tb:TaskbarIcon.TrayToolTip>
+    </tb:TaskbarIcon>
+</UserControl>

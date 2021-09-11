@@ -169,7 +169,7 @@
                                   Command="{Binding PlacementTarget.Tag.ExcludeApplicationCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
                         <MenuItem Header="Add Paste Macro For Application"
                                   Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource MainWindowViewModel}}"
+                                  Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
                                   CommandParameter="{Binding}" />
                     </ContextMenu>
                 </Button.ContextMenu>

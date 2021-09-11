@@ -68,6 +68,7 @@
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
+    <None Remove="Resources\Images\test.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -87,6 +88,7 @@
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
+    <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -96,7 +98,6 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
-    <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />

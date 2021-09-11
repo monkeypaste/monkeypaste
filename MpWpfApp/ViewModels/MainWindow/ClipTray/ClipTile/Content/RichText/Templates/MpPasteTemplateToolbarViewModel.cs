@@ -310,11 +310,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPasteTemplateToolbarViewModel(MpClipTileViewModel ctvm) : base() {
+        public MpPasteTemplateToolbarViewModel() : base() {
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(SelectedTemplateIdx):
-                        if(SubSelectedRtbViewModel == null || SelectedTemplateIdx < 0) {
+                        if (SubSelectedRtbViewModel == null || SelectedTemplateIdx < 0) {
                             break;
                         }
                         SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[SelectedTemplateIdx].TemplateName);
@@ -331,6 +331,9 @@ namespace MpWpfApp {
                         break;
                 }
             };
+        }
+        public MpPasteTemplateToolbarViewModel(MpClipTileViewModel ctvm) : this() {
+            
             HostClipTileViewModel = ctvm;
         }
 

@@ -1,12 +1,106 @@
-﻿<UserControl x:Class="MpWpfApp.Views.MainWindow.SideBarMenu.MpAppModeButtonGridView"
+﻿<UserControl x:Class="MpWpfApp.MpAppModeButtonGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MpWpfApp.Views.MainWindow.SideBarMenu"
+             xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Grid.Row="0"
+          Grid.Column="0"
+          Background="DimGray">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:CallMethodAction MethodName="AppMode_Loaded"
+                                    TargetObject="{Binding}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ToggleButton Grid.Row="0"
+                      Grid.Column="0"
+                      Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      ToolTipService.InitialShowDelay="0"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="{Binding IsAppPausedTooltip}"
+                      Padding="10"
+                      IsChecked="{Binding IsAppPaused}">
+            <Image Source="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}, Source={StaticResource SystemTrayViewModel}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton Grid.Row="1"
+                      Grid.Column="0"
+                      ToolTipService.InitialShowDelay="0"
+                      ToolTip="{Binding IsAutoCopyModeTooltip}"
+                      Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      IsEnabled="{Binding IsAutoCopyModeEnabled}"
+                      IsChecked="{Binding IsAutoCopyMode}"
+                      Padding="10">
+            <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton Grid.Row="2"
+                      Grid.Column="0"
+                      ToolTipService.InitialShowDelay="0"
+                      Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="{Binding IsRighClickPasteModeTooltip}"
+                      IsEnabled="{Binding IsRighClickPasteModeEnabled}"
+                      IsChecked="{Binding IsRightClickPasteMode}"
+                      Padding="10">
+            <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton Grid.Row="3"
+                      Grid.Column="0"
+                      Padding="10"
+                      ToolTipService.InitialShowDelay="0"
+                      Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="{Binding IsAppendModeTooltip}"
+                      IsEnabled="{Binding IsAppendModeEnabled}"
+                      IsChecked="{Binding IsInAppendMode}">
+            <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton Grid.Row="4"
+                      Grid.Column="0"
+                      ToolTipService.InitialShowDelay="0"
+                      Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="{Binding IsAutoAnalysisModeTooltip}"
+                      IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
+                      IsChecked="{Binding IsInAutoAnalyzeMode}"
+                      Padding="10">
+            <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
     </Grid>
 </UserControl>

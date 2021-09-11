@@ -282,9 +282,6 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Overlays\MpRtbItemOverlayView.xaml.cs">
-      <DependentUpon>MpRtbItemOverlayView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml.cs">
       <DependentUpon>MpRtbEditToolbarView.xaml</DependentUpon>
     </Compile>
@@ -318,10 +315,19 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\MpItemSearchView.xaml.cs">
+      <DependentUpon>MpItemSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml.cs">
+      <DependentUpon>MpItemSortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml.cs">
+      <DependentUpon>MpTagTileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\TagTray\MpTagTrayView.xaml.cs">
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
       <DependentUpon>MpTagTrayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
@@ -357,6 +363,9 @@
     <Compile Include="Views\SwirlTest.xaml.cs">
       <DependentUpon>SwirlTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SystemTray\MpSystemTrayView.xaml.cs">
+      <DependentUpon>MpSystemTrayView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -382,10 +391,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Overlays\MpRtbItemOverlayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -433,11 +438,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\FilterMenu\Search\MpItemSearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\MpMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\TagTray\MpTagTrayView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -491,6 +508,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SwirlTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemTray\MpSystemTrayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1887,6 +1908,7 @@
     <Resource Include="Resources\Images\defaultfavicon.png" />
     <Resource Include="Resources\Images\copy.png" />
     <Resource Include="FodyWeavers.xml" />
+    <Resource Include="Resources\Images\down_black.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1906,6 +1928,7 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

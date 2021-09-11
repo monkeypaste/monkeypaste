@@ -6,7 +6,10 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="50" d:DesignWidth="800">
+    <UserControl.Resources>
+        <RichTextBox x:Key="CurrentRtbTarget" />
+    </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
             Canvas.Top="{Binding HostClipTileViewModel.EditRichTextBoxToolbarViewModel.EditBorderCanvasTop, Mode=TwoWay}"
             Visibility="{Binding HostClipTileViewModel.EditToolbarVisibility}"
@@ -24,6 +27,8 @@
             </i:Interaction.Triggers>
             <Button x:Name="PrintButton"
                     Template="{StaticResource FlatButtonControlTemplate}"
+                    Click="PrintButton_Click"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     Margin="10,1,0,1">
                 <Image Source="/Resources/Images/MpRichTextBox/Print.png"
                        Stretch="None"
@@ -33,6 +38,7 @@
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <ComboBox x:Name="FontFamilyCombo"
+                      SelectionChanged="FontFamilyCombo_SelectionChanged"
                       Height="23"
                       Width="100"
                       Margin="5,2,0,2"
@@ -57,11 +63,13 @@
                       Width="40"
                       Margin="5,2,5,2"
                       IsEditable="True"
+                      SelectionChanged="FontSizeCombo_SelectionChanged"
                       ItemsSource="{Binding FontSizes}" />
             <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <Button x:Name="AddTemplateButton"
+                    PreviewMouseDown="AddTemplateButton_PreviewMouseDown"
                     ToolTip="Add Template"
                     Template="{StaticResource FlatButtonControlTemplate}"
                     IsEnabled="{Binding IsAddTemplateButtonEnabled}"
@@ -75,6 +83,7 @@
                    SnapsToDevicePixels="True" />
             <Button x:Name="CutButton"
                     Command="ApplicationCommands.Cut"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     ToolTip="Cut"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/editcut.png"
@@ -83,6 +92,7 @@
             </Button>
             <Button x:Name="CopyButton"
                     Command="ApplicationCommands.Copy"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     ToolTip="Copy"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/editcopy.png"
@@ -91,6 +101,7 @@
             </Button>
             <Button x:Name="PasteButton"
                     Command="ApplicationCommands.Paste"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     ToolTip="Paste"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/editpaste.png"
@@ -99,6 +110,7 @@
             </Button>
             <Button x:Name="UndoButton"
                     Command="ApplicationCommands.Undo"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     ToolTip="Undo"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/editundo.png"
@@ -107,6 +119,7 @@
             </Button>
             <Button x:Name="RedoButton"
                     Command="ApplicationCommands.Redo"
+                    CommandTarget="{StaticResource CurrentRtbTarget}"
                     ToolTip="Redo"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/editredo.png"
@@ -117,6 +130,7 @@
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <ToggleButton x:Name="BoldButton"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
                           Command="EditingCommands.ToggleBold"
                           ToolTip="Bold"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
@@ -126,6 +140,7 @@
             </ToggleButton>
             <ToggleButton x:Name="ItalicButton"
                           Command="EditingCommands.ToggleItalic"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
                           ToolTip="Italic"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/fontitalic.png"
@@ -133,6 +148,7 @@
                        SnapsToDevicePixels="True" />
             </ToggleButton>
             <ToggleButton x:Name="UnderlineButton"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
                           Command="EditingCommands.ToggleUnderline"
                           ToolTip="Underline"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
@@ -144,6 +160,7 @@
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <Button x:Name="ForegroundColorButton"
+                    Click="ForegroundColorButton_Click"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Border x:Name="ForegroundColorButtonBorder">
                     <Image Source="/Resources/Images/MpRichTextBox/Textcolor.png"
@@ -153,6 +170,7 @@
                 </Border>
             </Button>
             <Button x:Name="BackgroundColorButton"
+                    Click="BackgroundColorButton_Click"
                     Template="{StaticResource FlatButtonControlTemplate}">
                 <Border x:Name="BackgroundColorButtonBorder">
                     <Image Source="/Resources/Images/MpRichTextBox/Backcolor.png"
@@ -162,9 +180,11 @@
             </Button>
             <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None"
-                   SnapsToDevicePixels="True" />
-            <ToggleButton x:Name="LeftButton"
+                   SnapsToDevicePixels="True" />            
+            <ToggleButton x:Name="LeftButton"                          
                           Command="EditingCommands.AlignLeft"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
+                          Click="AlignmentToggleButton_Click"
                           ToolTip="Align Left"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/alignleft.png"
@@ -173,6 +193,8 @@
             </ToggleButton>
             <ToggleButton x:Name="CenterButton"
                           Command="EditingCommands.AlignCenter"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
+                          Click="AlignmentToggleButton_Click"
                           ToolTip="Align Center"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/aligncenter.png"
@@ -181,6 +203,8 @@
             </ToggleButton>
             <ToggleButton x:Name="RightButton"
                           Command="EditingCommands.AlignRight"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
+                          Click="AlignmentToggleButton_Click"
                           ToolTip="Align Right"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/alignright.png"
@@ -192,6 +216,8 @@
                    SnapsToDevicePixels="True" />
             <ToggleButton x:Name="BulletsButton"
                           Command="EditingCommands.ToggleBullets"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
+                          Click="ListToggleButton_Click"
                           ToolTip="Bullets"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/listbullets.png"
@@ -200,6 +226,8 @@
             </ToggleButton>
             <ToggleButton x:Name="NumberingButton"
                           Command="EditingCommands.ToggleNumbering"
+                          CommandTarget="{StaticResource CurrentRtbTarget}"
+                          Click="ListToggleButton_Click"
                           ToolTip="Numbering"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/MpRichTextBox/listnumbers.png"
@@ -214,7 +242,8 @@
                           ToolTip="Spell Check?"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/spellcheck.png"
-                       Stretch="Fill"
+                       Width="16"
+                       Height="16"
                        SnapsToDevicePixels="True" />
             </ToggleButton>
             <Image Source="/Resources/Images/MpRichTextBox/separator.png"

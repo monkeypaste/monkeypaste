@@ -6,22 +6,16 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="50" d:DesignWidth="700">    
     <Border x:Name="ClipTileEditTemplateToolbar"
             Visibility="{Binding HostClipTileViewModel.EditTemplateToolbarVisibility}"
-            Canvas.Top="{Binding HostClipTileViewModel.EditTemplateToolbarViewModel.EditTemplateBorderCanvasTop, Mode=TwoWay}"
-            Height="{Binding HostClipTileViewModel.EditTemplateToolbarHeight}"
-            Width="{Binding HostClipTileViewModel.TileContentWidth}"
+            Width="{Binding HostClipTileViewModel.TileBorderWidth}"
+            Height="40"
+            HorizontalAlignment="Stretch"
             CornerRadius="10,0,0,10"
             BorderThickness="0"
             Background="LightBlue">
-        <Grid DataContext="{Binding HostClipTileViewModel.EditTemplateToolbarViewModel}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                    <i:CallMethodAction TargetObject="{Binding}"
-                                        MethodName="EditTemplateToolbarBorderGrid_Loaded" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="3*" />
@@ -29,6 +23,8 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="TemplateColorButton"
                     Grid.Column="0"
+                    Command="{Binding ChangeTemplateColorCommand}"
+                    CommandParameter="{x:Reference TemplateColorButton}"
                     Background="{Binding SelectedTemplateHyperlinkViewModel.TemplateBrush, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                     Width="20"
                     Height="20"
@@ -46,6 +42,8 @@
                          BorderBrush="{Binding SelectedTemplateNameTextBoxBorderBrush}"
                          BorderThickness="2"
                          Text="{Binding SelectedTemplateHyperlinkViewModel.TemplateName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                         TextChanged="TemplateNameEditorTextBox_TextChanged"
+                         PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                          FontSize="14"
                          Height="25"
                          MinWidth="200"

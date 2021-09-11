@@ -1386,7 +1386,7 @@ namespace MpWpfApp {
                                 rtbvm.IsSubSelected = false;
                             }
                             if (rtbvm.HostClipTileViewModel.IsEditingTile) {
-                                rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, false);
+                                //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, false);
                             }              
                         } else if(rtbvm.HostClipTileViewModel.IsEditingTile) {
                             rtbvm.SaveSubItemToDatabase();
@@ -1471,7 +1471,7 @@ namespace MpWpfApp {
             Rtb.SelectionChanged += (s, e3) => {
                 var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
                 if (rtbvm.IsEditingContent) {
-                    rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.Rtb_SelectionChanged(rtbvm.Rtb, e3);
+                    //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.Rtb_SelectionChanged(rtbvm.Rtb, e3);
                 }
             };
 
@@ -1915,6 +1915,18 @@ namespace MpWpfApp {
             }
         }
 
+        public List<MpCopyItemTemplate> GetTemplates() {
+            var tl = new List<MpCopyItemTemplate>();
+            if (CopyItem == null) {
+                return tl;
+            }
+            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
+                                .Where(x => x.CopyItemId == CopyItem.Id)
+                                .ToList();
+        }
+
+        
+
         public void CreateHyperlinks() {
             if(Rtb == null) {
                 return;
@@ -1950,7 +1962,7 @@ namespace MpWpfApp {
                             }
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
+                                var copyItemTemplate = GetTemplates().Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
                                     //CopyItem.GetTemplateByName(matchRange.Text);
                                 hl = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(this, copyItemTemplate, matchRange);
                                 hl.Tag = linkType;

@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="MpWpfApp.MpItemSearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:spinners="clr-namespace:xamlSpinnersWPF"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MpWpfApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <!-- Search Border -->
+        <local:MpClipBorder x:Name="SearchTextBoxBorder"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"
+                            Margin="5"
+                            CornerRadius="10"
+                            BorderBrush="{Binding TextBoxBorderBrush}"
+                            Background="White"
+                            BorderThickness="3">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:CallMethodAction MethodName="SearchBoxBorder_Loaded"
+                                        TargetObject="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SearchDropDownButton"
+                        Background="Transparent"
+                        Grid.Column="0"
+                        Margin="3,0,0,0"
+                        Width="25"
+                        Height="25"
+                        Template="{StaticResource SearchButtonControlTemplate}"
+                        BorderThickness="0">
+                    <Image Source="/MpWpfApp;component/Resources/Images/search.png"
+                           Stretch="Fill"
+                           SnapsToDevicePixels="True" />
+                </Button>
+                <TextBox x:Name="SearchBox"
+                         Grid.Column="1"
+                         AllowDrop="False"
+                         FontSize="16"
+                         Background="Transparent"
+                         Foreground="{Binding TextBoxTextBrush}"
+                         FontStyle="{Binding TextBoxFontStyle}"
+                         BorderThickness="0"
+                         VerticalContentAlignment="Center"
+                         Padding="0,0,0,0"
+                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"></TextBox>
+                <spinners:ucSpinnerApple x:Name="IsSearchingSpinner"
+                                         Grid.Column="2"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,5,0"
+                                         Visibility="{Binding SearchSpinnerVisibility}" />
+                <Button x:Name="ClearTextBoxButton"
+                        Grid.Column="2"
+                        Width="15"
+                        Height="15"
+                        Visibility="{Binding ClearTextButtonVisibility}"
+                        Command="{Binding ClearTextCommand}"
+                        Template="{DynamicResource BackgroundButton}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
+                    </Button.Background>
+                    <Button.Resources>
+                        <ControlTemplate x:Key="BackgroundButton"
+                                         TargetType="Button">
+                            <Border x:Name="border"
+                                    BorderThickness="0"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            TargetName="border">
+                                        <Setter.Value>
+                                            <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </local:MpClipBorder>
+        <!-- Search Navigation Border-->
+        <local:MpClipBorder Grid.Column="1"
+                            CornerRadius="10"
+                            Visibility="{Binding SearchNavigationButtonPanelVisibility}"
+                            HorizontalAlignment="Center"
+                            Margin="3,0,10,0">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="PreviousTemplateButton"
+                        TabIndex="2"
+                        Command="{Binding PrevMatchCommand}"
+                        Width="20"
+                        Height="20"
+                        Padding="5">
+                    <Image Source="/Resources/Images/back_black.png" />
+                </Button>
+                <Button x:Name="NextTemplateButton"
+                        TabIndex="3"
+                        Command="{Binding NextMatchCommand}"
+                        Width="20"
+                        Height="20"
+                        Padding="5">
+                    <Image Source="/Resources/Images/forward_black.png" />
+                </Button>
+            </StackPanel>
+        </local:MpClipBorder>
+    </Grid>
+</UserControl>

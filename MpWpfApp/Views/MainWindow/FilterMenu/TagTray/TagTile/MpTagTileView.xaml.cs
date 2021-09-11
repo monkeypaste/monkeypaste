@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAppModeButtonGridView.xaml
+    /// Interaction logic for MpTagTileView.xaml
     /// </summary>
-    public partial class MpAppModeButtonGridView : UserControl {
-        public MpAppModeButtonGridView() {
+    public partial class MpTagTileView : UserControl {
+        public MpTagTileView() {
             InitializeComponent();
         }
     }

@@ -24,9 +24,9 @@ namespace MpWpfApp {
         private TextRange _originalSelection = null;
         private Brush _originalTemplateColor = Brushes.Pink;
 
-        private Grid _borderGrid = null;
+        //private Grid _borderGrid = null;
 
-        private bool _wasEdited = false;
+        
         #endregion
 
         #region Properties       
@@ -73,7 +73,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-        public TextBox SelectedTemplateNameTextBox {get; set;}
+        // public TextBox SelectedTemplateNameTextBox {get; set;}
         #endregion
 
         #region Layout 
@@ -128,7 +128,9 @@ namespace MpWpfApp {
             get {
                 return string.IsNullOrEmpty(_originalTemplateName);
             }
-        }        
+        }
+
+        public bool WasEdited { get; set; } = false;
         #endregion
 
         #region Business Logic Properties
@@ -150,14 +152,25 @@ namespace MpWpfApp {
         #endregion
 
         #region Model Properties
-
+        public MpCopyItemTemplate CopyItemTemplate { get; set; }
         #endregion
 
         #endregion
 
         #region Public Methods
+        public MpEditTemplateToolbarViewModel() : base() {
+            PropertyChanged += MpEditTemplateToolbarViewModel_PropertyChanged;
+        }
 
-        public MpEditTemplateToolbarViewModel(MpClipTileViewModel ctvm) : base() {
+        private void MpEditTemplateToolbarViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(CopyItemTemplate):
+
+                    break;
+            }
+        }
+
+        public MpEditTemplateToolbarViewModel(MpClipTileViewModel ctvm) : this() {
             HostClipTileViewModel = ctvm;
         }
 
@@ -165,105 +178,43 @@ namespace MpWpfApp {
             if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
                 return;
             }
-            _borderGrid = (Grid)sender;                 
+            // _borderGrid = (Grid)sender;
+            //SelectedTemplateNameTextBox = (TextBox)(sender as FrameworkElement).FindName("TemplateNameEditorTextBox");
         }
 
-        public void InitWithRichTextBox(RichTextBox rtb) {
-            SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel):
-                        //thlvm.IsSelected is triggered on mouse click, this brings up edit toolbar
-                        SetTemplate(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel, true);
-                        break;
-                }
-            };
-            var editTemplateToolbarBorder = _borderGrid.GetVisualAncestor<Border>();
-            var templateColorButton = (Button)editTemplateToolbarBorder.FindName("TemplateColorButton");
-            var cb = (MpClipBorder)editTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
-            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
-            var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
-            var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
-            //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
-            var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
-            var titleSwirl = (Image)cb.FindName("TitleSwirl");
+        //public void InitWithRichTextBox(RichTextBox rtb) {
+            //SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
+            //    switch (e.PropertyName) {
+            //        case nameof(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel):
+            //            //thlvm.IsSelected is triggered on mouse click, this brings up edit toolbar
+            //            SetTemplate(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel, true);
+            //            break;
+            //    }
+            //};
 
-            SelectedTemplateNameTextBox = (TextBox)editTemplateToolbarBorder.FindName("TemplateNameEditorTextBox");
+            //if (HostClipTileViewModel.IsEditingTemplate && HostClipTileViewModel.IsEditingTile) {
+            //    SelectedTemplateNameTextBox.Focus();
+            //    SelectedTemplateNameTextBox.SelectAll();
+            //} else if (WasEdited) {
+            //    ResetState();
+            //    if (!Validate()) {
+            //        CancelCommand.Execute(null);
+            //    } else {
+            //        OkCommand.Execute(null);
+            //    }
+            //}
+        //}
 
-            templateColorButton.Click += (s, e) => {
-                var colorMenuItem = new MenuItem();
-                var colorContextMenu = new ContextMenu();
-                colorContextMenu.Items.Add(colorMenuItem);
-                MpHelpers.Instance.SetColorChooserMenuItem(
-                    colorContextMenu,
-                    colorMenuItem,
-                    (s1, e1) => {
-                        if(IsSelectedNewTemplate) {
-                            SelectedTemplateHyperlinkViewModel.TemplateBrush = (Brush)((Border)s1).Tag;
-                        } else {
-                            foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
-                                if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
-                                    thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
-                                }
-                            }
-                        }                        
-                    },
-                    MpHelpers.Instance.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
-                    MpHelpers.Instance.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
-                );
-                templateColorButton.ContextMenu = colorContextMenu;
-                colorContextMenu.PlacementTarget = templateColorButton;
-                colorContextMenu.Width = 200;
-                colorContextMenu.Height = 100;
-                colorContextMenu.IsOpen = true;
-            };
+        //public void Resize(double deltaTemplateTop,double deltaWidth) {
+            //if(deltaTemplateTop > 0) {
+            //    HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
+            //} else {
+            //    HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Hidden;
+            //}
 
-            SelectedTemplateNameTextBox.TextChanged += (s, e) => {
-                _wasEdited = true;
-                if (SelectedTemplateHyperlinkViewModel != null) {
-                    foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
-                        if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
-                            thlvm.TemplateName = SelectedTemplateNameTextBox.Text;
-                        }
-                    }
-                    Validate();
-                }
-            };
-
-            SelectedTemplateNameTextBox.PreviewKeyDown += (s, e8) => {
-                if (e8.Key == Key.Escape) {
-                    CancelCommand.Execute(null);
-                    e8.Handled = true;
-                }
-                if (e8.Key == Key.Enter) {
-                    OkCommand.Execute(null);                    
-                    e8.Handled = true;
-                }
-            };
-
-            rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
-                if (HostClipTileViewModel.IsEditingTemplate) {
-                    //clicking out of edit template toolbar performs Ok Command (save template & hide toolbar)
-                    OkCommand.Execute(null);
-                }
-            };
-
-
-            if (HostClipTileViewModel.IsEditingTemplate && HostClipTileViewModel.IsEditingTile) {
-                SelectedTemplateNameTextBox.Focus();
-                SelectedTemplateNameTextBox.SelectAll();
-            } else if (_wasEdited) {
-                ResetState();
-                if (!Validate()) {
-                    CancelCommand.Execute(null);
-                } else {
-                    OkCommand.Execute(null);
-                }
-            }
-        }
-        public void Resize(double deltaTemplateTop) {
             //EditTemplateBorderCanvasTop += deltaTemplateTop;
-            HideToolbar();
-        }
+            //HideToolbar();
+        //}
 
         public void SetTemplate(MpTemplateHyperlinkViewModel ttcvm, bool isEditMode) {
             //cases
@@ -310,10 +261,19 @@ namespace MpWpfApp {
                 ShowToolbar();
             }
         }
-        #endregion
 
-        #region Private Methods
-        private void ResetState() {
+        public void SetTemplateName(string newName) {
+            if (SelectedTemplateHyperlinkViewModel != null) {
+                foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
+                    if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
+                        thlvm.TemplateName = newName;
+                    }
+                }
+                Validate();
+            }
+        }
+
+        public void ResetState() {
             SelectedTemplateHyperlinkViewModel = null;
             ValidationText = string.Empty;
             _selectedTemplateHyperlink = null;
@@ -321,7 +281,17 @@ namespace MpWpfApp {
             _originalTemplateName = string.Empty;
             _originalSelection = null;
             _originalTemplateColor = Brushes.Pink;
+
+            if (!Validate()) {
+                CancelCommand.Execute(null);
+            } else {
+                OkCommand.Execute(null);
+            }
         }
+        #endregion
+
+        #region Private Methods
+
 
         private bool Validate() {
             if (SelectedTemplateHyperlinkViewModel == null || SubSelectedRtbViewModel == null) {
@@ -370,11 +340,13 @@ namespace MpWpfApp {
         }
 
         private void ShowToolbar() {
-            EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight - HostClipTileViewModel.EditTemplateToolbarHeight;
+            //EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight - HostClipTileViewModel.EditTemplateToolbarHeight;
+            HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
         }
 
         private void HideToolbar() {
-            EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight + 20;
+            //EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight + 20;
+            HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Hidden;
         }
 
         #endregion
@@ -445,11 +417,49 @@ namespace MpWpfApp {
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
             HostClipTileViewModel.IsEditingTemplate = false;
             HideToolbar();
-            SubSelectedRtbViewModel.Rtb.Focus();
+            //SubSelectedRtbViewModel.Rtb.Focus();
+        }
+
+        private RelayCommand<object> _changeTemplateColorCommand;
+        public ICommand ChangeTemplateColorCommand {
+            get {
+                if(_changeTemplateColorCommand == null) {
+                    _changeTemplateColorCommand = new RelayCommand<object>(ChangeTemplateColor);
+                }
+                return _changeTemplateColorCommand;
+            }
+        }
+        private void ChangeTemplateColor(object args) {
+            var templateColorButton = args as Button;
+            var colorMenuItem = new MenuItem();
+            var colorContextMenu = new ContextMenu();
+            colorContextMenu.Items.Add(colorMenuItem);
+            MpHelpers.Instance.SetColorChooserMenuItem(
+                colorContextMenu,
+                colorMenuItem,
+                (s1, e1) => {
+                    if (IsSelectedNewTemplate) {
+                        SelectedTemplateHyperlinkViewModel.TemplateBrush = (Brush)((Border)s1).Tag;
+                    } else {
+                        foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
+                            if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                                thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
+                            }
+                        }
+                    }
+                },
+                MpHelpers.Instance.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
+                MpHelpers.Instance.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
+            );
+            templateColorButton.ContextMenu = colorContextMenu;
+            colorContextMenu.PlacementTarget = templateColorButton;
+            colorContextMenu.Width = 200;
+            colorContextMenu.Height = 100;
+            colorContextMenu.IsOpen = true;
         }
 
         public void Dispose() {
-            SelectedTemplateNameTextBox = null;
+            //SelectedTemplateNameTextBox = null;
         }
         #endregion
 

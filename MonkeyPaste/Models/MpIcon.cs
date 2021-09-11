@@ -144,7 +144,7 @@ namespace MonkeyPaste {
             return newIcon;
         }
 
-        public static async Task<MpIcon> CreateAsync(string iconImgBase64) {            
+        public static async Task<MpIcon> CreateAsync(string iconImgBase64) {       
             var iconImage = new MpDbImage() {
                 //ImageBytes = iconImg
                 ImageBase64 = iconImgBase64

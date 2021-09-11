@@ -33,7 +33,7 @@
                     ToolTipService.InitialShowDelay="0"
                     ToolTip="{Binding HotkeyIconTooltip}"
                     Margin="0,-5,2,0"
-                    Command="{Binding AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                    Command="{Binding AssignHotkeyCommand}"
                     Visibility="{Binding ToggleEditModeButtonVisibility}"
                     Template="{StaticResource SearchButtonControlTemplate}">
                 <Image Source="{Binding HotkeyIconSource}" />

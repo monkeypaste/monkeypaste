@@ -1008,5 +1008,9 @@
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
         <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
         <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
+        <local:MpSystemTrayView x:Key="SystemTrayViewModel" />
+        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
+        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
+        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
     </Application.Resources>
 </Application>

@@ -12,7 +12,7 @@ using System.Text;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
-    public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable, ITextBlobSerializer {
+    public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTemplateId")]
@@ -40,23 +40,15 @@ namespace MonkeyPaste {
         public int CopyItemId { get; set; }
 
         public string HexColor { get; set; }
-
-        [TextBlob(nameof(TemplateDocIdxsBlobbed))]
-        public List<int> TemplateDocIdxs { get; set; }
-
-        public string TemplateDocIdxsBlobbed { get; set; }
-
+        
         public string TemplateName { get; set; }
 
         [Ignore]
         public string TemplateText { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpCopyItem CopyItem { get; set; }
-
         #endregion
 
-        public static MpCopyItemTemplate Create(int copyItemId,string templateName) {
+        public static MpCopyItemTemplate Create(int copyItemId,string templateName, string templateColor = "") {
             var dupCheck = MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
             if (dupCheck != null) {
                 return dupCheck;
@@ -64,10 +56,11 @@ namespace MonkeyPaste {
             var newCopyItemTemplate = new MpCopyItemTemplate() {
                 CopyItemTemplateGuid = System.Guid.NewGuid(),
                 CopyItemId = copyItemId,
-                TemplateName = templateName
+                TemplateName = templateName,
+                HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.Instance.GetRandomColor().ToHex() : templateColor
             };
 
-            MpDb.Instance.AddItem<MpCopyItemTemplate>(newCopyItemTemplate);
+            MpDb.Instance.AddOrUpdate<MpCopyItemTemplate>(newCopyItemTemplate);
 
             return newCopyItemTemplate;
         }

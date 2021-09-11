@@ -1,4 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,6 +56,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+        public static bool IsListBoxItemVisible(this MpMultiSelectListBox lb, int index) {
+            var lbi = lb.GetListBoxItem(index);
+            if (lbi != null && lbi.Visibility == Visibility.Visible) {
+                var lbir = lb.GetListBoxItemRect(index);
+                if (lbir.Left < lb.ScrollViewer.HorizontalOffset) {
+                    return false;
+                }
+                if (lbir.Right > lb.GetListBoxRect().Right + lb.ScrollViewer.HorizontalOffset) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
             if (lb == null) {
                 return null;
@@ -68,14 +84,27 @@ namespace MpWpfApp {
             return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
         }
 
-        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
+        public static Rect GetListBoxItemRect(this MpMultiSelectListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            Point origin = new Point();
+            Point origin = new Point(); 
+            if (lb.ScrollViewer.HorizontalOffset > 0 || lb.ScrollViewer.VerticalOffset > 0) {
+                origin = lbi.TranslatePoint(new Point(0, 0), lb.ScrollViewer);
+            } else {
+                origin = lbi.TranslatePoint(new Point(0, 0), lb);
+            }
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
         }
+
+        public static Rect GetListBoxRect(this ListBox lb) {
+            if (lb == null) {
+                return new Rect();
+            }
+            return new Rect(new Point(0, 0), new Size(lb.ActualWidth, lb.ActualHeight));
+        }
+
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
             if(parent == null || child == null) {
                 return false;
@@ -625,6 +654,10 @@ namespace MpWpfApp {
                     };
                 }
             }
+        }
+
+        public static Color ToWinColor(this SKColor skc) {
+            return Color.FromArgb(skc.Alpha, skc.Red, skc.Green, skc.Blue);
         }
         #endregion
 

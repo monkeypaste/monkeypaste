@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Xamarin.Forms.PlatformConfiguration;
 using System.Collections;
 using System.Reflection;
+using SkiaSharp;
 
 namespace MonkeyPaste {    
     public class MpDb : MpISync {
@@ -572,7 +573,7 @@ namespace MonkeyPaste {
         private void InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
-            File.Delete(dbPath);
+            //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 

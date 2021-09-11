@@ -9,6 +9,12 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase {
+        #region Singleton Definition
+        private static readonly Lazy<MpClipTileSortViewModel> _Lazy = new Lazy<MpClipTileSortViewModel>(() => new MpClipTileSortViewModel());
+        public static MpClipTileSortViewModel Instance { get { return _Lazy.Value; } }
+
+        public void Init() { }
+        #endregion
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {

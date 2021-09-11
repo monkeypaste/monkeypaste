@@ -91,11 +91,6 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeDelete | CascadeOperation.CascadeRead)]
-        public List<MpCopyItemTemplate> Templates { get; set; }
-
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
 
         #region Static Methods

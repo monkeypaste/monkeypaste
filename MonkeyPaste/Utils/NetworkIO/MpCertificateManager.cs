@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using RtfPipe.Tokens;
 using System.IO;
 
 namespace MonkeyPaste {

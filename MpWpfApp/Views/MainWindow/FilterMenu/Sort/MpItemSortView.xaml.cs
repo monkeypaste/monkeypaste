@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpRtbItemOverlayView.xaml
+    /// Interaction logic for MpItemSortView.xaml
     /// </summary>
-    public partial class MpRtbItemOverlayView : UserControl {
-        public MpRtbItemOverlayView() {
+    public partial class MpItemSortView : UserControl {
+        public MpItemSortView() {
             InitializeComponent();
         }
     }

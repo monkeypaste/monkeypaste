@@ -15,7 +15,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Brushes
-        private Brush _layerBrush = MpHelpers.Instance.GetRandomBrushColor();
+        private Brush _layerBrush = Brushes.Yellow;
         public Brush LayerBrush {
             get {
                 return _layerBrush;

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MpWpfApp.Views.MainWindow.TagTray {
+namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTagTrayView.xaml
     /// </summary>

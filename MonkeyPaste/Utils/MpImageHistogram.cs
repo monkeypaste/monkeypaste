@@ -26,9 +26,9 @@ namespace MonkeyPaste {
             for (int x = 0; x < bitmap.Width; x++) {
                 for (int y = 0; y < bitmap.Height; y++) {
                     SKColor currentColor = bitmap.GetPixel(x, y);
-                    if (currentColor.Alpha == 0) {
-                        continue;
-                    }
+                    //if (currentColor.Alpha == 0) {
+                    //    continue;
+                    //}
                     //If a record already exists for this color, set the count, otherwise just set it as 0
                     int currentCount = countDictionary.ContainsKey(currentColor) ? countDictionary[currentColor] : 0;
 

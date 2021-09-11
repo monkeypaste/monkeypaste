@@ -180,7 +180,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        private MpAppModeViewModel() : base() {
+        public MpAppModeViewModel() : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsAppPaused):

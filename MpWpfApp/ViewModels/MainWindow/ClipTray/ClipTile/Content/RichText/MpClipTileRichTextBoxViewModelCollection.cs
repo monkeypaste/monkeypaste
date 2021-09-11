@@ -433,6 +433,7 @@ namespace MpWpfApp {
 
         #endregion
 
+
         #region Public Methods
         public MpClipTileRichTextBoxViewModelCollection() : base() { }
 

@@ -121,11 +121,11 @@ namespace MpWpfApp {
             AppViewModel = new MpAppViewModel(ClipTileViewModel.CopyItem.Source.App);
             var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(AppViewModel.PrimaryIconColorList);
             for (int i = 0; i < randomColorList.Count; i++) {
-                var c = AppViewModel.PrimaryIconColorList[i];
+                var c = AppViewModel.PrimaryIconColorList[i].ToSkColor().ToWinColor();
                 this.Add(
                     new MpSwirlLayerViewModel(
                         i,
-                        new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(c)),
+                        new SolidColorBrush(c),
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
             }
         }

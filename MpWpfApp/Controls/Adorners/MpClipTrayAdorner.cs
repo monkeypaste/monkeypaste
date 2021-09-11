@@ -16,12 +16,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Statics
-        
+
+        #endregion
+
+        #region Properties
+        public Point DropTopPoint { get; set; }
+        public Point DropBottomPoint { get; set; }
         #endregion
 
         #region Public Methods
-        public MpClipTrayAdorner(ListBox lb) : base(lb) {
-        }
+        public MpClipTrayAdorner(ListBox lb) : base(lb) { }
         #endregion
 
         #region Overrides
@@ -30,11 +34,8 @@ namespace MpWpfApp {
             var redPen = new Pen(Brushes.Red, 1.5);
             redPen.DashStyle = DashStyles.Dash;
 
-            var t = clipTrayVm.DropTopPoint;
-            var b = clipTrayVm.DropBottomPoint;
-
             if (clipTrayVm.IsTrayDropping) {
-                drawingContext.DrawLine(redPen, t, b);
+                drawingContext.DrawLine(redPen, DropTopPoint, DropBottomPoint);
             }
         }
         #endregion

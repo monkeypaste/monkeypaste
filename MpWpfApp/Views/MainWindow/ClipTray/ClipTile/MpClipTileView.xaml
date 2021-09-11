@@ -17,6 +17,16 @@
                         Height="{Binding TileBorderHeight}"
                         Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                         Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
+                        PreviewMouseUp="ClipTileClipBorder_PreviewMouseUp"
+                        MouseEnter="ClipTileClipBorder_MouseEnter"
+                        MouseMove="ClipTileClipBorder_MouseMove"
+                        MouseLeave="ClipTileClipBorder_MouseLeave"
+                        LostFocus="ClipTileClipBorder_LostFocus"
+                        MouseDown="ClipTileClipBorder_MouseDown"
+                        DragLeave="ClipTileClipBorder_DragLeave"
+                        PreviewDragEnter="ClipTileClipBorder_PreviewDragEnter"
+                        PreviewDragOver="ClipTileClipBorder_PreviewDragOver"
+                        PreviewDrop="ClipTileClipBorder_PreviewDrop"
                         Focusable="True"
                         AllowDrop="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -170,7 +180,7 @@
                               Command="{Binding PlacementTarget.Tag.ExcludeApplicationCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
                     <MenuItem Header="Add Paste Macro For Application"
                               Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                              Command="{Binding SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource MainWindowViewModel}}"
+                              Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
                               CommandParameter="{Binding}" />
                 </MenuItem>
                 <MenuItem Header="_Selection"
@@ -247,7 +257,9 @@
                     <RowDefinition Height="{Binding TileDetailHeight}" />
                 </Grid.RowDefinitions>
                 <!-- Tile Title Canvas -->
-                <local:MpClipTileTitleView DataContext="{Binding}" />
+                <local:MpClipTileTitleView x:Name="TileTitleView" 
+                                           Grid.Row="0"
+                                           DataContext="{Binding}" />
                 <!-- Content Container Canvas -->
                 <Canvas x:Name="ClipTileContentCanvas"
                         Grid.Row="1"
@@ -292,7 +304,9 @@
                     </Grid.ToolTip>
                 </Grid>
                 <!-- Tile Detail Grid -->
-                <local:MpClipTileDetailView DataContext="{Binding}" />
+                <local:MpClipTileDetailView x:Name="TileDetailView"
+                                            Grid.Row="2"
+                                            DataContext="{Binding}" />
             </Grid>
             <!-- Overlays -->            
             <!-- Trial Expired -->

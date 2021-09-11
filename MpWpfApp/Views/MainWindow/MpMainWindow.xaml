@@ -58,87 +58,10 @@
                 <RowDefinition Height="{Binding FilterMenuHeight}" />
                 <RowDefinition Height="{Binding ClipTrayHeight}" />
             </Grid.RowDefinitions>
-            <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
-                            DataContext="{Binding SystemTrayViewModel}"
-                            IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
-                            ToolTipText="{Binding SystemTrayIconToolTipText}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="SystemTrayTaskbarIcon_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <tb:TaskbarIcon.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Settings"
-                                  Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding ShowSettingsWindowCommand}"
-                                  CommandParameter="{StaticResource SettingsTabAccount}" />
-                        <MenuItem Header="{Binding PauseOrPlayHeader}"
-                                  Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}}"
-                                  Command="{Binding MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand}" />
-                        <MenuItem Header="Help"
-                                  Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding ShowSettingsWindowCommand}"
-                                  CommandParameter="{StaticResource SettingsTabHelp}" />
-                        <MenuItem Header="Log..."
-                                  Command="{Binding ShowLogDialogCommand}" />
-                        <Separator />
-                        <MenuItem Header="Exit"
-                                  Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding ExitApplicationCommand}" />
-                    </ContextMenu>
-                </tb:TaskbarIcon.ContextMenu>
-                <tb:TaskbarIcon.TrayToolTip>
-                    <Border Background="{StaticResource AppColorDark}"
-                            BorderBrush="{StaticResource AppColorLight}"
-                            BorderThickness="2"
-                            Padding="10"
-                            CornerRadius="4"
-                            Opacity="0.8">
-                        <StackPanel>
-                            <TextBlock Text="{Binding AppStatus}"
-                                       Foreground="White"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding AccountStatus}"
-                                       Foreground="White"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding TotalItemCount}"
-                                       Foreground="White"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding DbSizeInMbs}"
-                                       Foreground="White"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-                </tb:TaskbarIcon.TrayToolTip>
-            </tb:TaskbarIcon>
-            <Grid Background="DarkViolet"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Height="150"
-                  Width="300"
-                  Visibility="{Binding ProcessingVisibility}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
-                <Label x:Name="LoadingLabel"
-                       Grid.Row="0"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"
-                       FontSize="30"
-                       Content="Processing" />
-                <Viewbox Grid.Row="1"
-                         Margin="20">
-                    <spinners:ucSpinnerCogs />
-                </Viewbox>
-            </Grid>
+            
+            <!-- System Tray -->
+            <local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />
+            
             <!-- Main Menu -->
             <StackPanel Grid.Row="0"
                         Grid.Column="0"
@@ -149,8 +72,7 @@
             <Grid Grid.Row="1"
                   Grid.Column="0"
                   Focusable="True"
-                  Background="DarkViolet"
-                  Visibility="{Binding AppVisibility}">
+                  Background="DarkViolet">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="1.15*" />
@@ -165,7 +87,7 @@
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
-                            Command="{Binding SystemTrayViewModel.ShowSettingsWindowCommand}"
+                            Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
                             Template="{StaticResource SearchButtonControlTemplate}">
                         <Image Source="/Resources/Images/cog.png"
                                HorizontalAlignment="Center"
@@ -187,490 +109,67 @@
                     </ToggleButton>
                 </StackPanel>
                 <!-- Sort Combobox -->
-                <Grid Grid.Column="1"
-                      DataContext="{Binding ClipTileSortViewModel}"
-                      Margin="0">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Loaded">
-                            <i:CallMethodAction MethodName="ClipTileSort_Loaded"
-                                                TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="4*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0"
-                           FontSize="19"
-                           Foreground="White"
-                           HorizontalAlignment="Left"
-                           FontWeight="DemiBold"
-                           VerticalContentAlignment="Center"
-                           Padding="0,0,0,0">Sort By</Label>
-                    <local:MpClipBorder CornerRadius="15"
-                                        Margin="5"
-                                        Grid.Column="1">
-                        <ComboBox FontSize="16"
-                                  Background="Transparent"
-                                  HorizontalContentAlignment="Left"
-                                  VerticalContentAlignment="Center"
-                                  SelectedItem="{Binding SelectedSortType}"
-                                  ItemsSource="{Binding SortTypes}">
-                            <ComboBox.ItemTemplate>
-                                <ItemContainerTemplate>
-                                    <TextBlock Text="{Binding Header}" />
-                                </ItemContainerTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </local:MpClipBorder>
-                    <Button Grid.Column="2"
-                            Margin="0,0,0,0"
-                            Background="Transparent"
-                            Template="{StaticResource SearchButtonControlTemplate}"
-                            BorderThickness="0"
-                            Height="30"
-                            Width="30"
-                            Command="{Binding ToggleSortOrderCommand}">
-                        <Grid>
-                            <Image Source="/Resources/Images/asc_black.png"
-                                   Visibility="{Binding AscSortOrderButtonImageVisibility}"
-                                   Stretch="Fill" />
-                            <Image Source="/Resources/Images/desc_black.png"
-                                   Visibility="{Binding DescSortOrderButtonImageVisibility}"
-                                   Stretch="Fill" />
-                        </Grid>
-                    </Button>
-                </Grid>
+                <local:MpItemSortView x:Name="ItemSortView"
+                                      Grid.Column="1"
+                                      DataContext="{Binding ClipTileSortViewModel}" />
+               
                 <!-- Tag Tray -->
-                <Grid Grid.Column="2"
-                      DataContext="{Binding TagTrayViewModel}"
-                      RenderTransformOrigin="0.5,0.5"
-                      Focusable="False"
-                      HorizontalAlignment="Center">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Loaded">
-                            <i:CallMethodAction MethodName="TagTray_Loaded"
-                                                TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.1*" />
-                        <ColumnDefinition Width="auto"
-                                          MaxWidth="{Binding MaxTagTrayWidth}" />
-                        <ColumnDefinition Width="0.1*" />
-                        <ColumnDefinition Width="0.2*" />
-                    </Grid.ColumnDefinitions>
-                    <RepeatButton x:Name="TagTrayNavLeftButton"
-                                  Margin="5"
-                                  Padding="5"
-                                  Width="30"
-                                  Grid.Column="0"
-                                  Template="{StaticResource FlatRepeatButtonControlTemplate}"
-                                  Visibility="{Binding NavButtonVisibility}"
-                                  Command="{Binding NavLeftCommand}">
-                        <Image Source="/Resources/Images/back_black.png"
-                               Stretch="Fill" />
-                    </RepeatButton>
-                    <local:MpMultiSelectListBox x:Name="TagTray"
-                                                Grid.Column="1"
-                                                Focusable="False"
-                                                ScrollToSelectedItem="True"
-                                                Background="Transparent"
-                                                BorderBrush="Transparent"
-                                                dd:DragDrop.IsDragSource="True"
-                                                dd:DragDrop.IsDropTarget="True"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                MaxWidth="{Binding MaxTagTrayWidth}"
-                                                SelectionMode="Single"
-                                                ScrollViewer.IsDeferredScrollingEnabled="False"
-                                                ScrollViewer.CanContentScroll="False"
-                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                ItemsSource="{Binding}">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="IsSelected"
-                                        Value="{Binding IsSelected}" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel IsItemsHost="True"
-                                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                        Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <!-- Tag Tile Border -->
-                                <local:MpClipBorder x:Name="TagTileBorder"
-                                                    CornerRadius="10"
-                                                    Margin="5,3,0,0"
-                                                    Padding="7,5,7,5"
-                                                    Focusable="True"
-                                                    VerticalAlignment="Stretch"
-                                                    Background="{Binding TagBorderBackgroundBrush}"
-                                                    BorderBrush="{Binding TagBorderBrush}"
-                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
-                                                    BorderThickness="1.5"
-                                                    Height="{Binding TagHeight}">
-                                    <local:MpClipBorder.Resources>
-                                        <local:MpBindingProxy x:Key="TagTileProxy"
-                                                              Data="{Binding}" />
-                                    </local:MpClipBorder.Resources>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Loaded">
-                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                MethodName="TagTile_Loaded" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <local:MpClipBorder.ContextMenu>
-                                        <ContextMenu>
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Loaded">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="TagTile_ContextMenu_Loaded" />
-                                                </i:EventTrigger>
-                                                <i:EventTrigger EventName="Opened">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="TagTile_ContextMenu_Opened" />
-                                                </i:EventTrigger>
-                                                <i:EventTrigger EventName="Closed">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="TagTile_ContextMenu_Closed" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <MenuItem Header="Rename"
-                                                      Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      Command="{Binding PlacementTarget.Tag.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
-                                            <MenuItem Header="Assign Hotkey"
-                                                      Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      InputGestureText="{Binding PlacementTarget.Tag.ShortcutKeyString, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                      Command="{Binding PlacementTarget.Tag.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
-                                            <Separator />
-                                            <MenuItem x:Name="ClipTileColorContextMenuItem"
-                                                      Style="{StaticResource ColorPalleteMenuItemStyle}" />
-                                            <Separator />
-                                            <MenuItem Header="Delete"
-                                                      Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                      Command="{Binding DeleteTagCommand, Source={StaticResource TagTrayViewModel}}" />
-                                        </ContextMenu>
-                                    </local:MpClipBorder.ContextMenu>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Tag Count Box-->
-                                        <local:MpClipBorder CornerRadius="5"
-                                                            Grid.Column="0"
-                                                            Grid.Row="0"
-                                                            MinWidth="20"
-                                                            Margin="3,0,0,0"
-                                                            Padding="5"
-                                                            BorderThickness="0"
-                                                            Background="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
-                                            <TextBlock Background="Transparent"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"
-                                                       Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                       Foreground="{Binding TagCountTextColor}" />
-                                        </local:MpClipBorder>
-                                        <TextBlock x:Name="TagTextBlock"
-                                                   Grid.Column="1"
-                                                   Grid.Row="0"
-                                                   Margin="5,0,0,0"
-                                                   Background="Transparent"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Visibility="{Binding TextBlockVisibility}"
-                                                   FontSize="{Binding TagFontSize}"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{Binding TagTextColor}"
-                                                   Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"></TextBlock>
-                                        <TextBox x:Name="TagTextBox"
-                                                 Grid.Row="0"
-                                                 Grid.Column="1"
-                                                 Margin="5,0,0,0"
-                                                 Background="White"
-                                                 Foreground="Black"
-                                                 IsReadOnly="False"
-                                                 HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center"
-                                                 Visibility="{Binding TextBoxVisibility}"
-                                                 FontSize="{Binding TagFontSize}"
-                                                 Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
-                                    </Grid>
-                                </local:MpClipBorder>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </local:MpMultiSelectListBox>
-                    <RepeatButton x:Name="TagTrayNavRightButton"
-                                  Grid.Column="2"
-                                  Margin="5"
-                                  Padding="5"
-                                  Width="30"
-                                  Template="{StaticResource FlatRepeatButtonControlTemplate}"
-                                  Visibility="{Binding NavButtonVisibility}"
-                                  Command="{Binding NavRightCommand}">
-                        <Image Source="/Resources/Images/forward_black.png"
-                               Stretch="Fill" />
-                    </RepeatButton>
-                    <!-- Add Tag Button -->
-                    <Button x:Name="AddTagButton"
-                            Height="30"
-                            Width="30"
-                            Grid.Column="3"
-                            BorderThickness="0"
-                            ToolTip="Add Collection"
-                            ToolTipService.InitialShowDelay="100"
-                            Template="{StaticResource SearchButtonControlTemplate}"
-                            Background="Transparent"
-                            Command="{Binding CreateTagCommand}">
-                        <Image Stretch="Fill"
-                               Source="/MpWpfApp;component/Resources/Images/add2.png" />
-                    </Button>
-                </Grid>
-                <Grid Grid.Column="3"
-                      DataContext="{Binding SearchBoxViewModel}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="0.2*" />
-                    </Grid.ColumnDefinitions>
-                    <!-- Search Border -->
-                    <local:MpClipBorder x:Name="SearchTextBoxBorder"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"
-                                        Margin="5"
-                                        CornerRadius="10"
-                                        BorderBrush="{Binding TextBoxBorderBrush}"
-                                        Background="White"
-                                        BorderThickness="3">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Loaded">
-                                <i:CallMethodAction MethodName="SearchBoxBorder_Loaded"
-                                                    TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <Grid Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.15*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="0.1*" />
-                            </Grid.ColumnDefinitions>
-                            <Button x:Name="SearchDropDownButton"
-                                    Background="Transparent"
-                                    Grid.Column="0"
-                                    Margin="3,0,0,0"
-                                    Width="25"
-                                    Height="25"
-                                    Template="{StaticResource SearchButtonControlTemplate}"
-                                    BorderThickness="0">
-                                <Image Source="/MpWpfApp;component/Resources/Images/search.png"
-                                       Stretch="Fill"
-                                       SnapsToDevicePixels="True" />
-                            </Button>
-                            <TextBox x:Name="SearchBox"
-                                     Grid.Column="1"
-                                     AllowDrop="False"
-                                     FontSize="16"
-                                     Background="Transparent"
-                                     Foreground="{Binding TextBoxTextBrush}"
-                                     FontStyle="{Binding TextBoxFontStyle}"
-                                     BorderThickness="0"
-                                     VerticalContentAlignment="Center"
-                                     Padding="0,0,0,0"
-                                     Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"></TextBox>
-                            <spinners:ucSpinnerApple x:Name="IsSearchingSpinner"
-                                                     Grid.Column="2"
-                                                     VerticalAlignment="Center"
-                                                     Margin="0,0,5,0"
-                                                     Visibility="{Binding SearchSpinnerVisibility}" />
-                            <Button x:Name="ClearTextBoxButton"
-                                    Grid.Column="2"
-                                    Width="15"
-                                    Height="15"
-                                    Visibility="{Binding ClearTextButtonVisibility}"
-                                    Command="{Binding ClearTextCommand}"
-                                    Template="{DynamicResource BackgroundButton}">
-                                <Button.Background>
-                                    <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
-                                </Button.Background>
-                                <Button.Resources>
-                                    <ControlTemplate x:Key="BackgroundButton"
-                                                     TargetType="Button">
-                                        <Border x:Name="border"
-                                                BorderThickness="0"
-                                                Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center" />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver"
-                                                     Value="True">
-                                                <Setter Property="Background"
-                                                        TargetName="border">
-                                                    <Setter.Value>
-                                                        <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Resources>
-                            </Button>
-                        </Grid>
-                    </local:MpClipBorder>
-                    <!-- Search Navigation Border-->
-                    <local:MpClipBorder Grid.Column="1"
-                                        CornerRadius="10"
-                                        Visibility="{Binding SearchNavigationButtonPanelVisibility}"
-                                        HorizontalAlignment="Center"
-                                        Margin="3,0,10,0">
-                        <StackPanel Orientation="Horizontal">
-                            <Button x:Name="PreviousTemplateButton"
-                                    TabIndex="2"
-                                    Command="{Binding PrevMatchCommand}"
-                                    Width="20"
-                                    Height="20"
-                                    Padding="5">
-                                <Image Source="/Resources/Images/back_black.png" />
-                            </Button>
-                            <Button x:Name="NextTemplateButton"
-                                    TabIndex="3"
-                                    Command="{Binding NextMatchCommand}"
-                                    Width="20"
-                                    Height="20"
-                                    Padding="5">
-                                <Image Source="/Resources/Images/forward_black.png" />
-                            </Button>
-                        </StackPanel>
-                    </local:MpClipBorder>
-                </Grid>
+                <local:MpTagTrayView x:Name="TagTrayView"
+                                     Grid.Column="2" 
+                                     DataContext="{Binding TagTrayViewModel}"/>
+                
+                <!-- Search -->
+                <local:MpItemSearchView x:Name="SearchView"
+                                        Grid.Column="3"
+                                        DataContext="{Binding SearchBoxViewModel}" />
+               
             </Grid>
+            
+            <!--3rd row row for tray -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
                   Focusable="True"
-                  Background="MediumPurple"
-                  Visibility="{Binding AppVisibility}">
+                  Background="MediumPurple">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!-- Side bar AppState Buttons -->
-                <Grid Grid.Row="0"
-                      Grid.Column="0"
-                      Background="DimGray"
-                      DataContext="{Binding AppModeViewModel}"
-                      Visibility="{Binding AppModeColumnVisibility}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Loaded">
-                            <i:CallMethodAction MethodName="AppMode_Loaded"
-                                                TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <ToggleButton Grid.Row="0"
-                                  Grid.Column="0"
-                                  Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  ToolTipService.InitialShowDelay="0"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                  ToolTip="{Binding IsAppPausedTooltip}"
-                                  Padding="10"
-                                  IsChecked="{Binding IsAppPaused}">
-                        <Image Source="{Binding  MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </ToggleButton>
-                    <ToggleButton Grid.Row="1"
-                                  Grid.Column="0"
-                                  ToolTipService.InitialShowDelay="0"
-                                  ToolTip="{Binding IsAutoCopyModeTooltip}"
-                                  Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                  IsEnabled="{Binding IsAutoCopyModeEnabled}"
-                                  IsChecked="{Binding IsAutoCopyMode}"
-                                  Padding="10">
-                        <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </ToggleButton>
-                    <ToggleButton Grid.Row="2"
-                                  Grid.Column="0"
-                                  ToolTipService.InitialShowDelay="0"
-                                  Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                  ToolTip="{Binding IsRighClickPasteModeTooltip}"
-                                  IsEnabled="{Binding IsRighClickPasteModeEnabled}"
-                                  IsChecked="{Binding IsRightClickPasteMode}"
-                                  Padding="10">
-                        <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </ToggleButton>
-                    <ToggleButton Grid.Row="3"
-                                  Grid.Column="0"
-                                  Padding="10"
-                                  ToolTipService.InitialShowDelay="0"
-                                  Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                  ToolTip="{Binding IsAppendModeTooltip}"
-                                  IsEnabled="{Binding IsAppendModeEnabled}"
-                                  IsChecked="{Binding IsInAppendMode}">
-                        <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </ToggleButton>
-                    <ToggleButton Grid.Row="4"
-                                  Grid.Column="0"
-                                  ToolTipService.InitialShowDelay="0"
-                                  Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                  ToolTip="{Binding IsAutoAnalysisModeTooltip}"
-                                  IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
-                                  IsChecked="{Binding IsInAutoAnalyzeMode}"
-                                  Padding="10">
-                        <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </ToggleButton>
-                </Grid>
+                <local:MpAppModeButtonGridView Grid.Row="0"
+                                               Grid.Column="0"
+                                               Visibility="{Binding AppModeColumnVisibility, Source={StaticResource AppModeViewModel}}"
+                                               DataContext="{Binding AppModeViewModel}" />
+                
                 <local:MpClipTrayView x:Name="ClipTrayView"
                                       DataContext="{Binding ClipTrayViewModel}"
                                       Grid.Row="0"
                                       Grid.Column="1" />
+                <Grid Background="DarkGray"
+                      Opacity="0.3"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      Visibility="{Binding ProcessingVisibility}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+                    <Label x:Name="LoadingLabel"
+                           Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           FontSize="30"
+                           Content="Processing" />
+                    <Viewbox Grid.Row="1"
+                             Margin="20">
+                        <spinners:ucSpinnerCogs />
+                    </Viewbox>
+                </Grid>
             </Grid>
-            <!--3rd row row for tray -->
+            
+            
         </Grid>
     </Canvas>
 </Window>

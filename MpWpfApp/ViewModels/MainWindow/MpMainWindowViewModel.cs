@@ -56,59 +56,30 @@ namespace MpWpfApp {
             }
         }
 
-        //private MpClipTrayViewModel _clipTrayViewModel = null;
         public MpClipTrayViewModel ClipTrayViewModel {
             get {
                 return MpClipTrayViewModel.Instance;
             }
-            //set {
-            //    if (_clipTrayViewModel != value) {
-            //        _clipTrayViewModel = value;
-            //        OnPropertyChanged(nameof(ClipTrayViewModel));
-            //    }
-            //}
         }
 
-        //private MpTagTrayViewModel _tagTrayViewModel = null;
         public MpTagTrayViewModel TagTrayViewModel {
             get {
                 return MpTagTrayViewModel.Instance;
             }
-            //set {
-            //    if (_tagTrayViewModel != value) {
-            //        _tagTrayViewModel = value;
-            //        OnPropertyChanged(nameof(TagTrayViewModel));
-            //    }
-            //}
         }
 
-        private MpClipTileSortViewModel _clipTileSortViewModel = null;
         public MpClipTileSortViewModel ClipTileSortViewModel {
             get {
-                return _clipTileSortViewModel;
-            }
-            set {
-                if (_clipTileSortViewModel != value) {
-                    _clipTileSortViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileSortViewModel));
-                }
+                return MpClipTileSortViewModel.Instance;
             }
         }
 
-        //private MpSearchBoxViewModel _searchBoxViewModel = null;
         public MpSearchBoxViewModel SearchBoxViewModel {
             get {
                 return MpSearchBoxViewModel.Instance;
             }
-            //set {
-            //    if (_searchBoxViewModel != value) {
-            //        _searchBoxViewModel = value;
-            //        OnPropertyChanged(nameof(SearchBoxViewModel));
-            //    }
-            //}
         }
 
-        //private MpAppModeViewModel _appModeViewModel = null;
         public MpAppModeViewModel AppModeViewModel {
             get {
                 return MpAppModeViewModel.Instance;
@@ -241,7 +212,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        private Visibility _processinngVisibility = Visibility.Collapsed;
+        private Visibility _processinngVisibility = Visibility.Hidden;
         public Visibility ProcessingVisibility {
             get {
                 return _processinngVisibility;
@@ -282,13 +253,18 @@ namespace MpWpfApp {
             MpSearchBoxViewModel.Instance.Init();
             MpClipTrayViewModel.Instance.Init();
             //ClipTrayViewModel = new MpClipTrayViewModel();
-            ClipTileSortViewModel = new MpClipTileSortViewModel();
+            //ClipTileSortViewModel = new MpClipTileSortViewModel();
+            MpClipTileSortViewModel.Instance.Init();
             MpAppModeViewModel.Instance.Init();
             MpTagTrayViewModel.Instance.Init();
             //TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
 
             Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
             Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
+            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
+            Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
+            Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
+            Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {

@@ -49,11 +49,13 @@ namespace MpWpfApp {
     public class MpHelpers {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
+        public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
         //private YoloWrapper yoloWrapper = null;
         public void Init() {
             Rand = new Random((int)DateTime.Now.Ticks);
+            SharedRtb = new RichTextBox();
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
             _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }

@@ -76,13 +76,28 @@ namespace MonkeyPaste {
             return string.Join("", diff);
         }
 
-        public string LoadFileResource(string resourcePath) {
+        public string LoadTextResource(string resourcePath) {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItem)).Assembly;
-            var stream = assembly.GetManifestResourceStream(resourcePath);
+            var stream = assembly.GetManifestResourceStream(resourcePath); 
             using (var reader = new System.IO.StreamReader(stream)) {
                 var res = reader.ReadToEnd();
                 return res;
             }
+        }
+        public SKBitmap LoadBitmapResource(string resourcePath) {
+            // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
+            var assembly = this.GetType().GetTypeInfo().Assembly;
+            byte[] buffer = null;
+
+            using (System.IO.Stream s = assembly.GetManifestResourceStream(resourcePath)) {
+                if (s != null) {
+                    long length = s.Length;
+                    buffer = new byte[length];
+                    s.Read(buffer, 0, (int)length);
+                }
+            }
+
+            return new MpImageConverter().Convert(buffer,typeof(SKBitmap)) as SKBitmap;
         }
 
         public string GetCheckSum(string theString) {
@@ -489,73 +504,54 @@ namespace MonkeyPaste {
             //sw.Start();
 
             var primaryIconColorList = new List<string>();
-            var hist = MpImageHistogram.Instance.GetStatistics(skbmp);
-            foreach (var kvp in hist) {
-                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+            List<KeyValuePair<SKColor, int>> hist = MpImageHistogram.Instance.GetStatistics(skbmp);
+            //foreach (var kvp in hist) {
+            //    //var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+            //    SKColor c = kvp.Key;
+            //    c = new SKColor(c.Red, c.Green, c.Blue, 255);
+            //    //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+            //    if (primaryIconColorList.Count == listCount) {
+            //        break;
+            //    }
 
-                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == listCount) {
-                    break;
-                }
-                //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs(c.R - c.G);
-                var rbDiff = Math.Abs(c.R - c.B);
-                var gbDiff = Math.Abs(c.G - c.B);
-                var totalDiff = rgDiff + rbDiff + gbDiff;
+            //    //between 0-255 where 0 is black 255 is white
+            //    var rgDiff = Math.Abs(c.Red - c.Green);
+            //    var rbDiff = Math.Abs(c.Red - c.Blue);
+            //    var gbDiff = Math.Abs(c.Green - c.Blue);
+            //    var totalDiff = rgDiff + rbDiff + gbDiff;
 
-                //0-255 0 is black
-                var grayScaleValue = 0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50/255 && grayScaleValue < 200/255 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(c.ToHex());
-                }
-            }
+            //    //0-255 0 is black
+            //    var grayScaleValue = c.ToGrayScale().Red; //0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B;
+            //    var relativeDist = 100;// primaryIconColorList.Count == 0 ? 100 : primaryIconColorList[primaryIconColorList.Count - 1].ToSkColor().ColorDistance(c);// MpHelpers.Instance.ColorDistance(Color.FromHex(), c);
+            //    if (totalDiff > 50 &&
+            //        grayScaleValue > 50 &&
+            //        relativeDist > 15) {
+            //        primaryIconColorList.Add(c.ToString());
+            //    }
+            //}
 
             //if only 1 color found within threshold make random list
             for (int i = primaryIconColorList.Count; i < listCount; i++) {
                 primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
             }
 
+            foreach(var c in primaryIconColorList) {
+                Console.WriteLine(c);
+            }
             //sw.Stop();
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
 
-        public static async Task<List<string>> CreatePrimaryColorListAsync(SKBitmap skbmp, int listCount = 5) {
-            //var sw = new Stopwatch();
-            //sw.Start();
-
-            var primaryIconColorList = new List<string>();
-            var hist = await MpImageHistogram.Instance.GetStatisticsAsync(skbmp);
-            foreach (var kvp in hist) {
-                var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
-
-                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == listCount) {
-                    break;
-                }
-                //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.R - (int)c.G);
-                var rbDiff = Math.Abs((int)c.R - (int)c.B);
-                var gbDiff = Math.Abs((int)c.G - (int)c.B);
-                var totalDiff = rgDiff + rbDiff + gbDiff;
-
-                //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(Color.FromHex(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(c.ToHex());
-                }
-            }
-
-            //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < listCount; i++) {
-                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
-            }
-
-            //sw.Stop();
-            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
-            return primaryIconColorList;
+        public double ColorDistance(SKColor e1, SKColor e2) {
+            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
+            long rmean = (long)((e1.Red + e2.Red) / 2);
+            long r = (long)(e1.Red - e2.Red);
+            long g = (long)(e1.Green - e2.Green);
+            long b = (long)(e1.Blue - e2.Blue);
+            double max = 764.83331517396653;
+            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
+            return d / max;
         }
 
         public double ColorDistance(Color e1, Color e2) {
@@ -620,7 +616,7 @@ namespace MonkeyPaste {
             //}
             //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             int x = Rand.Next(0, _ContentColors.Count);
-            int y = Rand.Next(0, _ContentColors[0].Count);
+            int y = Rand.Next(0, _ContentColors[0].Count-1);
             return ((SolidColorBrush)GetContentColor(x, y)).Color;
         }
 

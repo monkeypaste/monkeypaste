@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="MpWpfApp.MpTagTrayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:local="clr-namespace:MpWpfApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Grid.Column="2"
+          RenderTransformOrigin="0.5,0.5"
+          Focusable="False"
+          HorizontalAlignment="Center">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:CallMethodAction MethodName="TagTray_Loaded"
+                                    TargetObject="{Binding}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*" />
+            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="auto"
+                              MaxWidth="{Binding MaxTagTrayWidth}" />
+            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <!-- Smart Filter Dropdown Button -->
+        <Button x:Name="SmartFilterDropdownButton"
+                Height="30"
+                Width="30"
+                Grid.Column="0"
+                BorderThickness="0"
+                ToolTip="Add Collection"
+                ToolTipService.InitialShowDelay="100"
+                Template="{StaticResource SearchButtonControlTemplate}"
+                Background="Transparent"
+                Command="{Binding CreateTagCommand}">
+            <Image Stretch="Fill"
+                   Source="/MpWpfApp;component/Resources/Images/down_black.png" />
+        </Button>
+        <RepeatButton x:Name="TagTrayNavLeftButton"
+                      Margin="5"
+                      Padding="5"
+                      Width="30"
+                      Grid.Column="1"
+                      Template="{StaticResource FlatRepeatButtonControlTemplate}"
+                      Visibility="{Binding NavButtonVisibility}"
+                      Command="{Binding NavLeftCommand}">
+            <Image Source="/Resources/Images/back_black.png"
+                   Stretch="Fill" />
+        </RepeatButton>
+        <local:MpMultiSelectListBox x:Name="TagTray"
+                                    Grid.Column="2"
+                                    Focusable="False"
+                                    ScrollToSelectedItem="True"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="{Binding MaxTagTrayWidth}"
+                                    SelectionMode="Single"
+                                    ScrollViewer.IsDeferredScrollingEnabled="False"
+                                    ScrollViewer.CanContentScroll="False"
+                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                    ItemsSource="{Binding}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True"
+                                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                            Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpTagTileView DataContext="{Binding}" />
+                    <!-- Tag Tile Border -->
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </local:MpMultiSelectListBox>
+        <RepeatButton x:Name="TagTrayNavRightButton"
+                      Grid.Column="3"
+                      Margin="5"
+                      Padding="5"
+                      Width="30"
+                      Template="{StaticResource FlatRepeatButtonControlTemplate}"
+                      Visibility="{Binding NavButtonVisibility}"
+                      Command="{Binding NavRightCommand}">
+            <Image Source="/Resources/Images/forward_black.png"
+                   Stretch="Fill" />
+        </RepeatButton>
+        <!-- Add Tag Button -->
+        <Button x:Name="AddTagButton"
+                Height="30"
+                Width="30"
+                Grid.Column="4"
+                BorderThickness="0"
+                ToolTip="Add Collection"
+                ToolTipService.InitialShowDelay="100"
+                Template="{StaticResource SearchButtonControlTemplate}"
+                Background="Transparent"
+                Command="{Binding CreateTagCommand}">
+            <Image Stretch="Fill"
+                   Source="/MpWpfApp;component/Resources/Images/add2.png" />
+        </Button>
+    </Grid>
+</UserControl>
