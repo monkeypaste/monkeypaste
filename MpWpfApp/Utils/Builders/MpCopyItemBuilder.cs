@@ -8,10 +8,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpCopyItemFactory {
-        #region Statics
-        #endregion
-
+    public class MpCopyItemBuilder : MpICopyItemBuilder {
         #region Private Variables
         #endregion
 
@@ -21,7 +18,7 @@ namespace MpWpfApp {
         #region Public Methods
         public static MpCopyItem CreateFromClipboard(int remainingRetryCount = 5) {            
             if (remainingRetryCount < 0) {
-                Console.WriteLine("Retry count exceeded ignoring copy item");
+                MonkeyPaste.MpConsole.WriteLine("Retry count exceeded ignoring copy item");
                 return null;
             }
             try {
@@ -73,11 +70,11 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.RichText;
                     if (iData.GetDataPresent(DataFormats.Html)) {
                         var htmlData = (string)iData.GetData(DataFormats.Html);
-                        url = MpUrlFactory.CreateFromHtmlData(htmlData);
+                        url = MpUrlBuilder.CreateFromHtmlData(htmlData);
                     }
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
                 } else {
-                    Console.WriteLine("MpData error clipboard data is not known format");
+                    MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
                     return null;
                 }
                 if (itemType == MpCopyItemType.RichText && ((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
@@ -114,9 +111,13 @@ namespace MpWpfApp {
             }
             catch (Exception e) {
                 //this catches intermittent COMExceptions (happened copy/pasting in Excel)
-                Console.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
+                MonkeyPaste.MpConsole.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
                 return CreateFromClipboard(remainingRetryCount - 1);
             }
+        }
+
+        public MpCopyItem Create(int remainingTryCount = 5) {
+            return MpCopyItemBuilder.CreateFromClipboard(remainingTryCount);
         }
         #endregion
 

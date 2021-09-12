@@ -114,7 +114,7 @@ namespace MpWpfApp {
             set {
                 if (_isRightClickPasteMode != value) {
                     _isRightClickPasteMode = value;
-                    Console.WriteLine("IsRightClickPasteMode changed to: " + _isRightClickPasteMode);
+                    MonkeyPaste.MpConsole.WriteLine("IsRightClickPasteMode changed to: " + _isRightClickPasteMode);
                     OnPropertyChanged(nameof(IsRightClickPasteMode));
                 }
             }
@@ -128,7 +128,7 @@ namespace MpWpfApp {
             set {
                 if (_isInAutoAnalyzeMode != value) {
                     _isInAutoAnalyzeMode = value;
-                    Console.WriteLine("IsInAutoAnalyzeMode changed to: " + _isInAutoAnalyzeMode);
+                    MonkeyPaste.MpConsole.WriteLine("IsInAutoAnalyzeMode changed to: " + _isInAutoAnalyzeMode);
                     OnPropertyChanged(nameof(IsInAutoAnalyzeMode));
                 }
             }
@@ -142,7 +142,7 @@ namespace MpWpfApp {
             set {
                 if (_isInAppendMode != value) {
                     _isInAppendMode = value;
-                    Console.WriteLine("IsInAppendMode changed to: " + _isInAppendMode);
+                    MonkeyPaste.MpConsole.WriteLine("IsInAppendMode changed to: " + _isInAppendMode);
                     OnPropertyChanged(nameof(IsInAppendMode));
                 }
             }

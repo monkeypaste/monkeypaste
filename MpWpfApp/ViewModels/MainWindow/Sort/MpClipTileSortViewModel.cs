@@ -187,7 +187,7 @@ namespace MpWpfApp {
             ct.ClipTileViewModels.Sort(x => x[GetSortTypeAsMemberPath()], sortDir == ListSortDirection.Descending);
             //ct.Refresh();
             sw.Stop();
-            Console.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
+            MonkeyPaste.MpConsole.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
             ct.ResetClipSelection();
             IsSorting = false;
         }

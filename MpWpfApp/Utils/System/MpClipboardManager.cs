@@ -82,7 +82,7 @@ namespace MpWpfApp {
                 IgnoreClipboardChangeEvent = false;
             }
             catch (Exception e) {
-                Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
+                MonkeyPaste.MpConsole.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
             }
             //Mouse.OverrideCursor = null;
         }
@@ -121,10 +121,10 @@ namespace MpWpfApp {
                         //do nothing
                     } else {
                         if(MpAppModeViewModel.Instance.IsAppPaused) {
-                            Console.WriteLine("App Paused, ignoring copy");
+                            MonkeyPaste.MpConsole.WriteLine("App Paused, ignoring copy");
                         }
                         else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
-                            Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
+                            MonkeyPaste.MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
                             //MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
                             Task.Run(OnClipboardChanged);

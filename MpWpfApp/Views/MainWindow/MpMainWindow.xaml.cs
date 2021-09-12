@@ -10,13 +10,8 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
-        //public readonly SynchronizationContext SyncContext;
         public MpMainWindow() {
             InitializeComponent();
-
-            //Forms.Init();
-            //LoadApplication(new Monkey.App());
-            //SyncContext = SynchronizationContext.Current;
         }
 
         private void MainWindow_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
@@ -32,9 +27,15 @@ namespace MpWpfApp {
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+
         }
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(DataContext != null) {
+                var mwvm = DataContext as MpMainWindowViewModel;
+
+                mwvm.FinishLoading();
+            }
         }
 
         private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

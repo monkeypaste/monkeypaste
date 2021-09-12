@@ -1,40 +1,90 @@
 ﻿using System;
 using System.Windows;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpMeasurements : MpViewModelBase {
         private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
-        public static MpMeasurements Instance { get { return _Lazy.Value; } }
+        public static MpMeasurements Instance { 
+            get { 
+                return _Lazy.Value; 
+            } }
 
         public double MainWindowToScreenHeightRatio = 0.35;
 
         private MpMeasurements() {
-            Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles;
-            Properties.Settings.Default.Save();
+            if (MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {                
+                return;
+            }
+            UpdateMeasurements();
+            DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged; ;
         }
 
-        private double _screenWidth = SystemParameters.PrimaryScreenWidth;
-        private double _screenHeight = SystemParameters.PrimaryScreenHeight;
+        private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e) {
+            UpdateMeasurements();
+        }
+
+        public void UpdateMeasurements() {
+            // Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles;
+            // Properties.Settings.Default.Save();
+
+            if (MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+                return;
+            }
+            Device.BeginInvokeOnMainThread(() => {
+                // to get display info required for iOS so just always running on main thread
+
+                var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+
+                // Width (in pixels)
+                _screenWidth = mainDisplayInfo.Width;
+
+                // Height (in pixels)
+                _screenHeight = mainDisplayInfo.Height;
+
+                // Screen density
+                _screenDensity = mainDisplayInfo.Density;
+
+                // TODO adjust these based on device
+                _workAreaHeight = _screenHeight;
+                _workAreaWidth = _screenWidth;
+
+                // Orientation (Landscape, Portrait, Square, Unknown)
+                var orientation = mainDisplayInfo.Orientation;
+
+                // Rotation (0, 90, 180, 270)
+                var rotation = mainDisplayInfo.Rotation;
+            });
+        }
+
+        private static double _screenWidth = 0;//SystemParameters.PrimaryScreenWidth;
+        private static double _screenHeight = 0;//_screenHeight;
+
+        private static double _workAreaHeight = 0;
+        private static double _workAreaWidth = 0;
+
+        private static double _screenDensity = 0;
 
         public double MainWindowMinHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;
+                return _screenHeight * MainWindowToScreenHeightRatio;
             }
         }
 
         public double MainWindowMaxHeight {
             get {
-                return SystemParameters.WorkArea.Height;
+                return _workAreaHeight;
             }
         }
 
-        private double _taskBarHeight = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
+        private double _taskBarHeight = _screenHeight - _workAreaHeight;
 
         public Rect MainWindowRect {
             get {
                 return new Rect(
                     0,
-                    SystemParameters.WorkArea.Height - MainWindowMinHeight,
+                    _workAreaHeight - MainWindowMinHeight,
                     _screenWidth,
                     MainWindowMinHeight);
             }
@@ -96,7 +146,7 @@ namespace MpWpfApp {
 
         public int TotalVisibleClipTiles {
             get {
-                return (int)(ClipTrayWidth / ClipTileMinSize) + 1;
+                return (int)(ClipTrayWidth / ClipTileMinSize);
             }
         }
 

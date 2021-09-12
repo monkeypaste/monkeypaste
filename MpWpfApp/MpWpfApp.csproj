@@ -6,9 +6,9 @@
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
-  <!--<PropertyGroup>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>-->
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -152,6 +152,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserUiStrings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\MpAndroidInterfaceWrapper.cs" />
+    <Compile Include="Utils\Builders\MpIconBuilder.cs" />
     <Compile Include="Utils\DataVirtualization\DescriptionList.cs" />
     <Compile Include="Utils\DataVirtualization\FilterDescription.cs" />
     <Compile Include="Utils\DataVirtualization\FilterDescriptionList.cs" />
@@ -169,8 +171,8 @@
     <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
     <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
-    <Compile Include="Utils\MpUrlFactory.cs" />
-    <Compile Include="Utils\MpCopyItemFactory.cs" />
+    <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
+    <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
     <Compile Include="Utils\MpWpfDbInfo.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
@@ -222,6 +224,8 @@
     <Compile Include="ViewModels\Base\MpUndoableObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentContainerViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentItemViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />

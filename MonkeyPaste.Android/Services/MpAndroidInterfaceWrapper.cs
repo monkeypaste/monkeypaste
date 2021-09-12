@@ -11,17 +11,7 @@ using System.Text;
 
 namespace MonkeyPaste.Droid {
     public class MpAndroidInterfaceWrapper : MpINativeInterfaceWrapper {
-        //private Dictionary<Type, object> _services { get; set; } = new Dictionary<Type, object>();
 
-
-        //public void Register<T>(object so) where T: class { {
-        //    var so = Activator.CreateInstance(typeof(T));
-        //    _services.Add(so.GetType(), so);
-        //}
-
-        //public T Get<T>() where T : class {
-        //    return _services.Where(x => x.GetType() == typeof(T)).FirstOrDefault() as T;
-        //}
         public MpKeyboardInteractionService KeyboardService { private get; set; }
         public MpLocalStorage_Android StorageService { private get; set; }
         public MpGlobalTouch TouchService { private get; set; }
@@ -35,6 +25,10 @@ namespace MonkeyPaste.Droid {
 
         public MpIGlobalTouch GetGlobalTouch() {
             return TouchService;
+        }
+
+        public MpIIconBuilder GetIconBuilder() {
+            throw new NotImplementedException();
         }
 
         public MpIKeyboardInteractionService GetKeyboardInteractionService() {

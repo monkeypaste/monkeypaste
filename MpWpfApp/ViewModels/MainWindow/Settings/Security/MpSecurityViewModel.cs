@@ -78,7 +78,7 @@ namespace MpWpfApp {
             }
         }
         private void DeleteExcludedApp() {
-            Console.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
+            MonkeyPaste.MpConsole.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
             var eavm = AppViewModels[SelectedExcludedAppIndex];
             AppViewModels[AppViewModels.IndexOf(eavm)].IsAppRejected = false;
             AppViewModels[AppViewModels.IndexOf(eavm)].App.WriteToDatabase();
@@ -95,7 +95,7 @@ namespace MpWpfApp {
             }
         }
         private void AddExcludedApp() {
-            Console.WriteLine("Add excluded app : ");
+            MonkeyPaste.MpConsole.WriteLine("Add excluded app : ");
             OpenFileDialog openFileDialog = new OpenFileDialog() {
                 Filter = "Applications|*.lnk;*.exe",
                 Title = "Select an application to exclude",                

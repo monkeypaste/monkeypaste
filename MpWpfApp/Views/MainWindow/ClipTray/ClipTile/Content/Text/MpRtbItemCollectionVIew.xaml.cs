@@ -56,13 +56,13 @@ namespace MpWpfApp {
 
         private void Rtbcvm_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if(e.NewItems != null) {
-                foreach(var rtbvm in e.NewItems as List<MpRtbListBoxItemRichTextBoxViewModel>) {
+                foreach(MpRtbListBoxItemRichTextBoxViewModel rtbvm in e.NewItems) {
                     rtbvm.PropertyChanged += Rtbvm_PropertyChanged; 
                 }
             }
 
             if (e.OldItems != null) {
-                foreach (var rtbvm in e.OldItems as List<MpRtbListBoxItemRichTextBoxViewModel>) {
+                foreach (MpRtbListBoxItemRichTextBoxViewModel rtbvm in e.OldItems) {
                     rtbvm.PropertyChanged -= Rtbvm_PropertyChanged;
                 }
             }

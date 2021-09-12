@@ -418,12 +418,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsAnyEditingTemplate {
-            get {
-                return HostClipTileViewModel.IsEditingTemplate;
-            }
-        }
-
         public bool IsAnyPastingTemplate {
             get {
                 return this.Any(x => x.IsPastingTemplate);
@@ -505,7 +499,7 @@ namespace MpWpfApp {
             //ListBox?.Items.Refresh();
             //MpConsole.WriteLine("Refresh is commented out");
             sw.Stop();
-            //Console.WriteLine("Rtblb(HVIdx:"+MpClipTrayViewModel.Instance.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+            //MonkeyPaste.MpConsole.WriteLine("Rtblb(HVIdx:"+MpClipTrayViewModel.Instance.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
         public async Task FillAllTemplates() {
@@ -518,7 +512,7 @@ namespace MpWpfApp {
                         //tile will be shrunk in on completed of hide window
                         MainWindowViewModel.ExpandClipTile(HostClipTileViewModel);
                         if (!MpClipTrayViewModel.Instance.IsPastingHotKey) {
-                            HostClipTileViewModel.PasteTemplateToolbarViewModel.IsLoading = true;
+                            HostClipTileViewModel.PasteTemplateToolbarViewModel.IsBusy = true;
                         }
                         hasExpanded = true;
                     } 
@@ -593,7 +587,7 @@ namespace MpWpfApp {
             //Refresh();
             UpdateLayout();
             sw.Stop();
-            Console.WriteLine("Rtbvmc Sync: " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Rtbvmc Sync: " + sw.ElapsedMilliseconds + "ms");
         }
 
         public void UpdateSortOrder(bool fromModel = false) {
@@ -640,7 +634,6 @@ namespace MpWpfApp {
                 rtbvm.IsSubDragging = false;
                 UpdateAdorners();
             } else {
-
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
             }
 
@@ -654,7 +647,7 @@ namespace MpWpfApp {
                 var loneCompositeCopyItem = this[0].CopyItem;
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
                 HostClipTileViewModel.CopyItem.DeleteFromDatabase();
-                HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
+               // HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
 
                 //now since tile is a single clip update the tiles shortcut button
                 var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.Id).ToList();

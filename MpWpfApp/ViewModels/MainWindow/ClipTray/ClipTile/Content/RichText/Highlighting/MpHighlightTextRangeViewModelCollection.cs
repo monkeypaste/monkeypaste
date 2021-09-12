@@ -184,7 +184,7 @@ namespace MpWpfApp {
 
             var sttvm = MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
             if (!sttvm.IsLinkedWithClipTile(ClipTileViewModel)) {
-                Console.WriteLine("Clip tile w/ title " + ClipTileViewModel.CopyItemTitle + " is not linked with current tag");
+                MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + ClipTileViewModel.CopyItemTitle + " is not linked with current tag");
                 HighlightTaskCount--;
                 return new Dictionary<object, Visibility> { { ClipTileViewModel, Visibility.Collapsed } };
             }
@@ -288,7 +288,7 @@ namespace MpWpfApp {
 
                     //begin text range highlighting
 
-                    //Console.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
+                    //MonkeyPaste.MpConsole.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
                     
                     //highlight title 
                     if(tc && ttb != null) {
@@ -342,7 +342,7 @@ namespace MpWpfApp {
                             }
                             break;
                     }
-                    Console.WriteLine("Ending highlighting clip with title: " + ClipTileViewModel.CopyItemTitle);
+                    MonkeyPaste.MpConsole.WriteLine("Ending highlighting clip with title: " + ClipTileViewModel.CopyItemTitle);
                     ResetSelection();
                     result = this.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
                 }),
@@ -454,7 +454,7 @@ namespace MpWpfApp {
             if (nextIdx >= this.Count) {
                 nextIdx = 0;
             }
-            Console.WriteLine("CurIdx: " + curIdx + " NextIdx: " + nextIdx);
+            MonkeyPaste.MpConsole.WriteLine("CurIdx: " + curIdx + " NextIdx: " + nextIdx);
             ClearSelection();
             this[nextIdx].IsSelected = true;
             OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));

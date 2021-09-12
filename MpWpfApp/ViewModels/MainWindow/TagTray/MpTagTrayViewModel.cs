@@ -159,7 +159,7 @@ namespace MpWpfApp {
             var tagTray = (ListBox)tagTrayGrid.FindName("TagTray");
             var leftButton = (RepeatButton)tagTrayGrid.FindName("TagTrayNavLeftButton");
             var rightButton = (RepeatButton)tagTrayGrid.FindName("TagTrayNavRightButton");
-            Console.WriteLine("Max Tag Tray Width: " + MaxTagTrayWidth);
+            MonkeyPaste.MpConsole.WriteLine("Max Tag Tray Width: " + MaxTagTrayWidth);
             ListBox = tagTray;
             ScrollViewer = ListBox.GetVisualDescendent<ScrollViewer>();
             //_trayCanvas = ListBox.GetVisualAncestor<Canvas>();
@@ -205,25 +205,15 @@ namespace MpWpfApp {
         }
 
         public void RefreshAllCounts() {
-            foreach(var ttvm in this) {
+            var acil = MpDb.Instance.GetItems<MpCopyItem>();
+            foreach (var ttvm in this) {
                 ttvm.TagClipCount = 0;
-                foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                    if(ttvm.IsLinkedWithClipTile(ctvm) /*&& ctvm.CopyItemType != MpCopyItemType.Composite*/) {
+                foreach(var ctvm in acil) {
+                    if(ttvm.IsLinkedWithClipTile(ctvm)) { 
                         ttvm.TagClipCount++;
                     }
-                    //if(ctvm.CopyItemType == MpCopyItemType.Composite) {
-                    //    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                    //        if(ttvm.IsLinkedWithRtbItem(rtbvm)) {
-                    //            ttvm.TagClipCount++;
-                    //        }
-                    //    }
-                    //}
                 }
             }
-            //if (GetRecentTagTileViewModel().IsSelected) {
-            //    //will trigger reselection in Add's property change
-            //    GetRecentTagTileViewModel().IsSelected = false;
-            //}
         }
 
         public void RefreshRecentTag() {

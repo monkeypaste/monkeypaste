@@ -81,7 +81,7 @@ namespace MpWpfApp {
             return (bool)_property;
         }
         private void PerformNotification() {
-            Console.WriteLine("Executed " + Enum.GetName(typeof(MpNotificationType), NotificationType));
+            MonkeyPaste.MpConsole.WriteLine("Executed " + Enum.GetName(typeof(MpNotificationType), NotificationType));
         }
         #endregion
     }

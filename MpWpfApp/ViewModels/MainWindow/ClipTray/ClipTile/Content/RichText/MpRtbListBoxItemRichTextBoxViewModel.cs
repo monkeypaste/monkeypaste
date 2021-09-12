@@ -1382,7 +1382,7 @@ namespace MpWpfApp {
                                        !MpClipTrayViewModel.Instance.IsPastingHotKey &&
                                        !MpClipTrayViewModel.Instance.IsPastingSelected &&
                                        MpMainWindowViewModel.IsMainWindowOpen) {
-                                Console.WriteLine(@"RtbItem Selection was rejected");
+                                MonkeyPaste.MpConsole.WriteLine(@"RtbItem Selection was rejected");
                                 rtbvm.IsSubSelected = false;
                             }
                             if (rtbvm.HostClipTileViewModel.IsEditingTile) {
@@ -1754,7 +1754,7 @@ namespace MpWpfApp {
 
                 
 
-                Console.WriteLine("Detected Browser Address: " + detectedUrl);
+                MonkeyPaste.MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
             
         }
 
@@ -1762,7 +1762,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.HotkeyPasteCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SendSubSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
-            RichTextBoxViewModelCollection.SpeakSubSelectedClipsAsyncCommand.RaiseCanExecuteChanged();            
+            RichTextBoxViewModelCollection.SpeakSubSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
         }
 
         public void UpdateLayout() {
@@ -1829,10 +1829,10 @@ namespace MpWpfApp {
             //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
             //OnPropertyChanged(nameof(CopyItem));
             cipcsw.Stop();
-            Console.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
 
             sw.Stop();
-            Console.WriteLine("Saving(VIdx:" + RichTextBoxViewModelCollection.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + RichTextBoxViewModelCollection.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
         }
 
         public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
@@ -2014,7 +2014,7 @@ namespace MpWpfApp {
                                                Uri.IsWellFormedUriString(urlText,UriKind.RelativeOrAbsolute)) {
                                                 hl.NavigateUri = new Uri(urlText);
                                             } else {
-                                                Console.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
+                                                MonkeyPaste.MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
                                                 var par = hl.Parent.FindParentOfType<Paragraph>();
                                                 var s = new Span();
                                                 s.Inlines.AddRange(hl.Inlines.ToArray());
@@ -2023,7 +2023,7 @@ namespace MpWpfApp {
                                             }
                                         }
                                         catch(Exception ex) {
-                                            Console.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: "+ex);
+                                            MonkeyPaste.MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: "+ex);
                                             var par = hl.Parent.FindParentOfType<Paragraph>();
                                             var s = new Span();
                                             s.Inlines.AddRange(hl.Inlines.ToArray());
@@ -2087,7 +2087,7 @@ namespace MpWpfApp {
                                             hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
                                         }
                                         catch (Exception ex) {
-                                            Console.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
+                                            MonkeyPaste.MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
                                         }
                                         break;
                                     case MpSubTextTokenType.HexColor8:
@@ -2119,7 +2119,7 @@ namespace MpWpfApp {
                                         hl.Foreground = MpHelpers.Instance.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
                                         break;
                                     default:
-                                        Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
+                                        MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
                                         break;
                                 }
                             }

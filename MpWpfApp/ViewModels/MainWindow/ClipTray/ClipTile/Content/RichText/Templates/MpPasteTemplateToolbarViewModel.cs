@@ -436,8 +436,8 @@ namespace MpWpfApp {
                 //tbx.SelectAll();
             };
             SelectedTemplateTextBox.PreviewKeyDown += (s, e8) => {
-                if(IsLoading) {
-                    IsLoading = false;
+                if(IsBusy) {
+                    IsBusy = false;
                     e8.Handled = true;
                     return;
                 }
@@ -635,7 +635,7 @@ namespace MpWpfApp {
             srtbvm.ClearHyperlinks();
             var docClone = srtbvm.Rtb.Document.Clone();
             sw.Stop();
-            Console.WriteLine(@"Clear: " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine(@"Clear: " + sw.ElapsedMilliseconds + "ms");
             sw.Start();
             foreach (var uthlvm in uthlvmlc) {
                 var matchList = MpHelpers.Instance.FindStringRangesFromPosition(
@@ -647,11 +647,11 @@ namespace MpWpfApp {
                 }
             }
             sw.Stop();
-            Console.WriteLine(@"Replace: " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine(@"Replace: " + sw.ElapsedMilliseconds + "ms");
             sw.Start();
             srtbvm.CreateHyperlinks();
             sw.Stop();
-            Console.WriteLine(@"Create: " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine(@"Create: " + sw.ElapsedMilliseconds + "ms");
             srtbvm.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(docClone);
             //Returned to GetPastableRichText
         }

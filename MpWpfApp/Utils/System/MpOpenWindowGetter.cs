@@ -41,7 +41,7 @@ namespace MpWpfApp {
                 }
                 catch (InvalidOperationException ex) {
                     // no graphical interface
-                    Console.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
+                    MonkeyPaste.MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
                 }
 
                 return true;

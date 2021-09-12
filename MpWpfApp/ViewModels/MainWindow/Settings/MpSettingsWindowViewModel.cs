@@ -296,7 +296,7 @@ namespace MpWpfApp {
             }
         }
         private void DeleteShortcut() {
-            Console.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
+            MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
             var scvm = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex];
             MpShortcutCollectionViewModel.Instance.Remove(scvm);
         }
@@ -311,7 +311,7 @@ namespace MpWpfApp {
             }
         }
         private void ResetShortcut() {
-            Console.WriteLine("Reset row: " + SelectedShortcutIndex);
+            MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
             MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].KeyString = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.DefaultKeyString;
             MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Register();
             MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.WriteToDatabase();

@@ -12,7 +12,7 @@ namespace MpWpfApp {
         public string GetDbFilePath() {
             if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) ||
                 !File.Exists(Properties.Settings.Default.DbPath)) {
-                Console.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
+                MonkeyPaste.MpConsole.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
                 Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();

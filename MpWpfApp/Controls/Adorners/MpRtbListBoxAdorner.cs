@@ -38,7 +38,7 @@ namespace MpWpfApp {
                 return;
             }
             if (rtbvmc.HostClipTileViewModel.IsClipDropping) {
-                //Console.WriteLine("Drop left point: " + l.ToString() + " drop right point: " + r.ToString());
+                //MonkeyPaste.MpConsole.WriteLine("Drop left point: " + l.ToString() + " drop right point: " + r.ToString());
                 drawingContext.DrawLine(redPen, l, r);
             }
         }

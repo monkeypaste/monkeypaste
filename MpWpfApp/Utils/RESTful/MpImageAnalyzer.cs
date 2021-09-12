@@ -71,7 +71,7 @@ namespace MpWpfApp {
                 string contentString = await response.Content.ReadAsStringAsync();
 
                 // Display the JSON response.
-                Console.WriteLine("\nResponse:\n\n{0}\n",
+                MonkeyPaste.MpConsole.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
 
                 return contentString;                                
@@ -79,7 +79,7 @@ namespace MpWpfApp {
 
             }
             catch (Exception e) {
-                Console.WriteLine("\n" + e.Message);
+                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
             }
 
             return null;

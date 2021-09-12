@@ -283,7 +283,7 @@ namespace MpWpfApp {
             if(args is MpApp) {
                 appPath = (args as MpApp).AppPath;
                 if(!File.Exists(appPath)) {
-                    Console.WriteLine("AddPasteToAppPath error, appPath does not exist: " + appPath);
+                    MonkeyPaste.MpConsole.WriteLine("AddPasteToAppPath error, appPath does not exist: " + appPath);
                     return;
                 }
             } else {

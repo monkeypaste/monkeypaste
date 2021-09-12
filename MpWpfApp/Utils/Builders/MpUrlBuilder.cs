@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpUrlFactory {
+    public class MpUrlBuilder : MpIUrlBuilder {
         #region Statics
         #endregion
 
@@ -32,6 +32,10 @@ namespace MpWpfApp {
             string sourceUrlTitle = MonkeyPaste.MpHelpers.Instance.GetUrlTitle(sourceUrl);
 
             return MpUrl.Create(sourceUrl, sourceUrlTitle);
+        }
+
+        public MpUrl Create(string url) {
+            throw new NotImplementedException();
         }
         #endregion
 

@@ -27,9 +27,9 @@ namespace MpWpfApp {
             }
 
             if (comException == null) {
-                Console.WriteLine("Mp Handled com exception with null value");
+                MonkeyPaste.MpConsole.WriteLine("Mp Handled com exception with null value");
             } else {
-                Console.WriteLine("Mp Handled com exception: " + comException.ToString());
+                MonkeyPaste.MpConsole.WriteLine("Mp Handled com exception: " + comException.ToString());
             }
         }
 

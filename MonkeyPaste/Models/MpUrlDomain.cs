@@ -132,6 +132,7 @@ namespace MonkeyPaste {
             };
             var favIconImg64 = MpHelpers.Instance.GetUrlFavicon(domainStr);
             if(!string.IsNullOrEmpty(favIconImg64)) {
+                // todo Move get icon builder here
                 newUrlDomain.FavIcon = MpIcon.Create(favIconImg64);
                 newUrlDomain.FavIconId = newUrlDomain.FavIcon.Id;
             }

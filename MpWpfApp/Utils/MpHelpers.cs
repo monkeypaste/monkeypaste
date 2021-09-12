@@ -94,7 +94,7 @@ namespace MpWpfApp {
             foreach (var range in rangeList) {
                 if(ct.IsCancellationRequested) {
                     //throw new OperationCanceledException();
-                    Console.WriteLine("Bg highlighting canceled");
+                    MonkeyPaste.MpConsole.WriteLine("Bg highlighting canceled");
                     return;
                 }
                 range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
@@ -438,9 +438,9 @@ namespace MpWpfApp {
                 return Math.Round(Convert.ToDouble(moneyStr), 2);
             }
             catch (Exception ex) {
-                Console.WriteLine(
+                MonkeyPaste.MpConsole.WriteLine(
                     "MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
-                Console.WriteLine("Exception Details: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("Exception Details: " + ex);
                 return 0;
             }
         }
@@ -616,7 +616,7 @@ namespace MpWpfApp {
                 return result;
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelpers Currency Conversion exception: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers Currency Conversion exception: " + ex.ToString());
                 return string.Empty;
             }
         }
@@ -636,7 +636,7 @@ namespace MpWpfApp {
         #endregion
 
         #region System
-        public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
+        public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {            
             Application.Current.Dispatcher.Invoke(action, priority);
         }
 
@@ -666,7 +666,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                Console.WriteLine("MpHelpers.PassKeysListToWindow exception: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.PassKeysListToWindow exception: " + ex);
             }
         }
 
@@ -698,7 +698,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
                 return false;
             }
         }
@@ -723,7 +723,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                Console.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
                 return false;
             }
         }
@@ -842,7 +842,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return string.Empty;
             }
         }
@@ -1081,7 +1081,7 @@ namespace MpWpfApp {
                     }
                 }
                 if (outHandle == IntPtr.Zero) {
-                    Console.WriteLine("Error starting process: " + processPath);
+                    MonkeyPaste.MpConsole.WriteLine("Error starting process: " + processPath);
                     return outHandle;
                 }
 
@@ -1089,7 +1089,7 @@ namespace MpWpfApp {
                 return outHandle;
             }
             catch (Exception ex) {
-                Console.WriteLine("Start Process error (Admin to Normal mode): " + ex);
+                MonkeyPaste.MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
                 return IntPtr.Zero;
             }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
@@ -1248,7 +1248,7 @@ namespace MpWpfApp {
                 //if app is started using "Run as" is if you get "Access Denied" error. 
                 //That means that running app has rights that your app does not have. 
                 //in this case ADMIN rights
-                Console.WriteLine("IsProcessAdmin error: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
         }
@@ -1262,8 +1262,8 @@ namespace MpWpfApp {
                 var process = Process.GetCurrentProcess();
                 return process.MainModule.FileName;
             } catch(Exception ex) {
-                Console.WriteLine("Error getting this application process path: " + ex.ToString());
-                Console.WriteLine("Attempting queryfullprocessimagename...");
+                MonkeyPaste.MpConsole.WriteLine("Error getting this application process path: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("Attempting queryfullprocessimagename...");
                 return GetExecutablePathAboveVista(Process.GetCurrentProcess().Handle);
             }
         }
@@ -1315,7 +1315,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path (w/ Handle "+hwnd.ToString()+") : " + e.ToString());
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path (w/ Handle "+hwnd.ToString()+") : " + e.ToString());
                 return GetExecutablePathAboveVista(hwnd);
             }
         }
@@ -1403,16 +1403,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
-        public MpObservableCollection<string> CreatePrimaryColorList(BitmapSource bmpSource) {
+        public List<string> CreatePrimaryColorList(BitmapSource bmpSource,int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
-            var primaryIconColorList = new MpObservableCollection<string>();
+            var primaryIconColorList = new List<string>();
             var hist = MpImageHistogram.Instance.GetStatistics(bmpSource);
             foreach (var kvp in hist) {
                 var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
 
-                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == 5) {
+                //MonkeyPaste.MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == palleteSize) {
                     break;
                 }
                 //between 0-255 where 0 is black 255 is white
@@ -1430,11 +1430,11 @@ namespace MpWpfApp {
             }
 
             //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < 5; i++) {
+            for (int i = primaryIconColorList.Count; i < palleteSize; i++) {
                 primaryIconColorList.Add(MpHelpers.Instance.ConvertColorToHex(MpHelpers.Instance.GetRandomColor()));
             }
             //sw.Stop();
-            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            //MonkeyPaste.MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
 
@@ -2529,8 +2529,8 @@ namespace MpWpfApp {
                     return pt;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("ConvertRichTextToPlainText Exception, fallingt back to WinForms Rtb...");
-                    Console.WriteLine("Exception was: " + ex.ToString());
+                    MonkeyPaste.MpConsole.WriteLine("ConvertRichTextToPlainText Exception, fallingt back to WinForms Rtb...");
+                    MonkeyPaste.MpConsole.WriteLine("Exception was: " + ex.ToString());
                     //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
                     //so falling back winforms richtextbox
                     using (System.Windows.Forms.RichTextBox wf_rtb = new System.Windows.Forms.RichTextBox()) {
@@ -2618,8 +2618,8 @@ namespace MpWpfApp {
                         return flowDocument;
                     }
                     catch(Exception ex) {
-                        Console.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
-                        Console.WriteLine("Exception Details: " + ex);
+                        MonkeyPaste.MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                        MonkeyPaste.MpConsole.WriteLine("Exception Details: " + ex);
                         return rtf.ToPlainText().ToFlowDocument();
                     }
                 }
@@ -2715,7 +2715,7 @@ namespace MpWpfApp {
                     return bit;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
+                    MonkeyPaste.MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
                     return null;
                 }
                 
@@ -2871,7 +2871,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MonkeyPaste.MpConsole.WriteLine(e.ToString());
                 return false;
             }
         }
@@ -2949,7 +2949,7 @@ namespace MpWpfApp {
                 }
                 return img;
             } catch(Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
                 return null;
             }
         }
@@ -2984,7 +2984,7 @@ namespace MpWpfApp {
                 //string[] hostParts = new System.Uri(url).Host.Split('.');
                 //return String.Join(".", hostParts.Skip(Math.Max(0, hostParts.Length - 2)).Take(2));
             } catch(Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
             }
             return null;
         }

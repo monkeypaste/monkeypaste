@@ -152,7 +152,7 @@
                     <MenuItem Header="Say"
                               Tag="16"
                               Icon="{Binding Source={StaticResource SpeakIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                              Command="{Binding SpeakSelectedClipsAsyncCommand, Source={StaticResource ClipTrayViewModel}}" />
+                              Command="{Binding SpeakSelectedClipsCommand, Source={StaticResource ClipTrayViewModel}}" />
                     <Separator />
                     <MenuItem Header="Search"
                               Icon="{Binding Source={StaticResource SearchIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">

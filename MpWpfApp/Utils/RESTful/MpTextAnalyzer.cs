@@ -36,25 +36,25 @@ namespace MpWpfApp {
                     Response<DocumentSentiment> response = await client.AnalyzeSentimentAsync(text);
                     DocumentSentiment docSentiment = response.Value;
 
-                    Console.WriteLine($"Sentiment was {docSentiment.Sentiment}, with confidence scores: ");
-                    Console.WriteLine($"  Positive confidence score: {docSentiment.ConfidenceScores.Positive}.");
-                    Console.WriteLine($"  Neutral confidence score: {docSentiment.ConfidenceScores.Neutral}.");
-                    Console.WriteLine($"  Negative confidence score: {docSentiment.ConfidenceScores.Negative}.");
+                    MonkeyPaste.MpConsole.WriteLine($"Sentiment was {docSentiment.Sentiment}, with confidence scores: ");
+                    MonkeyPaste.MpConsole.WriteLine($"  Positive confidence score: {docSentiment.ConfidenceScores.Positive}.");
+                    MonkeyPaste.MpConsole.WriteLine($"  Neutral confidence score: {docSentiment.ConfidenceScores.Neutral}.");
+                    MonkeyPaste.MpConsole.WriteLine($"  Negative confidence score: {docSentiment.ConfidenceScores.Negative}.");
 
                     foreach(var sentence in docSentiment.Sentences) {
-                        Console.WriteLine($"Sentence: {sentence.Text}");
-                        Console.WriteLine($"Sentiment: {sentence.Sentiment}");
+                        MonkeyPaste.MpConsole.WriteLine($"Sentence: {sentence.Text}");
+                        MonkeyPaste.MpConsole.WriteLine($"Sentiment: {sentence.Sentiment}");
                     }
 
                     return docSentiment.ToString();
                 }
                 catch (RequestFailedException exception) {
-                    Console.WriteLine($"Error Code: {exception.ErrorCode}");
-                    Console.WriteLine($"Message: {exception.Message}");
+                    MonkeyPaste.MpConsole.WriteLine($"Error Code: {exception.ErrorCode}");
+                    MonkeyPaste.MpConsole.WriteLine($"Message: {exception.Message}");
                 }
             }
             catch (Exception e) {
-                Console.WriteLine("\n" + e.Message);
+                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
             }
 
             return null;

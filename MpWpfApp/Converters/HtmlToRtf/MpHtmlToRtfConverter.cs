@@ -268,11 +268,11 @@ namespace MpWpfApp {
             }
 
             if (closestFontFamily != null) {
-                //Console.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
+                //MonkeyPaste.MpConsole.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
                 MpRichTextFormatProperties.Instance.AddFont(closestFontFamily.ToString().ToLower());
                 return closestFontFamily;
             }
-            Console.WriteLine("Could not find system font: " + fontName);
+            MonkeyPaste.MpConsole.WriteLine("Could not find system font: " + fontName);
             return defaultFontFamily;
         }
 

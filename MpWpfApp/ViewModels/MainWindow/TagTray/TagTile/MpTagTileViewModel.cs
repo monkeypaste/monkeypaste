@@ -56,7 +56,7 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.Id == 2;
+                return Tag.Id == MpTag.RecentTagId;
             }
         }
 
@@ -65,7 +65,7 @@ namespace MpWpfApp {
                 if (Tag == null) {
                     return false;
                 }
-                return Tag.Id == 1;
+                return Tag.Id == MpTag.AllTagId;
             }
         }
 
@@ -443,30 +443,9 @@ namespace MpWpfApp {
             Tag.UnlinkWithCopyItem(rtbvm.CopyItem);
         }
 
-        public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
-            if (ctvm == null || 
-                ctvm.CopyItem == null || 
-                ctvm.CopyItemId == 0 || 
-                Tag == null || 
-                Tag.Id == 0) {
-                return false;
-            }
-            if(IsAllTag) {
-                return true;
-            }
-            if(IsRecentTag) {
-                return MpClipTrayViewModel.Instance.ClipTileViewModels.
-                    OrderByDescending(x => x.CopyDateTime).
-                    Take(Properties.Settings.Default.MaxRecentClipItems).
-                    Contains(ctvm);
-            }
-            return Tag.IsLinkedWithCopyItem(ctvm.CopyItem);
-        }
-
-        public bool IsLinkedWithRtbItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
-            if (rtbvm == null ||
-                rtbvm.CopyItem == null ||
-                rtbvm.CopyItemId == 0 ||
+        public bool IsLinkedWithClipTile(MpCopyItem ci) {
+            if (ci == null ||
+                ci.Id == 0 ||
                 Tag == null ||
                 Tag.Id == 0) {
                 return false;
@@ -478,9 +457,17 @@ namespace MpWpfApp {
                 return MpClipTrayViewModel.Instance.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
                     Take(Properties.Settings.Default.MaxRecentClipItems).
-                    Contains(rtbvm.HostClipTileViewModel);
+                    Any(x => x.CopyItem.Id == ci.Id);
             }
-            return Tag.IsLinkedWithCopyItem(rtbvm.CopyItem);
+            return Tag.IsLinkedWithCopyItem(ci);
+        }
+
+        public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
+            return IsLinkedWithClipTile(ctvm.CopyItem);
+        }
+
+        public bool IsLinkedWithRtbItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+            return IsLinkedWithClipTile(rtbvm.CopyItem);
         }
         #endregion
 

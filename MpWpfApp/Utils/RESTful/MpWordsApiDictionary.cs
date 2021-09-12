@@ -31,7 +31,7 @@ namespace MpWpfApp {
                 var body = await response.Content.ReadAsStringAsync();
                 //var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(body);
                 //return result[0]["translations"][0]["text"];
-                Console.WriteLine(body);
+                MonkeyPaste.MpConsole.WriteLine(body);
             }
         }
         #endregion

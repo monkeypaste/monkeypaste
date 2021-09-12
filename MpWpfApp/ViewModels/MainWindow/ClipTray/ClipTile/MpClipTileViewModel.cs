@@ -49,27 +49,6 @@
 
         #region Properties
 
-        #region Property Reflection Referencer
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
-        #endregion
-
         #region View Models
         private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection();
         public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
@@ -106,19 +85,6 @@
                 if(_rtbListBoxItemRichTextBoxViewModels != value) {
                     _rtbListBoxItemRichTextBoxViewModels = value;
                     OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
-                }
-            }
-        }
-
-        private ObservableCollection<MpContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpContextMenuItemViewModel>();
-        public ObservableCollection<MpContextMenuItemViewModel> ConvertClipTypes {
-            get {
-                return _convertClipTypes;
-            }
-            set {
-                if (_convertClipTypes != value) {
-                    _convertClipTypes = value;
-                    OnPropertyChanged(nameof(ConvertClipTypes));
                 }
             }
         }
@@ -286,7 +252,7 @@
 
                 //}
                 //catch (Exception ex) {
-                //    Console.WriteLine("ItemRect error: " + ex);
+                //    MonkeyPaste.MpConsole.WriteLine("ItemRect error: " + ex);
                 //    return new Rect(new Point(double.MinValue, double.MinValue), new Size(0, 0));
                 //}
 
@@ -1589,9 +1555,9 @@
                 }
                 return _copyItem;
             }
-            set {
+           // set {
                 //if (_copyItem != value) 
-                {
+               // {
                     //if(CopyItem != null && 
                     //   CopyItemType == MpCopyItemType.RichText) {
                     //    if(value != null && value.CopyItemType == MpCopyItemType.Composite) {
@@ -1608,12 +1574,12 @@
                     //if(_copyItem != value && _copyItem != null && value != null) {
                     //    updateVms = true;
                     //}
-                    _copyItem = value;
-                    if (CopyItem != null && _wasAddedAtRuntime) {
-                        CopyItem.WriteToDatabase();
-                    }
+                    //_copyItem = value;
+                    //if (CopyItem != null && _wasAddedAtRuntime) {
+                    //    CopyItem.WriteToDatabase();
+                    //}
 
-                    OnPropertyChanged(nameof(CopyItem));
+                   // OnPropertyChanged(nameof(CopyItem));
 
                     //if(updateVms) {
                     //    TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
@@ -1623,8 +1589,8 @@
                     //    PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
                     //    HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
                     //}
-                }
-            }
+               // }
+            //}
         }
         #endregion
 
@@ -1772,18 +1738,21 @@
 
         public MpClipTileViewModel(bool isPlaceholder) : this() {
             if (isPlaceholder) {
-                CopyItem = null;
+                IsBusy = true;
+                //CopyItem = null;
             }
         }
 
         public MpClipTileViewModel(MpCopyItem ci) : this(false) {
             if (ci == null) {
                 //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
-                CopyItem = null;
+                //CopyItem = null;
+                IsBusy = true;
                 return;
             }
             if (ci.Id == 0 && !MpMainWindowViewModel.IsMainWindowLoading) {
                 //ci.WriteToDatabase();
+                IsBusy = true;
                 _wasAddedAtRuntime = true;
             }
 
@@ -1992,7 +1961,7 @@
 
             //vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            Console.WriteLine("Image Analysis: " + CopyItemDescription);
+            MonkeyPaste.MpConsole.WriteLine("Image Analysis: " + CopyItemDescription);
             //ImagePreview = new MpImageAnalysisDocument();
         }
 
@@ -2123,10 +2092,14 @@
         }
 
         public void RefreshAsyncCommands() {
+            if(MpMainWindowViewModel.IsMainWindowLoading) {
+                return;
+            }
+
             MpClipTrayViewModel.Instance.HotkeyPasteCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
-            MpClipTrayViewModel.Instance.SpeakSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
+            MpClipTrayViewModel.Instance.SpeakSelectedClipsCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.MergeSelectedClipsCommand.RaiseCanExecuteChanged();
         }
 
@@ -2178,7 +2151,7 @@
                 //}
                 var ovm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(oci.Id);
                 if(ovm == null) {
-                    //Console.WriteLine(@"ClipTIle.Merge error cannot find copy item w/ id: " + oci.CopyItemId+ " so ignoring" );
+                    //MonkeyPaste.MpConsole.WriteLine(@"ClipTIle.Merge error cannot find copy item w/ id: " + oci.CopyItemId+ " so ignoring" );
                     //continue;
                     ovm = new MpClipTileViewModel(oci);
                 }
@@ -2275,7 +2248,7 @@
                     //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
                     //}
                 }
-                Console.WriteLine("Detected Browser Address: " + detectedUrl);
+                MonkeyPaste.MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
             }
 
             if (ocrTask != null) {
@@ -2380,7 +2353,7 @@
                 FileListBox.Items.Refresh();
             }
             sw.Stop();
-            Console.WriteLine("ClipTile(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
         public void ClearClipSelection() {
@@ -2396,7 +2369,7 @@
             TextSelection rtbSelection = null;
             if (RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1 && IsEditingTile) {
                 rtbSelection = RichTextBoxViewModelCollection.SubSelectedClipItems[0].Rtb.Selection;
-                Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
+                MonkeyPaste.MpConsole.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
             }
 
             //remove links to update model rich text
@@ -2411,7 +2384,7 @@
                 rtbvm.SaveSubItemToDatabase();
             }
             rtsw.Stop();
-            Console.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
 
             //CopyItemRichText = RichTextBoxViewModelCollection.FullDocument.ToRichText();
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
@@ -2427,10 +2400,10 @@
             //CopyItemBmp = GetSeparatedCompositeFlowDocument().ToBitmapSource();
             OnPropertyChanged(nameof(CopyItem));
             cipcsw.Stop();
-            Console.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
 
             sw.Stop();
-            Console.WriteLine("Saving(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
 
             if (rtbSelection != null && RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1) {
                 RichTextBoxViewModelCollection.SubSelectedClipItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
@@ -2483,7 +2456,7 @@
                     }
                 }
                 sw.Stop();
-                Console.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
+                MonkeyPaste.MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
                 if (isPastingTemplate) {
                     Application.Current.MainWindow.Cursor = Cursors.Arrow;
                     Application.Current.MainWindow.ForceCursor = true;

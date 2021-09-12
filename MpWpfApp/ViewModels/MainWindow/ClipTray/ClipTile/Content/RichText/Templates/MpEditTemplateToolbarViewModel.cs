@@ -257,7 +257,7 @@ namespace MpWpfApp {
                 MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(SubSelectedRtbViewModel, SelectedTemplateHyperlinkViewModel.CopyItemTemplate, SubSelectedRtbViewModel.Rtb.Selection);
                 OkCommand.Execute(null);
             } else {
-                //Console.WriteLine("SetTemplate Resize edit template toolbar deltaHeight: " + HostClipTileViewModel.EditTemplateToolbarHeight);
+                //MonkeyPaste.MpConsole.WriteLine("SetTemplate Resize edit template toolbar deltaHeight: " + HostClipTileViewModel.EditTemplateToolbarHeight);
                 ShowToolbar();
             }
         }

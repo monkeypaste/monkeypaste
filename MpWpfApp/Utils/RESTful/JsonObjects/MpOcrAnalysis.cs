@@ -42,8 +42,8 @@ namespace MpWpfApp {
                 return string.Empty;
             }
             foreach(var region in regions) {
-                Console.WriteLine(@"Region#: " + regions.IndexOf(region) + " bb: "+region.boundingBox);
-                Console.WriteLine(@"{");
+                MonkeyPaste.MpConsole.WriteLine(@"Region#: " + regions.IndexOf(region) + " bb: "+region.boundingBox);
+                MonkeyPaste.MpConsole.WriteLine(@"{");
                 if(region.lines == null) {
                     continue;
                 }
@@ -51,15 +51,15 @@ namespace MpWpfApp {
                     if(line.words == null) {
                         continue;
                     }
-                    Console.WriteLine("\t Line#: " + region.lines.IndexOf(line) + " bb: " + line.boundingBox);
-                    Console.WriteLine("\t{");
+                    MonkeyPaste.MpConsole.WriteLine("\t Line#: " + region.lines.IndexOf(line) + " bb: " + line.boundingBox);
+                    MonkeyPaste.MpConsole.WriteLine("\t{");
                     foreach (var word in line.words) {
-                        Console.WriteLine("\t\t Word#: " + line.words.IndexOf(word) + " bb: " + word.boundingBox);
-                        Console.WriteLine("\t\t'" + word.text + "'");
+                        MonkeyPaste.MpConsole.WriteLine("\t\t Word#: " + line.words.IndexOf(word) + " bb: " + word.boundingBox);
+                        MonkeyPaste.MpConsole.WriteLine("\t\t'" + word.text + "'");
                     }
-                    Console.WriteLine("\t}");                   
+                    MonkeyPaste.MpConsole.WriteLine("\t}");                   
                 }
-                Console.WriteLine(@"}");
+                MonkeyPaste.MpConsole.WriteLine(@"}");
             }
             return base.ToString();
         }

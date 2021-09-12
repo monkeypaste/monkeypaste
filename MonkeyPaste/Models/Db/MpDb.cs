@@ -762,14 +762,14 @@ namespace MonkeyPaste {
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpIconGuid text not null
                     , fk_IconDbImageId integer not null
-                    , fk_IconBorderDbImageId integer not null
-                    , fk_IconSelectedHighlightBorderDbImageId integer not null
-                    , fk_IconHighlightBorderDbImageId integer not null
-                    , HexColor1 text '#FFFF0000'
-                    , HexColor2 text '#FFFF0000'
-                    , HexColor3 text '#FFFF0000'
-                    , HexColor4 text '#FFFF0000'
-                    , HexColor5 text '#FFFF0000');                                       
+                    , fk_IconBorderDbImageId integer 
+                    , fk_IconSelectedHighlightBorderDbImageId integer
+                    , fk_IconHighlightBorderDbImageId integer 
+                    , HexColor1 text 
+                    , HexColor2 text 
+                    , HexColor3 text 
+                    , HexColor4 text
+                    , HexColor5 text);                                       
                     
                     
                     CREATE TABLE MpPasteToAppPath (

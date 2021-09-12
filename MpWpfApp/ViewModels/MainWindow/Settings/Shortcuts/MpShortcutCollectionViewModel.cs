@@ -277,7 +277,7 @@ namespace MpWpfApp {
                                     }),System.Windows.Threading.DispatcherPriority.Background);
                                 }
                             } catch(Exception ex) {
-                                Console.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
+                                MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
                             }
 
                         }
@@ -316,7 +316,7 @@ namespace MpWpfApp {
                 #endregion
             }
             catch (Exception ex) {
-                Console.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
                 return false;
             }
             return true;
@@ -377,7 +377,7 @@ namespace MpWpfApp {
                         shortcutCommand = MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
                         break;
                     case 16:
-                        shortcutCommand = MpClipTrayViewModel.Instance.SpeakSelectedClipsAsyncCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.SpeakSelectedClipsCommand;
                         break;
                     case 17:
                         shortcutCommand = MpClipTrayViewModel.Instance.MergeSelectedClipsCommand;
@@ -419,12 +419,12 @@ namespace MpWpfApp {
                                 if(ctvm == null) {
                                     var ci = MpCopyItem.GetCopyItemById(sc.CopyItemId);
                                     if(ci == null) {
-                                        Console.WriteLine("SHortcut init error cannot find copy item w/ id: " + sc.CopyItemId);
+                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find copy item w/ id: " + sc.CopyItemId);
                                         break;
                                     }
                                     ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
                                     if(ctvm == null) {
-                                        Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
+                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
                                     var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
@@ -444,8 +444,8 @@ namespace MpWpfApp {
                             }
                         }
                         catch (Exception ex) {
-                            Console.WriteLine("ShortcutCollection init error, unknown shortcut: " + sc.ToString());
-                            Console.WriteLine("With exception: " + ex.ToString());
+                            MonkeyPaste.MpConsole.WriteLine("ShortcutCollection init error, unknown shortcut: " + sc.ToString());
+                            MonkeyPaste.MpConsole.WriteLine("With exception: " + ex.ToString());
                         }
                         break;
                 }

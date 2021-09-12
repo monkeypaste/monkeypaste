@@ -67,7 +67,7 @@ namespace MpWpfApp {
                         parsedRect.Height = val;
                     }
                 } catch(Exception ex) {
-                    Console.WriteLine(@"Error parsing rect string: " + rectString + " with exception: " + ex);
+                    MonkeyPaste.MpConsole.WriteLine(@"Error parsing rect string: " + rectString + " with exception: " + ex);
                 }
             }
             return parsedRect;

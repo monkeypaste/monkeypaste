@@ -43,7 +43,7 @@ namespace MpWpfApp {
             
             MpRunningApplicationManager.Instance.Init();
 
-            Console.WriteLine("This app's exe: " + ThisAppPath);
+            MonkeyPaste.MpConsole.WriteLine("This app's exe: " + ThisAppPath);
             
             Timer timer = new Timer(100);
             timer.Elapsed += (s, e) => {
@@ -66,7 +66,7 @@ namespace MpWpfApp {
 
                     MpRunningApplicationManager.Instance.UpdateHandleStack(LastHandle);
 
-                    Console.WriteLine(string.Format(@"Last Window: {0} ({1})",MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle), _lastHandle));
+                    MonkeyPaste.MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})",MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle), _lastHandle));
                 }
             };
             timer.Start();

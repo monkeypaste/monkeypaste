@@ -92,7 +92,7 @@ namespace MpWpfApp {
                     }
                 }
             } else {
-                Console.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
+                MonkeyPaste.MpConsole.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
             }
             return rejectApp;
         }

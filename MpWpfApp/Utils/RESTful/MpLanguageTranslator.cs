@@ -32,7 +32,7 @@ namespace MpWpfApp {
         public MpLanguageTranslator() : base("Language Translation") {
             try {
                 if (!MpHelpers.Instance.IsConnectedToInternet()) {
-                    Console.WriteLine("Client offline. Language Translation is inactive");
+                    MonkeyPaste.MpConsole.WriteLine("Client offline. Language Translation is inactive");
                     return;
                 }
                 // at least show an error dialog if there's an unexpected error
@@ -53,7 +53,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine("Error trying to connect to internet: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("Error trying to connect to internet: " + ex.ToString());
             }
             
         }
@@ -163,7 +163,7 @@ namespace MpWpfApp {
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
             if(!MpHelpers.Instance.IsConnectedToNetwork()) {
-                Console.WriteLine("Client offline. Language Translation is inactive");
+                MonkeyPaste.MpConsole.WriteLine("Client offline. Language Translation is inactive");
                 return;
             }
             // Send a request to get supported language codes
@@ -186,10 +186,10 @@ namespace MpWpfApp {
                 }
             } catch(Exception ex) {
                 if(MpHelpers.Instance.IsConnectedToNetwork()) {
-                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
+                    MonkeyPaste.MpConsole.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
                     GetLanguagesForTranslate();
                 } else {
-                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
+                    MonkeyPaste.MpConsole.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                Console.WriteLine("LanguageTranslation exception: " + ex.ToString());
+                MonkeyPaste.MpConsole.WriteLine("LanguageTranslation exception: " + ex.ToString());
                 ShowError();
                 return string.Empty;
             }

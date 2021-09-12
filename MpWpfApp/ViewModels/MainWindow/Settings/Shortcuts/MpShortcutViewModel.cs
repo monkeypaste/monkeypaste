@@ -106,7 +106,7 @@ namespace MpWpfApp {
                                         outStr += "{F" + val + "}";
                                     }
                                     catch(Exception ex) {
-                                        Console.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
+                                        MonkeyPaste.MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                         outStr += key.ToUpper();
                                         break;
                                     }
@@ -360,12 +360,12 @@ namespace MpWpfApp {
                                 if (ctvm == null) {
                                     var ci = MpCopyItem.GetCopyItemById(Shortcut.CopyItemId);
                                     if (ci == null) {
-                                        Console.WriteLine("SHortcut init error cannot find copy item w/ id: " + Shortcut.CopyItemId);
+                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find copy item w/ id: " + Shortcut.CopyItemId);
                                         break;
                                     }
                                     ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
                                     if (ctvm == null) {
-                                        Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
+                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
                                     var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
@@ -422,11 +422,11 @@ namespace MpWpfApp {
                     }
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Error creating shortcut: " + ex.ToString());
+                    MonkeyPaste.MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
                     return;
                 }
                 Shortcut.WriteToDatabase();
-                Console.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
+                MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
         }
@@ -434,7 +434,7 @@ namespace MpWpfApp {
         public void Unregister() {
             if(KeysObservable != null) {
                 KeysObservable.Dispose();
-                Console.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
+                MonkeyPaste.MpConsole.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
             } else {
                 //either not previously registered or a sequence that won't be unregistered until app shutdown
             }

@@ -237,7 +237,7 @@ namespace MpWpfApp {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {
                         usp.DefaultValue = await MpLanguageTranslator.Instance.Translate((string)dsp.DefaultValue, newLanguage, false);
-                        Console.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
+                        MonkeyPaste.MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
                     }
                 }
             }
@@ -260,7 +260,7 @@ namespace MpWpfApp {
             }
             Properties.Settings.Default.LoadOnLogin = loadOnLogin;
             Properties.Settings.Default.Save();
-            Console.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
+            MonkeyPaste.MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
 
         

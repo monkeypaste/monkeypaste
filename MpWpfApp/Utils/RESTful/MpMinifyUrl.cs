@@ -27,7 +27,7 @@ namespace MpWpfApp {
                         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bitlyToken);
                         using (var response = await client.SendAsync(request).ConfigureAwait(false)) {
                             if (!response.IsSuccessStatusCode) {
-                                Console.WriteLine("Minify error: " + response.Content.ToString());
+                                MonkeyPaste.MpConsole.WriteLine("Minify error: " + response.Content.ToString());
                                 return string.Empty;
                             }
 
@@ -44,7 +44,7 @@ namespace MpWpfApp {
                         }
                     }
                     catch (Exception ex) {
-                        Console.WriteLine("Minify exception: " + ex.ToString());
+                        MonkeyPaste.MpConsole.WriteLine("Minify exception: " + ex.ToString());
                         ShowError();
                         return string.Empty;
                     }

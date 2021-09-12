@@ -159,7 +159,7 @@ namespace MpWpfApp {
                 CurrencySymbols = CurrencySymbols.Substring(0, CurrencySymbols.Length - 2);
             }
             catch(Exception ex) {
-                Console.WriteLine("Currency Converter error: " + ex);
+                MonkeyPaste.MpConsole.WriteLine("Currency Converter error: " + ex);
             }
         }
 

@@ -7,14 +7,37 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Globalization;
 using System.Windows.Controls;
+using System.Reflection;
 
 namespace MpWpfApp {
     public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
         #region Private Variables
 
-        #endregion        
+        #endregion
 
         #region Properties
+
+
+        #region Property Reflection Referencer
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                if (myPropInfo == null) {
+                    throw new Exception("Unable to find property: " + propertyName);
+                }
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+            }
+        }
+        #endregion
 
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel {
@@ -53,29 +76,14 @@ namespace MpWpfApp {
             get {
                 return _isBusy;
             }
-            protected set {
+            set {
                 if(_isBusy != value) {
                     _isBusy = value;
-                    Application.Current.MainWindow.Cursor = IsBusy ? Cursors.Wait : Cursors.Arrow;
+                    //Application.Current.MainWindow.Cursor = IsBusy ? Cursors.Wait : Cursors.Arrow;
                     OnPropertyChanged(nameof(IsBusy));
-                    OnPropertyChanged(nameof(IsLoading));
                 }
             }            
         }
-
-        private bool _isLoading;
-        public bool IsLoading {
-            get {
-                return _isLoading;
-            }
-            set {
-                if (_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
-
 
         private static bool _designMode = false;
         protected bool IsInDesignMode {

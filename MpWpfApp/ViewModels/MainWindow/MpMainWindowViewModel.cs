@@ -240,6 +240,9 @@ namespace MpWpfApp {
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
+            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpWpfInterfaceWrapper() {
+                IconBuilder = new MpIconBuilder()
+            });
 
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
             MpHelpers.Instance.Init();            
@@ -267,20 +270,22 @@ namespace MpWpfApp {
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
-        public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+        public void FinishLoading() {
             MpShortcutCollectionViewModel.Instance.Init();
 
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
             int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
-            MpStandardBalloonViewModel.ShowBalloon(
-                "Monkey Paste",
-                "Successfully loaded w/ " + totalItems + " items",
-                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
 
             IsMainWindowLoading = false;
+
+
+            MpStandardBalloonViewModel.ShowBalloon(
+                "Monkey Paste",
+                "Successfully loaded w/ " + totalItems + " items",
+                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
         }
 
         public void ClearEdits() {
@@ -386,8 +391,8 @@ namespace MpWpfApp {
                         File.Delete(tfp);
                     }
                     catch(Exception ex) {
-                        Console.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
-                        Console.WriteLine(ex);
+                        MonkeyPaste.MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
+                        MonkeyPaste.MpConsole.WriteLine(ex);
                     }
                 }
             }

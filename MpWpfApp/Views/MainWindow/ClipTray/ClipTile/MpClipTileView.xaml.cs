@@ -153,9 +153,9 @@ namespace MpWpfApp {
                     return;
                 }
                 if (ctvm.MouseDownPosition == new Point()) {
-                    ctvm.MouseDownPosition = e.GetPosition(ctvm.ClipBorder);
+                    ctvm.MouseDownPosition = e.GetPosition(ClipTileClipBorder);
                 }
-                if (MpHelpers.Instance.DistanceBetweenPoints(ctvm.MouseDownPosition, e.GetPosition(ctvm.ClipBorder)) < minDragDist) {
+                if (MpHelpers.Instance.DistanceBetweenPoints(ctvm.MouseDownPosition, e.GetPosition(ClipTileClipBorder)) < minDragDist) {
                     return;
                 }
 
@@ -174,7 +174,7 @@ namespace MpWpfApp {
             ctvm.IsClipDropping = false;
             ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
             ctvm.RichTextBoxViewModelCollection.ScrollViewer?.ScrollToHome();
-            Console.WriteLine("ClipTile Dragleave");
+            MonkeyPaste.MpConsole.WriteLine("ClipTile Dragleave");
         }
 
         private void ClipTileClipBorder_PreviewDragEnter(object sender, DragEventArgs e) {
@@ -182,9 +182,9 @@ namespace MpWpfApp {
             var ctv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
             ctv.AutoScrollByMouse();
 
-            Console.WriteLine("ClipTile Dragenter");
+            MonkeyPaste.MpConsole.WriteLine("ClipTile Dragenter");
             if (!ctvm.IsDragDataValid(e.Data)) {
-                Console.WriteLine(@"Drag data invalid from drag enter");
+                MonkeyPaste.MpConsole.WriteLine(@"Drag data invalid from drag enter");
                 e.Handled = true;
                 return;
             }
@@ -203,7 +203,7 @@ namespace MpWpfApp {
 
             if (ctvm.IsDragDataValid(e1.Data)) {
                 int dropIdx = ctv.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.ListBox));
-                Console.WriteLine("DropIdx: " + dropIdx);
+                MonkeyPaste.MpConsole.WriteLine("DropIdx: " + dropIdx);
                 if (dropIdx >= 0 && dropIdx <= ctvm.RichTextBoxViewModelCollection.Count) {
                     if (dropIdx < ctvm.RichTextBoxViewModelCollection.Count) {
                         if (!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx)) {
@@ -227,7 +227,7 @@ namespace MpWpfApp {
                     ctv.ClipTrayAdornerLayer?.Update();
                 }
             } else {
-                Console.WriteLine(@"Drag data invalid from drag over");
+                MonkeyPaste.MpConsole.WriteLine(@"Drag data invalid from drag over");
                 ctvm.IsClipDropping = false;
                 //e1.Effects = DragDropEffects.None;
                 e1.Handled = true;

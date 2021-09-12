@@ -36,12 +36,6 @@
     </Window.Background>-->
     <Window.Resources>        
     </Window.Resources>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:CallMethodAction MethodName="MainWindow_Loaded"
-                                TargetObject="{Binding}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Canvas x:Name="MainWindowCanvas"
             AllowDrop="True"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
