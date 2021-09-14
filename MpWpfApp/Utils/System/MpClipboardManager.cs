@@ -17,6 +17,16 @@ using WindowsInput.Native;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+    public enum MpPasteDataFormats {
+        None = 0,
+        PlainText,
+        Csv,
+        RichText,
+        Html,
+        Bitmap,
+        FileList
+    }
+
     public class MpClipboardManager : IDisposable {
         private static readonly Lazy<MpClipboardManager> _Lazy = new Lazy<MpClipboardManager>(() => new MpClipboardManager());
         public static MpClipboardManager Instance { get { return _Lazy.Value; } }

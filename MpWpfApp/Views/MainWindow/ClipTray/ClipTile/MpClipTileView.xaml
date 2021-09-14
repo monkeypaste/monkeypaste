@@ -9,6 +9,13 @@
              mc:Ignorable="d"             
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:MpContainerToRtbCollectionConverter x:Key="ContainerToRtbCollectionConverter" />
+        <local:MpContentTemplateSelector x:Key="ContentTemplateSelector" />
+    </UserControl.Resources>
+    <!--<UserControl.DataContext>
+        <local:MpClipTileViewModel />
+    </UserControl.DataContext>-->
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding}"
                         Margin="{Binding TileMargin}"
@@ -40,6 +47,19 @@
                                     MethodName="ClipTile_Loaded" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
+        <!--<local:MpClipBorder.Style>
+            <Style>
+                <Setter Property="Border.Background"
+                        Value="{Binding TileBorderBrush}" />
+                <Style.Triggers>
+                    <Trigger Property="Border.IsMouseOver"
+                             Value="True">
+                        <Setter Property="Border.Background"
+                                Value="Green" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </local:MpClipBorder.Style>-->
         <local:MpClipBorder.BorderBrush>
             <DrawingBrush Viewport="0,0,8,8"
                           ViewportUnits="Absolute"
@@ -267,12 +287,21 @@
                         Width="{Binding TileContentWidth}"
                         Height="{Binding TileContentHeight}"
                         ToolTipService.InitialShowDelay="1000">
-                    <!-- RichText Content -->
-                    <local:MpRtbItemCollectionVIew DataContext="{Binding RichTextBoxViewModelCollection}" />
-                    <!-- Image Content-->
-                    <local:MpImageItemView DataContext="{Binding}" />
-                    <!--File List Content -->
-                    <local:MpFileListCollectionView DataContext="{Binding FileListCollectionViewModel}" />
+                    <ContentControl Content="{Binding}"
+                                    DataContext="{Binding ContentContainerViewModel, Converter={StaticResource ContainerToRtbCollectionConverter}}"
+                                    ContentTemplateSelector="{StaticResource ContentTemplateSelector}">
+                        <ContentControl.Resources>
+                            <DataTemplate x:Key="RichTextTemplate">
+                                <local:MpRtbItemCollectionView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="ImageTemplate">
+                                <local:MpImageItemView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="FileListTemplate">
+                                <local:MpFileListCollectionView />
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
                 </Canvas>
                 <!-- Selection Overlay Grid -->
                 <Grid x:Name="ClipTileSelectionOverlayGrid"

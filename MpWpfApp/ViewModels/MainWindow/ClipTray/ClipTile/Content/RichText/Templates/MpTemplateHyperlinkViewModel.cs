@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
     public enum MpCurrencyType {
@@ -29,8 +30,8 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private MpRtbListBoxItemRichTextBoxViewModel _hostRtbItemViewModel = null;
-        public MpRtbListBoxItemRichTextBoxViewModel HostRtbItemViewModel {
+        private MpRtbItemViewModel _hostRtbItemViewModel = null;
+        public MpRtbItemViewModel HostRtbItemViewModel {
             get {
                 return _hostRtbItemViewModel;
             }
@@ -47,28 +48,11 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Property Reflection Referencer
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpTemplateHyperlinkViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpTemplateHyperlinkViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
+        #region Layout Properties        
         #endregion
 
-        #region Layout Properties        
+        #region Document Properties
+        public ObservableCollection<TextRange> TemplateRanges { get; private set; } = new ObservableCollection<TextRange>();
         #endregion
 
         #region Appearance Properties
@@ -352,7 +336,7 @@ namespace MpWpfApp {
         public static event EventHandler OnTemplateSelected;
 
         #region Factory Methods
-        public static Hyperlink CreateTemplateHyperlink(MpRtbListBoxItemRichTextBoxViewModel rtbvm, MpCopyItemTemplate cit, TextRange tr) {
+        public static Hyperlink CreateTemplateHyperlink(MpRtbItemViewModel rtbvm, MpCopyItemTemplate cit, TextRange tr) {
             var thlvm = new MpTemplateHyperlinkViewModel(rtbvm, cit);
 
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
@@ -410,8 +394,8 @@ namespace MpWpfApp {
 
         #region Public Methods
         //public MpTemplateHyperlinkViewModel() :this(new MpClipTileViewModel(new MpCopyItem()),new MpCopyItemTemplate()) { }
-
-        public MpTemplateHyperlinkViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, MpCopyItemTemplate cit) : base() {
+        public MpTemplateHyperlinkViewModel() : base() { }
+        public MpTemplateHyperlinkViewModel(MpRtbItemViewModel rtbvm, MpCopyItemTemplate cit) : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsSelected):
@@ -497,7 +481,7 @@ namespace MpWpfApp {
                 }
                 if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile) {
                     e.Handled = true;
-                    HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
+                    (HostRtbItemViewModel.ContainerViewModel as MpRtbItemCollectionViewModel).EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
             };
 
@@ -514,7 +498,7 @@ namespace MpWpfApp {
                 }
                 if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile) {
                     e4.Handled = true;
-                    HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
+                    (HostRtbItemViewModel.ContainerViewModel as MpRtbItemCollectionViewModel).EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
             };
 

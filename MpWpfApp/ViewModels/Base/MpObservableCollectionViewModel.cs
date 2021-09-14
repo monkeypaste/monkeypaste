@@ -89,31 +89,31 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         #region Properties
 
         #region Controls
-        private ListBox _listBox = null;
-        public ListBox ListBox {
-            get {
-                return _listBox;
-            }
-            set {
-                if (_listBox != value) {
-                    _listBox = value;
-                    OnPropertyChanged(nameof(ListBox));
-                }
-            }
-        }
+        //private ListBox _listBox = null;
+        //public ListBox ListBox {
+        //    get {
+        //        return _listBox;
+        //    }
+        //    set {
+        //        if (_listBox != value) {
+        //            _listBox = value;
+        //            OnPropertyChanged(nameof(ListBox));
+        //        }
+        //    }
+        //}
 
-        private ScrollViewer _scrollViewer = null;
-        public ScrollViewer ScrollViewer {
-            get {
-                return _scrollViewer;
-            }
-            set {
-                if(_scrollViewer != value) {
-                    _scrollViewer = value;
-                    OnPropertyChanged(nameof(ScrollViewer));
-                }
-            }
-        }
+        //private ScrollViewer _scrollViewer = null;
+        //public ScrollViewer ScrollViewer {
+        //    get {
+        //        return _scrollViewer;
+        //    }
+        //    set {
+        //        if(_scrollViewer != value) {
+        //            _scrollViewer = value;
+        //            OnPropertyChanged(nameof(ScrollViewer));
+        //        }
+        //    }
+        //}
 
         //public List<ListBoxItem> VisibleListBoxItems {
         //    get {
@@ -209,89 +209,89 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             }
         }
 
-        public int IndexUnderDragCursor {
-            get {
-                if (this.ListBox == null) {
-                    // means there is no index under the cursor
-                    return -1;
-                } 
-                var mp = MpHelpers.Instance.GetMousePosition(ListBox);
-                var listBoxRect = GetListBoxRect();
-                if (listBoxRect.Contains(mp)) {
-                    for (int i = 0; i < this.ListBox.Items.Count; i++) {
-                        var item = this.GetListBoxItem(i);
-                        var itemRect = GetListBoxItemRect(i);
-                        mp = MpHelpers.Instance.GetMousePosition(item);
-                        if (itemRect.Contains(mp)) {
-                            if (IsHorizontal) {
-                                if (mp.X > itemRect.Width / 2) {
-                                    return i + 1;
-                                }
-                                return i;
-                            } else {
-                                if (mp.Y > itemRect.Height / 2) {
-                                    return i + 1;
-                                }
-                                return i;
-                            }
-                        }
-                    }
-                    mp = MpHelpers.Instance.GetMousePosition(ListBox);
-                    if(mp.X >= GetListBoxItemRect(0).Left && mp.X <= GetListBoxItemRect(ListBox.Items.Count-1).Right) {
-                        double minDist = double.MaxValue;
-                        int minIdx = -1;
-                        for (int i = 0; i < this.ListBox.Items.Count; i++) {
-                            var item = this.GetListBoxItem(i);
-                            var itemRect = this.GetListBoxItemRect(i);
-                            double lowDist = 0;
-                            double highDist = 0;
-                            double curDist = double.MaxValue;
-                            if (IsHorizontal) {
-                                double lbilx = itemRect.Left;
-                                double lbirx = itemRect.Right;
-                                lowDist = Math.Abs(mp.X - lbilx);
-                                highDist = Math.Abs(mp.X - lbirx);
-                                curDist = Math.Min(lowDist, highDist);
-                            } else {
-                                double lbity = itemRect.Top;
-                                double lbiby = itemRect.Bottom;
-                                lowDist = Math.Abs(mp.Y - lbity);
-                                highDist = Math.Abs(mp.Y - lbiby);
-                                curDist = Math.Min(lowDist, highDist);
-                            }
-                            if (curDist < minDist) {
-                                minDist = curDist;
-                                if (minDist == lowDist) {
-                                    minIdx = i;
-                                } else {
-                                    minIdx = i + 1;
-                                }
-                            }
-                        }
-                        if (minIdx >= 0) {
-                            return minIdx;
-                        }
-                    }
-                    if(mp.X > GetListBoxItemRect(0).Left) {
-                        return this.ListBox.Items.Count;
-                    }
-                    return 0;
-                } else {
-                    if (IsHorizontal) {
-                        return ListBox.Items.Count;
-                        //var mp = MpHelpers.Instance.GetMousePosition(ListBox);
-                        //var listBoxBounds = VisualTreeHelper.GetContentBounds(ListBox);
-                        //if (mp.X <= listBoxBounds.Left) {
-                        //    return 0;
-                        //}
-                        //if(mp.X >= listBoxBounds.Right) {
-                        //    return ListBox.Items.Count;
-                        //}
-                    }
-                }
-                return -1;
-            }
-        }
+        //public int IndexUnderDragCursor {
+        //    get {
+        //        if (this.ListBox == null) {
+        //            // means there is no index under the cursor
+        //            return -1;
+        //        } 
+        //        var mp = MpHelpers.Instance.GetMousePosition(ListBox);
+        //        var listBoxRect = GetListBoxRect();
+        //        if (listBoxRect.Contains(mp)) {
+        //            for (int i = 0; i < this.ListBox.Items.Count; i++) {
+        //                var item = this.GetListBoxItem(i);
+        //                var itemRect = GetListBoxItemRect(i);
+        //                mp = MpHelpers.Instance.GetMousePosition(item);
+        //                if (itemRect.Contains(mp)) {
+        //                    if (IsHorizontal) {
+        //                        if (mp.X > itemRect.Width / 2) {
+        //                            return i + 1;
+        //                        }
+        //                        return i;
+        //                    } else {
+        //                        if (mp.Y > itemRect.Height / 2) {
+        //                            return i + 1;
+        //                        }
+        //                        return i;
+        //                    }
+        //                }
+        //            }
+        //            mp = MpHelpers.Instance.GetMousePosition(ListBox);
+        //            if(mp.X >= GetListBoxItemRect(0).Left && mp.X <= GetListBoxItemRect(ListBox.Items.Count-1).Right) {
+        //                double minDist = double.MaxValue;
+        //                int minIdx = -1;
+        //                for (int i = 0; i < this.ListBox.Items.Count; i++) {
+        //                    var item = this.GetListBoxItem(i);
+        //                    var itemRect = this.GetListBoxItemRect(i);
+        //                    double lowDist = 0;
+        //                    double highDist = 0;
+        //                    double curDist = double.MaxValue;
+        //                    if (IsHorizontal) {
+        //                        double lbilx = itemRect.Left;
+        //                        double lbirx = itemRect.Right;
+        //                        lowDist = Math.Abs(mp.X - lbilx);
+        //                        highDist = Math.Abs(mp.X - lbirx);
+        //                        curDist = Math.Min(lowDist, highDist);
+        //                    } else {
+        //                        double lbity = itemRect.Top;
+        //                        double lbiby = itemRect.Bottom;
+        //                        lowDist = Math.Abs(mp.Y - lbity);
+        //                        highDist = Math.Abs(mp.Y - lbiby);
+        //                        curDist = Math.Min(lowDist, highDist);
+        //                    }
+        //                    if (curDist < minDist) {
+        //                        minDist = curDist;
+        //                        if (minDist == lowDist) {
+        //                            minIdx = i;
+        //                        } else {
+        //                            minIdx = i + 1;
+        //                        }
+        //                    }
+        //                }
+        //                if (minIdx >= 0) {
+        //                    return minIdx;
+        //                }
+        //            }
+        //            if(mp.X > GetListBoxItemRect(0).Left) {
+        //                return this.ListBox.Items.Count;
+        //            }
+        //            return 0;
+        //        } else {
+        //            if (IsHorizontal) {
+        //                return ListBox.Items.Count;
+        //                //var mp = MpHelpers.Instance.GetMousePosition(ListBox);
+        //                //var listBoxBounds = VisualTreeHelper.GetContentBounds(ListBox);
+        //                //if (mp.X <= listBoxBounds.Left) {
+        //                //    return 0;
+        //                //}
+        //                //if(mp.X >= listBoxBounds.Right) {
+        //                //    return ListBox.Items.Count;
+        //                //}
+        //            }
+        //        }
+        //        return -1;
+        //    }
+        //}
         #endregion
 
         #region Business Logic
@@ -327,199 +327,199 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
 
         public MpObservableCollectionViewModel(IEnumerable<T> collection) : base(collection) { }
 
-        public bool IsListBoxItemVisible(int index) {
-            var lbi = GetListBoxItem(index);
-            if (lbi != null && lbi.Visibility == Visibility.Visible) {
-                if(GetListBoxItemRect(index).Left < ScrollViewer.HorizontalOffset) {
-                    return false;
-                }
-                if (GetListBoxItemRect(index).Right > GetListBoxRect().Right + ScrollViewer.HorizontalOffset) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
+        //public bool IsListBoxItemVisible(int index) {
+        //    var lbi = GetListBoxItem(index);
+        //    if (lbi != null && lbi.Visibility == Visibility.Visible) {
+        //        if(GetListBoxItemRect(index).Left < ScrollViewer.HorizontalOffset) {
+        //            return false;
+        //        }
+        //        if (GetListBoxItemRect(index).Right > GetListBoxRect().Right + ScrollViewer.HorizontalOffset) {
+        //            return false;
+        //        }
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        public ListBoxItem GetListBoxItem(int index) {
-            if (this.ListBox == null) {
-                return null;
-            }
-            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-                return null;
-            }
-            if (index < 0 || index >= this.ListBox.Items.Count) {
-                return null;
-            }
-            return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-        }
+        //public ListBoxItem GetListBoxItem(int index) {
+        //    if (this.ListBox == null) {
+        //        return null;
+        //    }
+        //    if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+        //        return null;
+        //    }
+        //    if (index < 0 || index >= this.ListBox.Items.Count) {
+        //        return null;
+        //    }
+        //    return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+        //}
 
-        public ListBoxItem GetListBoxItem(T item) {
-            if (this.ListBox == null) {
-                return null;
-            }
-            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-                return null;
-            }
-            if(!ListBox.Items.Contains(item)) {
-                return null;
-            }
-            return GetListBoxItem(ListBox.Items.IndexOf(item));
-        }
+        //public ListBoxItem GetListBoxItem(T item) {
+        //    if (this.ListBox == null) {
+        //        return null;
+        //    }
+        //    if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+        //        return null;
+        //    }
+        //    if(!ListBox.Items.Contains(item)) {
+        //        return null;
+        //    }
+        //    return GetListBoxItem(ListBox.Items.IndexOf(item));
+        //}
 
-        public Rect GetListBoxRect() {
-            if(ListBox == null) {
-                return new Rect();
-            }
-            return new Rect(new Point(0,0), new Size(ListBox.ActualWidth, ListBox.ActualHeight));
-        }
+        //public Rect GetListBoxRect() {
+        //    if(ListBox == null) {
+        //        return new Rect();
+        //    }
+        //    return new Rect(new Point(0,0), new Size(ListBox.ActualWidth, ListBox.ActualHeight));
+        //}
 
-        public Rect GetListBoxItemRect(int index) {
-            var lbi = GetListBoxItem(index);
-            if (lbi == null || lbi.Visibility != Visibility.Visible) {
-                return new Rect();
-            }
-            Point origin = new Point();
-            if(ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0) {
-                origin = lbi.TranslatePoint(new Point(0, 0), ScrollViewer);
-            } else {
-                origin = lbi.TranslatePoint(new Point(0, 0), ListBox);
-            }
-            //origin.X -= ScrollViewer.HorizontalOffset;
-           //origin.Y -= ScrollViewer.VerticalOffset;
-            return new Rect(origin, new Size(lbi.ActualWidth,lbi.ActualHeight));
-        }
+        //public Rect GetListBoxItemRect(int index) {
+        //    var lbi = GetListBoxItem(index);
+        //    if (lbi == null || lbi.Visibility != Visibility.Visible) {
+        //        return new Rect();
+        //    }
+        //    Point origin = new Point();
+        //    if(ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0) {
+        //        origin = lbi.TranslatePoint(new Point(0, 0), ScrollViewer);
+        //    } else {
+        //        origin = lbi.TranslatePoint(new Point(0, 0), ListBox);
+        //    }
+        //    //origin.X -= ScrollViewer.HorizontalOffset;
+        //   //origin.Y -= ScrollViewer.VerticalOffset;
+        //    return new Rect(origin, new Size(lbi.ActualWidth,lbi.ActualHeight));
+        //}
 
-        public Point[] GetAdornerPoints(int index) {
-            var points = new Point[2];
-            var itemRect = index >= this.Count ? GetListBoxItemRect(this.Count - 1) : GetListBoxItemRect(index);
-            if(!IsHorizontal) {
-                itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
-            }
-            if (IsHorizontal) {
-                if(index < this.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.BottomLeft;
-                } else {
-                    points[0] = itemRect.TopRight;
-                    points[1] = itemRect.BottomRight;
-                }
-            }  else {
-                if (index < this.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.TopRight;
-                } else {
-                    points[0] = itemRect.BottomLeft;
-                    points[1] = itemRect.BottomRight;
-                }
-            }
-            if (ScrollViewer != null && 
-                (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0)) {
-                points[0].X += ScrollViewer.Margin.Right;
-                //points[0].Y += ScrollViewer.VerticalOffset;
-                points[1].X += ScrollViewer.Margin.Right;
-                //points[1].Y += ScrollViewer.VerticalOffset;
-            } 
-            return points;
-        }
+        //public Point[] GetAdornerPoints(int index) {
+        //    var points = new Point[2];
+        //    var itemRect = index >= this.Count ? GetListBoxItemRect(this.Count - 1) : GetListBoxItemRect(index);
+        //    if(!IsHorizontal) {
+        //        itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+        //    }
+        //    if (IsHorizontal) {
+        //        if(index < this.Count) {
+        //            points[0] = itemRect.TopLeft;
+        //            points[1] = itemRect.BottomLeft;
+        //        } else {
+        //            points[0] = itemRect.TopRight;
+        //            points[1] = itemRect.BottomRight;
+        //        }
+        //    }  else {
+        //        if (index < this.Count) {
+        //            points[0] = itemRect.TopLeft;
+        //            points[1] = itemRect.TopRight;
+        //        } else {
+        //            points[0] = itemRect.BottomLeft;
+        //            points[1] = itemRect.BottomRight;
+        //        }
+        //    }
+        //    if (ScrollViewer != null && 
+        //        (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0)) {
+        //        points[0].X += ScrollViewer.Margin.Right;
+        //        //points[0].Y += ScrollViewer.VerticalOffset;
+        //        points[1].X += ScrollViewer.Margin.Right;
+        //        //points[1].Y += ScrollViewer.VerticalOffset;
+        //    } 
+        //    return points;
+        //}
 
-        public void UpdateExtendedSelection(int index) {
-            /*
-            1    if the target item is not selected, select it
-            2    if Ctrl key is down, add target item to selection 
-            3    if Shift key is down
-            4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
-            5    else add item and all previous items
-            6    if the target item is selected de-select only if Ctrl key is down         
-            7    if neither ctrl nor shift are pressed clear any other selection
-            8    if the target item is selected
-            9    if Ctrl key is down, remove item from selection
-            10   if Shift key is down
-            11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
-            12   else remove any other item from selection
-            */
-            //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
-            //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
-            //    MpClipTrayViewModel.Instance.UpdateExtendedSelection(MpClipTrayViewModel.Instance.IndexOf(hctvm));
-            //}
-            bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
-            bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
-            var lbi = GetListBoxItem(index);
-            if (!lbi.IsSelected) {
-                ListBoxItem lastSelectedItem = null;
-                if (ListBox.SelectedItems.Count > 0) {
-                    // NOTE this maybe the wrong item
-                    lastSelectedItem = (ListBoxItem)GetListBoxItem((T)ListBox.SelectedItems[ListBox.SelectedItems.Count - 1]);
-                }
-                if (isShiftDown) {
-                    if (lastSelectedItem == null) {
-                        //5 else add item and all previous items
-                        for (int i = 0; i <= index; i++) {
-                            GetListBoxItem(i).IsSelected = true;
-                        }
-                        return;
-                    } else {
-                        //4 if there is a previously selected item, add all items between target
-                        //  item and most recently selected item to selection, clearing any others
-                        ListBox.SelectedItems.Clear();
+        //public void UpdateExtendedSelection(int index) {
+        //    /*
+        //    1    if the target item is not selected, select it
+        //    2    if Ctrl key is down, add target item to selection 
+        //    3    if Shift key is down
+        //    4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
+        //    5    else add item and all previous items
+        //    6    if the target item is selected de-select only if Ctrl key is down         
+        //    7    if neither ctrl nor shift are pressed clear any other selection
+        //    8    if the target item is selected
+        //    9    if Ctrl key is down, remove item from selection
+        //    10   if Shift key is down
+        //    11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
+        //    12   else remove any other item from selection
+        //    */
+        //    //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
+        //    //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
+        //    //    MpClipTrayViewModel.Instance.UpdateExtendedSelection(MpClipTrayViewModel.Instance.IndexOf(hctvm));
+        //    //}
+        //    bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
+        //    bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
+        //    var lbi = GetListBoxItem(index);
+        //    if (!lbi.IsSelected) {
+        //        ListBoxItem lastSelectedItem = null;
+        //        if (ListBox.SelectedItems.Count > 0) {
+        //            // NOTE this maybe the wrong item
+        //            lastSelectedItem = (ListBoxItem)GetListBoxItem((T)ListBox.SelectedItems[ListBox.SelectedItems.Count - 1]);
+        //        }
+        //        if (isShiftDown) {
+        //            if (lastSelectedItem == null) {
+        //                //5 else add item and all previous items
+        //                for (int i = 0; i <= index; i++) {
+        //                    GetListBoxItem(i).IsSelected = true;
+        //                }
+        //                return;
+        //            } else {
+        //                //4 if there is a previously selected item, add all items between target
+        //                //  item and most recently selected item to selection, clearing any others
+        //                ListBox.SelectedItems.Clear();
 
-                        int lastIdx = ListBox.Items.IndexOf(lastSelectedItem.DataContext);
-                        if (lastIdx < index) {
-                            for (int i = lastIdx; i <= index; i++) {
-                                GetListBoxItem(i).IsSelected = true;
-                            }
-                        } else {
-                            for (int i = index; i <= lastIdx; i++) {
-                                GetListBoxItem(i).IsSelected = true;
-                            }
-                        }
-                    }
-                } else if (isCtrlDown) {
-                    //2    if Ctrl key is down, add target item to selection 
-                    //6    if the target item is selected de-select only if Ctrl key is down
+        //                int lastIdx = ListBox.Items.IndexOf(lastSelectedItem.DataContext);
+        //                if (lastIdx < index) {
+        //                    for (int i = lastIdx; i <= index; i++) {
+        //                        GetListBoxItem(i).IsSelected = true;
+        //                    }
+        //                } else {
+        //                    for (int i = index; i <= lastIdx; i++) {
+        //                        GetListBoxItem(i).IsSelected = true;
+        //                    }
+        //                }
+        //            }
+        //        } else if (isCtrlDown) {
+        //            //2    if Ctrl key is down, add target item to selection 
+        //            //6    if the target item is selected de-select only if Ctrl key is down
 
-                    lbi.IsSelected = !lbi.IsSelected;
-                } else {
-                    //7    if neither ctrl nor shift are pressed clear any other selection
-                    // MpClipTrayViewModel.Instance.ClearClipSelection(false);
-                    //HostClipTileViewModel.IsSelected = true;
-                    ListBox.SelectedItems.Clear();
-                    lbi.IsSelected = true;
-                }
-            } else if (lbi.IsSelected) {
-                if (isShiftDown) {
-                    //10   if Shift key is down
-                    if (ListBox.SelectedItems.Count > 0) {
-                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
-                        var firstSelectedItem = GetListBoxItem((T)ListBox.SelectedItems[0]);
-                        int firstIdx = ListBox.Items.IndexOf(firstSelectedItem.DataContext);
-                        ListBox.SelectedItems.Clear();
-                        if (firstIdx < index) {
-                            for (int i = firstIdx; i <= index; i++) {
-                                GetListBoxItem(i).IsSelected = true;
-                            }
-                            return;
-                        } else {
-                            for (int i = index; i <= firstIdx; i++) {
-                                GetListBoxItem(i).IsSelected = true;
-                            }
-                            return;
-                        }
-                    }
+        //            lbi.IsSelected = !lbi.IsSelected;
+        //        } else {
+        //            //7    if neither ctrl nor shift are pressed clear any other selection
+        //            // MpClipTrayViewModel.Instance.ClearClipSelection(false);
+        //            //HostClipTileViewModel.IsSelected = true;
+        //            ListBox.SelectedItems.Clear();
+        //            lbi.IsSelected = true;
+        //        }
+        //    } else if (lbi.IsSelected) {
+        //        if (isShiftDown) {
+        //            //10   if Shift key is down
+        //            if (ListBox.SelectedItems.Count > 0) {
+        //                //11   if there is a previously selected item, remove all items between target item and previous item from selection
+        //                var firstSelectedItem = GetListBoxItem((T)ListBox.SelectedItems[0]);
+        //                int firstIdx = ListBox.Items.IndexOf(firstSelectedItem.DataContext);
+        //                ListBox.SelectedItems.Clear();
+        //                if (firstIdx < index) {
+        //                    for (int i = firstIdx; i <= index; i++) {
+        //                        GetListBoxItem(i).IsSelected = true;
+        //                    }
+        //                    return;
+        //                } else {
+        //                    for (int i = index; i <= firstIdx; i++) {
+        //                        GetListBoxItem(i).IsSelected = true;
+        //                    }
+        //                    return;
+        //                }
+        //            }
 
-                } else if (isCtrlDown) {
-                    //9    if Ctrl key is down, remove item from selection
-                    lbi.IsSelected = false;
-                } else {
-                    //12   else remove any other item from selection
+        //        } else if (isCtrlDown) {
+        //            //9    if Ctrl key is down, remove item from selection
+        //            lbi.IsSelected = false;
+        //        } else {
+        //            //12   else remove any other item from selection
 
-                    //MpClipTrayViewModel.Instance.ClearClipSelection(false);
-                    //HostClipTileViewModel.IsSelected = true;
-                    ListBox.SelectedItems.Clear();
-                    lbi.IsSelected = true;
-                }
-            }
-        }
+        //            //MpClipTrayViewModel.Instance.ClearClipSelection(false);
+        //            //HostClipTileViewModel.IsSelected = true;
+        //            ListBox.SelectedItems.Clear();
+        //            lbi.IsSelected = true;
+        //        }
+        //    }
+        //}
 
         public void RaisePropertyChanged(params string[] propertyNames) {
             foreach (var propertyName in propertyNames) {
@@ -599,7 +599,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
 
         #region IDisposable
         public void Dispose() {
-            ListBox = null;
+            //ListBox = null;
         }
         #endregion
     }

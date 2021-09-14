@@ -69,7 +69,7 @@ namespace MonkeyPaste.Droid {
                     await Clipboard.SetTextAsync(selectedText);
 
                     // TODO Add Skia Icon builder here
-                    var icon = MpIcon.Create(hostAppIconBase64,null);
+                    var icon = MpIcon.Create(hostAppIconBase64);
                     var app = MpApp.Create(hostPackageName,hostAppName,icon);
                     var source = MpSource.Create(app, null);
                     MonkeyPaste.MpCopyItem.Create(source, selectedText,MpCopyItemType.RichText);

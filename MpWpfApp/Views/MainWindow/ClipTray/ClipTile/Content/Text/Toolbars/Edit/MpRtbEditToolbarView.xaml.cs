@@ -210,16 +210,17 @@ namespace MpWpfApp {
             e3.Handled = true;
             var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             var hctvm = rtbetbvm.HostClipTileViewModel;
+            var rtbcvm = hctvm.ContentContainerViewModel as MpRtbItemCollectionViewModel;
             var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
-            var rtblb = rtb.FindParentOfType<MpRtbItemCollectionVIew>();
-            var rtbvm = rtb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+            var rtblb = rtb.FindParentOfType<MpRtbItemCollectionView>();
+            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
             //SubSelectedRtbViewModel.SaveSubItemToDatabase();
 
             if (rtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
                 //if templates are NOT in the clip yet add one w/ default name
                 //rtblb.EditTemplateView.SetActiveTemplate(null, true);
 
-                hctvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
+               rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
                 //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             } else {
                 var templateContextMenu = new ContextMenu();
@@ -251,7 +252,7 @@ namespace MpWpfApp {
                     tmi.Icon = b;
                     tmi.Header = tb;
                     tmi.Click += (s1, e5) => {
-                        hctvm.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
+                        rtbcvm.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
                         //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
                     };
                     templateContextMenu.Items.Add(tmi);
@@ -268,7 +269,7 @@ namespace MpWpfApp {
                 addNewMenuItem.Icon = img;
                 addNewMenuItem.Header = tb2;
                 addNewMenuItem.Click += (s1, e5) => {
-                    hctvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                    rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
                 };
                 templateContextMenu.Items.Add(addNewMenuItem);
                 AddTemplateButton.ContextMenu = templateContextMenu;

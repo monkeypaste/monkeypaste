@@ -8,9 +8,10 @@ namespace MpWpfApp {
 
         public double MainWindowToScreenHeightRatio = 0.35;
 
-        private MpMeasurements() {
-            Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles;
-            Properties.Settings.Default.Save();
+        public MpMeasurements() { }
+
+        public void Measure() {
+            
         }
 
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
@@ -28,7 +29,13 @@ namespace MpWpfApp {
             }
         }
 
-        private double _taskBarHeight = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
+        public int MaxRecentClipItems {
+            get {
+                return TotalVisibleClipTiles;
+            }
+        }
+
+        public double TaskBarHeight { get; private set; } = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
 
         public Rect MainWindowRect {
             get {

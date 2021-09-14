@@ -59,7 +59,7 @@ namespace MpWpfApp {
                 List<MpShortcutViewModel> scvml = null;
                 if (vm.GetType() == typeof(MpShortcutViewModel)) {
                     scvml = this.Where(x => x.Command == command && x.CommandParameter == commandParameter).ToList();
-                } else if(vm is MpClipTileViewModel || vm is MpRtbListBoxItemRichTextBoxViewModel) {
+                } else if(vm is MpClipTileViewModel || vm is MpRtbItemViewModel) {
                     scvml = this.Where(x => x.CopyItemId == (int)commandParameter).ToList();
                 } else {
                     scvml = this.Where(x => x.TagId == (int)commandParameter).ToList();
@@ -73,8 +73,8 @@ namespace MpWpfApp {
                         scvm.Unregister();
                         if (vm is MpClipTileViewModel) {
                             (vm as MpClipTileViewModel).ShortcutKeyString = string.Empty;
-                        } else if (vm is MpRtbListBoxItemRichTextBoxViewModel) {
-                            (vm as MpRtbListBoxItemRichTextBoxViewModel).ShortcutKeyString = string.Empty;
+                        } else if (vm is MpRtbItemViewModel) {
+                            (vm as MpRtbItemViewModel).ShortcutKeyString = string.Empty;
                         } else if (vm is MpTagTileViewModel) {
                             (vm as MpTagTileViewModel).ShortcutKeyString = string.Empty;
                         }
@@ -107,8 +107,8 @@ namespace MpWpfApp {
                                 ShortcutName = "Paste " + ctvm.CopyItemTitle
                             },                            
                             command, commandParameter);
-            } else if (vm.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
-                var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)vm;
+            } else if (vm.GetType() == typeof(MpRtbItemViewModel)) {
+                var rtbvm = (MpRtbItemViewModel)vm;
                 nscvm = new MpShortcutViewModel(
                             new MpShortcut() {
                                 CopyItemId = rtbvm.CopyItem.Id,
@@ -169,15 +169,15 @@ namespace MpWpfApp {
                         ctvm.ShortcutKeyString = string.Empty;
                     } else {
                         foreach(var ctvm1 in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                            foreach(var rtbvm in ctvm1.RichTextBoxViewModelCollection) {
-                                if(rtbvm.CopyItemId == scvm.CopyItemId) {
+                            foreach(var rtbvm in ctvm1.ContentContainerViewModel.ItemViewModels) {
+                                if(rtbvm.CopyItem.Id == scvm.CopyItemId) {
                                     rtbvm.ShortcutKeyString = string.Empty;
                                 }
                             }
                         }
                     }
                 } else {
-                    foreach(var ttvm in MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.Id == scvm.Shortcut.TagId).ToList()) {
+                    foreach(var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == scvm.Shortcut.TagId).ToList()) {
                         ttvm.ShortcutKeyString = string.Empty;
                     }
                 }
@@ -194,7 +194,7 @@ namespace MpWpfApp {
                                 continue;
                             }
                             string header = (smi as MpContextMenuItemViewModel).Header.ToString();
-                            (smi as MpContextMenuItemViewModel).InputGestureText = MainWindowViewModel.TagTrayViewModel.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
+                            (smi as MpContextMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
                         }
                     } else {
                         var scvm = this.Where(x => x.ShortcutId == tagNum).FirstOrDefault();
@@ -250,9 +250,11 @@ namespace MpWpfApp {
                 ApplicationHook.MouseWheel += (s, e) => {
                     if (!MpMainWindowViewModel.IsMainWindowLoading &&
                         MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                        var rtbvm = MpClipTrayViewModel.Instance.SelectedClipTiles[0].RichTextBoxViewModelCollection;
-                        var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-                        sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
+                        var rtbvm = MpClipTrayViewModel.Instance.PrimarySelectedClipTile.ContentContainerViewModel.ItemViewModels[0];//SelectedClipTiles[0].RtbItemCollectionViewModel;
+                        rtbvm.RequestScrollWheelChange(e.Delta);
+
+                        //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
+                        //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
                     }
                 };
                 #endregion
@@ -268,9 +270,9 @@ namespace MpWpfApp {
                                             if(ctvm.CopyItemPlainText == cbText && !ctvm.IsTextItem) {
                                                 ctvm.PasteCount++;
                                             }
-                                            foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                                                if(rtbvm.CopyItemPlainText == cbText) {
-                                                    rtbvm.PasteCount++;
+                                            foreach(var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
+                                                if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
+                                                    rtbvm.CopyItem.PasteCount++;
                                                 }
                                             }
                                         }
@@ -427,10 +429,10 @@ namespace MpWpfApp {
                                         MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
-                                    var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
+                                    var rtbvm = ctvm.ContentContainerViewModel.GetContentItemByCopyItemId(ci.Id);
                                     rtbvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = MpClipTrayViewModel.Instance.HotkeyPasteCommand;
-                                    commandParameter = rtbvm.CopyItemId;
+                                    commandParameter = rtbvm.CopyItem.Id;
                                 } else {
                                     ctvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = ctvm.PasteClipCommand;
@@ -438,7 +440,7 @@ namespace MpWpfApp {
                                     commandParameter = ctvm.CopyItemId;
                                 }
                             } else if (sc.TagId > 0) {
-                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.Id == sc.TagId).Single();
+                                var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == sc.TagId).Single();
                                 ttvm.ShortcutKeyString = sc.KeyString;
                                 shortcutCommand = ttvm.SelectTagCommand;
                             }

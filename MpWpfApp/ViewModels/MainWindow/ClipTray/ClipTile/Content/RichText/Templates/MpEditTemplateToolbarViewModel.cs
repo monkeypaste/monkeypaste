@@ -45,16 +45,16 @@ namespace MpWpfApp {
             }
         }
 
-        public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbViewModel {
+        public MpRtbItemViewModel SubSelectedRtbViewModel {
             get {
                 if (HostClipTileViewModel == null) {
                     return null;
                 }
-                if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 0 ||
-                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count != 1) {
+                if (HostClipTileViewModel.ContentContainerViewModel.Count == 0 ||
+                   HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Count != 1) {
                     return null;
                 }
-                return HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0];
+                return HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems[0] as MpRtbItemViewModel;
             }
         }
 

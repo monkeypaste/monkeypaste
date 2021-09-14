@@ -67,7 +67,11 @@ namespace MonkeyPaste {
 
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;
-            string str = line.ToString();
+            string str = line.ToString(); 
+            if (MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+                Console.WriteLine(str);
+                return;
+            }
             Console.WriteLine("");
             Console.WriteLine(@"-----------------------------------------------------------------------");
             Console.WriteLine("");
@@ -83,6 +87,10 @@ namespace MonkeyPaste {
             if (args != null && args.Length > 0) {
                 str = string.Format(str, args);
             } 
+            if(MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+                Console.WriteLine(str);
+                return;
+            }
             Console.WriteLine("");
             Console.WriteLine(@"-----------------------------------------------------------------------");
             Console.WriteLine("");

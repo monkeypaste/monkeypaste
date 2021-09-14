@@ -53,8 +53,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpRtbListBoxItemRichTextBoxViewModel _subSelectedRtbViewModel = null;
-        public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbViewModel {
+        private MpRtbItemViewModel _subSelectedRtbViewModel = null;
+        public MpRtbItemViewModel SubSelectedRtbViewModel {
             get {
                 return _subSelectedRtbViewModel;
             }
@@ -99,8 +99,8 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel == null || SubSelectedRtbViewModel == null) {
                     return string.Empty;
                 }
-                if(HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Where(x=>x.HasTemplate).ToList().Count > 1) {
-                    foreach (var rtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                if(HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Where(x=>x.HasTemplate).ToList().Count > 1) {
+                    foreach (MpRtbItemViewModel rtbvm in HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems) {
                         if (rtbvm.HasTemplate && rtbvm.TemplateHyperlinkCollectionViewModel.Any(x => string.IsNullOrEmpty(x.TemplateText))) {
                             return @"CONTINUE";
                         }
@@ -352,8 +352,8 @@ namespace MpWpfApp {
             }
         }
 
-        public void SetSubItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
-            MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox.ScrollIntoView(HostClipTileViewModel);
+        public void SetSubItem(MpRtbItemViewModel rtbvm) {            
+            MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
             if (HostClipTileViewModel.IsPastingTemplate) {
                 InitWithRichTextBox(rtbvm.Rtb);
             } else {
@@ -361,7 +361,7 @@ namespace MpWpfApp {
                 //so that tile content is resized 'right'
                 ClearAllTemplates();
                 HostClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                MpClipTrayViewModel.Instance.ClipTileViewModels.ScrollViewer.ScrollToHome();
+                MpClipTrayViewModel.Instance.RequestScrollToHome();
             }
         }
         #endregion
@@ -369,13 +369,13 @@ namespace MpWpfApp {
         #region Private Methods
         
         private void InitWithRichTextBox(RichTextBox rtb) {
-            SubSelectedRtbViewModel = rtb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+            SubSelectedRtbViewModel = rtb.DataContext as MpRtbItemViewModel;
 
             var pasteTemplateToolbarBorder = _borderGrid.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
-            var clipTray = MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox;
+            var clipTray = new ListBox();// MpClipTrayViewModel.Instance.ClipTileViewModels.ListBox;
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
@@ -387,7 +387,7 @@ namespace MpWpfApp {
             NextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
             PasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
             var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
-            var ds = HostClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
+            //var ds = HostClipTileViewModel.ContentContainerViewModel.FullDocument.GetDocumentSize();
 
             #region Focus Appearance 
             PreviousTemplateButton.GotFocus += (s, e4) => {
@@ -474,10 +474,10 @@ namespace MpWpfApp {
                 return;
             }
             SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(templateName);
-            HostClipTileViewModel.RichTextBoxViewModelCollection.ListBox.ScrollIntoView(SubSelectedRtbViewModel);
+            HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(SubSelectedRtbViewModel);
             var rtb = SubSelectedRtbViewModel.Rtb;
             var characterRect = SelectedTemplate.TemplateHyperlinkRange.End.GetCharacterRect(LogicalDirection.Forward);
-            HostClipTileViewModel.RichTextBoxViewModelCollection.ListBox.ScrollIntoView(rtb);
+            HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(rtb);
             rtb.ScrollToHorizontalOffset(characterRect.Left - rtb.ActualWidth / 2d);
             rtb.ScrollToVerticalOffset(characterRect.Top - rtb.ActualHeight / 2d);
 
@@ -512,7 +512,7 @@ namespace MpWpfApp {
                 SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SetTemplateText(uthlvm.TemplateName, string.Empty);
             }
 
-            foreach(var srtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+            foreach(MpRtbItemViewModel srtbvm in HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems) {
                 foreach(var thlvm in srtbvm.TemplateHyperlinkCollectionViewModel) {
                     thlvm.IsSelected = false;
                 }                

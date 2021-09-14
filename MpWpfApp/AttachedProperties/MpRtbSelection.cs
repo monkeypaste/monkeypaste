@@ -27,7 +27,7 @@ namespace MpWpfApp {
                         rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
                         return;
                     }
-                    var rtbvm = rtb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+                    var rtbvm = rtb.DataContext as MpRtbItemViewModel;
                     rtb.SelectionChanged += (s, e1) => {
                         rtbvm.RtbSelectionRange = rtb.Selection;
                     };

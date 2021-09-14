@@ -17,7 +17,6 @@ namespace MpWpfApp {
 
         #region Properties
 
-
         #region Property Reflection Referencer
         public object this[string propertyName] {
             get {
@@ -50,23 +49,53 @@ namespace MpWpfApp {
                 //return mwvm as MpMainWindowViewModel;
             }
         }
+
+        //public MpMeasurements Measurements { get; private set; }
         #endregion
 
 
-
-        public bool CanAcceptChildren { get; set; } = true;
-
-        private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
-        public bool IsTrialExpired {
+        private bool _isMouseOverVerticalScrollBar = false;
+        public bool IsMouseOverVerticalScrollBar {
             get {
-                return _isTrialExpired;
+                return _isMouseOverVerticalScrollBar;
             }
             set {
-                if (_isTrialExpired != value) {
-                    _isTrialExpired = value;
-                    Properties.Settings.Default.IsTrialExpired = _isTrialExpired;
-                    Properties.Settings.Default.Save();
-                    OnPropertyChanged(nameof(IsTrialExpired));
+                if (_isMouseOverVerticalScrollBar != value) {
+                    _isMouseOverVerticalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverVerticalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
+        }
+
+        private bool _isMouseOverHorizontalScrollBar = false;
+        public bool IsMouseOverHorizontalScrollBar {
+            get {
+                return _isMouseOverHorizontalScrollBar;
+            }
+            set {
+                if (_isMouseOverHorizontalScrollBar != value) {
+                    _isMouseOverHorizontalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverHorizontalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
+        }
+
+        public bool IsMouseOverScrollBar {
+            get {
+                return IsMouseOverHorizontalScrollBar || IsMouseOverVerticalScrollBar;
+            }
+        }
+        public bool CanAcceptChildren { get; set; } = true;
+
+        public static bool IsTrialExpired {
+            get {
+                return MonkeyPaste.MpPreferences.Instance.IsTrialExpired;
+            }
+            set {
+                if (MonkeyPaste.MpPreferences.Instance.IsTrialExpired != value) {
+                    MonkeyPaste.MpPreferences.Instance.IsTrialExpired = value;
                 }
             }
         }
@@ -141,7 +170,6 @@ namespace MpWpfApp {
             //if(MainWindowViewModel == null) {
             //    MainWindowViewModel = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
             //}
-            
         }
 
         protected virtual void OnInitialize() {

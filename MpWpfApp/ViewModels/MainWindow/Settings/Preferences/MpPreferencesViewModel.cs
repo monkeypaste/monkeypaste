@@ -156,7 +156,7 @@ namespace MpWpfApp {
                     if(!MpMainWindowViewModel.IsMainWindowLoading) {
                         foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
-                            foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                            foreach(MpRtbItemViewModel rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
                                 rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));
                             }
                         }

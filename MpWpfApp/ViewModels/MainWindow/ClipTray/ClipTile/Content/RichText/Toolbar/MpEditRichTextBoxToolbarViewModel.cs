@@ -38,16 +38,16 @@ namespace MpWpfApp {
             }
         }
 
-        public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbViewModel {
+        public MpRtbItemViewModel SubSelectedRtbViewModel {
             get {
                 if (HostClipTileViewModel == null) {
                     return null;
                 }
-                if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 0 ||
-                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count != 1) {
+                if (HostClipTileViewModel.ContentContainerViewModel.Count == 0 ||
+                   HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Count != 1) {
                     return null;
                 }
-                return HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0];
+                return HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems[0] as MpRtbItemViewModel;
             }
         }
         #endregion
@@ -219,11 +219,11 @@ namespace MpWpfApp {
 
             if (HostClipTileViewModel.IsEditingTile) {
                 //var ctv = (Application.Current.MainWindow as MpMainWindow).FindName("ClipTray") as MpClipTrayView;
-                //ctv.ClipTray.ScrollIntoView(HostClipTileViewModel);
-                HostClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+                MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
+                HostClipTileViewModel.ContentContainerViewModel.ResetSubSelection();
                 //Rtb_SelectionChanged(this, new RoutedEventArgs());
             } else if(!HostClipTileViewModel.IsPastingTemplate) {
-                HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                HostClipTileViewModel.ContentContainerViewModel.ClearSubSelection();
                 //ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
             }
         }
@@ -248,12 +248,12 @@ namespace MpWpfApp {
                     timer.Stop();
                     if (HostClipTileViewModel.IsEditingTile) {
                         var ctv = (Application.Current.MainWindow as MpMainWindow).FindName("ClipTray") as MpClipTrayView;
-                        ctv.ClipTray.ScrollIntoView(HostClipTileViewModel);
-                        HostClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+                        MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
+                        HostClipTileViewModel.ContentContainerViewModel.ResetSubSelection();
                         //Rtb_SelectionChanged(this, new RoutedEventArgs());
                     } else {
-                        HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
-                        HostClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+                        HostClipTileViewModel.ContentContainerViewModel.ClearSubSelection();
+                        HostClipTileViewModel.ContentContainerViewModel.RequestUiUpdate();
                     }
                     if (onCompleted != null) {
                         onCompleted.BeginInvoke(this, new EventArgs(), null, null);
@@ -282,12 +282,12 @@ namespace MpWpfApp {
             return HasTextChanged && 
                    HostClipTileViewModel != null && 
                    HostClipTileViewModel.IsEditingTile &&
-                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
+                   HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Count == 1;
         }
         private void RefreshDocument() {
-            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].SaveSubItemToDatabase();
-            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].ClearHyperlinks();
-            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].CreateHyperlinks();
+            HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems[0].SaveToDatabase();
+            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedContentItems[0].ClearHyperlinks();
+            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedContentItems[0].CreateHyperlinks();
         }
         #endregion
 

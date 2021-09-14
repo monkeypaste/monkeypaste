@@ -20,13 +20,13 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpClipTrayView : UserControl {
         public AdornerLayer ClipTrayAdornerLayer;
-        public MpClipTrayAdorner ClipTrayAdorner;
+        public MpLineAdorner ClipTrayAdorner;
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
         public MpClipTrayView() {
             InitializeComponent();
 
-            ClipTrayAdorner = new MpClipTrayAdorner(ClipTray);
+            ClipTrayAdorner = new MpLineAdorner(ClipTray);
             ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTray);
             ClipTrayAdornerLayer.Add(ClipTrayAdorner);
         }
@@ -57,9 +57,9 @@ namespace MpWpfApp {
             if (e.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                 int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ClipTray));
                 if (dropIdx >= 0/* && (dropIdx >= ctrvm.ClipTileViewModels.Count || (dropIdx < ctrvm.ClipTileViewModels.Count && !this[dropIdx].IsClipOrAnySubItemDragging))*/) {
-                    var adornerPoints = GetAdornerPoints(dropIdx);
-                    ClipTrayAdorner.DropTopPoint = adornerPoints[0];
-                    ClipTrayAdorner.DropBottomPoint = adornerPoints[1];
+                    var adornerPoints = ClipTray.GetAdornerPoints(dropIdx,true);
+                    ClipTrayAdorner.Point1 = adornerPoints[0];
+                    ClipTrayAdorner.Point2 = adornerPoints[1];
                     ctrvm.IsTrayDropping = true;
                     e.Effects = DragDropEffects.Move;
                 }
@@ -96,13 +96,13 @@ namespace MpWpfApp {
                     dctvml.Reverse();
                     foreach (var dctvm in dctvml) {
                         int dragCtvmIdx = ctrvm.ClipTileViewModels.IndexOf(dctvm);
-                        bool wasEmptySelection = dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0;
+                        bool wasEmptySelection = dctvm.ContentContainerViewModel.SubSelectedContentItems.Count == 0;
                         if (wasEmptySelection) {
-                            dctvm.RichTextBoxViewModelCollection.SubSelectAll();
+                            dctvm.ContentContainerViewModel.SubSelectAll();
                         }
-                        if (dctvm.RichTextBoxViewModelCollection.Count == 0 ||
+                        if (dctvm.ContentContainerViewModel.Count == 0 ||
                             wasEmptySelection ||
-                            dctvm.RichTextBoxViewModelCollection.Count == dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count) {
+                            dctvm.ContentContainerViewModel.Count == dctvm.ContentContainerViewModel.SubSelectedContentItems.Count) {
                             //1. if all rtbvm of sctvm are selected or rtbvm count is 0, do move to dropidx
                             if (dragCtvmIdx < dropIdx) {
                                 ctrvm.ClipTileViewModels.Move(dragCtvmIdx, dropIdx - 1);
@@ -113,10 +113,10 @@ namespace MpWpfApp {
                         } else {
                             //2. if partial selection, remove from parent and make new
                             //   composite in merge then insert at dropidx.
-                            var drtbvm = dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.OrderBy(x => x.CompositeSortOrderIdx).ToList()[0];
-                            dctvm.RichTextBoxViewModelCollection.Remove(drtbvm, true);
+                            var drtbvm = dctvm.ContentContainerViewModel.SubSelectedContentItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+                            dctvm.ContentContainerViewModel.ItemViewModels.Remove(drtbvm);
                             var nctvm = new MpClipTileViewModel(drtbvm.CopyItem);
-                            foreach (var ssrtbvm in dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.OrderBy(x => x.CompositeSortOrderIdx).ToList()) {
+                            foreach (var ssrtbvm in dctvm.ContentContainerViewModel.SubSelectedContentItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()) {
                                 nctvm.MergeCopyItemList(new List<MpCopyItem>() { ssrtbvm.CopyItem });
                             }
                             ctrvm.Add(nctvm, dropIdx);
@@ -179,7 +179,6 @@ namespace MpWpfApp {
             //}
             return dropIdx;
         }
-
         #endregion
 
         #region Selection
@@ -209,29 +208,31 @@ namespace MpWpfApp {
         }
         #endregion
 
-        public Point[] GetAdornerPoints(int index) {
-            var points = new Point[2];
-            var itemRect = index >= ClipTray.Items.Count ? 
-                ClipTray.GetListBoxItemRect(ClipTray.Items.Count -1) : ClipTray.GetListBoxItemRect(index);
 
-            if (index < ClipTray.Items.Count) {
-                points[0] = itemRect.TopLeft;
-                points[1] = itemRect.BottomLeft;
-            } else {
-                points[0] = itemRect.TopRight;
-                points[1] = itemRect.BottomRight;
+        private void ClipTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if (DataContext != null) {
+                var ctrvm = DataContext as MpClipTrayViewModel;
+                ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
+                ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
+                ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
+                ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             }
-            var sv = ClipTray.ScrollViewer;
-            if (sv != null &&
-                (sv.HorizontalOffset > 0 || sv.VerticalOffset > 0)) {
-                points[0].X += sv.Margin.Right;
-                //points[0].Y += ScrollViewer.VerticalOffset;
-                points[1].X += sv.Margin.Right;
-                //points[1].Y += ScrollViewer.VerticalOffset;
-            }
-            return points;
         }
 
-        
+        private void Ctrvm_OnUiRefreshRequest(object sender, EventArgs e) {
+            ClipTray?.Items.Refresh();
+        }
+
+        private void Ctrvm_OnFocusRequest(object sender, object e) {
+            ClipTray?.GetListBoxItem(ClipTray.Items.IndexOf(e)).Focus();
+        }
+
+        private void Ctrvm_OnScrollToHomeRequest(object sender, EventArgs e) {
+            ClipTray?.GetScrollViewer().ScrollToHome();
+        }
+
+        private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
+            ClipTray?.ScrollIntoView(e);
+        }
     }
 }

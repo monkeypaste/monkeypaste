@@ -11,14 +11,13 @@
         <RichTextBox x:Key="CurrentRtbTarget" />
     </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
-            Canvas.Top="{Binding HostClipTileViewModel.EditRichTextBoxToolbarViewModel.EditBorderCanvasTop, Mode=TwoWay}"
+            Canvas.Top="{Binding EditBorderCanvasTop, Mode=TwoWay}"
             Visibility="{Binding HostClipTileViewModel.EditToolbarVisibility}"
             Height="{Binding HostClipTileViewModel.EditRichTextBoxToolbarHeight}"
             Width="{Binding HostClipTileViewModel.TileContentWidth}"
             BorderThickness="0,0,0,1"
             BorderBrush="OldLace">
-        <StackPanel Orientation="Horizontal"
-                    DataContext="{Binding HostClipTileViewModel.EditRichTextBoxToolbarViewModel}">
+        <StackPanel Orientation="Horizontal">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:CallMethodAction TargetObject="{Binding}"

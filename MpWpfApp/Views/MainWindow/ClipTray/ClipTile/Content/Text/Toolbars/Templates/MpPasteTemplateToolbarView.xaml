@@ -14,8 +14,7 @@
             BorderThickness="0"
             Background="LightBlue"
             Visibility="{Binding HostClipTileViewModel.PasteTemplateToolbarVisibility}">
-        <Grid x:Name="PasteTemplateToolbarGrid"
-              DataContext="{Binding HostClipTileViewModel.PasteTemplateToolbarViewModel}">
+        <Grid x:Name="PasteTemplateToolbarGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:CallMethodAction TargetObject="{Binding}"

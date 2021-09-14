@@ -40,6 +40,11 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Events
+        public event EventHandler<int> OnTagSelectionChanged;
+        #endregion
+
+
         #region Public Methods
         public MpTagTileCollectionViewModel() : base() {
             PropertyChanged += MpTagCollectionViewModel_PropertyChanged;

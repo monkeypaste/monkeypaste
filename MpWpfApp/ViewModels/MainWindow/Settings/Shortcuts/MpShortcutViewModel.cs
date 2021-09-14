@@ -368,13 +368,13 @@ namespace MpWpfApp {
                                         MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
                                         break;
                                     }
-                                    var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.Id);
+                                    var rtbvm = ctvm.ContentContainerViewModel.GetContentItemByCopyItemId(ci.Id);
                                     rtbvm.ShortcutKeyString = Shortcut.KeyString;
                                 } else {
                                     ctvm.ShortcutKeyString = Shortcut.KeyString;
                                 }
                             } else {
-                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                                var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
                                 ttvm.ShortcutKeyString = Shortcut.KeyString;
                             }
                         }

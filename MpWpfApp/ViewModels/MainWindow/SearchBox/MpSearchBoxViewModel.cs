@@ -345,6 +345,10 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Events
+        public event EventHandler<string> OnSearchTextChanged;
+        #endregion
+
         #region Public Methods
         public MpSearchBoxViewModel() : base() {
             var timer = new DispatcherTimer();
@@ -361,6 +365,8 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(Text):
+                        OnSearchTextChanged?.Invoke(this, Text);
+
                         timer.Stop();
                         timer.Start();
                         break;
@@ -549,8 +555,8 @@ namespace MpWpfApp {
                             //if tile is collapsed ignore children visibility
                             break;
                         }
-                        if(skvp.Key is MpRtbListBoxItemRichTextBoxViewModel) {
-                            (skvp.Key as MpRtbListBoxItemRichTextBoxViewModel).SubItemVisibility = skvp.Value;
+                        if(skvp.Key is MpRtbItemViewModel) {
+                            (skvp.Key as MpRtbItemViewModel).SubItemVisibility = skvp.Value;
                         }
                     }
                     

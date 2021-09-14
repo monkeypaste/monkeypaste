@@ -1,0 +1,394 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using AsyncAwaitBestPractices.MVVM;
+using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
+
+namespace MpWpfApp {
+    public abstract class MpContentItemViewModel : MpViewModelBase {
+        private static string _unsetJoystickIcon64 = "";
+        private static string _setJoyStickIcon64 = "";
+
+        public string HotkeyIconSource {
+            get {
+                if(string.IsNullOrEmpty(_unsetJoystickIcon64)) {
+                    _unsetJoystickIcon64 = new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png")).ToBase64String();
+                }
+                if (string.IsNullOrEmpty(_setJoyStickIcon64)) {
+                    _setJoyStickIcon64 = new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystickactive.png")).ToBase64String();
+                }
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return _unsetJoystickIcon64;
+                }
+                return _setJoyStickIcon64;
+            }
+        }
+
+        public string HotkeyIconTooltip {
+            get {
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return @"Assign Shortcut";
+                }
+                return ShortcutKeyString;
+            }
+        }
+        private string _shortcutKeyString = string.Empty;
+        public string ShortcutKeyString {
+            get {
+                return _shortcutKeyString;
+            }
+            set {
+                if (_shortcutKeyString != value) {
+                    _shortcutKeyString = value;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(HotkeyIconSource));
+                    OnPropertyChanged(nameof(HotkeyIconTooltip));
+                }
+            }
+        }
+
+        private bool _isPrimarySubSelected = false;
+        public bool IsPrimarySubSelected {
+            get {
+                return _isPrimarySubSelected;
+            }
+            set {
+                if (_isPrimarySubSelected != value) {
+                    _isPrimarySubSelected = value;
+                    OnPropertyChanged(nameof(IsPrimarySubSelected));
+                    //OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
+                }
+            }
+        }
+
+        public RichTextBox Rtb { get; set; }
+        public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
+
+        public bool HasTemplate { get; set; } = false;
+        public abstract Size GetExpandedSize();
+        public abstract Size GetUnexpandedSize();
+        public abstract string GetDetail(MpCopyItemDetailType detailType);
+
+        public event EventHandler<int> OnScrollWheel;
+        public void Resize(Rect newSize) { }
+
+        public static MpContentItemViewModel Create(MpContentContainerViewModel ccvm, MpCopyItem ci) {
+            switch(ci.ItemType) {
+                case MpCopyItemType.RichText:
+                    return new MpRtbItemViewModel(ccvm, ci);
+                default:
+                    // TODO add other content view models here
+                    break;
+            }
+            throw new Exception("Unsupported item type");
+        }
+
+        public void RequestScrollWheelChange(int delta) {
+            //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
+            //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
+            OnScrollWheel?.Invoke(this, delta);
+        }
+
+        public MpContentContainerViewModel ContainerViewModel { get; private set; }
+
+        public  MpClipTileViewModel HostClipTileViewModel { 
+            get {
+                if(ContainerViewModel == null) {
+                    return null;
+                }
+                return ContainerViewModel.HostClipTileViewModel;
+            }
+        }
+
+        public DateTime LastSubSelectedDateTime { get; set; }
+
+        public bool IsSubSelected { get; set; } = false;
+        public bool IsSubHovering { get; set; } = false;
+        public bool IsSubContextMenuOpen { get; set; } = false;
+
+        public bool IsSubEditingContent { get; set; } = false;
+        public bool IsSubPastingTemplate { get; set; } = false;
+        public bool IsSubEditingTitle { get; set; } = false;
+
+        public bool IsSubDragging { get; set; } = false;
+        public bool IsSubDropping { get; set; } = false;
+        public Point MouseDownPosition { get; set; }
+        public IDataObject DragDataObject { get; set; }
+
+        public void ClearSubDragState() {
+            IsSubDragging = false;
+            DragDataObject = null;
+            MouseDownPosition = new Point();
+        }
+        public MpCopyItem CopyItem { get; set; }
+
+        public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
+            //returns path of tmp file for rt or img and actual paths of filelist
+            var fileList = new List<string>();
+            if (CopyItem.ItemType == MpCopyItemType.FileList) {
+                if (forceType == MpCopyItemType.Image) {
+                    fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
+                } else if (forceType == MpCopyItemType.RichText) {
+                    fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
+                } else {
+                    var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    if (splitArray == null || splitArray.Length == 0) {
+                        throw new Exception("CopyItem GetFileList error, file list should not be empty");
+                    } else {
+                        foreach (string p in splitArray) {
+                            if (!string.IsNullOrEmpty(p.Trim())) {
+                                fileList.Add(p);
+                            }
+                        }
+                    }
+                }
+            } else {
+                string op = Path.GetTempFileName();// MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
+                //file extension
+                switch (CopyItem.ItemType) {
+                    case MpCopyItemType.RichText:
+                        if (forceType == MpCopyItemType.Image) {
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                        } else {
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
+                        }
+                        foreach (var cci in MpCopyItem.GetCompositeChildren(CopyItem)) {
+                            if (forceType == MpCopyItemType.Image) {
+                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                            } else {
+                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
+                            }
+                            op = Path.GetTempFileName(); //MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
+                        }
+                        break;
+                    case MpCopyItemType.Image:
+                        if (forceType == MpCopyItemType.RichText) {
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToPlainText()));
+                        } else {
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                        }
+                        break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+                //for temporary files add to mwvm list for shutdown cleanup
+                foreach (var fp in fileList) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
+                }
+            }
+            // add temp files to 
+            return fileList;
+        }
+
+
+        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
+                    return _tagMenuItems;
+                }
+                _tagMenuItems.Clear();
+                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                    if (tagTile.IsSudoTag) {
+                        continue;
+                    }
+                    _tagMenuItems.Add(
+                        new MpContextMenuItemViewModel(
+                            tagTile.TagName,
+                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                            tagTile,
+                            tagTile.IsLinked(CopyItem),
+                            string.Empty,
+                            null,
+                            tagTile.ShortcutKeyString,
+                            tagTile.Color));
+                }
+                return _tagMenuItems;
+            }
+        }
+
+        public void SaveToDatabase() {
+            CopyItem.WriteToDatabase();
+        }
+
+        public void RemoveFromDatabase() {
+            CopyItem.DeleteFromDatabase();
+        }
+
+        public void MoveToArchive() {
+            // TODO maybe add archiving
+        }
+
+
+        public MpContentItemViewModel() : base() { }
+
+        public MpContentItemViewModel(MpContentContainerViewModel container, MpCopyItem ci) : this() {
+            CopyItem = ci;
+            ContainerViewModel = container;
+        }
+
+
+        #region Commands
+        private RelayCommand _editSubTitleCommand;
+        public ICommand EditSubTitleCommand {
+            get {
+                if (_editSubTitleCommand == null) {
+                    _editSubTitleCommand = new RelayCommand(EditSubTitle, CanEditSubTitle);
+                }
+                return _editSubTitleCommand;
+            }
+        }
+        private bool CanEditSubTitle() {
+            if (MpMainWindowViewModel.IsMainWindowLoading) {
+                return false;
+            }
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+                   ContainerViewModel.SubSelectedContentItems.Count == 1;
+        }
+        private void EditSubTitle() {
+            IsSubEditingTitle = !IsSubEditingTitle;
+        }
+
+        private RelayCommand _editSubContentCommand;
+        public ICommand EditSubContentCommand {
+            get {
+                if (_editSubContentCommand == null) {
+                    _editSubContentCommand = new RelayCommand(EditSubContent, CanEditSubContent);
+                }
+                return _editSubContentCommand;
+            }
+        }
+        private bool CanEditSubContent() {
+            if (MpMainWindowViewModel.IsMainWindowLoading) {
+                return false;
+            }
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+                   ContainerViewModel.SubSelectedContentItems.Count == 1;
+        }
+        private void EditSubContent() {
+            if (!HostClipTileViewModel.IsEditingTile) {
+                HostClipTileViewModel.IsEditingTile = true;
+                ContainerViewModel.ClearSubSelection();
+                IsSubSelected = true;
+            }
+        }
+
+        private RelayCommand _sendSubSelectedToEmailCommand;
+        public ICommand SendSubSelectedToEmailCommand {
+            get {
+                if (_sendSubSelectedToEmailCommand == null) {
+                    _sendSubSelectedToEmailCommand = new RelayCommand(SendSubSelectedToEmail, CanSendSubSelectedToEmail);
+                }
+                return _sendSubSelectedToEmailCommand;
+            }
+        }
+        private bool CanSendSubSelectedToEmail() {
+            return !IsSubEditingContent;
+        }
+        private void SendSubSelectedToEmail() {
+            MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
+            //MpClipTrayViewModel.Instance.ClearClipSelection();
+            //IsSelected = true;
+            //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        }
+
+        private RelayCommand _createQrCodeFromSubSelectedItemCommand;
+        public ICommand CreateQrCodeFromSubSelectedItemCommand {
+            get {
+                if (_createQrCodeFromSubSelectedItemCommand == null) {
+                    _createQrCodeFromSubSelectedItemCommand = new RelayCommand(CreateQrCodeFromSubSelectedItem, CanCreateQrCodeFromSubSelectedItem);
+                }
+                return _createQrCodeFromSubSelectedItemCommand;
+            }
+        }
+        private bool CanCreateQrCodeFromSubSelectedItem() {
+            return CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+        }
+        private void CreateQrCodeFromSubSelectedItem() {
+            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());
+            System.Windows.Clipboard.SetImage(bmpSrc);
+        }
+
+        private AsyncCommand<string> _translateSubSelectedItemTextAsyncCommand;
+        public IAsyncCommand<string> TranslateSubSelectedItemTextAsyncCommand {
+            get {
+                if (_translateSubSelectedItemTextAsyncCommand == null) {
+                    _translateSubSelectedItemTextAsyncCommand = new AsyncCommand<string>(TranslateSubSelectedItemTextAsync, CanTranslateSubSelectedItemText);
+                }
+                return _translateSubSelectedItemTextAsyncCommand;
+            }
+        }
+        private bool CanTranslateSubSelectedItemText(object args) {
+            return CopyItem.ItemType == MpCopyItemType.RichText;
+        }
+        private async Task TranslateSubSelectedItemTextAsync(string toLanguage) {
+            var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItem.ItemData.ToPlainText(), toLanguage, false);
+            if (!string.IsNullOrEmpty(translatedText)) {
+                CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
+            }
+        }
+
+        private RelayCommand _excludeSubSelectedItemApplicationCommand;
+        public ICommand ExcludeSubSelectedItemApplicationCommand {
+            get {
+                if (_excludeSubSelectedItemApplicationCommand == null) {
+                    _excludeSubSelectedItemApplicationCommand = new RelayCommand(ExcludeSubSelectedItemApplication, CanExcludeSubSelectedItemApplication);
+                }
+                return _excludeSubSelectedItemApplicationCommand;
+            }
+        }
+        private bool CanExcludeSubSelectedItemApplication() {
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1;
+        }
+        private void ExcludeSubSelectedItemApplication() {
+            MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItem.Source.AppId), true);
+        }
+
+        private RelayCommand _pasteSubItemCommand;
+        public ICommand PasteSubItemCommand {
+            get {
+                if (_pasteSubItemCommand == null) {
+                    _pasteSubItemCommand = new RelayCommand(PasteSubItem);
+                }
+                return _pasteSubItemCommand;
+            }
+        }
+        private void PasteSubItem() {
+            MpClipTrayViewModel.Instance.ClearClipSelection();
+            HostClipTileViewModel.IsSelected = true;
+            ContainerViewModel.ClearSubSelection();
+            IsSubSelected = true;
+            MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
+        }
+
+        private RelayCommand _assignHotkeyToSubSelectedItemCommand;
+        public ICommand AssignHotkeyCommand {
+            get {
+                if (_assignHotkeyToSubSelectedItemCommand == null) {
+                    _assignHotkeyToSubSelectedItemCommand = new RelayCommand(AssignHotkeyToSubSelectedItem);
+                }
+                return _assignHotkeyToSubSelectedItemCommand;
+            }
+        }
+
+        private void AssignHotkeyToSubSelectedItem() {
+            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+                this,
+                "Paste " + CopyItem.Title,
+                ShortcutKeyString,
+                 MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItem.Id);
+        }
+        #endregion
+
+    }
+}

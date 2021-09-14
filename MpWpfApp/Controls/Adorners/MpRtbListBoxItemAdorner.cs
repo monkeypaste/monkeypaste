@@ -26,12 +26,12 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {            
-            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(this.AdornedElement as FrameworkElement).DataContext;
+            var rtbvm = (MpRtbItemViewModel)(this.AdornedElement as FrameworkElement).DataContext;
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;
 
-            if (rtbvm.RichTextBoxViewModelCollection.IndexOf(rtbvm) < rtbvm.RichTextBoxViewModelCollection.VisibleSubRtbViewModels.Count - 1) {                
+            if(rtbvm != null && rtbvm.ContainerViewModel.ItemViewModels.IndexOf(rtbvm) < rtbvm.ContainerViewModel.VisibleContentItems.Count - 1) {                
                 drawingContext.DrawLine(blackPen, adornedElementRect.BottomLeft, adornedElementRect.BottomRight);
             }
         }

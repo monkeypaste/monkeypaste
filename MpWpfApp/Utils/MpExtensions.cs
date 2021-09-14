@@ -25,6 +25,144 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Collections
+        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isHorizontal) {
+            var points = new Point[2];
+            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) :lb.GetListBoxItemRect(index);
+            if (!isHorizontal) {
+                itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+            }
+            if (isHorizontal) {
+                if (index < lb.Items.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.BottomLeft;
+                } else {
+                    points[0] = itemRect.TopRight;
+                    points[1] = itemRect.BottomRight;
+                }
+            } else {
+                if (index < lb.Items.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.TopRight;
+                } else {
+                    points[0] = itemRect.BottomLeft;
+                    points[1] = itemRect.BottomRight;
+                }
+            }
+            var sv = lb.GetScrollViewer();
+            if (sv != null &&
+                (sv.HorizontalOffset > 0 || sv.VerticalOffset > 0)) {
+                points[0].X += sv.Margin.Right;
+                //points[0].Y += ScrollViewer.VerticalOffset;
+                points[1].X += sv.Margin.Right;
+                //points[1].Y += ScrollViewer.VerticalOffset;
+            }
+            return points;
+        }
+
+
+        public static ScrollViewer GetScrollViewer(this ListBox lb) {
+            return lb.GetVisualDescendent<ScrollViewer>();
+        }
+
+        public static void UpdateExtendedSelection(this ListBox lb, int index) {
+            /*
+            1    if the target item is not selected, select it
+            2    if Ctrl key is down, add target item to selection 
+            3    if Shift key is down
+            4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
+            5    else add item and all previous items
+            6    if the target item is selected de-select only if Ctrl key is down         
+            7    if neither ctrl nor shift are pressed clear any other selection
+            8    if the target item is selected
+            9    if Ctrl key is down, remove item from selection
+            10   if Shift key is down
+            11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
+            12   else remove any other item from selection
+            */
+            //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
+            //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
+            //    MpClipTrayViewModel.Instance.UpdateExtendedSelection(MpClipTrayViewModel.Instance.IndexOf(hctvm));
+            //}
+            bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
+            bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
+            var lbi = lb.GetListBoxItem(index);
+            if (!lbi.IsSelected) {
+                ListBoxItem lastSelectedItem = null;
+                if (lb.SelectedItems.Count > 0) {
+                    // NOTE this maybe the wrong item
+                    int itemIdx = lb.Items.IndexOf(lb.SelectedItems[lb.SelectedItems.Count - 1]);
+                    lastSelectedItem = (ListBoxItem)lb.GetListBoxItem(itemIdx);
+                }
+                if (isShiftDown) {
+                    if (lastSelectedItem == null) {
+                        //5 else add item and all previous items
+                        for (int i = 0; i <= index; i++) {
+                            lb.GetListBoxItem(i).IsSelected = true;
+                        }
+                        return;
+                    } else {
+                        //4 if there is a previously selected item, add all items between target
+                        //  item and most recently selected item to selection, clearing any others
+                        lb.SelectedItems.Clear();
+
+                        int lastIdx = lb.Items.IndexOf(lastSelectedItem.DataContext);
+                        if (lastIdx < index) {
+                            for (int i = lastIdx; i <= index; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                        } else {
+                            for (int i = index; i <= lastIdx; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                        }
+                    }
+                } else if (isCtrlDown) {
+                    //2    if Ctrl key is down, add target item to selection 
+                    //6    if the target item is selected de-select only if Ctrl key is down
+
+                    lbi.IsSelected = !lbi.IsSelected;
+                } else {
+                    //7    if neither ctrl nor shift are pressed clear any other selection
+                    // MpClipTrayViewModel.Instance.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    lb.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            } else if (lbi.IsSelected) {
+                if (isShiftDown) {
+                    //10   if Shift key is down
+                    if (lb.SelectedItems.Count > 0) {
+                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
+                        var firstSelectedItem = lb.GetListBoxItem(lb.Items.IndexOf(lb.SelectedItems[0]));
+                        int firstIdx = lb.Items.IndexOf(firstSelectedItem.DataContext);
+                        lb.SelectedItems.Clear();
+                        if (firstIdx < index) {
+                            for (int i = firstIdx; i <= index; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        } else {
+                            for (int i = index; i <= firstIdx; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        }
+                    }
+
+                } else if (isCtrlDown) {
+                    //9    if Ctrl key is down, remove item from selection
+                    lbi.IsSelected = false;
+                } else {
+                    //12   else remove any other item from selection
+
+                    //MpClipTrayViewModel.Instance.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    lb.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            }
+        }
+        
         public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
             var item = collection[oldIdx];
             collection.RemoveAt(oldIdx);
@@ -53,17 +191,54 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public static T GetVisualDescendent<T>(this DependencyObject d)
+           where T : DependencyObject {
+            return d.GetVisualDescendents<T>(null).FirstOrDefault();
+        }
+
+        public static T GetVisualDescendent<T>(this DependencyObject d, string childName)
+            where T : DependencyObject {
+            return d.GetVisualDescendents<T>(childName).FirstOrDefault();
+        }
+
+        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d)
+            where T : DependencyObject {
+            return d.GetVisualDescendents<T>(null);
+        }
+
+        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName)
+            where T : DependencyObject {
+            var childCount = VisualTreeHelper.GetChildrenCount(d);
+
+            for (var n = 0; n < childCount; n++) {
+                var child = VisualTreeHelper.GetChild(d, n);
+
+                if (child is T descendent) {
+                    if (string.IsNullOrEmpty(childName)
+                        || descendent is IFrameworkInputElement frameworkInputElement && frameworkInputElement.Name == childName) {
+                        yield return descendent;
+                    }
+                }
+
+                foreach (var match in GetVisualDescendents<T>(child, childName)) {
+                    yield return match;
+                }
+            }
+
+            yield break;
+        }
         #endregion
 
         #region Visual Tree
-        public static bool IsListBoxItemVisible(this MpMultiSelectListBox lb, int index) {
+        public static bool IsListBoxItemVisible(this ListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi != null && lbi.Visibility == Visibility.Visible) {
                 var lbir = lb.GetListBoxItemRect(index);
-                if (lbir.Left < lb.ScrollViewer.HorizontalOffset) {
+                if (lbir.Left < lb.GetScrollViewer().HorizontalOffset) {
                     return false;
                 }
-                if (lbir.Right > lb.GetListBoxRect().Right + lb.ScrollViewer.HorizontalOffset) {
+                if (lbir.Right > lb.GetListBoxRect().Right + lb.GetScrollViewer().HorizontalOffset) {
                     return false;
                 }
                 return true;
@@ -84,14 +259,14 @@ namespace MpWpfApp {
             return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
         }
 
-        public static Rect GetListBoxItemRect(this MpMultiSelectListBox lb, int index) {
+        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
             Point origin = new Point(); 
-            if (lb.ScrollViewer.HorizontalOffset > 0 || lb.ScrollViewer.VerticalOffset > 0) {
-                origin = lbi.TranslatePoint(new Point(0, 0), lb.ScrollViewer);
+            if (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0) {
+                origin = lbi.TranslatePoint(new Point(0, 0), lb.GetScrollViewer());
             } else {
                 origin = lbi.TranslatePoint(new Point(0, 0), lb);
             }

@@ -6,11 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
+             DataContext="{StaticResource ClipTrayViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <local:MpClipTrayViewModel />
-    </UserControl.DataContext>
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>            
             <local:MpMultiSelectListBox x:Name="ClipTray"
@@ -19,7 +17,8 @@
                                         Visibility="{Binding ClipTrayVisibility}"
                                         Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                         Height="{Binding MainWindowViewModel.ClipTrayHeight}"
-                                        Loaded="ClipTray_Loaded"
+                                        Loaded="ClipTray_Loaded" 
+                                        DataContextChanged="ClipTray_DataContextChanged"
                                         DragLeave="ClipTray_DragLeave"
                                         DragOver="ClipTray_DragOver"
                                         Drop="ClipTray_Drop"
@@ -91,14 +90,7 @@
                                                 CanHorizontallyScroll="True"
                                                 VerticalAlignment="Top"
                                                 HorizontalAlignment="Left"
-                                                Orientation="Horizontal">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Loaded">
-                                    <i:CallMethodAction MethodName="ClipTrayVirtualizingStackPanel_Loaded"
-                                                        TargetObject="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </VirtualizingStackPanel>
+                                                Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>

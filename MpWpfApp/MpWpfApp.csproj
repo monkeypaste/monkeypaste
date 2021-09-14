@@ -7,9 +7,6 @@
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AB141214-C52C-4390-B86B-1491D5F24E51}</ProjectGuid>
@@ -118,8 +115,9 @@
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
-    <Compile Include="Controls\Adorners\MpRtbListBoxAdorner.cs" />
     <Compile Include="Controls\Adorners\MpClipTrayAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpRtbListBoxAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpLineAdorner.cs" />
     <Compile Include="Controls\Adorners\MpRtbListBoxItemAdorner.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
@@ -134,6 +132,7 @@
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
+    <Compile Include="Converters\MpContainerToRtbCollectionConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="Utils\DataVirtualization\ParentOfTypeExtensions.cs" />
     <Compile Include="Utils\DataVirtualization\SortDescription.cs" />
     <Compile Include="Utils\DataVirtualization\SortDescriptionList.cs" />
+    <Compile Include="Utils\DragDrop\MpDragDropHelper.cs" />
     <Compile Include="Utils\FlowDocuments\MpAttached.cs" />
     <Compile Include="Utils\FlowDocuments\MpBindableRun.cs" />
     <Compile Include="Utils\FlowDocuments\MpBlockTemplateContent.cs" />
@@ -186,6 +186,7 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
+    <Compile Include="Utils\System\MpPasteManager.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
@@ -220,25 +221,29 @@
     <Compile Include="Utils\UndoRedo\MpUndoManager.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpObservableObject.cs" />
     <Compile Include="ViewModels\Base\MpPagingUndoableObservableCollection.cs" />
     <Compile Include="ViewModels\Base\MpUndoableObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentContainerViewModelBase.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentItemViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentContainerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpIClipTileContentViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpEditTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpPasteTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\TextRange\MpTextPointer.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\TextRange\MpTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Selector\MpContentTemplateSelector.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
@@ -286,14 +291,17 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Templates\MpTemplateHyperlink.xaml.cs">
+      <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml.cs">
       <DependentUpon>MpRtbEditToolbarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemCollectionVIew.xaml.cs">
       <DependentUpon>MpRtbItemCollectionVIew.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemVIew.xaml.cs">
-      <DependentUpon>MpRtbItemVIew.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemView.xaml.cs">
+      <DependentUpon>MpRtbItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpEditTemplateToolbarView.xaml.cs">
       <DependentUpon>MpEditTemplateToolbarView.xaml</DependentUpon>
@@ -398,6 +406,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Templates\MpTemplateHyperlink.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -406,7 +418,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemVIew.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

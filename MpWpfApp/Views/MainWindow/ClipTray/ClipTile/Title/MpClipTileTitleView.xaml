@@ -15,12 +15,6 @@
           HorizontalAlignment="Left"
           Width="{Binding TileBorderWidth}"
           Height="{Binding TileTitleHeight}">
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Loaded">
-                <i:CallMethodAction TargetObject="{Binding}"
-                                    MethodName="ClipTileTitle_Loaded" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
             <ColumnDefinition Width="0.25*" />
@@ -114,6 +108,9 @@
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"
               Grid.Column="0"
+              MouseEnter="ClipTileTitleTextGrid_MouseEnter"
+              MouseLeave="ClipTileTitleTextGrid_MouseLeave"
+              PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_PreviewMouseLeftButtonDown"
               Margin="5,0,30,25"
               Background="{Binding TileTitleTextGridBackgroundBrush}">
             <!-- Clip Title TextBlock -->
@@ -123,15 +120,18 @@
                        Foreground="White"
                        Background="Transparent"
                        Visibility="{Binding TileTitleTextBlockVisibility}">
-                                                        <!--<TextBlock.Effect>
-                                                            <DropShadowEffect ShadowDepth="0.5"
-                                                                              Direction="300"
-                                                                              Color="Black"
-                                                                              Opacity="1.0"
-                                                                              BlurRadius="0.1" />
-                                                        </TextBlock.Effect>--></TextBlock>
+                    <!--<TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="0.5"
+                                            Direction="300"
+                                            Color="Black"
+                                            Opacity="1.0"
+                                            BlurRadius="0.1" />
+                    </TextBlock.Effect>--></TextBlock>
             <!-- Clip Title TextBox -->
             <TextBox x:Name="ClipTileTitleTextBox"
+                     IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
+                     LostFocus="ClipTileTitleTextBox_LostFocus"
+                     PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
                      Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
                      Foreground="Black"
                      FontSize="20"
@@ -150,6 +150,9 @@
         <!-- Clip Title Icon Image -->
         <Grid Grid.Column="1">
             <Button x:Name="ClipTileAppIconImageButton"
+                    MouseEnter="ClipTileAppIconImageButton_MouseEnter"
+                    MouseLeave="ClipTileAppIconImageButton_MouseLeave"
+                    PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"
                     Style="{StaticResource Transparent_Button}"
                     Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
                     Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
@@ -175,6 +178,7 @@
                 </Button.ContextMenu>
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
+                          Loaded="ClipTileAppIconBorderImage_Loaded"
                            Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"

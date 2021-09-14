@@ -425,7 +425,7 @@ namespace MpWpfApp {
                         //clear input gesture text
                         MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
                     } else {
-                        MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
+                        MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
                     }
                 }
                 DuplicatedShortcutViewModel.KeyString = string.Empty;

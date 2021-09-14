@@ -25,8 +25,7 @@ namespace MpWpfApp {
         public MpClipTileView() {
             InitializeComponent();
             PreviewMouseUp += MpClipTileView_PreviewMouseUp_DragDrop;
-            MouseMove += MpClipTileView_MouseMove_DragDrop;
-            
+            MouseMove += MpClipTileView_MouseMove_DragDrop;            
         }
 
 
@@ -37,43 +36,49 @@ namespace MpWpfApp {
         }
 
         private void ClipTileClipBorder_MouseMove(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-
+            var ctvm = DataContext as MpClipTileViewModel; 
+            var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
+            var rtbcv = this.GetVisualDescendent<MpRtbItemCollectionView>();
             if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedClipTiles.Count <= 1) {
                 return;
             }
-            var mp = e.GetPosition(ctvm.RichTextBoxViewModelCollection.ListBox);
+            var mp = e.GetPosition(rtblb);
             bool isOverSubSelectedDragButton = false;
-            foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                var itemRect = ctvm.RichTextBoxViewModelCollection.GetListBoxItemRect(ctvm.RichTextBoxViewModelCollection.IndexOf(rtbvm));
+            foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
+                int lbiIdx = ctvm.ContentContainerViewModel.ItemViewModels.IndexOf(rtbvm);
+                var lbi = rtblb.GetListBoxItem(lbiIdx);
+                var rtbvm_canvas = lbi.GetVisualDescendent<Canvas>();
+                var itemRect = rtblb.GetListBoxItemRect(lbiIdx);
                 rtbvm.IsSubHovering = itemRect.Contains(mp);
                 if (rtbvm.IsSubHovering) {
-                    var irmp = e.GetPosition(rtbvm.Rtbc);
-                    var dragButtonRect = rtbvm.DragButtonRect;
+                    var rtbv = lbi.GetVisualDescendent<MpRtbItemView>();
+                    var irmp = e.GetPosition(rtbv.DragButton);
+                    var dragButtonRect = new Rect(0, 0, rtbv.DragButton.ActualWidth, rtbv.DragButton.ActualHeight);
                     if (dragButtonRect.Contains(irmp)) {
-                        isOverSubSelectedDragButton = true;
-                        ctvm.RichTextBoxViewModelCollection.SyncMultiSelectDragButton(true, e.MouseDevice.LeftButton == MouseButtonState.Pressed);
+                        isOverSubSelectedDragButton = true; 
+                        rtbcv.SyncMultiSelectDragButton(true, e.MouseDevice.LeftButton == MouseButtonState.Pressed);
                     }
                 }
             }
             if (!isOverSubSelectedDragButton) {
-                ctvm.RichTextBoxViewModelCollection.SyncMultiSelectDragButton(false, e.MouseDevice.LeftButton == MouseButtonState.Pressed);
+                rtbcv.SyncMultiSelectDragButton(false, e.MouseDevice.LeftButton == MouseButtonState.Pressed);
             }
         }
 
         private void ClipTileClipBorder_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
+            var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
 
             if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedClipTiles.Count <= 1) {
                 return;
             }
-            var mp = e.GetPosition(ctvm.RichTextBoxViewModelCollection.ListBox);
+            var mp = e.GetPosition(rtblb);
             bool isSubSelection = false;
-            if (ctvm.IsSelected && ctvm.RichTextBoxViewModelCollection.Count > 1) {
-                foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+            if (ctvm.IsSelected && ctvm.ContentContainerViewModel.Count > 1) {
+                foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
                     if (rtbvm.IsSubHovering) {
                         isSubSelection = true;
-                        ctvm.RichTextBoxViewModelCollection.UpdateExtendedSelection(ctvm.RichTextBoxViewModelCollection.IndexOf(rtbvm));
+                        rtblb.UpdateExtendedSelection(ctvm.ContentContainerViewModel.ItemViewModels.IndexOf(rtbvm));
                     }
                 }
             }
@@ -87,7 +92,7 @@ namespace MpWpfApp {
 
             if (ctvm != null && !ctvm.IsClipDragging) {
                 ctvm.IsHovering = false;
-                foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
                     rtbvm.IsSubHovering = false;
                 }
             }
@@ -108,7 +113,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
             ctvm.MouseDownPosition = new Point();
             ctvm.IsClipDragging = false;
-            foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+            foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
                 rtbvm.IsSubDragging = false;
             }
             ctvm.DragDataObject = null;
@@ -118,9 +123,9 @@ namespace MpWpfApp {
                     //ensures scrollbar interaction isn't treated as drag and drop
                     var sb = (ScrollBar)((Thumb)e.MouseDevice.DirectlyOver).TemplatedParent;
                     if (sb.Orientation == Orientation.Vertical) {
-                        ctvm.RichTextBoxViewModelCollection.IsMouseOverVerticalScrollBar = false;
+                        ctvm.ContentContainerViewModel.IsMouseOverVerticalScrollBar = false;
                     } else {
-                        ctvm.RichTextBoxViewModelCollection.IsMouseOverHorizontalScrollBar = false;
+                        ctvm.ContentContainerViewModel.IsMouseOverHorizontalScrollBar = false;
                     }
                     return;
                 }
@@ -135,9 +140,9 @@ namespace MpWpfApp {
                     //ensures scrollbar interaction isn't treated as drag and drop
                     var sb = (ScrollBar)((Thumb)e.MouseDevice.DirectlyOver).TemplatedParent;
                     if (sb.Orientation == Orientation.Vertical) {
-                        ctvm.RichTextBoxViewModelCollection.IsMouseOverVerticalScrollBar = true;
+                        ctvm.ContentContainerViewModel.IsMouseOverVerticalScrollBar = true;
                     } else {
-                        ctvm.RichTextBoxViewModelCollection.IsMouseOverHorizontalScrollBar = true;
+                        ctvm.ContentContainerViewModel.IsMouseOverHorizontalScrollBar = true;
                     }
                     return;
                 }
@@ -148,7 +153,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
             if (e.MouseDevice.LeftButton == MouseButtonState.Pressed) {
                 if (ctvm.IsExpanded ||
-                    ctvm.RichTextBoxViewModelCollection.IsMouseOverScrollBar ||
+                    ctvm.ContentContainerViewModel.IsMouseOverScrollBar ||
                     ctvm.IsAnySubItemDragging) {
                     return;
                 }
@@ -170,10 +175,12 @@ namespace MpWpfApp {
         }
         private void ClipTileClipBorder_DragLeave(object sender, DragEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
+            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
+            var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
             //ctvm.DragDataObject = null;
             ctvm.IsClipDropping = false;
-            ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
-            ctvm.RichTextBoxViewModelCollection.ScrollViewer?.ScrollToHome();
+            rtblbv.UpdateAdorners();
+            rtblb.ScrollViewer.ScrollToHome();
             MonkeyPaste.MpConsole.WriteLine("ClipTile Dragleave");
         }
 
@@ -192,39 +199,41 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_PreviewDragOver(object sender, DragEventArgs e1) {
             var ctvm = DataContext as MpClipTileViewModel;
-            var ctv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
+            var ctrv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
+            var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
+            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
             MpClipTrayViewModel.Instance.IsTrayDropping = false;
-            ctv.ClipTrayAdornerLayer.Update();
+            ctrv.ClipTrayAdornerLayer.Update();
 
 
-            ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
+            rtblbv?.UpdateAdorners();
 
-            ctv.AutoScrollByMouse();
+            ctrv.AutoScrollByMouse();
 
             if (ctvm.IsDragDataValid(e1.Data)) {
-                int dropIdx = ctv.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.ListBox));
+                int dropIdx = ctrv.GetDropIdx(MpHelpers.Instance.GetMousePosition(rtblb));
                 MonkeyPaste.MpConsole.WriteLine("DropIdx: " + dropIdx);
-                if (dropIdx >= 0 && dropIdx <= ctvm.RichTextBoxViewModelCollection.Count) {
-                    if (dropIdx < ctvm.RichTextBoxViewModelCollection.Count) {
-                        if (!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx)) {
-                            ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx]);
-                        } else if (dropIdx > 0 && dropIdx - 1 < ctvm.RichTextBoxViewModelCollection.Count) {
-                            ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx - 1]);
+                if (dropIdx >= 0 && dropIdx <= ctvm.ContentContainerViewModel.Count) {
+                    if (dropIdx < ctvm.ContentContainerViewModel.Count) {
+                        if (!rtblb.IsListBoxItemVisible(dropIdx)) {
+                            rtblb.ScrollIntoView(ctvm.ContentContainerViewModel.ItemViewModels[dropIdx]);
+                        } else if (dropIdx > 0 && dropIdx - 1 < ctvm.ContentContainerViewModel.Count) {
+                            rtblb.ScrollIntoView(ctvm.ContentContainerViewModel.ItemViewModels[dropIdx - 1]);
                         }
                     } else {
                         //only can be count + 1
-                        if (!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx - 1)) {
-                            ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx - 1]);
+                        if (!rtblb.IsListBoxItemVisible(dropIdx - 1)) {
+                            rtblb.ScrollIntoView(ctvm.ContentContainerViewModel.ItemViewModels[dropIdx - 1]);
                         }
                     }
-                    ctvm.RichTextBoxViewModelCollection.DropLeftPoint = ctvm.RichTextBoxViewModelCollection.GetAdornerPoints(dropIdx)[0];
-                    ctvm.RichTextBoxViewModelCollection.DropRightPoint = ctvm.RichTextBoxViewModelCollection.GetAdornerPoints(dropIdx)[1];
+                    rtblbv.RtbLbAdorner.Point1 = rtblb.GetAdornerPoints(dropIdx,false)[0];
+                    rtblbv.RtbLbAdorner.Point2 = rtblb.GetAdornerPoints(dropIdx,false)[1];
                     ctvm.IsClipDropping = true;
                     e1.Effects = DragDropEffects.Move;
                     e1.Handled = true;
 
                     MpClipTrayViewModel.Instance.IsTrayDropping = false;
-                    ctv.ClipTrayAdornerLayer?.Update();
+                    ctrv.ClipTrayAdornerLayer?.Update();
                 }
             } else {
                 MonkeyPaste.MpConsole.WriteLine(@"Drag data invalid from drag over");
@@ -232,18 +241,20 @@ namespace MpWpfApp {
                 //e1.Effects = DragDropEffects.None;
                 e1.Handled = true;
             }
-            ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
+            rtblbv?.UpdateAdorners();
         }
 
         private void ClipTileClipBorder_PreviewDrop(object sender, DragEventArgs e2) {
             var ctvm = DataContext as MpClipTileViewModel;
             var ctv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
+            var rtblb = this.GetDescendantOfType<MpMultiSelectListBox>();
+            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
 
             bool wasDropped = false;
             var dctvml = new List<MpClipTileViewModel>();
             if (e2.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                 dctvml = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                int dropIdx = ctv.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.ListBox));
+                int dropIdx = ctv.GetDropIdx(MpHelpers.Instance.GetMousePosition(rtblb));
                 if (dropIdx >= 0) {
                     /*
                      On tile drop: 
@@ -253,14 +264,14 @@ namespace MpWpfApp {
                     */
                     var dcil = new List<MpCopyItem>();
                     foreach (var dctvm in dctvml) {
-                        bool wasEmptySelection = dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0;
+                        bool wasEmptySelection = dctvm.ContentContainerViewModel.SubSelectedContentItems.Count == 0;
                         if (wasEmptySelection) {
-                            dctvm.RichTextBoxViewModelCollection.SubSelectAll();
+                            dctvm.ContentContainerViewModel.SubSelectAll();
                         }
-                        if (dctvm.RichTextBoxViewModelCollection.Count == 0) {
+                        if (dctvm.ContentContainerViewModel.Count == 0) {
                             dcil.Add(dctvm.CopyItem);
                         } else {
-                            foreach (var ssrtbvm in dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                            foreach (var ssrtbvm in dctvm.ContentContainerViewModel.SubSelectedContentItems) {
                                 dcil.Add(ssrtbvm.CopyItem);
                             }
                         }
@@ -272,10 +283,10 @@ namespace MpWpfApp {
             }
             if (wasDropped) {
                 MpClipTrayViewModel.Instance.ClearAllDragDropStates();
-                ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
+                ctvm.ContentContainerViewModel.ClearSubSelection();
             }
             e2.Handled = true;
-            ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
+            rtblbv?.UpdateAdorners();
         }
 
         #endregion

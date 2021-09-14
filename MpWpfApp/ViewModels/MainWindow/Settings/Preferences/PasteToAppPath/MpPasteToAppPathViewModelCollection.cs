@@ -140,8 +140,8 @@ namespace MpWpfApp {
                 return cm;
             }
             ICommand pasteCommand = null;
-            if (cm.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
-                pasteCommand = (cm.DataContext as MpRtbListBoxItemRichTextBoxViewModel).RichTextBoxViewModelCollection.PasteSubSelectedClipsCommand;
+            if (cm.DataContext is MpRtbItemViewModel) {
+                pasteCommand = (cm.DataContext as MpRtbItemViewModel).ContainerViewModel.PasteSubSelectedClipsCommand;
             } else {
                 pasteCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
             }

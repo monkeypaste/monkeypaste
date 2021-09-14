@@ -24,7 +24,7 @@ namespace MpWpfApp {
                 if(MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || Tag == null) {
                     return new List<MpClipTileViewModel>();
                 }
-                return MpClipTrayViewModel.Instance.ClipTileViewModels.Where(x => IsLinkedWithClipTile(x)).ToList();
+                return MpClipTrayViewModel.Instance.ClipTileViewModels.Where(x => IsLinked(x)).ToList();
             }
         }
         #endregion
@@ -431,7 +431,7 @@ namespace MpWpfApp {
             Tag.LinkWithCopyItem(ctvm.CopyItem);    
         }
 
-        public void AddClip(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+        public void AddClip(MpContentItemViewModel rtbvm) {
             Tag.LinkWithCopyItem(rtbvm.CopyItem);
         }
 
@@ -439,11 +439,11 @@ namespace MpWpfApp {
             Tag.UnlinkWithCopyItem(ctvm.CopyItem);
         }
 
-        public void RemoveClip(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+        public void RemoveClip(MpContentItemViewModel rtbvm) {
             Tag.UnlinkWithCopyItem(rtbvm.CopyItem);
         }
 
-        public bool IsLinkedWithClipTile(MpCopyItem ci) {
+        public bool IsLinked(MpCopyItem ci) {
             if (ci == null ||
                 ci.Id == 0 ||
                 Tag == null ||
@@ -456,18 +456,18 @@ namespace MpWpfApp {
             if (IsRecentTag) {
                 return MpClipTrayViewModel.Instance.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
-                    Take(Properties.Settings.Default.MaxRecentClipItems).
+                    Take(MpMeasurements.Instance.MaxRecentClipItems).
                     Any(x => x.CopyItem.Id == ci.Id);
             }
             return Tag.IsLinkedWithCopyItem(ci);
         }
 
-        public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
-            return IsLinkedWithClipTile(ctvm.CopyItem);
+        public bool IsLinked(MpClipTileViewModel ctvm) {
+            return IsLinked(ctvm.CopyItem);
         }
 
-        public bool IsLinkedWithRtbItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
-            return IsLinkedWithClipTile(rtbvm.CopyItem);
+        public bool IsLinked(MpContentItemViewModel rtbvm) {
+            return IsLinked(rtbvm.CopyItem);
         }
         #endregion
 

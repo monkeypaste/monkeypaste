@@ -21,5 +21,37 @@ namespace MpWpfApp {
         public MpTagTrayView() {
             InitializeComponent();
         }
+
+        private void TagTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(DataContext != null && DataContext is MpTagTrayViewModel ttrvm) {
+                ttrvm.TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+            }
+        }
+
+        private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (TagTray.ScrollViewer.ExtentWidth >= TagTray.MaxWidth) {
+                TagTrayNavLeftButton.Visibility = Visibility.Visible;
+                TagTrayNavRightButton.Visibility = Visibility.Visible;
+            } else {
+                TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
+                TagTrayNavRightButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void TagTrayContainerGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            MpClipTrayViewModel.Instance.ResetClipSelection();
+        }
+
+        private void TagTrayNavLeftButton_Click(object sender, RoutedEventArgs e) {
+            TagTray.ScrollViewer.ScrollToHorizontalOffset(TagTray.ScrollViewer.HorizontalOffset - 20);
+        }
+
+        private void TagTrayNavRightButton_Click(object sender, RoutedEventArgs e) {
+            TagTray.ScrollViewer.ScrollToHorizontalOffset(TagTray.ScrollViewer.HorizontalOffset + 20);
+        }
+
+        private void TagTrayContainerGrid_Loaded(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

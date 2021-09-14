@@ -85,7 +85,7 @@ namespace MpWpfApp {
                     if (ctvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
                         ctvm.CopyItem.Source.App = this[appIdx].App;
                     }
-                    foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                    foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
                         if (rtbvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
                             rtbvm.CopyItem.Source.App = this[appIdx].App;
                         }

@@ -174,8 +174,8 @@ namespace MpWpfApp {
             } else if (args is MpClipTileViewModel) {
                 args = (args as MpClipTileViewModel).CopyItem.Source.App;
                 tabIdx = 1;
-            } else if (args is MpRtbListBoxItemRichTextBoxViewModel) {
-                args = (args as MpRtbListBoxItemRichTextBoxViewModel).CopyItem.Source.App;
+            } else if (args is MpRtbItemViewModel) {
+                args = (args as MpRtbItemViewModel).CopyItem.Source.App;
                 tabIdx = 1;
             }
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);

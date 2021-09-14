@@ -252,15 +252,11 @@ namespace MpWpfApp {
             MpPluginManager.Instance.Init();
 
             MpSystemTrayViewModel.Instance.Init();
-            //SearchBoxViewModel = new MpSearchBoxViewModel() {  };
             MpSearchBoxViewModel.Instance.Init();
             MpClipTrayViewModel.Instance.Init();
-            //ClipTrayViewModel = new MpClipTrayViewModel();
-            //ClipTileSortViewModel = new MpClipTileSortViewModel();
             MpClipTileSortViewModel.Instance.Init();
             MpAppModeViewModel.Instance.Init();
             MpTagTrayViewModel.Instance.Init();
-            //TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
 
             Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
             Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
@@ -306,7 +302,7 @@ namespace MpWpfApp {
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
-            double ctvmDelta = ctvmToExpand.RichTextBoxViewModelCollection.TotalItemHeight - ctvmToExpand.RichTextBoxViewModelCollection.RtbLbScrollViewerHeight;
+            double ctvmDelta = ctvmToExpand.ContentContainerViewModel.TotalExpandedSize.Height - ctvmToExpand.ContentContainerViewModel.ContainerSize.Height;
             if(ctvmToExpand.IsPastingTemplate) {
                 ctvmDelta += ctvmToExpand.PasteTemplateToolbarHeight;
             } else if(ctvmToExpand.IsEditingTile) {

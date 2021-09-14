@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpContextMenuItemViewModel : MpViewModelBase {
-
         #region Properties
         private bool _isSeparator = false;
         public bool IsSeparator {
