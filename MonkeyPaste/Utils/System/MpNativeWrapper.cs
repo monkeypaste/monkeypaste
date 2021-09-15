@@ -18,17 +18,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interface Implementation
-        public MpIPhotoGalleryManager GetPhotoGalleryManager() {
-            return _niw.GetPhotoGalleryManager();
-        }
 
         public MpIKeyboardInteractionService GetKeyboardInteractionService() {
             return _niw.GetKeyboardInteractionService();
         }
 
-        public MpILocalStorage GetLocalStorageManager() {
-            return _niw.GetLocalStorageManager();
-        }
 
         public MpIGlobalTouch GetGlobalTouch() {
             return _niw.GetGlobalTouch();
@@ -38,9 +32,6 @@ namespace MonkeyPaste {
             return _niw.GetLocationFetcher();
         }
 
-        public MpIScreenshot GetScreenshot() {
-            return _niw.GetScreenshot();
-        }
 
         public MpIDbInfo GetDbInfo() {
             return _niw.GetDbInfo();

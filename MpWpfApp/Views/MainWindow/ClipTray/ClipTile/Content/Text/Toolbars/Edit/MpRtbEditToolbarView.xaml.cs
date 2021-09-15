@@ -212,7 +212,7 @@ namespace MpWpfApp {
             var hctvm = rtbetbvm.HostClipTileViewModel;
             var rtbcvm = hctvm.ContentContainerViewModel as MpRtbItemCollectionViewModel;
             var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
-            var rtblb = rtb.FindParentOfType<MpRtbItemCollectionView>();
+            var rtblb = rtb.FindParentOfType<MpContentListVIew>();
             var rtbvm = rtb.DataContext as MpRtbItemViewModel;
             //SubSelectedRtbViewModel.SaveSubItemToDatabase();
 

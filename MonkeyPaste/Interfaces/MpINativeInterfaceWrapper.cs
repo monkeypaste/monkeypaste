@@ -4,12 +4,9 @@ using System.Text;
 
 namespace MonkeyPaste {
     public interface MpINativeInterfaceWrapper {
-        MpIPhotoGalleryManager GetPhotoGalleryManager();
         MpIKeyboardInteractionService GetKeyboardInteractionService();
-        MpILocalStorage GetLocalStorageManager();
         MpIGlobalTouch GetGlobalTouch();
         MpIUiLocationFetcher GetLocationFetcher();
-        MpIScreenshot GetScreenshot();
         MpIDbInfo GetDbInfo();
         MpIIconBuilder GetIconBuilder();
     }

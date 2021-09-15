@@ -80,12 +80,12 @@ namespace MonkeyPaste.Droid {
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
 
+            MpPreferences.Instance.Init(new MpXamPreferences());
+
             AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper() {
                 KeyboardService = new MpKeyboardInteractionService(),
-                StorageService = new MpLocalStorage_Android(),
                 TouchService = new MpGlobalTouch(),
                 UiLocationFetcher = new MpUiLocationFetcher(),
-                Screenshot = new MpScreenshot(),
                 DbInfo = new MpDbFilePath_Android()
             };
             //MpNativeWrapper.Instance.Register<MpKeyboardInteractionService>();

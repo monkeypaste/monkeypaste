@@ -38,7 +38,7 @@ namespace MonkeyPaste.UWP {
         protected override void OnLaunched(LaunchActivatedEventArgs e) {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached) {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                this.DebugSettings.EnableFrameRateCounter = false;
             }
 #endif
 
@@ -51,8 +51,11 @@ namespace MonkeyPaste.UWP {
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                Xamarin.Forms.Forms.Init(e);
 
+
+                Rg.Plugins.Popup.Popup.Init();
+                Xamarin.Forms.Forms.Init(e, Rg.Plugins.Popup.Popup.GetExtraAssemblies());
+                MpPreferences.Instance.Init(new MpXamPreferences());
                 //CachedImageRenderer.In
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated) {

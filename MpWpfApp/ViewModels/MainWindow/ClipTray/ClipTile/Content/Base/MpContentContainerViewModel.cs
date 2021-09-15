@@ -305,7 +305,18 @@ namespace MpWpfApp {
             return (HeadItem as MpRtbItemViewModel).GetDetail(detailType);
         }
 
-        public ObservableCollection<MpContentItemViewModel> ItemViewModels { get; private set; } = new ObservableCollection<MpContentItemViewModel>();
+        private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
+        public ObservableCollection<MpContentItemViewModel> ItemViewModels { 
+            get {
+                return _itemViewModels;
+            }
+            private set {
+                if(_itemViewModels != value) {
+                    _itemViewModels = value;
+                    OnPropertyChanged(nameof(ItemViewModels));
+                }
+            }
+        } 
 
         public MpClipTileViewModel HostClipTileViewModel { get; private set; }
 

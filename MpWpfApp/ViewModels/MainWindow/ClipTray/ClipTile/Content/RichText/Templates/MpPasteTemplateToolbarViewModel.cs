@@ -176,6 +176,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
+        private Visibility _pasteTemplateToolbarVisibility = Visibility.Collapsed;
+        public Visibility PasteTemplateToolbarVisibility {
+            get {
+                return _pasteTemplateToolbarVisibility;
+            }
+            set {
+                if (_pasteTemplateToolbarVisibility != value) {
+                    _pasteTemplateToolbarVisibility = value;
+                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
+                }
+            }
+        }
+
         public Visibility PasteButtonVisibility {
             get {
                 if(HostClipTileViewModel == null || SubSelectedRtbViewModel == null) {
@@ -360,7 +373,7 @@ namespace MpWpfApp {
                 //this doesn't get called because tile is shrunk before setting ispastingtemplate to false
                 //so that tile content is resized 'right'
                 ClearAllTemplates();
-                HostClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
+                PasteTemplateToolbarVisibility = Visibility.Collapsed;
                 MpClipTrayViewModel.Instance.RequestScrollToHome();
             }
         }
@@ -428,7 +441,7 @@ namespace MpWpfApp {
             SelectedTemplateTextBox.IsVisibleChanged += (s, e9) => {
                 //this is used to capture the current template text box when the paste toolbar is shown
                 //to
-                if (HostClipTileViewModel.PasteTemplateToolbarVisibility == Visibility.Collapsed) {
+                if (PasteTemplateToolbarVisibility == Visibility.Collapsed) {
                     return;
                 }
                 var tbx = (TextBox)s;

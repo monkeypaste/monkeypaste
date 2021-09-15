@@ -20,7 +20,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRtbListBoxItemAdorner(Canvas rtbc) : base(rtbc) {
+        public MpRtbListBoxItemAdorner(FrameworkElement fe) : base(fe) {
         }
         #endregion
 

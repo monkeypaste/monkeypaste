@@ -9,7 +9,8 @@ namespace MpWpfApp {
     public class MpContainerToRtbCollectionConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is MpContentContainerViewModel) {
-                return value as MpRtbItemCollectionViewModel;
+                var rtbicvm = value as MpRtbItemCollectionViewModel;
+                return value;
             }
             throw new Exception("Cannot convert: " + value.ToString());
         }

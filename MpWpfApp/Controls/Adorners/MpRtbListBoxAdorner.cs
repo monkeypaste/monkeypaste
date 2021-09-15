@@ -16,7 +16,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRtbListBoxAdorner(ListBox rtblb) : base(rtblb) {
+        public MpRtbListBoxAdorner(FrameworkElement fe) : base(fe) {
         }
         #endregion
 

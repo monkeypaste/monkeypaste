@@ -77,6 +77,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout 
+        public double EditTemplateToolbarHeight {
+            get {
+                return MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
+            }
+        }
+
         private double _editTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;
         public double EditTemplateBorderCanvasTop {
             get {
@@ -108,6 +114,19 @@ namespace MpWpfApp {
                     return Visibility.Collapsed;
                 }
                 return Visibility.Visible;
+            }
+        }
+
+        private Visibility _editTemplateToolbarVisibility = Visibility.Collapsed;
+        public Visibility EditTemplateToolbarVisibility {
+            get {
+                return _editTemplateToolbarVisibility;
+            }
+            set {
+                if (_editTemplateToolbarVisibility != value) {
+                    _editTemplateToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditTemplateToolbarVisibility));
+                }
             }
         }
         #endregion
@@ -162,18 +181,18 @@ namespace MpWpfApp {
             PropertyChanged += MpEditTemplateToolbarViewModel_PropertyChanged;
         }
 
-        private void MpEditTemplateToolbarViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(CopyItemTemplate):
-
-                    break;
-            }
-        }
 
         public MpEditTemplateToolbarViewModel(MpClipTileViewModel ctvm) : this() {
             HostClipTileViewModel = ctvm;
         }
 
+        private void MpEditTemplateToolbarViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(CopyItemTemplate):
+
+                    break;
+            }
+        }
         public void EditTemplateToolbarBorderGrid_Loaded(object sender, RoutedEventArgs args) {
             if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
                 return;
@@ -341,12 +360,12 @@ namespace MpWpfApp {
 
         private void ShowToolbar() {
             //EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight - HostClipTileViewModel.EditTemplateToolbarHeight;
-            HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
+            EditTemplateToolbarVisibility = Visibility.Visible;
         }
 
         private void HideToolbar() {
             //EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight + 20;
-            HostClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Hidden;
+            EditTemplateToolbarVisibility = Visibility.Hidden;
         }
 
         #endregion

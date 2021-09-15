@@ -12,8 +12,8 @@
     </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
             Canvas.Top="{Binding EditBorderCanvasTop, Mode=TwoWay}"
-            Visibility="{Binding HostClipTileViewModel.EditToolbarVisibility}"
-            Height="{Binding HostClipTileViewModel.EditRichTextBoxToolbarHeight}"
+            Visibility="{Binding EditToolbarVisibility}"
+            Height="{Binding EditRichTextBoxToolbarHeight}"
             Width="{Binding HostClipTileViewModel.TileContentWidth}"
             BorderThickness="0,0,0,1"
             BorderBrush="OldLace">
@@ -257,7 +257,7 @@
                        SnapsToDevicePixels="True" />
             </Button>
             <!--<Button Command="EditingCommands.IncreaseIndentation"
-                                                                CommandTarget="{Binding ElementName=RtbListBoxItemRichTextBox}"
+                                                                CommandTarget="{Binding ElementName=Rtb}"
                                                                 ToolTip="Increase Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
                                                                 >
@@ -266,7 +266,7 @@
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
                                                         <Button Command="EditingCommands.DecreaseIndentation"
-                                                                CommandTarget="{Binding ElementName=RtbListBoxItemRichTextBox}"
+                                                                CommandTarget="{Binding ElementName=Rtb}"
                                                                 ToolTip="Decrease Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
                                                                 >

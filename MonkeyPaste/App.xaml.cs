@@ -22,6 +22,7 @@ namespace MonkeyPaste {
             InitializeComponent();
             NativeInterfaceWrapper = niw;
             //MainPage = new MpMainShell(niw);
+            MpMainDisplayInfo.Init();
 
             MainPage = new MpMainPage(niw);
 

@@ -1,19 +1,20 @@
 ﻿using MonkeyPaste.UWP;
-using SQLite;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Windows.Storage;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(MpDbFilePath_Uwp))]
+[assembly: Xamarin.Forms.Dependency(typeof(MpDbFilePath_Uwp))]
 namespace MonkeyPaste.UWP {
-    public class MpDbFilePath_Uwp : MonkeyPaste.MpIDbFilePath {
-        public string DbFilePath() {
-            var dbName = MonkeyPaste.MpPreferences.Instance.DbName;
-            return Path.Combine(ApplicationData.Current.LocalFolder.Path, dbName);
+    public class MpDbFilePath_Uwp : MonkeyPaste.MpIDbInfo {
+        public string GetDbFilePath() {
+            return Path.Combine(
+                System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+                MonkeyPaste.MpPreferences.Instance.DbName);
+        }
+
+        public string GetDbName() {
+            return "Mp.db";
+        }
+
+        public string GetDbPassword() {
+            return string.Empty;
         }
     }
 }

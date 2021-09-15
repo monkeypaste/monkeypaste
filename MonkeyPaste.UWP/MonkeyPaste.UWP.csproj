@@ -101,8 +101,20 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\MpClipboardManager.cs" />
+    <Compile Include="Utils\Helpers\MpImageHelper.cs" />
+    <Compile Include="Utils\Helpers\MpProcessHelper.cs" />
+    <Compile Include="Utils\System\MpClipboardListener.cs" />
     <Compile Include="Utils\MpDbFilePath_Uwp.cs" />
+    <Compile Include="Utils\MpGlobalTouch.cs" />
+    <Compile Include="Utils\MpIconBuilder.cs" />
+    <Compile Include="Utils\MpKeyboardInteractionService.cs" />
+    <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
+    <Compile Include="Utils\System\MpLastWindowWatcher.cs" />
+    <Compile Include="Utils\MpNativeWrapper.cs" />
+    <Compile Include="Utils\MpUiLocationFetcher.cs" />
+    <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
+    <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
+    <Compile Include="Utils\System\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -161,6 +173,12 @@
     </PackageReference>
     <PackageReference Include="SQLiteNetExtensions.Async">
       <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common">
+      <Version>5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="UACHelper">
+      <Version>1.3.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Media">
       <Version>5.0.1</Version>

@@ -221,17 +221,7 @@
            // }
         //}
 
-        public double EditTemplateToolbarHeight {
-            get {
-                return MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
-            }
-        }
-
-        public double EditRichTextBoxToolbarHeight {
-            get {
-                return MpMeasurements.Instance.ClipTileEditToolbarHeight;
-            }
-        }
+        
 
         public double PasteTemplateToolbarHeight {
             get {
@@ -239,18 +229,6 @@
             }
         }
 
-        private FontFamily _rtbFontFamily = null;
-        public FontFamily RtbFontFamily {
-            get {
-                return _rtbFontFamily;
-            }
-            set {
-                if (_rtbFontFamily != value) {
-                    _rtbFontFamily = value;
-                    OnPropertyChanged(nameof(RtbFontFamily));
-                }
-            }
-        }
 
         public double TileTitleIconSize {
             get {
@@ -497,45 +475,6 @@
                     return Visibility.Hidden;
                 }
                 return Visibility.Visible;
-            }
-        }
-
-        private Visibility _editToolbarVisibility = Visibility.Collapsed;
-        public Visibility EditToolbarVisibility {
-            get {
-                return _editToolbarVisibility;
-            }
-            set {
-                if (_editToolbarVisibility != value) {
-                    _editToolbarVisibility = value;
-                    OnPropertyChanged(nameof(EditToolbarVisibility));
-                }
-            }
-        }
-
-        private Visibility _editTemplateToolbarVisibility = Visibility.Collapsed;
-        public Visibility EditTemplateToolbarVisibility {
-            get {
-                return _editTemplateToolbarVisibility;
-            }
-            set {
-                if (_editTemplateToolbarVisibility != value) {
-                    _editTemplateToolbarVisibility = value;
-                    OnPropertyChanged(nameof(EditTemplateToolbarVisibility));
-                }
-            }
-        }
-
-        private Visibility _pasteTemplateToolbarVisibility = Visibility.Collapsed;
-        public Visibility PasteTemplateToolbarVisibility {
-            get {
-                return _pasteTemplateToolbarVisibility;
-            }
-            set {
-                if (_pasteTemplateToolbarVisibility != value) {
-                    _pasteTemplateToolbarVisibility = value;
-                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
-                }
             }
         }
 
@@ -1782,8 +1721,8 @@
         public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
             var ctvm = cm.DataContext as MpClipTileViewModel;
-            //if (ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
-            //    ctvm = (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel;
+            //if (ctvm is MpRtbViewModel) {
+            //    ctvm = (ctvm as MpRtbViewModel).HostClipTileViewModel;
             //}
             ctvm.IsContextMenuOpened = false;
 
@@ -1938,7 +1877,7 @@
             //        var ortbvm = octvm.ContentContainerViewModel.ItemViewModels[0];
             //        octvm.ContentContainerViewModel.ItemViewModels.Remove(ortbvm, true);
             //        ContentContainerViewModel.Add(ortbvm,forceIdx, true);
-            //    } else if(ovm is MpRtbItemViewModel ortbvm) {
+            //    } else if(ovm is MpContentListItemViewModel ortbvm) {
             //        if (ortbvm.HostClipTileViewModel == this && forceIdx >= 0) {
             //            //occurs when rtbvmc items are resorted
             //            forceIdx = Math.Min(ContentContainerViewModel.Count - 1, forceIdx);

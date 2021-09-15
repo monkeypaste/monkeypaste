@@ -16,13 +16,13 @@ using Xamarin.Forms;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpRtbItemCollectionVIew.xaml
+    /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
-    public partial class MpRtbItemCollectionView : UserControl {
+    public partial class MpContentListVIew : UserControl {
         AdornerLayer RtbLbAdornerLayer;
         public MpRtbListBoxAdorner RtbLbAdorner;
 
-        public MpRtbItemCollectionView() {
+        public MpContentListVIew() {
             InitializeComponent();
             MpTemplateHyperlinkViewModel.OnTemplateSelected += MpTemplateHyperlinkViewModel_OnTemplateSelected;
         }
@@ -32,7 +32,7 @@ namespace MpWpfApp {
             for (int i = 0; i < ClipTileRichTextBoxListBox.Items.Count; i++) {
                ClipTileRichTextBoxListBox
                     .GetListBoxItem(i)
-                    .GetVisualDescendent<MpRtbItemView>()
+                    .GetVisualDescendent<MpContentListItemView>()
                     .UpdateAdorner();
 
             }

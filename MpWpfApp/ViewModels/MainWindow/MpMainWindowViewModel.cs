@@ -304,16 +304,16 @@ namespace MpWpfApp {
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
             double ctvmDelta = ctvmToExpand.ContentContainerViewModel.TotalExpandedSize.Height - ctvmToExpand.ContentContainerViewModel.ContainerSize.Height;
             if(ctvmToExpand.IsPastingTemplate) {
-                ctvmDelta += ctvmToExpand.PasteTemplateToolbarHeight;
+                ctvmDelta += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
             } else if(ctvmToExpand.IsEditingTile) {
-                ctvmDelta += ctvmToExpand.EditRichTextBoxToolbarHeight;
+                ctvmDelta += MpMeasurements.Instance.ClipTileEditToolbarHeight;
             }
             _deltaHeight = Math.Min(maxDelta,ctvmDelta);//MpMeasurements.Instance.MainWindowMinHeight);
             Resize(_deltaHeight);
             ClipTrayViewModel.Resize(ctvmToExpand,
                                     ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
                                     _deltaHeight,
-                                    ctvmToExpand.IsPastingTemplate ? 0:ctvmToExpand.EditRichTextBoxToolbarHeight);
+                                    ctvmToExpand.IsPastingTemplate ? 0: MpMeasurements.Instance.ClipTileEditToolbarHeight);
         }
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
@@ -321,7 +321,7 @@ namespace MpWpfApp {
             ClipTrayViewModel.Resize(ctvmToShrink,
                 -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
                 -_deltaHeight,
-                ctvmToShrink.IsPastingTemplate ? 0:-ctvmToShrink.EditRichTextBoxToolbarHeight);
+                ctvmToShrink.IsPastingTemplate ? 0:-MpMeasurements.Instance.ClipTileEditToolbarHeight);
 
             ClipTrayViewModel.RestoreVisibleTiles();
 

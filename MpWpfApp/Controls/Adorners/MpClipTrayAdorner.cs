@@ -14,7 +14,7 @@ namespace MpWpfApp {
     public class MpClipTrayAdorner : MpLineAdorner {
 
         #region Public Methods
-        public MpClipTrayAdorner(ListBox lb) : base(lb) { }
+        public MpClipTrayAdorner(FrameworkElement fe) : base(fe) { }
         #endregion
 
         #region Overrides

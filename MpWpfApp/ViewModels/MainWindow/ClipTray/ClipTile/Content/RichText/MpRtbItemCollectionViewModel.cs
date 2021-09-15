@@ -235,33 +235,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
-        public ScrollBarVisibility HorizontalScrollbarVisibility {
-            get {
-                if(HostClipTileViewModel == null) {
-                    return ScrollBarVisibility.Hidden;
-                }
-                if(HostClipTileViewModel.IsExpanded) {
-                    if (RelativeWidthMax > HostClipTileViewModel.TileContentWidth) {
-                        return ScrollBarVisibility.Visible;
-                    } 
-                }
-                return ScrollBarVisibility.Hidden;
-            }
-        }
+        
 
-        public ScrollBarVisibility VerticalScrollbarVisibility {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return ScrollBarVisibility.Hidden;
-                }
-                if (HostClipTileViewModel.IsExpanded) {
-                    if (TotalItemHeight > RtbListBoxHeight) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                } 
-                return ScrollBarVisibility.Hidden;
-            }
-        }
+        
+
+        
         #endregion
 
         #region Business Logic
@@ -321,7 +299,7 @@ namespace MpWpfApp {
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(ctvm);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(ctvm);
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(ctvm);
-            //this.Add(new MpRtbItemViewModel(HostClipTileViewModel, ci));
+            //this.Add(new MpContentListItemViewModel(HostClipTileViewModel, ci));
         }
 
         public void RequestScrollIntoView(object obj) {
@@ -364,13 +342,13 @@ namespace MpWpfApp {
             var hci = HostClipTileViewModel.CopyItem;
             var rtbvm = RtbItemViewModels.Where(x => x.CopyItemId == hci.Id).FirstOrDefault();
             if (rtbvm == null) {
-              //  this.Add(new MpRtbItemViewModel(HostClipTileViewModel, hci));
+              //  this.Add(new MpContentListItemViewModel(HostClipTileViewModel, hci));
             }
             //below was supposed to be for composite types but pulled out to compile
             foreach (var cci in MpCopyItem.GetCompositeChildren(hci)) {
                 rtbvm = RtbItemViewModels.Where(x => x.CopyItemId == cci.Id).FirstOrDefault();
                 if (rtbvm == null) {
-                   // this.Add(new MpRtbItemViewModel(HostClipTileViewModel, cci));
+                   // this.Add(new MpContentListItemViewModel(HostClipTileViewModel, cci));
                 }
             }
             UpdateSortOrder(true);

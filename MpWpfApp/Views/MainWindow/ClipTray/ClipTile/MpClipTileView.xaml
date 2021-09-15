@@ -269,74 +269,23 @@
         <Grid x:Name="ClipTileBorderGrid"
               Background="#FF3D3D3D"
               Visibility="{Binding ContainerVisibility}">
-            <Grid Background="White"
+            <DockPanel Background="White"
                   Visibility="{Binding ContentVisibility}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="{Binding TileTitleHeight}" />
-                    <RowDefinition Height="{Binding TileContentHeight}" />
-                    <RowDefinition Height="{Binding TileDetailHeight}" />
-                </Grid.RowDefinitions>
                 <!-- Tile Title Canvas -->
-                <local:MpClipTileTitleView x:Name="TileTitleView" 
-                                           Grid.Row="0"
+                <local:MpClipTileTitleView x:Name="TileTitleView"
+                                           DockPanel.Dock="Top"
+                                           Height="{Binding TileTitleHeight}"
                                            DataContext="{Binding}" />
-                <!-- Content Container Canvas -->
-                <Canvas x:Name="ClipTileContentCanvas"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Width="{Binding TileContentWidth}"
-                        Height="{Binding TileContentHeight}"
-                        ToolTipService.InitialShowDelay="1000">
-                    <ContentControl Content="{Binding}"
-                                    DataContext="{Binding ContentContainerViewModel, Converter={StaticResource ContainerToRtbCollectionConverter}}"
-                                    ContentTemplateSelector="{StaticResource ContentTemplateSelector}">
-                        <ContentControl.Resources>
-                            <DataTemplate x:Key="RichTextTemplate">
-                                <local:MpRtbItemCollectionView />
-                            </DataTemplate>
-                            <DataTemplate x:Key="ImageTemplate">
-                                <local:MpImageItemView />
-                            </DataTemplate>
-                            <DataTemplate x:Key="FileListTemplate">
-                                <local:MpFileListCollectionView />
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>
-                </Canvas>
-                <!-- Selection Overlay Grid -->
-                <Grid x:Name="ClipTileSelectionOverlayGrid"
-                      Grid.Row="1"
-                      Grid.Column="0"
-                      Background="Magenta"
-                      Width="{Binding TileContentWidth}"
-                      Visibility="{Binding SelectionOverlayGridVisibility}"
-                      Opacity="0">
-                    <Grid.ToolTip>
-                        <ToolTip Visibility="{Binding ToolTipVisibility}"
-                                 Opacity="1"
-                                 Placement="Top">
-                            <ToolTip.Template>
-                                <ControlTemplate>
-                                    <local:MpClipBorder Background="White"
-                                                        BorderThickness="1"
-                                                        BorderBrush="Black"
-                                                        Padding="5">
-                                        <Image x:Name="ItemTooltipImage"
-                                               Stretch="Fill"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Source="{Binding Path=DataContext.CopyItemBmp,RelativeSource={RelativeSource TemplatedParent}}" />
-                                    </local:MpClipBorder>
-                                </ControlTemplate>
-                            </ToolTip.Template>
-                        </ToolTip>
-                    </Grid.ToolTip>
-                </Grid>
                 <!-- Tile Detail Grid -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
-                                            Grid.Row="2"
+                                            DockPanel.Dock="Bottom"
+                                            Height="{Binding TileDetailHeight}"
                                             DataContext="{Binding}" />
-            </Grid>
+                <!-- Content Container Canvas -->
+                <local:MpContentListVIew Width="{Binding TileContentWidth}"
+                                               DataContext="{Binding ContentContainerViewModel}" />               
+                
+            </DockPanel>
             <!-- Overlays -->            
             <!-- Trial Expired -->
             <local:MpClipTileTrialExpiredOverlay DataContext="{Binding}" />

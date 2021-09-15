@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpRtbItemVIew.xaml
+    /// Interaction logic for MpContentListItemView.xaml
     /// </summary>
-    public partial class MpRtbItemView : UserControl {
+    public partial class MpContentListItemView : UserControl {
         private int _minDragDist = 10;
 
         AdornerLayer RtbItemAdornerLayer;
         MpRtbListBoxItemAdorner RtbItemAdorner;
 
-        public MpRtbItemView() {
+        public MpContentListItemView() {
             InitializeComponent();
             
         }
@@ -34,12 +34,12 @@ namespace MpWpfApp {
 
         #region Canvas Events
         private void RtbListBoxItemCanvas_Loaded(object sender, RoutedEventArgs e) {
-            RtbItemAdorner = new MpRtbListBoxItemAdorner(RtbListBoxItemCanvas);
-            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbListBoxItemCanvas);
+            RtbItemAdorner = new MpRtbListBoxItemAdorner(RtbView);
+            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbView);
             RtbItemAdornerLayer?.Add(RtbItemAdorner);
         }
 
-        private void RtbListBoxItemRichTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             var rtblb = this.FindParentOfType<MpMultiSelectListBox>();
             rtblb?.UpdateLayout();
         }
@@ -55,23 +55,8 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Rtb Events
-        private void RtbListBoxItemRichTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if(rtbvm.HostClipTileViewModel.WasAddedAtRuntime) {
-                //force new items to have left alignment
-                RtbListBoxItemRichTextBox.CaretPosition = RtbListBoxItemRichTextBox.Document.ContentStart;
-                RtbListBoxItemRichTextBox.Document.TextAlignment = TextAlignment.Left;
-                RtbListBoxItemRichTextBox.UpdateLayout();
-            }
-        }
-
-        private void RtbListBoxItemRichTextBox_SelectionChanged(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if(rtbvm.IsEditingContent) {
-                //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.Rtb_SelectionChanged(rtbvm.Rtb, e3);
-            }
-        }
+        #region List Item Events
+        
 
         private void DragButton_PreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
@@ -165,11 +150,11 @@ namespace MpWpfApp {
         private void RtbTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             if (rtbvm.RtbListBoxItemTitleTextBoxVisibility == Visibility.Collapsed) {
-                rtbvm.CopyItemTitle = RtbTitleTextBox.Text;
+                //rtbvm.CopyItemTitle = RtbTitleTextBox.Text;
                 return;
             }
-            RtbTitleTextBox.Focus();
-            RtbTitleTextBox.SelectAll();
+            //RtbTitleTextBox.Focus();
+            //RtbTitleTextBox.SelectAll();
         }
 
         private void RtbTitleTextBox_LostFocus(object sender, RoutedEventArgs e) {

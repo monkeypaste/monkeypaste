@@ -61,6 +61,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout Properties      
+        public double EditRichTextBoxToolbarHeight {
+            get {
+                return MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            }
+        }
+
         private double _editBorderCanvasTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
         public double EditBorderCanvasTop {
             get {
@@ -89,7 +95,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility Properties
-
+        private Visibility _editToolbarVisibility = Visibility.Collapsed;
+        public Visibility EditToolbarVisibility {
+            get {
+                return _editToolbarVisibility;
+            }
+            set {
+                if (_editToolbarVisibility != value) {
+                    _editToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                }
+            }
+        }
         #endregion
 
         #region Brush Properties
@@ -208,9 +225,9 @@ namespace MpWpfApp {
 
         public void Resize(double deltaEditToolbarTop, double deltaWidth) {
             if(deltaEditToolbarTop > 0) {
-                HostClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                EditToolbarVisibility = Visibility.Visible;
             } else {
-                HostClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
+                EditToolbarVisibility = Visibility.Collapsed;
             }
             //EditBorderCanvasTop += deltaEditToolbarTop;
             //Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);

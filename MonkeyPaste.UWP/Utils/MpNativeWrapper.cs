@@ -1,21 +1,16 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using MonkeyPaste;
+using Xamarin.Forms.Platform.UWP;
+using Xamarin.Forms.PlatformConfiguration;
 
-namespace MonkeyPaste.Droid {
-    public class MpAndroidInterfaceWrapper : MpINativeInterfaceWrapper {
-
+namespace MonkeyPaste.UWP {
+    public class MpNativeWrapper : MpINativeInterfaceWrapper {
         public MpKeyboardInteractionService KeyboardService { private get; set; }
         public MpGlobalTouch TouchService { private get; set; }
         public MpUiLocationFetcher UiLocationFetcher { private get; set; }
-        public MpDbFilePath_Android DbInfo { private get; set; }
+        public MpDbFilePath_Uwp DbInfo { private get; set; }
 
         public MpIDbInfo GetDbInfo() {
             return DbInfo;
@@ -26,7 +21,7 @@ namespace MonkeyPaste.Droid {
         }
 
         public MpIIconBuilder GetIconBuilder() {
-            throw new NotImplementedException();
+            return null;
         }
 
         public MpIKeyboardInteractionService GetKeyboardInteractionService() {
@@ -35,10 +30,6 @@ namespace MonkeyPaste.Droid {
 
         public MpIUiLocationFetcher GetLocationFetcher() {
             return UiLocationFetcher;
-        }
-
-        public MpIPhotoGalleryManager GetPhotoGalleryManager() {
-            throw new NotImplementedException();
         }
     }
 }

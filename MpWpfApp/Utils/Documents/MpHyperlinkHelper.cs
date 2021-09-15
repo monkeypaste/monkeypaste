@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MpWpfApp.Utils {
-    class MpMouseKeyHook {
+namespace MpWpfApp {
+    public static class MpHyperlinkHelper {
+       // public static 
     }
 }

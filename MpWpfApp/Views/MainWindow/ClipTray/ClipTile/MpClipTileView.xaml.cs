@@ -38,7 +38,7 @@ namespace MpWpfApp {
         private void ClipTileClipBorder_MouseMove(object sender, MouseEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel; 
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
-            var rtbcv = this.GetVisualDescendent<MpRtbItemCollectionView>();
+            var rtbcv = this.GetVisualDescendent<MpContentListVIew>();
             if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedClipTiles.Count <= 1) {
                 return;
             }
@@ -51,7 +51,7 @@ namespace MpWpfApp {
                 var itemRect = rtblb.GetListBoxItemRect(lbiIdx);
                 rtbvm.IsSubHovering = itemRect.Contains(mp);
                 if (rtbvm.IsSubHovering) {
-                    var rtbv = lbi.GetVisualDescendent<MpRtbItemView>();
+                    var rtbv = lbi.GetVisualDescendent<MpContentListItemView>();
                     var irmp = e.GetPosition(rtbv.DragButton);
                     var dragButtonRect = new Rect(0, 0, rtbv.DragButton.ActualWidth, rtbv.DragButton.ActualHeight);
                     if (dragButtonRect.Contains(irmp)) {
@@ -175,7 +175,7 @@ namespace MpWpfApp {
         }
         private void ClipTileClipBorder_DragLeave(object sender, DragEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
-            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
+            var rtblbv = this.GetVisualDescendent<MpContentListVIew>();
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
             //ctvm.DragDataObject = null;
             ctvm.IsClipDropping = false;
@@ -201,7 +201,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
             var ctrv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
-            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
+            var rtblbv = this.GetVisualDescendent<MpContentListVIew>();
             MpClipTrayViewModel.Instance.IsTrayDropping = false;
             ctrv.ClipTrayAdornerLayer.Update();
 
@@ -248,7 +248,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
             var ctv = (Application.Current.MainWindow as MpMainWindow).ClipTrayView;
             var rtblb = this.GetDescendantOfType<MpMultiSelectListBox>();
-            var rtblbv = this.GetVisualDescendent<MpRtbItemCollectionView>();
+            var rtblbv = this.GetVisualDescendent<MpContentListVIew>();
 
             bool wasDropped = false;
             var dctvml = new List<MpClipTileViewModel>();

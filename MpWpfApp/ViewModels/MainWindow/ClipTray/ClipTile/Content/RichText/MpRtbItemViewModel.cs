@@ -49,7 +49,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls 
-        public RichTextBox Rtb { get; set; }
+        //public RichTextBox Rtb { get; set; }
 
         public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
 
@@ -1381,11 +1381,13 @@ namespace MpWpfApp {
 
                 rtbvm.RtbSelectionRange = new TextRange(rtbvm.Rtb.Document.ContentEnd, rtbvm.Rtb.Document.ContentEnd);
             };
+
+            OnPropertyChanged(nameof(CopyItem));
         }
 
         public void RtbItem_Loaded(object sender, RoutedEventArgs e) {
             Rtbc = (Canvas)sender;
-            Rtb = (RichTextBox)Rtbc.FindName("RtbListBoxItemRichTextBox");
+            Rtb = (RichTextBox)Rtbc.FindName("Rtb");
             RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
             RtbListBoxItemOverlayDockPanel = (DockPanel)Rtbc.FindName("RtbListItemOverlayBorderDockPanel");
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbTitleTextBlock");
