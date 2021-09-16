@@ -76,7 +76,18 @@
             }
         }
 
-        public MpContentContainerViewModel ContentContainerViewModel { get; set; } = new MpContentContainerViewModel();
+        private MpContentContainerViewModel _contentContainerViewModel;
+        public MpContentContainerViewModel ContentContainerViewModel { 
+            get {
+                return _contentContainerViewModel;
+            }
+            private set {
+                if(_contentContainerViewModel != value) {
+                    _contentContainerViewModel = value;
+                    OnPropertyChanged(nameof(ContentContainerViewModel));
+                }
+            }
+        }
 
 
         private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
@@ -1459,6 +1470,7 @@
         #endregion
 
         #region Events
+        public event EventHandler OnTileSelected;
         public event EventHandler OnTileExpand;
         public event EventHandler OnTileUnexpand;
         #endregion
@@ -1508,8 +1520,11 @@
                                 ctvm.IsSelected = false;
                                 break;
                             }
+                            //if(ctvm.ContentContainerViewModel.SubSelectedContentItems.Count == 0) {
+                            //    ctvm.ContentContainerViewModel.ItemViewModels[0].IsSubSelected = true;
+                            //}
                             ctvm.LastSelectedDateTime = DateTime.Now;
-
+                            OnTileSelected?.Invoke(this, null);                 
                         } else {
                             ctvm.ContentContainerViewModel.ClearSubSelection();
                             ctvm.LastSelectedDateTime = DateTime.MaxValue;
@@ -1602,6 +1617,11 @@
         }
 
         public MpClipTileViewModel(MpCopyItem ci) : this(false) {
+            InitContent(ci);
+        }
+
+        #region Loading Initializers
+        public void InitContent(MpCopyItem ci) {
             if (ci == null) {
                 //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
                 //CopyItem = null;
@@ -1614,9 +1634,9 @@
                 _wasAddedAtRuntime = true;
             }
 
-            ContentContainerViewModel = new MpContentContainerViewModel(this,ci);
+            ContentContainerViewModel = MpContentContainerViewModel.Create(this, ci);
 
-            //CopyItem = ci;
+            ContentContainerViewModel.OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
 
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(ContentContainerViewModel.HeadItem);
@@ -1624,7 +1644,8 @@
             OnPropertyChanged(nameof(CopyItem));
         }
 
-        #region Loading Initializers
+        
+
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             ClipBorder = (MpClipBorder)sender;
             ClipBorderTranslateTransform = (TranslateTransform)ClipBorder.FindName("ClipTileBorderTranslateTransform");
@@ -2063,7 +2084,7 @@
                 if (ContentContainerViewModel.SubSelectedContentItems.Count == 0) {
                     ContentContainerViewModel.SubSelectAll();
                 }
-                bool isPastingTemplate = ContentContainerViewModel.SubSelectedContentItems.Any(x => (x as MpRtbItemViewModel).HasTemplate);
+                bool isPastingTemplate = ContentContainerViewModel.SubSelectedContentItems.Any(x => (x as MpRtbItemViewModel).IsDynamicPaste);
                 if (isPastingTemplate) {
                     IsPastingTemplate = true;
                     TemplateRichText = string.Empty.ToRichText();
@@ -2090,7 +2111,7 @@
                 sw.Start();
                 string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in ContentContainerViewModel.SubSelectedContentItems) {
-                    if ((rtbvm as MpRtbItemViewModel).HasTemplate) {
+                    if ((rtbvm as MpRtbItemViewModel).IsDynamicPaste) {
                         //rtbvm.IsSubSelected = true;
                         (ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.SubSelectedRtbViewModel = rtbvm as MpRtbItemViewModel;
                         (ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
@@ -2160,7 +2181,11 @@
         #endregion
 
         #region Private Methods           
-
+        private void ContentContainerViewModel_OnSubSelectionChanged(object sender, object e) {
+            if(e != null && !IsSelected) {
+                IsSelected = true;
+            }
+        }
         #endregion
 
         #region Commands

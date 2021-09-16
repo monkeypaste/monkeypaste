@@ -68,7 +68,18 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpRtbItemViewModel> RtbItemViewModels { get; private set; } = new ObservableCollection<MpRtbItemViewModel>();
+        private ObservableCollection<MpRtbItemViewModel> _rtbItemViewModels = new ObservableCollection<MpRtbItemViewModel>();
+        public ObservableCollection<MpRtbItemViewModel> RtbItemViewModels { 
+            get {
+                return _rtbItemViewModels;
+            }
+            private set {
+                if(_rtbItemViewModels != value) {
+                    _rtbItemViewModels = value;
+                    OnPropertyChanged(nameof(RtbItemViewModels));
+                }
+            }
+        } 
 
         public MpEventEnabledFlowDocument FullDocument {
             get {
@@ -83,7 +94,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
 
         #region Controls
         private Canvas _rtbListBoxCanvas;
@@ -246,7 +256,7 @@ namespace MpWpfApp {
         public bool HasTemplate {
             get {
                 foreach (var rtbvm in RtbItemViewModels) {
-                    if (rtbvm.HasTemplate) {
+                    if (rtbvm.IsDynamicPaste) {
                         return true;
                     }
                 }
@@ -277,10 +287,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Events
-        public event EventHandler<object> OnScrollIntoViewRequest;
-        public event EventHandler OnScrollToHomeRequest;
-        #endregion
 
         #region Public Methods
         public MpRtbItemCollectionViewModel() : base() { }
@@ -296,19 +302,12 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(ctvm);
-            EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(ctvm);
-            PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(ctvm);
+            EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
+            EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
+            PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
             //this.Add(new MpContentListItemViewModel(HostClipTileViewModel, ci));
         }
 
-        public void RequestScrollIntoView(object obj) {
-            OnScrollIntoViewRequest?.Invoke(this, obj);
-        }
-
-        public void RequestScrollToHome() {
-            OnScrollToHomeRequest?.Invoke(this, null);
-        }
 
         public void Refresh() {
             var sw = new Stopwatch();

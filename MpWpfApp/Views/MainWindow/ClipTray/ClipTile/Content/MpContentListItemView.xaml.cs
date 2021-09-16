@@ -23,50 +23,61 @@ namespace MpWpfApp {
         AdornerLayer RtbItemAdornerLayer;
         MpRtbListBoxItemAdorner RtbItemAdorner;
 
-        public MpContentListItemView() {
-            InitializeComponent();
-            
+        public MpContentListItemView() : base() {
+            InitializeComponent();            
+        }
+
+
+        private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
+            RtbItemAdorner = new MpRtbListBoxItemAdorner(RtbView);
+            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbView);
+            RtbItemAdornerLayer?.Add(RtbItemAdorner);
+        }
+
+        private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(DataContext != null && DataContext is MpContentItemViewModel civm) {
+                civm.OnScrollWheelRequest += Civm_OnScrollWheelRequest;
+                civm.OnUiUpdateRequest += Civm_OnUiUpdateRequest;
+            }
         }
 
         public void UpdateAdorner() {
             RtbItemAdornerLayer.Update();
         }
 
-        #region Canvas Events
-        private void RtbListBoxItemCanvas_Loaded(object sender, RoutedEventArgs e) {
-            RtbItemAdorner = new MpRtbListBoxItemAdorner(RtbView);
-            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbView);
-            RtbItemAdornerLayer?.Add(RtbItemAdorner);
+        #region Event Handlers
+
+        #region View Model Ui Requests
+
+        private void Civm_OnUiUpdateRequest(object sender, EventArgs e) {
+            this.UpdateLayout();
         }
 
-        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            var rtblb = this.FindParentOfType<MpMultiSelectListBox>();
-            rtblb?.UpdateLayout();
+        private void Civm_OnScrollWheelRequest(object sender, int e) {
+            throw new NotImplementedException();
         }
 
-        private void RtbListBoxItemCanvas_MouseEnter(object sender, MouseEventArgs e) {
+        #endregion
+
+        #region Drag & Drop
+
+        private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             rtbvm.IsSubHovering = true;
         }
 
-        private void RtbListBoxItemCanvas_MouseLeave(object sender, MouseEventArgs e) {
+        private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             rtbvm.IsSubHovering = false;
         }
-        #endregion
-
-        #region List Item Events
         
-
         private void DragButton_PreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
                 Application.Current.MainWindow.Cursor = Cursors.Cross;
                 Application.Current.MainWindow.ForceCursor = true;
             }
         }
-        #endregion
 
-        #region DragButton Events
         private void DragButton_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             Application.Current.MainWindow.ForceCursor = false;
@@ -201,6 +212,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Context Menu Events
+
         private void RtbItem_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             var rtblb = this.FindParentOfType<MpMultiSelectListBox>();
@@ -273,5 +286,9 @@ namespace MpWpfApp {
             rtbvm.IsSubContextMenuOpened = false;
             rtbvm.ContainerViewModel.ClearSubSelection();
         }
+
+        #endregion
+
+        #endregion
     }
 }

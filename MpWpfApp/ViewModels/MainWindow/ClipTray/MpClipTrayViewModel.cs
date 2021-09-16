@@ -442,13 +442,14 @@ namespace MpWpfApp {
 
             MpHelpers.Instance.RunOnMainThread(() => {
                 ClipTileViewModels = new MpObservableCollectionViewModel<MpClipTileViewModel>(
-                                    cil.Where(x => x.CompositeParentCopyItemId <= 0).Select(x => new MpClipTileViewModel(x)).ToList());
+                                    cil.Where(x => x.CompositeParentCopyItemId <= 0).Select(x => CreateClipTileViewModel(x)).ToList());
 
                 if(!MpMainWindowViewModel.IsMainWindowLoading) {
                     ResetClipSelection();
                 }
             });
         }
+
         public void IsolateClipTile(MpClipTileViewModel tileToIsolate) {
             if (!VisibileClipTiles.Contains(tileToIsolate)) {
                 MonkeyPaste.MpConsole.WriteLine("Warning tile to isolate was hidden and is now being shown");
@@ -742,7 +743,6 @@ namespace MpWpfApp {
             workThread.Start(); 
         }
 
-
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
@@ -751,8 +751,44 @@ namespace MpWpfApp {
             MonkeyPaste.MpConsole.WriteLine("ClipTray Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
+
+        public void Select(List<int> visibleTileIdxList) {
+            int vcount = VisibileClipTiles.Count;
+            ClearClipSelection();
+            for(int i = 0;i < visibleTileIdxList.Count;i++) {
+                int idx = visibleTileIdxList[i];
+                if(idx < 0 || idx >= vcount) {
+                    throw new Exception($"Cannot select idx: {idx} with Visible List of size {vcount}");
+                }
+                VisibileClipTiles[idx].IsSelected = true;
+            }
+        }
+
+        public void Unselect(List<int> visibleTileIdxList) {
+            int vcount = VisibileClipTiles.Count;
+            for (int i = 0; i < visibleTileIdxList.Count; i++) {
+                int idx = visibleTileIdxList[i];
+                if (idx < 0 || idx >= vcount) {
+                    throw new Exception($"Cannot select idx: {idx} with Visible List of size {vcount}");
+                }
+                VisibileClipTiles[idx].IsSelected = false;
+            }
+        }
+
         public MpClipTileViewModel CreateClipTileViewModel(MpCopyItem ci) {
-            return new MpClipTileViewModel(ci);
+            var nctvm = new MpClipTileViewModel(ci);
+            nctvm.OnTileSelected += Nctvm_OnTileSelected;
+            return nctvm;
+        }
+
+        private void Nctvm_OnTileSelected(object sender, EventArgs e) {
+            if(!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                foreach(var ctvm in ClipTileViewModels) {
+                    if(ctvm != sender) {
+                        ctvm.IsSelected = false;
+                    }
+                }
+            }
         }
 
         public void Add(MpClipTileViewModel ctvm, int forceIdx = 0) {
@@ -1372,7 +1408,7 @@ namespace MpWpfApp {
         private bool CanCopySelectedClips(object args) {
             foreach (var sctvm in SelectedClipTiles) {
                 foreach (var srtbvm in sctvm.ContentContainerViewModel.SubSelectedContentItems) {
-                    if (srtbvm.HasTemplate) {
+                    if (srtbvm.IsDynamicPaste) {
                         return false;
                     }
                 }

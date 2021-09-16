@@ -15,14 +15,92 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpContentContainerViewModel : MpUndoableViewModelBase<MpContentContainerViewModel> {
+    public abstract class MpContentContainerViewModel : MpUndoableViewModelBase<MpContentContainerViewModel> {
         #region Private Variables
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
-        #endregion 
+        #endregion
 
         #region Properties
+
+        #region View Models 
+        private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
+        public ObservableCollection<MpContentItemViewModel> ItemViewModels {
+            get {
+                return _itemViewModels;
+            }
+            private set {
+                if (_itemViewModels != value) {
+                    _itemViewModels = value;
+                    OnPropertyChanged(nameof(ItemViewModels));
+                }
+            }
+        }
+
+        private MpClipTileViewModel _hostClipTileViewModel;
+        public MpClipTileViewModel HostClipTileViewModel { 
+            get {
+                return _hostClipTileViewModel;
+            }
+            private set {
+                if(_hostClipTileViewModel != value) {
+                    _hostClipTileViewModel = value;
+                    OnPropertyChanged(nameof(HostClipTileViewModel));
+                }
+            }
+        }
+
+        public MpContentItemViewModel HeadItem {
+            get {
+                if (ItemViewModels == null || ItemViewModels.Count == 0) {
+                    return null;
+                }
+                return ItemViewModels.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+            }
+        }
+        public MpContentItemViewModel TailItem {
+            get {
+                if (ItemViewModels == null || ItemViewModels.Count == 0) {
+                    return null;
+                }
+                return ItemViewModels.OrderByDescending(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+            }
+        }
+
+        public MpContentItemViewModel PrimarySubSelectedClipItem {
+            get {
+                if (SubSelectedContentItems == null || SubSelectedContentItems.Count < 1) {
+                    return null;
+                }
+                return SubSelectedContentItems[0];
+            }
+        }
+
+        public List<MpContentItemViewModel> SubSelectedContentItems {
+            get {
+                return ItemViewModels.Where(x => x.IsSubSelected == true).OrderBy(x => x.LastSubSelectedDateTime).ToList();
+            }
+        }
+
+        public List<MpContentItemViewModel> VisibleContentItems {
+            get {
+                return ItemViewModels.Where(x => x.ItemVisibility == Visibility.Visible).ToList();
+            }
+        }
+
+        public List<string> FileList {
+            get {
+                var fl = new List<string>();
+                var ivml = SubSelectedContentItems.Count == 0 ? ItemViewModels.ToList() : SubSelectedContentItems;
+                foreach (var ivm in ivml) {
+                    fl.AddRange(ivm.GetFileList());
+                }
+                return fl;
+            }
+        }
+
+        #endregion
 
         #region Visibility
         public ScrollBarVisibility HorizontalScrollbarVisibility {
@@ -115,6 +193,31 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsAnyContentDragging {
+            get {
+                return ItemViewModels.Any(x => x.IsSubDragging);
+            }
+        }
+
+        public bool IsAnyContentDropping {
+            get {
+                return ItemViewModels.Any(x => x.IsSubDropping);
+            }
+        }
+
+        public bool IsAnySubContextMenuOpened {
+            get {
+                return ItemViewModels.Any(x => x.IsSubContextMenuOpen);
+            }
+        }
+
+        public bool IsAnySubSelected {
+            get {
+                return ItemViewModels.Any(x => x.IsSubSelected);
+            }
+        }
+
         public bool IsDynamicPaste {
             get {
                 if (HeadItem == null ||
@@ -122,7 +225,7 @@ namespace MpWpfApp {
                     return false;
                 }
                 foreach (var ivm in ItemViewModels) {
-                    if (ivm is MpRtbItemViewModel && (ivm as MpRtbItemViewModel).HasTemplate) {
+                    if (ivm is MpRtbItemViewModel && (ivm as MpRtbItemViewModel).IsDynamicPaste) {
                         return true;
                     }
                 }
@@ -158,10 +261,70 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
+
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
         public event EventHandler<object> OnSubSelectionChanged;
+
+        #endregion
+
+
+        #region Public Methods
+
+        public static MpContentContainerViewModel Create(MpClipTileViewModel hctvm, MpCopyItem hci) {
+            MpContentContainerViewModel nccvm = null;
+
+            switch(hci.ItemType) {
+                case MpCopyItemType.RichText:
+                    nccvm = new MpRtbItemCollectionViewModel(hctvm, hci);
+                    break;
+            }
+
+            return nccvm;
+        }
+
+        public MpContentContainerViewModel() : base() { }
+
+        public MpContentContainerViewModel(MpClipTileViewModel rootTile) : this() {
+            PropertyChanged += MpContentContainerViewModel_PropertyChanged;
+            HostClipTileViewModel = rootTile;
+        }
+
+        public MpContentContainerViewModel(MpClipTileViewModel rootTile, MpCopyItem headItem) : this(rootTile) {
+            InitItems(headItem);
+            
+        }
+
+
+        public void InitItems(MpCopyItem headItem) {
+            ItemViewModels = new ObservableCollection<MpContentItemViewModel>() {
+                MpContentItemViewModel.Create(this, headItem)
+            };
+
+            foreach(var ivm in ItemViewModels) {
+                ivm.OnSubSelected += ItemViewModel_OnSubSelected;
+            }
+            RefreshSubItems();
+        }
+
+        private void ItemViewModel_OnSubSelected(object sender, EventArgs e) {
+            OnSubSelectionChanged?.Invoke(this, sender);
+        }
+
+        #region View Event Invokers
+        public void RequestScrollIntoView(object obj) {
+            OnScrollIntoViewRequest?.Invoke(this, obj);
+        }
+
+        public void RequestScrollToHome() {
+            OnScrollToHomeRequest?.Invoke(this, null);
+        }
+
+        public void RequestUiUpdate() {
+            OnUiUpdateRequest?.Invoke(this, null);
+        }
+
         #endregion
 
         public async Task UserPreparingDynamicPaste() {
@@ -171,46 +334,12 @@ namespace MpWpfApp {
             await Task.Delay(1);
             return "";
         }
-        public void RequestScrollIntoView(object obj) {
-            OnScrollIntoViewRequest?.Invoke(this, obj);
-        }
-
-        public void RequestScrollToHome() {
-            OnScrollToHomeRequest?.Invoke(this, null);
-        }
-        public void RequestUiUpdate() {
-            OnUiUpdateRequest?.Invoke(this, null);
-        }
-
-        public bool IsAnyContentDragging {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDragging);
-            }
-        }
-
-        public bool IsAnyContentDropping {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDropping);
-            }
-        }
 
         public void ClearAllSubDragDropState() {
             foreach (var ivm in ItemViewModels) {
                 ivm.ClearSubDragState();
             }
-        }
-
-        public bool IsAnySubContextMenuOpened {
-            get {
-                return ItemViewModels.Any(x => x.IsSubContextMenuOpen);
-            }
-        }
-
-        public bool IsAnySubSelected {
-            get {
-                return ItemViewModels.Any(x => x.IsSubSelected);
-            }
-        }
+        }        
 
         public void ResetSubSelection(List<MpContentItemViewModel> origSel = null) {
             ClearSubSelection();
@@ -252,73 +381,9 @@ namespace MpWpfApp {
             return ItemViewModels.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
         }
 
-        public MpContentItemViewModel HeadItem {
-            get {
-                if (ItemViewModels == null || ItemViewModels.Count == 0) {
-                    return null;
-                }
-                return ItemViewModels.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
-            }
-        }
-        public MpContentItemViewModel TailItem {
-            get {
-                if (ItemViewModels == null || ItemViewModels.Count == 0) {
-                    return null;
-                }
-                return ItemViewModels.OrderByDescending(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
-            }
-        }
-
-        public MpContentItemViewModel PrimarySubSelectedClipItem {
-            get {
-                if (SubSelectedContentItems == null || SubSelectedContentItems.Count < 1) {
-                    return null;
-                }
-                return SubSelectedContentItems[0];
-            }
-        }
-
-        public List<MpContentItemViewModel> SubSelectedContentItems {
-            get {
-                return ItemViewModels.Where(x => x.IsSubSelected == true).OrderBy(x => x.LastSubSelectedDateTime).ToList();
-            }
-        }
-
-        public List<MpContentItemViewModel> VisibleContentItems {
-            get {
-                return ItemViewModels.Where(x => x.ItemVisibility == Visibility.Visible).ToList();
-            }
-        }
-
-        public List<string> FileList {
-            get {
-                var fl = new List<string>();
-                var ivml = SubSelectedContentItems.Count == 0 ? ItemViewModels.ToList() : SubSelectedContentItems;
-                foreach (var ivm in ivml) {
-                    fl.AddRange(ivm.GetFileList());
-                }
-                return fl;
-            }
-        }
-
         public string GetDetailText(MpCopyItemDetailType detailType) {
             return (HeadItem as MpRtbItemViewModel).GetDetail(detailType);
         }
-
-        private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
-        public ObservableCollection<MpContentItemViewModel> ItemViewModels { 
-            get {
-                return _itemViewModels;
-            }
-            private set {
-                if(_itemViewModels != value) {
-                    _itemViewModels = value;
-                    OnPropertyChanged(nameof(ItemViewModels));
-                }
-            }
-        } 
-
-        public MpClipTileViewModel HostClipTileViewModel { get; private set; }
 
         public void InsertRange(int idx, List<MpCopyItem> models) {
             idx = idx < 0 ? 0 : idx >= ItemViewModels.Count ? ItemViewModels.Count : idx;
@@ -370,24 +435,19 @@ namespace MpWpfApp {
         public virtual void Resize(double deltaTop, double deltaWidth, double deltaHeight) {
             RequestUiUpdate();
         }
-
+        #endregion
         //public abstract string GetItemRtf();
         //public abstract string GetItemPlainText();
         //public abstract string GetItemQuillHtml();
         //public abstract string[] GetItemFileList();
 
-        public MpContentContainerViewModel() : base() { }
-
-        public MpContentContainerViewModel(MpClipTileViewModel rootTile) : this() {
-            HostClipTileViewModel = rootTile;
+        #region Private Methods
+        private void MpContentContainerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+               // case nameof(SubSele)
+            }
         }
-
-        public MpContentContainerViewModel(MpClipTileViewModel rootTile,MpCopyItem headItem) : this(rootTile) {
-            ItemViewModels = new ObservableCollection<MpContentItemViewModel>() { 
-                MpContentItemViewModel.Create(this, headItem) 
-            };
-            RefreshSubItems();
-        }
+        #endregion
 
         #region Commands
 

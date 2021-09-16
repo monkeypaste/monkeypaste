@@ -23,7 +23,7 @@
                  local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                  IsUndoEnabled="True"
                  SpellCheck.IsEnabled="{Binding RtbItemCollectionViewModel.EditRichTextBoxToolbarViewModel.UseSpellCheck}"
-                 VerticalAlignment="Top"
+                 VerticalAlignment="Stretch"
                  HorizontalAlignment="Stretch"                 
                  MinWidth="100"
                  MinHeight="100"

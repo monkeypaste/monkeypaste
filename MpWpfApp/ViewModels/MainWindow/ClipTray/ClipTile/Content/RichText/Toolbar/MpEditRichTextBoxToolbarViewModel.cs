@@ -18,47 +18,33 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpEditRichTextBoxToolbarViewModel : MpUndoableViewModelBase<MpEditRichTextBoxToolbarViewModel>, IDisposable {
+    public class MpEditRichTextBoxToolbarViewModel : MpContentToolbarViewModelBase, IDisposable {
         #region Private Variables
         #endregion        
 
         #region Properties
 
         #region View Models
-        private MpClipTileViewModel _hostClipTileViewModel = null;
-        public MpClipTileViewModel HostClipTileViewModel {
+
+        public MpRtbItemCollectionViewModel RtbItemCollectionViewModel {
             get {
-                return _hostClipTileViewModel;
-            }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
+                if(ContainerViewModel == null) {
+                    return null;
                 }
+                return ContainerViewModel as MpRtbItemCollectionViewModel;
             }
         }
 
         public MpRtbItemViewModel SubSelectedRtbViewModel {
             get {
-                if (HostClipTileViewModel == null) {
+               if(SubSelectedItemViewModel == null) {
                     return null;
                 }
-                if (HostClipTileViewModel.ContentContainerViewModel.Count == 0 ||
-                   HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Count != 1) {
-                    return null;
-                }
-                return HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems[0] as MpRtbItemViewModel;
+                return SubSelectedItemViewModel as MpRtbItemViewModel;
             }
         }
         #endregion
 
-        #region Controls
-        //public Border EditToolbarBorder { get; set; }
-
-        //public StackPanel BorderStackPanel { get; set; }
-        //public RichTextBox LastRtb { get; set; }
-        //public RichTextBox SelectedRtb { get; set; }
-        #endregion
 
         #region Layout Properties      
         public double EditRichTextBoxToolbarHeight {
@@ -206,10 +192,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpEditRichTextBoxToolbarViewModel() :base() { }
+        public MpEditRichTextBoxToolbarViewModel() : base() { }
 
-        public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) : base() {
-            HostClipTileViewModel = ctvm;
+        public MpEditRichTextBoxToolbarViewModel(MpRtbItemCollectionViewModel rtbicvm) : base(rtbicvm) {
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="700">    
     <Border x:Name="ClipTileEditTemplateToolbar"
-            Visibility="{Binding HostClipTileViewModel.EditTemplateToolbarVisibility}"
+            Visibility="{Binding EditTemplateToolbarVisibility}"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
             Height="40"
             HorizontalAlignment="Stretch"

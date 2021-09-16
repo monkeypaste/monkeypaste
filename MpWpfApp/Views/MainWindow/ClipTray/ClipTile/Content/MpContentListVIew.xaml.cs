@@ -18,23 +18,40 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
-    public partial class MpContentListVIew : UserControl {
+    public partial class MpContentListView : UserControl {
         AdornerLayer RtbLbAdornerLayer;
         public MpRtbListBoxAdorner RtbLbAdorner;
 
-        public MpContentListVIew() {
+        public MpContentListView() {
             InitializeComponent();
             MpTemplateHyperlinkViewModel.OnTemplateSelected += MpTemplateHyperlinkViewModel_OnTemplateSelected;
+        }
+
+        public MpContentListItemView GetSubSelectedItemView() {
+            if(ClipTileRichTextBoxListBox.Items.Count == 0) {
+                return null;
+            }
+            var ccvm = DataContext as MpContentContainerViewModel;
+            if (ClipTileRichTextBoxListBox.SelectedIndex < 0) {
+                ClipTileRichTextBoxListBox.SelectedItem = ClipTileRichTextBoxListBox.Items[0];
+            }
+            var sciLbi = ClipTileRichTextBoxListBox.GetListBoxItem(ClipTileRichTextBoxListBox.SelectedIndex);
+            if(sciLbi == null) {
+                throw new Exception("Cannot select content item");
+            }
+            return sciLbi.GetVisualDescendent<MpContentListItemView>();
         }
 
         public void UpdateAdorners() {
             RtbLbAdornerLayer.Update();
             for (int i = 0; i < ClipTileRichTextBoxListBox.Items.Count; i++) {
-               ClipTileRichTextBoxListBox
-                    .GetListBoxItem(i)
-                    .GetVisualDescendent<MpContentListItemView>()
-                    .UpdateAdorner();
-
+                var lbi = ClipTileRichTextBoxListBox.GetListBoxItem(i);
+                if(lbi == null) {
+                    MonkeyPaste.MpConsole.WriteTraceLine("No Listbox Item at idx: " + i);
+                    continue;
+                }
+                var cliv = lbi.GetVisualDescendent<MpContentListItemView>();
+                cliv?.UpdateAdorner();
             }
         }
         #region Rtb ListBox Events
@@ -42,6 +59,8 @@ namespace MpWpfApp {
             RtbLbAdorner = new MpRtbListBoxAdorner(ClipTileRichTextBoxListBox);
             RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTileRichTextBoxListBox);
             RtbLbAdornerLayer.Add(RtbLbAdorner);
+
+            UpdateUi();
         }
 
         private void ClipTileRichTextBoxListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
@@ -50,6 +69,11 @@ namespace MpWpfApp {
 
         private void ClipTileRichTextBoxListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
             // NOTE This is for selection changed from interface from VM is in another handler
+            var srtb = (sender as FrameworkElement).GetVisualDescendent<RichTextBox>();
+            if(srtb != null) {
+                EditToolbarView.SetCommandTarget(srtb);
+            }
+
             var rtblbvm = DataContext as MpRtbItemCollectionViewModel;
             if (rtblbvm.Count > 1) {
                 //order selected tiles by ascending datetime 
@@ -86,37 +110,55 @@ namespace MpWpfApp {
         }
 
         private void MpRtbEditToolbarView_OnTileUnexpand(object sender, EventArgs e) {
+            EditToolbarView.Visibility = Visibility.Collapsed;
+
             var rtbcvm = DataContext as MpRtbItemCollectionViewModel;
-            
+            rtbcvm.SaveAll();
             // TODO save models here
         }
 
         private void MpRtbEditToolbarView_OnTileExpand(object sender, EventArgs e) {
-            var srtb = ClipTileRichTextBoxListBox.GetListBoxItem(0).GetDescendantOfType<RichTextBox>();
-            EditToolbarView.SetCommandTarget(srtb);
-            EditTemplateView.SetActiveRtb(srtb);
+            //if(ClipTileRichTextBoxListBox.SelectedIndex < 0) {
+            //    ClipTileRichTextBoxListBox.SelectedIndex = 0;
+            //}
+            //
+
+            //var rtbcvm = DataContext as MpRtbItemCollectionViewModel;
+            //rtbcvm.ResetSubSelection();
+            //var lbi_srtb = GetSubSelectedItemView();//ClipTileRichTextBoxListBox.GetListBoxItem(ClipTileRichTextBoxListBox.SelectedIndex);
+            EditToolbarView.Visibility = Visibility.Visible;
+
+            var rtbl = this.GetVisualDescendents<RichTextBox>().ToList();
+            if(rtbl != null && rtbl.Count > 0) {
+                EditToolbarView.SetCommandTarget(rtbl[0]);
+                EditTemplateView.SetActiveRtb(rtbl[0]);
+            }
         }
         #endregion
 
-        #region ViewModel
+        #region ViewModel Events
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null) {
                 var rtbcvm = DataContext as MpContentContainerViewModel;
+                rtbcvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
                 rtbcvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 rtbcvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
                 rtbcvm.OnSubSelectionChanged += Rtbcvm_OnSubSelectionChanged;
                 rtbcvm.HostClipTileViewModel.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
                 rtbcvm.HostClipTileViewModel.OnTileUnexpand += MpRtbEditToolbarView_OnTileUnexpand;
-
                 //rtbcvm.SyncItemsWithModel();
             } 
+        }
+
+        private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
+            UpdateUi();
         }
 
         private void Rtbcvm_OnSubSelectionChanged(object sender, object e) {
             var rtbcvm = DataContext as MpContentContainerViewModel;
             var itemIdx = rtbcvm.ItemViewModels.IndexOf(e as MpContentItemViewModel);
-            if (itemIdx >= 0) {
+            if (itemIdx >= 0 && rtbcvm.HostClipTileViewModel.IsEditingTile) {
                 var ssrtb = ClipTileRichTextBoxListBox.GetListBoxItem(itemIdx).GetDescendantOfType<RichTextBox>();
                 EditToolbarView.SetCommandTarget(ssrtb);
                 EditTemplateView.SetActiveRtb(ssrtb);
@@ -132,6 +174,12 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+
+        public void UpdateUi() {
+            this.UpdateLayout();
+            ClipTileRichTextBoxListBox.Items.Refresh();
+        }
 
         public void SyncMultiSelectDragButton(bool isOver, bool isDown) {
             string transBrush = Brushes.Transparent.ToString();

@@ -32,14 +32,26 @@ namespace MpWpfApp {
         #region Properties       
 
         #region View Models        
-        private MpClipTileViewModel _hostClipTileViewModel = null;
+
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                return _hostClipTileViewModel;
+                if (RtbItemCollectionViewModel == null) {
+                    return null;
+                }
+
+                return RtbItemCollectionViewModel.HostClipTileViewModel;
             }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
+        }
+
+        private MpRtbItemCollectionViewModel _rtbItemCollectionViewModel;
+        public MpRtbItemCollectionViewModel RtbItemCollectionViewModel {
+            get {
+                return _rtbItemCollectionViewModel;
+            }
+            private set {
+                if (_rtbItemCollectionViewModel != value) {
+                    _rtbItemCollectionViewModel = value;
+                    OnPropertyChanged(nameof(RtbItemCollectionViewModel));
                     OnPropertyChanged(nameof(HostClipTileViewModel));
                 }
             }
@@ -182,8 +194,8 @@ namespace MpWpfApp {
         }
 
 
-        public MpEditTemplateToolbarViewModel(MpClipTileViewModel ctvm) : this() {
-            HostClipTileViewModel = ctvm;
+        public MpEditTemplateToolbarViewModel(MpRtbItemCollectionViewModel rtbicvm) : this() {
+            RtbItemCollectionViewModel = rtbicvm;
         }
 
         private void MpEditTemplateToolbarViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

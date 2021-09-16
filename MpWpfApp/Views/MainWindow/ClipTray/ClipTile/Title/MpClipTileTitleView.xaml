@@ -9,24 +9,19 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid Grid.Row="0"
-          Grid.Column="0"
-          VerticalAlignment="Top"
-          HorizontalAlignment="Left"
-          Width="{Binding TileBorderWidth}"
-          Height="{Binding TileTitleHeight}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
             <ColumnDefinition Width="0.25*" />
         </Grid.ColumnDefinitions>
         <Viewbox Grid.ColumnSpan="2"
-                 Stretch="Fill"
-                 Width="{Binding TileBorderWidth,Mode=TwoWay}"
-                 Height="{Binding TileTitleHeight,Mode=TwoWay}">
+                 Stretch="Fill">
             <Canvas x:Name="TitleSwirlCanvas"
                     Visibility="Visible"
                     Width="{Binding ClipTileViewModel.TileBorderMinWidth}"
                     Height="{Binding ClipTileViewModel.TileTitleHeight}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     DataContext="{Binding TitleSwirlViewModel}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
@@ -111,7 +106,8 @@
               MouseEnter="ClipTileTitleTextGrid_MouseEnter"
               MouseLeave="ClipTileTitleTextGrid_MouseLeave"
               PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_PreviewMouseLeftButtonDown"
-              Margin="5,0,30,25"
+              Margin="15,5,30,25"
+              HorizontalAlignment="Left"
               Background="{Binding TileTitleTextGridBackgroundBrush}">
             <!-- Clip Title TextBlock -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
@@ -148,11 +144,12 @@
                Width="{Binding TileTitleIconBorderSize}"
                Height="{Binding TileTitleIconBorderSize}"></Image>
         <!-- Clip Title Icon Image -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" >
             <Button x:Name="ClipTileAppIconImageButton"
                     MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                     MouseLeave="ClipTileAppIconImageButton_MouseLeave"
                     PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"
+                    
                     Style="{StaticResource Transparent_Button}"
                     Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
                     Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"

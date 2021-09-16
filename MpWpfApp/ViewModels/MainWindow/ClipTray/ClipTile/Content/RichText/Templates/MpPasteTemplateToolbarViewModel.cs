@@ -24,14 +24,25 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private MpClipTileViewModel _hostClipTileViewModel = null;
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                return _hostClipTileViewModel;
+                if(RtbItemCollectionViewModel == null) {
+                    return null;
+                }
+
+                return RtbItemCollectionViewModel.HostClipTileViewModel;
             }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
+        }
+
+        private MpRtbItemCollectionViewModel _rtbItemCollectionViewModel;
+        public MpRtbItemCollectionViewModel RtbItemCollectionViewModel {
+            get {
+                return _rtbItemCollectionViewModel;
+            }
+            private set {
+                if(_rtbItemCollectionViewModel != value) {
+                    _rtbItemCollectionViewModel = value;
+                    OnPropertyChanged(nameof(RtbItemCollectionViewModel));
                     OnPropertyChanged(nameof(HostClipTileViewModel));
                     OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
                     OnPropertyChanged(nameof(ClearSelectedTemplateTextboxButtonVisibility));
@@ -44,6 +55,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelListByDocOrder {
             get {
                 if (SubSelectedRtbViewModel == null) {
@@ -99,9 +111,9 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel == null || SubSelectedRtbViewModel == null) {
                     return string.Empty;
                 }
-                if(HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Where(x=>x.HasTemplate).ToList().Count > 1) {
+                if(HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Where(x=>x.IsDynamicPaste).ToList().Count > 1) {
                     foreach (MpRtbItemViewModel rtbvm in HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems) {
-                        if (rtbvm.HasTemplate && rtbvm.TemplateHyperlinkCollectionViewModel.Any(x => string.IsNullOrEmpty(x.TemplateText))) {
+                        if (rtbvm.IsDynamicPaste && rtbvm.TemplateHyperlinkCollectionViewModel.Any(x => string.IsNullOrEmpty(x.TemplateText))) {
                             return @"CONTINUE";
                         }
                     }
@@ -345,9 +357,9 @@ namespace MpWpfApp {
                 }
             };
         }
-        public MpPasteTemplateToolbarViewModel(MpClipTileViewModel ctvm) : this() {
-            
-            HostClipTileViewModel = ctvm;
+
+        public MpPasteTemplateToolbarViewModel(MpRtbItemCollectionViewModel rtbicvm) : this() {            
+            RtbItemCollectionViewModel = rtbicvm;
         }
 
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {

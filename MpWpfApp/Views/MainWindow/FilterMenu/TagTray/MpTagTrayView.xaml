@@ -11,10 +11,8 @@
              DataContextChanged="TagTray_DataContextChanged"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="TagTrayContainerGrid"
-          Grid.Column="2"
           Loaded="TagTrayContainerGrid_Loaded"
           PreviewMouseDown="TagTrayContainerGrid_PreviewMouseDown"
-          RenderTransformOrigin="0.5,0.5"
           Focusable="False"
           HorizontalAlignment="Center">
         <i:Interaction.Triggers>
@@ -41,7 +39,7 @@
                 ToolTipService.InitialShowDelay="100"
                 Template="{StaticResource SearchButtonControlTemplate}"
                 Background="Transparent"
-                Command="{Binding CreateTagCommand}">
+                Visibility="Collapsed">
             <Image Stretch="Fill"
                    Source="/MpWpfApp;component/Resources/Images/down_black.png" />
         </Button>
@@ -72,7 +70,7 @@
                                     ScrollViewer.CanContentScroll="False"
                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                    ItemsSource="{Binding}">
+                                    ItemsSource="{Binding TagTileViewModels}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="IsSelected"

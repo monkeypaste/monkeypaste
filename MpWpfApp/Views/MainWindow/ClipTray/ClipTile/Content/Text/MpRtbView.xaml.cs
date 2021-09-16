@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,20 +23,50 @@ namespace MpWpfApp {
             InitializeComponent();            
         }
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if (rtbvm.HostClipTileViewModel.WasAddedAtRuntime) {
-                //force new items to have left alignment
-                Rtb.CaretPosition = Rtb.Document.ContentStart;
-                Rtb.Document.TextAlignment = TextAlignment.Left;
-                UpdateLayout();
+            if (DataContext != null && DataContext is MpRtbItemViewModel rtbivm) {
+                rtbivm.OnRtbResetRequest += Rtbivm_OnRtbResetRequest;
+                rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
+                rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
+
+                rtbivm.TemporarySetRtb(Rtb);
+                if (rtbivm.HostClipTileViewModel.WasAddedAtRuntime) {
+                    //force new items to have left alignment
+                    Rtb.CaretPosition = Rtb.Document.ContentStart;
+                    Rtb.Document.TextAlignment = TextAlignment.Left;
+                    UpdateLayout();
+                }
+            }
+        }
+
+        private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
+            Rtb.UpdateLayout();
+        }
+
+        private void Rtbivm_OnScrollWheelRequest(object sender, int e) {
+            Rtb.ScrollToVerticalOffset(Rtb.VerticalOffset + e);
+        }
+
+        private void Rtbivm_OnRtbResetRequest(object sender, bool focusRtb) {
+            Rtb.ScrollToHome();
+            Rtb.CaretPosition = Rtb.Document.ContentStart;
+            if(focusRtb) {
+                Rtb.Focus();
             }
         }
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
-            if (rtbvm.IsEditingContent) {
+            if (rtbvm.IsEditingContent && Rtb.IsFocused) {
+                this.GetVisualAncestor<MpContentListView>().EditToolbarView.SetCommandTarget(Rtb);
                 //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.Rtb_SelectionChanged(rtbvm.Rtb, e3);
             }
         }
+
+        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            var rtblb = this.FindParentOfType<MpMultiSelectListBox>();
+            rtblb?.UpdateLayout();
+        }
+
+        
     }
 }

@@ -18,6 +18,118 @@ namespace MpWpfApp {
         private static string _unsetJoystickIcon64 = "";
         private static string _setJoyStickIcon64 = "";
 
+        #region Abstract Methods
+        public abstract Size GetExpandedSize();
+        public abstract Size GetUnexpandedSize();
+        public abstract string GetDetail(MpCopyItemDetailType detailType);
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+        public MpContentContainerViewModel ContainerViewModel { get; private set; }
+
+        public MpClipTileViewModel HostClipTileViewModel {
+            get {
+                if (ContainerViewModel == null) {
+                    return null;
+                }
+                return ContainerViewModel.HostClipTileViewModel;
+            }
+        }
+
+        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
+                    return _tagMenuItems;
+                }
+                _tagMenuItems.Clear();
+                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                    if (tagTile.IsSudoTag) {
+                        continue;
+                    }
+                    _tagMenuItems.Add(
+                        new MpContextMenuItemViewModel(
+                            tagTile.TagName,
+                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                            tagTile,
+                            tagTile.IsLinked(CopyItem),
+                            string.Empty,
+                            null,
+                            tagTile.ShortcutKeyString,
+                            tagTile.Color));
+                }
+                return _tagMenuItems;
+            }
+        }
+
+        #endregion
+
+        #region Layout
+        public double DragButtonSize {
+            get {
+                return MpMeasurements.Instance.RtbCompositeDragButtonSize;
+            }
+        }
+
+
+        #endregion
+
+        #region State
+        private int _detailIdx = 1;
+        public int DetailIdx {
+            get {
+                return _detailIdx;
+            }
+            set {
+                if (_detailIdx != value) {
+                    _detailIdx = value;
+                    OnPropertyChanged(nameof(DetailIdx));
+                }
+            }
+        }
+
+        public DateTime LastSubSelectedDateTime { get; set; }
+
+        private bool _isPrimarySubSelected = false;
+        public bool IsPrimarySubSelected {
+            get {
+                return _isPrimarySubSelected;
+            }
+            set {
+                if (_isPrimarySubSelected != value) {
+                    _isPrimarySubSelected = value;
+                    OnPropertyChanged(nameof(IsPrimarySubSelected));
+                    //OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
+                }
+            }
+        }
+
+        public bool IsSubSelected { get; set; } = false;
+        public bool IsSubHovering { get; set; } = false;
+        public bool IsSubContextMenuOpen { get; set; } = false;
+
+        public bool IsSubEditingContent { get; set; } = false;
+        public bool IsSubPastingTemplate { get; set; } = false;
+        public bool IsSubEditingTitle { get; set; } = false;
+
+        public abstract bool IsDynamicPaste { get; }
+
+        #region Drag & Drop
+
+        public bool IsSubDragging { get; set; } = false;
+        public bool IsSubDropping { get; set; } = false;
+        public Point MouseDownPosition { get; set; }
+        public IDataObject DragDataObject { get; set; }
+
+        #endregion
+
+        #endregion
+
+        #region Icons
+
         public string HotkeyIconSource {
             get {
                 if(string.IsNullOrEmpty(_unsetJoystickIcon64)) {
@@ -32,6 +144,10 @@ namespace MpWpfApp {
                 return _setJoyStickIcon64;
             }
         }
+
+        #endregion
+
+        #region Model
 
         public string HotkeyIconTooltip {
             get {
@@ -56,33 +172,27 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isPrimarySubSelected = false;
-        public bool IsPrimarySubSelected {
-            get {
-                return _isPrimarySubSelected;
-            }
-            set {
-                if (_isPrimarySubSelected != value) {
-                    _isPrimarySubSelected = value;
-                    OnPropertyChanged(nameof(IsPrimarySubSelected));
-                    //OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                }
-            }
-        }
+        public MpCopyItem CopyItem { get; set; }
+
+        #endregion
+
+        #endregion
 
         public RichTextBox Rtb { get; set; }
         public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
 
-        public bool HasTemplate { get; set; } = false;
-        public abstract Size GetExpandedSize();
-        public abstract Size GetUnexpandedSize();
-        public abstract string GetDetail(MpCopyItemDetailType detailType);
 
-        public event EventHandler<int> OnScrollWheel;
-        public void Resize(Rect newSize) { }
+        #region Events
+
+        public event EventHandler<int> OnScrollWheelRequest;
+        public event EventHandler OnUiUpdateRequest;
+        public event EventHandler OnSubSelected;
+        #endregion
+
+        #region Public Methods
 
         public static MpContentItemViewModel Create(MpContentContainerViewModel ccvm, MpCopyItem ci) {
-            switch(ci.ItemType) {
+            switch (ci.ItemType) {
                 case MpCopyItemType.RichText:
                     return new MpRtbItemViewModel(ccvm, ci);
                 default:
@@ -92,44 +202,42 @@ namespace MpWpfApp {
             throw new Exception("Unsupported item type");
         }
 
+        public MpContentItemViewModel() : base() { }
+
+        public MpContentItemViewModel(MpContentContainerViewModel container, MpCopyItem ci) : this() {
+            PropertyChanged += MpContentItemViewModel_PropertyChanged;
+            CopyItem = ci;
+            ContainerViewModel = container;
+        }
+
+        
+
+        public void Resize(Rect newSize) {
+            throw new Exception("Unemplemented");
+        }
+
+
+        #region View Request Invokers
+
         public void RequestScrollWheelChange(int delta) {
             //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
             //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
-            OnScrollWheel?.Invoke(this, delta);
+            OnScrollWheelRequest?.Invoke(this, delta);
         }
 
-        public MpContentContainerViewModel ContainerViewModel { get; private set; }
-
-        public  MpClipTileViewModel HostClipTileViewModel { 
-            get {
-                if(ContainerViewModel == null) {
-                    return null;
-                }
-                return ContainerViewModel.HostClipTileViewModel;
-            }
+        public void RequestUiUpdate() {
+            OnUiUpdateRequest?.Invoke(this, null);
         }
 
-        public DateTime LastSubSelectedDateTime { get; set; }
+        #endregion
 
-        public bool IsSubSelected { get; set; } = false;
-        public bool IsSubHovering { get; set; } = false;
-        public bool IsSubContextMenuOpen { get; set; } = false;
-
-        public bool IsSubEditingContent { get; set; } = false;
-        public bool IsSubPastingTemplate { get; set; } = false;
-        public bool IsSubEditingTitle { get; set; } = false;
-
-        public bool IsSubDragging { get; set; } = false;
-        public bool IsSubDropping { get; set; } = false;
-        public Point MouseDownPosition { get; set; }
-        public IDataObject DragDataObject { get; set; }
 
         public void ClearSubDragState() {
             IsSubDragging = false;
             DragDataObject = null;
             MouseDownPosition = new Point();
         }
-        public MpCopyItem CopyItem { get; set; }
+        
 
         public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
@@ -191,32 +299,6 @@ namespace MpWpfApp {
         }
 
 
-        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
-        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
-            get {
-                if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
-                    return _tagMenuItems;
-                }
-                _tagMenuItems.Clear();
-                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
-                    if (tagTile.IsSudoTag) {
-                        continue;
-                    }
-                    _tagMenuItems.Add(
-                        new MpContextMenuItemViewModel(
-                            tagTile.TagName,
-                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
-                            tagTile,
-                            tagTile.IsLinked(CopyItem),
-                            string.Empty,
-                            null,
-                            tagTile.ShortcutKeyString,
-                            tagTile.Color));
-                }
-                return _tagMenuItems;
-            }
-        }
-
         public void SaveToDatabase() {
             CopyItem.WriteToDatabase();
         }
@@ -229,14 +311,21 @@ namespace MpWpfApp {
             // TODO maybe add archiving
         }
 
+        #endregion
 
-        public MpContentItemViewModel() : base() { }
+        #region Private Methods
 
-        public MpContentItemViewModel(MpContentContainerViewModel container, MpCopyItem ci) : this() {
-            CopyItem = ci;
-            ContainerViewModel = container;
+        private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsSubSelected):
+                    if(IsSubSelected) {
+                        OnSubSelected?.Invoke(this, null);
+                    }
+                    break;
+            }
         }
 
+        #endregion
 
         #region Commands
         private RelayCommand _editSubTitleCommand;

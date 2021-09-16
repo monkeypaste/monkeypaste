@@ -240,7 +240,7 @@ namespace MpWpfApp {
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
-            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpWpfInterfaceWrapper() {
+            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
                 IconBuilder = new MpIconBuilder()
             });
 

@@ -11,8 +11,6 @@
         <RichTextBox x:Key="CurrentRtbTarget" />
     </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
-            Canvas.Top="{Binding EditBorderCanvasTop, Mode=TwoWay}"
-            Visibility="{Binding EditToolbarVisibility}"
             Height="{Binding EditRichTextBoxToolbarHeight}"
             Width="{Binding HostClipTileViewModel.TileContentWidth}"
             BorderThickness="0,0,0,1"

@@ -34,13 +34,14 @@ namespace MpWpfApp {
             rtbetbvm.HasTextChanged = false;
         }
 
-        private void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
+        public void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
             var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             ertbtvm.HasTextChanged = true;
         }
 
-        private void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
+        public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtb = sender as RichTextBox;
+
             var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
 
             var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
@@ -212,7 +213,7 @@ namespace MpWpfApp {
             var hctvm = rtbetbvm.HostClipTileViewModel;
             var rtbcvm = hctvm.ContentContainerViewModel as MpRtbItemCollectionViewModel;
             var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
-            var rtblb = rtb.FindParentOfType<MpContentListVIew>();
+            var rtblb = rtb.FindParentOfType<MpContentListView>();
             var rtbvm = rtb.DataContext as MpRtbItemViewModel;
             //SubSelectedRtbViewModel.SaveSubItemToDatabase();
 

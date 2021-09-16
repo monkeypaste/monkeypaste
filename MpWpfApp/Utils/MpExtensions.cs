@@ -231,6 +231,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+
+        public static Rect RelativeBounds(this FrameworkElement fe, Visual rv = null) {
+            if(fe == rv || rv == null) {
+                return fe.TransformToVisual(fe).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            }
+            if(fe.IsDescendantOf(rv)) {
+                return fe.TransformToAncestor(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            }
+            if(fe.IsAncestorOf(rv)) {
+                return fe.TransformToDescendant(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            }
+            return fe.TransformToVisual(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+        }
+
         public static bool IsListBoxItemVisible(this ListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi != null && lbi.Visibility == Visibility.Visible) {
@@ -250,16 +264,34 @@ namespace MpWpfApp {
             if (lb == null) {
                 return null;
             }
-            if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-                return null;
-            }
+            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+            //    return null;
+            //}
             if (index < 0 || index >= lb.Items.Count) {
                 return null;
             }
             return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
         }
 
-        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
+        public static ListBoxItem GetListBoxItem(this ListBox lb, object dataContext) {
+            if (lb == null) {
+                return null;
+            }
+            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+            //    return null;
+            //}
+
+            for (int i = 0; i < lb.Items.Count; i++) {
+                var lbi = lb.Items[i];
+                if(lbi == dataContext) {
+                    return lb.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+                }
+            }
+            return null;
+        }
+
+
+        public static Rect GetListBoxItemRect(this ListBox lb, int index) {            
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
