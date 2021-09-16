@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace MpWpfApp {
     public partial class MpRtbEditToolbarView : UserControl {
         ToggleButton selectedAlignmentButton;
         ToggleButton selectedListButton;
+        RichTextBox rtb;
 
         public MpRtbEditToolbarView() {
             InitializeComponent();
@@ -29,18 +31,23 @@ namespace MpWpfApp {
         public void SetCommandTarget(RichTextBox trtb) {
             trtb.SelectionChanged += CurrentRtb_SelectionChanged;
             trtb.TextChanged += CurrentRtb_TextChanged;
-            Resources["CurrentRtbTarget"] = trtb;
+            rtb = trtb;
+            rtb.IsReadOnly = false;
+            rtb.IsManipulationEnabled = true;
             var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             rtbetbvm.HasTextChanged = false;
+            rtbetbvm.HostClipTileViewModel.IsEditingTile = true;
         }
 
         public void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
             var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             ertbtvm.HasTextChanged = true;
+            
+            rtb.UpdateLayout();
         }
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            var rtb = sender as RichTextBox;
+            
 
             var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
 
@@ -82,6 +89,8 @@ namespace MpWpfApp {
             } else {
                 ertbtvm.IsAddTemplateButtonEnabled = false;
             }
+
+            rtb.UpdateLayout();
         }
 
         #region Toolbar Events
@@ -89,11 +98,13 @@ namespace MpWpfApp {
             if(FontFamilyCombo.SelectedItem == null) {
                 return;
             }
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
+            
             var fontFamily = FontFamilyCombo.SelectedItem.ToString();
             rtb.Focus();
             var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
             textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+
+            
         }
 
         private void FontSizeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -107,7 +118,6 @@ namespace MpWpfApp {
                 FontSizeCombo.SelectedItem = null;
                 return;
             }
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
             // Process selection
             rtb.Focus();
             var pointSize = FontSizeCombo.SelectedItem.ToString();
@@ -119,7 +129,7 @@ namespace MpWpfApp {
         private void ForegroundColorButton_Click(object sender, RoutedEventArgs e) {
             var colorMenuItem = new MenuItem();
             var colorContextMenu = new ContextMenu();
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
+            
 
             colorContextMenu.Items.Add(colorMenuItem);
             MpHelpers.Instance.SetColorChooserMenuItem(
@@ -140,7 +150,7 @@ namespace MpWpfApp {
 
             var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             var hctvm = rtbetbvm.HostClipTileViewModel;
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
+            
 
             colorContextMenu.Items.Add(colorMenuItem);
             MpHelpers.Instance.SetColorChooserMenuItem(
@@ -158,7 +168,7 @@ namespace MpWpfApp {
         }
 
         private void PrintButton_Click(object sender, RoutedEventArgs e) {
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
+            
             var dlg = new PrintDialog();
             dlg.PageRangeSelection = PageRangeSelection.AllPages;
             dlg.UserPageRangeEnabled = true;
@@ -212,7 +222,7 @@ namespace MpWpfApp {
             var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
             var hctvm = rtbetbvm.HostClipTileViewModel;
             var rtbcvm = hctvm.ContentContainerViewModel as MpRtbItemCollectionViewModel;
-            var rtb = Resources["CurrentRtbTarget"] as RichTextBox;
+            
             var rtblb = rtb.FindParentOfType<MpContentListView>();
             var rtbvm = rtb.DataContext as MpRtbItemViewModel;
             //SubSelectedRtbViewModel.SaveSubItemToDatabase();

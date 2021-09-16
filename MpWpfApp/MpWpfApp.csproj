@@ -288,6 +288,9 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpQuillEditorView.xaml.cs">
+      <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpRtbView.xaml.cs">
       <DependentUpon>MpRtbView.xaml</DependentUpon>
     </Compile>
@@ -403,6 +406,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Image\MpImageItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\MpQuillEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -725,6 +732,9 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.9" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.961.33</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.19041.1</Version>
@@ -1929,6 +1939,7 @@
     <Resource Include="Resources\Images\copy.png" />
     <Resource Include="FodyWeavers.xml" />
     <Resource Include="Resources\Images\down_black.png" />
+    <Content Include="Resources\Editor\Editor2.html" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
