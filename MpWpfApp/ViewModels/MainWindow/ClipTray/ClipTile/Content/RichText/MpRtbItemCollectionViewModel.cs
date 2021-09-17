@@ -24,62 +24,50 @@ using MonkeyPaste;
 using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
-    public class MpRtbItemCollectionViewModel : MpContentContainerViewModel  { 
+    public class MpRtbItemCollectionViewModel : MpContentContainerViewModel  {
         #region Properties
 
         #region ViewModels
 
-        private MpEditTemplateToolbarViewModel _editTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel();
-        public MpEditTemplateToolbarViewModel EditTemplateToolbarViewModel {
-            get {
-                return _editTemplateToolbarViewModel;
-            }
-            set {
-                if (_editTemplateToolbarViewModel != value) {
-                    _editTemplateToolbarViewModel = value;
-                    OnPropertyChanged(nameof(EditTemplateToolbarViewModel));
-                }
-            }
-        }
+        //private MpEditTemplateToolbarViewModel _editTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel();
+        //public MpEditTemplateToolbarViewModel EditTemplateToolbarViewModel {
+        //    get {
+        //        return _editTemplateToolbarViewModel;
+        //    }
+        //    set {
+        //        if (_editTemplateToolbarViewModel != value) {
+        //            _editTemplateToolbarViewModel = value;
+        //            OnPropertyChanged(nameof(EditTemplateToolbarViewModel));
+        //        }
+        //    }
+        //}
 
-        private MpPasteTemplateToolbarViewModel _pasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel();
-        public MpPasteTemplateToolbarViewModel PasteTemplateToolbarViewModel {
-            get {
-                return _pasteTemplateToolbarViewModel;
-            }
-            set {
-                if (_pasteTemplateToolbarViewModel != value) {
-                    _pasteTemplateToolbarViewModel = value;
-                    OnPropertyChanged(nameof(PasteTemplateToolbarViewModel));
-                }
-            }
-        }
+        //private MpPasteTemplateToolbarViewModel _pasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel();
+        //public MpPasteTemplateToolbarViewModel PasteTemplateToolbarViewModel {
+        //    get {
+        //        return _pasteTemplateToolbarViewModel;
+        //    }
+        //    set {
+        //        if (_pasteTemplateToolbarViewModel != value) {
+        //            _pasteTemplateToolbarViewModel = value;
+        //            OnPropertyChanged(nameof(PasteTemplateToolbarViewModel));
+        //        }
+        //    }
+        //}
 
-        private MpEditRichTextBoxToolbarViewModel _editRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel();
-        public MpEditRichTextBoxToolbarViewModel EditRichTextBoxToolbarViewModel {
-            get {
-                return _editRichTextBoxToolbarViewModel;
-            }
-            set {
-                if (_editRichTextBoxToolbarViewModel != value) {
-                    _editRichTextBoxToolbarViewModel = value;
-                    OnPropertyChanged(nameof(EditRichTextBoxToolbarViewModel));
-                }
-            }
-        }
 
-        private ObservableCollection<MpRtbItemViewModel> _rtbItemViewModels = new ObservableCollection<MpRtbItemViewModel>();
-        public ObservableCollection<MpRtbItemViewModel> RtbItemViewModels { 
-            get {
-                return _rtbItemViewModels;
-            }
-            private set {
-                if(_rtbItemViewModels != value) {
-                    _rtbItemViewModels = value;
-                    OnPropertyChanged(nameof(RtbItemViewModels));
-                }
-            }
-        } 
+        //private ObservableCollection<MpRtbItemViewModel> _rtbItemViewModels = new ObservableCollection<MpRtbItemViewModel>();
+        //public ObservableCollection<MpRtbItemViewModel> RtbItemViewModels {
+        //    get {
+        //        return _rtbItemViewModels;
+        //    }
+        //    private set {
+        //        if (_rtbItemViewModels != value) {
+        //            _rtbItemViewModels = value;
+        //            OnPropertyChanged(nameof(RtbItemViewModels));
+        //        }
+        //    }
+        //}
 
         public MpEventEnabledFlowDocument FullDocument {
             get {
@@ -87,11 +75,11 @@ namespace MpWpfApp {
             }
         }
 
-        public List<MpRtbItemViewModel> VisibleSubRtbViewModels {
-            get {
-                return RtbItemViewModels.Where(x => x.SubItemVisibility == Visibility.Visible).ToList();
-            }
-        }
+        //public List<MpRtbItemViewModel> VisibleSubRtbViewModels {
+        //    get {
+        //        return RtbItemViewModels.Where(x => x.SubItemVisibility == Visibility.Visible).ToList();
+        //    }
+        //}
 
         #endregion
 
@@ -163,7 +151,7 @@ namespace MpWpfApp {
                     return 0;
                 }
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
-                if (HostClipTileViewModel.IsEditingTile) {
+                if (HostClipTileViewModel.IsEditingContent) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
                 if (HostClipTileViewModel.IsPastingTemplate) {
@@ -175,7 +163,7 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel.DetailGridVisibility != Visibility.Visible) {
                     ch += HostClipTileViewModel.TileDetailHeight;
                 }
-                if (RtbItemViewModels.Count == 1) {
+                if (ItemViewModels.Count == 1) {
                     return ch;
                 }
                 return Math.Max(RtbLbScrollViewerHeight, Math.Max(ch,TotalItemHeight));
@@ -185,7 +173,7 @@ namespace MpWpfApp {
         public double RelativeWidthMax {
             get {
                 double maxWidth = 0;
-                foreach(var rtbvm in RtbItemViewModels) {
+                foreach(MpRtbItemViewModel rtbvm in ItemViewModels) {
                     maxWidth = Math.Max(maxWidth, rtbvm.RtbRelativeWidthMax);
                 }
                 return maxWidth;
@@ -198,7 +186,7 @@ namespace MpWpfApp {
                     return 0;
                 }
                 double totalHeight = 0;
-                foreach (var rtbvm in RtbItemViewModels) {
+                foreach (MpRtbItemViewModel rtbvm in ItemViewModels) {
                     totalHeight += rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom; ;
                 }                
                 return totalHeight;
@@ -253,36 +241,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
-        public bool HasTemplate {
-            get {
-                foreach (var rtbvm in RtbItemViewModels) {
-                    if (rtbvm.IsDynamicPaste) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        
         #endregion
 
         #region State
-        public bool IsAnyEditingContent {
-            get {
-                return RtbItemViewModels.Any(x => x.IsEditingContent);
-            }
-        }
-
-        public bool IsAnyEditingTitle {
-            get {
-                return RtbItemViewModels.Any(x => x.IsSubEditingTitle);
-            }
-        }
-
-        public bool IsAnyPastingTemplate {
-            get {
-                return RtbItemViewModels.Any(x => x.IsPastingTemplate);
-            }
-        }
+        
         #endregion
 
         #endregion
@@ -302,12 +265,25 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
-            EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
-            PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
+            //EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
+            //EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
+            //PasteTemplateToolbarViewModel = new
             //this.Add(new MpContentListItemViewModel(HostClipTileViewModel, ci));
         }
 
+
+
+        public void ClearAllHyperlinks() {
+            foreach (MpRtbItemViewModel rtbvm in ItemViewModels) {
+                rtbvm.RequestClearHyperlinks();
+            }
+        }
+
+        public void CreateAllHyperlinks() {
+            foreach (MpRtbItemViewModel rtbvm in ItemViewModels) {
+                rtbvm.RequestCreateHyperlinks();
+            }
+        }
 
         public void Refresh() {
             var sw = new Stopwatch();
@@ -318,19 +294,6 @@ namespace MpWpfApp {
             //MonkeyPaste.MpConsole.WriteLine("Rtblb(HVIdx:"+MpClipTrayViewModel.Instance.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
-        
-
-        public MpRtbItemViewModel GetRtbItemByCopyItemId(int copyItemId) {
-            foreach(var rtbvm in RtbItemViewModels) {
-                if(rtbvm.CopyItemId == copyItemId) {
-                    return rtbvm;
-                }
-            }
-            return null;
-        }
-
-        
-
         public void SyncItemsWithModel() {
             return;
             if(HostClipTileViewModel == null) {
@@ -339,13 +302,13 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
             var hci = HostClipTileViewModel.CopyItem;
-            var rtbvm = RtbItemViewModels.Where(x => x.CopyItemId == hci.Id).FirstOrDefault();
+            var rtbvm = ItemViewModels.Where(x => x.CopyItem.Id == hci.Id).FirstOrDefault();
             if (rtbvm == null) {
               //  this.Add(new MpContentListItemViewModel(HostClipTileViewModel, hci));
             }
             //below was supposed to be for composite types but pulled out to compile
             foreach (var cci in MpCopyItem.GetCompositeChildren(hci)) {
-                rtbvm = RtbItemViewModels.Where(x => x.CopyItemId == cci.Id).FirstOrDefault();
+                rtbvm = ItemViewModels.Where(x => x.CopyItem.Id == cci.Id).FirstOrDefault();
                 if (rtbvm == null) {
                    // this.Add(new MpContentListItemViewModel(HostClipTileViewModel, cci));
                 }
@@ -359,88 +322,87 @@ namespace MpWpfApp {
 
         public void UpdateSortOrder(bool fromModel = false) {
             if(fromModel) {
-                RtbItemViewModels.Sort(x => x.CompositeSortOrderIdx);
+                ItemViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
-                foreach (var rtbvm in RtbItemViewModels) {
-                    rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
-                    rtbvm.CompositeSortOrderIdx = RtbItemViewModels.IndexOf(rtbvm);
+                foreach (var rtbvm in ItemViewModels) {
+                    rtbvm.CopyItem.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
+                    rtbvm.CopyItem.CompositeSortOrderIdx = ItemViewModels.IndexOf(rtbvm);
                     rtbvm.CopyItem.WriteToDatabase();
-                    rtbvm.RtbListBoxItemAdornerLayer?.Update();
+                    rtbvm.RequestUiUpdate();
                 }
             }
         }
-        public void Add(MpRtbItemViewModel rtbvm, int forceIdx = 0, bool isMerge = false) {    
-            if(isMerge) {
-                HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
-            }
-            if (forceIdx >= 0) {
-                if (forceIdx >= RtbItemViewModels.Count) {
-                    RtbItemViewModels.Add(rtbvm);
-                } else {
-                    RtbItemViewModels.Insert(forceIdx, rtbvm);
-                }
-            } else {
-                RtbItemViewModels.Add(rtbvm);
-            }
-            rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItem));
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
-            SyncItemsWithModel();
-            UpdateAdorners();
-            //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
-        }
+        //public void Add(MpRtbItemViewModel rtbvm, int forceIdx = 0, bool isMerge = false) {    
+        //    if(isMerge) {
+        //        HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
+        //    }
+        //    if (forceIdx >= 0) {
+        //        if (forceIdx >= RtbItemViewModels.Count) {
+        //            RtbItemViewModels.Add(rtbvm);
+        //        } else {
+        //            RtbItemViewModels.Insert(forceIdx, rtbvm);
+        //        }
+        //    } else {
+        //        RtbItemViewModels.Add(rtbvm);
+        //    }
+        //    rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItem));
+        //    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
+        //    SyncItemsWithModel();
+        //    UpdateAdorners();
+        //    //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
+        //}
 
         
-        public void Remove(MpRtbItemViewModel rtbvm, bool isMerge = false) {
-            if (rtbvm.CopyItem == null) {
-                //occurs when duplicate detected on background thread
-                return;
-            }
+        //public void Remove(MpRtbItemViewModel rtbvm, bool isMerge = false) {
+        //    if (rtbvm.CopyItem == null) {
+        //        //occurs when duplicate detected on background thread
+        //        return;
+        //    }
 
-            if(isMerge) {
-                rtbvm.HostClipTileViewModel.IsClipDragging = false;
-                rtbvm.IsSubDragging = false;
-                UpdateAdorners();
-            } else {
-                HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
-            }
+        //    if(isMerge) {
+        //        rtbvm.HostClipTileViewModel.IsClipDragging = false;
+        //        rtbvm.IsSubDragging = false;
+        //        UpdateAdorners();
+        //    } else {
+        //        HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
+        //    }
 
 
-            RtbItemViewModels.Remove(rtbvm);
-            if (RtbItemViewModels.Count == 0) {
-                //remove empty composite or RichText container
-                HostClipTileViewModel.Dispose(isMerge);
-                return;
-            } else if(RtbItemViewModels.Count == 1) {
-                var loneCompositeCopyItem = RtbItemViewModels[0].CopyItem;
-                HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
-                HostClipTileViewModel.CopyItem.DeleteFromDatabase();
-               // HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
+        //    RtbItemViewModels.Remove(rtbvm);
+        //    if (RtbItemViewModels.Count == 0) {
+        //        //remove empty composite or RichText container
+        //        HostClipTileViewModel.Dispose(isMerge);
+        //        return;
+        //    } else if(RtbItemViewModels.Count == 1) {
+        //        var loneCompositeCopyItem = RtbItemViewModels[0].CopyItem;
+        //        HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
+        //        HostClipTileViewModel.CopyItem.DeleteFromDatabase();
+        //       // HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
 
-                //now since tile is a single clip update the tiles shortcut button
-                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.Id).ToList();
-                if (scvml.Count > 0) {
-                    HostClipTileViewModel.ShortcutKeyString = scvml[0].KeyString;
-                } else {
-                    HostClipTileViewModel.ShortcutKeyString = string.Empty;
-                }
-            } else {
-                //update composite sort order without removed item
-                UpdateSortOrder();
-            }
-            //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
+        //        //now since tile is a single clip update the tiles shortcut button
+        //        var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.Id).ToList();
+        //        if (scvml.Count > 0) {
+        //            HostClipTileViewModel.ShortcutKeyString = scvml[0].KeyString;
+        //        } else {
+        //            HostClipTileViewModel.ShortcutKeyString = string.Empty;
+        //        }
+        //    } else {
+        //        //update composite sort order without removed item
+        //        UpdateSortOrder();
+        //    }
+        //    //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
 
-            if (!isMerge) {
-                rtbvm.Dispose(isMerge);
-            }
-            //Refresh();
-            UpdateAdorners();
-        }
+        //    if (!isMerge) {
+        //        rtbvm.Dispose(isMerge);
+        //    }
+        //    //Refresh();
+        //    UpdateAdorners();
+        //}
 
         public void UpdateAdorners() {
-            //if(!HostClipTileViewModel.IsClipDropping) 
-                {
-                foreach (var rtbvm in RtbItemViewModels) {
-                    rtbvm.RtbListBoxItemAdornerLayer?.Update();
+            if(!HostClipTileViewModel.IsClipDropping) {
+                foreach (var rtbvm in ItemViewModels) {
+                    rtbvm.RequestUiUpdate();
                 }
             }
             RtbLbAdornerLayer?.Update();
@@ -451,15 +413,14 @@ namespace MpWpfApp {
             RtbLbScrollViewerWidth += deltaWidth;
             RtbLbScrollViewerHeight += deltaHeight;
 
+            //EditRichTextBoxToolbarViewModel.Resize(deltaTop, deltaWidth);
 
-            EditRichTextBoxToolbarViewModel.Resize(deltaTop, deltaWidth);
-
-            PasteTemplateToolbarViewModel.Resize(deltaHeight);
+            //PasteTemplateToolbarViewModel.Resize(deltaHeight);
             UpdateLayout();
         }
 
         public void UpdateLayout() {
-            foreach (var rtbvm in RtbItemViewModels) {
+            foreach (MpRtbItemViewModel rtbvm in ItemViewModels) {
                 rtbvm.UpdateLayout();
             }
 
@@ -485,47 +446,11 @@ namespace MpWpfApp {
             //    ScrollViewer.UpdateLayout();
             //}
         }
-        
-        public void SubSelectAll() {
-            foreach(var rtbvm in RtbItemViewModels) {
-                rtbvm.IsSubSelected = true;
-            }
-        }
-        public void ClearSubSelection(bool clearEditing = true) {
-            foreach(var rtbvm in RtbItemViewModels) {
-                rtbvm.IsPrimarySubSelected = false;
-                rtbvm.IsSubHovering = false;
-                rtbvm.IsSubSelected = false;
-                rtbvm.IsSubEditingTitle = false;
-            }
-        }
-
-        public void ResetSubSelection() {
-            ClearSubSelection();
-            if(RtbItemViewModels.Count > 0) {
-                RtbItemViewModels[0].IsSubSelected = true;
-                //if(ListBox != null) {
-                //    ((ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(RtbItemViewModels[0]))?.Focus();
-                //}
-            }
-        }
-
-        public void ClearAllHyperlinks() {
-            foreach(var rtbvm in RtbItemViewModels) {
-                rtbvm.ClearHyperlinks();
-            }
-        }
-
-        public void CreateAllHyperlinks() {
-            foreach (var rtbvm in RtbItemViewModels) {
-                rtbvm.CreateHyperlinks();
-            }
-        }
 
         public object Clone() {
-            var nrtbvmc = new MpRtbItemCollectionViewModel(HostClipTileViewModel,RtbItemViewModels[0].CopyItem.Clone() as MpCopyItem);
-            foreach(var rtbvm in RtbItemViewModels) {
-                nrtbvmc.Add((MpRtbItemViewModel)rtbvm.Clone());
+            var nrtbvmc = new MpRtbItemCollectionViewModel(HostClipTileViewModel,ItemViewModels[0].CopyItem.Clone() as MpCopyItem);
+            foreach(MpRtbItemViewModel rtbvm in ItemViewModels) {
+                //nrtbvmc.Add((MpRtbItemViewModel)rtbvm.Clone());
             }
             return nrtbvmc;
         }       
@@ -536,7 +461,7 @@ namespace MpWpfApp {
 
         private MpEventEnabledFlowDocument GetFullDocument() {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();
-            foreach (var rtbvm in RtbItemViewModels) {
+            foreach (MpRtbItemViewModel rtbvm in ItemViewModels) {
                 MpEventEnabledFlowDocument fd;
                 if (rtbvm.Rtb == null) {
                     fd = rtbvm.CopyItemRichText.ToFlowDocument();

@@ -188,10 +188,10 @@
                 </ContextMenu>
             </Grid.ContextMenu>
             <AdornerDecorator>
-                <!--<local:MpRtbView x:Name="RtbView"
-                                 DataContext="{Binding}" />-->
-                <local:MpQuillEditorView x:Name="RtbView"
-                                         DataContext="{Binding}" />
+                <local:MpRtbView x:Name="RtbView"
+                                 DataContext="{Binding}" />
+                <!--<local:MpQuillEditorView x:Name="RtbView"
+                                         DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
                                 Visibility="{Binding SubItemOverlayVisibility}"

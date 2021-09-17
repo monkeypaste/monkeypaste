@@ -12,7 +12,7 @@ using System.Text;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
-    public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable {
+    public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable, ICloneable {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTemplateId")]
@@ -111,6 +111,17 @@ namespace MonkeyPaste {
                 idxList.Add(Convert.ToInt32(idx));
             }
             return idxList;
+        }
+
+        public object Clone() {
+            var ccit = new MpCopyItemTemplate() {
+                Id = this.Id,
+                CopyItemTemplateGuid = this.CopyItemTemplateGuid,
+                TemplateName = this.TemplateName,
+                HexColor = this.HexColor,
+                TemplateText = this.TemplateText
+            };
+            return ccit;
         }
     }
 }

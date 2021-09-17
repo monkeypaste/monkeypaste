@@ -11,17 +11,13 @@
         <RichTextBox x:Key="CurrentRtbTarget" />
     </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
-            Height="{Binding EditRichTextBoxToolbarHeight}"
+            Loaded="ClipTileEditorToolbar_Loaded"
+            Background="OldLace"
+            Height="{Binding HostClipTileViewModel.EditRichTextBoxToolbarHeight}"
             Width="{Binding HostClipTileViewModel.TileContentWidth}"
             BorderThickness="0,0,0,1"
             BorderBrush="OldLace">
         <StackPanel Orientation="Horizontal">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                    <i:CallMethodAction TargetObject="{Binding}"
-                                        MethodName="ClipTileEditorToolbarBorder_Loaded" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <Button x:Name="PrintButton"
                     Template="{StaticResource FlatButtonControlTemplate}"
                     Click="PrintButton_Click"
@@ -60,21 +56,11 @@
                       Width="40"
                       Margin="5,2,5,2"
                       IsEditable="True"
-                      SelectionChanged="FontSizeCombo_SelectionChanged"
-                      ItemsSource="{Binding FontSizes}" />
+                      SelectionChanged="FontSizeCombo_SelectionChanged" />
             <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None"
                    SnapsToDevicePixels="True" />
-            <Button x:Name="AddTemplateButton"
-                    PreviewMouseDown="AddTemplateButton_PreviewMouseDown"
-                    ToolTip="Add Template"
-                    Template="{StaticResource FlatButtonControlTemplate}"
-                    IsEnabled="{Binding IsAddTemplateButtonEnabled}"
-                    Background="{Binding AddTemplateButtonBackgroundBrush}">
-                <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
-                       Stretch="None"
-                       SnapsToDevicePixels="True" />
-            </Button>
+            <local:MpAddTemplateToolbarButton x:Name="AddTemplateButton" />
             <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None"
                    SnapsToDevicePixels="True" />

@@ -68,9 +68,9 @@ namespace MpWpfApp {
             }
         }
 
-        public MpContentItemViewModel PrimarySubSelectedClipItem {
+        public MpContentItemViewModel PrimarySubSelectedContentItem {
             get {
-                if (SubSelectedContentItems == null || SubSelectedContentItems.Count < 1) {
+                if (SubSelectedContentItems == null || SubSelectedContentItems.Count == 0) {
                     return null;
                 }
                 return SubSelectedContentItems[0];
@@ -140,7 +140,7 @@ namespace MpWpfApp {
                     return cs;
                 }
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
-                if (HostClipTileViewModel.IsEditingTile) {
+                if (HostClipTileViewModel.IsEditingContent) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
                 if (HostClipTileViewModel.IsPastingTemplate) {
@@ -241,7 +241,10 @@ namespace MpWpfApp {
 
         public bool IsAnyEditingContent {
             get {
-                return ItemViewModels.Any(x => x.IsSubEditingContent);
+                if(HostClipTileViewModel == null) {
+                    return false;
+                }
+                return HostClipTileViewModel.IsEditingContent || ItemViewModels.Any(x => x.IsSubEditingContent);
             }
         }
 
@@ -254,6 +257,17 @@ namespace MpWpfApp {
         public bool IsAnyPastingTemplate {
             get {
                 return ItemViewModels.Any(x => x.IsSubPastingTemplate);
+            }
+        }
+
+        public bool HasTemplate {
+            get {
+                foreach (var rtbvm in ItemViewModels) {
+                    if (rtbvm.IsDynamicPaste) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
         #endregion
@@ -292,8 +306,7 @@ namespace MpWpfApp {
         }
 
         public MpContentContainerViewModel(MpClipTileViewModel rootTile, MpCopyItem headItem) : this(rootTile) {
-            InitItems(headItem);
-            
+            InitItems(headItem);            
         }
 
 
@@ -309,6 +322,8 @@ namespace MpWpfApp {
         }
 
         private void ItemViewModel_OnSubSelected(object sender, EventArgs e) {
+            OnPropertyChanged(nameof(SubSelectedContentItems));
+            OnPropertyChanged(nameof(PrimarySubSelectedContentItem));
             OnSubSelectionChanged?.Invoke(this, sender);
         }
 
@@ -377,6 +392,15 @@ namespace MpWpfApp {
             }
         }
 
+        public MpContentItemViewModel GetItemByCopyItemId(int copyItemId) {
+            foreach (var rtbvm in ItemViewModels) {
+                if (rtbvm.CopyItem.Id == copyItemId) {
+                    return rtbvm;
+                }
+            }
+            return null;
+        }
+
         public MpContentItemViewModel GetContentItemByCopyItemId(int ciid) {
             return ItemViewModels.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
         }
@@ -395,6 +419,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
 
         public void RemoveRange(List<MpCopyItem> models) {
             for (int i = 0; i < models.Count; i++) {
@@ -469,8 +494,8 @@ namespace MpWpfApp {
         }
         private void ToggleEditSubSelectedItem(object args) {
             var selectedRtbvm = SubSelectedContentItems[0];
-            if (!HostClipTileViewModel.IsEditingTile) {
-                HostClipTileViewModel.IsEditingTile = true;
+            if (!HostClipTileViewModel.IsEditingContent) {
+                HostClipTileViewModel.IsEditingContent = true;
             }
             selectedRtbvm.IsSubSelected = true;
         }

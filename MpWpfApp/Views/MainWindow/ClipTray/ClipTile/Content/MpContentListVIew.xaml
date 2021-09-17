@@ -12,6 +12,7 @@
              d:DesignWidth="800">
     <AdornerDecorator>
         <DockPanel x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
+                   Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                    Visibility="{Binding HostClipTileViewModel.RtbVisibility}"
                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                    HorizontalAlignment="Stretch"                   
@@ -19,15 +20,15 @@
             <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
                                         Visibility="Collapsed"
-                                        DataContext="{Binding EditRichTextBoxToolbarViewModel}" />
+                                        DataContext="{Binding PrimarySubSelectedContentItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              Visibility="Collapsed"
                                              DockPanel.Dock="Bottom"
-                                             DataContext="{Binding EditTemplateToolbarViewModel}" />
+                                             DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel.SelectedTemplate}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
                                               Visibility="Collapsed"
-                                              DataContext="{Binding PasteTemplateToolbarViewModel}" />
+                                              DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel}" />
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"
                                         RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"
@@ -45,7 +46,6 @@
                                         IsSynchronizedWithCurrentItem="True"
                                         MinHeight="150"
                                         MinWidth="150"
-                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                         ItemsSource="{Binding ItemViewModels}"
                                         Focusable="True"
                                         IsEnabled="True"

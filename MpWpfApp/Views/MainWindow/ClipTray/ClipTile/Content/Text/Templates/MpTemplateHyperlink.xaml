@@ -1,15 +1,43 @@
 ﻿<Hyperlink x:Class="MpWpfApp.MpTemplateHyperlink"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d" >
-    <InlineUIContainer>
-        <Border CornerRadius="5"
-                BorderThickness="1.5">
-            <TextBlock  ></TextBlock>
-        </Border>
-    </InlineUIContainer>
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:local="clr-namespace:MpWpfApp"
+           mc:Ignorable="d"
+           TextDecorations="{x:Null}"
+           IsEnabled="True"
+           Unloaded="Hyperlink_Unloaded"
+           MouseEnter="Hyperlink_MouseEnter"
+           MouseLeave="Hyperlink_MouseLeave"
+           PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
+           Tag="{Binding TemplateTokenTag}"
+           Cursor="{Binding TemplateTextBlockCursor}">
+    <Hyperlink.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Edit" 
+                      Command="{Binding EditTemplateCommand}" />
+            <MenuItem Header="Delete All"
+                      Command="{Binding DeleteTemplateCommand}" />
+        </ContextMenu>
+    </Hyperlink.ContextMenu>
+    <Hyperlink.Inlines>
+        <InlineUIContainer>
+            <Border CornerRadius="5"
+                    BorderThickness="1.5"
+                    Background="{Binding TemplateBackgroundBrush}"
+                    BorderBrush="{Binding TemplateBorderBrush}"
+                    Cursor="{Binding TemplateTextBlockCursor}">
+                <Border.RenderTransform>
+                    <TranslateTransform X="0"
+                                        Y="4" />
+                </Border.RenderTransform>
+                <TextBlock x:Name="TemplateTextBlock"
+                           Text="{Binding TemplateDisplayValue}"
+                           Foreground="{Binding TemplateForegroundBrush}"
+                           Cursor="{Binding TemplateTextBlockCursor}" />
+            </Border>
+        </InlineUIContainer>
+    </Hyperlink.Inlines>
 </Hyperlink>

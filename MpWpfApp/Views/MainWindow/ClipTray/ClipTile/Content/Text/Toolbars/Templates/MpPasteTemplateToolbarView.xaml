@@ -13,14 +13,8 @@
             CornerRadius="5"
             BorderThickness="0"
             Background="LightBlue"
-            Visibility="{Binding PasteTemplateToolbarVisibility}">
+            Visibility="{Binding HostClipTileViewModel.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}">
         <Grid x:Name="PasteTemplateToolbarGrid">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                    <i:CallMethodAction TargetObject="{Binding}"
-                                        MethodName="ClipTilePasteTemplateToolbarBorder_Loaded" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="*" />
@@ -31,7 +25,7 @@
             <local:MpClipBorder x:Name="SelectedTemplateComboBoxBorder"
                                 Grid.Column="0"
                                 HorizontalAlignment="Center"
-                                Background="{Binding SelectedTemplateBrush}"
+                                Background="{Binding SelectedTemplate.TemplateBrush}"
                                 CornerRadius="15"
                                 Margin="0,3,0,3">
                 <ComboBox x:Name="SelectedTemplateComboBox"
@@ -41,7 +35,7 @@
                           HorizontalContentAlignment="Left"
                           VerticalContentAlignment="Center"
                           SelectedIndex="{Binding SelectedTemplateIdx, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                          ItemsSource="{Binding UniqueTemplateHyperlinkViewModelListByDocOrder}">
+                          ItemsSource="{Binding Templates}">
                     <ComboBox.ItemTemplate>
                         <ItemContainerTemplate>
                             <DockPanel>
@@ -54,7 +48,7 @@
                                         BorderThickness="1"
                                         CornerRadius="10" />
                                 <TextBlock DockPanel.Dock="Right"
-                                           Text="{Binding TemplateDisplayName}" />
+                                           Text="{Binding TemplateName}" />
                             </DockPanel>
                         </ItemContainerTemplate>
                     </ComboBox.ItemTemplate>
@@ -63,7 +57,7 @@
             <Button x:Name="ClearAllTemplatesButton"
                     Grid.Column="1"
                     TabIndex="0"
-                    Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
+                    Visibility="{Binding IsAllTemplatesFilled, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                     Command="{Binding ClearAllTemplatesCommand}"
                     Margin="3,0,3,0"
                     Padding="0,0,0,0"
@@ -75,7 +69,7 @@
                                 CornerRadius="10"
                                 Background="White"
                                 BorderThickness="0.5"
-                                BorderBrush="{Binding SelectedTemplateTextBoxBorderBrush}"
+                                BorderBrush="DimGray"
                                 Margin="1"
                                 Padding="0"
                                 VerticalAlignment="Center"
@@ -89,9 +83,8 @@
                              Grid.Column="0"
                              TabIndex="1"
                              BorderThickness="0"
-                             Text="{Binding SelectedTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                             FontStyle="{Binding SelectedTemplateTextBoxFontStyle}"
-                             Foreground="{Binding SelectedTemplateTextBrush}"
+                             Text="{Binding SelectedTemplate.TemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="Black"
                              FontSize="16"
                              Height="24"
                              Width="240"
@@ -102,8 +95,8 @@
                              VerticalContentAlignment="Top" />
                     <Button x:Name="ClearCurrentTemplateButton"
                             Grid.Column="1"
-                            Visibility="{Binding ClearSelectedTemplateTextboxButtonVisibility}"
-                            Command="{Binding ClearCurrentTemplatesCommand}"
+                            Visibility="{Binding SelectedTemplate.HasText, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Command="{Binding SelectedTemplate.ClearTemplateCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             Width="15"
@@ -115,13 +108,12 @@
             </local:MpClipBorder>
             <StackPanel Orientation="Horizontal"
                         Grid.Column="3"
-                        Visibility="{Binding PasteTemplateNavigationButtonStackVisibility}"
+                        Visibility="{Binding HasMultipleTemplates,Converter={StaticResource BoolToVisibilityConverter}}"
                         HorizontalAlignment="Center"
                         Margin="8,0,0,0">
                 <Button x:Name="PreviousTemplateButton"
-                        BorderBrush="{Binding PreviousButtonBorderBrush}"
                         TabIndex="2"
-                        Command="{Binding PreviousTemplateTokenCommand}"
+                        Command="{Binding SelectPreviousTemplateCommand}"
                         Width="20"
                         Height="20"
                         Margin="0"
@@ -129,9 +121,8 @@
                     <Image Source="/Resources/Images/back_black.png" />
                 </Button>
                 <Button x:Name="NextTemplateButton"
-                        BorderBrush="{Binding NextButtonBorderBrush}"
                         TabIndex="3"
-                        Command="{Binding NextTemplateTokenCommand}"
+                        Command="{Binding SelectNextTemplateCommand}"
                         Width="20"
                         Height="20"
                         Margin="1"
@@ -142,8 +133,7 @@
             <Button x:Name="PasteTemplateButton"
                     Grid.Column="4"
                     TabIndex="4"
-                    Visibility="{Binding PasteButtonVisibility}"
-                    BorderBrush="{Binding PasteButtonBorderBrush}"
+                    Visibility="{Binding IsAllTemplatesFilled, Converter={StaticResource BoolToVisibilityConverter}}"
                     Command="{Binding PasteTemplateCommand}"
                     Content="{Binding PasteButtonText}"
                     Margin="15,0,15,0"

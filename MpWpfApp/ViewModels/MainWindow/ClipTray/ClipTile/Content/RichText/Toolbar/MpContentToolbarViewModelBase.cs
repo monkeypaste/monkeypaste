@@ -41,7 +41,7 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                return ContainerViewModel.PrimarySubSelectedClipItem;
+                return ContainerViewModel.PrimarySubSelectedContentItem;
             }
         }
 

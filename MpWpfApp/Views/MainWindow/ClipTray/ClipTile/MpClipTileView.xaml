@@ -282,8 +282,7 @@
                                             Height="{Binding TileDetailHeight}"
                                             DataContext="{Binding}" />
                 <!-- Content Container Canvas -->
-                <local:MpContentListView Background="Orange"
-                                         DataContext="{Binding ContentContainerViewModel}" />               
+                <local:MpContentListView DataContext="{Binding ContentContainerViewModel}" />               
                 
             </DockPanel>
             <!-- Overlays -->            

@@ -219,7 +219,7 @@ namespace MpWpfApp {
             //EditBorderWidth += deltaWidth;
             //EditToolbarBorder.Width += deltaWidth;
 
-            if (HostClipTileViewModel.IsEditingTile) {
+            if (HostClipTileViewModel.IsEditingContent) {
                 //var ctv = (Application.Current.MainWindow as MpMainWindow).FindName("ClipTray") as MpClipTrayView;
                 MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
                 HostClipTileViewModel.ContentContainerViewModel.ResetSubSelection();
@@ -248,7 +248,7 @@ namespace MpWpfApp {
                     //Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
                 } else {
                     timer.Stop();
-                    if (HostClipTileViewModel.IsEditingTile) {
+                    if (HostClipTileViewModel.IsEditingContent) {
                         var ctv = (Application.Current.MainWindow as MpMainWindow).FindName("ClipTray") as MpClipTrayView;
                         MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
                         HostClipTileViewModel.ContentContainerViewModel.ResetSubSelection();
@@ -283,7 +283,7 @@ namespace MpWpfApp {
         private bool CanRefreshDocument() {
             return HasTextChanged && 
                    HostClipTileViewModel != null && 
-                   HostClipTileViewModel.IsEditingTile &&
+                   HostClipTileViewModel.IsEditingContent &&
                    HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Count == 1;
         }
         private void RefreshDocument() {

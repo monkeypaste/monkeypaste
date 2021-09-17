@@ -110,8 +110,6 @@ namespace MpWpfApp {
             }
         }
 
-        
-
         public double SubItemAppIconSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeAppIconSize;
@@ -453,7 +451,7 @@ namespace MpWpfApp {
                     return Visibility.Visible;
                 }
 
-                if (IsSubHovering && (!IsSubSelected || !HostClipTileViewModel.IsEditingTile)) {
+                if (IsSubHovering && (!IsSubSelected || !HostClipTileViewModel.IsEditingContent)) {
                     return Visibility.Visible;
                 }
                 if (IsSubSelected && ContainerViewModel.SubSelectedContentItems.Count > 1) {
@@ -522,16 +520,89 @@ namespace MpWpfApp {
 
         public override bool IsDynamicPaste {
             get {
-                return TemplateHyperlinkCollectionViewModel.Count > 0;
+                return TemplateHyperlinkCollectionViewModel.Templates.Count > 0;
             }
         }
 
         public string TemplateRichText { get; set; }
         #endregion
 
+        #region Editor
+        private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
+        public bool UseSpellCheck {
+            get {
+                return _useSpellCheck;
+            }
+            set {
+                if (_useSpellCheck != value) {
+                    _useSpellCheck = value;
+                    OnPropertyChanged(nameof(UseSpellCheck));
+                }
+            }
+        }
+
+        private ObservableCollection<FontFamily> _systemFonts;
+        public ObservableCollection<FontFamily> SystemFonts {
+            get {
+                if(_systemFonts == null) {
+                    _systemFonts = new ObservableCollection<FontFamily>(Fonts.SystemFontFamilies);
+                }
+                return _systemFonts;
+            }
+            set {
+                if(_systemFonts != value) {
+                    _systemFonts = value;
+                    OnPropertyChanged(nameof(SystemFonts));
+                }
+            }
+        }
+        private ObservableCollection<string> _fontSizes;
+        public ObservableCollection<string> FontSizes {
+            get {
+                if (_fontSizes == null) {
+                    _fontSizes = new ObservableCollection<string>() {
+                         "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "14",
+                        "16",
+                        "18",
+                        "20",
+                        "22",
+                        "24",
+                        "26",
+                        "28",
+                        "36",
+                        "48",
+                        "72" };
+                }
+                return _fontSizes;
+            }
+            set {
+                if(_fontSizes != value) {
+                    _fontSizes = value;
+                    OnPropertyChanged(nameof(FontSizes));
+                }
+            }
+        }
+        #endregion
+
         #region State
 
-        
+        private bool _hasTextChanged = false;
+        public bool HasTextChanged {
+            get {
+                return _hasTextChanged;
+            }
+            set {
+                if (_hasTextChanged != value) {
+                    _hasTextChanged = value;
+                    OnPropertyChanged(nameof(HasTextChanged));
+                }
+            }
+        }
 
         private TextRange _rtbSelectionRange = null;
         public TextRange RtbSelectionRange {
@@ -672,42 +743,6 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isPrimarySubSelected = false;
-        public bool IsPrimarySubSelected {
-            get {
-                return _isPrimarySubSelected;
-            }
-            set {
-                if (_isPrimarySubSelected != value) {
-                    _isPrimarySubSelected = value;
-                    OnPropertyChanged(nameof(IsPrimarySubSelected));
-                    OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                }
-            }
-        }
-        
-        private bool _isSubSelected = false;
-        public bool IsSubSelected {
-            get {
-                return _isSubSelected;
-            }
-            set {
-                if (_isSubSelected != value) { 
-                    _isSubSelected = value;
-                    OnPropertyChanged(nameof(IsSubSelected));
-                    OnPropertyChanged(nameof(IsEditingContent));
-                    OnPropertyChanged(nameof(SubItemOverlayVisibility));
-                    OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                    OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-                    OnPropertyChanged(nameof(RtbOverlayBorderBrush));
-                    OnPropertyChanged(nameof(RtbPadding));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                    OnPropertyChanged(nameof(RtbPageWidth));
-                    OnPropertyChanged(nameof(RtbPageHeight));
-                    OnPropertyChanged(nameof(SubItemToolTipVisibility));
-                }
-            }
-        }
 
         public bool IsSelected {
             get {
@@ -764,7 +799,7 @@ namespace MpWpfApp {
                     return false;
                 }
                 if(IsSubSelected && 
-                   HostClipTileViewModel.IsEditingTile && 
+                   HostClipTileViewModel.IsEditingContent && 
                    ContainerViewModel.SubSelectedContentItems.Count == 1) {
                     return true;
                 }
@@ -1134,28 +1169,15 @@ namespace MpWpfApp {
             }
         }
 
-        public string TemplateRegExMatchString {
-            get {
-                var outStr = string.Empty;
-                foreach (var t in TemplateList) {
-                    if (outStr.Contains(t.TemplateName)) {
-                        continue;
-                    }
-                    outStr += t.TemplateName + "|";
-                }
-                if (!string.IsNullOrEmpty(outStr)) {
-                    return outStr.Remove(outStr.Length - 1, 1);
-                }
-                return outStr;
-            }
-        }
+        
         #endregion
 
         #endregion
 
         #region Events
         public event EventHandler<bool> OnRtbResetRequest;
-
+        public event EventHandler OnClearHyperlinksRequest;
+        public event EventHandler OnCreateHyperlinksRequest;
         #endregion
 
         #region ContentItem Overrides
@@ -1181,7 +1203,7 @@ namespace MpWpfApp {
         public MpRtbItemViewModel() : this(null,null) { }
 
         public MpRtbItemViewModel(MpContentContainerViewModel ccvm, MpCopyItem ci) : base(ccvm,ci) {
-            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);
+            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
             
             PropertyChanged += (s, e) => {
                 var rtbvm = s as MpRtbItemViewModel;
@@ -1248,10 +1270,10 @@ namespace MpWpfApp {
                                     rtbvm.IsSubSelected = false;
                                 }
                             }
-                            if (rtbvm.HostClipTileViewModel.IsEditingTile) {
+                            if (rtbvm.HostClipTileViewModel.IsEditingContent) {
                                 //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, false);
                             }
-                        } else if (rtbvm.HostClipTileViewModel.IsEditingTile) {
+                        } else if (rtbvm.HostClipTileViewModel.IsEditingContent) {
                             rtbvm.SaveSubItemToDatabase();
                         } else {
 
@@ -1329,10 +1351,10 @@ namespace MpWpfApp {
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
 
-            ClearHyperlinks();
+            rtb.ClearHyperlinks();
             RawRtf = Rtb.Document.ToRichText();
 
-            CreateHyperlinks();
+            rtb.CreateHyperlinks();
 
             UpdateLayout();
 
@@ -1348,8 +1370,13 @@ namespace MpWpfApp {
             OnRtbResetRequest?.Invoke(this, IsSubSelected);
         }
 
-       
+        public void RequestClearHyperlinks() {
+            OnClearHyperlinksRequest?.Invoke(this, null);
+        }
 
+        public void RequestCreateHyperlinks() {
+            OnCreateHyperlinksRequest?.Invoke(this, null);
+        }
 
         public void ClearSubDragDropState() {
             IsSubDragging = false;
@@ -1439,7 +1466,7 @@ namespace MpWpfApp {
             sw.Start();
 
             //remove links to update model rich text
-            ClearHyperlinks();
+            RequestClearHyperlinks();
 
             if(Rtb != null) {
                 
@@ -1453,7 +1480,7 @@ namespace MpWpfApp {
             }
 
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(this);
-            CreateHyperlinks();
+            RequestCreateHyperlinks();
 
             var cipcsw = new Stopwatch();
             cipcsw.Start();
@@ -1469,265 +1496,7 @@ namespace MpWpfApp {
 
         
         #region Hyperlinks
-        public void ClearHyperlinks() {
-            var rtbSelection = Rtb?.Selection;
-            var hlList = GetHyperlinkList();
-            foreach (var hl in hlList) {
-                string linkText = string.Empty;
-                if (hl.DataContext == null || hl.DataContext is MpRtbItemViewModel) {
-                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
-                } else {
-                    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
-                    linkText = thlvm.TemplateName;
-                }
-                hl.Inlines.Clear();
-                new Span(new Run(linkText), hl.ElementStart);
-            }
-            TemplateHyperlinkCollectionViewModel.Clear();
-            if (rtbSelection != null) {
-                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-        }
-
-        public List<MpCopyItemTemplate> GetTemplates() {
-            var tl = new List<MpCopyItemTemplate>();
-            if (CopyItem == null) {
-                return tl;
-            }
-            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
-                                .Where(x => x.CopyItemId == CopyItem.Id)
-                                .ToList();
-        }
-
         
-
-        public void CreateHyperlinks() {
-            if(Rtb == null) {
-                return;
-            }
-
-            var rtbSelection = Rtb?.Selection.Clone();
-            for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
-                var linkType = (MpSubTextTokenType)i;                
-                if (linkType == MpSubTextTokenType.StreetAddress) {
-                    //doesn't consistently work and presents bugs so disabling for now
-                    continue;
-                }
-                var lastRangeEnd = Rtb.Document.ContentStart;
-                var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
-                if(linkType == MpSubTextTokenType.TemplateSegment) {
-                    regExStr = TemplateRegExMatchString;
-                }
-                if (string.IsNullOrEmpty(regExStr)) {
-                    //this occurs for templates when copyitem has no templates
-                    continue;
-                }
-                if(linkType == MpSubTextTokenType.TemplateSegment) {
-                    linkType = MpSubTextTokenType.TemplateSegment;
-                }
-                var mc = Regex.Matches(CopyItemPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                foreach (Match m in mc) {
-                    foreach (Group mg in m.Groups) {
-                        foreach (Capture c in mg.Captures) {
-                            Hyperlink hl = null;
-                            var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
-                            if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
-                                continue;
-                            }
-                            lastRangeEnd = matchRange.End;
-                            if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = GetTemplates().Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
-                                    //CopyItem.GetTemplateByName(matchRange.Text);
-                                hl = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(this, copyItemTemplate, matchRange);
-                                hl.Tag = linkType;
-                                TemplateHyperlinkCollectionViewModel.Add((MpTemplateHyperlinkViewModel)hl.DataContext);
-                            } else {
-                                var matchRun = new Run(matchRange.Text);
-                                matchRange.Text = "";
-                                // DO NOT REMOVE this extra link ensures selection is retained!
-                                var hlink = new Hyperlink(matchRun, matchRange.Start);
-                                hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                hl = hlink;
-                                var linkText = c.Value;
-                                hl.Tag = linkType;
-                                if(linkText == @"DragAction.Cancel") {
-                                    linkText = linkText;
-                                }
-                                MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(IsSubSelected)), hl, Hyperlink.IsEnabledProperty);
-                                hl.MouseEnter += (s3, e3) => {
-                                    hl.Cursor = HostClipTileViewModel.IsSelected ? Cursors.Hand : Cursors.Arrow;
-                                };
-                                hl.MouseLeave += (s3, e3) => {
-                                    hl.Cursor = Cursors.Arrow;
-                                };
-                                hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if (hl.NavigateUri != null && HostClipTileViewModel.IsSelected) {
-                                        MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
-                                    }
-                                };
-
-                                var convertToQrCodeMenuItem = new MenuItem();
-                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                                convertToQrCodeMenuItem.Click += (s5, e1) => {
-                                    var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
-                                    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    Clipboard.SetImage(bmpSrc);
-                                };
-                                convertToQrCodeMenuItem.Tag = hl;
-                                hl.ContextMenu = new ContextMenu();
-                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
-
-                                switch ((MpSubTextTokenType)hl.Tag) {
-                                    case MpSubTextTokenType.StreetAddress:
-                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
-                                        break;
-                                    case MpSubTextTokenType.Uri:
-                                        try {
-                                            string urlText = MpHelpers.Instance.GetFullyFormattedUrl(linkText);
-                                            if(MpHelpers.Instance.IsValidUrl(urlText) &&
-                                               Uri.IsWellFormedUriString(urlText,UriKind.RelativeOrAbsolute)) {
-                                                hl.NavigateUri = new Uri(urlText);
-                                            } else {
-                                                MonkeyPaste.MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
-                                                var par = hl.Parent.FindParentOfType<Paragraph>();
-                                                var s = new Span();
-                                                s.Inlines.AddRange(hl.Inlines.ToArray());
-                                                par.Inlines.InsertAfter(hl, s);
-                                                par.Inlines.Remove(hl);
-                                            }
-                                        }
-                                        catch(Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: "+ex);
-                                            var par = hl.Parent.FindParentOfType<Paragraph>();
-                                            var s = new Span();
-                                            s.Inlines.AddRange(hl.Inlines.ToArray());
-                                            par.Inlines.InsertAfter(hl, s);
-                                            par.Inlines.Remove(hl);
-                                            par.Inlines.Remove(hlink);
-                                            break;
-
-                                        }
-                                        MenuItem minifyUrl = new MenuItem();
-                                        minifyUrl.Header = "Minify with bit.ly";
-                                        minifyUrl.Click += async (s1, e2) => {
-                                            Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
-                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
-                                            if (!string.IsNullOrEmpty(minifiedLink)) {
-                                                matchRange.Text = minifiedLink;
-                                                ClearHyperlinks();
-                                                CreateHyperlinks();
-                                            }
-                                            //Clipboard.SetText(minifiedLink);
-                                        };
-                                        minifyUrl.Tag = hl;
-                                        hl.ContextMenu.Items.Add(minifyUrl);
-                                        break;
-                                    case MpSubTextTokenType.Email:
-                                        hl.NavigateUri = new Uri("mailto:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.PhoneNumber:
-                                        hl.NavigateUri = new Uri("tel:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.Currency:
-                                        try {
-                                            //"https://www.google.com/search?q=%24500.80+to+yen"
-                                            MenuItem convertCurrencyMenuItem = new MenuItem();
-                                            convertCurrencyMenuItem.Header = "Convert Currency To";
-                                            var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
-                                            foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                                if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
-                                                    continue;
-                                                }
-                                                MenuItem subItem = new MenuItem();
-                                                subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                                subItem.Click += async (s2, e2) => {
-                                                    Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-                                                    var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-                                                        MpHelpers.Instance.GetCurrencyValueFromString(linkText),
-                                                        fromCurrencyType,
-                                                        toCurrencyType);
-                                                    convertedValue = Math.Round(convertedValue, 2);
-                                                    if (Rtb.Tag != null && ((List<Hyperlink>)Rtb.Tag).Contains(hl)) {
-                                                        ((List<Hyperlink>)Rtb.Tag).Remove(hl);
-                                                    }
-                                                    Run run = new Run(currency.CurrencySymbol + convertedValue);
-                                                    hl.Inlines.Clear();
-                                                    hl.Inlines.Add(run);
-                                                };
-
-                                                convertCurrencyMenuItem.Items.Add(subItem);
-                                            }
-
-                                            hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
-                                        }
-                                        catch (Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
-                                        }
-                                        break;
-                                    case MpSubTextTokenType.HexColor8:
-                                    case MpSubTextTokenType.HexColor6:
-                                        var rgbColorStr = linkText;
-                                        if (rgbColorStr.Length > 7) {
-                                            rgbColorStr = rgbColorStr.Substring(0, 7);
-                                        }
-                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
-
-                                        MenuItem changeColorItem = new MenuItem();
-                                        changeColorItem.Header = "Change Color";
-                                        changeColorItem.Click += (s, e) => {
-                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText),true);
-                                            if(result != null) {
-                                                var run = new Run(result.ToString());
-                                                hl.Inlines.Clear();
-                                                hl.Inlines.Add(run);
-                                                var bgBrush = result;
-                                                var fgBrush = MpHelpers.Instance.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
-                                                var tr = new TextRange(run.ElementStart, run.ElementEnd);
-                                                tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
-                                                tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
-                                            }
-                                        };
-                                        hl.ContextMenu.Items.Add(changeColorItem);
-
-                                        hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
-                                        hl.Foreground = MpHelpers.Instance.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
-                                        break;
-                                    default:
-                                        MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (rtbSelection != null) {
-                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-        }
-
-        public List<Hyperlink> GetHyperlinkList() {
-            if(Rtb == null) {
-                return new List<Hyperlink>();
-            }
-            var rtbSelection = Rtb?.Selection;
-            var hlList = new List<Hyperlink>();
-            for (TextPointer position = Rtb.Document.ContentStart;
-                position != null && position.CompareTo(Rtb.Document.ContentEnd) <= 0;
-                position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                    var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
-                    if (hl != null && !hlList.Contains(hl)) {
-                        hlList.Add(hl);
-                    }
-                }
-            }
-            if (rtbSelection != null) {
-                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-            return hlList;
-        }
         #endregion
 
         #region Clone Implementation
@@ -1840,7 +1609,17 @@ namespace MpWpfApp {
         }        
         #endregion
 
-
+        public ICommand RefreshDocumentCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        SaveSubItemToDatabase();
+                    },
+                    () => {
+                        return HasTextChanged;
+                    });
+            }
+        }
     }
 
 }

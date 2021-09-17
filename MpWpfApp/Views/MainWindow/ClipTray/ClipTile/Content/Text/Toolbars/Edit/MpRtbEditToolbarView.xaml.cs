@@ -1,6 +1,7 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,40 +23,69 @@ namespace MpWpfApp {
     public partial class MpRtbEditToolbarView : UserControl {
         ToggleButton selectedAlignmentButton;
         ToggleButton selectedListButton;
-        RichTextBox rtb;
+        RichTextBox artb;
+        List<ButtonBase> buttons;
 
         public MpRtbEditToolbarView() {
             InitializeComponent();
         }
 
-        public void SetCommandTarget(RichTextBox trtb) {
-            trtb.SelectionChanged += CurrentRtb_SelectionChanged;
-            trtb.TextChanged += CurrentRtb_TextChanged;
-            rtb = trtb;
-            rtb.IsReadOnly = false;
-            rtb.IsManipulationEnabled = true;
-            var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
-            rtbetbvm.HasTextChanged = false;
-            rtbetbvm.HostClipTileViewModel.IsEditingTile = true;
+
+        private void ClipTileEditorToolbar_Loaded(object sender, RoutedEventArgs e) {
+            
         }
 
+        public void SetCommandTarget(RichTextBox trtb) {
+            artb = trtb;
+            DataContext = artb.DataContext as MpRtbItemViewModel;
+            if(buttons == null) {
+                buttons = new List<ButtonBase>() {
+                PrintButton,
+                CutButton,
+                CopyButton,
+                PasteButton,
+                UndoButton,
+                RedoButton,
+                BoldButton,
+                ItalicButton,
+                UnderlineButton,
+                LeftButton,
+                RightButton,
+                CenterButton,
+                NumberingButton,
+                BulletsButton
+            };
+            }
+            foreach(var b in buttons) {
+                b.CommandTarget = trtb;
+            }
+            trtb.SelectionChanged += CurrentRtb_SelectionChanged;
+            trtb.TextChanged += CurrentRtb_TextChanged;
+            artb = trtb;
+            artb.IsReadOnly = false;
+            artb.IsManipulationEnabled = true;
+            
+            CurrentRtb_SelectionChanged(this, null);
+            
+        }
+
+        #region Toolbar Events
+
         public void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
-            var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
+            var ertbtvm = DataContext as MpRtbItemViewModel;
             ertbtvm.HasTextChanged = true;
             
-            rtb.UpdateLayout();
+            artb.UpdateLayout();
         }
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            
+            var ertbtvm = DataContext as MpRtbItemViewModel;
 
-            var ertbtvm = DataContext as MpEditRichTextBoxToolbarViewModel;
-
-            var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            var fontFamily = artb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
             FontFamilyCombo.SelectedItem = fontFamily;
 
             // Set font size combo
-            var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            var fontSize = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
             if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
                 fontSize = string.Empty;
             } else {
@@ -64,47 +94,44 @@ namespace MpWpfApp {
             FontSizeCombo.Text = fontSize.ToString();
 
             // Set Font buttons
-            BoldButton.IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-            ItalicButton.IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-            UnderlineButton.IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+            BoldButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+            ItalicButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+            UnderlineButton.IsChecked = artb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
             // Set Alignment buttons
-            LeftButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-            CenterButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-            RightButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+            LeftButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+            CenterButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+            RightButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
 
             //disable add template button if current selection intersects with a template
             //this may not be necessary since templates are inlineuicontainers...
             MpTemplateHyperlinkViewModel thlvm = null;
-            if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-               rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
+            if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
+               artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
                 }
             }
             if (thlvm == null) {
-                ertbtvm.IsAddTemplateButtonEnabled = true;
+                AddTemplateButton.IsEnabled = true;
             } else {
-                ertbtvm.IsAddTemplateButtonEnabled = false;
+                AddTemplateButton.IsEnabled = false;
             }
 
-            rtb.UpdateLayout();
+            artb.UpdateLayout();
         }
 
-        #region Toolbar Events
         private void FontFamilyCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if(FontFamilyCombo.SelectedItem == null) {
                 return;
             }
             
             var fontFamily = FontFamilyCombo.SelectedItem.ToString();
-            rtb.Focus();
-            var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
-            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
-
-            
+            artb.Focus();
+            var textRange = new TextRange(artb.Selection.Start, artb.Selection.End);
+            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);            
         }
 
         private void FontSizeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -119,10 +146,10 @@ namespace MpWpfApp {
                 return;
             }
             // Process selection
-            rtb.Focus();
+            artb.Focus();
             var pointSize = FontSizeCombo.SelectedItem.ToString();
             var pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
-            var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+            var textRange = new TextRange(artb.Selection.Start, artb.Selection.End);
             textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
         }
 
@@ -136,7 +163,7 @@ namespace MpWpfApp {
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {
-                    rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
+                    artb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
                 }
             );
             ForegroundColorButton.ContextMenu = colorContextMenu;
@@ -148,7 +175,7 @@ namespace MpWpfApp {
             var colorMenuItem = new MenuItem();
             var colorContextMenu = new ContextMenu();
 
-            var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
+            var rtbetbvm = DataContext as MpRtbItemViewModel;
             var hctvm = rtbetbvm.HostClipTileViewModel;
             
 
@@ -157,8 +184,8 @@ namespace MpWpfApp {
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {
-                    rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
-                    hctvm.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(rtb);
+                    artb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
+                    hctvm.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(artb);
                 }
             );
 
@@ -167,8 +194,7 @@ namespace MpWpfApp {
             colorContextMenu.IsOpen = true;
         }
 
-        private void PrintButton_Click(object sender, RoutedEventArgs e) {
-            
+        private void PrintButton_Click(object sender, RoutedEventArgs e) {            
             var dlg = new PrintDialog();
             dlg.PageRangeSelection = PageRangeSelection.AllPages;
             dlg.UserPageRangeEnabled = true;
@@ -176,7 +202,7 @@ namespace MpWpfApp {
             if (dlg.ShowDialog() == true) {
                 //use either one of the below    
                 // dlg.PrintVisual(RichTextControl as Visual, "printing as visual");
-                dlg.PrintDocument((((IDocumentPaginatorSource)rtb.Document).DocumentPaginator), "Printing Clipboard Item");
+                dlg.PrintDocument((((IDocumentPaginatorSource)artb.Document).DocumentPaginator), "Printing Clipboard Item");
             }
         }
 
@@ -193,7 +219,6 @@ namespace MpWpfApp {
             SetButtonGroupSelection(clickedButton, selectedListButton, buttonGroup, false);
             selectedListButton = clickedButton;
         }
-        #endregion
 
         private void SetButtonGroupSelection(ToggleButton clickedButton, ToggleButton currentSelectedButton, IEnumerable<ToggleButton> buttonGroup, bool ignoreClickWhenSelected) {
             /* In some cases, if the user clicks the currently-selected button, we want to ignore
@@ -216,77 +241,83 @@ namespace MpWpfApp {
             // Select the clicked button
             clickedButton.IsChecked = true;
         }
+        #endregion
 
-        private void AddTemplateButton_PreviewMouseDown(object sender, MouseButtonEventArgs e3) {
-            e3.Handled = true;
-            var rtbetbvm = DataContext as MpEditRichTextBoxToolbarViewModel;
-            var hctvm = rtbetbvm.HostClipTileViewModel;
-            var rtbcvm = hctvm.ContentContainerViewModel as MpRtbItemCollectionViewModel;
-            
-            var rtblb = rtb.FindParentOfType<MpContentListView>();
-            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
-            //SubSelectedRtbViewModel.SaveSubItemToDatabase();
+        //private void AddTemplateButton_PreviewMouseDown(object sender, MouseButtonEventArgs e3) {
+        //    if(artb == null) {
+        //        MonkeyPaste.MpConsole.WriteTraceLine("Error no active rtb");
+        //        return;
+        //    }
+        //    e3.Handled = true;
 
-            if (rtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
-                //if templates are NOT in the clip yet add one w/ default name
-                //rtblb.EditTemplateView.SetActiveTemplate(null, true);
+        //    var addButton = sender as Button;
+        //    addButton.ContextMenu = new MpAddTemplateToolbarContextMenuView(addButton,artb);
+        //    addButton.ContextMenu.IsOpen = true;
 
-               rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
-                //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            } else {
-                var templateContextMenu = new ContextMenu();
-                foreach (var ttcvm in rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
-                    Border b = new Border();
-                    b.Background = ttcvm.TemplateBrush;
-                    b.BorderBrush = Brushes.Black;
-                    b.BorderThickness = new Thickness(1);
-                    b.Width = 14;
-                    b.Height = 14;
-                    b.VerticalAlignment = VerticalAlignment.Center;
-                    b.HorizontalAlignment = HorizontalAlignment.Left;
+            //var rtbvm = artb.DataContext as MpRtbItemViewModel;
+            ////SubSelectedRtbViewModel.SaveSubItemToDatabase();
 
-                    TextBlock tb = new TextBlock();
-                    tb.Text = ttcvm.TemplateDisplayName;//TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
-                    tb.FontSize = 14;
-                    tb.HorizontalAlignment = HorizontalAlignment.Left;
-                    tb.VerticalAlignment = VerticalAlignment.Center;
-                    tb.Margin = new Thickness(5, 0, 0, 0);
+            //if (rtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
+            //    //if templates are NOT in the clip yet add one w/ default name
+            //    //rtblb.EditTemplateView.SetActiveTemplate(null, true);
+
+            //   rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
+            //    //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            //} else {
+            //    var templateContextMenu = new ContextMenu();
+            //    foreach (var ttcvm in rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+            //        Border b = new Border();
+            //        b.Background = ttcvm.TemplateBrush;
+            //        b.BorderBrush = Brushes.Black;
+            //        b.BorderThickness = new Thickness(1);
+            //        b.Width = 14;
+            //        b.Height = 14;
+            //        b.VerticalAlignment = VerticalAlignment.Center;
+            //        b.HorizontalAlignment = HorizontalAlignment.Left;
+
+            //        TextBlock tb = new TextBlock();
+            //        tb.Text = ttcvm.TemplateDisplayName;//TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
+            //        tb.FontSize = 14;
+            //        tb.HorizontalAlignment = HorizontalAlignment.Left;
+            //        tb.VerticalAlignment = VerticalAlignment.Center;
+            //        tb.Margin = new Thickness(5, 0, 0, 0);
 
 
-                    //DockPanel dp1 = new DockPanel();
-                    //dp1.Children.Add(b);
-                    //dp1.Children.Add(tb);
-                    //b.SetValue(DockPanel.DockProperty, Dock.Left);
-                    //tb.SetValue(DockPanel.DockProperty, Dock.Right);
+            //        //DockPanel dp1 = new DockPanel();
+            //        //dp1.Children.Add(b);
+            //        //dp1.Children.Add(tb);
+            //        //b.SetValue(DockPanel.DockProperty, Dock.Left);
+            //        //tb.SetValue(DockPanel.DockProperty, Dock.Right);
 
-                    MenuItem tmi = new MenuItem();
-                    tmi.Icon = b;
-                    tmi.Header = tb;
-                    tmi.Click += (s1, e5) => {
-                        rtbcvm.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
-                        //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
-                    };
-                    templateContextMenu.Items.Add(tmi);
-                }
-                var addNewMenuItem = new MenuItem();
-                TextBlock tb2 = new TextBlock();
-                tb2.Text = "Add New...";
-                tb2.FontSize = 14;
-                tb2.HorizontalAlignment = HorizontalAlignment.Left;
-                tb2.VerticalAlignment = VerticalAlignment.Center;
+            //        MenuItem tmi = new MenuItem();
+            //        tmi.Icon = b;
+            //        tmi.Header = tb;
+            //        tmi.Click += (s1, e5) => {
+            //            rtbcvm.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
+            //            //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
+            //        };
+            //        templateContextMenu.Items.Add(tmi);
+            //    }
+            //    var addNewMenuItem = new MenuItem();
+            //    TextBlock tb2 = new TextBlock();
+            //    tb2.Text = "Add New...";
+            //    tb2.FontSize = 14;
+            //    tb2.HorizontalAlignment = HorizontalAlignment.Left;
+            //    tb2.VerticalAlignment = VerticalAlignment.Center;
 
-                var img = new Image();
-                img.Source = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Silk/icons/add.png"));
-                addNewMenuItem.Icon = img;
-                addNewMenuItem.Header = tb2;
-                addNewMenuItem.Click += (s1, e5) => {
-                    rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
-                };
-                templateContextMenu.Items.Add(addNewMenuItem);
-                AddTemplateButton.ContextMenu = templateContextMenu;
-                templateContextMenu.PlacementTarget = AddTemplateButton;
-                templateContextMenu.IsOpen = true;
-            }
-        }
+            //    var img = new Image();
+            //    img.Source = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Silk/icons/add.png"));
+            //    addNewMenuItem.Icon = img;
+            //    addNewMenuItem.Header = tb2;
+            //    addNewMenuItem.Click += (s1, e5) => {
+            //        rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
+            //    };
+            //    templateContextMenu.Items.Add(addNewMenuItem);
+            //    AddTemplateButton.ContextMenu = templateContextMenu;
+            //    templateContextMenu.PlacementTarget = AddTemplateButton;
+            //    templateContextMenu.IsOpen = true;
+            //}
+       // }
+
     }
 }

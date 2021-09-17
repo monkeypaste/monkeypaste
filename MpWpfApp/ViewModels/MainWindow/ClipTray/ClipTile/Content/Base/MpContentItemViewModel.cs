@@ -365,8 +365,8 @@ namespace MpWpfApp {
                    ContainerViewModel.SubSelectedContentItems.Count == 1;
         }
         private void EditSubContent() {
-            if (!HostClipTileViewModel.IsEditingTile) {
-                HostClipTileViewModel.IsEditingTile = true;
+            if (!HostClipTileViewModel.IsEditingContent) {
+                HostClipTileViewModel.IsEditingContent = true;
                 ContainerViewModel.ClearSubSelection();
                 IsSubSelected = true;
             }

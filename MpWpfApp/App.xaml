@@ -1002,8 +1002,10 @@
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:MpBoolToVisibilityFlipConverter x:Key="BoolToVisibilityFlipConverter" />
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
         <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
+        <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
                 
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
         <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />

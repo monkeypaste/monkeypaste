@@ -61,7 +61,7 @@ namespace MpWpfApp {
                 if (SubSelectedRtbViewModel == null) {
                     return null;
                 }
-                return SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder;
+                return null;// SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder;
             }
         }
 
@@ -113,7 +113,7 @@ namespace MpWpfApp {
                 }
                 if(HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems.Where(x=>x.IsDynamicPaste).ToList().Count > 1) {
                     foreach (MpRtbItemViewModel rtbvm in HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems) {
-                        if (rtbvm.IsDynamicPaste && rtbvm.TemplateHyperlinkCollectionViewModel.Any(x => string.IsNullOrEmpty(x.TemplateText))) {
+                        if (rtbvm.IsDynamicPaste && rtbvm.TemplateHyperlinkCollectionViewModel.Templates.Any(x => string.IsNullOrEmpty(x.TemplateText))) {
                             return @"CONTINUE";
                         }
                     }
@@ -239,7 +239,7 @@ namespace MpWpfApp {
                 if(SubSelectedRtbViewModel == null) {
                     return Visibility.Collapsed;
                 }
-                if (SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
+                if (SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Templates.Count > 1) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -248,12 +248,26 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        private bool _hasTextChanged = false;
+        public bool HasTextChanged {
+            get {
+                return _hasTextChanged;
+            }
+            set {
+                if (_hasTextChanged != value) {
+                    _hasTextChanged = value;
+                    OnPropertyChanged(nameof(HasTextChanged));
+                }
+            }
+        }
+
         public bool HaveAllSubItemTemplatesBeenVisited {
             get {
                 if (SubSelectedRtbViewModel == null) {
                     return false;
                 }
-                return SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.All(x => x.WasVisited);
+                return SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Templates.All(x => x.WasVisited);
             }
         }
 
@@ -262,7 +276,7 @@ namespace MpWpfApp {
                 if (SubSelectedRtbViewModel == null) {
                     return false;
                 }
-                return SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.All(x => !string.IsNullOrEmpty(x.TemplateText));
+                return SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Templates.All(x => !string.IsNullOrEmpty(x.TemplateText));
             }
         }
         #endregion
@@ -342,7 +356,7 @@ namespace MpWpfApp {
                         if (SubSelectedRtbViewModel == null || SelectedTemplateIdx < 0) {
                             break;
                         }
-                        SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[SelectedTemplateIdx].TemplateName);
+                        //SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[SelectedTemplateIdx].TemplateName);
                         OnPropertyChanged(nameof(SelectedTemplate));
                         break;
                     case nameof(SelectedTemplate):
@@ -489,7 +503,7 @@ namespace MpWpfApp {
             };
 
             OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
-            SetTemplate(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+            SetTemplate(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Templates[0].TemplateName);
 
             SelectedTemplateTextBox.Focus();
         }
@@ -498,7 +512,7 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(templateName)) {
                 return;
             }
-            SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(templateName);
+            //SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(templateName);
             HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(SubSelectedRtbViewModel);
             var rtb = SubSelectedRtbViewModel.Rtb;
             var characterRect = SelectedTemplate.TemplateHyperlinkRange.End.GetCharacterRect(LogicalDirection.Forward);
@@ -506,7 +520,7 @@ namespace MpWpfApp {
             rtb.ScrollToHorizontalOffset(characterRect.Left - rtb.ActualWidth / 2d);
             rtb.ScrollToVerticalOffset(characterRect.Top - rtb.ActualHeight / 2d);
 
-            SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel);
+            SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplate);
         }
 
         private void UpdateFocusAppearance() {
@@ -538,9 +552,9 @@ namespace MpWpfApp {
             }
 
             foreach(MpRtbItemViewModel srtbvm in HostClipTileViewModel.ContentContainerViewModel.SubSelectedContentItems) {
-                foreach(var thlvm in srtbvm.TemplateHyperlinkCollectionViewModel) {
-                    thlvm.IsSelected = false;
-                }                
+                //foreach(var thlvm in srtbvm.TemplateHyperlinkCollectionViewModel) {
+                //    thlvm.IsSelected = false;
+                //}                
             }
         }
 
@@ -577,18 +591,18 @@ namespace MpWpfApp {
         }
         private void NextTemplateToken() {
             if(!string.IsNullOrEmpty(SelectedTemplateName)) {
-                foreach(var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
-                    if(thlvm.TemplateName == SelectedTemplateName && !string.IsNullOrEmpty(thlvm.TemplateText)) {
-                        thlvm.WasVisited = true;
-                    }
-                }
+                //foreach(var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
+                //    if(thlvm.TemplateName == SelectedTemplateName && !string.IsNullOrEmpty(thlvm.TemplateText)) {
+                //        thlvm.WasVisited = true;
+                //    }
+                //}
             }
             int nextIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SelectedTemplate) + 1;
             if(nextIdx >= UniqueTemplateHyperlinkViewModelListByDocOrder.Count) {
                 nextIdx = 0;
             }
-            SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[nextIdx].TemplateName);
-            SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel);
+           // SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[nextIdx].TemplateName);
+            SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplate);
             SelectedTemplateTextBox.Focus();
         }
 
@@ -606,20 +620,20 @@ namespace MpWpfApp {
                    HostClipTileViewModel.IsPastingTemplate;
         }
         private void PreviousTemplateToken() {
-            if (!string.IsNullOrEmpty(SelectedTemplateName)) {
-                foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
-                    if (thlvm.TemplateName == SelectedTemplateName && !string.IsNullOrEmpty(thlvm.TemplateText)) {
-                        thlvm.WasVisited = true;
-                    }
-                }
-            }
-            int prevIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SelectedTemplate) - 1;
-            if (prevIdx < 0) {
-                prevIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.Count - 1;
-            }
-            SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[prevIdx].TemplateName);
-            SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel);
-            SelectedTemplateTextBox.Focus();
+            //if (!string.IsNullOrEmpty(SelectedTemplateName)) {
+            //    foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
+            //        if (thlvm.TemplateName == SelectedTemplateName && !string.IsNullOrEmpty(thlvm.TemplateText)) {
+            //            thlvm.WasVisited = true;
+            //        }
+            //    }
+            //}
+            //int prevIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SelectedTemplate) - 1;
+            //if (prevIdx < 0) {
+            //    prevIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.Count - 1;
+            //}
+            //SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[prevIdx].TemplateName);
+            //SelectedTemplateIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.IndexOf(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplate);
+            //SelectedTemplateTextBox.Focus();
         }
 
         private RelayCommand _pasteTemplateCommand;
@@ -657,7 +671,7 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
             var srtbvm = SubSelectedRtbViewModel;
-            srtbvm.ClearHyperlinks();
+            srtbvm.RequestClearHyperlinks();
             var docClone = srtbvm.Rtb.Document.Clone();
             sw.Stop();
             MonkeyPaste.MpConsole.WriteLine(@"Clear: " + sw.ElapsedMilliseconds + "ms");
@@ -674,7 +688,7 @@ namespace MpWpfApp {
             sw.Stop();
             MonkeyPaste.MpConsole.WriteLine(@"Replace: " + sw.ElapsedMilliseconds + "ms");
             sw.Start();
-            srtbvm.CreateHyperlinks();
+            srtbvm.RequestCreateHyperlinks();
             sw.Stop();
             MonkeyPaste.MpConsole.WriteLine(@"Create: " + sw.ElapsedMilliseconds + "ms");
             srtbvm.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(docClone);

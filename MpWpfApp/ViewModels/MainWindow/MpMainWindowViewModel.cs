@@ -305,7 +305,7 @@ namespace MpWpfApp {
             double ctvmDelta = ctvmToExpand.ContentContainerViewModel.TotalExpandedSize.Height - ctvmToExpand.ContentContainerViewModel.ContainerSize.Height;
             if(ctvmToExpand.IsPastingTemplate) {
                 ctvmDelta += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-            } else if(ctvmToExpand.IsEditingTile) {
+            } else if(ctvmToExpand.IsEditingContent) {
                 ctvmDelta += MpMeasurements.Instance.ClipTileEditToolbarHeight;
             }
             _deltaHeight = Math.Min(maxDelta,ctvmDelta);//MpMeasurements.Instance.MainWindowMinHeight);

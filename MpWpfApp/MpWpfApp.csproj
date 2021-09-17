@@ -130,6 +130,8 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpBoolToVisibilityFlipConverter.cs" />
+    <Compile Include="Converters\MpBrushToImageConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
@@ -306,6 +308,9 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentListItemView.xaml.cs">
       <DependentUpon>MpContentListItemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpAddTemplateToolbarContextMenuView.xaml.cs">
+      <DependentUpon>MpAddTemplateToolbarContextMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpEditTemplateToolbarView.xaml.cs">
       <DependentUpon>MpEditTemplateToolbarView.xaml</DependentUpon>
     </Compile>
@@ -430,6 +435,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentListItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpAddTemplateToolbarContextMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

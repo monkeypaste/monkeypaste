@@ -8,9 +8,10 @@ using System.Windows.Markup;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Reflection;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
+    public abstract class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
         #region Private Variables
 
         #endregion
@@ -166,10 +167,36 @@ namespace MpWpfApp {
 
         #region Protected Methods
         protected MpViewModelBase() {
-            //OnInitialize();
-            //if(MainWindowViewModel == null) {
-            //    MainWindowViewModel = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-            //}
+            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
+            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
+            MpDb.Instance.SyncAdd += Instance_SyncAdd;
+            MpDb.Instance.SyncUpdate += Instance_SyncUpdate;
+            MpDb.Instance.SyncDelete += Instance_SyncDelete;
+        }
+
+        protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) {
+            
+        }
+
+        protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) {
+            
+        }
+
+        protected virtual void Instance_SyncAdd(object sender, MpDbSyncEventArgs e) {
+            
+        }
+
+        protected virtual void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            
+        }
+
+        protected virtual void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            
+        }
+
+        protected virtual void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            
         }
 
         protected virtual void OnInitialize() {

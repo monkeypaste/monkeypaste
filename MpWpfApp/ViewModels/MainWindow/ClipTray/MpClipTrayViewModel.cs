@@ -295,7 +295,7 @@ namespace MpWpfApp {
         public bool IsEditingClipTile {
             get {
                 foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.IsEditingTile) {
+                    if (sctvm.IsEditingContent) {
                         return true;
                     }
                 }
@@ -548,8 +548,8 @@ namespace MpWpfApp {
         public void ClearClipEditing() {
             foreach (var ctvm in ClipTileViewModels) {
                 ctvm.IsEditingTitle = false;
-                if (ctvm.IsEditingTile) {
-                    ctvm.IsEditingTile = false;
+                if (ctvm.IsEditingContent) {
+                    ctvm.IsEditingContent = false;
                 }
                 ctvm.IsEditingTemplate = false;
                 if (ctvm.IsPastingTemplate) {
@@ -1071,7 +1071,7 @@ namespace MpWpfApp {
                     foreach (MpRtbItemViewModel rtbvm in sctvm.ContentContainerViewModel.ItemViewModels) {
                         rtbvm.IsPastingTemplate = false;
                         rtbvm.ItemVisibility = Visibility.Visible;
-                        rtbvm.TemplateHyperlinkCollectionViewModel.Reset();
+                        rtbvm.TemplateHyperlinkCollectionViewModel.ResetAll();
                         rtbvm.TemplateRichText = string.Empty;
                         rtbvm.Rtb.ScrollToHorizontalOffset(0);
                         rtbvm.Rtb.ScrollToVerticalOffset(0);

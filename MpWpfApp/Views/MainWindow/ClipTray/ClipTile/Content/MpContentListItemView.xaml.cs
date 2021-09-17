@@ -216,8 +216,7 @@ namespace MpWpfApp {
 
         private void RtbItem_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
-            var rtblb = this.FindParentOfType<MpMultiSelectListBox>();
-            var rtblbvm = rtblb.DataContext as MpContentContainerViewModel;
+            var rtblbvm = rtbvm.ContainerViewModel as MpRtbItemCollectionViewModel;
             var cm = (ContextMenu)sender;
             cm.DataContext = rtbvm;
             MenuItem cmi = null;

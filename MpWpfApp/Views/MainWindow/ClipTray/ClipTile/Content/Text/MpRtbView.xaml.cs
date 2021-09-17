@@ -27,7 +27,8 @@ namespace MpWpfApp {
                 rtbivm.OnRtbResetRequest += Rtbivm_OnRtbResetRequest;
                 rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                 rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
-
+                rtbivm.OnClearHyperlinksRequest += Rtbivm_OnClearHyperlinksRequest;
+                rtbivm.OnCreateHyperlinksRequest += Rtbivm_OnCreateHyperlinksRequest;
                 rtbivm.TemporarySetRtb(Rtb);
                 if (rtbivm.HostClipTileViewModel.WasAddedAtRuntime) {
                     //force new items to have left alignment
@@ -36,6 +37,14 @@ namespace MpWpfApp {
                     UpdateLayout();
                 }
             }
+        }
+
+        private void Rtbivm_OnCreateHyperlinksRequest(object sender, EventArgs e) {
+            Rtb.CreateHyperlinks();
+        }
+
+        private void Rtbivm_OnClearHyperlinksRequest(object sender, EventArgs e) {
+            Rtb.ClearHyperlinks();
         }
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -57,8 +66,6 @@ namespace MpWpfApp {
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpRtbItemViewModel;
             if (rtbvm.IsEditingContent && Rtb.IsFocused) {
-                this.GetVisualAncestor<MpContentListView>().EditToolbarView.SetCommandTarget(Rtb);
-                //rtbvm.HostClipTileViewModel.EditRichTextBoxToolbarViewModel.Rtb_SelectionChanged(rtbvm.Rtb, e3);
             }
         }
 
@@ -67,6 +74,14 @@ namespace MpWpfApp {
             rtblb?.UpdateLayout();
         }
 
-        
+        private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
+            var plv = this.GetVisualAncestor<MpContentListView>();
+            if (plv != null) {
+                var et = plv.GetVisualDescendent<MpRtbEditToolbarView>();
+                if(et != null) {
+                    et.SetCommandTarget(Rtb);
+                }
+            }
+        }
     }
 }

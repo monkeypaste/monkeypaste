@@ -4,12 +4,12 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-    public class MpBoolToVisibilityConverter : IValueConverter {
+    public class MpBoolToVisibilityFlipConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (parameter != null) {
-                return (bool)value ? Visibility.Visible : Visibility.Hidden;
+            if(parameter != null) {
+                return (bool)value ? Visibility.Hidden : Visibility.Visible;
             }
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

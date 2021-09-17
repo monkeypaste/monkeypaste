@@ -52,7 +52,7 @@
                           Height="20"
                           Margin="0,-5,2,0"
                           Visibility="{Binding ToggleEditModeButtonVisibility}"
-                          IsChecked="{Binding IsEditingTile}"
+                          IsChecked="{Binding IsEditingContent}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/edit.png" />
             </ToggleButton>
