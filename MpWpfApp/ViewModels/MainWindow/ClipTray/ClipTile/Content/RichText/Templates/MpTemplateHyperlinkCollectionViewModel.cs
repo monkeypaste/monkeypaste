@@ -156,39 +156,68 @@ namespace MpWpfApp {
             }
         }
 
-        public MpTemplateHyperlinkViewModel CreateTemplateHyperlinkViewModel(MpCopyItemTemplate ncit) {
-            if(ncit == null) {
+        public MpTemplateHyperlinkViewModel AddItem(MpCopyItemTemplate ncit) {
+            MpTemplateHyperlinkViewModel ntvm = null;
+
+            if (ncit == null) {
+                //for new templates create a default name
                 ncit = MpCopyItemTemplate.Create(
                             HostRtbViewModel.CopyItem.Id,
                             GetUniqueTemplateName());
+                ncit.WriteToDatabase();
+                ntvm = new MpTemplateHyperlinkViewModel(this, ncit);
+            } else {
+                //check if template exists (it should)
+                var dupCheck = Templates.Where(x => x.TemplateName == ncit.TemplateName).FirstOrDefault();
+                if (dupCheck == null) {
+                    //not sure how this could happen but it may dunno
+                    ntvm = new MpTemplateHyperlinkViewModel(this, ncit);
+                } else {
+                    //set existing thvm for return
+                    ntvm = dupCheck;
+                }
             }
-            var ntvm = new MpTemplateHyperlinkViewModel(this, ncit);
-            ntvm.OnTemplateSelected += Ntvm_OnTemplateSelected;
+            if (ntvm.InstanceCount == 0) {
+                //only add one selection handler
+                ntvm.OnTemplateSelected += Ntvm_OnTemplateSelected;
+                Templates.Add(ntvm);
+            }
+            ntvm.InstanceCount++;
+
             return ntvm;
         }
 
-        private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
-            var sthlvm = sender as MpTemplateHyperlinkViewModel;
-            foreach(var thlvm in Templates) {
-                if(thlvm != sthlvm) {
-                    thlvm.IsSelected = false;
+        public void RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+            var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
+            if(thlvmToRemove != null) {
+                if(removeAll || thlvmToRemove.InstanceCount == 1) {
+                    thlvmToRemove.CopyItemTemplate.DeleteFromDatabase();
+                    Templates.Remove(thlvmToRemove);
+                } else {
+                    thlvmToRemove.InstanceCount--;
                 }
             }
-            OnPropertyChanged(nameof(SelectedTemplate));
         }
         #endregion
 
         #region Private Methods
 
-        #region Db Event Handlers
+        #region Selection Changed Handlers
 
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e != null && e is MpCopyItemTemplate cit) {
-                if(cit.CopyItemId == HostRtbViewModel.CopyItem.Id) {
-
+        private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
+            var sthlvm = sender as MpTemplateHyperlinkViewModel;
+            foreach (var thlvm in Templates) {
+                if (thlvm != sthlvm) {
+                    thlvm.IsSelected = false;
                 }
             }
+            OnPropertyChanged(nameof(SelectedTemplate));
         }
+
+        #endregion
+
+        #region Db Event Handlers
+
         #endregion
 
         private string GetUniqueTemplateName() {

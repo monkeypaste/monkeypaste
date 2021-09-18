@@ -533,8 +533,9 @@ namespace MpWpfApp {
             var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
             bool showMatchNav = false;
             foreach (var ctvm in ct.ClipTileViewModels) {
-                var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
-                newVisibilityDictionary.Add(ctvm, newVisibility);
+                //var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
+                //newVisibilityDictionary.Add(ctvm, newVisibility);
+                ctvm.RequestSearch(SearchText);
                 if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
                     showMatchNav = true;
                 }
@@ -556,7 +557,7 @@ namespace MpWpfApp {
                             break;
                         }
                         if(skvp.Key is MpRtbItemViewModel) {
-                            (skvp.Key as MpRtbItemViewModel).SubItemVisibility = skvp.Value;
+                            //(skvp.Key as MpRtbItemViewModel).SubItemVisibility = skvp.Value;
                         }
                     }
                     

@@ -19,15 +19,12 @@
                    VerticalAlignment="Stretch">
             <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
-                                        Visibility="Collapsed"
                                         DataContext="{Binding PrimarySubSelectedContentItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                             Visibility="Collapsed"
                                              DockPanel.Dock="Bottom"
                                              DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel.SelectedTemplate}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
-                                              Visibility="Collapsed"
                                               DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel}" />
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"

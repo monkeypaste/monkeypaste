@@ -306,19 +306,30 @@ namespace MpWpfApp {
         }
 
         public MpContentContainerViewModel(MpClipTileViewModel rootTile, MpCopyItem headItem) : this(rootTile) {
-            InitItems(headItem);            
+            Initialize(headItem);
         }
 
+        public void Initialize(MpCopyItem headItem) {
+            var ccil = MpCopyItem.GetCompositeChildren(headItem);
+            ccil.Insert(0, headItem);
 
-        public void InitItems(MpCopyItem headItem) {
-            ItemViewModels = new ObservableCollection<MpContentItemViewModel>() {
-                MpContentItemViewModel.Create(this, headItem)
-            };
+            var civml = new List<MpContentItemViewModel>();
+            foreach(var cci in ccil) {
+                civml.Add(MpContentItemViewModel.Create(this, cci));
+            }
+
+            ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
+                civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
 
             foreach(var ivm in ItemViewModels) {
-                ivm.OnSubSelected += ItemViewModel_OnSubSelected;
+                BindItemEvents(ivm);
             }
-            RefreshSubItems();
+
+            ResetSubSelection();
+        }
+
+        private void BindItemEvents(MpContentItemViewModel ivm) {
+            ivm.OnSubSelected += ItemViewModel_OnSubSelected;
         }
 
         private void ItemViewModel_OnSubSelected(object sender, EventArgs e) {
@@ -442,20 +453,6 @@ namespace MpWpfApp {
             }
         }
 
-        public void RefreshSubItems() {
-            if(HeadItem != null) {
-                var ccil = MpCopyItem.GetCompositeChildren(HeadItem.CopyItem);
-                foreach(var cci in ccil) {
-                    var dupCheck = ItemViewModels.Where(x => x.CopyItem.Id == cci.Id).FirstOrDefault();
-                    if(dupCheck == null) {
-                        ItemViewModels.Add(MpContentItemViewModel.Create(this, cci));
-                    } else {
-                        ItemViewModels[ItemViewModels.IndexOf(dupCheck)].CopyItem = cci;
-                    }                    
-                }
-                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(ItemViewModels.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
-            }
-        }
 
         public virtual void Resize(double deltaTop, double deltaWidth, double deltaHeight) {
             RequestUiUpdate();

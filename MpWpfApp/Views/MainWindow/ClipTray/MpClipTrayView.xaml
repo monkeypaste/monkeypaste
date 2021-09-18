@@ -25,8 +25,6 @@
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         MouseLeftButtonDown="ClipTray_MouseLeftButtonDown"
                                         IsListBoxHorizontal="True"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Top"
                                         AllowDrop="True"
                                         ScrollToSelectedItem="True"
                                         IsSynchronizedWithCurrentItem="True"
@@ -43,12 +41,6 @@
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="ClipTray_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
                 <local:MpMultiSelectListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />

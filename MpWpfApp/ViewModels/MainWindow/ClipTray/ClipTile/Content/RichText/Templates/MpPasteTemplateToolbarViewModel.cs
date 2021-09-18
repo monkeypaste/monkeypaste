@@ -394,7 +394,7 @@ namespace MpWpfApp {
         public void SetSubItem(MpRtbItemViewModel rtbvm) {            
             MpClipTrayViewModel.Instance.RequestScrollIntoView(HostClipTileViewModel);
             if (HostClipTileViewModel.IsPastingTemplate) {
-                InitWithRichTextBox(rtbvm.Rtb);
+                //InitWithRichTextBox(rtbvm.Rtb);
             } else {
                 //this doesn't get called because tile is shrunk before setting ispastingtemplate to false
                 //so that tile content is resized 'right'

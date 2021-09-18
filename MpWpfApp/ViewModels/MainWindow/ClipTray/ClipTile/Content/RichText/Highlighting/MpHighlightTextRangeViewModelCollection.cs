@@ -177,7 +177,7 @@ namespace MpWpfApp {
             NonTransparentDocumentBackgroundRangeList.AddRange(rtb.FindNonTransparentRangeList());
         }
 
-        public async Task<Dictionary<object,Visibility>> PerformHighlightingAsync(string hlt) {
+        public async Task<Dictionary<object,Visibility>> PerformHighlightingAsync(string hlt,TextBlock ttb, List<Tuple<TextBlock, RichTextBox>> tl) {
             HighlightTaskCount++;
 
             ClearHighlightingCommand.Execute(null);
@@ -208,17 +208,16 @@ namespace MpWpfApp {
                 return VisibilityDictionary;
             }
 
-            var result = await PerformHighlightAsyncHelper(hlt);
+            var result = await PerformHighlightAsyncHelper(hlt,ttb,tl);
             HighlightTaskCount--;
 
             return result;
         }
         
-        private async Task<Dictionary<object,Visibility>> PerformHighlightAsyncHelper(string hlt) {
+        private async Task<Dictionary<object,Visibility>> PerformHighlightAsyncHelper(string hlt, TextBlock ttb, List<Tuple<TextBlock,RichTextBox>> tl) {
             var result = Visibility.Visible;
             await Dispatcher.CurrentDispatcher.InvokeAsync(
                 (Action)(() => {
-                    var ttb = HostClipTileViewModel.TitleTextBlock;
                     int sortIdx = 0;
 
                     #region Pre-Pass Checks
@@ -307,8 +306,9 @@ namespace MpWpfApp {
                             this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, mr, sortIdx++, MpHighlightType.Title));
                         }
                         if (HostClipTileViewModel.IsTextItem) {
-                            foreach(var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                var strl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.RtbListBoxItemTitleTextBlock.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                            foreach(var t in tl) {
+                                var rtbvm = t.Item2.DataContext as MpRtbItemViewModel;
+                                var strl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                 foreach (var mr in strl) {
                                     this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Title));
                                 }
@@ -318,8 +318,10 @@ namespace MpWpfApp {
                     switch (HostClipTileViewModel.CopyItemType) {
                         case MpCopyItemType.RichText:                   
                             if (cc) {
-                                foreach(var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {                             
-                                    var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.Rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                foreach(var t in tl) {
+                                    var rtb = t.Item2;
+                                    var rtbvm = rtb.DataContext as MpRtbItemViewModel;
+                                    var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                     foreach (var mr in rtbvmtrl) {
                                         this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, mr, sortIdx++,MpHighlightType.Text));
                                     }
@@ -332,25 +334,25 @@ namespace MpWpfApp {
                                 this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, null, -1, MpHighlightType.Image));
                             }
                             break;
-                        case MpCopyItemType.FileList:
-                            if(Properties.Settings.Default.SearchByFileList && cc) {
-                                var flb = HostClipTileViewModel.FileListBox;
-                                foreach (var fivm in HostClipTileViewModel.FileListCollectionViewModel) {                                    
-                                    if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
-                                        var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
-                                        if (container != null) {
-                                            var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
-                                            if (fitb != null) {
-                                                var hlrl = MpHelpers.Instance.FindStringRangesFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                                                foreach (var mr in hlrl) {
-                                                    this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel,null, mr, sortIdx++,MpHighlightType.Text));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            break;
+                        //case MpCopyItemType.FileList:
+                        //    if(Properties.Settings.Default.SearchByFileList && cc) {
+                        //        var flb = HostClipTileViewModel.FileListBox;
+                        //        foreach (var fivm in HostClipTileViewModel.FileListCollectionViewModel) {                                    
+                        //            if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
+                        //                var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
+                        //                if (container != null) {
+                        //                    var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
+                        //                    if (fitb != null) {
+                        //                        var hlrl = MpHelpers.Instance.FindStringRangesFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                        //                        foreach (var mr in hlrl) {
+                        //                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel,null, mr, sortIdx++,MpHighlightType.Text));
+                        //                        }
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
                     }
                     MonkeyPaste.MpConsole.WriteLine("Ending highlighting clip with title: " + HostClipTileViewModel.CopyItemTitle);
                     ResetSelection();

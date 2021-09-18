@@ -36,7 +36,7 @@ namespace MpWpfApp {
                 if(HostTemplateCollectionViewModel == null) {
                     return null;
                 }
-                return HostClipTileViewModel;
+                return HostTemplateCollectionViewModel.HostClipTileViewModel;
             }
         }
         private MpTemplateHyperlinkCollectionViewModel _hostTemplateCollectionViewModel = null;
@@ -80,14 +80,7 @@ namespace MpWpfApp {
         #region Visibility Properties
         #endregion
 
-
-        #region Brush Properties
-        public Brush TemplateNameTextBoxBorderBrush {
-            get {
-                return string.IsNullOrEmpty(ValidationText) ? Brushes.Transparent : Brushes.Red;
-            }
-        }
-
+        #region Validation
         private string _validationText = string.Empty;
         public string ValidationText {
             get {
@@ -105,11 +98,26 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsValid {
+            get {
+                return !string.IsNullOrEmpty(ValidationText);
+            }
+        }
+        #endregion
+
+
+        #region Brush Properties
+        public Brush TemplateNameTextBoxBorderBrush {
+            get {
+                return IsValid ? Brushes.Transparent : Brushes.Red;
+            }
+        }
+
+        
+
         public Brush TemplateBorderBrush {
             get {
-                if(HostTemplateCollectionViewModel == null && 
-                  !HostClipTileViewModel.IsEditingContent && 
-                  !HostClipTileViewModel.IsPastingTemplate) {
+                if(HostClipTileViewModel == null || !HostClipTileViewModel.IsExpanded) {
                     return Brushes.Transparent;
                 }
                 if(IsSelected) {
@@ -133,9 +141,10 @@ namespace MpWpfApp {
 
         public Brush TemplateBackgroundBrush {
             get {
-                if(HostTemplateCollectionViewModel != null &&
-                    (HostClipTileViewModel.IsEditingContent || 
-                     HostClipTileViewModel.IsPastingTemplate)) {
+                if(HostClipTileViewModel == null) {
+                    return TemplateBrush;
+                }
+                if(HostClipTileViewModel.IsExpanded) {
                     if (IsHovering) {
                         return MpHelpers.Instance.GetDarkerBrush(TemplateBrush);
                     }
@@ -172,7 +181,7 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) 
+                //if (_isSelected != value)  
                     {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
@@ -217,6 +226,19 @@ namespace MpWpfApp {
 
             }
         }
+
+        private int _instanceCount = 0;
+        public int InstanceCount {
+            get {
+                return _instanceCount;            
+            }
+            set {
+                if(_instanceCount != value) {
+                    _instanceCount = value;
+                    OnPropertyChanged(nameof(InstanceCount));
+                }
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -229,7 +251,7 @@ namespace MpWpfApp {
         public string TemplateDisplayValue {
             get {
                 if (HostClipTileViewModel.IsPastingTemplate && 
-                    !string.IsNullOrEmpty(TemplateText)) {
+                    HasText) {
                     return TemplateText;
                 }
                 return TemplateName;
@@ -402,63 +424,6 @@ namespace MpWpfApp {
 
         public event EventHandler OnTemplateSelected;
 
-        #region Factory Methods
-        //public static Hyperlink CreateTemplateHyperlink(MpRtbItemViewModel rtbvm, MpCopyItemTemplate cit, TextRange tr) {
-        //    var thlvm = new MpTemplateHyperlinkViewModel(rtbvm, cit);
-
-        //    //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
-        //    //needs to be broken into their text before the template hyperlink can be created
-        //    var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
-        //    var trEHl = tr.End.Parent.FindParentOfType<Hyperlink>();
-        //    var trText = tr.Text;
-
-        //    if (trSHl != null) {
-        //        var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
-        //        trSHl.Inlines.Clear();
-        //        var span = new Span(new Run(linkText), trSHl.ElementStart);
-        //        tr =  MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
-        //    }
-        //    if (trEHl != null && trEHl != trSHl) {
-        //        var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
-        //        trEHl.Inlines.Clear();
-        //        var span = new Span(new Run(linkText), trEHl.ElementStart);
-        //        tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
-        //    }
-        //    thlvm.TemplateHyperlinkRange = tr;
-
-        //    var tb = new TextBlock();
-        //    tb.DataContext = thlvm;
-        //    tb.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
-
-        //    var b = new Border();
-        //    b.CornerRadius = new CornerRadius(5);
-        //    b.BorderThickness = new Thickness(1.5);
-        //    b.DataContext = thlvm;
-        //    b.Child = tb;
-            
-        //    var iuic = new InlineUIContainer();
-        //    iuic.DataContext = thlvm;
-        //    iuic.Child = b;
-            
-        //    var hl = new Hyperlink(tr.Start,tr.End);
-        //    hl.DataContext = thlvm;
-        //    hl.Inlines.Clear();
-        //    hl.Inlines.Add(iuic);
-
-        //    b.RenderTransform = new TranslateTransform(0, 4);
-        //    //add trailing run of one space to allow clicking after iuic
-        //    var tailStartPointer = hl.ElementEnd.GetInsertionPosition(LogicalDirection.Forward);
-        //    if(new TextRange(tr.End,rtbvm.Rtb.Document.ContentEnd).IsEmpty) {
-        //        new Run(@" ", rtbvm.Rtb.Document.ContentEnd);
-        //    }
-            
-
-        //    thlvm.TemplateHyperlink = hl;
-
-        //    return hl;
-        //}
-        #endregion
-
         #region Public Methods
         public MpTemplateHyperlinkViewModel() : base() { }
         public MpTemplateHyperlinkViewModel(MpTemplateHyperlinkCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base() {
@@ -572,7 +537,7 @@ namespace MpWpfApp {
                         IsSelected = false;
                     },
                     () => {
-                        return !Validate();
+                        return Validate();
                     });
             }
         }

@@ -295,7 +295,8 @@ namespace MonkeyPaste {
                 return null;
             }
             using var httpClient = new HttpClient();
-            byte[] bytes = httpClient.GetByteArrayAsync(url).Result;
+            //RunSync<object>(() => dpv.GetDataAsync(af).AsTask());
+            byte[] bytes = MpAsyncHelpers.RunSync<byte[]>(() => httpClient.GetByteArrayAsync(url));
 
             using var fs = new FileStream("favicon.ico", FileMode.Create);
             fs.Write(bytes, 0, bytes.Length);

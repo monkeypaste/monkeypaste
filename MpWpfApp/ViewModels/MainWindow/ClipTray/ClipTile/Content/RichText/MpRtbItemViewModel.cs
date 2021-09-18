@@ -32,7 +32,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region ViewModels
-        private MpTemplateHyperlinkCollectionViewModel _templateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel();
+        private MpTemplateHyperlinkCollectionViewModel _templateHyperlinkCollectionViewModel;
         public MpTemplateHyperlinkCollectionViewModel TemplateHyperlinkCollectionViewModel {
             get {
                 return _templateHyperlinkCollectionViewModel;
@@ -58,30 +58,30 @@ namespace MpWpfApp {
         #region Controls 
         //public RichTextBox Rtb { get; set; }
 
-        public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
+        //public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
 
-        public MpClipBorder RtbListBoxItemClipBorder { get; set; }
+        //public MpClipBorder RtbListBoxItemClipBorder { get; set; }
 
-        public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
+        //public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
 
-        public TextBox RtbListBoxItemTitleTextBox { get; set; }
+        //public TextBox RtbListBoxItemTitleTextBox { get; set; }
 
-        public Button DragButton { get; set; }
+        //public Button DragButton { get; set; }
 
-        private Grid _rtbc;
-        public Grid Rtbc {
-            get {
-                return _rtbc;
-            }
-            set {
-                if(_rtbc != value) {
-                    _rtbc = value;
-                    OnPropertyChanged(nameof(Rtbc));
-                }
-            }
-        }
+        //private Grid _rtbc;
+        //public Grid Rtbc {
+        //    get {
+        //        return _rtbc;
+        //    }
+        //    set {
+        //        if(_rtbc != value) {
+        //            _rtbc = value;
+        //            OnPropertyChanged(nameof(Rtbc));
+        //        }
+        //    }
+        //}
 
-        public AdornerLayer RtbListBoxItemAdornerLayer { get; set; }
+        //public AdornerLayer RtbListBoxItemAdornerLayer { get; set; }
 
         #endregion
 
@@ -101,405 +101,405 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        public Rect DragButtonRect {
-            get {
-                if(DragButton == null || Rtbc == null) {
-                    return new Rect();
-                }
-                return DragButton.TransformToAncestor((Visual)Rtbc).TransformBounds(LayoutInformation.GetLayoutSlot(DragButton));
-            }
-        }
+        //public Rect DragButtonRect {
+        //    get {
+        //        if(DragButton == null || Rtbc == null) {
+        //            return new Rect();
+        //        }
+        //        return DragButton.TransformToAncestor((Visual)Rtbc).TransformBounds(LayoutInformation.GetLayoutSlot(DragButton));
+        //    }
+        //}
 
-        public double SubItemAppIconSize {
-            get {
-                return MpMeasurements.Instance.RtbCompositeAppIconSize;
-            }
-        }
+        //public double SubItemAppIconSize {
+        //    get {
+        //        return MpMeasurements.Instance.RtbCompositeAppIconSize;
+        //    }
+        //}
 
-        public double SubItemAppIconBorderSize {
-            get {
-                return MpMeasurements.Instance.RtbCompositeAppIconBorderSize;
-            }
-        }
+        //public double SubItemAppIconBorderSize {
+        //    get {
+        //        return MpMeasurements.Instance.RtbCompositeAppIconBorderSize;
+        //    }
+        //}
 
-        public double SubItemAppIconInnerBorderSize {
-            get {
-                return MpMeasurements.Instance.RtbCompositeAppIconBorderSize * 0.8;
-            }
-        }
+        //public double SubItemAppIconInnerBorderSize {
+        //    get {
+        //        return MpMeasurements.Instance.RtbCompositeAppIconBorderSize * 0.8;
+        //    }
+        //}
 
-        public double RtbListBoxItemTitleFontSize {
-            get {
-                return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
-            }
-        }
+        //public double RtbListBoxItemTitleFontSize {
+        //    get {
+        //        return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
+        //    }
+        //}
 
-        public Thickness RtbPadding {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return new Thickness(0);
-                }
-                var mm = MpMeasurements.Instance.RtbEditModeMinMargin;
+        //public Thickness RtbPadding {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return new Thickness(0);
+        //        }
+        //        var mm = MpMeasurements.Instance.RtbEditModeMinMargin;
 
-                if(SubItemOverlayVisibility == Visibility.Visible) {
-                    return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm + SubItemAppIconSize, 0);
-                }
-                if(IsEditingContent) {
-                    return new Thickness(0);
-                }
-                return new Thickness(mm);
-            }
-        }
+        //        if(SubItemOverlayVisibility == Visibility.Visible) {
+        //            return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm + SubItemAppIconSize, 0);
+        //        }
+        //        if(IsEditingContent) {
+        //            return new Thickness(0);
+        //        }
+        //        return new Thickness(mm);
+        //    }
+        //}
 
-        public double RtbWidth {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                if (HostClipTileViewModel.IsExpanded) {
-                    return Math.Max(
-                        RtbPageWidth + RtbPadding.Left + RtbPadding.Right,
-                        HostClipTileViewModel.TileContentWidth);
-                }
-                return RtbCanvasWidth;// - 23;
-            }
-        }
+        //public double RtbWidth {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        if (HostClipTileViewModel.IsExpanded) {
+        //            return Math.Max(
+        //                RtbPageWidth + RtbPadding.Left + RtbPadding.Right,
+        //                HostClipTileViewModel.TileContentWidth);
+        //        }
+        //        return RtbCanvasWidth;// - 23;
+        //    }
+        //}
 
-        public double RtbHeight {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                if (HostClipTileViewModel.IsExpanded) {
-                    if (ContainerViewModel.Count == 1) {
-                        return GetExpandedSize().Height;
-                    }
-                    //if (IsSubSelected) {
-                    //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-                    //}
-                    //if (IsSubHovering) {
-                    //    return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
-                    //}
-                    //return MpMeasurements.Instance.RtbCompositeItemMinHeight;
-                    //if(Rtbc == null) {
-                    //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-                    //} else {
-                    //    return Math.Max(Rtbc.ActualHeight, MpMeasurements.Instance.RtbCompositeItemMinHeight);
+        //public double RtbHeight {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        if (HostClipTileViewModel.IsExpanded) {
+        //            if (ContainerViewModel.Count == 1) {
+        //                return GetExpandedSize().Height;
+        //            }
+        //            //if (IsSubSelected) {
+        //            //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
+        //            //}
+        //            //if (IsSubHovering) {
+        //            //    return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
+        //            //}
+        //            //return MpMeasurements.Instance.RtbCompositeItemMinHeight;
+        //            //if(Rtbc == null) {
+        //            //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
+        //            //} else {
+        //            //    return Math.Max(Rtbc.ActualHeight, MpMeasurements.Instance.RtbCompositeItemMinHeight);
 
-                    //}
-                    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-                }
-                if (ContainerViewModel.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
-                    if (Rtb == null) {
-                        var fd = CopyItemRichText.ToFlowDocument();
-                        fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
-                        return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-                    } else {
-                        return HostClipTileViewModel.TileContentHeight;
+        //            //}
+        //            return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
+        //        }
+        //        if (ContainerViewModel.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
+        //            if (Rtb == null) {
+        //                var fd = CopyItemRichText.ToFlowDocument();
+        //                fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
+        //                return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
+        //            } else {
+        //                return HostClipTileViewModel.TileContentHeight;
 
-                        //var fd = Rtb.Document;
-                        //fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
-                        //return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-                    }
-                }
-                return MpMeasurements.Instance.RtbCompositeItemMinHeight;
-            }
-        }
+        //                //var fd = Rtb.Document;
+        //                //fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
+        //                //return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
+        //            }
+        //        }
+        //        return MpMeasurements.Instance.RtbCompositeItemMinHeight;
+        //    }
+        //}
 
-        public double RtbPageWidth {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                if (HostClipTileViewModel.IsExpanded) {                    
-                    if (Rtb == null) {
-                        double curFontSize = 16;
-                        var width = Math.Max(
-                        CopyItemRichText.ToFlowDocument().GetDocumentSize().Width + (curFontSize * 3),
-                        RtbCanvasWidth + (curFontSize * 3));
+        //public double RtbPageWidth {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        if (HostClipTileViewModel.IsExpanded) {                    
+        //            if (Rtb == null) {
+        //                double curFontSize = 16;
+        //                var width = Math.Max(
+        //                CopyItemRichText.ToFlowDocument().GetDocumentSize().Width + (curFontSize * 3),
+        //                RtbCanvasWidth + (curFontSize * 3));
 
-                        return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
-                    } else {
-                        var fs = Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                        double curFontSize = fs.GetType() == typeof(double) ? (double)fs : 16;
-                        var width = Math.Max(
-                        Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
-                        Rtbc.ActualWidth /*RtbCanvasWidth*/ + (curFontSize * 3));
+        //                return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+        //            } else {
+        //                var fs = Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+        //                double curFontSize = fs.GetType() == typeof(double) ? (double)fs : 16;
+        //                var width = Math.Max(
+        //                Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
+        //                Rtbc.ActualWidth /*RtbCanvasWidth*/ + (curFontSize * 3));
 
-                        return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
-                    }
+        //                return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+        //            }
                     
-                }
-                return RtbWidth - RtbPadding.Left - RtbPadding.Right - 23;
+        //        }
+        //        return RtbWidth - RtbPadding.Left - RtbPadding.Right - 23;
                 
-            }
-        }
+        //    }
+        //}
 
-        public double RtbPageHeight {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                if (HostClipTileViewModel.IsExpanded) {
-                    if (Rtb == null) {
-                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height;
-                    } else {
-                        if(HostClipTileViewModel.IsPastingTemplate) {
-                            return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-                        }
-                        return Rtb.Document.GetDocumentSize().Height;
-                    }
-                }
-                return RtbHeight - RtbPadding.Top - RtbPadding.Bottom;
-            }
-        }
+        //public double RtbPageHeight {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        if (HostClipTileViewModel.IsExpanded) {
+        //            if (Rtb == null) {
+        //                return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height;
+        //            } else {
+        //                if(HostClipTileViewModel.IsPastingTemplate) {
+        //                    return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
+        //                }
+        //                return Rtb.Document.GetDocumentSize().Height;
+        //            }
+        //        }
+        //        return RtbHeight - RtbPadding.Top - RtbPadding.Bottom;
+        //    }
+        //}
 
-        public double RtbCanvasWidth {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                var w = HostClipTileViewModel.TileContentWidth - MpMeasurements.Instance.ClipTileSubItemOverlayMargin;
-                if (ContainerViewModel.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
-                    w -= MpMeasurements.Instance.ScrollbarWidth;
-                }
-                return w;
-            }
-        }
+        //public double RtbCanvasWidth {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        var w = HostClipTileViewModel.TileContentWidth - MpMeasurements.Instance.ClipTileSubItemOverlayMargin;
+        //        if (ContainerViewModel.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
+        //            w -= MpMeasurements.Instance.ScrollbarWidth;
+        //        }
+        //        return w;
+        //    }
+        //}
 
-        public double RtbCanvasHeight {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                return RtbHeight;
-            }
-        }
+        //public double RtbCanvasHeight {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        return RtbHeight;
+        //    }
+        //}
 
-        public double RtbRelativeWidthMax {
-            get {
-                if (CopyItem == null) {
-                    return 0;
-                }
-                var doc = Rtb == null ? ItemFlowDocument : Rtb.Document;
-                return doc.GetDocumentSize().Width;
-            }
-        }
+        //public double RtbRelativeWidthMax {
+        //    get {
+        //        if (CopyItem == null) {
+        //            return 0;
+        //        }
+        //        var doc = Rtb == null ? ItemFlowDocument : Rtb.Document;
+        //        return doc.GetDocumentSize().Width;
+        //    }
+        //}
         #endregion
 
         #region Brushes
-        public Brush RtbListBoxItemBorderBrush {
-            get {
-                if (!IsCompositeChild) {
-                    return Brushes.Transparent;
-                }
-                if (IsPrimarySubSelected) {
-                    return Brushes.Blue;
-                }
-                if (IsSubSelected) {
-                    return Brushes.Red;
-                }
-                if (IsSubHovering) {
-                    return Brushes.Yellow;
-                }
-                return Brushes.Transparent;
-            }
-        }
+        //public Brush RtbListBoxItemBorderBrush {
+        //    get {
+        //        if (!IsCompositeChild) {
+        //            return Brushes.Transparent;
+        //        }
+        //        if (IsPrimarySubSelected) {
+        //            return Brushes.Blue;
+        //        }
+        //        if (IsSubSelected) {
+        //            return Brushes.Red;
+        //        }
+        //        if (IsSubHovering) {
+        //            return Brushes.Yellow;
+        //        }
+        //        return Brushes.Transparent;
+        //    }
+        //}
 
-        public Brush RtbListBoxItemBackgroundColor {
-            get {
-                if(HostClipTileViewModel == null) {
-                    return Brushes.Transparent;
-                }
-                if(SubItemOverlayVisibility == Visibility.Visible) {
-                    var scb = CopyItemColorBrush;
-                    if (HostClipTileViewModel.IsExpanded && IsSubHovering) {
-                        scb.Opacity = 0.1;
-                    } else if (/*HostClipTileViewModel.IsClipDropping || */
-                               (!HostClipTileViewModel.IsExpanded && IsSubHovering && !IsSubSelected)) {
-                        scb.Opacity = 0;
-                    } else {
-                        scb.Opacity = 0.25;
-                    }
+        //public Brush RtbListBoxItemBackgroundColor {
+        //    get {
+        //        if(HostClipTileViewModel == null) {
+        //            return Brushes.Transparent;
+        //        }
+        //        if(SubItemOverlayVisibility == Visibility.Visible) {
+        //            var scb = CopyItemColorBrush;
+        //            if (HostClipTileViewModel.IsExpanded && IsSubHovering) {
+        //                scb.Opacity = 0.1;
+        //            } else if (/*HostClipTileViewModel.IsClipDropping || */
+        //                       (!HostClipTileViewModel.IsExpanded && IsSubHovering && !IsSubSelected)) {
+        //                scb.Opacity = 0;
+        //            } else {
+        //                scb.Opacity = 0.25;
+        //            }
                     
-                    return scb;
-                }
-                return Brushes.Transparent;
-            }
-            set {
-                if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
-                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            }
-        }
+        //            return scb;
+        //        }
+        //        return Brushes.Transparent;
+        //    }
+        //    set {
+        //        if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
+        //            CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
+        //            //CopyItem.WriteToDatabase();
+        //            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
+        //            OnPropertyChanged(nameof(CopyItem));
+        //        }
+        //    }
+        //}
 
-        public Brush RtbListBoxItemTitleTextBlockTextColor {
-            get {
-                if (!IsCompositeChild) {
-                    return Brushes.Transparent;
-                }
-                if (IsHoveringOnTitleTextBlock) {
-                    return Brushes.DarkGray;
-                }
-                return Brushes.Black;
-            }
-        }
+        //public Brush RtbListBoxItemTitleTextBlockTextColor {
+        //    get {
+        //        if (!IsCompositeChild) {
+        //            return Brushes.Transparent;
+        //        }
+        //        if (IsHoveringOnTitleTextBlock) {
+        //            return Brushes.DarkGray;
+        //        }
+        //        return Brushes.Black;
+        //    }
+        //}
 
-        public Brush RtbOverlayBorderBrush {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return Brushes.Transparent;
-                }
-                if(HostClipTileViewModel.IsPastingTemplate) {
-                    return Brushes.Transparent;
-                }
-                if (IsSubSelected) {
-                    return Brushes.Pink;
-                }
-                if (IsSubHovering) {
-                    return Brushes.Yellow;
-                }
-                return Brushes.Transparent;
-            }
-        }
+        //public Brush RtbOverlayBorderBrush {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return Brushes.Transparent;
+        //        }
+        //        if(HostClipTileViewModel.IsPastingTemplate) {
+        //            return Brushes.Transparent;
+        //        }
+        //        if (IsSubSelected) {
+        //            return Brushes.Pink;
+        //        }
+        //        if (IsSubHovering) {
+        //            return Brushes.Yellow;
+        //        }
+        //        return Brushes.Transparent;
+        //    }
+        //}
         #endregion
 
         #region Visibility
-        public Visibility MultiSelectOrderMarkerVisibility {
-            get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
-                    return Visibility.Hidden;
-                }
-                if (IsSubSelected && 
-                    (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 ||
-                     ContainerViewModel.SubSelectedContentItems.Count > 1)) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
+        //public Visibility MultiSelectOrderMarkerVisibility {
+        //    get {
+        //        if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
+        //            return Visibility.Hidden;
+        //        }
+        //        if (IsSubSelected && 
+        //            (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 ||
+        //             ContainerViewModel.SubSelectedContentItems.Count > 1)) {
+        //            return Visibility.Visible;
+        //        }
+        //        return Visibility.Collapsed;
+        //    }
+        //}
 
-        private Visibility _subItemVisibility = Visibility.Visible;
-        public Visibility SubItemVisibility {
-            get {
-                return _subItemVisibility;
-            }
-            set {
-                if(_subItemVisibility != value) {
-                    _subItemVisibility = value;
-                    OnPropertyChanged(nameof(SubItemVisibility));
-                }
-            }
-        }
+        //private Visibility _subItemVisibility = Visibility.Visible;
+        //public Visibility SubItemVisibility {
+        //    get {
+        //        return _subItemVisibility;
+        //    }
+        //    set {
+        //        if(_subItemVisibility != value) {
+        //            _subItemVisibility = value;
+        //            OnPropertyChanged(nameof(SubItemVisibility));
+        //        }
+        //    }
+        //}
 
-        public Visibility DragAndHotkeyButtonVisibility {
-            get {
-                if(MainWindowViewModel.SearchBoxViewModel.HasText) {
-                    return Visibility.Hidden;
-                }
-                return Visibility.Visible;
-            }
-        }
+        //public Visibility DragAndHotkeyButtonVisibility {
+        //    get {
+        //        if(MainWindowViewModel.SearchBoxViewModel.HasText) {
+        //            return Visibility.Hidden;
+        //        }
+        //        return Visibility.Visible;
+        //    }
+        //}
 
-        public Visibility SubItemToolTipVisibility {
-            get {
-                if (CopyItem == null || !Properties.Settings.Default.ShowItemPreview) {
-                    return Visibility.Collapsed;
-                }
-                return (MpClipTrayViewModel.Instance.IsScrolling || IsSubSelected || HostClipTileViewModel.IsExpanded) ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
+        //public Visibility SubItemToolTipVisibility {
+        //    get {
+        //        if (CopyItem == null || !Properties.Settings.Default.ShowItemPreview) {
+        //            return Visibility.Collapsed;
+        //        }
+        //        return (MpClipTrayViewModel.Instance.IsScrolling || IsSubSelected || HostClipTileViewModel.IsExpanded) ? Visibility.Collapsed : Visibility.Visible;
+        //    }
+        //}
 
-        public Visibility SubItemOverlayVisibility {
-            get {
-                OnPropertyChanged(nameof(DragAndHotkeyButtonVisibility));
-                if (HostClipTileViewModel == null) {
-                    return Visibility.Collapsed;
-                }               
+        //public Visibility SubItemOverlayVisibility {
+        //    get {
+        //        OnPropertyChanged(nameof(DragAndHotkeyButtonVisibility));
+        //        if (HostClipTileViewModel == null) {
+        //            return Visibility.Collapsed;
+        //        }               
 
-                if (IsSubEditingTitle) {
-                    return Visibility.Visible;
-                }
-                if(HostClipTileViewModel.IsPastingTemplate) {
-                    return Visibility.Hidden;
-                }
-                if (HostClipTileViewModel.IsClipDropping) {
-                    return Visibility.Collapsed;
-                }
-                //if(HostClipTileViewModel.IsClipDropping && (!HostClipTileViewModel.IsAnySubItemDragging || HostClipTileViewModel.IsClipDragging)) {
-                //    return Visibility.Visible;
-                //}
-                if (!IsCompositeChild) {
-                    return Visibility.Collapsed;
-                }
-                if(MainWindowViewModel.SearchBoxViewModel.HasText &&
-                   HostClipTileViewModel.TileVisibility == Visibility.Visible &&
-                   HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
-                   (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.ContentItemViewModel != this ||
-                    HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {                    
-                    //this ensures overlay is shown when selected search match is relavant to title or application
-                    return Visibility.Visible;
-                }
-                if(IsSubSelected && !HostClipTileViewModel.IsExpanded) {
-                    return Visibility.Visible;
-                }
+        //        if (IsSubEditingTitle) {
+        //            return Visibility.Visible;
+        //        }
+        //        if(HostClipTileViewModel.IsPastingTemplate) {
+        //            return Visibility.Hidden;
+        //        }
+        //        if (HostClipTileViewModel.IsClipDropping) {
+        //            return Visibility.Collapsed;
+        //        }
+        //        //if(HostClipTileViewModel.IsClipDropping && (!HostClipTileViewModel.IsAnySubItemDragging || HostClipTileViewModel.IsClipDragging)) {
+        //        //    return Visibility.Visible;
+        //        //}
+        //        if (!IsCompositeChild) {
+        //            return Visibility.Collapsed;
+        //        }
+        //        if(MainWindowViewModel.SearchBoxViewModel.HasText &&
+        //           HostClipTileViewModel.TileVisibility == Visibility.Visible &&
+        //           HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
+        //           (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.ContentItemViewModel != this ||
+        //            HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {                    
+        //            //this ensures overlay is shown when selected search match is relavant to title or application
+        //            return Visibility.Visible;
+        //        }
+        //        if(IsSubSelected && !HostClipTileViewModel.IsExpanded) {
+        //            return Visibility.Visible;
+        //        }
 
-                if(!IsSubSelected && HostClipTileViewModel.IsExpanded) {
-                    return Visibility.Visible;
-                }
+        //        if(!IsSubSelected && HostClipTileViewModel.IsExpanded) {
+        //            return Visibility.Visible;
+        //        }
 
-                if (IsSubHovering && (!IsSubSelected || !HostClipTileViewModel.IsEditingContent)) {
-                    return Visibility.Visible;
-                }
-                if (IsSubSelected && ContainerViewModel.SubSelectedContentItems.Count > 1) {
-                    return Visibility.Visible;
-                }                
-                return Visibility.Collapsed;
-            }
-        }
+        //        if (IsSubHovering && (!IsSubSelected || !HostClipTileViewModel.IsEditingContent)) {
+        //            return Visibility.Visible;
+        //        }
+        //        if (IsSubSelected && ContainerViewModel.SubSelectedContentItems.Count > 1) {
+        //            return Visibility.Visible;
+        //        }                
+        //        return Visibility.Collapsed;
+        //    }
+        //}
 
-        public Visibility RtbListBoxItemTitleTextBlockVisibility {
-            get {
-                if (IsSubEditingTitle) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
-            }
-        }
+        //public Visibility RtbListBoxItemTitleTextBlockVisibility {
+        //    get {
+        //        if (IsSubEditingTitle) {
+        //            return Visibility.Collapsed;
+        //        }
+        //        return Visibility.Visible;
+        //    }
+        //}
 
-        public Visibility RtbListBoxItemTitleTextBoxVisibility {
-            get {
-                if (IsSubEditingTitle) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
+        //public Visibility RtbListBoxItemTitleTextBoxVisibility {
+        //    get {
+        //        if (IsSubEditingTitle) {
+        //            return Visibility.Visible;
+        //        }
+        //        return Visibility.Collapsed;
+        //    }
+        //}
 
-        public Visibility AppIconHighlightBorderVisibility {
-            get {
-                if(HostClipTileViewModel == null) {
-                    return Visibility.Hidden;
-                }
-                return HostClipTileViewModel.HighlightTextRangeViewModelCollection.AppMatchRtbvmList.Contains(this) ? Visibility.Visible : Visibility.Hidden;
-            }
-        }
+        //public Visibility AppIconHighlightBorderVisibility {
+        //    get {
+        //        if(HostClipTileViewModel == null) {
+        //            return Visibility.Hidden;
+        //        }
+        //        return HostClipTileViewModel.HighlightTextRangeViewModelCollection.AppMatchRtbvmList.Contains(this) ? Visibility.Visible : Visibility.Hidden;
+        //    }
+        //}
 
-        public Visibility AppIconImageVisibility {
-            get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
-                    return Visibility.Visible;
-                }
-                if (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 &&
-                   !IsSubHovering) {
-                    return Visibility.Hidden;
-                }
-                return Visibility.Visible;
-            }
-        }
+        //public Visibility AppIconImageVisibility {
+        //    get {
+        //        if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
+        //            return Visibility.Visible;
+        //        }
+        //        if (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 &&
+        //           !IsSubHovering) {
+        //            return Visibility.Hidden;
+        //        }
+        //        return Visibility.Visible;
+        //    }
+        //}
         #endregion
 
         #region Business Logic 
@@ -604,32 +604,32 @@ namespace MpWpfApp {
             }
         }
 
-        private TextRange _rtbSelectionRange = null;
-        public TextRange RtbSelectionRange {
-            get {
-                return _rtbSelectionRange;
-            }
-            set {
-                if(_rtbSelectionRange != value) {
-                    _rtbSelectionRange = value;
-                    OnPropertyChanged(nameof(RtbSelectionRange));
-                }
-            }
-        }
+        //private TextRange _rtbSelectionRange = null;
+        //public TextRange RtbSelectionRange {
+        //    get {
+        //        return _rtbSelectionRange;
+        //    }
+        //    set {
+        //        if(_rtbSelectionRange != value) {
+        //            _rtbSelectionRange = value;
+        //            OnPropertyChanged(nameof(RtbSelectionRange));
+        //        }
+        //    }
+        //}
 
-        public string MultiSelectedOrderIdxDisplayValue {
-            get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSubSelected) {
-                    return string.Empty;
-                }
-                int multiIdx = MpClipTrayViewModel.Instance.GetSelectionOrderIdxForItem(this);
-                if (multiIdx < 0) {
-                    return string.Empty;
-                }
-                multiIdx++;
-                return multiIdx.ToString();
-            }
-        }
+        //public string MultiSelectedOrderIdxDisplayValue {
+        //    get {
+        //        if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSubSelected) {
+        //            return string.Empty;
+        //        }
+        //        int multiIdx = MpClipTrayViewModel.Instance.GetSelectionOrderIdxForItem(this);
+        //        if (multiIdx < 0) {
+        //            return string.Empty;
+        //        }
+        //        multiIdx++;
+        //        return multiIdx.ToString();
+        //    }
+        //}
 
         private bool _isOverDragButton = false;
         public bool IsOverDragButton {
@@ -657,19 +657,19 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isResizingTop = false;
-        public bool IsResizingTop {
-            get {
-                return _isResizingTop;
-            }
-            set {
-                if(_isResizingTop != value) {
-                    _isResizingTop = value;
-                    OnPropertyChanged(nameof(IsResizingTop));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                }
-            }
-        }
+        //private bool _isResizingTop = false;
+        //public bool IsResizingTop {
+        //    get {
+        //        return _isResizingTop;
+        //    }
+        //    set {
+        //        if(_isResizingTop != value) {
+        //            _isResizingTop = value;
+        //            OnPropertyChanged(nameof(IsResizingTop));
+        //            OnPropertyChanged(nameof(RtbListBoxItemCursor));
+        //        }
+        //    }
+        //}
 
         private bool _isSubContextMenuOpened = false;
         public bool IsSubContextMenuOpened {
@@ -684,114 +684,114 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isResizingBottom = false;
-        public bool IsResizingBottom {
-            get {
-                return _isResizingBottom;
-            }
-            set {
-                if (_isResizingBottom != value) {
-                    _isResizingBottom = value;
-                    OnPropertyChanged(nameof(IsResizingBottom));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                }
-            }
-        }
+        //private bool _isResizingBottom = false;
+        //public bool IsResizingBottom {
+        //    get {
+        //        return _isResizingBottom;
+        //    }
+        //    set {
+        //        if (_isResizingBottom != value) {
+        //            _isResizingBottom = value;
+        //            OnPropertyChanged(nameof(IsResizingBottom));
+        //            OnPropertyChanged(nameof(RtbListBoxItemCursor));
+        //        }
+        //    }
+        //}
 
-        private bool _isHoveringOverTop = false;
-        public bool IsHoveringOverTop {
-            get {
-                return _isHoveringOverTop;
-            }
-            set {
-                if (_isHoveringOverTop != value) {
-                    _isHoveringOverTop = value;
-                    OnPropertyChanged(nameof(IsHoveringOverTop));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                }
-            }
-        }
+        //private bool _isHoveringOverTop = false;
+        //public bool IsHoveringOverTop {
+        //    get {
+        //        return _isHoveringOverTop;
+        //    }
+        //    set {
+        //        if (_isHoveringOverTop != value) {
+        //            _isHoveringOverTop = value;
+        //            OnPropertyChanged(nameof(IsHoveringOverTop));
+        //            OnPropertyChanged(nameof(RtbListBoxItemCursor));
+        //        }
+        //    }
+        //}
 
-        private bool _isHoveringOverBottom = false;
-        public bool IsHoveringOverBottom {
-            get {
-                return _isHoveringOverBottom;
-            }
-            set {
-                if (_isHoveringOverBottom != value) {
-                    _isHoveringOverBottom = value;
-                    OnPropertyChanged(nameof(IsHoveringOverBottom));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                }
-            }
-        }
+        //private bool _isHoveringOverBottom = false;
+        //public bool IsHoveringOverBottom {
+        //    get {
+        //        return _isHoveringOverBottom;
+        //    }
+        //    set {
+        //        if (_isHoveringOverBottom != value) {
+        //            _isHoveringOverBottom = value;
+        //            OnPropertyChanged(nameof(IsHoveringOverBottom));
+        //            OnPropertyChanged(nameof(RtbListBoxItemCursor));
+        //        }
+        //    }
+        //}
 
-        private bool _isHoveringOnTitleTextBlock = false;
-        public bool IsHoveringOnTitleTextBlock {
-            get {
-                return _isHoveringOnTitleTextBlock;
-            }
-            set {
-                if (_isHoveringOnTitleTextBlock != value) {
-                    _isHoveringOnTitleTextBlock = value;
-                    OnPropertyChanged(nameof(IsHoveringOnTitleTextBlock));
-                    OnPropertyChanged(nameof(RtbListBoxItemTitleTextBlockTextColor));
-                    if(IsHoveringOnTitleTextBlock) {
-                        OnPropertyChanged(nameof(DetailText));
-                    }
-                }
-            }
-        }
+        //private bool _isHoveringOnTitleTextBlock = false;
+        //public bool IsHoveringOnTitleTextBlock {
+        //    get {
+        //        return _isHoveringOnTitleTextBlock;
+        //    }
+        //    set {
+        //        if (_isHoveringOnTitleTextBlock != value) {
+        //            _isHoveringOnTitleTextBlock = value;
+        //            OnPropertyChanged(nameof(IsHoveringOnTitleTextBlock));
+        //            OnPropertyChanged(nameof(RtbListBoxItemTitleTextBlockTextColor));
+        //            if(IsHoveringOnTitleTextBlock) {
+        //                OnPropertyChanged(nameof(DetailText));
+        //            }
+        //        }
+        //    }
+        //}
 
 
-        public bool IsSelected {
-            get {
-                return IsSubSelected;
-            }
-            set {
-                IsSubSelected = value;
-            }
-        }
+        //public bool IsSelected {
+        //    get {
+        //        return IsSubSelected;
+        //    }
+        //    set {
+        //        IsSubSelected = value;
+        //    }
+        //}
 
-        private bool _isSubHovering = false;
-        public bool IsSubHovering {
-            get {
-                return _isSubHovering;
-            }
-            set {
-                if (_isSubHovering != value) {
-                    _isSubHovering = value;
-                    OnPropertyChanged(nameof(IsSubHovering));
-                    OnPropertyChanged(nameof(SubItemOverlayVisibility));
-                    OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-                    OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
-                    OnPropertyChanged(nameof(RtbPadding));
-                    OnPropertyChanged(nameof(RtbCanvasHeight));
-                    OnPropertyChanged(nameof(RtbCanvasWidth));
-                    OnPropertyChanged(nameof(RtbCanvasHeight));
-                    OnPropertyChanged(nameof(RtbPageWidth));
-                    OnPropertyChanged(nameof(RtbPageHeight));
-                    OnPropertyChanged(nameof(RtbOverlayBorderBrush));
-                }
-            }
-        }
+        //private bool _isSubHovering = false;
+        //public bool IsSubHovering {
+        //    get {
+        //        return _isSubHovering;
+        //    }
+        //    set {
+        //        if (_isSubHovering != value) {
+        //            _isSubHovering = value;
+        //            OnPropertyChanged(nameof(IsSubHovering));
+        //            OnPropertyChanged(nameof(SubItemOverlayVisibility));
+        //            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
+        //            OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
+        //            OnPropertyChanged(nameof(RtbListBoxItemCursor));
+        //            //OnPropertyChanged(nameof(RtbPadding));
+        //            //OnPropertyChanged(nameof(RtbCanvasHeight));
+        //            //OnPropertyChanged(nameof(RtbCanvasWidth));
+        //            //OnPropertyChanged(nameof(RtbCanvasHeight));
+        //            //OnPropertyChanged(nameof(RtbPageWidth));
+        //            //OnPropertyChanged(nameof(RtbPageHeight));
+        //            OnPropertyChanged(nameof(RtbOverlayBorderBrush));
+        //        }
+        //    }
+        //}
 
-        private bool _isEditingTitle = false;
-        public bool IsSubEditingTitle {
-            get {
-                return _isEditingTitle;
-            }
-            set {
-                if (_isEditingTitle != value) {
-                    _isEditingTitle = value;
-                    OnPropertyChanged(nameof(IsSubEditingTitle));
-                    OnPropertyChanged(nameof(RtbListBoxItemTitleTextBlockVisibility));
-                    OnPropertyChanged(nameof(RtbListBoxItemTitleTextBoxVisibility));
-                    OnPropertyChanged(nameof(CopyItemTitle));
-                }
-            }
-        }
+        //private bool _isEditingTitle = false;
+        //public bool IsSubEditingTitle {
+        //    get {
+        //        return _isEditingTitle;
+        //    }
+        //    set {
+        //        if (_isEditingTitle != value) {
+        //            _isEditingTitle = value;
+        //            OnPropertyChanged(nameof(IsSubEditingTitle));
+        //            OnPropertyChanged(nameof(RtbListBoxItemTitleTextBlockVisibility));
+        //            OnPropertyChanged(nameof(RtbListBoxItemTitleTextBoxVisibility));
+        //            OnPropertyChanged(nameof(CopyItemTitle));
+        //        }
+        //    }
+        //}
 
         public bool IsEditingContent {
             get {
@@ -1178,6 +1178,7 @@ namespace MpWpfApp {
         public event EventHandler<bool> OnRtbResetRequest;
         public event EventHandler OnClearHyperlinksRequest;
         public event EventHandler OnCreateHyperlinksRequest;
+        public event EventHandler OnSyncModels;
         #endregion
 
         #region ContentItem Overrides
@@ -1247,7 +1248,7 @@ namespace MpWpfApp {
                                         ortbvm.IsSubEditingTitle = false;
                                     }
                                 }
-                                rtbvm.ResetRtb();
+                                rtbvm.RequestRtbReset();
                                 //RichTextBoxViewModelCollection.Refresh();
                             } else {
                                 var test = !MpHelpers.Instance.IsMultiSelectKeyDown();
@@ -1296,15 +1297,15 @@ namespace MpWpfApp {
                             //_detailIdx = 1;
                         }
                         break;
-                    case nameof(rtbvm.IsHoveringOnTitleTextBlock):
-                        if(rtbvm.IsHoveringOnTitleTextBlock) {
-                            rtbvm.DetailIdx++;
-                            if (rtbvm.DetailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                                rtbvm.DetailIdx = 1;
-                            }
-                            rtbvm.DetailText = rtbvm.GetDetail((MpCopyItemDetailType)rtbvm.DetailIdx);
-                        }
-                        break;
+                    //case nameof(rtbvm.IsHoveringOnTitleTextBlock):
+                    //    if(rtbvm.IsHoveringOnTitleTextBlock) {
+                    //        rtbvm.DetailIdx++;
+                    //        if (rtbvm.DetailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                    //            rtbvm.DetailIdx = 1;
+                    //        }
+                    //        rtbvm.DetailText = rtbvm.GetDetail((MpCopyItemDetailType)rtbvm.DetailIdx);
+                    //    }
+                    //    break;
                     case nameof(rtbvm.IsSubContextMenuOpened):
                         if(rtbvm.IsSubContextMenuOpened) {
                             rtbvm.IsSubSelected = true;
@@ -1329,41 +1330,39 @@ namespace MpWpfApp {
                     }
                 }
 
-                rtbvm.RtbSelectionRange = new TextRange(rtbvm.Rtb.Document.ContentEnd, rtbvm.Rtb.Document.ContentEnd);
+                //rtbvm.RtbSelectionRange = new TextRange(rtbvm.Rtb.Document.ContentEnd, rtbvm.Rtb.Document.ContentEnd);
             };
 
             OnPropertyChanged(nameof(CopyItem));
         }
 
-        public void TemporarySetRtb(RichTextBox rtb) {
-            Rtbc = rtb.GetVisualAncestor<Grid>();
-            Rtb = rtb;//(RichTextBox)Rtbc.FindName("Rtb");
-            RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
-            RtbListBoxItemOverlayDockPanel = (DockPanel)Rtbc.FindName("RtbListItemOverlayBorderDockPanel");
-            RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbTitleTextBlock");
-            RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbTitleTextBox");
-            DragButton = (Button)Rtbc.FindName("DragButton");
-            var titleIconImageButton = (Button)Rtbc.FindName("RtbItemAppIconImageButton");
-            var titleIconBorderImage = (Image)Rtbc.FindName("RtbItemAppIconBorderImage");
-            var titleIconBorderImageScaleTransform = (ScaleTransform)Rtbc.FindName("RtbItemAppIconBorderImageScaleTransform");
-            var titleIconHighlightBorderImage = (Image)Rtbc.FindName("RtbItemAppIconHighlightedBorderImage");
+        //public void TemporarySetRtb(RichTextBox rtb) {
+        //    Rtbc = rtb.GetVisualAncestor<Grid>();
+        //    Rtb = rtb;//(RichTextBox)Rtbc.FindName("Rtb");
+        //    RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
+        //    RtbListBoxItemOverlayDockPanel = (DockPanel)Rtbc.FindName("RtbListItemOverlayBorderDockPanel");
+        //    RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbTitleTextBlock");
+        //    RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbTitleTextBox");
+        //    DragButton = (Button)Rtbc.FindName("DragButton");
+        //    var titleIconImageButton = (Button)Rtbc.FindName("RtbItemAppIconImageButton");
+        //    var titleIconBorderImage = (Image)Rtbc.FindName("RtbItemAppIconBorderImage");
+        //    var titleIconBorderImageScaleTransform = (ScaleTransform)Rtbc.FindName("RtbItemAppIconBorderImageScaleTransform");
+        //    var titleIconHighlightBorderImage = (Image)Rtbc.FindName("RtbItemAppIconHighlightedBorderImage");
 
-            HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
+            
 
 
-            rtb.ClearHyperlinks();
-            RawRtf = Rtb.Document.ToRichText();
+            
 
-            rtb.CreateHyperlinks();
+        //    RequestUiUpdate();
 
-            UpdateLayout();
+            
 
-            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
-            if (scvml.Count > 0) {
-                ShortcutKeyString = scvml[0].KeyString;
-            }
+        //    OnViewModelLoaded();
+        //}
 
-            OnViewModelLoaded();
+        public void RequestSyncModels() {
+            OnSyncModels?.Invoke(this, null);
         }
 
         public void RequestRtbReset() {
@@ -1424,74 +1423,47 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.RefreshAllCommands();
         }
 
-        public void UpdateLayout() {
-            if (Rtb != null) {
-                Rtb.Document.PageWidth = RtbPageWidth;
-                Rtb.Document.PageHeight = RtbPageHeight;
-            }
+        //public void UpdateLayout() {
+        //    if (Rtb != null) {
+        //        Rtb.Document.PageWidth = RtbPageWidth;
+        //        Rtb.Document.PageHeight = RtbPageHeight;
+        //    }
 
-            OnPropertyChanged(nameof(SubItemOverlayVisibility));
-            OnPropertyChanged(nameof(SubItemToolTipVisibility));
-            OnPropertyChanged(nameof(RtbPadding));
-            OnPropertyChanged(nameof(RtbCanvasWidth));
-            OnPropertyChanged(nameof(RtbCanvasHeight));
-            OnPropertyChanged(nameof(RtbWidth));
-            OnPropertyChanged(nameof(RtbHeight));
-            OnPropertyChanged(nameof(RtbPageWidth));
-            OnPropertyChanged(nameof(RtbPageHeight));
-            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
+        //    OnPropertyChanged(nameof(SubItemOverlayVisibility));
+        //    OnPropertyChanged(nameof(SubItemToolTipVisibility));
+        //    OnPropertyChanged(nameof(RtbPadding));
+        //    OnPropertyChanged(nameof(RtbCanvasWidth));
+        //    OnPropertyChanged(nameof(RtbCanvasHeight));
+        //    OnPropertyChanged(nameof(RtbWidth));
+        //    OnPropertyChanged(nameof(RtbHeight));
+        //    OnPropertyChanged(nameof(RtbPageWidth));
+        //    OnPropertyChanged(nameof(RtbPageHeight));
+        //    OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
 
-            
-            Rtbc?.UpdateLayout();
-            Rtb?.UpdateLayout();
-            RtbListBoxItemClipBorder?.UpdateLayout();  
-        }
 
-        public void ResetRtb() {
-            if (Rtb == null) {
-                return;
-            }
-            Rtb.ScrollToHome();
-            Rtb.CaretPosition = Rtb.Document.ContentStart;
-            Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+        //    Rtbc?.UpdateLayout();
+        //    Rtb?.UpdateLayout();
+        //    RtbListBoxItemClipBorder?.UpdateLayout();
+        //}
 
-            ContainerViewModel.RequestUiUpdate();
-            if(IsSubSelected) {
-                Rtb.Focus();
-            }
-        }
+        //public void ResetRtb() {
+        //    if (Rtb == null) {
+        //        return;
+        //    }
+        //    Rtb.ScrollToHome();
+        //    Rtb.CaretPosition = Rtb.Document.ContentStart;
+        //    Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+
+        //    ContainerViewModel.RequestUiUpdate();
+        //    if(IsSubSelected) {
+        //        Rtb.Focus();
+        //    }
+        //}
 
         public void SaveSubItemToDatabase() {
-            var sw = new Stopwatch();
-            sw.Start();
+            RequestSyncModels();
 
-            //remove links to update model rich text
-            RequestClearHyperlinks();
-
-            if(Rtb != null) {
-                
-            }
-            //clear any search highlighting when saving the document then restore after save
-            HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(this);
-
-            if(Rtb != null) {
-                RawRtf = Rtb.Document.ToRichText();
-                CopyItemRichText = RawRtf;
-            }
-
-            HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(this);
-            RequestCreateHyperlinks();
-
-            var cipcsw = new Stopwatch();
-            cipcsw.Start();
-
-            //HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.GetSeparatedCompositeFlowDocument().ToBitmapSource();
-            //OnPropertyChanged(nameof(CopyItem));
-            cipcsw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
-
-            sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + ContainerViewModel.ItemViewModels.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+            CopyItem.WriteToDatabase();
         }
 
         
@@ -1502,8 +1474,6 @@ namespace MpWpfApp {
         #region Clone Implementation
         public object Clone() {
             var nrtbvm = new MpRtbItemViewModel(ContainerViewModel, CopyItem);
-            nrtbvm.Rtb = new RichTextBox();
-            nrtbvm.Rtb.Document = Rtb.Document.Clone();
             return nrtbvm;
         }
         #endregion
@@ -1599,13 +1569,13 @@ namespace MpWpfApp {
                 CopyItem.DeleteFromDatabase();
             }
             
-            Rtb = null;
-            RtbListBoxItemOverlayDockPanel = null;
-            RtbListBoxItemClipBorder = null;
-            RtbListBoxItemTitleTextBlock = null;
-            RtbListBoxItemTitleTextBox = null;
-            Rtbc = null;
-            RtbListBoxItemAdornerLayer = null;
+            //Rtb = null;
+            //RtbListBoxItemOverlayDockPanel = null;
+            //RtbListBoxItemClipBorder = null;
+            //RtbListBoxItemTitleTextBlock = null;
+            //RtbListBoxItemTitleTextBox = null;
+            //Rtbc = null;
+            //RtbListBoxItemAdornerLayer = null;
         }        
         #endregion
 

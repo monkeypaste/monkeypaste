@@ -234,6 +234,11 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Events
+        public event EventHandler OnTileExpand;
+        public event EventHandler OnTileUnexpand;
+        #endregion
+
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
             //MpViewModelBase.MainWindowViewModel = this;
@@ -266,24 +271,6 @@ namespace MpWpfApp {
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
-        public void FinishLoading() {
-            MpShortcutCollectionViewModel.Instance.Init();
-
-            MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-
-            int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
-
-            MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
-
-            IsMainWindowLoading = false;
-
-
-            MpStandardBalloonViewModel.ShowBalloon(
-                "Monkey Paste",
-                "Successfully loaded w/ " + totalItems + " items",
-                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-        }
-
         public void ClearEdits() {
             TagTrayViewModel.ClearTagEditing();
             ClipTrayViewModel.ClearClipEditing();
@@ -314,6 +301,9 @@ namespace MpWpfApp {
                                     ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
                                     _deltaHeight,
                                     ctvmToExpand.IsPastingTemplate ? 0: MpMeasurements.Instance.ClipTileEditToolbarHeight);
+
+
+            OnTileExpand?.Invoke(ctvmToExpand, null);
         }
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
@@ -327,6 +317,9 @@ namespace MpWpfApp {
 
             MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
+
+
+            OnTileUnexpand?.Invoke(this, null);
         }
 
         public void SetupMainWindowRect() {

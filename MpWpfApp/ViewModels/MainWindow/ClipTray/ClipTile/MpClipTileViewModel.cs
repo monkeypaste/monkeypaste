@@ -141,19 +141,19 @@
         #endregion
 
         #region Controls
-        public TextBox TitleTextBox;
+        //public TextBox TitleTextBox;
 
-        public TextBlock TitleTextBlock;
+        //public TextBlock TitleTextBlock;
 
-        public Image Image;
+        //public Image Image;
 
-        public ListBox FileListBox;
+        //public ListBox FileListBox;
 
-        public Grid ClipTileSelectionOverlayGrid;
+        //public Grid ClipTileSelectionOverlayGrid;
 
-        public MpClipBorder ClipBorder;
+        //public MpClipBorder ClipBorder;
 
-        public TranslateTransform ClipBorderTranslateTransform;
+        //public TranslateTransform ClipBorderTranslateTransform;
         #endregion
 
         #region Appearance
@@ -926,9 +926,6 @@
 
         public bool IsExpanded {
             get {
-                if (ClipBorder == null) {
-                    return false;
-                }
                 if (IsPastingTemplate || IsEditingTemplate || IsEditingContent) {
                     return true;
                 }
@@ -1475,8 +1472,8 @@
 
         #region Events
         public event EventHandler OnTileSelected;
-        public event EventHandler OnTileExpand;
-        public event EventHandler OnTileUnexpand;
+
+        public event EventHandler<string> OnSearchRequest;
         #endregion
 
         #region Public Methods
@@ -1563,10 +1560,8 @@
                         break;
                     case nameof(ctvm.IsEditingContent):                        
                         if (ctvm.IsEditingContent) {
-                            OnTileExpand?.Invoke(this, null);
                             MainWindowViewModel.ExpandClipTile(this);
                         } else {
-                            OnTileUnexpand?.Invoke(this, null);
                             ctvm.SaveToDatabase();
                             MainWindowViewModel.ShrinkClipTile(this);
                         }
@@ -1624,6 +1619,10 @@
             InitContent(ci);
         }
 
+        public void RequestSearch(string st) {
+            OnSearchRequest?.Invoke(this, st);
+        }
+
         #region Loading Initializers
         public void InitContent(MpCopyItem ci) {
             if (ci == null) {
@@ -1651,11 +1650,6 @@
         
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            ClipBorder = (MpClipBorder)sender;
-            ClipBorderTranslateTransform = (TranslateTransform)ClipBorder.FindName("ClipTileBorderTranslateTransform");
-            ClipTileSelectionOverlayGrid = (Grid)ClipBorder.FindName("ClipTileSelectionOverlayGrid");
-            var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-
 
             #region Shortcut
             var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
@@ -1710,8 +1704,8 @@
             }
             ctvm.OnPropertyChanged(nameof(ctvm.FileListCollectionViewModel));
 
-            ctvm.FileListBox = (ListBox)sender;
-            ctvm.FileListBox.ContextMenu = (ContextMenu)ctvm.FileListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            //ctvm.FileListBox = (ListBox)sender;
+            //ctvm.FileListBox.ContextMenu = (ContextMenu)ctvm.FileListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
         }
         #endregion
 
@@ -1998,34 +1992,34 @@
             //OnPropertyChanged(nameof(AppIcon));
         }
 
-        public void FadeIn(double bt = 0, double ms = 1000) {
-            MpHelpers.Instance.AnimateVisibilityChange(
-                ClipBorder,
-                Visibility.Visible,
-                (s, e) => {
-                    TileVisibility = Visibility.Visible;
-                },
-                ms, bt);
-        }
+        //public void FadeIn(double bt = 0, double ms = 1000) {
+        //    MpHelpers.Instance.AnimateVisibilityChange(
+        //        ClipBorder,
+        //        Visibility.Visible,
+        //        (s, e) => {
+        //            TileVisibility = Visibility.Visible;
+        //        },
+        //        ms, bt);
+        //}
 
-        public void FadeOut(Visibility outVisibility = Visibility.Collapsed, double bt = 0, double ms = 1000) {
-            MpHelpers.Instance.AnimateVisibilityChange(
-                ClipBorder,
-                outVisibility,
-                (s, e) => {
-                    TileVisibility = outVisibility;
-                },
-                ms, bt);
-        }
+        //public void FadeOut(Visibility outVisibility = Visibility.Collapsed, double bt = 0, double ms = 1000) {
+        //    MpHelpers.Instance.AnimateVisibilityChange(
+        //        ClipBorder,
+        //        outVisibility,
+        //        (s, e) => {
+        //            TileVisibility = outVisibility;
+        //        },
+        //        ms, bt);
+        //}
 
 
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
             ContentContainerViewModel.RequestUiUpdate();
-            if (FileListBox != null) {
-                FileListBox.Items.Refresh();
-            }
+            //if (FileListBox != null) {
+            //    FileListBox.Items.Refresh();
+            //}
             sw.Stop();
             MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -2178,7 +2172,9 @@
                     }
                     break;
                 case MpCopyItemType.FileList:
-                    FileListBox.ScrollIntoView(FileListCollectionViewModel[0]);
+                    //FileListBox.ScrollIntoView(FileListCollectionViewModel[0]);
+
+                    ContentContainerViewModel.RequestScrollIntoView(ContentContainerViewModel.ItemViewModels[0]);
                     break;
             }
         }
@@ -2353,14 +2349,14 @@
                 }
             }
             
-            ClipBorder = null;
-            TitleTextBox = null;
-            TitleTextBlock = null;
-            Image = null;
-            FileListBox = null;
-            ClipTileSelectionOverlayGrid = null;
-            ClipBorder = null;
-            ClipBorderTranslateTransform = null;
+            //ClipBorder = null;
+            //TitleTextBox = null;
+            //TitleTextBlock = null;
+            //Image = null;
+            //FileListBox = null;
+            //ClipTileSelectionOverlayGrid = null;
+            //ClipBorder = null;
+            //ClipBorderTranslateTransform = null;
         }
 
         #endregion

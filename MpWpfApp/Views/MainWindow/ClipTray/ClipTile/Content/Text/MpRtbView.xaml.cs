@@ -22,6 +22,32 @@ namespace MpWpfApp {
         public MpRtbView() {
             InitializeComponent();            
         }
+        
+
+
+        public void SyncModels() {
+            var rtbvm = DataContext as MpRtbItemViewModel;
+            
+            //clear any search highlighting when saving the document then restore after save
+            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
+
+            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
+            
+            Rtb.ClearHyperlinks();
+
+            rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
+
+            Rtb.CreateHyperlinks();
+
+            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
+
+            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == rtbvm.CopyItemId).ToList();
+            if (scvml.Count > 0) {
+                rtbvm.ShortcutKeyString = scvml[0].KeyString;
+            }
+        }
+
+
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             if (DataContext != null && DataContext is MpRtbItemViewModel rtbivm) {
                 rtbivm.OnRtbResetRequest += Rtbivm_OnRtbResetRequest;
@@ -29,14 +55,21 @@ namespace MpWpfApp {
                 rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
                 rtbivm.OnClearHyperlinksRequest += Rtbivm_OnClearHyperlinksRequest;
                 rtbivm.OnCreateHyperlinksRequest += Rtbivm_OnCreateHyperlinksRequest;
-                rtbivm.TemporarySetRtb(Rtb);
+                rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
+
                 if (rtbivm.HostClipTileViewModel.WasAddedAtRuntime) {
                     //force new items to have left alignment
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     UpdateLayout();
                 }
+
+                SyncModels();
             }
+        }
+
+        private void Rtbivm_OnSyncModels(object sender, EventArgs e) {
+            SyncModels();
         }
 
         private void Rtbivm_OnCreateHyperlinksRequest(object sender, EventArgs e) {
@@ -79,7 +112,7 @@ namespace MpWpfApp {
             if (plv != null) {
                 var et = plv.GetVisualDescendent<MpRtbEditToolbarView>();
                 if(et != null) {
-                    et.SetCommandTarget(Rtb);
+                    et.SetActiveRtb(Rtb);
                 }
             }
         }

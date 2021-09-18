@@ -18,8 +18,22 @@ namespace MpWpfApp {
     /// Interaction logic for MpPasteTemplateToolbarView.xaml
     /// </summary>
     public partial class MpPasteTemplateToolbarView : UserControl {
+        RichTextBox _activeRtb;
+
         public MpPasteTemplateToolbarView() {
             InitializeComponent();
+            Visibility = Visibility.Collapsed;
+        }
+        public void SetActiveRtb(RichTextBox trtb) {
+            _activeRtb = trtb;
+            var rtbvm = _activeRtb.DataContext as MpRtbItemViewModel;
+            foreach (var thlvm in rtbvm.TemplateHyperlinkCollectionViewModel.Templates) {
+                thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
+            }
+        }
+
+        private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
+            
         }
     }
 }

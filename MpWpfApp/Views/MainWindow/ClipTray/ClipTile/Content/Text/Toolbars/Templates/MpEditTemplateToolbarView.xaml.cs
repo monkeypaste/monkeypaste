@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -28,6 +29,7 @@ namespace MpWpfApp {
 
         public MpEditTemplateToolbarView() {
             InitializeComponent();
+            Visibility = Visibility.Collapsed;
         }
 
         public void SetActiveRtb(RichTextBox trtb) {
@@ -37,27 +39,50 @@ namespace MpWpfApp {
             foreach(var thlvm in rtbvm.TemplateHyperlinkCollectionViewModel.Templates) {
                 thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
             }
-            rtbvm.TemplateHyperlinkCollectionViewModel.Templates.CollectionChanged += Templates_CollectionChanged;
-            var ettvm = DataContext as MpEditTemplateToolbarViewModel;
-
-            if (ettvm.HostClipTileViewModel.IsEditingTemplate && ettvm.HostClipTileViewModel.IsEditingContent) {
-                TemplateNameEditorTextBox.Focus();
-                TemplateNameEditorTextBox.SelectAll();
-            } 
         }
 
-        private void Templates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            throw new NotImplementedException();
+        public void CancelCreate() {
+            //var rtb = this.ElementStart.Parent.FindParentOfType<RichTextBox>();
+
+            //rtb.Selection.Select(ElementStart, ElementEnd);
+            //rtb.Selection.Text = string.Empty;
+
+
+            //var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+
+            //if (thlvm != null) {
+            //    var thlcvm = thlvm.HostTemplateCollectionViewModel;
+            //    if (thlcvm != null) {
+            //        thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
+            //    }
+            //}
+
+            //rtb.Selection.Select(NewStartPointer, NewStartPointer);
+            //rtb.Selection.Text = NewOriginalText;
+        }
+
+        public void ShowToolbar() {
+            var ctdv = this.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpClipTileDetailView>();
+            ctdv.Visibility = Visibility.Collapsed;
+            Visibility = Visibility.Visible;
+        }
+
+        public void HideToolbar() {
+            Visibility = Visibility.Collapsed;
+            var ctdv = this.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpClipTileDetailView>();
+            ctdv.Visibility = Visibility.Visible;            
         }
 
         private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            DataContext = sender as MpTemplateHyperlinkViewModel;
+            ShowToolbar();
         }
 
         private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var thlvm = DataContext as MpTemplateHyperlinkViewModel;
             if(thlvm != null) {
                 thlvm.OkCommand.Execute(null);
+                HideToolbar();
                 _activeRtb.Focus();
             }
         }
@@ -72,11 +97,6 @@ namespace MpWpfApp {
             if (e.Key == Key.Enter) {
                 thlvm.OkCommand.Execute(null);
                 e.Handled = true;
-            }
-        }
-
-        private void ClipTileEditTemplateToolbar_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext == null) {
             }
         }
 

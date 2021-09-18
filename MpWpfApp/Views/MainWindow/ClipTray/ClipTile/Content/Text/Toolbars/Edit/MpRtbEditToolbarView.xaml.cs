@@ -28,6 +28,7 @@ namespace MpWpfApp {
 
         public MpRtbEditToolbarView() {
             InitializeComponent();
+            Visibility = Visibility.Collapsed;
         }
 
 
@@ -35,9 +36,11 @@ namespace MpWpfApp {
             
         }
 
-        public void SetCommandTarget(RichTextBox trtb) {
+        public void SetActiveRtb(RichTextBox trtb) {
+            AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
             DataContext = artb.DataContext as MpRtbItemViewModel;
+
             if(buttons == null) {
                 buttons = new List<ButtonBase>() {
                 PrintButton,
@@ -56,6 +59,7 @@ namespace MpWpfApp {
                 BulletsButton
             };
             }
+
             foreach(var b in buttons) {
                 b.CommandTarget = trtb;
             }
@@ -64,6 +68,7 @@ namespace MpWpfApp {
             artb = trtb;
             artb.IsReadOnly = false;
             artb.IsManipulationEnabled = true;
+
             
             CurrentRtb_SelectionChanged(this, null);
             
@@ -243,81 +248,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        //private void AddTemplateButton_PreviewMouseDown(object sender, MouseButtonEventArgs e3) {
-        //    if(artb == null) {
-        //        MonkeyPaste.MpConsole.WriteTraceLine("Error no active rtb");
-        //        return;
-        //    }
-        //    e3.Handled = true;
-
-        //    var addButton = sender as Button;
-        //    addButton.ContextMenu = new MpAddTemplateToolbarContextMenuView(addButton,artb);
-        //    addButton.ContextMenu.IsOpen = true;
-
-            //var rtbvm = artb.DataContext as MpRtbItemViewModel;
-            ////SubSelectedRtbViewModel.SaveSubItemToDatabase();
-
-            //if (rtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
-            //    //if templates are NOT in the clip yet add one w/ default name
-            //    //rtblb.EditTemplateView.SetActiveTemplate(null, true);
-
-            //   rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
-            //    //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            //} else {
-            //    var templateContextMenu = new ContextMenu();
-            //    foreach (var ttcvm in rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
-            //        Border b = new Border();
-            //        b.Background = ttcvm.TemplateBrush;
-            //        b.BorderBrush = Brushes.Black;
-            //        b.BorderThickness = new Thickness(1);
-            //        b.Width = 14;
-            //        b.Height = 14;
-            //        b.VerticalAlignment = VerticalAlignment.Center;
-            //        b.HorizontalAlignment = HorizontalAlignment.Left;
-
-            //        TextBlock tb = new TextBlock();
-            //        tb.Text = ttcvm.TemplateDisplayName;//TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
-            //        tb.FontSize = 14;
-            //        tb.HorizontalAlignment = HorizontalAlignment.Left;
-            //        tb.VerticalAlignment = VerticalAlignment.Center;
-            //        tb.Margin = new Thickness(5, 0, 0, 0);
-
-
-            //        //DockPanel dp1 = new DockPanel();
-            //        //dp1.Children.Add(b);
-            //        //dp1.Children.Add(tb);
-            //        //b.SetValue(DockPanel.DockProperty, Dock.Left);
-            //        //tb.SetValue(DockPanel.DockProperty, Dock.Right);
-
-            //        MenuItem tmi = new MenuItem();
-            //        tmi.Icon = b;
-            //        tmi.Header = tb;
-            //        tmi.Click += (s1, e5) => {
-            //            rtbcvm.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
-            //            //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
-            //        };
-            //        templateContextMenu.Items.Add(tmi);
-            //    }
-            //    var addNewMenuItem = new MenuItem();
-            //    TextBlock tb2 = new TextBlock();
-            //    tb2.Text = "Add New...";
-            //    tb2.FontSize = 14;
-            //    tb2.HorizontalAlignment = HorizontalAlignment.Left;
-            //    tb2.VerticalAlignment = VerticalAlignment.Center;
-
-            //    var img = new Image();
-            //    img.Source = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Silk/icons/add.png"));
-            //    addNewMenuItem.Icon = img;
-            //    addNewMenuItem.Header = tb2;
-            //    addNewMenuItem.Click += (s1, e5) => {
-            //        rtbcvm.EditTemplateToolbarViewModel.SetTemplate(null, true);
-            //    };
-            //    templateContextMenu.Items.Add(addNewMenuItem);
-            //    AddTemplateButton.ContextMenu = templateContextMenu;
-            //    templateContextMenu.PlacementTarget = AddTemplateButton;
-            //    templateContextMenu.IsOpen = true;
-            //}
-       // }
 
     }
 }

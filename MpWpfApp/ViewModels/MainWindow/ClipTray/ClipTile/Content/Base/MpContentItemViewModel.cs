@@ -178,8 +178,8 @@ namespace MpWpfApp {
 
         #endregion
 
-        public RichTextBox Rtb { get; set; }
-        public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
+        //public RichTextBox Rtb { get; set; }
+        //public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
 
 
         #region Events

@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Xamarin.Forms;
 
 namespace MpWpfApp {
     /// <summary>
@@ -59,6 +58,10 @@ namespace MpWpfApp {
             RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTileRichTextBoxListBox);
             RtbLbAdornerLayer.Add(RtbLbAdorner);
 
+            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
+            mwvm.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
+            mwvm.OnTileUnexpand += MpRtbEditToolbarView_OnTileUnexpand;
+
             UpdateUi();
         }
 
@@ -71,7 +74,9 @@ namespace MpWpfApp {
             // NOTE This is for selection changed from interface from VM is in another handler
             var srtb = (sender as FrameworkElement).GetVisualDescendent<RichTextBox>();
             if(srtb != null && rtblbvm.HostClipTileViewModel.IsEditingContent) {
-                EditToolbarView.SetCommandTarget(srtb);
+                EditToolbarView.SetActiveRtb(srtb);
+                EditTemplateView.SetActiveRtb(srtb);
+                PasteTemplateView.SetActiveRtb(srtb);
             }
 
             if (rtblbvm.Count > 1) {
@@ -114,7 +119,7 @@ namespace MpWpfApp {
                 var rtbcvm = DataContext as MpRtbItemCollectionViewModel;
                 rtbcvm.ResetSubSelection();
             }
-            
+            UpdateUi();
         }
         #endregion
 
@@ -126,8 +131,6 @@ namespace MpWpfApp {
                 rtbcvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
                 rtbcvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 rtbcvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                rtbcvm.HostClipTileViewModel.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
-                rtbcvm.HostClipTileViewModel.OnTileUnexpand += MpRtbEditToolbarView_OnTileUnexpand;
                 //rtbcvm.SyncItemsWithModel();
             } 
         }

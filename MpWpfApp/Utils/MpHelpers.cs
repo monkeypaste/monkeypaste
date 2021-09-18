@@ -1944,17 +1944,26 @@ namespace MpWpfApp {
         }
 
         public BitmapSource GetIconImage(string sourcePath) {
-            if (!File.Exists(sourcePath)) {
-                if (!Directory.Exists(sourcePath)) {
-                    //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
-                    //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
-                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Exclamation.ToBitmap());
-                } else {
-                    return GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
-                }
+            BitmapSource iconBmp = new BitmapImage();
+            try {
+                if (!File.Exists(sourcePath)) {
+                    if (!Directory.Exists(sourcePath)) {
+                        //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
+                        //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
+                        iconBmp = ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Exclamation.ToBitmap());
+                    } else {
+                        iconBmp = GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
+                    }
 
+                } else {
+                    iconBmp = GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
+                }                
             }
-            return GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
+            catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                iconBmp = ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
+            }
+            return iconBmp;
         }
 
         public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newScale) {

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
 using System;
 using System.Threading;
 using System.Windows;
@@ -28,13 +29,24 @@ namespace MpWpfApp {
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
+            
         }
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null) {
-                var mwvm = DataContext as MpMainWindowViewModel;
+                MpShortcutCollectionViewModel.Instance.Init();
 
-                mwvm.FinishLoading();
+                MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
+                int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
+
+                MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
+                MpStandardBalloonViewModel.ShowBalloon(
+                   "Monkey Paste",
+                   "Successfully loaded w/ " + totalItems + " items",
+                   Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+                MpMainWindowViewModel.IsMainWindowLoading = false;
             }
         }
 

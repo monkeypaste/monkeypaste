@@ -20,15 +20,25 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTileView.xaml
     /// </summary>
     public partial class MpClipTileView : UserControl {
-        int minDragDist = 5;
+        int minDragDist = 25;
 
         public MpClipTileView() {
             InitializeComponent();
             PreviewMouseUp += MpClipTileView_PreviewMouseUp_DragDrop;
-            MouseMove += MpClipTileView_MouseMove_DragDrop;            
+            MouseMove += MpClipTileView_MouseMove_DragDrop;     
         }
 
+        private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
+            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
+            mwvm.OnTileExpand += Mwvm_OnTileExpand;
+            mwvm.OnTileUnexpand += Mwvm_OnTileUnexpand;
+        }
 
+        private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if (DataContext != null && DataContext is MpClipTileViewModel ctvm) {
+                ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
+            }
+        }
         #region Selection
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
@@ -292,5 +302,25 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+        
+
+        private void Mwvm_OnTileUnexpand(object sender, EventArgs e) {
+            if (sender == DataContext) {
+                TileDetailView.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Mwvm_OnTileExpand(object sender, EventArgs e) {
+            if(sender == DataContext) {
+                //TileDetailView.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        
+
+        private void Ctvm_OnSearchRequest(object sender, string e) {
+            throw new NotImplementedException();
+        }
     }
 }

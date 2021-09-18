@@ -24,6 +24,8 @@
                         Height="{Binding TileBorderHeight}"
                         Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                         Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
+                        Loaded="ClipTileClipBorder_Loaded"
+                        DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         PreviewMouseUp="ClipTileClipBorder_PreviewMouseUp"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseMove="ClipTileClipBorder_MouseMove"

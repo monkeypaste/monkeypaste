@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListItemView.xaml
     /// </summary>
     public partial class MpContentListItemView : UserControl {
-        private int _minDragDist = 10;
+        private int _minDragDist = 25;
 
         AdornerLayer RtbItemAdornerLayer;
         MpRtbListBoxItemAdorner RtbItemAdorner;
@@ -104,9 +104,9 @@ namespace MpWpfApp {
                 }
                 //SyncMultiSelectDragButton(false, true);
                 if (rtbvm.MouseDownPosition == new Point()) {
-                    rtbvm.MouseDownPosition = e7.GetPosition(rtbvm.Rtbc);
+                    rtbvm.MouseDownPosition = e7.GetPosition(ContentListItemViewGrid);
                 }
-                if (MpHelpers.Instance.DistanceBetweenPoints(rtbvm.MouseDownPosition, e7.GetPosition(rtbvm.Rtbc)) < _minDragDist) {
+                if (MpHelpers.Instance.DistanceBetweenPoints(rtbvm.MouseDownPosition, e7.GetPosition(ContentListItemViewGrid)) < _minDragDist) {
                     return;
                 }
                 rtbvm.IsSubDragging = true;
@@ -115,7 +115,7 @@ namespace MpWpfApp {
                     rtbvm.DragDataObject = MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, false).Result;//RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
                 }
                 DragDrop.DoDragDrop(
-                            rtbvm.Rtbc,
+                            ContentListItemViewGrid,
                             rtbvm.DragDataObject,
                             DragDropEffects.Copy | DragDropEffects.Move);
                 e7.Handled = true;
@@ -134,82 +134,6 @@ namespace MpWpfApp {
            // SyncMultiSelectDragButton(false, false);
         }
         
-        #endregion
-
-        #region Title TextBlock Events
-        private void RtbTitleTextBlock_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if (!rtbvm.HostClipTileViewModel.IsExpanded) {
-                rtbvm.IsSubSelected = true;
-            }
-            rtbvm.IsSubEditingTitle = true;
-            e.Handled = true;
-        }
-
-        private void RtbTitleTextBlock_MouseEnter(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            rtbvm.IsHoveringOnTitleTextBlock = true;
-        }
-
-        private void RtbTitleTextBlock_MouseLeave(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            rtbvm.IsHoveringOnTitleTextBlock = false;
-        }
-        #endregion
-
-        #region Title TextBox Events
-        private void RtbTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if (rtbvm.RtbListBoxItemTitleTextBoxVisibility == Visibility.Collapsed) {
-                //rtbvm.CopyItemTitle = RtbTitleTextBox.Text;
-                return;
-            }
-            //RtbTitleTextBox.Focus();
-            //RtbTitleTextBox.SelectAll();
-        }
-
-        private void RtbTitleTextBox_LostFocus(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            rtbvm.IsSubEditingTitle = false;
-        }
-
-        private void RtbTitleTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            if (e.Key == Key.Enter || e.Key == Key.Escape) {
-                rtbvm.IsSubEditingTitle = false;
-            }
-        }
-        #endregion
-
-        #region AppIcon Button Events
-        private void RtbItemAppIconImageButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            //MpHelpers.Instance.OpenUrl(CopyItem.App.AppPath);
-            rtbvm.ContainerViewModel.ClearSubSelection();
-            rtbvm.IsSubSelected = true;
-
-            foreach (var vctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
-                if (vctvm.CopyItemAppId != rtbvm.CopyItemAppId) {
-                    bool hasSubItemWithApp = false;
-                    if (vctvm.ContentContainerViewModel.Count > 1) {
-                        foreach (var vrtbvm in vctvm.ContentContainerViewModel.ItemViewModels) {
-                            if (vrtbvm.CopyItem.Source.AppId != rtbvm.CopyItemAppId) {
-                                vrtbvm.ItemVisibility = Visibility.Collapsed;
-                            } else {
-                                hasSubItemWithApp = true;
-                            }
-                        }
-                    }
-                    if (!hasSubItemWithApp) {
-                        vctvm.TileVisibility = Visibility.Collapsed;
-                    }
-                }
-            }
-            //this triggers clip tray to swap out the app icons for the filtered app
-            //MpClipTrayViewModel.Instance.FilterByAppIcon = rtbvm.CopyItemAppIcon;
-            MpClipTrayViewModel.Instance.IsFilteringByApp = true;
-        }
-
         #endregion
 
         #region Context Menu Events

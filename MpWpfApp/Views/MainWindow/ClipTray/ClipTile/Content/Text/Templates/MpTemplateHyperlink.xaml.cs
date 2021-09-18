@@ -1,4 +1,5 @@
-﻿using MonkeyPaste;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,11 @@ namespace MpWpfApp {
         public TextPointer NewStartPointer;
         public string NewOriginalText;
 
-        public static MpTemplateHyperlink Create(TextRange tr,MpCopyItemTemplate cit) {
-            var startPointer = tr.Start;
-            string origText = tr.Text;
+        public bool IsNew = false;
 
+        public RichTextBox Rtb;
+
+        public static MpTemplateHyperlink Create(TextRange tr,MpCopyItemTemplate cit) {
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
             var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
@@ -45,21 +47,33 @@ namespace MpWpfApp {
                 tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
             }
 
+            var startPointer = tr.Start;
+            string origText = tr.Text;
+
+            tr.Text = string.Empty;
+
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
             var rtbvm = rtb.DataContext as MpRtbItemViewModel;
             var thcvm = rtbvm.TemplateHyperlinkCollectionViewModel;
 
-            MpTemplateHyperlinkViewModel thlvm = thcvm.CreateTemplateHyperlinkViewModel(cit);
-            thlvm.CopyItemTemplate.WriteToDatabase();
+            bool newCit = cit == null;
+
+            MpTemplateHyperlinkViewModel thlvm = thcvm.AddItem(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
-            nthl.NewStartPointer = startPointer;
-            nthl.NewOriginalText = origText;
+            
+            if(newCit) {
+                nthl.IsNew = true;
+                nthl.NewStartPointer = startPointer;
+                nthl.NewOriginalText = origText;
 
-            var dupCheck = thcvm.Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
-            if(dupCheck == null) {
-                thcvm.Templates.Add(thlvm);
+
+                var ettbv = rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
+                ettbv.SetActiveRtb(rtb);
+
+                thlvm.IsSelected = true;
             }
+            nthl.Rtb = rtb;
             return nthl;
         }
 
@@ -67,36 +81,19 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        public MpTemplateHyperlink(TextRange tr, MpTemplateHyperlinkViewModel thlvm) : base(tr.Start,tr.End) {
-            InitializeComponent();
+        private MpTemplateHyperlink(TextRange tr, MpTemplateHyperlinkViewModel thlvm) : base(tr.Start,tr.End) {
             DataContext = thlvm;
-        }
+            InitializeComponent();
+        }       
         
-        public void DeleteHyperlink(bool fromContextMenu) {
-            var rtb = this.ElementStart.Parent.FindParentOfType<RichTextBox>();
-
-            if (fromContextMenu) {
-                rtb.Selection.Select(ElementStart, ElementEnd);
-                rtb.Selection.Text = string.Empty;
-            }
-            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
-            var thlcvm = thlvm.HostTemplateCollectionViewModel;
-            //remove this individual token reference
-            if (thlcvm != null) {
-                thlcvm.Templates.Remove(thlvm);
-            }
-
-            if(!string.IsNullOrEmpty(NewOriginalText)) {
-                rtb.Selection.Select(ElementStart, ElementEnd);
-                rtb.Selection.Text = string.Empty;
-
-                rtb.Selection.Select(NewStartPointer, NewStartPointer);
-                rtb.Selection.Text = NewOriginalText;
-            }
-        }
-
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            DeleteHyperlink(false);
+            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+            if (thlvm != null) {
+                var thlcvm = thlvm.HostTemplateCollectionViewModel;
+                if (thlcvm != null) {
+                    thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
+                }
+            }
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {

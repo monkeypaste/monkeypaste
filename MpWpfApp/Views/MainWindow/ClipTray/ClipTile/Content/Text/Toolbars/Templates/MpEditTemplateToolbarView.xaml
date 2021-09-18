@@ -8,7 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="700">    
     <Border x:Name="ClipTileEditTemplateToolbar"
-            DataContextChanged="ClipTileEditTemplateToolbar_DataContextChanged"
             Visibility="{Binding IsEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
             Height="40"
@@ -51,7 +50,7 @@
                          Margin="0,0,0,0"
                          Padding="0,0,0,0" />
                 <TextBlock x:Name="TemplateNameValidationTextBlock"
-                           Text="{Binding HostTemplateCollectionViewModel.ValidationText}"
+                           Text="{Binding ValidationText}"
                            Visibility="{Binding HostTemplateCollectionViewModel.ValidationVisibility}"
                            Foreground="Red"
                            FontStyle="Oblique"

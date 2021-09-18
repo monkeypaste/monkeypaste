@@ -10,19 +10,10 @@
              x:Name="AddTemplateContextMenu">
     <Button x:Name="AddButton"
             ToolTip="Add Template"
+            Click="AddButton_Click"
             Template="{StaticResource FlatButtonControlTemplate}">
         <Button.ContextMenu>
-            <ContextMenu Opened="AddTemplateContextMenu_Opened"
-                         ItemsSource="{Binding Templates}">
-                <ContextMenu.ItemContainerStyle>
-                    <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Icon"
-                                Value="{Binding TemplateBrush, Converter={StaticResource BrushToImageConverter}}" />
-                        <Setter Property="Header"
-                                Value="{Binding TemplateName}" />
-                    </Style>
-                </ContextMenu.ItemContainerStyle>
-            </ContextMenu>
+            <ContextMenu Opened="AddTemplateContextMenu_Opened" />
         </Button.ContextMenu>
         <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
                Stretch="None"

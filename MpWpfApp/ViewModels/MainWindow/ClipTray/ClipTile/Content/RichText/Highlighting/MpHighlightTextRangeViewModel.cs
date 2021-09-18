@@ -117,10 +117,6 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
-        
-
-
         #region Public Methods
         public MpHighlightTextRangeViewModel() : this(null,null,null,-1,MpHighlightType.None) { }
 
@@ -149,7 +145,8 @@ namespace MpWpfApp {
                                     break;
                                 case MpCopyItemType.FileList:
                                     var flivm = HostClipTileViewModel.FileListCollectionViewModel[SortOrderIdx];
-                                    HostClipTileViewModel.FileListBox.ScrollIntoView(flivm);
+                                    //HostClipTileViewModel.FileListBox.ScrollIntoView(flivm);
+                                    HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(flivm);
                                     break;
                             }
                         }
@@ -169,7 +166,7 @@ namespace MpWpfApp {
         public void HighlightRange() {
            // HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
             foreach (MpRtbItemViewModel rtbvm in HostClipTileViewModel.ContentContainerViewModel.ItemViewModels) {
-                rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
+                //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
             }
             if (HighlightType == MpHighlightType.App || HighlightType == MpHighlightType.Image) {

@@ -24,24 +24,39 @@ namespace MpWpfApp {
         }
 
         public MpAddTemplateToolbarButton(RichTextBox rtb) : this() {
+            SetActiveRtb(rtb);            
+        }
+
+        public void SetActiveRtb(RichTextBox rtb) {
             Rtb = rtb;
-            DataContext = (Rtb.DataContext as MpRtbItemViewModel).TemplateHyperlinkCollectionViewModel;
-            AddButton.ContextMenu.PlacementTarget = AddButton;
         }
 
         private void AddTemplateContextMenu_Opened(object sender, RoutedEventArgs e) {
-            DataContext = (Rtb.DataContext as MpRtbItemViewModel).TemplateHyperlinkCollectionViewModel;
+            var tc = (Rtb.DataContext as MpRtbItemViewModel).TemplateHyperlinkCollectionViewModel.Templates;
 
-            var addNewMenuItem = new MenuItem() {
+            var mil = new List<MenuItem>();
+            foreach(var thvm in tc) {
+                var mi = new MenuItem() {
+                    Header = thvm.TemplateDisplayName,
+                    Icon = new Border() { 
+                        BorderBrush = Brushes.Black,
+                        Background = thvm.TemplateBrush
+                    },
+                    DataContext = thvm
+                };
+                mil.Add(mi);
+            }
+            
+            mil.Add(new MenuItem() {
                 Header = "Add New...",
                 Icon = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Silk/icons/add.png"))
-            };
+            });
 
-            AddButton.ContextMenu.Items.Add(addNewMenuItem);
-
-            foreach (MenuItem mi in AddButton.ContextMenu.Items) {
+            foreach (MenuItem mi in mil) {
                 mi.Click += Template_Click;
             }
+
+            AddButton.ContextMenu.ItemsSource = mil;
         }
 
         private void Template_Click(object sender, RoutedEventArgs e) {
@@ -50,11 +65,32 @@ namespace MpWpfApp {
 
             var mi = sender as MenuItem;
             if(mi.DataContext == null) {
+                //when clicking add new
                 var thl = MpTemplateHyperlink.Create(Rtb.Selection,null);
                 var thlvm = thl.DataContext as MpTemplateHyperlinkViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
             } else if(mi.DataContext is MpTemplateHyperlinkViewModel thlvm) {
+                //when clicking a pre-existing template
+                var nthl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
+                var nthlvm = nthl.DataContext as MpTemplateHyperlinkViewModel;
+                nthlvm.EditTemplateCommand.Execute(null);
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e) {
+            if(Rtb == null || Rtb.DataContext == null) {
+                MonkeyPaste.MpConsole.WriteTraceLine("No rtb or rtb context");
+                return;
+            }
+            var rtbvm = Rtb.DataContext as MpRtbItemViewModel;
+            if(rtbvm.TemplateHyperlinkCollectionViewModel.Templates.Count == 0) {
+                //when no templates exist create a new default one
+                var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
+                var thlvm = thl.DataContext as MpTemplateHyperlinkViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
+            } else {
+                //otherwise show template menu
+                AddButton.ContextMenu.IsOpen = true;
             }
         }
     }

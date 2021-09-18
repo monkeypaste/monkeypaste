@@ -31,6 +31,15 @@ namespace MpWpfApp {
             ClipTrayAdornerLayer.Add(ClipTrayAdorner);
         }
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+            MpClipboardManager.Instance.Init();
+            MpClipboardManager.Instance.ClipboardChanged += (s,e1) => ctrvm.AddItemFromClipboard();
+
+
+            if (MpPreferences.Instance.IsInitialLoad) {
+                ctrvm.InitIntroItems();
+            }
+
             ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
         }
 
@@ -119,7 +128,8 @@ namespace MpWpfApp {
                             foreach (var ssrtbvm in dctvm.ContentContainerViewModel.SubSelectedContentItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()) {
                                 nctvm.MergeCopyItemList(new List<MpCopyItem>() { ssrtbvm.CopyItem });
                             }
-                            ctrvm.Add(nctvm, dropIdx);
+                            //ctrvm.Add(nctvm, dropIdx);
+                            ctrvm.RefreshClips();
                             nctvm.OnPropertyChanged(nameof(nctvm.CopyItem));
                             wasDropped = true;
                         }
