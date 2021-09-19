@@ -10,13 +10,26 @@ using System.Windows.Controls;
 using System.Reflection;
 using MonkeyPaste;
 
-namespace MpWpfApp {
-    public abstract class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
+namespace MpWpfApp {    
+    public abstract class MpViewModelBase<P> : DependencyObject, INotifyPropertyChanged where P: class {
         #region Private Variables
 
         #endregion
 
         #region Properties
+
+        private P _parent;
+        public P Parent {
+            get {
+                return _parent;
+            }
+            set {
+                if(_parent != value) {
+                    _parent = value;
+                    OnPropertyChanged(nameof(Parent));
+                }
+            }
+        }
 
         #region Property Reflection Referencer
         public object this[string propertyName] {
@@ -166,7 +179,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
-        protected MpViewModelBase() {
+        protected MpViewModelBase(P parent) {
+            Parent = parent;
             MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
             MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
             MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
@@ -199,49 +213,14 @@ namespace MpWpfApp {
             
         }
 
-        protected virtual void OnInitialize() {
-            _designMode = DesignerProperties.GetIsInDesignMode(new Button())
-                || Application.Current == null || Application.Current.GetType() == typeof(Application);
-
-            if (!_designMode) {
-                var designMode = DesignerProperties.IsInDesignModeProperty;
-                _designMode = (bool)DependencyPropertyDescriptor.FromProperty(designMode, typeof(FrameworkElement)).Metadata.DefaultValue;
-            }
-
-            if (_designMode) {
-                DesignData();
-            }
-
-            SetOSCultureBinding();
-        }
-
-        /// <summary>
-        /// With this method, we can inject design time data into the view so that we can
-        /// create a more Blendable application.
-        /// </summary>
-        protected virtual void DesignData() {  }
-
-
-
         #endregion
 
         #region Private methods
-        /// <summary>
-        /// Set the current culture binding based on the OS culture.
-        /// </summary>
-        private static void SetOSCultureBinding() {
-            if (!_osBinding && !_designMode) {
-                FrameworkElement.LanguageProperty.OverrideMetadata(
-                     typeof(FrameworkElement), new FrameworkPropertyMetadata(
-                         XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
-                _osBinding = true;
-            }
-        }
+
         #endregion
 
         #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; } = false;
-
 
         private event PropertyChangedEventHandler _propertyChanged;
         public event PropertyChangedEventHandler PropertyChanged {
@@ -250,26 +229,10 @@ namespace MpWpfApp {
         }
 
         public virtual void OnPropertyChanged(string propertyName) {
-            //this.VerifyPropertyName(propertyName);
             PropertyChangedEventHandler handler = _propertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);
-            }
-        }
-
-        //[Conditional("DEBUG")]
-        //[DebuggerStepThrough]
-        public void VerifyPropertyName(string propertyName) {
-            // Verify that the property name matches a real, 
-            // public, instance property on this object. 
-            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
-                string msg = "Invalid property name: " + propertyName;
-                if (this.ThrowOnInvalidPropertyName) {
-                    throw new Exception(msg);
-                } else {
-                    Debug.Fail(msg);
-                }
             }
         }
         #endregion

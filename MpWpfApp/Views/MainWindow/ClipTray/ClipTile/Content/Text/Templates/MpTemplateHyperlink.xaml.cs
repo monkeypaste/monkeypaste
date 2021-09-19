@@ -53,12 +53,12 @@ namespace MpWpfApp {
             tr.Text = string.Empty;
 
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
-            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
-            var thcvm = rtbvm.TemplateHyperlinkCollectionViewModel;
+            var rtbvm = rtb.DataContext as MpContentItemViewModel;
+            var thcvm = rtbvm.TokenCollection;
 
             bool newCit = cit == null;
 
-            MpTemplateHyperlinkViewModel thlvm = thcvm.AddItem(cit);
+            MpTokenViewModel thlvm = thcvm.AddItem(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
             
@@ -81,15 +81,15 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private MpTemplateHyperlink(TextRange tr, MpTemplateHyperlinkViewModel thlvm) : base(tr.Start,tr.End) {
+        private MpTemplateHyperlink(TextRange tr, MpTokenViewModel thlvm) : base(tr.Start,tr.End) {
             DataContext = thlvm;
             InitializeComponent();
         }       
         
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+            var thlvm = DataContext as MpTokenViewModel;
             if (thlvm != null) {
-                var thlcvm = thlvm.HostTemplateCollectionViewModel;
+                var thlcvm = thlvm.Parent;
                 if (thlcvm != null) {
                     thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
                 }
@@ -97,17 +97,17 @@ namespace MpWpfApp {
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
-            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+            var thlvm = DataContext as MpTokenViewModel;
             thlvm.IsHovering = true;
         }
 
         private void Hyperlink_MouseLeave(object sender, MouseEventArgs e) {
-            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+            var thlvm = DataContext as MpTokenViewModel;
             thlvm.IsHovering = false;
         }
 
         private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var thlvm = DataContext as MpTemplateHyperlinkViewModel;
+            var thlvm = DataContext as MpTokenViewModel;
             thlvm.IsSelected = true;
         }
     }

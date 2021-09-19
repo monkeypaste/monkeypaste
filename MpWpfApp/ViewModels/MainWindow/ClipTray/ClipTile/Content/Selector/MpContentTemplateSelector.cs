@@ -14,7 +14,7 @@ namespace MpWpfApp {
                 return null;
             }
             var tp = (container as ContentPresenter).TemplatedParent as FrameworkElement;
-            var ci = (item as MpContentContainerViewModel).HeadItem.CopyItem;
+            var ci = (item as MpClipTileViewModel).HeadItem.CopyItem;
             switch (ci.ItemType) {
                 case MpCopyItemType.RichText:
                     var dt = (DataTemplate)(tp.Resources["RichTextTemplate"]);

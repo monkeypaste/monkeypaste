@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpContextMenuItemViewModel : MpViewModelBase {
+    public class MpContextMenuItemViewModel : MpViewModelBase<object> {
         #region Properties
         private bool _isSeparator = false;
         public bool IsSeparator {
@@ -156,7 +156,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpContextMenuItemViewModel() : base() {
+        public MpContextMenuItemViewModel() : base(null) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IconSource):

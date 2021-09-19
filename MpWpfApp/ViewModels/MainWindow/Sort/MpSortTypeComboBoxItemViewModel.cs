@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSortTypeComboBoxItemViewModel : MpViewModelBase {
+    public class MpSortTypeComboBoxItemViewModel : MpViewModelBase<object> {
         #region Properties
         private string _header;
         public string Header {
@@ -18,7 +18,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) : base() {
+        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) : base(null) {
             Header = header;
             Command = command;
         }

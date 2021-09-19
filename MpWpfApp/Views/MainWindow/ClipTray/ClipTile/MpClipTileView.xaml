@@ -5,24 +5,17 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
-             xmlns:local="clr-namespace:MpWpfApp"
+             xmlns:local="clr-namespace:MpWpfApp"             
              mc:Ignorable="d"             
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <UserControl.Resources>
-        <local:MpContainerToRtbCollectionConverter x:Key="ContainerToRtbCollectionConverter" />
-        <local:MpContentTemplateSelector x:Key="ContentTemplateSelector" />
-    </UserControl.Resources>
-    <!--<UserControl.DataContext>
-        <local:MpClipTileViewModel />
-    </UserControl.DataContext>-->
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding}"
-                        Margin="{Binding TileMargin}"
+                        Margin="{local:MpMeasurementsBinding ClipTileMargin, Converter={StaticResource DoubleToThicknessConverter}, Mode=OneWay}"
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
-                        Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                        Visibility="{Binding ItemVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                         Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                         Loaded="ClipTileClipBorder_Loaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
@@ -43,12 +36,6 @@
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Loaded">
-                <i:CallMethodAction TargetObject="{Binding}"
-                                    MethodName="ClipTile_Loaded" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
         <!--<local:MpClipBorder.Style>
             <Style>
                 <Setter Property="Border.Background"
@@ -276,15 +263,15 @@
                 <!-- Tile Title Canvas -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
                                            DockPanel.Dock="Top"
-                                           Height="{Binding TileTitleHeight}"
-                                           DataContext="{Binding}" />
+                                           Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
+                                           DataContext="{Binding PrimaryItem}" />
                 <!-- Tile Detail Grid -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
-                                            Height="{Binding TileDetailHeight}"
-                                            DataContext="{Binding}" />
+                                            Height="{local:MpMeasurementsBinding ClipTileDetailHeight, Mode=OneWay}"
+                                            DataContext="{Binding PrimaryItem}" />
                 <!-- Content Container Canvas -->
-                <local:MpContentListView DataContext="{Binding ContentContainerViewModel}" />               
+                <local:MpContentListView DataContext="{Binding}" />               
                 
             </DockPanel>
             <!-- Overlays -->            

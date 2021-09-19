@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModel : MpUndoableViewModelBase<MpPasteToAppPathViewModel>, IDisposable {
+    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, IDisposable {
         #region Private Variables
         #endregion
 
@@ -328,7 +328,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpPasteToAppPathViewModel() : this(null) { }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath, IntPtr handle) {
+        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath, IntPtr handle) : base(MpPasteToAppPathViewModelCollection.Instance) {
             //constructor used for running applications
             PasteToAppPath = pasteToAppPath;
             if(handle != IntPtr.Zero) {
@@ -337,7 +337,7 @@ namespace MpWpfApp {
             }            
         }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath) {
+        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath) : base(MpPasteToAppPathViewModelCollection.Instance) {
             //constructor used for user defined paste to applications
             PasteToAppPath = pasteToAppPath;
         }

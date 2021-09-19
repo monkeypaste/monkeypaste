@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpClipTileTitleSwirlViewModel : MpUndoableObservableCollectionViewModel<MpClipTileTitleSwirlViewModel,MpSwirlLayerViewModel> {
+    public class MpClipTileTitleSwirlViewModel : MpViewModelBase<MpClipTileViewModel> {
         #region Private Variables
 
         #endregion
@@ -16,42 +17,19 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpClipTileViewModel _clipTileViewModel = null;
-        public MpClipTileViewModel ClipTileViewModel {
-            get {
-                return _clipTileViewModel;
-            }
-            set {
-                if (_clipTileViewModel != value) {
-                    _clipTileViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileViewModel));
-                }
-            }
-        }
 
-        public MpAppViewModel _appViewModel = null;
-        public MpAppViewModel AppViewModel {
-            get {
-                return _appViewModel;
-            }
-            set {
-                if(_appViewModel != value) {
-                    _appViewModel = value;
-                    OnPropertyChanged(nameof(AppViewModel));
-                }
-            }
-        }
+        public ObservableCollection<MpSwirlLayerViewModel> Swirls { get; set; } = new ObservableCollection<MpSwirlLayerViewModel>();
 
         public MpSwirlLayerViewModel SwirlLayer0 {
             get {
-                if(this.Count <= 0) {
+                if(Swirls.Count <= 0) {
                     return null;
                 }
-                return this[0];
+                return Swirls[0];
             }
             set {
-                if(this.Count > 0 && this[0] != value) {
-                    this[0] = value;
+                if(Swirls.Count > 0 && Swirls[0] != value) {
+                    Swirls[0] = value;
                     OnPropertyChanged(nameof(SwirlLayer0));
                 }
             }
@@ -59,14 +37,14 @@ namespace MpWpfApp {
 
         public MpSwirlLayerViewModel SwirlLayer1 {
             get {
-                if (this.Count <= 1) {
+                if (Swirls.Count <= 1) {
                     return null;
                 }
-                return this[1];
+                return Swirls[1];
             }
             set {
-                if (this.Count > 1 && this[1] != value) {
-                    this[1] = value;
+                if (Swirls.Count > 1 && Swirls[1] != value) {
+                    Swirls[1] = value;
                     OnPropertyChanged(nameof(SwirlLayer1));
                 }
             }
@@ -74,14 +52,14 @@ namespace MpWpfApp {
 
         public MpSwirlLayerViewModel SwirlLayer2 {
             get {
-                if (this.Count <= 2) {
+                if (Swirls.Count <= 2) {
                     return null;
                 }
-                return this[2];
+                return Swirls[2];
             }
             set {
-                if (this.Count > 2 && this[2] != value) {
-                    this[2] = value;
+                if (Swirls.Count > 2 && Swirls[2] != value) {
+                    Swirls[2] = value;
                     OnPropertyChanged(nameof(SwirlLayer2));
                 }
             }
@@ -89,14 +67,14 @@ namespace MpWpfApp {
 
         public MpSwirlLayerViewModel SwirlLayer3 {
             get {
-                if (this.Count <= 3) {
+                if (Swirls.Count <= 3) {
                     return null;
                 }
-                return this[3];
+                return Swirls[3];
             }
             set {
-                if (this.Count > 3 && this[3] != value) {
-                    this[3] = value;
+                if (Swirls.Count > 3 && Swirls[3] != value) {
+                    Swirls[3] = value;
                     OnPropertyChanged(nameof(SwirlLayer3));
                 }
             }
@@ -114,15 +92,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpClipTileTitleSwirlViewModel() : base() { }
+        public MpClipTileTitleSwirlViewModel() : base(null) { }
 
-        public MpClipTileTitleSwirlViewModel(MpClipTileViewModel ctvm) : this() {
-            ClipTileViewModel = ctvm;
-            AppViewModel = new MpAppViewModel(ClipTileViewModel.CopyItem.Source.App);
-            var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(AppViewModel.PrimaryIconColorList);
+        public MpClipTileTitleSwirlViewModel(MpClipTileViewModel ctvm) : base(ctvm) {
+            var icon = Parent.HeadItem.CopyItem.Source.App.Icon;
+            var cl = new List<string>() { icon.HexColor1, icon.HexColor2, icon.HexColor3, icon.HexColor4, icon.HexColor5 };
+            var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(cl);
             for (int i = 0; i < randomColorList.Count; i++) {
-                var c = AppViewModel.PrimaryIconColorList[i].ToSkColor().ToWinColor();
-                this.Add(
+                var c = cl[i].ToSkColor().ToWinColor();
+                Swirls.Add(
                     new MpSwirlLayerViewModel(
                         i,
                         new SolidColorBrush(c),
@@ -135,8 +113,8 @@ namespace MpWpfApp {
         }
 
         public void ForceBrush(Brush forcedBrush, int forceLayerIdx=-1) {
-            foreach(var slvm in this) {
-                if(forceLayerIdx >= 0 && this.IndexOf(slvm) == forceLayerIdx) {
+            foreach(var slvm in Swirls) {
+                if(forceLayerIdx >= 0 && Swirls.IndexOf(slvm) == forceLayerIdx) {
 
                 } else if(forceLayerIdx < 0) {
                     slvm.LayerBrush = forcedBrush;

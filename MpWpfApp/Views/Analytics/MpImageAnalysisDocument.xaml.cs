@@ -24,7 +24,7 @@ namespace MpWpfApp {
         }
         public MpImageAnalysisDocument(string analysisData) {
             InitializeComponent();
-            DataContext = new MpImageAnalysisViewModel(analysisData);
+            DataContext = new MpImageAnalysisViewModel(null,analysisData);
         }
     }
 }

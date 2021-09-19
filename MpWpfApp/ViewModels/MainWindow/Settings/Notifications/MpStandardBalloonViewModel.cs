@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpStandardBalloonViewModel : MpViewModelBase {
+    public class MpStandardBalloonViewModel : MpViewModelBase<object> {
         private static readonly Lazy<MpStandardBalloonViewModel> _Lazy = new Lazy<MpStandardBalloonViewModel>(() => new MpStandardBalloonViewModel());
         public static MpStandardBalloonViewModel Instance { get { return _Lazy.Value; } }
 
@@ -134,7 +134,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpStandardBalloonViewModel() : this(null) { }
 
-        public MpStandardBalloonViewModel(string title, string content, string bitmapSourcePath) {
+        public MpStandardBalloonViewModel(string title, string content, string bitmapSourcePath) : base(null) {
             BalloonTitle = title;
             BalloonContent = content;
             BalloonBitmapSource = (BitmapSource)new BitmapImage(new Uri(bitmapSourcePath));
@@ -148,7 +148,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpStandardBalloonViewModel(MpClipTileViewModel ctvm) : base() {
+        private MpStandardBalloonViewModel(MpClipTileViewModel ctvm) : base(null) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel):

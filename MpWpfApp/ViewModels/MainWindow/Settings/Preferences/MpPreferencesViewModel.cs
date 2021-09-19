@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpPreferencesViewModel : MpViewModelBase {
+    public class MpPreferencesViewModel : MpViewModelBase<object> {
         #region Private Variables
 
         #endregion
@@ -156,7 +156,7 @@ namespace MpWpfApp {
                     if(!MpMainWindowViewModel.IsMainWindowLoading) {
                         foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
-                            foreach(MpRtbItemViewModel rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
+                            foreach(var rtbvm in ctvm.ItemViewModels) {
                                 //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));
                             }
                         }
@@ -211,7 +211,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPreferencesViewModel() : base() {
+        public MpPreferencesViewModel() : base(null) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsLoadOnLoginChecked):

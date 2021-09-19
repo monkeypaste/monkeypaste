@@ -276,7 +276,7 @@ namespace MpWpfApp {
             }
         }
         private void ReassignShortcut() {
-            var scvm = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex];
+            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
             MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
                 scvm,
                 scvm.ShortcutDisplayName,
@@ -297,7 +297,7 @@ namespace MpWpfApp {
         }
         private void DeleteShortcut() {
             MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-            var scvm = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex];
+            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
             MpShortcutCollectionViewModel.Instance.Remove(scvm);
         }
 
@@ -312,9 +312,9 @@ namespace MpWpfApp {
         }
         private void ResetShortcut() {
             MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
-            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].KeyString = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.DefaultKeyString;
-            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Register();
-            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.WriteToDatabase();
+            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].KeyString = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Shortcut.DefaultKeyString;
+            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Register();
+            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Shortcut.WriteToDatabase();
         }
 
         private RelayCommand<int> _clickSettingsPanelCommand;

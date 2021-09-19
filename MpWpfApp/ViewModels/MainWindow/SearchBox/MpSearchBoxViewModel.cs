@@ -17,7 +17,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpSearchBoxViewModel : MpUndoableObservableCollectionViewModel<MpSearchBoxViewModel,MpSearchElementViewModel> {
+    public class MpSearchBoxViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
         public static MpSearchBoxViewModel Instance { get { return _Lazy.Value; } }
@@ -350,7 +350,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSearchBoxViewModel() : base() {
+        public MpSearchBoxViewModel() : base(null) {
             var timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 0, 0, Properties.Settings.Default.SearchBoxTypingDelayInMilliseconds);
             timer.Tick += (s, e) => {
@@ -550,14 +550,14 @@ namespace MpWpfApp {
                 foreach (var kvp in newVisibilityDictionary) {
                     foreach(var skvp in kvp.Value) {
                         if (skvp.Key is MpClipTileViewModel) {
-                            (skvp.Key as MpClipTileViewModel).TileVisibility = skvp.Value;                            
+                            (skvp.Key as MpClipTileViewModel).ItemVisibility = skvp.Value;                            
                         }
                         if(skvp.Key is MpClipTileViewModel && skvp.Value == Visibility.Collapsed) {
                             //if tile is collapsed ignore children visibility
                             break;
                         }
-                        if(skvp.Key is MpRtbItemViewModel) {
-                            //(skvp.Key as MpRtbItemViewModel).SubItemVisibility = skvp.Value;
+                        if(skvp.Key is MpContentItemViewModel) {
+                            //(skvp.Key as MpContentItemViewModel).SubItemVisibility = skvp.Value;
                         }
                     }
                     

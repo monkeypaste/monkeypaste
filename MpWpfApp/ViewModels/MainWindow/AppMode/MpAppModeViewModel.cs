@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpAppModeViewModel : MpViewModelBase {
+    public class MpAppModeViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpAppModeViewModel> _Lazy = new Lazy<MpAppModeViewModel>(() => new MpAppModeViewModel());
         public static MpAppModeViewModel Instance { get { return _Lazy.Value; } }
@@ -180,7 +180,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAppModeViewModel() : base() {
+        public MpAppModeViewModel() : base(null) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsAppPaused):

@@ -6,23 +6,10 @@ using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpFileListItemViewModel : MpViewModelBase {
+    public class MpFileListItemViewModel : MpContentItemViewModel {
         #region Properties
 
         #region View Models
-        private MpClipTileViewModel _hostClipTileViewModel = null;
-        public MpClipTileViewModel HostClipTileViewModel {
-            get {
-                return _hostClipTileViewModel;
-            }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
-                }
-            }
-        }
-
         #endregion
 
         #region Controls
@@ -97,14 +84,14 @@ namespace MpWpfApp {
         }
 
         private bool _isSubSelected = false;
-        public bool IsSubSelected {
+        public bool IsSelected {
             get {
                 return _isSubSelected;
             }
             set {
                 if (_isSubSelected != value) {
                     _isSubSelected = value;
-                    OnPropertyChanged(nameof(IsSubSelected));
+                    OnPropertyChanged(nameof(IsSelected));
                 }
             }
         }
@@ -112,8 +99,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpFileListItemViewModel(MpClipTileViewModel parent, string path) : base() {
-            HostClipTileViewModel = parent;
+        public MpFileListItemViewModel(MpFileListItemCollectionViewModel parent,string path) : base(null,null) {
             ItemPath = path;
             ItemUri = new Uri(ItemPath,UriKind.Absolute);
             ItemName = Path.GetFileName(ItemUri.LocalPath);
@@ -136,9 +122,6 @@ namespace MpWpfApp {
         }
 
         public void FileItemWebBrowser_Loaded(object sender, RoutedEventArgs e) {
-            if (HostClipTileViewModel.WebBrowserFileViewerVisibility == Visibility.Collapsed) {
-                return;
-            }
             FileWebBrowser = (WebBrowser)sender;
             //FileWebBrowser.OpenFile(ItemPath);
         }

@@ -32,25 +32,14 @@ namespace MpWpfApp {
         #region Properties
 
         #region ViewModels
-        private MpTemplateHyperlinkCollectionViewModel _templateHyperlinkCollectionViewModel;
-        public MpTemplateHyperlinkCollectionViewModel TemplateHyperlinkCollectionViewModel {
-            get {
-                return _templateHyperlinkCollectionViewModel;
-            }
-            set {
-                if (_templateHyperlinkCollectionViewModel != value) {
-                    _templateHyperlinkCollectionViewModel = value;
-                    OnPropertyChanged(nameof(TemplateHyperlinkCollectionViewModel));
-                }
-            }
-        }        
+             
         
         public MpRtbItemCollectionViewModel RtbItemCollectionViewModel {
             get {
-                if(ContainerViewModel == null) {
+                if(Parent == null) {
                     return null;
                 }
-                return ContainerViewModel as MpRtbItemCollectionViewModel;
+                return Parent as MpRtbItemCollectionViewModel;
             }
         }
         #endregion
@@ -101,408 +90,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        //public Rect DragButtonRect {
-        //    get {
-        //        if(DragButton == null || Rtbc == null) {
-        //            return new Rect();
-        //        }
-        //        return DragButton.TransformToAncestor((Visual)Rtbc).TransformBounds(LayoutInformation.GetLayoutSlot(DragButton));
-        //    }
-        //}
 
-        //public double SubItemAppIconSize {
-        //    get {
-        //        return MpMeasurements.Instance.RtbCompositeAppIconSize;
-        //    }
-        //}
-
-        //public double SubItemAppIconBorderSize {
-        //    get {
-        //        return MpMeasurements.Instance.RtbCompositeAppIconBorderSize;
-        //    }
-        //}
-
-        //public double SubItemAppIconInnerBorderSize {
-        //    get {
-        //        return MpMeasurements.Instance.RtbCompositeAppIconBorderSize * 0.8;
-        //    }
-        //}
-
-        //public double RtbListBoxItemTitleFontSize {
-        //    get {
-        //        return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
-        //    }
-        //}
-
-        //public Thickness RtbPadding {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return new Thickness(0);
-        //        }
-        //        var mm = MpMeasurements.Instance.RtbEditModeMinMargin;
-
-        //        if(SubItemOverlayVisibility == Visibility.Visible) {
-        //            return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm + SubItemAppIconSize, 0);
-        //        }
-        //        if(IsEditingContent) {
-        //            return new Thickness(0);
-        //        }
-        //        return new Thickness(mm);
-        //    }
-        //}
-
-        //public double RtbWidth {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        if (HostClipTileViewModel.IsExpanded) {
-        //            return Math.Max(
-        //                RtbPageWidth + RtbPadding.Left + RtbPadding.Right,
-        //                HostClipTileViewModel.TileContentWidth);
-        //        }
-        //        return RtbCanvasWidth;// - 23;
-        //    }
-        //}
-
-        //public double RtbHeight {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        if (HostClipTileViewModel.IsExpanded) {
-        //            if (ContainerViewModel.Count == 1) {
-        //                return GetExpandedSize().Height;
-        //            }
-        //            //if (IsSubSelected) {
-        //            //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-        //            //}
-        //            //if (IsSubHovering) {
-        //            //    return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
-        //            //}
-        //            //return MpMeasurements.Instance.RtbCompositeItemMinHeight;
-        //            //if(Rtbc == null) {
-        //            //    return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-        //            //} else {
-        //            //    return Math.Max(Rtbc.ActualHeight, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-
-        //            //}
-        //            return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-        //        }
-        //        if (ContainerViewModel.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
-        //            if (Rtb == null) {
-        //                var fd = CopyItemRichText.ToFlowDocument();
-        //                fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
-        //                return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-        //            } else {
-        //                return HostClipTileViewModel.TileContentHeight;
-
-        //                //var fd = Rtb.Document;
-        //                //fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
-        //                //return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-        //            }
-        //        }
-        //        return MpMeasurements.Instance.RtbCompositeItemMinHeight;
-        //    }
-        //}
-
-        //public double RtbPageWidth {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        if (HostClipTileViewModel.IsExpanded) {                    
-        //            if (Rtb == null) {
-        //                double curFontSize = 16;
-        //                var width = Math.Max(
-        //                CopyItemRichText.ToFlowDocument().GetDocumentSize().Width + (curFontSize * 3),
-        //                RtbCanvasWidth + (curFontSize * 3));
-
-        //                return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
-        //            } else {
-        //                var fs = Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-        //                double curFontSize = fs.GetType() == typeof(double) ? (double)fs : 16;
-        //                var width = Math.Max(
-        //                Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
-        //                Rtbc.ActualWidth /*RtbCanvasWidth*/ + (curFontSize * 3));
-
-        //                return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
-        //            }
-                    
-        //        }
-        //        return RtbWidth - RtbPadding.Left - RtbPadding.Right - 23;
-                
-        //    }
-        //}
-
-        //public double RtbPageHeight {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        if (HostClipTileViewModel.IsExpanded) {
-        //            if (Rtb == null) {
-        //                return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height;
-        //            } else {
-        //                if(HostClipTileViewModel.IsPastingTemplate) {
-        //                    return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
-        //                }
-        //                return Rtb.Document.GetDocumentSize().Height;
-        //            }
-        //        }
-        //        return RtbHeight - RtbPadding.Top - RtbPadding.Bottom;
-        //    }
-        //}
-
-        //public double RtbCanvasWidth {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        var w = HostClipTileViewModel.TileContentWidth - MpMeasurements.Instance.ClipTileSubItemOverlayMargin;
-        //        if (ContainerViewModel.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
-        //            w -= MpMeasurements.Instance.ScrollbarWidth;
-        //        }
-        //        return w;
-        //    }
-        //}
-
-        //public double RtbCanvasHeight {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return 0;
-        //        }
-        //        return RtbHeight;
-        //    }
-        //}
-
-        //public double RtbRelativeWidthMax {
-        //    get {
-        //        if (CopyItem == null) {
-        //            return 0;
-        //        }
-        //        var doc = Rtb == null ? ItemFlowDocument : Rtb.Document;
-        //        return doc.GetDocumentSize().Width;
-        //    }
-        //}
         #endregion
 
         #region Brushes
-        //public Brush RtbListBoxItemBorderBrush {
-        //    get {
-        //        if (!IsCompositeChild) {
-        //            return Brushes.Transparent;
-        //        }
-        //        if (IsPrimarySubSelected) {
-        //            return Brushes.Blue;
-        //        }
-        //        if (IsSubSelected) {
-        //            return Brushes.Red;
-        //        }
-        //        if (IsSubHovering) {
-        //            return Brushes.Yellow;
-        //        }
-        //        return Brushes.Transparent;
-        //    }
-        //}
-
-        //public Brush RtbListBoxItemBackgroundColor {
-        //    get {
-        //        if(HostClipTileViewModel == null) {
-        //            return Brushes.Transparent;
-        //        }
-        //        if(SubItemOverlayVisibility == Visibility.Visible) {
-        //            var scb = CopyItemColorBrush;
-        //            if (HostClipTileViewModel.IsExpanded && IsSubHovering) {
-        //                scb.Opacity = 0.1;
-        //            } else if (/*HostClipTileViewModel.IsClipDropping || */
-        //                       (!HostClipTileViewModel.IsExpanded && IsSubHovering && !IsSubSelected)) {
-        //                scb.Opacity = 0;
-        //            } else {
-        //                scb.Opacity = 0.25;
-        //            }
-                    
-        //            return scb;
-        //        }
-        //        return Brushes.Transparent;
-        //    }
-        //    set {
-        //        if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
-        //            CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-        //            //CopyItem.WriteToDatabase();
-        //            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-        //            OnPropertyChanged(nameof(CopyItem));
-        //        }
-        //    }
-        //}
-
-        //public Brush RtbListBoxItemTitleTextBlockTextColor {
-        //    get {
-        //        if (!IsCompositeChild) {
-        //            return Brushes.Transparent;
-        //        }
-        //        if (IsHoveringOnTitleTextBlock) {
-        //            return Brushes.DarkGray;
-        //        }
-        //        return Brushes.Black;
-        //    }
-        //}
-
-        //public Brush RtbOverlayBorderBrush {
-        //    get {
-        //        if (HostClipTileViewModel == null) {
-        //            return Brushes.Transparent;
-        //        }
-        //        if(HostClipTileViewModel.IsPastingTemplate) {
-        //            return Brushes.Transparent;
-        //        }
-        //        if (IsSubSelected) {
-        //            return Brushes.Pink;
-        //        }
-        //        if (IsSubHovering) {
-        //            return Brushes.Yellow;
-        //        }
-        //        return Brushes.Transparent;
-        //    }
-        //}
         #endregion
 
         #region Visibility
-        //public Visibility MultiSelectOrderMarkerVisibility {
-        //    get {
-        //        if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
-        //            return Visibility.Hidden;
-        //        }
-        //        if (IsSubSelected && 
-        //            (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 ||
-        //             ContainerViewModel.SubSelectedContentItems.Count > 1)) {
-        //            return Visibility.Visible;
-        //        }
-        //        return Visibility.Collapsed;
-        //    }
-        //}
+       
 
-        //private Visibility _subItemVisibility = Visibility.Visible;
-        //public Visibility SubItemVisibility {
-        //    get {
-        //        return _subItemVisibility;
-        //    }
-        //    set {
-        //        if(_subItemVisibility != value) {
-        //            _subItemVisibility = value;
-        //            OnPropertyChanged(nameof(SubItemVisibility));
-        //        }
-        //    }
-        //}
-
-        //public Visibility DragAndHotkeyButtonVisibility {
-        //    get {
-        //        if(MainWindowViewModel.SearchBoxViewModel.HasText) {
-        //            return Visibility.Hidden;
-        //        }
-        //        return Visibility.Visible;
-        //    }
-        //}
-
-        //public Visibility SubItemToolTipVisibility {
-        //    get {
-        //        if (CopyItem == null || !Properties.Settings.Default.ShowItemPreview) {
-        //            return Visibility.Collapsed;
-        //        }
-        //        return (MpClipTrayViewModel.Instance.IsScrolling || IsSubSelected || HostClipTileViewModel.IsExpanded) ? Visibility.Collapsed : Visibility.Visible;
-        //    }
-        //}
-
-        //public Visibility SubItemOverlayVisibility {
-        //    get {
-        //        OnPropertyChanged(nameof(DragAndHotkeyButtonVisibility));
-        //        if (HostClipTileViewModel == null) {
-        //            return Visibility.Collapsed;
-        //        }               
-
-        //        if (IsSubEditingTitle) {
-        //            return Visibility.Visible;
-        //        }
-        //        if(HostClipTileViewModel.IsPastingTemplate) {
-        //            return Visibility.Hidden;
-        //        }
-        //        if (HostClipTileViewModel.IsClipDropping) {
-        //            return Visibility.Collapsed;
-        //        }
-        //        //if(HostClipTileViewModel.IsClipDropping && (!HostClipTileViewModel.IsAnySubItemDragging || HostClipTileViewModel.IsClipDragging)) {
-        //        //    return Visibility.Visible;
-        //        //}
-        //        if (!IsCompositeChild) {
-        //            return Visibility.Collapsed;
-        //        }
-        //        if(MainWindowViewModel.SearchBoxViewModel.HasText &&
-        //           HostClipTileViewModel.TileVisibility == Visibility.Visible &&
-        //           HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
-        //           (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.ContentItemViewModel != this ||
-        //            HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {                    
-        //            //this ensures overlay is shown when selected search match is relavant to title or application
-        //            return Visibility.Visible;
-        //        }
-        //        if(IsSubSelected && !HostClipTileViewModel.IsExpanded) {
-        //            return Visibility.Visible;
-        //        }
-
-        //        if(!IsSubSelected && HostClipTileViewModel.IsExpanded) {
-        //            return Visibility.Visible;
-        //        }
-
-        //        if (IsSubHovering && (!IsSubSelected || !HostClipTileViewModel.IsEditingContent)) {
-        //            return Visibility.Visible;
-        //        }
-        //        if (IsSubSelected && ContainerViewModel.SubSelectedContentItems.Count > 1) {
-        //            return Visibility.Visible;
-        //        }                
-        //        return Visibility.Collapsed;
-        //    }
-        //}
-
-        //public Visibility RtbListBoxItemTitleTextBlockVisibility {
-        //    get {
-        //        if (IsSubEditingTitle) {
-        //            return Visibility.Collapsed;
-        //        }
-        //        return Visibility.Visible;
-        //    }
-        //}
-
-        //public Visibility RtbListBoxItemTitleTextBoxVisibility {
-        //    get {
-        //        if (IsSubEditingTitle) {
-        //            return Visibility.Visible;
-        //        }
-        //        return Visibility.Collapsed;
-        //    }
-        //}
-
-        //public Visibility AppIconHighlightBorderVisibility {
-        //    get {
-        //        if(HostClipTileViewModel == null) {
-        //            return Visibility.Hidden;
-        //        }
-        //        return HostClipTileViewModel.HighlightTextRangeViewModelCollection.AppMatchRtbvmList.Contains(this) ? Visibility.Visible : Visibility.Hidden;
-        //    }
-        //}
-
-        //public Visibility AppIconImageVisibility {
-        //    get {
-        //        if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
-        //            return Visibility.Visible;
-        //        }
-        //        if (MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 1 &&
-        //           !IsSubHovering) {
-        //            return Visibility.Hidden;
-        //        }
-        //        return Visibility.Visible;
-        //    }
-        //}
         #endregion
 
-        #region Business Logic 
+        #region Business Logic  
 
         private string _rawRtf;
         public string RawRtf {
@@ -520,7 +119,7 @@ namespace MpWpfApp {
 
         public override bool IsDynamicPaste {
             get {
-                return TemplateHyperlinkCollectionViewModel.Templates.Count > 0;
+                return TokenCollection.Tokens.Count > 0;
             }
         }
 
@@ -528,65 +127,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Editor
-        private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
-        public bool UseSpellCheck {
-            get {
-                return _useSpellCheck;
-            }
-            set {
-                if (_useSpellCheck != value) {
-                    _useSpellCheck = value;
-                    OnPropertyChanged(nameof(UseSpellCheck));
-                }
-            }
-        }
-
-        private ObservableCollection<FontFamily> _systemFonts;
-        public ObservableCollection<FontFamily> SystemFonts {
-            get {
-                if(_systemFonts == null) {
-                    _systemFonts = new ObservableCollection<FontFamily>(Fonts.SystemFontFamilies);
-                }
-                return _systemFonts;
-            }
-            set {
-                if(_systemFonts != value) {
-                    _systemFonts = value;
-                    OnPropertyChanged(nameof(SystemFonts));
-                }
-            }
-        }
-        private ObservableCollection<string> _fontSizes;
-        public ObservableCollection<string> FontSizes {
-            get {
-                if (_fontSizes == null) {
-                    _fontSizes = new ObservableCollection<string>() {
-                         "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "14",
-                        "16",
-                        "18",
-                        "20",
-                        "22",
-                        "24",
-                        "26",
-                        "28",
-                        "36",
-                        "48",
-                        "72" };
-                }
-                return _fontSizes;
-            }
-            set {
-                if(_fontSizes != value) {
-                    _fontSizes = value;
-                    OnPropertyChanged(nameof(FontSizes));
-                }
-            }
-        }
         #endregion
 
         #region State
@@ -631,32 +171,6 @@ namespace MpWpfApp {
         //    }
         //}
 
-        private bool _isOverDragButton = false;
-        public bool IsOverDragButton {
-            get {
-                return _isOverDragButton;
-            }
-            set {
-                if (_isOverDragButton != value) {
-                    _isOverDragButton = value;
-                    OnPropertyChanged(nameof(IsOverDragButton));
-                }
-            }
-        }
-
-        private bool _isSubDragging = false;
-        public bool IsSubDragging {
-            get {
-                return _isSubDragging;
-            }
-            set {
-                if(_isSubDragging != value) {
-                    _isSubDragging = value;
-                    OnPropertyChanged(nameof(IsSubDragging));
-                }
-            }
-        }
-
         //private bool _isResizingTop = false;
         //public bool IsResizingTop {
         //    get {
@@ -671,18 +185,6 @@ namespace MpWpfApp {
         //    }
         //}
 
-        private bool _isSubContextMenuOpened = false;
-        public bool IsSubContextMenuOpened {
-            get {
-                return _isSubContextMenuOpened;
-            }
-            set {
-                if (_isSubContextMenuOpened != value) {
-                    _isSubContextMenuOpened = value;
-                    OnPropertyChanged(nameof(IsSubContextMenuOpened));
-                }
-            }
-        }
 
         //private bool _isResizingBottom = false;
         //public bool IsResizingBottom {
@@ -795,12 +297,12 @@ namespace MpWpfApp {
 
         public bool IsEditingContent {
             get {
-                if(ContainerViewModel == null) {
+                if(Parent == null) {
                     return false;
                 }
                 if(IsSubSelected && 
                    HostClipTileViewModel.IsEditingContent && 
-                   ContainerViewModel.SubSelectedContentItems.Count == 1) {
+                   Parent.SelectedItems.Count == 1) {
                     return true;
                 }
                 return false;
@@ -820,14 +322,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsCompositeChild {
-            get {
-                if(CopyItem == null || HostClipTileViewModel == null) {
-                    return false;
-                }
-                return CopyItem.CompositeParentCopyItemId > 0 || ContainerViewModel.Count > 1;
-            }
-        }
+        
         #endregion
 
         #region Model
@@ -1176,27 +671,13 @@ namespace MpWpfApp {
 
         #region Events
         public event EventHandler<bool> OnRtbResetRequest;
-        public event EventHandler OnClearHyperlinksRequest;
-        public event EventHandler OnCreateHyperlinksRequest;
+        public event EventHandler OnClearTokensRequest;
+        public event EventHandler OnCreateTokensRequest;
         public event EventHandler OnSyncModels;
         #endregion
 
         #region ContentItem Overrides
-        public override Size GetExpandedSize() {
-            var ds = ItemFlowDocument.GetDocumentSize();
-            return new Size(
-                Math.Max(ds.Width,MpMeasurements.Instance.ClipTileContentMinMaxWidth),
-                Math.Max(ds.Height,MpMeasurements.Instance.ClipTileContentHeight)
-                );
-        }
-
-        public override Size GetUnexpandedSize() {
-            double h = ContainerViewModel.ItemViewModels.Count > 1 ?
-                            MpMeasurements.Instance.RtbCompositeItemMinHeight :
-                            MpMeasurements.Instance.ClipTileContentHeight;
-
-            return new Size(MpMeasurements.Instance.ClipTileContentMinWidth, h);
-        }
+        
 
         #endregion
 
@@ -1204,7 +685,7 @@ namespace MpWpfApp {
         public MpRtbItemViewModel() : this(null,null) { }
 
         public MpRtbItemViewModel(MpContentContainerViewModel ccvm, MpCopyItem ci) : base(ccvm,ci) {
-            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
+            TokenCollection = new MpTokenCollectionViewModel(this);
             
             PropertyChanged += (s, e) => {
                 var rtbvm = s as MpRtbItemViewModel;
@@ -1237,12 +718,12 @@ namespace MpWpfApp {
                             rtbvm.HostClipTileViewModel.IsSelected = true;
                         } else if (!rtbvm.IsSubSelected &&
                                   rtbvm.HostClipTileViewModel.IsSelected &&
-                                  rtbvm.ContainerViewModel.ItemViewModels.Count == 1) {
+                                  rtbvm.Parent.ItemViewModels.Count == 1) {
                             //rtbvm.HostClipTileViewModel.IsSelected = false;
                         }
                         if (rtbvm.IsSubSelected) {
                             if (rtbvm.HostClipTileViewModel.IsExpanded) {
-                                foreach (var ortbvm in rtbvm.ContainerViewModel.ItemViewModels) {
+                                foreach (var ortbvm in rtbvm.Parent.ItemViewModels) {
                                     if (ortbvm != rtbvm) {
                                         ortbvm.IsSubSelected = false;
                                         ortbvm.IsSubEditingTitle = false;
@@ -1280,7 +761,7 @@ namespace MpWpfApp {
 
                         }
                         if (rtbvm.HostClipTileViewModel.IsExpanded) {
-                            rtbvm.ContainerViewModel.RequestUiUpdate();
+                            rtbvm.Parent.RequestUiUpdate();
                         }
                         break;
                     case nameof(rtbvm.IsSubHovering):
@@ -1288,7 +769,7 @@ namespace MpWpfApp {
                             if (MpClipTrayViewModel.Instance.IsScrolling) {
                                 rtbvm.IsSubHovering = false;
                             }
-                            foreach (var ortbvm in rtbvm.ContainerViewModel.ItemViewModels) {
+                            foreach (var ortbvm in rtbvm.Parent.ItemViewModels) {
                                 if (ortbvm != rtbvm) {
                                     ortbvm.IsSubHovering = false;
                                 }
@@ -1321,7 +802,7 @@ namespace MpWpfApp {
                 if (!MpMainWindowViewModel.IsMainWindowLoading) {
                     //Task.Run(rtbvm.GatherAnalytics);
                 } else {
-                    if (rtbvm.ContainerViewModel.ItemViewModels.IndexOf(rtbvm) == 0) {
+                    if (rtbvm.Parent.ItemViewModels.IndexOf(rtbvm) == 0) {
                         MpHelpers.Instance.RunOnMainThread((Action)(() => {
                             //rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.AppIcon));
                             rtbvm.HostClipTileViewModel.OnPropertyChanged(nameof(rtbvm.HostClipTileViewModel.TileTitleIconSize));
@@ -1370,11 +851,11 @@ namespace MpWpfApp {
         }
 
         public void RequestClearHyperlinks() {
-            OnClearHyperlinksRequest?.Invoke(this, null);
+            OnClearTokensRequest?.Invoke(this, null);
         }
 
         public void RequestCreateHyperlinks() {
-            OnCreateHyperlinksRequest?.Invoke(this, null);
+            OnCreateTokensRequest?.Invoke(this, null);
         }
 
         public void ClearSubDragDropState() {
@@ -1473,7 +954,7 @@ namespace MpWpfApp {
 
         #region Clone Implementation
         public object Clone() {
-            var nrtbvm = new MpRtbItemViewModel(ContainerViewModel, CopyItem);
+            var nrtbvm = new MpRtbItemViewModel(Parent, CopyItem);
             return nrtbvm;
         }
         #endregion
@@ -1555,17 +1036,10 @@ namespace MpWpfApp {
 
         #region Overrides
         public void Dispose(bool isMerge = false) {
-            ContainerViewModel.RemoveRange(new List<MpCopyItem> { CopyItem });
+            Parent.RemoveRange(new List<MpCopyItem> { CopyItem });
             
             
             if (!isMerge) {
-                var scvmToRemoveList = new List<MpShortcutViewModel>();
-                foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList()) {
-                    scvmToRemoveList.Add(scvmToRemove);
-                }
-                foreach (var scvmToRemove in scvmToRemoveList) {
-                    MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-                }
                 CopyItem.DeleteFromDatabase();
             }
             

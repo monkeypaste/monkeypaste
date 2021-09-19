@@ -64,8 +64,8 @@ namespace MpWpfApp {
         //public async Task FillAllTemplates() {
         //    bool hasExpanded = false;
         //    foreach (var rtbvm in SubSelectedContentItems) {
-        //        if (rtbvm.HasTemplate) {
-        //            rtbvm.IsSubSelected = true;
+        //        if (rtbvm.HasTokens) {
+        //            rtbvm.IsSelected = true;
         //            rtbvm.IsPastingTemplate = true;
         //            if (!hasExpanded) {
         //                //tile will be shrunk in on completed of hide window
@@ -311,7 +311,7 @@ namespace MpWpfApp {
         //        }
         //        var sb = new StringBuilder();
         //        foreach (var sctvm in SubSelectedContentItems) {
-        //            if (sctvm.HasTemplate) {
+        //            if (sctvm.HasTokens) {
         //                sb.Append(
         //                    MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
         //            } else {
@@ -343,7 +343,7 @@ namespace MpWpfApp {
         //        }
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
         //        foreach (var sctvm in SubSelectedContentItems.OrderBy(x => x.LastSubSelectedDateTime)) {
-        //            if (sctvm.HasTemplate) {
+        //            if (sctvm.HasTokens) {
         //                fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.TemplateRichText.ToFlowDocument(), fd);
         //            } else {
         //                fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);

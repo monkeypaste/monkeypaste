@@ -12,50 +12,38 @@ using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpTemplateHyperlinkCollectionViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel> {
+    public class MpTokenCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {
         #region Private Variables
         #endregion
 
         #region Properties
 
         #region View Models
-        private MpRtbItemViewModel _hostRtbViewModel = null;
-        public MpRtbItemViewModel HostRtbViewModel {
-            get {
-                return _hostRtbViewModel;
-            }
-            set {
-                if (_hostRtbViewModel != value) {
-                    _hostRtbViewModel = value;
-                    OnPropertyChanged(nameof(HostRtbViewModel));
-                }
-            }
-        }
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                if(HostRtbViewModel == null) {
+                if(Parent == null) {
                     return null;
                 }
-                return HostRtbViewModel.HostClipTileViewModel;
+                return Parent.Parent.Parent as MpClipTileViewModel;
             }
         }
 
-        private ObservableCollection<MpTemplateHyperlinkViewModel> _templates = new ObservableCollection<MpTemplateHyperlinkViewModel>();
-        public ObservableCollection<MpTemplateHyperlinkViewModel> Templates {
+        private ObservableCollection<MpTokenViewModel> _templates = new ObservableCollection<MpTokenViewModel>();
+        public ObservableCollection<MpTokenViewModel> Tokens {
             get {
                 return _templates;
             }
             private set {
                 if(_templates != value) {
                     _templates = value;
-                    OnPropertyChanged(nameof(Templates));
+                    OnPropertyChanged(nameof(Tokens));
                 }
             }
         }
 
-        public MpTemplateHyperlinkViewModel SelectedTemplate {
+        public MpTokenViewModel SelectedTemplate {
             get {
-                return Templates.Where(x => x.IsSelected).FirstOrDefault();
+                return Tokens.Where(x => x.IsSelected).FirstOrDefault();
             }
         }
         #endregion
@@ -63,7 +51,7 @@ namespace MpWpfApp {
         #region Business Logic Properties
         public bool HasMultipleTemplates {
             get {
-                return Templates.Count > 1;
+                return Tokens.Count > 1;
             }
         }
 
@@ -77,7 +65,7 @@ namespace MpWpfApp {
         #region State
         public bool IsAllTemplatesFilled {
             get {
-                return Templates.Any(x => x.HasText);
+                return Tokens.Any(x => x.HasText);
             }
         }
         public int SelectedTemplateIdx {
@@ -85,19 +73,19 @@ namespace MpWpfApp {
                 if(SelectedTemplate == null) {
                     return 0;
                 }
-                return Templates.IndexOf(SelectedTemplate);
+                return Tokens.IndexOf(SelectedTemplate);
             }
             set {
-                if(value >= 0 && value < Templates.Count) {
+                if(value >= 0 && value < Tokens.Count) {
                     ClearSelection();
-                    Templates[value].IsSelected = true;
+                    Tokens[value].IsSelected = true;
                 }
             }
         }
 
         public bool IsEditingTemplate {
             get {
-                return Templates.Any(x => x.IsEditingTemplate);
+                return Tokens.Any(x => x.IsEditingTemplate);
             }
         }
         #endregion
@@ -105,16 +93,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTemplateHyperlinkCollectionViewModel() : base() { }
+        public MpTokenCollectionViewModel() : base(null) { }
 
-        public MpTemplateHyperlinkCollectionViewModel(MpRtbItemViewModel rtbvm) : base() {
-            
-
-            Templates.CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(Templates));
+        public MpTokenCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {           
+            Tokens.CollectionChanged += (s, e) => {
+                OnPropertyChanged(nameof(Tokens));
             };
 
-            HostRtbViewModel = rtbvm;
 
             HostClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
@@ -127,51 +112,40 @@ namespace MpWpfApp {
         }
 
         public void ClearAllEditing() {
-            foreach(var thlvm in Templates) {
+            foreach(var thlvm in Tokens) {
                 thlvm.IsEditingTemplate = false;
             }
         }
 
         public void ClearSelection() {
-            foreach(var thlvm in Templates) {
+            foreach(var thlvm in Tokens) {
                 thlvm.IsSelected = false;
             }
         }
 
         public void ResetAll() {
-            foreach (var thlvm in Templates) {
+            foreach (var thlvm in Tokens) {
                 thlvm.Reset();
             }
             ClearSelection();
         }
 
-        public void SetTemplateText(string templateName, string templateText) {
-            foreach (var thlvm in Templates) {
-                if (thlvm.TemplateName == templateName) {
-                    thlvm.SetTemplateText(templateText);
-                    thlvm.IsSelected = true;
-                } else {
-                    thlvm.IsSelected = false;
-                }
-            }
-        }
-
-        public MpTemplateHyperlinkViewModel AddItem(MpCopyItemTemplate ncit) {
-            MpTemplateHyperlinkViewModel ntvm = null;
+        public MpTokenViewModel AddItem(MpCopyItemTemplate ncit) {
+            MpTokenViewModel ntvm = null;
 
             if (ncit == null) {
                 //for new templates create a default name
                 ncit = MpCopyItemTemplate.Create(
-                            HostRtbViewModel.CopyItem.Id,
+                            Parent.CopyItem.Id,
                             GetUniqueTemplateName());
                 ncit.WriteToDatabase();
-                ntvm = new MpTemplateHyperlinkViewModel(this, ncit);
+                ntvm = new MpTokenViewModel(this, ncit);
             } else {
                 //check if template exists (it should)
-                var dupCheck = Templates.Where(x => x.TemplateName == ncit.TemplateName).FirstOrDefault();
+                var dupCheck = Tokens.Where(x => x.TemplateName == ncit.TemplateName).FirstOrDefault();
                 if (dupCheck == null) {
                     //not sure how this could happen but it may dunno
-                    ntvm = new MpTemplateHyperlinkViewModel(this, ncit);
+                    ntvm = new MpTokenViewModel(this, ncit);
                 } else {
                     //set existing thvm for return
                     ntvm = dupCheck;
@@ -180,7 +154,7 @@ namespace MpWpfApp {
             if (ntvm.InstanceCount == 0) {
                 //only add one selection handler
                 ntvm.OnTemplateSelected += Ntvm_OnTemplateSelected;
-                Templates.Add(ntvm);
+                Tokens.Add(ntvm);
             }
             ntvm.InstanceCount++;
 
@@ -188,11 +162,11 @@ namespace MpWpfApp {
         }
 
         public void RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
-            var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
+            var thlvmToRemove = Tokens.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
                     thlvmToRemove.CopyItemTemplate.DeleteFromDatabase();
-                    Templates.Remove(thlvmToRemove);
+                    Tokens.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;
                 }
@@ -205,8 +179,8 @@ namespace MpWpfApp {
         #region Selection Changed Handlers
 
         private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
-            var sthlvm = sender as MpTemplateHyperlinkViewModel;
-            foreach (var thlvm in Templates) {
+            var sthlvm = sender as MpTokenViewModel;
+            foreach (var thlvm in Tokens) {
                 if (thlvm != sthlvm) {
                     thlvm.IsSelected = false;
                 }
@@ -221,14 +195,14 @@ namespace MpWpfApp {
         #endregion
 
         private string GetUniqueTemplateName() {
-            HostRtbViewModel.SaveToDatabase();
+            Parent.SaveToDatabase();
             int uniqueIdx = 1;
             string namePrefix = "<Template";
-            string pt = HostRtbViewModel.CopyItem.ItemData.ToPlainText();
+            string pt = Parent.CopyItem.ItemData.ToPlainText();
             while (pt.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) ||
-                   HostRtbViewModel
-                    .TemplateHyperlinkCollectionViewModel
-                    .Templates.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">")
+                   Parent
+                    .TokenCollection
+                    .Tokens.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">")
                     .ToList().Count > 0) {
                 uniqueIdx++;
             }
@@ -242,12 +216,12 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        foreach(var thlvm in Templates) {
+                        foreach(var thlvm in Tokens) {
                             thlvm.ClearTemplateCommand.Execute(null);
                         }
                     },
                     () => {
-                        return Templates.Any(x=>x.HasText);
+                        return Tokens.Any(x=>x.HasText);
                     });
             }
         }
@@ -257,19 +231,19 @@ namespace MpWpfApp {
                 return new RelayCommand(
                     () => {
                         if(!SelectedTemplate.HasText) {
-                            SelectedTemplate.SetTemplateText(" ");
+                            SelectedTemplate.TemplateText = " ";
                         }
-                        int nextIdx = Templates.IndexOf(SelectedTemplate) + 1;
-                        if (nextIdx >= Templates.Count) {
+                        int nextIdx = Tokens.IndexOf(SelectedTemplate) + 1;
+                        if (nextIdx >= Tokens.Count) {
                             nextIdx = 0;
                         }
-                        Templates[nextIdx].IsSelected = true;
+                        Tokens[nextIdx].IsSelected = true;
                         OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
-                        return HostRtbViewModel != null && 
+                        return Parent != null && 
                                HostClipTileViewModel.IsPastingTemplate &&
-                               Templates.Count > 1;
+                               Tokens.Count > 1;
                     });
             }
         }
@@ -279,19 +253,19 @@ namespace MpWpfApp {
                 return new RelayCommand(
                     () => {
                         if (!SelectedTemplate.HasText) {
-                            SelectedTemplate.SetTemplateText(" ");
+                            SelectedTemplate.TemplateText = " ";
                         }
-                        int prevIdx = Templates.IndexOf(SelectedTemplate) - 1;
-                        if (prevIdx < Templates.Count) {
-                            prevIdx = Templates.Count - 1;
+                        int prevIdx = Tokens.IndexOf(SelectedTemplate) - 1;
+                        if (prevIdx < Tokens.Count) {
+                            prevIdx = Tokens.Count - 1;
                         }
-                        Templates[prevIdx].IsSelected = true;
+                        Tokens[prevIdx].IsSelected = true;
                         OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
-                        return HostRtbViewModel != null && 
+                        return Parent != null && 
                                HostClipTileViewModel.IsPastingTemplate &&
-                               Templates.Count > 1;
+                               Tokens.Count > 1;
                     });
             }
         }
@@ -300,11 +274,11 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        string rtf = HostRtbViewModel.CopyItem.ItemData;
-                        foreach (var thlvm in Templates) {
+                        string rtf = Parent.CopyItem.ItemData;
+                        foreach (var thlvm in Tokens) {
                             rtf = rtf.Replace(thlvm.TemplateName, thlvm.TemplateText);
                         }
-                        HostRtbViewModel.TemplateRichText = rtf;
+                        Parent.TemplateRichText = rtf;
                     },
                     () => {
                         return IsAllTemplatesFilled;

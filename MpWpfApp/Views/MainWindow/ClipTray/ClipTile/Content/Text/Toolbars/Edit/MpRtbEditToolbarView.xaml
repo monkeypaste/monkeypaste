@@ -35,8 +35,7 @@
                       Height="23"
                       Width="100"
                       Margin="5,2,0,2"
-                      IsEditable="True"
-                      ItemsSource="{Binding SystemFonts}">
+                      IsEditable="True">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Width="250" />
@@ -221,7 +220,7 @@
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <ToggleButton x:Name="SpellCheck"
-                          IsChecked="{Binding UseSpellCheck}"
+                          IsChecked="{local:MpSettingBinding UseSpellCheck}"
                           ToolTip="Spell Check?"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/spellcheck.png"

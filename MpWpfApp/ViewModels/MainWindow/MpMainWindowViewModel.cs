@@ -19,7 +19,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
+    public class MpMainWindowViewModel : MpViewModelBase<object>, IDisposable {
         #region Statics
         public static bool IsMainWindowLoading { get; set; } = true;
         public static bool IsMainWindowOpening { get; set; } = false;
@@ -240,7 +240,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods        
-        public MpMainWindowViewModel() : base() {
+        public MpMainWindowViewModel() : base(null) {
             //MpViewModelBase.MainWindowViewModel = this;
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
@@ -289,7 +289,7 @@ namespace MpWpfApp {
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
-            double ctvmDelta = ctvmToExpand.ContentContainerViewModel.TotalExpandedSize.Height - ctvmToExpand.ContentContainerViewModel.ContainerSize.Height;
+            double ctvmDelta = ctvmToExpand.TotalExpandedSize.Height - ctvmToExpand.ContainerSize.Height;
             if(ctvmToExpand.IsPastingTemplate) {
                 ctvmDelta += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
             } else if(ctvmToExpand.IsEditingContent) {
@@ -309,7 +309,7 @@ namespace MpWpfApp {
         public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
             Resize(-_deltaHeight);
             ClipTrayViewModel.Resize(ctvmToShrink,
-                -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
+                -(ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
                 -_deltaHeight,
                 ctvmToShrink.IsPastingTemplate ? 0:-MpMeasurements.Instance.ClipTileEditToolbarHeight);
 

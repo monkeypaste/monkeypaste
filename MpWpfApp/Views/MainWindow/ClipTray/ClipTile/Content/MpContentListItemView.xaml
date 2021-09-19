@@ -190,17 +190,15 @@
             <AdornerDecorator>
                 <local:MpRtbView x:Name="RtbView"
                                  DataContext="{Binding}" />
-                <!--<local:MpQuillEditorView x:Name="RtbView"
-                                         DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="{Binding SubItemOverlayVisibility}"
+                                Visibility="{Binding IsSubHovering, Converter={StaticResource BoolToVisibilityConverter}}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Background="{Binding RtbListBoxItemBackgroundColor}"
+                                Background="LightYellow"
                                 Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                 ToolTipService.InitialShowDelay="750"
-                                BorderBrush="{Binding RtbOverlayBorderBrush}"
+                                BorderBrush="Yellow"
                                 BorderThickness="1"
                                 CornerRadius="5">
                 <local:MpClipBorder.ToolTip>
@@ -222,7 +220,6 @@
                     </ToolTip>
                 </local:MpClipBorder.ToolTip>
                 <Button x:Name="DragButton"
-                        Visibility="{Binding DragAndHotkeyButtonVisibility}"
                         PreviewGiveFeedback="DragButton_PreviewGiveFeedback"
                         PreviewMouseUp="DragButton_PreviewMouseUp"
                         PreviewMouseDown="DragButton_PreviewMouseDown"

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpTagTileViewModel : MpViewModelBase {
+    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
@@ -315,7 +315,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTagTileViewModel(MpTag tag) : base() {
+        public MpTagTileViewModel(MpTagTrayViewModel parent, MpTag tag) : base(parent) {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
@@ -427,16 +427,8 @@ namespace MpWpfApp {
         public void TagTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
         }
 
-        public void AddClip(MpClipTileViewModel ctvm) {
-            Tag.LinkWithCopyItem(ctvm.CopyItem);    
-        }
-
         public void AddClip(MpContentItemViewModel rtbvm) {
             Tag.LinkWithCopyItem(rtbvm.CopyItem);
-        }
-
-        public void RemoveClip(MpClipTileViewModel ctvm) {
-            Tag.UnlinkWithCopyItem(ctvm.CopyItem);
         }
 
         public void RemoveClip(MpContentItemViewModel rtbvm) {
@@ -455,15 +447,20 @@ namespace MpWpfApp {
             }
             if (IsRecentTag) {
                 return MpClipTrayViewModel.Instance.ClipTileViewModels.
-                    OrderByDescending(x => x.CopyDateTime).
+                    OrderByDescending(x => x.ItemViewModels.Max(y=>y.CopyItem.CopyDateTime)).
                     Take(MpMeasurements.Instance.MaxRecentClipItems).
-                    Any(x => x.CopyItem.Id == ci.Id);
+                    Any(x => x.ItemViewModels.Any(y=>y.CopyItem.Id == ci.Id));
             }
             return Tag.IsLinkedWithCopyItem(ci);
         }
 
         public bool IsLinked(MpClipTileViewModel ctvm) {
-            return IsLinked(ctvm.CopyItem);
+            foreach(var civm in ctvm.ItemViewModels) {
+                if(IsLinked(civm)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsLinked(MpContentItemViewModel rtbvm) {

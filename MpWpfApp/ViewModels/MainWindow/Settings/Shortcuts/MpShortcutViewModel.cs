@@ -14,7 +14,7 @@ using WindowsInput;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpShortcutViewModel : MpViewModelBase {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel> {
         #region Properties        
 
         #region Visibility 
@@ -350,29 +350,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) {
+        public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) : base(MpShortcutCollectionViewModel.Instance) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
-                                var ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(Shortcut.CopyItemId);
-                                if (ctvm == null) {
-                                    var ci = MpCopyItem.GetCopyItemById(Shortcut.CopyItemId);
-                                    if (ci == null) {
-                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find copy item w/ id: " + Shortcut.CopyItemId);
-                                        break;
-                                    }
-                                    ctvm = MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
-                                    if (ctvm == null) {
-                                        MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
-                                        break;
-                                    }
-                                    var rtbvm = ctvm.ContentContainerViewModel.GetContentItemByCopyItemId(ci.Id);
-                                    rtbvm.ShortcutKeyString = Shortcut.KeyString;
-                                } else {
-                                    ctvm.ShortcutKeyString = Shortcut.KeyString;
-                                }
+                                var ctvm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(Shortcut.CopyItemId);
+                                ctvm.ShortcutKeyString = Shortcut.KeyString;
                             } else {
                                 var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
                                 ttvm.ShortcutKeyString = Shortcut.KeyString;

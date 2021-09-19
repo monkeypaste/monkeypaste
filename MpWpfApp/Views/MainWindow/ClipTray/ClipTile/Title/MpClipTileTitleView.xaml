@@ -180,8 +180,8 @@
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"
                            Visibility="Hidden"
-                           Width="{Binding TileTitleIconSize}"
-                           Height="{Binding TileTitleIconSize}">
+                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}"
+                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}">
                         <Image.RenderTransform>
                             <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
                         </Image.RenderTransform>
@@ -191,11 +191,11 @@
                            Stretch="Fill"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Visibility="{Binding ClipTileTitleAppIconImageVisibility}"
-                           Width="{Binding TileTitleIconSize}"
-                           Height="{Binding TileTitleIconSize}"></Image>
-                    <!--<Viewbox Width="{Binding TileTitleIconSize}"
-                                                                     Height="{Binding TileTitleIconSize}"
+                           Visibility="{Binding Parent.ClipTileTitleAppIconImageVisibility}"
+                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}"
+                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}" />
+                    <!--<Viewbox Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
+                                                                     Height="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                      Visibility="{Binding MultiSelectOrderMarkerVisibility}">
                                                                 <Grid>
                                                                     <Ellipse HorizontalAlignment="Center"
@@ -205,8 +205,8 @@
                                                                              Fill="{Binding TileBorderBrush}" />
                                                                     <Ellipse HorizontalAlignment="Center"
                                                                              VerticalAlignment="Center"
-                                                                             Width="{Binding TileTitleIconSize}"
-                                                                             Height="{Binding TileTitleIconSize}"
+                                                                             Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
+                                                                             Height="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                              Fill="White" />
                                                                     <TextBlock Background="Transparent"
                                                                                Foreground="Black"

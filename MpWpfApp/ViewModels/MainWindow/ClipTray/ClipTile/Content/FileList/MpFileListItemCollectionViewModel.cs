@@ -1,35 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpFileListItemCollectionViewModel : MpUndoableObservableCollectionViewModel<MpFileListItemCollectionViewModel,MpFileListItemViewModel> {
+    public class MpFileListItemCollectionViewModel : MpClipTileViewModel {
 
-        private MpClipTileViewModel _hostClipTileViewModel;
-        public MpClipTileViewModel HostClipTileViewModel {
-            get {
-                return _hostClipTileViewModel;
-            }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
-                }
-            }
-        }
+        public ObservableCollection<MpFileListItemViewModel> FileItems = new ObservableCollection<MpFileListItemViewModel>();
+        
+        public MpFileListItemCollectionViewModel() : base(null,null) { }
 
-        public MpFileListItemCollectionViewModel() : base() { }
-
-        public MpFileListItemCollectionViewModel(MpClipTileViewModel hctvm) : this() {
-            HostClipTileViewModel = hctvm;
-        }
-
-        public void ClearSubSelection() {
-            foreach(var flvm in this) {
-                flvm.IsSubSelected = false;
-            }
+        public MpFileListItemCollectionViewModel(MpClipTileViewModel hctvm) : base(hctvm,hctvm.CopyItem) {
         }
     }
 }

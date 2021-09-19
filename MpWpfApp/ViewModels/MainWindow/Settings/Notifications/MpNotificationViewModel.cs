@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpNotificationViewModel : MpViewModelBase {
+    public class MpNotificationViewModel : MpViewModelBase<object> {
         #region Properties
         private MpNotificationType _notificationType = MpNotificationType.None;
         public MpNotificationType NotificationType {
@@ -52,7 +52,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpNotificationViewModel(MpNotificationType type, object notificationProperty) : base() {
+        public MpNotificationViewModel(MpNotificationType type, object notificationProperty) : base(null) {
             //PropertyChanged += (s, e) => {
                 //switch (e.PropertyName) {
                     //case nameof(NotificationType):

@@ -17,7 +17,7 @@ using MonkeyPaste;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpHighlightTextRangeViewModelCollection : MpViewModelBase, IDisposable {
+    public class MpHighlightTextRangeViewModelCollection : MpViewModelBase<MpClipTileViewModel>, IDisposable {
         #region Private Variables
 
         #endregion
@@ -27,14 +27,12 @@ namespace MpWpfApp {
         #region View Models
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                if(ContentViewModel == null) {
+                if(Parent == null) {
                     return null;
                 }
-                return ContentViewModel.HostClipTileViewModel;
+                return Parent;
             }
         }
-
-        public MpContentItemViewModel ContentViewModel { get; set; }
 
         public MpHighlightTextRangeViewModel SelectedHighlightTextRangeViewModel {
             get {
@@ -103,7 +101,7 @@ namespace MpWpfApp {
                         vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
                     } else {
                         vdict.Add(HostClipTileViewModel, Visibility.Visible);
-                        foreach(var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
+                        foreach(var rtbvm in Parent.Parent.ItemViewModels) {
                             vdict.Add(rtbvm, Visibility.Visible);
                         }
                     }
@@ -124,7 +122,7 @@ namespace MpWpfApp {
                     } else if(!vdict.ContainsKey(HostClipTileViewModel)) {
                         vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
                     }
-                    foreach(var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
+                    foreach(var rtbvm in Parent.Parent.ItemViewModels) {
                         //this loop adds any unmatched rtbvm's to the dictionary so they are collapsed
                         if(!vdict.ContainsKey(rtbvm)) {
                             vdict.Add(rtbvm, Visibility.Collapsed);
@@ -143,9 +141,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpHighlightTextRangeViewModelCollection() : this(null) {}
 
-        public MpHighlightTextRangeViewModelCollection(MpContentItemViewModel civm) : base() {
-            ContentViewModel = civm;
-
+        public MpHighlightTextRangeViewModelCollection(MpClipTileViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(SelectedHighlightTextRangeViewModel):
@@ -177,7 +173,7 @@ namespace MpWpfApp {
             NonTransparentDocumentBackgroundRangeList.AddRange(rtb.FindNonTransparentRangeList());
         }
 
-        public async Task<Dictionary<object,Visibility>> PerformHighlightingAsync(string hlt,TextBlock ttb, List<Tuple<TextBlock, RichTextBox>> tl) {
+        public async Task<Dictionary<object,Visibility>> PerformHighlightingAsync(string hlt, List<Tuple<TextBlock, RichTextBox>> tl) {
             HighlightTaskCount++;
 
             ClearHighlightingCommand.Execute(null);
@@ -194,7 +190,7 @@ namespace MpWpfApp {
 
             var sttvm = MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
             if (!sttvm.IsLinked(HostClipTileViewModel)) {
-                MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + HostClipTileViewModel.CopyItemTitle + " is not linked with current tag");
+                //MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + HostClipTileViewModel.CopyItemTitle + " is not linked with current tag");
                 HighlightTaskCount--;
                 return new Dictionary<object, Visibility> { { HostClipTileViewModel, Visibility.Collapsed } };
             }
@@ -208,13 +204,13 @@ namespace MpWpfApp {
                 return VisibilityDictionary;
             }
 
-            var result = await PerformHighlightAsyncHelper(hlt,ttb,tl);
+            var result = await PerformHighlightAsyncHelper(hlt,tl);
             HighlightTaskCount--;
 
             return result;
         }
         
-        private async Task<Dictionary<object,Visibility>> PerformHighlightAsyncHelper(string hlt, TextBlock ttb, List<Tuple<TextBlock,RichTextBox>> tl) {
+        private async Task<Dictionary<object,Visibility>> PerformHighlightAsyncHelper(string hlt, List<Tuple<TextBlock,RichTextBox>> tl) {
             var result = Visibility.Visible;
             await Dispatcher.CurrentDispatcher.InvokeAsync(
                 (Action)(() => {
@@ -224,67 +220,41 @@ namespace MpWpfApp {
                     bool tc = false, cc = false, anc = false, apc = false, uc = false;
 
                     if(Properties.Settings.Default.SearchByTitle) {
-                        tc = HostClipTileViewModel.CopyItemTitle.ContainsByCaseSetting(hlt);
-                        if (HostClipTileViewModel.IsTextItem && !tc) {
-                            foreach (var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                tc = rtbvm.CopyItem.Title.ContainsByCaseSetting(hlt) ? true : tc;
-                            }
+                        foreach (var rtbvm in Parent.ItemViewModels) {
+                            tc = rtbvm.CopyItem.Title.ContainsByCaseSetting(hlt) ? true : tc;
                         }
                     }                    
                     if(Properties.Settings.Default.SearchByRichText) {
-                        cc = HostClipTileViewModel.CopyItemPlainText.ContainsByCaseSetting(hlt) ||
-                             HostClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt);
-                        if (HostClipTileViewModel.IsTextItem && !cc) {
-                            foreach (var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                cc = rtbvm.CopyItem.ItemData.ContainsByCaseSetting(hlt) ||
-                                     HostClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt) ? true : cc;
-                            }
+                        foreach (var rtbvm in Parent.ItemViewModels) {
+                            cc = rtbvm.CopyItem.ItemData.ContainsByCaseSetting(hlt) ? true : cc;
                         }
                     }
 
                     if (Properties.Settings.Default.SearchByApplicationName) {
-                        anc = HostClipTileViewModel.CopyItemAppName.ContainsByCaseSetting(hlt);
-                        if (anc) {
-                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));                            
-                        }
-                        if (HostClipTileViewModel.IsTextItem) {
-                            foreach (var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                bool ranc = rtbvm.CopyItem.Source.App.AppName.ContainsByCaseSetting(hlt);
-                                anc = ranc ? true : anc;
-                                if(ranc) {
-                                    this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
-                                }
+                        foreach (var rtbvm in Parent.ItemViewModels) {
+                            bool ranc = rtbvm.CopyItem.Source.App.AppName.ContainsByCaseSetting(hlt);
+                            anc = ranc ? true : anc;
+                            if (ranc) {
+                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
                     if (Properties.Settings.Default.SearchByProcessName) {
-                        apc = HostClipTileViewModel.CopyItemAppPath.ContainsByCaseSetting(hlt);
-                        if (apc) {
-                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
-                        }
-                        if (HostClipTileViewModel.IsTextItem) {
-                            foreach (var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                bool rapc = rtbvm.CopyItem.Source.App.SourcePath.ContainsByCaseSetting(hlt);
-                                apc = rapc ? true : apc;
-                                if(rapc) {
-                                    this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
-                                }
+                        foreach (var rtbvm in Parent.ItemViewModels) {
+                            bool rapc = rtbvm.CopyItem.Source.App.SourcePath.ContainsByCaseSetting(hlt);
+                            apc = rapc ? true : apc;
+                            if (rapc) {
+                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
 
-                    if (Properties.Settings.Default.SearchBySourceUrl && HostClipTileViewModel.CopyItem.Source.Url != null) {
-                        uc = HostClipTileViewModel.CopyItem.Source.Url.UrlPath.ContainsByCaseSetting(hlt);
-                        if (uc) {
-                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
-                        }
-                        if (HostClipTileViewModel.IsTextItem) {
-                            foreach (var rtbvm in ContentViewModel.ContainerViewModel.ItemViewModels) {
-                                bool ruc = rtbvm.CopyItem.Source.Url.UrlPath.ContainsByCaseSetting(hlt);
-                                uc = ruc ? true : uc;
-                                if(ruc) {
-                                    this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
-                                }
+                    if (Properties.Settings.Default.SearchBySourceUrl && Parent.ItemViewModels.Any(x=>x.CopyItem.Source.Url != null)) {
+                        foreach (var rtbvm in Parent.ItemViewModels) {
+                            bool ruc = rtbvm.CopyItem.Source.Url.UrlPath.ContainsByCaseSetting(hlt);
+                            uc = ruc ? true : uc;
+                            if (ruc) {
+                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
@@ -300,61 +270,58 @@ namespace MpWpfApp {
                     //MonkeyPaste.MpConsole.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
                     
                     //highlight title 
-                    if(tc && ttb != null) {
-                        var trl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                        foreach (var mr in trl) {
-                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, mr, sortIdx++, MpHighlightType.Title));
-                        }
-                        if (HostClipTileViewModel.IsTextItem) {
-                            foreach(var t in tl) {
-                                var rtbvm = t.Item2.DataContext as MpRtbItemViewModel;
-                                var strl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                                foreach (var mr in strl) {
-                                    this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Title));
-                                }
+                    if(tc) {
+                        foreach (var t in tl) {
+                            var ttb = t.Item1;
+                            var rtbvm = t.Item2.DataContext as MpContentItemViewModel;
+                            var strl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                            foreach (var mr in strl) {
+                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Title));
                             }
                         }
                     }
-                    switch (HostClipTileViewModel.CopyItemType) {
-                        case MpCopyItemType.RichText:                   
-                            if (cc) {
-                                foreach(var t in tl) {
-                                    var rtb = t.Item2;
-                                    var rtbvm = rtb.DataContext as MpRtbItemViewModel;
-                                    var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                                    foreach (var mr in rtbvmtrl) {
-                                        this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, rtbvm, mr, sortIdx++,MpHighlightType.Text));
+                    foreach(var civm in Parent.ItemViewModels) {
+                        switch (civm.CopyItem.ItemType) {
+                            case MpCopyItemType.RichText:
+                                if (cc) {
+                                    foreach (var t in tl) {
+                                        var rtb = t.Item2;
+                                        var rtbvm = rtb.DataContext as MpContentItemViewModel;
+                                        var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                        foreach (var mr in rtbvmtrl) {
+                                            this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Text));
+                                        }
                                     }
                                 }
-                            }
-                            break;
-                        case MpCopyItemType.Image:
-                            if(Properties.Settings.Default.SearchByImage && cc) {
-                                //already found in pre-pass
-                                this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel, null, null, -1, MpHighlightType.Image));
-                            }
-                            break;
-                        //case MpCopyItemType.FileList:
-                        //    if(Properties.Settings.Default.SearchByFileList && cc) {
-                        //        var flb = HostClipTileViewModel.FileListBox;
-                        //        foreach (var fivm in HostClipTileViewModel.FileListCollectionViewModel) {                                    
-                        //            if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
-                        //                var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
-                        //                if (container != null) {
-                        //                    var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
-                        //                    if (fitb != null) {
-                        //                        var hlrl = MpHelpers.Instance.FindStringRangesFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                        //                        foreach (var mr in hlrl) {
-                        //                            this.Add(new MpHighlightTextRangeViewModel(HostClipTileViewModel,null, mr, sortIdx++,MpHighlightType.Text));
-                        //                        }
-                        //                    }
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //    break;
+                                break;
+                            case MpCopyItemType.Image:
+                                if (Properties.Settings.Default.SearchByImage && cc) {
+                                    //already found in pre-pass
+                                    this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, null, null, -1, MpHighlightType.Image));
+                                }
+                                break;
+                                //case MpCopyItemType.FileList:
+                                //    if(Properties.Settings.Default.SearchByFileList && cc) {
+                                //        var flb = HostClipTileViewModel.FileListBox;
+                                //        foreach (var fivm in HostClipTileViewModel.FileListCollectionViewModel) {                                    
+                                //            if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
+                                //                var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
+                                //                if (container != null) {
+                                //                    var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
+                                //                    if (fitb != null) {
+                                //                        var hlrl = MpHelpers.Instance.FindStringRangesFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                //                        foreach (var mr in hlrl) {
+                                //                            this.Add(new MpHighlightTextRangeViewModel(this,HostClipTileViewModel,null, mr, sortIdx++,MpHighlightType.Text));
+                                //                        }
+                                //                    }
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //    break;
+                        }
                     }
-                    MonkeyPaste.MpConsole.WriteLine("Ending highlighting clip with title: " + HostClipTileViewModel.CopyItemTitle);
+                   // MonkeyPaste.MpConsole.WriteLine("Ending highlighting clip with title: " + HostClipTileViewModel.CopyItemTitle);
                     ResetSelection();
                     result = HighlightRangeViewModels.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
                 }),

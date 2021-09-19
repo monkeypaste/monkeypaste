@@ -28,6 +28,8 @@ namespace MpWpfApp {
 
         public MpRtbEditToolbarView() {
             InitializeComponent();
+
+            FontFamilyCombo.ItemsSource = Fonts.SystemFontFamilies;
             Visibility = Visibility.Collapsed;
         }
 
@@ -39,7 +41,7 @@ namespace MpWpfApp {
         public void SetActiveRtb(RichTextBox trtb) {
             AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
-            DataContext = artb.DataContext as MpRtbItemViewModel;
+            DataContext = artb.DataContext as MpContentItemViewModel;
 
             if(buttons == null) {
                 buttons = new List<ButtonBase>() {
@@ -77,14 +79,14 @@ namespace MpWpfApp {
         #region Toolbar Events
 
         public void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
-            var ertbtvm = DataContext as MpRtbItemViewModel;
-            ertbtvm.HasTextChanged = true;
+            var ertbtvm = DataContext as MpContentItemViewModel;
+            ertbtvm.HasModelChanged = true;
             
             artb.UpdateLayout();
         }
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            var ertbtvm = DataContext as MpRtbItemViewModel;
+            var ertbtvm = DataContext as MpContentItemViewModel;
 
             var fontFamily = artb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
             FontFamilyCombo.SelectedItem = fontFamily;
@@ -110,13 +112,13 @@ namespace MpWpfApp {
 
             //disable add template button if current selection intersects with a template
             //this may not be necessary since templates are inlineuicontainers...
-            MpTemplateHyperlinkViewModel thlvm = null;
+            MpTokenViewModel thlvm = null;
             if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
+                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTokenViewModel)) {
+                    thlvm = (MpTokenViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTokenViewModel)) {
+                    thlvm = (MpTokenViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
                 }
             }
             if (thlvm == null) {
@@ -180,7 +182,7 @@ namespace MpWpfApp {
             var colorMenuItem = new MenuItem();
             var colorContextMenu = new ContextMenu();
 
-            var rtbetbvm = DataContext as MpRtbItemViewModel;
+            var rtbetbvm = DataContext as MpContentItemViewModel;
             var hctvm = rtbetbvm.HostClipTileViewModel;
             
 

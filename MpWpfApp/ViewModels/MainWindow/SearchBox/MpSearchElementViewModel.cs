@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
-    public class MpSearchElementViewModel : MpUndoableViewModelBase<MpSearchElementViewModel> {
+    public class MpSearchElementViewModel : MpViewModelBase<MpSearchBoxViewModel> {
         #region Private Variables
 
         #endregion
@@ -59,9 +59,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSearchElementViewModel() : base() { }
+        public MpSearchElementViewModel() : base(null) { }
 
-        public MpSearchElementViewModel(MpSearchBoxViewModel sbvm, TextRange tr) {
+        public MpSearchElementViewModel(MpSearchBoxViewModel sbvm, TextRange tr) : base(sbvm) {
             SearchBoxViewModel = sbvm;
             TextRange = tr;
         }

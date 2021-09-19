@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpSwirlLayerViewModel : MpUndoableViewModelBase<MpSwirlLayerViewModel> {
-
+    public class MpSwirlLayerViewModel : MpViewModelBase<MpClipTileTitleSwirlViewModel> {
         #region Properties
 
         #region View Models
@@ -63,7 +62,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSwirlLayerViewModel() : base() {  }
+        public MpSwirlLayerViewModel() : base(null) {  }
 
         public MpSwirlLayerViewModel(int layerId, Brush layerBrush, double layerOpacity) : this()  {
             LayerId = layerId;

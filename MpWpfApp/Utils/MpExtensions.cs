@@ -471,24 +471,24 @@ namespace MpWpfApp {
             var hlList = rtb.GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
-                if (hl.DataContext == null || hl.DataContext is MpRtbItemViewModel) {
+                if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
                     linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                 } else {
-                    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
+                    var thlvm = (MpTokenViewModel)hl.DataContext;
                     linkText = thlvm.TemplateName;
                 }
                 hl.Inlines.Clear();
                 new Span(new Run(linkText), hl.ElementStart);
             }
-            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
-            rtbvm.TemplateHyperlinkCollectionViewModel.Templates.Clear();
+            var rtbvm = rtb.DataContext as MpContentItemViewModel;
+            rtbvm.TokenCollection.Tokens.Clear();
             if (rtbSelection != null) {
                 rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
         }
 
         public static List<MpCopyItemTemplate> GetTemplates(this RichTextBox rtb) {
-            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
+            var rtbvm = rtb.DataContext as MpContentItemViewModel;
             var tl = new List<MpCopyItemTemplate>();
             if (rtbvm.CopyItem == null) {
                 return tl;
@@ -517,7 +517,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            var rtbvm = rtb.DataContext as MpRtbItemViewModel;
+            var rtbvm = rtb.DataContext as MpContentItemViewModel;
             var rtbSelection = rtb?.Selection.Clone();
             string pt = rtbvm.CopyItem.ItemData.ToPlainText();
             for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
@@ -564,7 +564,7 @@ namespace MpWpfApp {
                                 if (linkText == @"DragAction.Cancel") {
                                     linkText = linkText;
                                 }
-                                MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSubSelected)), hl, Hyperlink.IsEnabledProperty);
+                                MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
                                 hl.MouseEnter += (s3, e3) => {
                                     hl.Cursor = rtbvm.HostClipTileViewModel.IsSelected ? Cursors.Hand : Cursors.Arrow;
                                 };

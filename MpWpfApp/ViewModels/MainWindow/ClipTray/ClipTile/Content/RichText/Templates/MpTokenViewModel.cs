@@ -23,7 +23,7 @@ namespace MpWpfApp {
         Euros,
         Yen
     }    
-    public class MpTemplateHyperlinkViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel>, ICloneable {
+    public class MpTokenViewModel : MpViewModelBase<MpTokenCollectionViewModel>, ICloneable {
         #region Private Variables
         private MpCopyItemTemplate _originalModel;
         #endregion
@@ -33,21 +33,21 @@ namespace MpWpfApp {
         #region View Models
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                if(HostTemplateCollectionViewModel == null) {
+                if(Parent == null) {
                     return null;
                 }
-                return HostTemplateCollectionViewModel.HostClipTileViewModel;
+                return Parent.HostClipTileViewModel;
             }
         }
-        private MpTemplateHyperlinkCollectionViewModel _hostTemplateCollectionViewModel = null;
-        public MpTemplateHyperlinkCollectionViewModel HostTemplateCollectionViewModel {
+        private MpTokenCollectionViewModel _hostTemplateCollectionViewModel = null;
+        public MpTokenCollectionViewModel Parent {
             get {
                 return _hostTemplateCollectionViewModel;
             }
             set {
                 if (_hostTemplateCollectionViewModel != value) {
                     _hostTemplateCollectionViewModel = value;
-                    OnPropertyChanged(nameof(HostTemplateCollectionViewModel));
+                    OnPropertyChanged(nameof(Parent));
                     OnPropertyChanged(nameof(HostClipTileViewModel));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                     OnPropertyChanged(nameof(TemplateTextBlockCursor));
@@ -61,14 +61,10 @@ namespace MpWpfApp {
         #region Layout Properties        
         #endregion
 
-        #region Document Properties
-        public ObservableCollection<TextRange> TemplateRanges { get; private set; } = new ObservableCollection<TextRange>();
-        #endregion
-
         #region Appearance Properties
         public Cursor TemplateTextBlockCursor {
             get {
-                if(HostTemplateCollectionViewModel != null && 
+                if(Parent != null && 
                   (HostClipTileViewModel.IsEditingContent || HostClipTileViewModel.IsEditingTemplate)) {
                     return Cursors.Hand;
                 }
@@ -91,9 +87,6 @@ namespace MpWpfApp {
                     _validationText = value;
                     OnPropertyChanged(nameof(ValidationText));
                     OnPropertyChanged(nameof(TemplateNameTextBoxBorderBrush));
-                    //OnPropertyChanged(nameof(ValidationVisibility));
-                    //OnPropertyChanged(nameof(SelectedTemplateNameTextBoxBorderBrush));
-                    //OnPropertyChanged(nameof(SelectedTemplateNameTextBoxBorderBrushThickness)); ;
                 }
             }
         }
@@ -104,7 +97,6 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
 
         #region Brush Properties
         public Brush TemplateNameTextBoxBorderBrush {
@@ -258,7 +250,6 @@ namespace MpWpfApp {
             }
         }
 
-        private string _templateDisplayName = string.Empty;
         public string TemplateDisplayName {
             get {
                 if(string.IsNullOrEmpty(TemplateName)) {
@@ -278,46 +269,6 @@ namespace MpWpfApp {
                     _templateText = value;
                     OnPropertyChanged(nameof(TemplateText));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
-                }
-            }
-        }
-
-        private TextRange _templateTextRange = null;
-        public TextRange TemplateHyperlinkRange {
-            get {
-                return _templateTextRange;
-            }
-            set {
-                if (_templateTextRange != value) {
-                    _templateTextRange = value;
-                    OnPropertyChanged(nameof(TemplateHyperlinkRange));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                }
-            }
-        }
-
-        private Hyperlink _templateHyperlink = null;
-        public Hyperlink TemplateHyperlink {
-            get {
-                return _templateHyperlink;
-            }
-            set {
-                if(_templateHyperlink != value) {
-                    _templateHyperlink = value;
-                    OnPropertyChanged(nameof(TemplateHyperlink));
-                }
-            }
-        }
-
-        private TextBlock _templateTextBlock = null;
-        public TextBlock TemplateTextBlock {
-            get {
-                return _templateTextBlock;
-            }
-            set {
-                if (_templateTextBlock != value) {
-                    _templateTextBlock = value;
-                    OnPropertyChanged(nameof(TemplateTextBlock));
                 }
             }
         }
@@ -425,8 +376,8 @@ namespace MpWpfApp {
         public event EventHandler OnTemplateSelected;
 
         #region Public Methods
-        public MpTemplateHyperlinkViewModel() : base() { }
-        public MpTemplateHyperlinkViewModel(MpTemplateHyperlinkCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base() {
+        public MpTokenViewModel() : base(null) { }
+        public MpTokenViewModel(MpTokenCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsSelected):
@@ -439,23 +390,18 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            HostTemplateCollectionViewModel = thlcvm;
             CopyItemTemplate = cit;         
         }
 
-        public void SetTemplateText(string text) {
-            TemplateText = text;
-        }
-
         public bool Validate() {
-            HostTemplateCollectionViewModel.HostRtbViewModel.SaveToDatabase();
+            Parent.Parent.SaveToDatabase();
 
             if (string.IsNullOrEmpty(TemplateName.Trim())) {
                 ValidationText = "Name cannot be empty!";
                 return false;
             }
 
-            string pt = HostTemplateCollectionViewModel.HostRtbViewModel.CopyItem.ItemData.ToPlainText();
+            string pt = Parent.Parent.CopyItem.ItemData.ToPlainText();
             if (pt.Contains(TemplateName)) {
                 ValidationText = $"{TemplateName} must have a unique name";
                 return false;
@@ -479,8 +425,8 @@ namespace MpWpfApp {
                     () => {
                         _originalModel = CopyItemTemplate.Clone() as MpCopyItemTemplate;
 
-                        HostTemplateCollectionViewModel.ClearAllEditing();
-                        HostTemplateCollectionViewModel.ClearSelection();
+                        Parent.ClearAllEditing();
+                        Parent.ClearSelection();
 
                         IsSelected = true;
                         IsEditingTemplate = true;
@@ -587,7 +533,7 @@ namespace MpWpfApp {
         //}
 
         public object Clone() {
-            var nthlvm = new MpTemplateHyperlinkViewModel(HostTemplateCollectionViewModel, CopyItemTemplate);
+            var nthlvm = new MpTokenViewModel(Parent, CopyItemTemplate);
             nthlvm.TemplateText = TemplateText;
             return nthlvm;
         }

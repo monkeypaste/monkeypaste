@@ -24,6 +24,8 @@ namespace MpWpfApp {
 
         public DashStyle DashStyle { get; set; }
 
+        public bool IsShowing { get; set; } = false;
+
         private Pen _pen {
             get {
                 return new Pen(Color, Thickness) { DashStyle = this.DashStyle };
@@ -39,7 +41,9 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
-            drawingContext.DrawLine(_pen, Point1, Point2);
+            if(IsShowing) {
+                drawingContext.DrawLine(_pen, Point1, Point2);
+            }
         }
         #endregion
     }

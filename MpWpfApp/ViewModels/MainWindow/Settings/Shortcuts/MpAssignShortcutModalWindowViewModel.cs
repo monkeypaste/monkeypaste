@@ -17,7 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpAssignShortcutModalWindowViewModel : MpViewModelBase {
+    public class MpAssignShortcutModalWindowViewModel : MpViewModelBase<object> {
         #region Static Variables
         public static bool IsOpen = false;
         #endregion
@@ -277,7 +277,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command) : base() {
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command) : base(null) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(WarningString):
@@ -339,7 +339,7 @@ namespace MpWpfApp {
             DuplicatedShortcutViewModel = null;
             _isReplacingShortcut = false;
             //iterate over ALL shortcuts
-            foreach (var scvm in MpShortcutCollectionViewModel.Instance) {                
+            foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {                
                 if (scvm.Command == _assigningCommand ||
                     scvm.KeyList.Count != _keyList.Count || 
                     scvm.KeyList.Count == 0) {
@@ -423,7 +423,7 @@ namespace MpWpfApp {
                 if(DuplicatedShortcutViewModel.IsCustom()) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        MpClipTrayViewModel.Instance.GetClipTileByCopyItemId(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
+                        MpClipTrayViewModel.Instance.GetCopyItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
                     } else {
                         MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
                     }

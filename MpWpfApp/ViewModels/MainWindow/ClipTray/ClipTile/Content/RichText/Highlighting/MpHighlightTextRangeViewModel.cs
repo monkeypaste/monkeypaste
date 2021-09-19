@@ -19,7 +19,7 @@ namespace MpWpfApp {
         Text = 0
     }
 
-    public class MpHighlightTextRangeViewModel : MpUndoableViewModelBase<MpHighlightTextRangeViewModel>, IComparable<MpHighlightTextRangeViewModel> {
+    public class MpHighlightTextRangeViewModel : MpViewModelBase<MpHighlightTextRangeViewModelCollection>, IComparable<MpHighlightTextRangeViewModel> {
         #region Private Variables
 
         #endregion
@@ -117,10 +117,11 @@ namespace MpWpfApp {
             }
         }
         #endregion
-        #region Public Methods
-        public MpHighlightTextRangeViewModel() : this(null,null,null,-1,MpHighlightType.None) { }
 
-        public MpHighlightTextRangeViewModel(MpClipTileViewModel ctvm, MpContentItemViewModel rtbvm, TextRange tr, int contentId, MpHighlightType ht) {
+        #region Public Methods
+        public MpHighlightTextRangeViewModel() : this(null,null,null,null,-1,MpHighlightType.None) { }
+
+        public MpHighlightTextRangeViewModel(MpHighlightTextRangeViewModelCollection parent, MpClipTileViewModel ctvm, MpContentItemViewModel rtbvm, TextRange tr, int contentId, MpHighlightType ht) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsSelected):
@@ -136,22 +137,23 @@ namespace MpWpfApp {
                             if(characterRect == Rect.Empty) {
                                 characterRect = Range.End.GetCharacterRect(LogicalDirection.Forward);
                             }
-                            switch (HostClipTileViewModel.CopyItemType) {
-                                case MpCopyItemType.RichText:
-                                    //var rtb = ContentItemViewModel.Rtb;
-                                    HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(characterRect);
-                                    //rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
-                                    //rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
-                                    break;
-                                case MpCopyItemType.FileList:
-                                    var flivm = HostClipTileViewModel.FileListCollectionViewModel[SortOrderIdx];
-                                    //HostClipTileViewModel.FileListBox.ScrollIntoView(flivm);
-                                    HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(flivm);
-                                    break;
-                            }
+                            HostClipTileViewModel.RequestScrollIntoView(characterRect);
+                            //switch (HostClipTileViewModel.CopyItemType) {
+                            //    case MpCopyItemType.RichText:
+                            //        //var rtb = ContentItemViewModel.Rtb;
+
+                            //        //rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
+                            //        //rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+                            //        break;
+                            //    case MpCopyItemType.FileList:
+                            //        //var flivm = HostClipTileViewModel.FileListCollectionViewModel.FileItems[SortOrderIdx];
+                            //        //HostClipTileViewModel.FileListBox.ScrollIntoView(flivm);
+                            //        //HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(flivm);
+                            //        break;
+                            //}
                         }
                         //if(IsSelected && IsTitleRange && ctvm is MpRtbViewModel) {
-                        //    ((MpRtbViewModel)ctvm).IsSubSelected = false;
+                        //    ((MpRtbViewModel)ctvm).IsSelected = false;
                         //}
                         break;
                 }
@@ -165,7 +167,7 @@ namespace MpWpfApp {
 
         public void HighlightRange() {
            // HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
-            foreach (MpRtbItemViewModel rtbvm in HostClipTileViewModel.ContentContainerViewModel.ItemViewModels) {
+            foreach (var rtbvm in HostClipTileViewModel.ItemViewModels) {
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
             }

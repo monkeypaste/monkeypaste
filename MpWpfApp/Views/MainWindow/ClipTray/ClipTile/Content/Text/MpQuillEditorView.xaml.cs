@@ -29,7 +29,7 @@ namespace MpWpfApp {
             string html = MpHelpers.Instance.ReadTextFromFile(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MpWpfApp\Resources\Editor\Editor2.html");
             
             string contentTag = @"<div id='editor'>";
-            string itemHtml = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml((DataContext as MpRtbItemViewModel).CopyItem.ItemData);
+            string itemHtml = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml((DataContext as MpContentItemViewModel).CopyItem.ItemData);
             var data = itemHtml; //string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;
             html = html.Replace(contentTag, contentTag + data);
 

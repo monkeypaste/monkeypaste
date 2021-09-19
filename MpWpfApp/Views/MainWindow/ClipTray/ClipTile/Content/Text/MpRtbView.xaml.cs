@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
 
         public void SyncModels() {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             
             //clear any search highlighting when saving the document then restore after save
             rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
@@ -41,7 +41,7 @@ namespace MpWpfApp {
 
             rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
 
-            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == rtbvm.CopyItemId).ToList();
+            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
             if (scvml.Count > 0) {
                 rtbvm.ShortcutKeyString = scvml[0].KeyString;
             }
@@ -49,12 +49,12 @@ namespace MpWpfApp {
 
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            if (DataContext != null && DataContext is MpRtbItemViewModel rtbivm) {
-                rtbivm.OnRtbResetRequest += Rtbivm_OnRtbResetRequest;
+            if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
+                rtbivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
                 rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                 rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
-                rtbivm.OnClearHyperlinksRequest += Rtbivm_OnClearHyperlinksRequest;
-                rtbivm.OnCreateHyperlinksRequest += Rtbivm_OnCreateHyperlinksRequest;
+                rtbivm.OnClearTokensRequest += Rtbivm_OnClearHyperlinksRequest;
+                rtbivm.OnCreateTokensRequest += Rtbivm_OnCreateHyperlinksRequest;
                 rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
 
                 if (rtbivm.HostClipTileViewModel.WasAddedAtRuntime) {
@@ -97,7 +97,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             if (rtbvm.IsEditingContent && Rtb.IsFocused) {
             }
         }

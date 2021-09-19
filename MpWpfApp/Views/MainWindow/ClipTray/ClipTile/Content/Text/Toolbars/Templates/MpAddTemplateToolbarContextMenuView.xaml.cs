@@ -32,7 +32,7 @@ namespace MpWpfApp {
         }
 
         private void AddTemplateContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var tc = (Rtb.DataContext as MpRtbItemViewModel).TemplateHyperlinkCollectionViewModel.Templates;
+            var tc = (Rtb.DataContext as MpContentItemViewModel).TokenCollection.Tokens;
 
             var mil = new List<MenuItem>();
             foreach(var thvm in tc) {
@@ -60,19 +60,19 @@ namespace MpWpfApp {
         }
 
         private void Template_Click(object sender, RoutedEventArgs e) {
-            var thlcvm = DataContext as MpTemplateHyperlinkCollectionViewModel;
+            var thlcvm = DataContext as MpTokenCollectionViewModel;
             Rtb.Focus();
 
             var mi = sender as MenuItem;
             if(mi.DataContext == null) {
                 //when clicking add new
                 var thl = MpTemplateHyperlink.Create(Rtb.Selection,null);
-                var thlvm = thl.DataContext as MpTemplateHyperlinkViewModel;
+                var thlvm = thl.DataContext as MpTokenViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
-            } else if(mi.DataContext is MpTemplateHyperlinkViewModel thlvm) {
+            } else if(mi.DataContext is MpTokenViewModel thlvm) {
                 //when clicking a pre-existing template
                 var nthl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
-                var nthlvm = nthl.DataContext as MpTemplateHyperlinkViewModel;
+                var nthlvm = nthl.DataContext as MpTokenViewModel;
                 nthlvm.EditTemplateCommand.Execute(null);
             }
         }
@@ -82,11 +82,11 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteTraceLine("No rtb or rtb context");
                 return;
             }
-            var rtbvm = Rtb.DataContext as MpRtbItemViewModel;
-            if(rtbvm.TemplateHyperlinkCollectionViewModel.Templates.Count == 0) {
+            var rtbvm = Rtb.DataContext as MpContentItemViewModel;
+            if(rtbvm.TokenCollection.Tokens.Count == 0) {
                 //when no templates exist create a new default one
                 var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
-                var thlvm = thl.DataContext as MpTemplateHyperlinkViewModel;
+                var thlvm = thl.DataContext as MpTokenViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
             } else {
                 //otherwise show template menu

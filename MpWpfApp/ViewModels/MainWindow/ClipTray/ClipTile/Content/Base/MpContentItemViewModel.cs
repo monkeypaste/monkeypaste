@@ -14,28 +14,33 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public abstract class MpContentItemViewModel : MpViewModelBase {
+    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
         private static string _unsetJoystickIcon64 = "";
         private static string _setJoyStickIcon64 = "";
 
         #region Abstract Methods
-        public abstract Size GetExpandedSize();
-        public abstract Size GetUnexpandedSize();
-        public abstract string GetDetail(MpCopyItemDetailType detailType);
+        
 
         #endregion
 
         #region Properties
 
         #region View Models
-        public MpContentContainerViewModel ContainerViewModel { get; private set; }
-
         public MpClipTileViewModel HostClipTileViewModel {
             get {
-                if (ContainerViewModel == null) {
-                    return null;
+                return Parent.Parent as MpClipTileViewModel;
+            }
+        }
+        private MpTokenCollectionViewModel _tokenCollection;
+        public MpTokenCollectionViewModel TokenCollection {
+            get {
+                return _tokenCollection;
+            }
+            set {
+                if (_tokenCollection != value) {
+                    _tokenCollection = value;
+                    OnPropertyChanged(nameof(TokenCollection));
                 }
-                return ContainerViewModel.HostClipTileViewModel;
             }
         }
 
@@ -68,14 +73,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        public double DragButtonSize {
-            get {
-                return MpMeasurements.Instance.RtbCompositeDragButtonSize;
-            }
-        }
-
 
         #endregion
+
+        public string TemplateRichText { get; set; }
 
         #region State
         private int _detailIdx = 1;
@@ -107,18 +108,24 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsSubSelected { get; set; } = false;
-        public bool IsSubHovering { get; set; } = false;
-        public bool IsSubContextMenuOpen { get; set; } = false;
+        public bool IsSelected { get; set; } = false;
+        public bool IsHovering { get; set; } = false;
+        public bool IsContextMenuOpen { get; set; } = false;
 
-        public bool IsSubEditingContent { get; set; } = false;
-        public bool IsSubPastingTemplate { get; set; } = false;
-        public bool IsSubEditingTitle { get; set; } = false;
+        public bool IsEditingContent { get; set; } = false;
+        public bool IsPastingTemplate { get; set; } = false;
+        public bool IsEditingTitle { get; set; } = false;
 
-        public abstract bool IsDynamicPaste { get; }
+        public bool HasModelChanged { get; set; } = false;
+        public bool HasTokens {
+            get {
+                return TokenCollection.Tokens.Count > 0;
+            }
+        }
 
         #region Drag & Drop
 
+        public bool IsOverDragButton { get; set; } = false;
         public bool IsSubDragging { get; set; } = false;
         public bool IsSubDropping { get; set; } = false;
         public Point MouseDownPosition { get; set; }
@@ -132,7 +139,7 @@ namespace MpWpfApp {
 
         public string HotkeyIconSource {
             get {
-                if(string.IsNullOrEmpty(_unsetJoystickIcon64)) {
+                if (string.IsNullOrEmpty(_unsetJoystickIcon64)) {
                     _unsetJoystickIcon64 = new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png")).ToBase64String();
                 }
                 if (string.IsNullOrEmpty(_setJoyStickIcon64)) {
@@ -148,6 +155,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+        public bool IsCompositeChild {
+            get {
+                if (CopyItem == null || Parent == null) {
+                    return false;
+                }
+                return CopyItem.CompositeParentCopyItemId > 0 || Parent.Count > 1;
+            }
+        }
 
         public string HotkeyIconTooltip {
             get {
@@ -157,6 +172,7 @@ namespace MpWpfApp {
                 return ShortcutKeyString;
             }
         }
+        
         private string _shortcutKeyString = string.Empty;
         public string ShortcutKeyString {
             get {
@@ -172,48 +188,172 @@ namespace MpWpfApp {
             }
         }
 
+        public int RelevanceScore {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CopyCount + CopyItem.PasteCount;
+            }
+        }
+
         public MpCopyItem CopyItem { get; set; }
 
         #endregion
 
         #endregion
 
-        //public RichTextBox Rtb { get; set; }
-        //public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
-
-
         #region Events
 
         public event EventHandler<int> OnScrollWheelRequest;
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler OnSubSelected;
+
+
+        public event EventHandler<bool> OnUiResetRequest;
+        public event EventHandler OnClearTokensRequest;
+        public event EventHandler OnCreateTokensRequest;
+        public event EventHandler OnSyncModels;
         #endregion
 
         #region Public Methods
 
-        public static MpContentItemViewModel Create(MpContentContainerViewModel ccvm, MpCopyItem ci) {
-            switch (ci.ItemType) {
-                case MpCopyItemType.RichText:
-                    return new MpRtbItemViewModel(ccvm, ci);
-                default:
-                    // TODO add other content view models here
-                    break;
-            }
-            throw new Exception("Unsupported item type");
-        }
+        public MpContentItemViewModel() : base(null) { }
 
-        public MpContentItemViewModel() : base() { }
-
-        public MpContentItemViewModel(MpContentContainerViewModel container, MpCopyItem ci) : this() {
+        public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
             CopyItem = ci;
-            ContainerViewModel = container;
+
+            TokenCollection = new MpTokenCollectionViewModel(this);
         }
 
-        
+        public async Task GatherAnalytics() {
+            var analyticTasks = new List<Task>();
+            Task<string> urlTask = null, ocrTask = null, cvTask = null;
+            if (CopyItem.SsDbImage != null) {
+                urlTask = MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.SsDbImage.ImageBase64.ToBitmapSource());
+                analyticTasks.Add(urlTask);
+            }
+
+            if (CopyItem.ItemType == MpCopyItemType.Image) {
+                var itemBmpBytes = MpHelpers.Instance.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
+                ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
+                analyticTasks.Add(ocrTask);
+                cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
+                analyticTasks.Add(cvTask);
+            }
+
+            await Task.WhenAll(analyticTasks.ToArray());
+
+            if (urlTask != null) {
+                string detectedUrl = await urlTask;
+                if (!string.IsNullOrEmpty(detectedUrl)) {
+                    string urlTitle = await MpHelpers.Instance.GetUrlTitle(detectedUrl);
+                    //CopyItemUrl = MpUrl.Create(detectedUrl, urlTitle);
+                    //if (CopyItemUrlDomain == null) {
+                    //    string urlDomain = MpHelpers.Instance.GetUrlDomain(detectedUrl);
+                    //    string urlDomainTitle = await MpHelpers.Instance.GetUrlTitle(urlDomain);
+                    //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
+                    //}
+                }
+                MonkeyPaste.MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
+            }
+
+            if (ocrTask != null) {
+                CopyItem.ItemDescription = await ocrTask;
+            }
+
+            if (cvTask != null) {
+                CopyItem.ItemDescription = await cvTask;
+                //var imgAnalysis = JsonConvert.DeserializeObject<MpImageAnalysis>(cvContent);
+            }
+
+            //OnPropertyChanged(nameof(AppIcon));
+        }
+
+        public void RequestSyncModels() {
+            OnSyncModels?.Invoke(this, null);
+        }
+
+        public void RequestUiReset() {
+            OnUiResetRequest?.Invoke(this, IsSelected);
+        }
+
+        public void RequestClearHyperlinks() {
+            OnClearTokensRequest?.Invoke(this, null);
+        }
+
+        public void RequestCreateHyperlinks() {
+            OnCreateTokensRequest?.Invoke(this, null);
+        }
 
         public void Resize(Rect newSize) {
-            throw new Exception("Unemplemented");
+            //throw new Exception("Unemplemented");
+        }
+
+        public Size GetExpandedSize() {
+            var ds = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+            return new Size(
+                Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth),
+                Math.Max(ds.Height, MpMeasurements.Instance.ClipTileContentHeight)
+                );
+        }
+
+        public Size GetUnexpandedSize() {
+            double h = Parent.ItemViewModels.Count > 1 ?
+                            MpMeasurements.Instance.RtbCompositeItemMinHeight :
+                            MpMeasurements.Instance.ClipTileContentHeight;
+
+            return new Size(MpMeasurements.Instance.ClipTileContentMinWidth, h);
+        }
+
+        public string GetDetail(MpCopyItemDetailType detailType) {
+            Size itemSize;
+            int fc = 0, lc = 0, cc = 0;
+            double ds = 0;
+            switch (CopyItem.ItemType) {
+                case MpCopyItemType.Image:
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
+                    break;
+                case MpCopyItemType.FileList:
+                    fc = GetFileList().Count;
+                    ds = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
+                    break;
+                case MpCopyItemType.RichText:
+                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
+                    cc = CopyItem.ItemData.ToPlainText().Length;
+                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    break;
+            }
+            string info = "I dunno";// string.Empty;
+            switch (detailType) {
+                //created
+                case MpCopyItemDetailType.DateTimeCreated:
+                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
+                    info = "Copied " + CopyItem.CopyDateTime.ToString();
+                    break;
+                //chars/lines
+                case MpCopyItemDetailType.DataSize:
+                    if (CopyItem.ItemType == MpCopyItemType.Image) {
+                        var bmp = CopyItem.ItemData.ToBitmapSource();
+                        info = "(" + (int)bmp.Width + "px) x (" + (int)bmp.Height + "px)";
+                    } else if (CopyItem.ItemType == MpCopyItemType.RichText) {
+                        info = cc + " chars | " + lc + " lines";
+                    } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
+                        info = fc + " files | " + ds + " MB";
+                    }
+                    break;
+                //# copies/# pastes
+                case MpCopyItemDetailType.UsageStats:
+                    info = cc + " copies | " + CopyItem.PasteCount + " pastes";
+                    break;
+                default:
+                    info = "Unknown detailId: " + (int)detailType;
+                    break;
+            }
+
+            return info;
         }
 
 
@@ -231,13 +371,33 @@ namespace MpWpfApp {
 
         #endregion
 
+        private void UpdateDetails() {
+            Size itemSize;
+            int fc, lc, cc;
+            double ds;
+            switch (CopyItem.ItemType) {
+                case MpCopyItemType.Image:
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
+                    break;
+                case MpCopyItemType.FileList:
+                    fc = GetFileList().Count;
+                    ds = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
+                    break;
+                case MpCopyItemType.RichText:
+                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
+                    cc = CopyItem.ItemData.ToPlainText().Length;
+                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    break;
+            }
+        }
 
         public void ClearSubDragState() {
             IsSubDragging = false;
             DragDataObject = null;
             MouseDownPosition = new Point();
         }
-        
+
 
         public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
@@ -316,9 +476,10 @@ namespace MpWpfApp {
         #region Private Methods
 
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(IsSubSelected):
-                    if(IsSubSelected) {
+            switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        LastSubSelectedDateTime = DateTime.Now;
                         OnSubSelected?.Invoke(this, null);
                     }
                     break;
@@ -342,33 +503,26 @@ namespace MpWpfApp {
                 return false;
             }
             return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                   ContainerViewModel.SubSelectedContentItems.Count == 1;
+                   Parent.SelectedItems.Count == 1;
         }
         private void EditSubTitle() {
-            IsSubEditingTitle = !IsSubEditingTitle;
+            IsEditingTitle = !IsEditingTitle;
         }
 
-        private RelayCommand _editSubContentCommand;
         public ICommand EditSubContentCommand {
             get {
-                if (_editSubContentCommand == null) {
-                    _editSubContentCommand = new RelayCommand(EditSubContent, CanEditSubContent);
-                }
-                return _editSubContentCommand;
-            }
-        }
-        private bool CanEditSubContent() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                return false;
-            }
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                   ContainerViewModel.SubSelectedContentItems.Count == 1;
-        }
-        private void EditSubContent() {
-            if (!HostClipTileViewModel.IsEditingContent) {
-                HostClipTileViewModel.IsEditingContent = true;
-                ContainerViewModel.ClearSubSelection();
-                IsSubSelected = true;
+                return new RelayCommand(
+                    () => {
+                        if (!IsEditingContent) {
+                            Parent.IsEditingContent = true;
+                            Parent.ClearSubSelection();
+                            IsSelected = true;
+                        }
+                    },
+                    () => {
+                        return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+                               Parent.SelectedItems.Count == 1;
+                    });
             }
         }
 
@@ -382,7 +536,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanSendSubSelectedToEmail() {
-            return !IsSubEditingContent;
+            return !IsEditingContent;
         }
         private void SendSubSelectedToEmail() {
             MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
@@ -454,9 +608,9 @@ namespace MpWpfApp {
         }
         private void PasteSubItem() {
             MpClipTrayViewModel.Instance.ClearClipSelection();
-            HostClipTileViewModel.IsSelected = true;
-            ContainerViewModel.ClearSubSelection();
-            IsSubSelected = true;
+            Parent.IsSelected = true;
+            Parent.ClearSubSelection();
+            IsSelected = true;
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
 

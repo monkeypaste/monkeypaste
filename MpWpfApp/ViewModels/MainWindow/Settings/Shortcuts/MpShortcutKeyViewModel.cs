@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpShortcutKeyViewModel : MpViewModelBase {
-
+    public class MpShortcutKeyViewModel : MpViewModelBase<object> {
         #region Properties
         private int _seqIdx = 0;
         public int SeqIdx {
@@ -77,7 +76,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpShortcutKeyViewModel() : base() { }
+        public MpShortcutKeyViewModel() : base(null) { }
 
         public MpShortcutKeyViewModel(string keyStr,bool showPlus,bool showComma, int seqIdx) : this() {
             KeyStr = keyStr;

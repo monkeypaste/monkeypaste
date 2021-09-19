@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpImageAnalysisCollectionViewModel  : MpObservableCollectionViewModel<MpImageAnalysisViewModel> {
-        public MpImageAnalysisCollectionViewModel() : base() {
-            this.Add(new MpImageAnalysisViewModel());
+    public class MpImageAnalysisCollectionViewModel  : MpViewModelBase<MpContentItemViewModel> {
+        public ObservableCollection<MpImageAnalysisViewModel> Items { get; set; } = new ObservableCollection<MpImageAnalysisViewModel>();
+
+        public MpImageAnalysisCollectionViewModel() : base(null) {
+            Items.Add(new MpImageAnalysisViewModel());
         }
-        public MpImageAnalysisCollectionViewModel(string analysisData) {
-            this.Add(new MpImageAnalysisViewModel(analysisData));
+
+        public MpImageAnalysisCollectionViewModel(MpContentItemViewModel parent, string analysisData) : base (parent) {
+            Items.Add(new MpImageAnalysisViewModel(this,analysisData));
         }
     }
 
-    public class MpImageAnalysisViewModel : MpViewModelBase {
+    public class MpImageAnalysisViewModel : MpViewModelBase<MpImageAnalysisCollectionViewModel> {
         #region Private Variables
         private double _minScore = 0.0;
         #endregion
@@ -180,7 +183,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpImageAnalysisViewModel() : base() {
+        public MpImageAnalysisViewModel() : base(null) {
             var ia = new MpImageAnalysis();
             ia.categories = new List<MpImageCategory>();
             var testcategory = new MpImageCategory();
@@ -217,7 +220,7 @@ namespace MpWpfApp {
             //SourceBmp = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/joystick.png"));
         }
 
-        public MpImageAnalysisViewModel(string serializedAnalysis) : this() {
+        public MpImageAnalysisViewModel(MpImageAnalysisCollectionViewModel parent, string serializedAnalysis) : base(parent) {
             if(string.IsNullOrEmpty(serializedAnalysis)) {
                 return;
             }

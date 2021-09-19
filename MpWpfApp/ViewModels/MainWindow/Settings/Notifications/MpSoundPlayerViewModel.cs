@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerViewModel : MpViewModelBase {
+    public class MpSoundPlayerViewModel : MpViewModelBase<object> {
         #region Private Variables
         private SoundPlayer _soundPlayer = null;
         #endregion
@@ -55,7 +55,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSoundPlayerViewModel(MpSoundType soundType, string path, bool isAbsolute = false) {
+        public MpSoundPlayerViewModel(MpSoundType soundType, string path, bool isAbsolute = false) : base(null) {
             SoundType = soundType;            
             LoadFile(path, isAbsolute);
         }

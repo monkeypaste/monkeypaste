@@ -105,13 +105,13 @@ namespace MpWpfApp {
                     dctvml.Reverse();
                     foreach (var dctvm in dctvml) {
                         int dragCtvmIdx = ctrvm.ClipTileViewModels.IndexOf(dctvm);
-                        bool wasEmptySelection = dctvm.ContentContainerViewModel.SubSelectedContentItems.Count == 0;
+                        bool wasEmptySelection = dctvm.SelectedItems.Count == 0;
                         if (wasEmptySelection) {
-                            dctvm.ContentContainerViewModel.SubSelectAll();
+                            dctvm.SubSelectAll();
                         }
-                        if (dctvm.ContentContainerViewModel.Count == 0 ||
+                        if (dctvm.Count == 0 ||
                             wasEmptySelection ||
-                            dctvm.ContentContainerViewModel.Count == dctvm.ContentContainerViewModel.SubSelectedContentItems.Count) {
+                            dctvm.Count == dctvm.SelectedItems.Count) {
                             //1. if all rtbvm of sctvm are selected or rtbvm count is 0, do move to dropidx
                             if (dragCtvmIdx < dropIdx) {
                                 ctrvm.ClipTileViewModels.Move(dragCtvmIdx, dropIdx - 1);
@@ -122,15 +122,15 @@ namespace MpWpfApp {
                         } else {
                             //2. if partial selection, remove from parent and make new
                             //   composite in merge then insert at dropidx.
-                            var drtbvm = dctvm.ContentContainerViewModel.SubSelectedContentItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
-                            dctvm.ContentContainerViewModel.ItemViewModels.Remove(drtbvm);
-                            var nctvm = new MpClipTileViewModel(drtbvm.CopyItem);
-                            foreach (var ssrtbvm in dctvm.ContentContainerViewModel.SubSelectedContentItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()) {
+                            var drtbvm = dctvm.SelectedItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+                            dctvm.ItemViewModels.Remove(drtbvm);
+                            var nctvm = new MpClipTileViewModel(ctrvm,drtbvm.CopyItem);
+                            foreach (var ssrtbvm in dctvm.SelectedItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()) {
                                 nctvm.MergeCopyItemList(new List<MpCopyItem>() { ssrtbvm.CopyItem });
                             }
                             //ctrvm.Add(nctvm, dropIdx);
                             ctrvm.RefreshClips();
-                            nctvm.OnPropertyChanged(nameof(nctvm.CopyItem));
+                            nctvm.RequestUiUpdate();
                             wasDropped = true;
                         }
                     }

@@ -131,11 +131,11 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.ClearClipSelection();
             ctvm.IsSelected = true;
             foreach (var vctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
-                if (vctvm.CopyItemAppId != ctvm.CopyItemAppId) {
+                if (vctvm.ItemViewModels.Any(x=>x.CopyItem.Source.AppId != ctvm.PrimaryItem.CopyItem.Source.AppId)) {
                     bool hasSubItemWithApp = false;
-                    if (vctvm.ContentContainerViewModel.ItemViewModels.Count > 1) {
-                        foreach (var vrtbvm in vctvm.ContentContainerViewModel.ItemViewModels) {
-                            if (vrtbvm.CopyItem.Source.App.Id != ctvm.CopyItemAppId) {
+                    if (vctvm.ItemViewModels.Count > 1) {
+                        foreach (var vrtbvm in vctvm.ItemViewModels) {
+                            if (vrtbvm.CopyItem.Source.App.Id != ctvm.PrimaryItem.CopyItem.Source.AppId) {
                                 vrtbvm.ItemVisibility = Visibility.Collapsed;
                             } else {
                                 hasSubItemWithApp = true;
@@ -143,7 +143,7 @@ namespace MpWpfApp {
                         }
                     }
                     if (!hasSubItemWithApp) {
-                        vctvm.TileVisibility = Visibility.Collapsed;
+                        vctvm.ItemVisibility = Visibility.Collapsed;
                     }
                 }
             }

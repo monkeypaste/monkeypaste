@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpHelpViewModel : MpViewModelBase {
+    public class MpHelpViewModel : MpViewModelBase<object> {
         #region Private Variables
 
         #endregion
@@ -15,7 +15,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-
+        public MpHelpViewModel() : base(null) { }
         #endregion
 
         #region Commands

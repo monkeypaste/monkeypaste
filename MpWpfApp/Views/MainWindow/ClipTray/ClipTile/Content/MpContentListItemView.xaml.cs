@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace MpWpfApp {
         private int _minDragDist = 25;
 
         AdornerLayer RtbItemAdornerLayer;
-        MpRtbListBoxItemAdorner RtbItemAdorner;
+        MpLineAdorner RtbItemAdorner;
 
         public MpContentListItemView() : base() {
             InitializeComponent();            
@@ -29,9 +30,17 @@ namespace MpWpfApp {
 
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            RtbItemAdorner = new MpRtbListBoxItemAdorner(RtbView);
+            RtbItemAdorner = new MpLineAdorner(RtbView);
             RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbView);
             RtbItemAdornerLayer?.Add(RtbItemAdorner);
+
+            var civm = DataContext as MpContentItemViewModel;
+            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItem.Id).ToList();
+            if (scvml.Count > 0) {
+                civm.ShortcutKeyString = scvml[0].KeyString;
+            } else {
+                civm.ShortcutKeyString = string.Empty;
+            }
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -62,13 +71,13 @@ namespace MpWpfApp {
         #region Drag & Drop
 
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            rtbvm.IsSubHovering = true;
+            var rtbvm = DataContext as MpContentItemViewModel;
+            rtbvm.IsHovering = true;
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            rtbvm.IsSubHovering = false;
+            var rtbvm = DataContext as MpContentItemViewModel;
+            rtbvm.IsHovering = false;
         }
         
         private void DragButton_PreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) {
@@ -79,7 +88,7 @@ namespace MpWpfApp {
         }
 
         private void DragButton_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             Application.Current.MainWindow.ForceCursor = false;
             rtbvm.MouseDownPosition = new Point();
             rtbvm.DragDataObject = null;
@@ -89,15 +98,15 @@ namespace MpWpfApp {
 
 
         private void DragButton_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             //SyncMultiSelectDragButton(true, true);
         }
 
         private void DragButton_PreviewMouseMove(object sender, MouseEventArgs e7) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
                 if (rtbvm.IsEditingContent ||
-                  (rtbvm.HostClipTileViewModel.IsExpanded && rtbvm.ContainerViewModel.Count == 1)) {
+                  (rtbvm.HostClipTileViewModel.IsExpanded && rtbvm.Parent.Count == 1)) {
                     //cannot resort w/ only 1 item and its relative location is not clear
                     //since its isolated
                     return;
@@ -110,7 +119,7 @@ namespace MpWpfApp {
                     return;
                 }
                 rtbvm.IsSubDragging = true;
-                rtbvm.IsSubSelected = true;
+                rtbvm.IsSelected = true;
                 if (rtbvm.DragDataObject == null) {
                     rtbvm.DragDataObject = MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, false).Result;//RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
                 }
@@ -123,24 +132,43 @@ namespace MpWpfApp {
         }
 
         private void DragButton_MouseEnter(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             rtbvm.IsOverDragButton = true;
             //SyncMultiSelectDragButton(true, false);
         }
 
         private void DragButton_MouseLeave(object sender, MouseEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
             rtbvm.IsOverDragButton = false;
            // SyncMultiSelectDragButton(false, false);
         }
-        
+
+        //public bool IsDragDataValid(IDataObject data) {
+        //    var rtbvm = DataContext as MpContentItemViewModel;
+        //    if (rtbvm.CopyItem.ItemType == MpCopyItemType.Image || rtbvm.CopyItem.ItemType == MpCopyItemType.FileList) {
+        //    return false;
+        //    }
+        //    if (data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
+        //        var dctvml = (List<MpClipTileViewModel>)data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
+        //        foreach (var dctvm in dctvml) {
+        //            if ((dctvm == this && !IsAnySubItemDragging) ||
+        //               dctvm.CopyItem.ItemType == MpCopyItemType.Image ||
+        //               dctvm.CopyItemType == MpCopyItemType.FileList) {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
         #endregion
 
         #region Context Menu Events
 
         private void RtbItem_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            var rtbvm = DataContext as MpRtbItemViewModel;
-            var rtblbvm = rtbvm.ContainerViewModel as MpRtbItemCollectionViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
+            var rtblbvm = rtbvm.Parent as MpClipTileViewModel;
             var cm = (ContextMenu)sender;
             cm.DataContext = rtbvm;
             MenuItem cmi = null;
@@ -158,21 +186,20 @@ namespace MpWpfApp {
                     cmi,
                     (s, e1) => {
                         rtblbvm.ChangeSubSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
-                        foreach (var sctvm in rtblbvm.SubSelectedContentItems) {
+                        foreach (var sctvm in rtblbvm.SelectedItems) {
                             sctvm.CopyItem.WriteToDatabase();
                         }
                     },
-                    MpHelpers.Instance.GetColorColumn(rtbvm.CopyItemColorBrush),
-                    MpHelpers.Instance.GetColorRow(rtbvm.CopyItemColorBrush)
+                   0,0
                 );
         }
 
         private void RtbItem_ContextMenu_Opened(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
 
             cm.Tag = rtbvm;
-            rtbvm.IsSubContextMenuOpened = true;
+            rtbvm.IsContextMenuOpen = true;
             cm = MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(cm);
 
             MenuItem eami = null;
@@ -192,10 +219,10 @@ namespace MpWpfApp {
                 }
             }
             if (eami != null) {
-                eami.Header = @"Exclude Application '" + rtbvm.CopyItemAppName + "'";
+                eami.Header = @"Exclude Application '" + rtbvm.CopyItem.Source.App.AppName + "'";
             }
 
-            rtbvm.RefreshAsyncCommands();
+           // rtbvm.RefreshAsyncCommands();
 
             rtbvm.OnPropertyChanged(nameof(rtbvm.TagMenuItems));
 
@@ -204,10 +231,10 @@ namespace MpWpfApp {
 
         private void RtbItem_ContextMenu_Closed(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
-            var rtbvm = DataContext as MpRtbItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
 
-            rtbvm.IsSubContextMenuOpened = false;
-            rtbvm.ContainerViewModel.ClearSubSelection();
+            rtbvm.IsContextMenuOpen = false;
+            rtbvm.Parent.ClearSubSelection();
         }
 
         #endregion

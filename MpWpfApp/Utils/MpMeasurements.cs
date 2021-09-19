@@ -2,7 +2,7 @@
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpMeasurements : MpViewModelBase {
+    public class MpMeasurements {
         private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
         public static MpMeasurements Instance { get { return _Lazy.Value; } }
 

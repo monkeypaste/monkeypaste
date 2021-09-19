@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpClipTileSortViewModel : MpViewModelBase {
+    public class MpClipTileSortViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpClipTileSortViewModel> _Lazy = new Lazy<MpClipTileSortViewModel>(() => new MpClipTileSortViewModel());
         public static MpClipTileSortViewModel Instance { get { return _Lazy.Value; } }
@@ -99,7 +99,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpClipTileSortViewModel() : base() {
+        public MpClipTileSortViewModel() : base(null) {
             //must be set before property changed registered for loading order
             SelectedSortType = SortTypes[0];
 

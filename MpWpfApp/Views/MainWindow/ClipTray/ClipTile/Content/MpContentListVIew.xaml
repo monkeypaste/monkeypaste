@@ -19,13 +19,13 @@
                    VerticalAlignment="Stretch">
             <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
-                                        DataContext="{Binding PrimarySubSelectedContentItem}" />
+                                        DataContext="{Binding SelectedItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              DockPanel.Dock="Bottom"
-                                             DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel.SelectedTemplate}" />
+                                             DataContext="{Binding SelectedItem.TemplateHyperlinkCollectionViewModel.SelectedTemplate}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
-                                              DataContext="{Binding PrimarySubSelectedContentItem.TemplateHyperlinkCollectionViewModel}" />
+                                              DataContext="{Binding SelectedItem.TemplateHyperlinkCollectionViewModel}" />
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"
                                         RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"
@@ -64,7 +64,7 @@
                 <local:MpMultiSelectListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSubSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
                         <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
                         <Setter Property="HorizontalContentAlignment"

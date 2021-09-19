@@ -7,7 +7,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpViewModelBase {
+    public class MpSystemTrayViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpSystemTrayViewModel> _Lazy = new Lazy<MpSystemTrayViewModel>(() => new MpSystemTrayViewModel());
         public static MpSystemTrayViewModel Instance { get { return _Lazy.Value; } }
@@ -101,7 +101,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        private MpSystemTrayViewModel() : base() {
+        private MpSystemTrayViewModel() : base(null) {
             SettingsWindowViewModel = new MpSettingsWindowViewModel();
         }
 
@@ -172,10 +172,10 @@ namespace MpWpfApp {
             if(args is int) {
                 tabIdx = (int)args;
             } else if (args is MpClipTileViewModel) {
-                args = (args as MpClipTileViewModel).CopyItem.Source.App;
+                args = (args as MpClipTileViewModel).PrimaryItem.CopyItem.Source.App;
                 tabIdx = 1;
-            } else if (args is MpRtbItemViewModel) {
-                args = (args as MpRtbItemViewModel).CopyItem.Source.App;
+            } else if (args is MpContentItemViewModel) {
+                args = (args as MpContentItemViewModel).CopyItem.Source.App;
                 tabIdx = 1;
             }
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);

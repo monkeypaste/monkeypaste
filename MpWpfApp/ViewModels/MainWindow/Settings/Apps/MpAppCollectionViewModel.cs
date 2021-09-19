@@ -59,16 +59,16 @@ namespace MpWpfApp {
                         } else {
                             MpApp appToReject = app.App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
-                                var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                foreach (MpClipTileViewModel ctvm in clipsFromApp) {
-                                    if (ctvm.CopyItemAppId == appToReject.Id) {
-                                        clipTilesToRemove.Add(ctvm);
-                                    }
-                                }
-                                foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                                    ctrvm.Remove(ctToRemove);
-                                    ctToRemove.CopyItem.DeleteFromDatabase();
-                                }
+                                //var clipTilesToRemove = clipsFromApp.Select(x => x.ItemViewModels.Where(y => y.CopyItem.Source.AppId == appToReject.Id));
+
+                                //foreach (var ctToRemove in clipTilesToRemove) {
+                                //    ctToRemove.Parent.ItemViewModels.Remove(ctToRemove);
+                                //    if (ctr)
+                                //        ctToRemove.CopyItem.DeleteFromDatabase();
+                                //}
+
+
+                                // TODO Remove content items or empty clips above
                             }
                         }
                     }
@@ -82,10 +82,7 @@ namespace MpWpfApp {
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
                 foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                    if (ctvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
-                        ctvm.CopyItem.Source.App = this[appIdx].App;
-                    }
-                    foreach (var rtbvm in ctvm.ContentContainerViewModel.ItemViewModels) {
+                    foreach (var rtbvm in ctvm.ItemViewModels) {
                         if (rtbvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
                             rtbvm.CopyItem.Source.App = this[appIdx].App;
                         }
@@ -110,16 +107,19 @@ namespace MpWpfApp {
                         } else {
                             MpApp appToReject = dupList[0].App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
-                                var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
-                                    if (ctvm.CopyItemAppId == appToReject.Id) {
-                                        clipTilesToRemove.Add(ctvm);
-                                    }
-                                }
-                                foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                                    ctrvm.Remove(ctToRemove);
-                                    ctToRemove.CopyItem.DeleteFromDatabase();
-                                }
+                                //var clipTilesToRemove = new List<MpClipTileViewModel>();
+                                //foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
+                                //    if (ctvm.CopyItemAppId == appToReject.Id) {
+                                //        clipTilesToRemove.Add(ctvm);
+                                //    }
+                                //}
+                                //foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
+                                //    ctrvm.Remove(ctToRemove);
+                                //    ctToRemove.CopyItem.DeleteFromDatabase();
+                                //}
+
+
+                                // TODO Remove content items or empty clips above
                             }
                             appToReject.IsAppRejected = true;
                             appToReject.WriteToDatabase();
