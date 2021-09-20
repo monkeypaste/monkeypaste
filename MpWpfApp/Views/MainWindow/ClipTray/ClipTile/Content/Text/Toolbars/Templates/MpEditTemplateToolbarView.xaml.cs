@@ -35,10 +35,10 @@ namespace MpWpfApp {
         public void SetActiveRtb(RichTextBox trtb) {
             _activeRtb = trtb;
             _activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
-            var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
-            foreach(var thlvm in rtbvm.TokenCollection.Tokens) {
-                thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
-            }
+            //var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
+            //foreach(var thlvm in rtbvm.TemplateCollection.Templates) {
+            //    thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
+            //}
         }
 
         public void CancelCreate() {
@@ -74,12 +74,12 @@ namespace MpWpfApp {
         }
 
         private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
-            DataContext = sender as MpTokenViewModel;
+            DataContext = sender as MpTemplateViewModel;
             ShowToolbar();
         }
 
         private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+            var thlvm = DataContext as MpTemplateViewModel;
             if(thlvm != null) {
                 thlvm.OkCommand.Execute(null);
                 HideToolbar();
@@ -89,7 +89,7 @@ namespace MpWpfApp {
 
 
         private void TemplateNameEditorTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+            var thlvm = DataContext as MpTemplateViewModel;
             if (e.Key == Key.Escape) {
                 thlvm.CancelCommand.Execute(null);
                 e.Handled = true;
@@ -101,7 +101,7 @@ namespace MpWpfApp {
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+            var thlvm = DataContext as MpTemplateViewModel;
             if(thlvm.IsNew) {
 
             }

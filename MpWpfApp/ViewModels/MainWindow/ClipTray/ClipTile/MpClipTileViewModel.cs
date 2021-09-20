@@ -60,18 +60,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
-        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
-            get {
-                return _clipTileTitleSwirlViewModel;
-            }
-            set {
-                if (_clipTileTitleSwirlViewModel != value) {
-                    _clipTileTitleSwirlViewModel = value;
-                    OnPropertyChanged(nameof(TitleSwirlViewModel));
-                }
-            }
-        }
+        
 
         private ObservableCollection<MpContentItemViewModel> _itemViewModels;
         public ObservableCollection<MpContentItemViewModel> ItemViewModels {
@@ -159,24 +148,6 @@ using System.Speech.Synthesis;
         public double PasteTemplateToolbarHeight {
             get {
                 return MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-            }
-        }
-
-        public double TileTitleIconBorderSize {
-            get {
-                return MpMeasurements.Instance.ClipTileTitleIconBorderSize;
-            }
-        }
-
-        public double TileTitleIconInnerBorderSize {
-            get {
-                return TileTitleIconBorderSize * 0.8;
-            }
-        }
-
-        public double TileBorderMinWidth {
-            get {
-                return MpMeasurements.Instance.ClipTileBorderMinSize;
             }
         }
 
@@ -309,28 +280,9 @@ using System.Speech.Synthesis;
             }
         }
 
-        private double _tileMargin = MpMeasurements.Instance.ClipTileMargin;
-        public double TileMargin {
-            get {
-                return _tileMargin;
-            }
-            set {
-                if (_tileMargin != value) {
-                    _tileMargin = value;
-                    OnPropertyChanged(nameof(TileMargin));
-                }
-            }
-        }
-
         public double TileWidthMax {
             get {
                 return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, TotalExpandedSize.Width);
-            }
-        }
-
-        public double TitleFontSize {
-            get {
-                return MpMeasurements.Instance.ClipTileTitleFontSize;
             }
         }
 
@@ -343,13 +295,13 @@ using System.Speech.Synthesis;
                     return cs;
                 }
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
-                if (IsEditingContent) {
+                if (IsAnyEditingContent) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
-                if (IsPastingTemplate) {
+                if (IsAnyPastingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                 }
-                if (IsEditingTemplate) {
+                if (IsAnyEditingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
                 }
                 if (Count == 1) {
@@ -414,11 +366,6 @@ using System.Speech.Synthesis;
                 return new Size(
                 MpMeasurements.Instance.ClipTileContentMinWidth,
                 MpMeasurements.Instance.ClipTileContentHeight);
-                //foreach (var ivm in ItemViewModels) {
-                //    var ivs = ivm.GetExpandedSize();
-                //    ts.Width = Math.Max(ts.Width, ivs.Width);
-                //}
-                //return ts;
             }
         }
 
@@ -427,7 +374,7 @@ using System.Speech.Synthesis;
         #region Visibility        
         public Visibility DetailGridVisibility {
             get {
-                return IsEditingTemplate || IsPastingTemplate ? Visibility.Collapsed : Visibility.Visible;
+                return IsAnyEditingTemplate || IsAnyPastingTemplate ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -492,51 +439,12 @@ using System.Speech.Synthesis;
             }
         }
 
-        private Visibility _containerVisibility = Visibility.Visible;
-        public Visibility ContainerVisibility {
-            get {
-                return _containerVisibility;
-            }
-            set {
-                if (_containerVisibility != value) {
-                    _containerVisibility = value;
-                    OnPropertyChanged(nameof(ContainerVisibility));
-                }
-            }
-        }
-        public Visibility TileTitleTextBlockVisibility {
-            get {
-                if (IsEditingTitle) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
-            }
-        }
-
-        public Visibility TileTitleTextBoxVisibility {
-            get {
-                if (IsEditingTitle) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
         public Visibility TileDetectedImageItemsVisibility {
             get {
                 if (IsSelected) {
                     return Visibility.Visible;
                 }
                 return Visibility.Hidden;
-            }
-        }
-
-        public Visibility TileDetailGridVisibility {
-            get {
-                if (IsEditingContent || IsEditingTemplate || IsPastingTemplate) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
             }
         }
 
@@ -566,27 +474,16 @@ using System.Speech.Synthesis;
             }
         }
         #endregion
-        
+
         #region Brush Properties        
-        public Brush DetailTextColor {
-            get {
-                if (IsSelected) {
-                    return Brushes.DarkGray;
-                }
-                if (IsHovering) {
-                    return Brushes.DimGray;
-                }
-                return Brushes.Transparent;
-            }
-        }
 
         public Rect TileBorderBrushRect {
             get {
                 if (HeadItem == null ||
-                   !IsAnySubContextMenuOpened) {
+                   !IsAnyContextMenuOpened) {
                     return new Rect(50, 0, 50, 50);
                 }
-                if (IsAnySubContextMenuOpened) {
+                if (IsAnyContextMenuOpened) {
                     return new Rect(0, 0, 50, 50);
                 }
                 return new Rect(50, 0, 50, 50);
@@ -609,31 +506,11 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Brush TileTitleTextGridBackgroundBrush {
-            get {
-                if (IsHoveringOnTitleTextGrid && !IsEditingTitle) {
-                    return new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
-                }
-                return Brushes.Transparent;
-            }
-        }
+       
         #endregion
 
         #region Business Logic
         public string TemplateRichText { get; set; }
-
-        private bool _wasAddedAtRuntime = false;
-        public bool WasAddedAtRuntime {
-            get {
-                return _wasAddedAtRuntime;
-            }
-            set {
-                if (_wasAddedAtRuntime != value) {
-                    _wasAddedAtRuntime = value;
-                    OnPropertyChanged(nameof(WasAddedAtRuntime));
-                }
-            }
-        }
 
         public bool IsLoading {
             get {
@@ -718,95 +595,66 @@ using System.Speech.Synthesis;
             }
         }
 
-
-        private bool _isHoveringOnTitleTextGrid = false;
-        public bool IsHoveringOnTitleTextGrid {
+        public bool IsAnyContentDragging {
             get {
-                return _isHoveringOnTitleTextGrid;
-            }
-            set {
-                if (_isHoveringOnTitleTextGrid != value) {
-                    _isHoveringOnTitleTextGrid = value;
-                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
-                    OnPropertyChanged(nameof(TitleTextColor));
-                }
+                return ItemViewModels.Any(x => x.IsSubDragging);
             }
         }
 
-        private bool _isEditingTitle = false;
-        public bool IsEditingTitle {
+        public bool IsAnyContentDropping {
             get {
-                return _isEditingTitle;
-            }
-            set {
-                if (_isEditingTitle != value) {
-                    _isEditingTitle = value;
-                    OnPropertyChanged(nameof(IsEditingTitle));
-                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
-                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
-                }
+                return ItemViewModels.Any(x => x.IsSubDropping);
             }
         }
 
-        private bool _isEditingContent = false;
-        public bool IsEditingContent {
+        public bool IsAnyContextMenuOpened {
             get {
-                return _isEditingContent;
-            }
-            set {
-                if (_isEditingContent != value) {
-                    _isEditingContent = value;
-                    OnPropertyChanged(nameof(IsEditingContent));
-                    OnPropertyChanged(nameof(IsRtbReadOnly));
-                    OnPropertyChanged(nameof(HeadItem));
-                    OnPropertyChanged(nameof(TileDetailGridVisibility));
-                    OnPropertyChanged(nameof(TileContentHeight));
-                    OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
-                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-                }
+                return ItemViewModels.Any(x => x.IsContextMenuOpen);
             }
         }
 
-        private bool _isEditingTemplate = false;
-        public bool IsEditingTemplate {
+        public bool IsAnySelected {
             get {
-                return _isEditingTemplate;
-            }
-            set {
-                if (_isEditingTemplate != value) {
-                    _isEditingTemplate = value;
-                    OnPropertyChanged(nameof(IsEditingTemplate));
-                    OnPropertyChanged(nameof(TileDetailGridVisibility));
-                    OnPropertyChanged(nameof(TileContentHeight));
-                    OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
-                    OnPropertyChanged(nameof(DetailGridVisibility));
-                    OnPropertyChanged(nameof(TileDetailHeight));
-                }
+                return ItemViewModels.Any(x => x.IsSelected);
             }
         }
 
-        private bool _isPastingTemplate = false;
-        public bool IsPastingTemplate {
+        public bool HasTemplates {
             get {
-                return _isPastingTemplate;
+                return ItemViewModels.Any(x => x.HasTemplates);
             }
-            set {
-                if (_isPastingTemplate != value) {
-                    _isPastingTemplate = value;
-                    OnPropertyChanged(nameof(IsPastingTemplate));
-                    OnPropertyChanged(nameof(TileDetailGridVisibility));
-                    OnPropertyChanged(nameof(TileContentHeight));
-                    OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-                    OnPropertyChanged(nameof(DetailGridVisibility));
-                    OnPropertyChanged(nameof(TileDetailHeight));
+        }
+
+        public int Count {
+            get {
+                return ItemViewModels.Count;
+            }
+        }
+
+        public bool IsAnyEditingContent {
+            get {
+                if (Parent == null) {
+                    return false;
                 }
+                return ItemViewModels.Any(x => x.IsEditingContent);
+            }
+        }
+
+        public bool IsAnyEditingTitle {
+            get {
+                return ItemViewModels.Any(x => x.IsEditingTitle);
+            }
+        }
+
+        public bool IsAnyEditingTemplate {
+            get {
+                return ItemViewModels.Any(x => x.IsEditingTemplate);
+            }
+        }
+
+        public bool IsAnyPastingTemplate {
+            get {
+                return ItemViewModels.Any(x => x.IsPastingTemplate);
             }
         }
 
@@ -826,7 +674,7 @@ using System.Speech.Synthesis;
 
         public bool IsExpanded {
             get {
-                if (IsPastingTemplate || IsEditingTemplate || IsEditingContent) {
+                if (IsAnyPastingTemplate || IsAnyEditingTemplate || IsAnyEditingContent) {
                     return true;
                 }
                 return false;
@@ -835,7 +683,7 @@ using System.Speech.Synthesis;
 
         public bool IsRtbReadOnly {
             get {
-                return !IsEditingContent;
+                return !IsAnyEditingContent;
             }
         }
 
@@ -849,12 +697,6 @@ using System.Speech.Synthesis;
                     _lastSelectedDateTime = value;
                     OnPropertyChanged(nameof(LastSelectedDateTime));
                 }
-            }
-        }
-
-        public bool IsAnySubContextMenuOpened {
-            get {
-                return IsAnyContextMenuOpened;
             }
         }
 
@@ -873,21 +715,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        //private bool _isPrimarySelected = false;
-        //public bool IsPrimarySelected {
-        //    get {
-        //        return _isPrimarySelected;
-        //    }
-        //    set {
-        //        if (_isPrimarySelected != value) {
-        //            _isPrimarySelected = value;
-        //            OnPropertyChanged(nameof(IsPrimarySelected));
-        //            OnPropertyChanged(nameof(TileBorderBrush));
-        //            OnPropertyChanged(nameof(TileBorderBrushRect));
-        //        }
-        //    }
-        //}
-
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -895,13 +722,11 @@ using System.Speech.Synthesis;
             }
             set {
                 if (_isSelected != value) {
-                    // && (!MpClipTrayViewModel.Instance.IsAnyTileExpanded || IsExpanded || (!IsExpanded && value == false))) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.SelectedClipTiles));
                     OnPropertyChanged(nameof(ToolTipVisibility));
                     OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(DetailTextColor));
+                   //OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
@@ -920,7 +745,7 @@ using System.Speech.Synthesis;
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(DetailTextColor));
+                    //OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
@@ -945,74 +770,14 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Model
-        //public BitmapSource CopyItemFavIcon {
-        //    get {
-        //        if (CopyItemUrlDomain == null) {
-        //            return null;
-        //        }
-        //        return CopyItemUrlDomain.FavIcon.IconImage.ImageBase64.ToBitmapSource();
-        //    }
-        //    set {
-        //        if (CopyItemUrlDomain != null) {
-        //            CopyItemUrlDomain.FavIcon.IconImage.ImageBase64 = value.ToBase64String();
-        //            CopyItemUrlDomain.FavIcon.IconImage.WriteToDatabase();
-        //            OnPropertyChanged(nameof(CopyItemFavIcon));
-        //            OnPropertyChanged(nameof(AppIcon));
-
-        //            OnPropertyChanged(nameof(TileTitleIconSize));
-        //            OnPropertyChanged(nameof(TileTitleIconBorderSize));
-        //        }
-        //    }
-        //}
-
-        public string DetailText {
+        public DateTime CopyItemCreatedDateTime {
             get {
-                if (HeadItem == null) {
-                    return string.Empty;
+                if (PrimaryItem == null) {
+                    return DateTime.MinValue;
                 }
-                _detailIdx++;
-                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                    _detailIdx = 1;
-                }
-                // TODO this should aggregate details over all sub items 
-                return PrimaryItem.GetDetail((MpCopyItemDetailType)_detailIdx);
+                return PrimaryItem.CopyItemCreatedDateTime;
             }
         }
-
-        public int LineCount { get; set; }
-
-        public int CharCount { get; set; }
-
-        public int FileCount { get; set; }
-
-        public double DataSizeInMb { get; set; }
-
-        public Brush TitleBackgroundColor {
-            get {
-                if (PrimaryItem.CopyItem == null) {
-                    return Brushes.Transparent;
-                }
-                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(PrimaryItem.CopyItem.ItemColor));
-            }
-            set {
-                if (PrimaryItem.CopyItem != null && PrimaryItem.CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
-                    PrimaryItem.CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    PrimaryItem.CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(TitleBackgroundColor));
-                }
-            }
-        }
-
-        public Brush TitleTextColor {
-            get {
-                if (IsHoveringOnTitleTextGrid) {
-                    return Brushes.DarkGray;
-                }
-                return Brushes.White;
-            }
-        }
-
-
         #endregion
 
         #endregion
@@ -1029,7 +794,6 @@ using System.Speech.Synthesis;
         public MpClipTileViewModel(bool isPlaceholder) : this() {
             if (isPlaceholder) {
                 IsBusy = true;
-                //PrimaryItem.CopyItem = null;
             }
         }
 
@@ -1084,7 +848,7 @@ using System.Speech.Synthesis;
                         ctvm.LastSelectedDateTime = DateTime.Now;
                         OnTileSelected?.Invoke(this, null);
                     } else {
-                        ctvm.ClearSubSelection();
+                        ctvm.ClearClipSelection();
                         ctvm.LastSelectedDateTime = DateTime.MaxValue;
 
                         //multi-select label stuff (disabled)
@@ -1115,23 +879,15 @@ using System.Speech.Synthesis;
                         //_detailIdx = 1;
                     }
                     break;
-                case nameof(ctvm.IsEditingContent):
-                    if (ctvm.IsEditingContent) {
-                        MainWindowViewModel.ExpandClipTile(this);
-                    } else {
-                        ctvm.SaveToDatabase();
-                        MainWindowViewModel.ShrinkClipTile(this);
-                    }
-                    break;
-                case nameof(ctvm.IsEditingTemplate):
-                    if (ctvm.IsEditingTemplate) {
+                case nameof(ctvm.IsAnyEditingTemplate):
+                    if (ctvm.IsAnyEditingTemplate) {
                         ctvm.TileContentHeight += ctvm.TileDetailHeight;
                     } else {
                         ctvm.TileContentHeight -= ctvm.TileDetailHeight;
                     }
                     break;
-                case nameof(ctvm.IsPastingTemplate):
-                    if (ctvm.IsPastingTemplate) {
+                case nameof(ctvm.IsAnyPastingTemplate):
+                    if (ctvm.IsAnyPastingTemplate) {
                         ctvm.TileContentHeight += ctvm.TileDetailHeight;
                     } else {
                         ctvm.TileContentHeight -= ctvm.TileDetailHeight;
@@ -1164,22 +920,17 @@ using System.Speech.Synthesis;
         #region Loading Initializers
         public void InitContent(MpCopyItem ci) {
             if (ci == null) {
-                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
-                //CopyItem = null;
                 IsBusy = true;
                 return;
             }
             if (ci.Id == 0 && !MpMainWindowViewModel.IsMainWindowLoading) {
-                //ci.WriteToDatabase();
                 IsBusy = true;
-                _wasAddedAtRuntime = true;
             }
 
             OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
 
             Initialize(ci);
 
-            TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
             OnPropertyChanged(nameof(PrimaryItem));
@@ -1317,7 +1068,7 @@ using System.Speech.Synthesis;
             SaveToDatabase();
 
             //IsBusy = false;
-            ClearSubSelection();
+            ClearClipSelection();
             RequestUiUpdate();
             MpClipTrayViewModel.Instance.Refresh();
         }
@@ -1381,7 +1132,13 @@ using System.Speech.Synthesis;
         public void ClearClipSelection() {
             IsSelected = false;
             LastSelectedDateTime = DateTime.MaxValue;
-            ClearSubSelection();
+            ClearSubClipSelection();
+        }
+
+        public void ClearEditing() {
+            foreach(var ivm in ItemViewModels) {
+                ivm.ClearEditing();
+            }
         }
 
         public void SaveToDatabase() {
@@ -1389,7 +1146,7 @@ using System.Speech.Synthesis;
             sw.Start();
 
             TextSelection rtbSelection = null;
-            if (SelectedItems.Count == 1 && IsEditingContent) {
+            if (SelectedItems.Count == 1 && IsAnyEditingContent) {
                 //rtbSelection = ContentContainerViewModel.SubSelectedContentItems[0].Rtb.Selection;
                 MonkeyPaste.MpConsole.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
             }
@@ -1438,9 +1195,9 @@ using System.Speech.Synthesis;
                 if (SelectedItems.Count == 0) {
                     SubSelectAll();
                 }
-                bool isPastingTemplate = SelectedItems.Any(x => x.HasTokens);
+                bool isPastingTemplate = SelectedItems.Any(x => x.HasTemplates);
                 if (isPastingTemplate) {
-                    IsPastingTemplate = true;
+                    SelectedItems.Where(x => x.HasTemplates).Select(y => y.IsPastingTemplate = true);
                     TemplateRichText = string.Empty.ToRichText();
                     if (!MpMainWindowViewModel.IsMainWindowOpen) {
                         MainWindowViewModel.ShowWindowCommand.Execute(null);
@@ -1465,14 +1222,14 @@ using System.Speech.Synthesis;
                 sw.Start();
                 string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in SelectedItems) {
-                    if (rtbvm.HasTokens) {
+                    if (rtbvm.HasTemplates) {
                         rtbvm.IsSelected = true;
                         //(ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.SubSelectedRtbViewModel = rtbvm as MpContentItemViewModel;
                         //(ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
                         string rtbvmrtf = rtbvm.TemplateRichText;
                         rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
                         //rtbvm.TemplateRichText = string.Empty;
-                        rtbvm.TokenCollection.ResetAll();
+                        rtbvm.TemplateCollection.ResetAll();
                     } else {
                         rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
                     }
@@ -1524,14 +1281,6 @@ using System.Speech.Synthesis;
             }
             if (!isMerge) {
                 foreach (var rtbvm in ItemViewModels) {
-                    //remove any shortcuts associated with clip
-                    var scvmToRemoveList = new List<MpShortcutViewModel>();
-                    foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList()) {
-                        scvmToRemoveList.Add(scvmToRemove);
-                    }
-                    foreach (var scvmToRemove in scvmToRemoveList) {
-                        MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-                    }
                     rtbvm.CopyItem.DeleteFromDatabase();
                 }
             }
@@ -1592,62 +1341,7 @@ using System.Speech.Synthesis;
 
         #region State
 
-        public bool IsAnyContentDragging {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDragging);
-            }
-        }
-
-        public bool IsAnyContentDropping {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDropping);
-            }
-        }
-
-        public bool IsAnyContextMenuOpened {
-            get {
-                return ItemViewModels.Any(x => x.IsContextMenuOpen);
-            }
-        }
-
-        public bool IsAnySelected {
-            get {
-                return ItemViewModels.Any(x => x.IsSelected);
-            }
-        }
-
-        public bool HasTokens {
-            get {
-                return ItemViewModels.Any(x => x.HasTokens);
-            }
-        }
-
-        public int Count {
-            get {
-                return ItemViewModels.Count;
-            }
-        }
-
-        public bool IsAnyEditingContent {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                return ItemViewModels.Any(x => x.IsEditingContent);
-            }
-        }
-
-        public bool IsAnyEditingTitle {
-            get {
-                return ItemViewModels.Any(x => x.IsEditingTitle);
-            }
-        }
-
-        public bool IsAnyPastingTemplate {
-            get {
-                return ItemViewModels.Any(x => x.IsPastingTemplate);
-            }
-        }
+       
         #endregion
 
         #endregion
@@ -1719,7 +1413,7 @@ using System.Speech.Synthesis;
         }
 
         public void ResetSubSelection(List<MpContentItemViewModel> origSel = null) {
-            ClearSubSelection();
+            ClearClipSelection();
             if (VisibleItems.Count > 0) {
                 if (origSel == null) {
                     VisibleItems[0].IsSelected = true;
@@ -1736,7 +1430,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public void ClearSubSelection() {
+        public void ClearSubClipSelection() {
             foreach (var ivm in ItemViewModels) {
                 ivm.IsSelected = false;
             }
@@ -1781,7 +1475,15 @@ using System.Speech.Synthesis;
                 }
             }
         }
-
+        public void UpdateSortOrder(bool fromModel = false) {
+            if (fromModel) {
+                ItemViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
+            } else {
+                foreach (var ivm in ItemViewModels) {
+                    ivm.CopyItem.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                }
+            }
+        }
 
         public void RemoveRange(List<MpCopyItem> models) {
             for (int i = 0; i < models.Count; i++) {
@@ -1803,6 +1505,19 @@ using System.Speech.Synthesis;
         //public abstract string GetItemPlainText();
         //public abstract string GetItemQuillHtml();
         //public abstract string[] GetItemFileList();
+
+        #region Protected Methods
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem ci) {
+                var ivm = ItemViewModels.Where(x => x.CopyItem.Id == ci.Id).FirstOrDefault();
+                if(ivm != null) {
+                    ItemViewModels.Remove(ivm);
+                    UpdateSortOrder();
+                }
+            }
+        }
+        #endregion
+
 
         #region Private Methods
         private void MpContentContainerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -1919,63 +1634,10 @@ using System.Speech.Synthesis;
                    SelectedItems.Count <= 1;
         }
         private void EditTitle() {
-            if (SelectedItems.Count == 0) {
-                IsEditingTitle = !IsEditingTitle;
-            } else {
-                SelectedItems[0].EditSubTitleCommand.Execute(null);
-            }
+
+            PrimaryItem.EditSubTitleCommand.Execute(null);
         }
 
-        private RelayCommand _editContentCommand;
-        public ICommand EditContentCommand {
-            get {
-                if (_editContentCommand == null) {
-                    _editContentCommand = new RelayCommand(EditContent, CanEditContent);
-                }
-                return _editContentCommand;
-            }
-        }
-        private bool CanEditContent() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                return false;
-            }
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                   MpClipTrayViewModel.Instance.SelectedClipTiles[0].IsTextItem;
-        }
-        private void EditContent() {
-            if (!IsEditingContent) {
-                IsEditingContent = true;
-            }
-            if (SelectedItems.Count == 0) {
-                ItemViewModels[0].IsSelected = true;
-            }
-            SelectedItems[0].EditSubContentCommand.Execute(null);
-        }
-
-
-        private RelayCommand<object> _toggleEditSubSelectedItemCommand;
-        public ICommand ToggleEditSubSelectedItemCommand {
-            get {
-                if (_toggleEditSubSelectedItemCommand == null) {
-                    _toggleEditSubSelectedItemCommand = new RelayCommand<object>(ToggleEditSubSelectedItem, CanToggleEditSubSelectedItem);
-                }
-                return _toggleEditSubSelectedItemCommand;
-            }
-        }
-        private bool CanToggleEditSubSelectedItem(object args) {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                return false;
-            }
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                   SelectedItems.Count == 1;
-        }
-        private void ToggleEditSubSelectedItem(object args) {
-            var selectedRtbvm = SelectedItems[0];
-            if (!IsEditingContent) {
-                IsEditingContent = true;
-            }
-            selectedRtbvm.IsSelected = true;
-        }
 
         private RelayCommand _selectNextItemCommand;
         public ICommand SelectNextItemCommand {
@@ -1992,7 +1654,7 @@ using System.Speech.Synthesis;
         }
         private void SelectNextItem() {
             var maxItem = SelectedItems.Max(x => VisibleItems.IndexOf(x));
-            ClearSubSelection();
+            ClearClipSelection();
             VisibleItems[maxItem + 1].IsSelected = true;
         }
 
@@ -2010,7 +1672,7 @@ using System.Speech.Synthesis;
         }
         private void SelectPreviousItem() {
             var minItem = SelectedItems.Min(x => VisibleItems.IndexOf(x));
-            ClearSubSelection();
+            ClearClipSelection();
             VisibleItems[minItem - 1].IsSelected = true;
         }
 
@@ -2024,7 +1686,7 @@ using System.Speech.Synthesis;
             }
         }
         private void SelectAll() {
-            ClearSubSelection();
+            ClearClipSelection();
             foreach (var ctvm in VisibleItems) {
                 ctvm.IsSelected = true;
             }
@@ -2121,7 +1783,7 @@ using System.Speech.Synthesis;
                         DispatcherPriority.Normal,
                         (Action)(() => {
                             var tempSelectedClipTiles = SelectedItems;
-                            ClearSubSelection();
+                            ClearClipSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
                                 ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), 0);
@@ -2164,7 +1826,7 @@ using System.Speech.Synthesis;
                         DispatcherPriority.Normal,
                         (Action)(() => {
                             var tempSelectedClipTiles = SelectedItems;
-                            ClearSubSelection();
+                            ClearClipSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
                                 ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), ItemViewModels.Count - 1);
@@ -2216,7 +1878,7 @@ using System.Speech.Synthesis;
                 lastSelectedClipTileIdx = VisibleItems.IndexOf(ct);
                 ItemViewModels.Remove(ct);
             }
-            ClearSubSelection();
+            ClearClipSelection();
             if (VisibleItems.Count > 0) {
                 if (lastSelectedClipTileIdx <= 0) {
                     VisibleItems[0].IsSelected = true;
@@ -2297,7 +1959,7 @@ using System.Speech.Synthesis;
         }
         private void InvertSubSelection() {
             var sctvml = SelectedItems;
-            ClearSubSelection();
+            ClearClipSelection();
             foreach (var vctvm in VisibleItems) {
                 if (!sctvml.Contains(vctvm)) {
                     vctvm.IsSelected = true;
@@ -2364,7 +2026,7 @@ using System.Speech.Synthesis;
         }
         private void DuplicateSubSelectedClips() {
             var tempSubSelectedRtbvml = SelectedItems;
-            ClearSubSelection();
+            ClearClipSelection();
             foreach (var srtbvm in tempSubSelectedRtbvml) {
                 var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
                 clonedCopyItem.WriteToDatabase();

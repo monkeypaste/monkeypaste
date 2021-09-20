@@ -106,7 +106,7 @@ namespace MpWpfApp {
             var rtbvm = DataContext as MpContentItemViewModel;
             if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
                 if (rtbvm.IsEditingContent ||
-                  (rtbvm.HostClipTileViewModel.IsExpanded && rtbvm.Parent.Count == 1)) {
+                  (rtbvm.Parent.IsExpanded && rtbvm.Parent.Count == 1)) {
                     //cannot resort w/ only 1 item and its relative location is not clear
                     //since its isolated
                     return;
@@ -234,7 +234,7 @@ namespace MpWpfApp {
             var rtbvm = DataContext as MpContentItemViewModel;
 
             rtbvm.IsContextMenuOpen = false;
-            rtbvm.Parent.ClearSubSelection();
+            rtbvm.Parent.ClearClipSelection();
         }
 
         #endregion

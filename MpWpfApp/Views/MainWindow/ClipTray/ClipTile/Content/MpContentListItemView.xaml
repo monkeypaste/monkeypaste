@@ -15,7 +15,7 @@
               Loaded="ContentListItemView_Loaded"
               DataContextChanged="ContentListItemView_DataContextChanged"
               DataContext="{Binding}"
-              Focusable="{Binding HostClipTileViewModel.IsExpanded}"
+              Focusable="{Binding Parent.IsExpanded}"
               Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
               MouseEnter="ContentListItemView_MouseEnter"
@@ -47,7 +47,7 @@
                         <MenuItem Header="_Edit Content"
                                   Tag="20"
                                   Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding PlacementTarget.Tag.RtbItemCollectionViewModel.ToggleEditSubSelectedItemCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
+                                  Command="{Binding PlacementTarget.Tag.EditSubSelectedItemCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
                         <MenuItem Header="_Rename"
                                   Tag="21"
                                   Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -192,7 +192,7 @@
                                  DataContext="{Binding}" />
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="{Binding IsSubHovering, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Visibility="Hidden"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Background="LightYellow"
@@ -205,7 +205,7 @@
                     <ToolTip x:Name="ClipTileTooltip"
                              Visibility="{Binding PlacementTarget.DataContext.SubItemToolTipVisibility, RelativeSource={RelativeSource Self}}"
                              Placement="Top"
-                             HorizontalOffset="{Binding PlacementTarget.DataContext.HostClipTileViewModel.TileBorderWidth, RelativeSource={RelativeSource Self}}">
+                             HorizontalOffset="{Binding PlacementTarget.DataContext.Parent.TileBorderWidth, RelativeSource={RelativeSource Self}}">
                         <ToolTip.Template>
                             <ControlTemplate>
                                 <Border Background="White"

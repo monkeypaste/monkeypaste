@@ -9,7 +9,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpClipTileTitleSwirlViewModel : MpViewModelBase<MpClipTileViewModel> {
+    public class MpClipTileTitleSwirlViewModel : MpViewModelBase<MpContentItemViewModel> {
         #region Private Variables
 
         #endregion
@@ -94,8 +94,8 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
-        public MpClipTileTitleSwirlViewModel(MpClipTileViewModel ctvm) : base(ctvm) {
-            var icon = Parent.HeadItem.CopyItem.Source.App.Icon;
+        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel ctvm) : base(ctvm) {
+            var icon = Parent.CopyItem.Source.App.Icon;
             var cl = new List<string>() { icon.HexColor1, icon.HexColor2, icon.HexColor3, icon.HexColor4, icon.HexColor5 };
             var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(cl);
             for (int i = 0; i < randomColorList.Count; i++) {

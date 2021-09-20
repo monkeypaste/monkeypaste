@@ -23,7 +23,7 @@ namespace MpWpfApp {
         Euros,
         Yen
     }    
-    public class MpTokenViewModel : MpViewModelBase<MpTokenCollectionViewModel>, ICloneable {
+    public class MpTemplateViewModel : MpViewModelBase<MpTemplateCollectionViewModel>, ICloneable {
         #region Private Variables
         private MpCopyItemTemplate _originalModel;
         #endregion
@@ -39,23 +39,7 @@ namespace MpWpfApp {
                 return Parent.HostClipTileViewModel;
             }
         }
-        private MpTokenCollectionViewModel _hostTemplateCollectionViewModel = null;
-        public MpTokenCollectionViewModel Parent {
-            get {
-                return _hostTemplateCollectionViewModel;
-            }
-            set {
-                if (_hostTemplateCollectionViewModel != value) {
-                    _hostTemplateCollectionViewModel = value;
-                    OnPropertyChanged(nameof(Parent));
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
-                    OnPropertyChanged(nameof(TemplateName));
-                    OnPropertyChanged(nameof(TemplateDisplayName));
-                }
-            }
-        }
+
         #endregion
 
         #region Layout Properties        
@@ -65,7 +49,7 @@ namespace MpWpfApp {
         public Cursor TemplateTextBlockCursor {
             get {
                 if(Parent != null && 
-                  (HostClipTileViewModel.IsEditingContent || HostClipTileViewModel.IsEditingTemplate)) {
+                  (HostClipTileViewModel.IsAnyEditingContent || HostClipTileViewModel.IsAnyEditingTemplate)) {
                     return Cursors.Hand;
                 }
                 return Cursors.Arrow;
@@ -93,7 +77,7 @@ namespace MpWpfApp {
 
         public bool IsValid {
             get {
-                return !string.IsNullOrEmpty(ValidationText);
+                return string.IsNullOrEmpty(ValidationText);
             }
         }
         #endregion
@@ -242,7 +226,7 @@ namespace MpWpfApp {
 
         public string TemplateDisplayValue {
             get {
-                if (HostClipTileViewModel.IsPastingTemplate && 
+                if (HostClipTileViewModel.IsAnyPastingTemplate && 
                     HasText) {
                     return TemplateText;
                 }
@@ -376,8 +360,8 @@ namespace MpWpfApp {
         public event EventHandler OnTemplateSelected;
 
         #region Public Methods
-        public MpTokenViewModel() : base(null) { }
-        public MpTokenViewModel(MpTokenCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
+        public MpTemplateViewModel() : base(null) { }
+        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsSelected):
@@ -394,15 +378,14 @@ namespace MpWpfApp {
         }
 
         public bool Validate() {
-            Parent.Parent.SaveToDatabase();
-
             if (string.IsNullOrEmpty(TemplateName.Trim())) {
                 ValidationText = "Name cannot be empty!";
                 return false;
             }
 
             string pt = Parent.Parent.CopyItem.ItemData.ToPlainText();
-            if (pt.Contains(TemplateName)) {
+            if (pt.Contains(TemplateName) || 
+                Parent.Templates.Any(x=>x.TemplateName == TemplateName && x != this)) {
                 ValidationText = $"{TemplateName} must have a unique name";
                 return false;
             }
@@ -430,8 +413,6 @@ namespace MpWpfApp {
 
                         IsSelected = true;
                         IsEditingTemplate = true;
-
-                        HostClipTileViewModel.IsEditingTemplate = true;
                     },
                     () => {
                         if (HostClipTileViewModel == null) {
@@ -478,6 +459,7 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
+                        Parent.Parent.RequestSyncModels();
                         CopyItemTemplate.WriteToDatabase();
                         IsEditingTemplate = false;
                         IsSelected = false;
@@ -533,7 +515,7 @@ namespace MpWpfApp {
         //}
 
         public object Clone() {
-            var nthlvm = new MpTokenViewModel(Parent, CopyItemTemplate);
+            var nthlvm = new MpTemplateViewModel(Parent, CopyItemTemplate);
             nthlvm.TemplateText = TemplateText;
             return nthlvm;
         }

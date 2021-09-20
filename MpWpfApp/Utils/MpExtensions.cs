@@ -474,14 +474,14 @@ namespace MpWpfApp {
                 if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
                     linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                 } else {
-                    var thlvm = (MpTokenViewModel)hl.DataContext;
+                    var thlvm = (MpTemplateViewModel)hl.DataContext;
                     linkText = thlvm.TemplateName;
                 }
                 hl.Inlines.Clear();
                 new Span(new Run(linkText), hl.ElementStart);
             }
             var rtbvm = rtb.DataContext as MpContentItemViewModel;
-            rtbvm.TokenCollection.Tokens.Clear();
+            rtbvm.TemplateCollection.Templates.Clear();
             if (rtbSelection != null) {
                 rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
@@ -550,8 +550,9 @@ namespace MpWpfApp {
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = rtb.GetTemplates().Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
-                                                                                                                                      //CopyItem.GetTemplateByName(matchRange.Text);
-                                hl = MpTemplateHyperlink.Create(matchRange, copyItemTemplate);                              
+                                matchRange.Text = string.Empty;
+                                var thlvm = rtbvm.TemplateCollection.AddItem(copyItemTemplate);                                                                                                      //CopyItem.GetTemplateByName(matchRange.Text);
+                                hl = new MpTemplateHyperlink(matchRange, thlvm);                              
                             } else {
                                 var matchRun = new Run(matchRange.Text);
                                 matchRange.Text = "";
@@ -566,13 +567,13 @@ namespace MpWpfApp {
                                 }
                                 MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
                                 hl.MouseEnter += (s3, e3) => {
-                                    hl.Cursor = rtbvm.HostClipTileViewModel.IsSelected ? Cursors.Hand : Cursors.Arrow;
+                                    hl.Cursor = rtbvm.Parent.IsSelected ? Cursors.Hand : Cursors.Arrow;
                                 };
                                 hl.MouseLeave += (s3, e3) => {
                                     hl.Cursor = Cursors.Arrow;
                                 };
                                 hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if (hl.NavigateUri != null && rtbvm.HostClipTileViewModel.IsSelected) {
+                                    if (hl.NavigateUri != null && rtbvm.Parent.IsSelected) {
                                         MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
@@ -723,6 +724,7 @@ namespace MpWpfApp {
                 return new List<Hyperlink>();
             }
             var rtbSelection = rtb?.Selection;
+
             var hlList = new List<Hyperlink>();
             for (TextPointer position = rtb.Document.ContentStart;
                 position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;

@@ -122,7 +122,6 @@ namespace MpWpfApp {
             set {
                 if(_isBusy != value) {
                     _isBusy = value;
-                    //Application.Current.MainWindow.Cursor = IsBusy ? Cursors.Wait : Cursors.Arrow;
                     OnPropertyChanged(nameof(IsBusy));
                 }
             }            
@@ -134,8 +133,6 @@ namespace MpWpfApp {
                 return _designMode;
             }
         }
-
-        private static bool _osBinding = false;
 
         private string _name = string.Empty;
         public string Name {
@@ -170,12 +167,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public void RaisePropertyChanged(params string[] propertyNames) {
-            foreach (var propertyName in propertyNames) {
-                OnPropertyChanged(propertyName);
-                //_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
         #endregion
 
         #region Protected Methods
@@ -189,29 +180,23 @@ namespace MpWpfApp {
             MpDb.Instance.SyncDelete += Instance_SyncDelete;
         }
 
+        #region Db Events
+
         protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) {
             
         }
 
-        protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) {
-            
-        }
+        protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) {  }
 
-        protected virtual void Instance_SyncAdd(object sender, MpDbSyncEventArgs e) {
-            
-        }
+        protected virtual void Instance_SyncAdd(object sender, MpDbSyncEventArgs e) { }
 
-        protected virtual void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            
-        }
+        protected virtual void Instance_OnItemDeleted(object sender, MpDbModelBase e) { }
 
-        protected virtual void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            
-        }
+        protected virtual void Instance_OnItemUpdated(object sender, MpDbModelBase e) { }
 
-        protected virtual void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            
-        }
+        protected virtual void Instance_OnItemAdded(object sender, MpDbModelBase e) { }
+
+        #endregion
 
         #endregion
 

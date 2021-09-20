@@ -18,8 +18,8 @@
                  Stretch="Fill">
             <Canvas x:Name="TitleSwirlCanvas"
                     Visibility="Visible"
-                    Width="{Binding ClipTileViewModel.TileBorderMinWidth}"
-                    Height="{Binding ClipTileViewModel.TileTitleHeight}"
+                    Width="{local:MpMeasurementsBinding ClipTileBorderMinSize, Mode=OneWay}"
+                    Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     DataContext="{Binding TitleSwirlViewModel}">
@@ -111,11 +111,11 @@
               Background="{Binding TileTitleTextGridBackgroundBrush}">
             <!-- Clip Title TextBlock -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
-                       Text="{Binding CopyItemTitle}"
-                       FontSize="{Binding TitleFontSize}"
+                       Text="{Binding CopyItem.Title}"
+                       FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize, Mode=OneWay}"
                        Foreground="White"
                        Background="Transparent"
-                       Visibility="{Binding TileTitleTextBlockVisibility}">
+                       Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityFlipConverter}}">
                     <!--<TextBlock.Effect>
                         <DropShadowEffect ShadowDepth="0.5"
                                             Direction="300"
@@ -132,29 +132,29 @@
                      Foreground="Black"
                      FontSize="20"
                      IsReadOnly="False"
-                     Visibility="{Binding TileTitleTextBoxVisibility}"
-                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
+                     Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Text="{Binding CopyItem.Title, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
+            
         </Grid>
         <Image x:Name="ClipTileAppIconHighlightedBorderImage"
                Grid.Column="1"
                HorizontalAlignment="Left"
                Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                Stretch="Fill"
-               Visibility="{Binding AppIconHighlightBorderVisibility}"
-               Width="{Binding TileTitleIconBorderSize}"
-               Height="{Binding TileTitleIconBorderSize}"></Image>
+               Visibility="Hidden"
+               Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"
+               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"></Image>
         <!-- Clip Title Icon Image -->
         <Grid Grid.Column="1" >
             <Button x:Name="ClipTileAppIconImageButton"
                     MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                     MouseLeave="ClipTileAppIconImageButton_MouseLeave"
-                    PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"
-                    
+                    PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"                    
                     Style="{StaticResource Transparent_Button}"
-                    Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
+                    Visibility="Visible"
                     Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
-                    HorizontalAlignment="Left"
-                    Margin="5,0,0,0"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,20,0"
                     VerticalAlignment="Center"
                     RenderTransformOrigin="0.5,0.5"
                     Background="Transparent"

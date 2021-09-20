@@ -10,9 +10,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox HorizontalAlignment="Center"
              VerticalAlignment="Center"
-             Visibility="{Binding LoadingSpinnerVisibility}"
-             Width="{Binding LoadingSpinnerSize}"
-             Height="{Binding LoadingSpinnerSize}">
+             Width="{local:MpMeasurementsBinding ClipTileLoadingSpinnerSize,Mode=OneWay}"
+             Height="{local:MpMeasurementsBinding ClipTileLoadingSpinnerSize,Mode=OneWay}">
         <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
                                      VerticalAlignment="Center" />
     </Viewbox>

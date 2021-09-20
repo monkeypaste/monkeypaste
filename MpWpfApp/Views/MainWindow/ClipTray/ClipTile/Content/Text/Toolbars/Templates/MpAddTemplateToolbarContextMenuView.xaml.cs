@@ -32,7 +32,7 @@ namespace MpWpfApp {
         }
 
         private void AddTemplateContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var tc = (Rtb.DataContext as MpContentItemViewModel).TokenCollection.Tokens;
+            var tc = (Rtb.DataContext as MpContentItemViewModel).TemplateCollection.Templates;
 
             var mil = new List<MenuItem>();
             foreach(var thvm in tc) {
@@ -60,19 +60,19 @@ namespace MpWpfApp {
         }
 
         private void Template_Click(object sender, RoutedEventArgs e) {
-            var thlcvm = DataContext as MpTokenCollectionViewModel;
+            var thlcvm = DataContext as MpTemplateCollectionViewModel;
             Rtb.Focus();
 
             var mi = sender as MenuItem;
             if(mi.DataContext == null) {
                 //when clicking add new
                 var thl = MpTemplateHyperlink.Create(Rtb.Selection,null);
-                var thlvm = thl.DataContext as MpTokenViewModel;
+                var thlvm = thl.DataContext as MpTemplateViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
-            } else if(mi.DataContext is MpTokenViewModel thlvm) {
+            } else if(mi.DataContext is MpTemplateViewModel thlvm) {
                 //when clicking a pre-existing template
                 var nthl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
-                var nthlvm = nthl.DataContext as MpTokenViewModel;
+                var nthlvm = nthl.DataContext as MpTemplateViewModel;
                 nthlvm.EditTemplateCommand.Execute(null);
             }
         }
@@ -83,10 +83,10 @@ namespace MpWpfApp {
                 return;
             }
             var rtbvm = Rtb.DataContext as MpContentItemViewModel;
-            if(rtbvm.TokenCollection.Tokens.Count == 0) {
+            if(rtbvm.TemplateCollection.Templates.Count == 0) {
                 //when no templates exist create a new default one
                 var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
-                var thlvm = thl.DataContext as MpTokenViewModel;
+                var thlvm = thl.DataContext as MpTemplateViewModel;
                 thlvm.EditTemplateCommand.Execute(null);
             } else {
                 //otherwise show template menu

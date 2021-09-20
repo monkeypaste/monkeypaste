@@ -277,6 +277,15 @@ namespace MonkeyPaste {
         #endregion
 
         #region User Properties
+
+        public DateTime StartupDateTime {
+            get {
+                return _prefIo.Get(nameof(StartupDateTime), DateTime.MinValue);
+            }
+            set {
+                _prefIo.Set(nameof(StartupDateTime), value);
+            }
+        }
         public string UserCultureInfoName {
             get {
                 return _prefIo.Get(nameof(UserCultureInfoName), string.Empty);

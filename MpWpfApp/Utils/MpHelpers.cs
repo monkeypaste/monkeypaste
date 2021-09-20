@@ -2424,7 +2424,7 @@ namespace MpWpfApp {
         public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
             using (MemoryStream stream = new MemoryStream()) {
-                range.Save(stream, DataFormats.XamlPackage);
+                range.Save(stream, DataFormats.Xaml);
                 //return ASCIIEncoding.Default.GetString(stream.ToArray());
                 return UTF8Encoding.Default.GetString(stream.ToArray());
             }

@@ -277,7 +277,7 @@ namespace MpWpfApp {
                                     bool hasSubLink = false;
                                     foreach (var rtbvm in ctvm.ItemViewModels) {
                                         if (newTagTile.IsLinked(rtbvm)) {
-                                            rtbvm.HostClipTileViewModel.ItemVisibility = Visibility.Visible;
+                                            rtbvm.Parent.ItemVisibility = Visibility.Visible;
                                             rtbvm.ItemVisibility = Visibility.Visible;
                                             hasSubLink = true;
                                         }

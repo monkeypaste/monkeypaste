@@ -73,7 +73,7 @@ namespace MpWpfApp {
             var rtblbvm = DataContext as MpClipTileViewModel;
             // NOTE This is for selection changed from interface from VM is in another handler
             var srtb = (sender as FrameworkElement).GetVisualDescendent<RichTextBox>();
-            if(srtb != null && rtblbvm.Parent.IsEditingContent) {
+            if(srtb != null && rtblbvm.PrimaryItem.IsEditingContent) {
                 EditToolbarView.SetActiveRtb(srtb);
                 EditTemplateView.SetActiveRtb(srtb);
                 PasteTemplateView.SetActiveRtb(srtb);
@@ -108,7 +108,7 @@ namespace MpWpfApp {
         private void MpRtbEditToolbarView_OnTileUnexpand(object sender, EventArgs e) {
             EditToolbarView.Visibility = Visibility.Collapsed;
 
-            var rtbcvm = DataContext as MpContentItemViewModel;
+            var rtbcvm = DataContext as MpClipTileViewModel;
             rtbcvm.SaveToDatabase();
             // TODO save models here
         }

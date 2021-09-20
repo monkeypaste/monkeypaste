@@ -27,7 +27,7 @@ namespace MpWpfApp {
         public void SetActiveRtb(RichTextBox trtb) {
             _activeRtb = trtb;
             var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
-            foreach (var thlvm in rtbvm.TokenCollection.Tokens) {
+            foreach (var thlvm in rtbvm.TemplateCollection.Templates) {
                 thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
             }
         }

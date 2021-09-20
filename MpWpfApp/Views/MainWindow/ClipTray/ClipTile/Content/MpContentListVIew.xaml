@@ -13,7 +13,6 @@
     <AdornerDecorator>
         <DockPanel x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                   Visibility="{Binding HostClipTileViewModel.RtbVisibility}"
                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                    HorizontalAlignment="Stretch"                   
                    VerticalAlignment="Stretch">
@@ -22,10 +21,10 @@
                                         DataContext="{Binding SelectedItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              DockPanel.Dock="Bottom"
-                                             DataContext="{Binding SelectedItem.TemplateHyperlinkCollectionViewModel.SelectedTemplate}" />
+                                             DataContext="{Binding SelectedItem.TemplateCollection.SelectedTemplate}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
-                                              DataContext="{Binding SelectedItem.TemplateHyperlinkCollectionViewModel}" />
+                                              DataContext="{Binding SelectedItem.TemplateCollection}" />
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"
                                         RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"

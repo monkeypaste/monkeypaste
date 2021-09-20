@@ -29,25 +29,25 @@ namespace MpWpfApp {
         }
 
         private void ClipTileTitleTextGrid_MouseEnter(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             Application.Current.MainWindow.Cursor = Cursors.IBeam;
             ctvm.IsHoveringOnTitleTextGrid = true;
         }
 
         private void ClipTileTitleTextGrid_MouseLeave(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             Application.Current.MainWindow.Cursor = Cursors.Arrow;
             ctvm.IsHoveringOnTitleTextGrid = false;
         }
 
         private void ClipTileTitleTextGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             ctvm.IsEditingTitle = true;
             e.Handled = true;
         }
 
         private void ClipTileTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             if (ClipTileTitleTextBox.Visibility == Visibility.Collapsed) {
                 return;
             }
@@ -58,23 +58,23 @@ namespace MpWpfApp {
         }
 
         private void ClipTileTitleTextBox_LostFocus(object sender, RoutedEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             ctvm.IsEditingTitle = false;
         }
 
         private void ClipTileTitleTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Enter || e.Key == Key.Escape) {
                 ctvm.IsEditingTitle = false;
             }
         }
 
         private void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             if (MpClipTrayViewModel.Instance.IsScrolling) {
                 return;
             }
-            if (ctvm.IsEditingTemplate || ctvm.IsPastingTemplate) {
+            if (ctvm.Parent.IsExpanded) {
                 return;
             }
             double t = 100;
@@ -104,13 +104,11 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            if (MpClipTrayViewModel.Instance.IsScrolling || ctvm.IsContextMenuOpened) {
+            var ctvm = DataContext as MpContentItemViewModel;
+            if (MpClipTrayViewModel.Instance.IsScrolling || ctvm.Parent.IsContextMenuOpened || ctvm.Parent.IsExpanded) {
                 return;
             }
-            if (ctvm.IsEditingTemplate || ctvm.IsPastingTemplate) {
-                return;
-            }
+
             double fromScale = 1.15;
             double toScale = 1;
             double st = 300;
@@ -126,16 +124,16 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconImageButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
+            var ctvm = DataContext as MpContentItemViewModel;
             //MpHelpers.Instance.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();
             ctvm.IsSelected = true;
             foreach (var vctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
-                if (vctvm.ItemViewModels.Any(x=>x.CopyItem.Source.AppId != ctvm.PrimaryItem.CopyItem.Source.AppId)) {
+                if (vctvm.ItemViewModels.Any(x=>x.CopyItem.Source.AppId != ctvm.CopyItem.Source.AppId)) {
                     bool hasSubItemWithApp = false;
                     if (vctvm.ItemViewModels.Count > 1) {
                         foreach (var vrtbvm in vctvm.ItemViewModels) {
-                            if (vrtbvm.CopyItem.Source.App.Id != ctvm.PrimaryItem.CopyItem.Source.AppId) {
+                            if (vrtbvm.CopyItem.Source.App.Id != ctvm.CopyItem.Source.AppId) {
                                 vrtbvm.ItemVisibility = Visibility.Collapsed;
                             } else {
                                 hasSubItemWithApp = true;

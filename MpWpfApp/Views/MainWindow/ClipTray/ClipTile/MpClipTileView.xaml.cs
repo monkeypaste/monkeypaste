@@ -139,7 +139,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
 
             if (!ctvm.IsSelected) {
-                ctvm.IsEditingTitle = false;
+                ctvm.ClearEditing();
             }
         }
         #endregion
@@ -320,7 +320,7 @@ namespace MpWpfApp {
             }
             if (wasDropped) {
                 MpClipTrayViewModel.Instance.ClearAllDragDropStates();
-                ctvm.ClearSubSelection();
+                ctvm.ClearClipSelection();
             }
             e2.Handled = true;
             rtblbv?.UpdateAdorners();

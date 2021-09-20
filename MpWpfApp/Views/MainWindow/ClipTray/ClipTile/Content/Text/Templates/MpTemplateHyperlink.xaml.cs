@@ -54,19 +54,18 @@ namespace MpWpfApp {
 
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
             var rtbvm = rtb.DataContext as MpContentItemViewModel;
-            var thcvm = rtbvm.TokenCollection;
+            var thcvm = rtbvm.TemplateCollection;
 
             bool newCit = cit == null;
 
-            MpTokenViewModel thlvm = thcvm.AddItem(cit);
+            MpTemplateViewModel thlvm = thcvm.AddItem(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
-            
+
             if(newCit) {
                 nthl.IsNew = true;
                 nthl.NewStartPointer = startPointer;
                 nthl.NewOriginalText = origText;
-
 
                 var ettbv = rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
                 ettbv.SetActiveRtb(rtb);
@@ -81,34 +80,43 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private MpTemplateHyperlink(TextRange tr, MpTokenViewModel thlvm) : base(tr.Start,tr.End) {
+        public MpTemplateHyperlink(TextRange tr, MpTemplateViewModel thlvm) : base(tr.Start,tr.End) {
             DataContext = thlvm;
+
+            var rtbv = tr.Start.Parent.FindParentOfType<MpRtbView>();
+            rtbv.AddTemplate(thlvm, this);
             InitializeComponent();
+
         }       
         
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
-            if (thlvm != null) {
-                var thlcvm = thlvm.Parent;
-                if (thlcvm != null) {
-                    thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
-                }
-            }
+            //var thlvm = DataContext as MpTemplateViewModel;
+            //if (thlvm != null) {
+            //    var thlcvm = thlvm.Parent;
+            //    if (thlcvm != null) {
+            //        thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
+            //    }
+            //}
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+            var thlvm = DataContext as MpTemplateViewModel;
             thlvm.IsHovering = true;
         }
 
         private void Hyperlink_MouseLeave(object sender, MouseEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+            var thlvm = DataContext as MpTemplateViewModel;
             thlvm.IsHovering = false;
         }
 
-        private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var thlvm = DataContext as MpTokenViewModel;
+        private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {            
+            var thlvm = DataContext as MpTemplateViewModel;
             thlvm.IsSelected = true;
+
+            var rtb = this.FindParentOfType<RichTextBox>();
+            var ettbv = rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
+            ettbv.DataContext = thlvm;
+            ettbv.ShowToolbar();
         }
     }
 }

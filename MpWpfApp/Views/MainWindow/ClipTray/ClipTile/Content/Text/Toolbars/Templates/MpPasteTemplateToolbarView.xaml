@@ -13,7 +13,7 @@
             CornerRadius="5"
             BorderThickness="0"
             Background="LightBlue"
-            Visibility="{Binding HostClipTileViewModel.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}">
+            Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}">
         <Grid x:Name="PasteTemplateToolbarGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />

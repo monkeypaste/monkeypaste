@@ -13,8 +13,8 @@
     <Border x:Name="ClipTileEditorToolbar"
             Loaded="ClipTileEditorToolbar_Loaded"
             Background="OldLace"
-            Height="{Binding HostClipTileViewModel.EditRichTextBoxToolbarHeight}"
-            Width="{Binding HostClipTileViewModel.TileContentWidth}"
+            Height="{local:MpMeasurementsBinding ClipTileEditToolbarHeight, Mode=OneWay}"
+            Width="{Binding Parent.TileContentWidth}"
             BorderThickness="0,0,0,1"
             BorderBrush="OldLace">
         <StackPanel Orientation="Horizontal">

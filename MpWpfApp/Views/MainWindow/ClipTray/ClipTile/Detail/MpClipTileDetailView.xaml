@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border Grid.Row="2"
-            Visibility="{Binding DetailGridVisibility}"
             Background="Transparent"
             BorderThickness="0,0,0,0"
             BorderBrush="LightGray">
@@ -28,9 +27,8 @@
                     ToolTip="{Binding HotkeyIconTooltip}"
                     Margin="0,-5,2,0"
                     Command="{Binding AssignHotkeyCommand}"
-                    Visibility="{Binding ToggleEditModeButtonVisibility}"
                     Template="{StaticResource SearchButtonControlTemplate}">
-                <Image Source="{Binding HotkeyIconSource}" />
+                <Image Source="{Binding HotkeyIconSource, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
             </Button>
             <TextBlock x:Name="ClipTileTitleDetailTextBlock"
                        Grid.Column="1"
@@ -45,7 +43,6 @@
                           Width="20"
                           Height="20"
                           Margin="0,-5,2,0"
-                          Visibility="{Binding ToggleEditModeButtonVisibility}"
                           IsChecked="{Binding IsEditingContent}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/edit.png" />

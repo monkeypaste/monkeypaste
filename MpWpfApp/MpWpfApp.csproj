@@ -222,8 +222,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpIContentCommands.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTokenCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTokenViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Selector\MpContentTemplateSelector.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />

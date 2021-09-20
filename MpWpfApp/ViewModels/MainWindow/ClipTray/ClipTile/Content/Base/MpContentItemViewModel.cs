@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AsyncAwaitBestPractices.MVVM;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -26,20 +27,30 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpClipTileViewModel HostClipTileViewModel {
+
+        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
+        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
             get {
-                return Parent.Parent as MpClipTileViewModel;
-            }
-        }
-        private MpTokenCollectionViewModel _tokenCollection;
-        public MpTokenCollectionViewModel TokenCollection {
-            get {
-                return _tokenCollection;
+                return _clipTileTitleSwirlViewModel;
             }
             set {
-                if (_tokenCollection != value) {
-                    _tokenCollection = value;
-                    OnPropertyChanged(nameof(TokenCollection));
+                if (_clipTileTitleSwirlViewModel != value) {
+                    _clipTileTitleSwirlViewModel = value;
+                    OnPropertyChanged(nameof(TitleSwirlViewModel));
+                }
+            }
+        }
+
+
+        private MpTemplateCollectionViewModel _templateCollection;
+        public MpTemplateCollectionViewModel TemplateCollection {
+            get {
+                return _templateCollection;
+            }
+            set {
+                if (_templateCollection != value) {
+                    _templateCollection = value;
+                    OnPropertyChanged(nameof(TemplateCollection));
                 }
             }
         }
@@ -72,13 +83,106 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Appearance
+        public Brush DetailTextColor {
+            get {
+                if (IsSelected) {
+                    return Brushes.DarkGray;
+                }
+                if (IsHovering) {
+                    return Brushes.DimGray;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush TileTitleTextGridBackgroundBrush {
+            get {
+                if (IsHoveringOnTitleTextGrid && !IsEditingTitle) {
+                    return new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush TitleBackgroundColor {
+            get {
+                if (CopyItem == null) {
+                    return Brushes.Transparent;
+                }
+                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(CopyItem.ItemColor));
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
+                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(TitleBackgroundColor));
+                }
+            }
+        }
+
+        public Brush TitleTextColor {
+            get {
+                if (IsHoveringOnTitleTextGrid) {
+                    return Brushes.DarkGray;
+                }
+                return Brushes.White;
+            }
+        }
+
+        #endregion
+
+        #region Visibility 
+
+        public Visibility TileDetailGridVisibility {
+            get {
+                if (Parent.IsAnyEditingContent || Parent.IsAnyEditingTemplate || Parent.IsAnyPastingTemplate) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+
+        #endregion
+
         #region Layout
 
         #endregion
 
-        public string TemplateRichText { get; set; }
-
         #region State
+
+        public bool WasAddedAtRuntime {
+            get {
+                if(CopyItem == null) {
+                    return true;
+                }
+                return MpPreferences.Instance.StartupDateTime < CopyItem.CopyDateTime;
+            }
+        }
+
+        public Cursor RtbCursor {
+            get {
+                if(IsEditingContent) {
+                    return Cursors.IBeam;
+                }
+                return Cursors.Arrow;
+            }
+        }
+        private bool _isHoveringOnTitleTextGrid = false;
+        public bool IsHoveringOnTitleTextGrid {
+            get {
+                return _isHoveringOnTitleTextGrid;
+            }
+            set {
+                if (_isHoveringOnTitleTextGrid != value) {
+                    _isHoveringOnTitleTextGrid = value;
+                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged(nameof(TitleTextColor));
+                }
+            }
+        }
+
         private int _detailIdx = 1;
         public int DetailIdx {
             get {
@@ -113,13 +217,31 @@ namespace MpWpfApp {
         public bool IsContextMenuOpen { get; set; } = false;
 
         public bool IsEditingContent { get; set; } = false;
+        public bool IsEditingTemplate {
+            get {
+                return TemplateCollection.Templates.Any(x => x.IsEditingTemplate);
+            }
+        }
         public bool IsPastingTemplate { get; set; } = false;
-        public bool IsEditingTitle { get; set; } = false;
+
+        private bool _isEditingTitle = false;
+        public bool IsEditingTitle {
+            get {
+                return _isEditingTitle;
+            }
+            set {
+                if (_isEditingTitle != value) {
+                    _isEditingTitle = value;
+                    OnPropertyChanged(nameof(IsEditingTitle));
+                     OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                }
+            }
+        }
 
         public bool HasModelChanged { get; set; } = false;
-        public bool HasTokens {
+        public bool HasTemplates {
             get {
-                return TokenCollection.Tokens.Count > 0;
+                return TemplateCollection.Templates.Count > 0;
             }
         }
 
@@ -133,6 +255,24 @@ namespace MpWpfApp {
 
         #endregion
 
+        #endregion
+
+        #region Business Logic
+        public string TemplateRichText { get; set; }
+
+        public string DetailText {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                _detailIdx++;
+                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                    _detailIdx = 1;
+                }
+                // TODO this should aggregate details over all sub items 
+                return GetDetail((MpCopyItemDetailType)_detailIdx);
+            }
+        }
         #endregion
 
         #region Icons
@@ -152,15 +292,33 @@ namespace MpWpfApp {
             }
         }
 
+        //public BitmapSource HotkeyIconSource {
+        //    get {
+        //        if (string.IsNullOrEmpty(ShortcutKeyString)) {
+        //            return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png"));
+        //        }
+        //        return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystickactive.png"));
+        //    }
+        //}
+
         #endregion
 
         #region Model
         public bool IsCompositeChild {
             get {
-                if (CopyItem == null || Parent == null) {
+                if (CopyItem == null || base.Parent == null) {
                     return false;
                 }
-                return CopyItem.CompositeParentCopyItemId > 0 || Parent.Count > 1;
+                return CopyItem.CompositeParentCopyItemId > 0 || base.Parent.Count > 1;
+            }
+        }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                if(CopyItem == null) {
+                    return DateTime.MinValue;
+                }
+                return CopyItem.CopyDateTime;
             }
         }
 
@@ -211,8 +369,8 @@ namespace MpWpfApp {
 
 
         public event EventHandler<bool> OnUiResetRequest;
-        public event EventHandler OnClearTokensRequest;
-        public event EventHandler OnCreateTokensRequest;
+        public event EventHandler OnClearTemplatesRequest;
+        public event EventHandler OnCreateTemplatesRequest;
         public event EventHandler OnSyncModels;
         #endregion
 
@@ -224,7 +382,8 @@ namespace MpWpfApp {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
             CopyItem = ci;
 
-            TokenCollection = new MpTokenCollectionViewModel(this);
+            TemplateCollection = new MpTemplateCollectionViewModel(this);
+            TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
         }
 
         public async Task GatherAnalytics() {
@@ -280,11 +439,11 @@ namespace MpWpfApp {
         }
 
         public void RequestClearHyperlinks() {
-            OnClearTokensRequest?.Invoke(this, null);
+            OnClearTemplatesRequest?.Invoke(this, null);
         }
 
         public void RequestCreateHyperlinks() {
-            OnCreateTokensRequest?.Invoke(this, null);
+            OnCreateTemplatesRequest?.Invoke(this, null);
         }
 
         public void Resize(Rect newSize) {
@@ -300,7 +459,7 @@ namespace MpWpfApp {
         }
 
         public Size GetUnexpandedSize() {
-            double h = Parent.ItemViewModels.Count > 1 ?
+            double h = base.Parent.ItemViewModels.Count > 1 ?
                             MpMeasurements.Instance.RtbCompositeItemMinHeight :
                             MpMeasurements.Instance.ClipTileContentHeight;
 
@@ -398,6 +557,15 @@ namespace MpWpfApp {
             MouseDownPosition = new Point();
         }
 
+        public void ClearEditing() {
+            IsEditingContent = false;
+            IsEditingTitle = false;
+            TemplateCollection.ClearAllEditing();
+            if(IsPastingTemplate) {
+                IsPastingTemplate = false;
+                MainWindowViewModel.ShrinkClipTile(Parent);                
+            }
+        }
 
         public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
@@ -483,45 +651,35 @@ namespace MpWpfApp {
                         OnSubSelected?.Invoke(this, null);
                     }
                     break;
+                case nameof(IsEditingContent):
+                    if(IsEditingContent) {
+                        MainWindowViewModel.ExpandClipTile(Parent);
+                    } else {
+                        Parent.SaveToDatabase();
+                        MainWindowViewModel.ShrinkClipTile(Parent);
+                    }
+                    break;
             }
         }
 
         #endregion
 
         #region Commands
-        private RelayCommand _editSubTitleCommand;
-        public ICommand EditSubTitleCommand {
-            get {
-                if (_editSubTitleCommand == null) {
-                    _editSubTitleCommand = new RelayCommand(EditSubTitle, CanEditSubTitle);
-                }
-                return _editSubTitleCommand;
-            }
-        }
-        private bool CanEditSubTitle() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                return false;
-            }
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                   Parent.SelectedItems.Count == 1;
-        }
-        private void EditSubTitle() {
-            IsEditingTitle = !IsEditingTitle;
-        }
+        
 
         public ICommand EditSubContentCommand {
             get {
                 return new RelayCommand(
                     () => {
                         if (!IsEditingContent) {
-                            Parent.IsEditingContent = true;
-                            Parent.ClearSubSelection();
+                            Parent.ClearEditing();
+                            Parent.ClearClipSelection();
                             IsSelected = true;
                         }
                     },
                     () => {
                         return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
-                               Parent.SelectedItems.Count == 1;
+                               base.Parent.SelectedItems.Count == 1;
                     });
             }
         }
@@ -608,8 +766,8 @@ namespace MpWpfApp {
         }
         private void PasteSubItem() {
             MpClipTrayViewModel.Instance.ClearClipSelection();
-            Parent.IsSelected = true;
-            Parent.ClearSubSelection();
+            base.Parent.IsSelected = true;
+            base.Parent.ClearClipSelection();
             IsSelected = true;
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
@@ -623,7 +781,6 @@ namespace MpWpfApp {
                 return _assignHotkeyToSubSelectedItemCommand;
             }
         }
-
         private void AssignHotkeyToSubSelectedItem() {
             ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
                 this,
@@ -631,7 +788,40 @@ namespace MpWpfApp {
                 ShortcutKeyString,
                  MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItem.Id);
         }
-        #endregion
 
+        public ICommand RefreshDocumentCommand {
+            get {
+                return new RelayCommand(
+                    ()=> {
+                        RequestSyncModels();
+                    },
+                    ()=> {
+                        return true;// HasModelChanged
+                    });
+            }
+        }
+
+        
+
+        private RelayCommand _editSubTitleCommand;
+        public ICommand EditSubTitleCommand {
+            get {
+                if (_editSubTitleCommand == null) {
+                    _editSubTitleCommand = new RelayCommand(EditSubTitle, CanEditSubTitle);
+                }
+                return _editSubTitleCommand;
+            }
+        }
+        private bool CanEditSubTitle() {
+            if (MpMainWindowViewModel.IsMainWindowLoading) {
+                return false;
+            }
+            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+                   base.Parent.SelectedItems.Count == 1;
+        }
+        private void EditSubTitle() {
+            IsEditingTitle = !IsEditingTitle;
+        }
+        #endregion
     }
 }

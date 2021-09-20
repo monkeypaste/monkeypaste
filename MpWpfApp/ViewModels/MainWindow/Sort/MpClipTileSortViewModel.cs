@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase<object> {

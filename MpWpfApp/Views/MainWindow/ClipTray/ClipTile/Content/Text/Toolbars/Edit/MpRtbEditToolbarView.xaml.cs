@@ -112,13 +112,13 @@ namespace MpWpfApp {
 
             //disable add template button if current selection intersects with a template
             //this may not be necessary since templates are inlineuicontainers...
-            MpTokenViewModel thlvm = null;
+            MpTemplateViewModel thlvm = null;
             if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTokenViewModel)) {
-                    thlvm = (MpTokenViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTokenViewModel)) {
-                    thlvm = (MpTokenViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
+                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
+                    thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
+                    thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
                 }
             }
             if (thlvm == null) {
@@ -183,7 +183,7 @@ namespace MpWpfApp {
             var colorContextMenu = new ContextMenu();
 
             var rtbetbvm = DataContext as MpContentItemViewModel;
-            var hctvm = rtbetbvm.HostClipTileViewModel;
+            var hctvm = rtbetbvm.Parent;
             
 
             colorContextMenu.Items.Add(colorMenuItem);

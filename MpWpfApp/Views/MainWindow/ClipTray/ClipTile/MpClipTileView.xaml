@@ -72,10 +72,6 @@
                                 Y="0"
                                 x:Name="ClipTileBorderTranslateTransform" />
         </local:MpClipBorder.RenderTransform>
-        <local:MpClipBorder.Resources>
-            <local:MpBindingProxy x:Key="ClipTileProxy"
-                                  Data="{Binding}" />
-        </local:MpClipBorder.Resources>
         <local:MpClipBorder.ContextMenu>
             <ContextMenu x:Name="ClipTile_ContextMenu">
                 <i:Interaction.Triggers>
@@ -256,10 +252,8 @@
                                                       BlurRadius="7" />
                                 </local:MpClipBorder.Effect>-->
         <Grid x:Name="ClipTileBorderGrid"
-              Background="#FF3D3D3D"
-              Visibility="{Binding ContainerVisibility}">
-            <DockPanel Background="White"
-                  Visibility="{Binding ContentVisibility}">
+              Background="#FF3D3D3D">
+            <DockPanel Background="White">
                 <!-- Tile Title Canvas -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
                                            DockPanel.Dock="Top"
@@ -269,16 +263,17 @@
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
                                             Height="{local:MpMeasurementsBinding ClipTileDetailHeight, Mode=OneWay}"
+                                            Visibility="{Binding TileDetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!-- Content Container Canvas -->
                 <local:MpContentListView DataContext="{Binding}" />               
                 
             </DockPanel>
-            <!-- Overlays -->            
-            <!-- Trial Expired -->
-            <local:MpClipTileTrialExpiredOverlay DataContext="{Binding}" />
+            <!-- Overlays -->
             <!-- Loading Spinner -->
-            <local:MpClipTileLoadingOverlayView DataContext="{Binding}" />
+            <local:MpClipTileLoadingOverlayView Visibility="{local:MpSettingBinding IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <!-- Trial Expired -->
+            <local:MpClipTileTrialExpiredOverlay Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </local:MpClipBorder>
 </UserControl>

@@ -101,7 +101,7 @@ namespace MpWpfApp {
                         vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
                     } else {
                         vdict.Add(HostClipTileViewModel, Visibility.Visible);
-                        foreach(var rtbvm in Parent.Parent.ItemViewModels) {
+                        foreach(var rtbvm in Parent.ItemViewModels) {
                             vdict.Add(rtbvm, Visibility.Visible);
                         }
                     }
@@ -122,7 +122,7 @@ namespace MpWpfApp {
                     } else if(!vdict.ContainsKey(HostClipTileViewModel)) {
                         vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
                     }
-                    foreach(var rtbvm in Parent.Parent.ItemViewModels) {
+                    foreach(var rtbvm in Parent.ItemViewModels) {
                         //this loop adds any unmatched rtbvm's to the dictionary so they are collapsed
                         if(!vdict.ContainsKey(rtbvm)) {
                             vdict.Add(rtbvm, Visibility.Collapsed);

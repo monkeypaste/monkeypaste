@@ -1,5 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,32 +20,65 @@ namespace MpWpfApp {
     /// Interaction logic for Mpxaml
     /// </summary>
     public partial class MpRtbView : UserControl {
-        public MpRtbView() {
-            InitializeComponent();            
-        }
-        
+        public Dictionary<int, List<Hyperlink>> TemplateLookUp = new Dictionary<int, List<Hyperlink>>();
 
+        public MpRtbView() {
+            InitializeComponent();
+            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
+        }      
 
         public void SyncModels() {
             var rtbvm = DataContext as MpContentItemViewModel;
             
             //clear any search highlighting when saving the document then restore after save
-            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
+            rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
 
-            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
-            
-            Rtb.ClearHyperlinks();
+            rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
+
+            ClearHyperlinks();
+
+            var test = Rtb.Document.ToRichText();
 
             rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
+            rtbvm.CopyItem.WriteToDatabase();
 
             Rtb.CreateHyperlinks();
 
-            rtbvm.HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
+            rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
 
             var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
             if (scvml.Count > 0) {
                 rtbvm.ShortcutKeyString = scvml[0].KeyString;
             }
+        }
+
+        public void AddTemplate(MpTemplateViewModel thlvm,MpTemplateHyperlink hl) {
+            if (!TemplateLookUp.ContainsKey(thlvm.CopyItemTemplateId)) {
+                TemplateLookUp.Add(thlvm.CopyItemTemplateId, new List<Hyperlink> { hl });
+            } else {
+                TemplateLookUp[thlvm.CopyItemTemplateId].Add(hl);
+            }
+        }
+
+        public void RemoveTemplate(MpTemplateViewModel thlvm, MpTemplateHyperlink hl) {
+            if (TemplateLookUp.ContainsKey(thlvm.CopyItemTemplateId)) {
+                TemplateLookUp[thlvm.CopyItemTemplateId].Remove(hl);
+                if (TemplateLookUp[thlvm.CopyItemTemplateId].Count == 0) {
+                    TemplateLookUp.Remove(thlvm.CopyItemTemplateId);
+                }
+            }
+        }
+
+        private void ClearHyperlinks() {
+            foreach (var kvp in TemplateLookUp) {
+                foreach(var hl in kvp.Value) {
+                    var thlvm = (MpTemplateViewModel)hl.DataContext;
+                    hl.Inlines.Clear();
+                    new Span(new Run(thlvm.TemplateName), hl.ElementStart);
+                }
+            }
+            TemplateLookUp.Clear();
+            Rtb.ClearHyperlinks();
         }
 
 
@@ -53,11 +87,11 @@ namespace MpWpfApp {
                 rtbivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
                 rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                 rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
-                rtbivm.OnClearTokensRequest += Rtbivm_OnClearHyperlinksRequest;
-                rtbivm.OnCreateTokensRequest += Rtbivm_OnCreateHyperlinksRequest;
+                rtbivm.OnClearTemplatesRequest += Rtbivm_OnClearHyperlinksRequest;
+                rtbivm.OnCreateTemplatesRequest += Rtbivm_OnCreateHyperlinksRequest;
                 rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
 
-                if (rtbivm.HostClipTileViewModel.WasAddedAtRuntime) {
+                if (rtbivm.WasAddedAtRuntime) {
                     //force new items to have left alignment
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
