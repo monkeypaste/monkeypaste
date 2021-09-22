@@ -104,8 +104,12 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpPasteToAppPathViewModelCollection() {
+            
+        }
+
+        public void Init() {
             MpRunningApplicationManager.Instance.PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):
                         _menuItemViewModels = null;
                         OnPropertyChanged(nameof(MenuItemViewModels));
@@ -113,7 +117,7 @@ namespace MpWpfApp {
                 }
             };
 
-            foreach(var ptap in MpPasteToAppPath.GetAllPasteToAppPaths()) {
+            foreach (var ptap in MpPasteToAppPath.GetAllPasteToAppPaths()) {
                 this.Add(new MpPasteToAppPathViewModel(ptap));
             }
         }

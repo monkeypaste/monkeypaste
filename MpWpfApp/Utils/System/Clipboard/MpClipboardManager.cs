@@ -41,6 +41,9 @@ namespace MpWpfApp {
 
         public bool IgnoreClipboardChangeEvent { get; set; }
 
+        public MpCopyHelper Copy { get; private set; }
+        public MpPasteHelper Paste { get; private set; }
+
         private HwndSourceHook hook;
         private HwndSource hwndSource;
         private IntPtr _nextClipboardViewer;
@@ -65,10 +68,42 @@ namespace MpWpfApp {
             IgnoreClipboardChangeEvent = true;
             _nextClipboardViewer = WinApi.SetClipboardViewer(hwndSource.Handle);
             IgnoreClipboardChangeEvent = false;
+
+            Copy = new MpCopyHelper();
+            Paste = new MpPasteHelper();
         }
 
         public event EventHandler ClipboardChanged;
         protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
+
+        public void CopyItemsToClipboard(List<MpCopyItem> cil, params object[] formatOrder) {
+            if (formatOrder.Length == 0) {
+                if (cil.All(x => x.ItemType == MpCopyItemType.Image)) {
+                    formatOrder = new object[] {
+                        DataFormats.Bitmap
+                    };
+                } else {
+                    formatOrder = new object[] {
+                        DataFormats.Rtf,
+                        DataFormats.Text
+                    };
+                }
+            }
+            IDataObject ido = new DataObject();
+            foreach (string format in formatOrder) {
+                if (format == DataFormats.FileDrop) {
+                    ido.SetData(format, MpCopyItemMerger.Instance.MergeFilePaths(cil));
+                } else if (format == DataFormats.Bitmap) {
+                    ido.SetData(format, MpCopyItemMerger.Instance.MergeBitmaps(cil));
+                } else if (format == DataFormats.Rtf) {
+                    ido.SetData(format, MpCopyItemMerger.Instance.MergeRtf(cil));
+                } else if (format == DataFormats.Text) {
+                    ido.SetData(format, MpCopyItemMerger.Instance.MergePlainText(cil));
+                }
+            }
+
+            SetDataObject(ido);
+        }
 
         public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
             //Mouse.OverrideCursor = Cursors.Wait;
@@ -98,7 +133,9 @@ namespace MpWpfApp {
         }
 
         public void SetDataObject(IDataObject dataObject) {
-            Clipboard.SetDataObject(dataObject, true);
+            MpHelpers.Instance.RunOnMainThread(() => {
+                Clipboard.SetDataObject(dataObject, true);
+            });            
         }
 
         private IDictionary<string, object> GetClipboardData() {

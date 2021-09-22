@@ -75,14 +75,12 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                MpHelpers.Instance.RunOnMainThread((Action)(() => {
-                    if (_isSelected != value || MpClipTrayViewModel.Instance.IsFilteringByApp) {
-                        _isSelected = value;
-                        OnPropertyChanged(nameof(IsSelected));
-                        OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                        OnPropertyChanged(nameof(TagTextColor));
-                    }
-                }));
+                if (_isSelected != value) {// || MpClipTrayViewModel.Instance.IsFilteringByApp) {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
+                }
             }
         }
 

@@ -34,6 +34,8 @@ namespace MpWpfApp {
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null) {
+                MpPasteToAppPathViewModelCollection.Instance.Init();
+
                 MpShortcutCollectionViewModel.Instance.Init();
 
                 MpSoundPlayerGroupCollectionViewModel.Instance.Init();

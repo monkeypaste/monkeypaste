@@ -150,5 +150,28 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            if(civm.IsEditingContent) {
+                e.Handled = false;
+                return;
+            }
+            ContextMenu = new MpContentContextMenuView() { DataContext = civm };
+            ContextMenu.IsOpen = true;
+            e.Handled = true;
+        }
+
+        private void Rtb_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            if (civm.IsEditingContent) {
+                e.Handled = false;
+                return;
+            }
+            var ctv = this.GetVisualAncestor<MpClipTileView>();
+            if(ctv != null) {
+                ctv.ClipTileClipBorder_PreviewMouseUp(sender, e);
+            }
+        }
     }
 }

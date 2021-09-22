@@ -168,6 +168,7 @@
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
+    <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
     <Compile Include="Utils\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
@@ -181,9 +182,11 @@
     <Compile Include="Utils\RESTful\JsonObjects\MpImageAnalysis.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
+    <Compile Include="Utils\System\Clipboard\MpClipboardManager.cs" />
+    <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
-    <Compile Include="Utils\System\MpPasteManager.cs" />
+    <Compile Include="Utils\System\Clipboard\MpCopyHelper.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
@@ -194,7 +197,6 @@
     <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
     <Compile Include="Utils\RESTful\MpMinifyUrl.cs" />
     <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />
-    <Compile Include="Utils\System\MpClipboardManager.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\System\MpScreenInformation.cs" />
@@ -292,6 +294,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpPasteTemplateToolbarView.xaml.cs">
       <DependentUpon>MpPasteTemplateToolbarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Context\MpContentContextMenuView.xaml.cs">
+      <DependentUpon>MpContentContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Detail\MpClipTileDetailView.xaml.cs">
       <DependentUpon>MpClipTileDetailView.xaml</DependentUpon>
@@ -415,6 +420,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpPasteTemplateToolbarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Context\MpContentContextMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

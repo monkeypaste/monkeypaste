@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows.Input;
+using System.Windows;
 
 namespace MpWpfApp {
-    class MpPasteManager {
+    public class MpCopyHelper {
+        
+
+
         //SelectedClipTilesMergedPlainText
         //SelectedClipTilesCsv
 

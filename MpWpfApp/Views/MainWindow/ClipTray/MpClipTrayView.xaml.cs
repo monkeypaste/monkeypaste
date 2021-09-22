@@ -23,6 +23,9 @@ namespace MpWpfApp {
         public MpLineAdorner ClipTrayAdorner;
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
+        private int _remainingItems = int.MaxValue;
+        private int _headIdx = 0;
+
         public MpClipTrayView() {
             InitializeComponent();
 
@@ -32,15 +35,23 @@ namespace MpWpfApp {
         }
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
+            ctrvm.OnTilesChanged += Ctrvm_OnTilesChanged;
+
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += (s,e1) => ctrvm.AddItemFromClipboard();
 
+            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
             if (MpPreferences.Instance.IsInitialLoad) {
                 ctrvm.InitIntroItems();
             }
 
             ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
+        }
+
+        private void Ctrvm_OnTilesChanged(object sender, object e) {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
         }
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
@@ -243,6 +254,22 @@ namespace MpWpfApp {
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
             ClipTray?.ScrollIntoView(e);
+        }
+
+        private void ClipTray_ScrollChanged(object sender, ScrollChangedEventArgs e) {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+
+            int leftIdx = -1;
+            for (int i = 0; i < ClipTray.Items.Count; i++) {                
+                var lbir = ClipTray.GetListBoxItemRect(i,true);
+                if(lbir.Right < 0) {
+                    _remainingItems--;
+                    leftIdx = i + 1;
+                }
+            }
+            if(_remainingItems <= 1 && !MpMainWindowViewModel.IsMainWindowLoading) {
+               // ctrvm.RefreshClips(true, "CopyDateTime", leftIdx, MpMeasurements.Instance.TotalVisibleClipTiles * 2);
+            }
         }
     }
 }

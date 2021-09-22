@@ -378,15 +378,17 @@ namespace MpWpfApp {
         }
 
         public bool Validate() {
-            if (string.IsNullOrEmpty(TemplateName.Trim())) {
-                ValidationText = "Name cannot be empty!";
-                return false;
+            if(IsNew) {
+                string pt = Parent.Parent.CopyItem.ItemData.ToPlainText();
+                if (pt.Contains(TemplateName) ||
+                    Parent.Templates.Any(x => x.TemplateName == TemplateName && x != this)) {
+                    ValidationText = $"{TemplateName} must have a unique name";
+                    return false;
+                }
             }
 
-            string pt = Parent.Parent.CopyItem.ItemData.ToPlainText();
-            if (pt.Contains(TemplateName) || 
-                Parent.Templates.Any(x=>x.TemplateName == TemplateName && x != this)) {
-                ValidationText = $"{TemplateName} must have a unique name";
+            if (string.IsNullOrEmpty(TemplateName.Trim())) {
+                ValidationText = "Name cannot be empty!";
                 return false;
             }
 

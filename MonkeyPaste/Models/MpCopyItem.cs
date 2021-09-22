@@ -131,6 +131,7 @@ namespace MonkeyPaste {
             if (ci == null || ci.Id == 0) {
                 return new List<MpCopyItem>();
             }
+            //return MpDb.Instance.Query<MpCopyItem>(@"SELECT * FROM MpCopyItem WHERE fk_ParentCopyItemId=? ORDER BY CompositeSortOrderIdx", ci.Id);
             return MpDb.Instance.GetItems<MpCopyItem>().Where(x => x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx).ToList();
         }
 
@@ -161,19 +162,27 @@ namespace MonkeyPaste {
             int tagId,
             int start,
             int count,
-            string sortColumn = "pk_MpCopyItemId",
+            string sortColumn = "CopyDateTime",
             bool isDescending = false) {
             List<MpCopyItem> result = new List<MpCopyItem>();
 
             switch(tagId) {
                 case MpTag.AllTagId:
-                    result = MpDb.Instance.Query<MpCopyItem>(
-                            @"SELECT * from MpCopyItem " +
-                            "ORDER BY ? " + (isDescending ? "DESC" : "ASC") +
-                            " LIMIT ? OFFSET ?",
-                            sortColumn,
-                            count,
-                            start);
+                    if (isDescending) {
+                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                  select ci)
+                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    } else {
+                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                  select ci)
+                                 .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    }
                     break;
                 case MpTag.RecentTagId:
                     sortColumn = "CopyDateTime";
@@ -197,14 +206,22 @@ namespace MonkeyPaste {
 
                 default:
                     if (isDescending) {
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                 .OrderByDescending(x => x.CopyDateTime)
+                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                  from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                  where ci.Id == cit.CopyItemId &&
+                                        tagId == cit.TagId
+                                  select ci)
+                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                  .Take(count)
                                  .Skip(start)
                                  .ToList();
                     } else {
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                 .OrderBy(x => x.CopyDateTime)
+                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                  from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                  where ci.Id == cit.CopyItemId &&
+                                        tagId == cit.TagId
+                                  select ci)
+                                 .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                  .Take(count)
                                  .Skip(start)
                                  .ToList();
@@ -229,6 +246,11 @@ namespace MonkeyPaste {
         }
 
         public static MpCopyItem Create(MpSource source, string data, MpCopyItemType itemType) {
+            var dupCheck = MpDb.Instance.GetItems<MpCopyItem>().Where(x => x.ItemData == data).FirstOrDefault();
+            if(dupCheck != null) {
+                dupCheck.Id *= -1;
+                return dupCheck;
+            }
             var newCopyItem = new MpCopyItem() { 
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,

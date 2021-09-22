@@ -30,7 +30,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentCommands {
         #region Private Variables
         private int _detailIdx = 1;
         private List<string> _tempFileList = new List<string>();
@@ -129,11 +129,10 @@ using System.Speech.Synthesis;
         public List<string> FileList {
             get {
                 var fl = new List<string>();
-                var ivml = SelectedItems.Count == 0 ? ItemViewModels.ToList() : SelectedItems;
-                foreach (var ivm in ivml) {
-                    fl.AddRange(ivm.GetFileList());
-                }
-                return fl;
+                DoCommandSelection();
+                var ivml = SelectedItems;
+                var cil = ivml.Select(x => x.CopyItem).ToList();
+                return MpCopyItemMerger.Instance.MergeFilePaths(cil).ToList();
             }
         }
 
@@ -965,7 +964,7 @@ using System.Speech.Synthesis;
                 return;
             }
 
-            MpClipTrayViewModel.Instance.HotkeyPasteCommand.RaiseCanExecuteChanged();
+            MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
             MpClipTrayViewModel.Instance.SpeakSelectedClipsCommand.RaiseCanExecuteChanged();
@@ -1280,9 +1279,7 @@ using System.Speech.Synthesis;
                 MpClipTrayViewModel.Instance.Remove(this);
             }
             if (!isMerge) {
-                foreach (var rtbvm in ItemViewModels) {
-                    rtbvm.CopyItem.DeleteFromDatabase();
-                }
+                DeleteAll();
             }
 
             //ClipBorder = null;
@@ -1445,6 +1442,17 @@ using System.Speech.Synthesis;
         public void SubSelectAll() {
             foreach (var ivm in ItemViewModels) {
                 ivm.IsSelected = true;
+            }
+        }
+
+        public void DoCommandSelection() {
+            //called before all commands (assuming passes CanExecute checks)
+            //to select all items if none are selected for tile based commands
+            if (!IsSelected) {
+                IsSelected = true;
+            }
+            if(SelectedItems.Count == 0) {
+                SubSelectAll();
             }
         }
 
@@ -1676,50 +1684,6 @@ using System.Speech.Synthesis;
             VisibleItems[minItem - 1].IsSelected = true;
         }
 
-        private RelayCommand _selectAllCommand;
-        public ICommand SelectAllCommand {
-            get {
-                if (_selectAllCommand == null) {
-                    _selectAllCommand = new RelayCommand(SelectAll);
-                }
-                return _selectAllCommand;
-            }
-        }
-        private void SelectAll() {
-            ClearClipSelection();
-            foreach (var ctvm in VisibleItems) {
-                ctvm.IsSelected = true;
-            }
-        }
-
-        private AsyncCommand<Brush> _changeSubSelectedClipsColorCommand;
-        public IAsyncCommand<Brush> ChangeSubSelectedClipsColorCommand {
-            get {
-                if (_changeSubSelectedClipsColorCommand == null) {
-                    _changeSubSelectedClipsColorCommand = new AsyncCommand<Brush>(ChangeSubSelectedClipsColor);
-                }
-                return _changeSubSelectedClipsColorCommand;
-            }
-        }
-        private async Task ChangeSubSelectedClipsColor(Brush brush) {
-            if (brush == null) {
-                return;
-            }
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            foreach (var sctvm in SelectedItems) {
-                                sctvm.CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex((brush as SolidColorBrush).Color);
-                            }
-                        }));
-            }
-            finally {
-                IsBusy = false;
-            }
-        }
-
         private RelayCommand<object> _pasteSubSelectedClipsCommand;
         public ICommand PasteSubSelectedClipsCommand {
             get {
@@ -1754,46 +1718,41 @@ using System.Speech.Synthesis;
             MainWindowViewModel.HideWindowCommand.Execute(true);
         }
 
-        private AsyncCommand _bringSubSelectedClipTilesToFrontCommand;
-        public IAsyncCommand BringSubSelectedClipTilesToFrontCommand {
+        public ICommand BringToFrontCommand {
             get {
-                if (_bringSubSelectedClipTilesToFrontCommand == null) {
-                    _bringSubSelectedClipTilesToFrontCommand = new AsyncCommand(BringSubSelectedClipTilesToFront, CanBringSubSelectedClipTilesToFront);
-                }
-                return _bringSubSelectedClipTilesToFrontCommand;
-            }
-        }
-        private bool CanBringSubSelectedClipTilesToFront(object arg) {
-            if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
-                return false;
-            }
-            bool canBringForward = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                if (!SelectedItems.Contains(VisibleItems[i])) {
-                    canBringForward = true;
-                    break;
-                }
-            }
-            return canBringForward;
-        }
-        private async Task BringSubSelectedClipTilesToFront() {
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            var tempSelectedClipTiles = SelectedItems;
-                            ClearClipSelection();
+                return new RelayCommand(
+                    () => {
+                        try {
+                            IsBusy = true;
+                            MpHelpers.Instance.RunOnMainThread(
+                                    (Action)(() => {
+                                        var tempSelectedClipTiles = SelectedItems;
+                                        ClearClipSelection();
 
-                            foreach (var sctvm in tempSelectedClipTiles) {
-                                ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), 0);
-                                sctvm.IsSelected = true;
+                                        foreach (var sctvm in tempSelectedClipTiles) {
+                                            ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), 0);
+                                            sctvm.IsSelected = true;
+                                        }
+                                        RequestScrollIntoView(SelectedItems[0]);
+                                    }));
+                        }
+                        finally {
+                            IsBusy = false;
+                        }
+                    },
+                    () => {
+                        if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
+                            return false;
+                        }
+                        bool canBringForward = false;
+                        for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                            if (!SelectedItems.Contains(VisibleItems[i])) {
+                                canBringForward = true;
+                                break;
                             }
-                            RequestScrollIntoView(SelectedItems[0]);
-                        }));
-            }
-            finally {
-                IsBusy = false;
+                        }
+                        return canBringForward;
+                    });
             }
         }
 
@@ -2037,6 +1996,73 @@ using System.Speech.Synthesis;
             }
         }
         #endregion
+
+        #region MpIContentCommands 
+        public ICommand SelectAllCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        SubSelectAll();
+                    });
+            }
+        }
+
+        public ICommand ChangeColorCommand {
+            get {
+                return new RelayCommand<Brush>(
+                    (b) => {
+                        DoCommandSelection();
+                        ItemViewModels.ForEach(x => x.ChangeColorCommand.Execute(b));
+                    });
+            }
+        }
+
+        public ICommand CopyCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        DoCommandSelection();
+                        var cil = ItemViewModels.Select(x => x.CopyItem).ToList();
+                        MpClipboardManager.Instance.CopyItemsToClipboard(cil);
+                    });
+            }
+        }
+
+        public ICommand PasteCommand => throw new NotImplementedException();
+
+        public ICommand DeleteCommand => throw new NotImplementedException();
+
+        public ICommand CreateQrCodeCommand => throw new NotImplementedException();
+
+        public ICommand DuplicateCommand => throw new NotImplementedException();
+
+        public ICommand EditContentCommand => throw new NotImplementedException();
+
+        public ICommand ExcludeApplicationCommand => throw new NotImplementedException();
+
+        public ICommand HotkeyPasteCommand => throw new NotImplementedException();
+
+        public ICommand InvertSelectionCommand => throw new NotImplementedException();
+
+        public ICommand LinkTagToContentCommand => throw new NotImplementedException();
+
+        public ICommand LoadMoreClipsCommand => throw new NotImplementedException();
+
+        public ICommand MergeCommand => throw new NotImplementedException();
+
+        public ICommand SelectNextCommand => throw new NotImplementedException();
+
+        public ICommand SelectPreviousCommand => throw new NotImplementedException();
+
+        public ICommand SendToEmailCommand => throw new NotImplementedException();
+
+        public ICommand SendToBackCommand => throw new NotImplementedException();
+
+        public ICommand SpeakCommand => throw new NotImplementedException();
+
+        public ICommand TranslateCommand => throw new NotImplementedException();
+        #endregion
+
         #endregion
     }
 }

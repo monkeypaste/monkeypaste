@@ -12,6 +12,8 @@
                  GotFocus="Rtb_GotFocus"
                  TextChanged="Rtb_TextChanged"
                  SelectionChanged="Rtb_SelectionChanged"
+                 PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
+                 PreviewMouseUp="Rtb_PreviewMouseUp"
                  IsEnabled="True"
                  AllowDrop="True"
                  AutoWordSelection="False"
@@ -28,7 +30,7 @@
                  MinHeight="100"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                 BorderThickness="0">
+                 BorderThickness="0">        
         <RichTextBox.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                              Color="Blue" />

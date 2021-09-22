@@ -417,7 +417,7 @@ namespace MpWpfApp {
                         shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
                         break;
                     case 27:
-                        shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.CopyCommand;
                         break;
                     default:
                         try {
@@ -441,7 +441,7 @@ namespace MpWpfApp {
                                 } else {
                                     ctvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = ctvm.PasteSubItemCommand;
-                                    shortcutCommand = MpClipTrayViewModel.Instance.HotkeyPasteCommand;
+                                    shortcutCommand = MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand;
                                     commandParameter = ctvm.CopyItem.Id;
                                 }
                             } else if (sc.TagId > 0) {

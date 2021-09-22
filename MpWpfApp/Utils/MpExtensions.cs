@@ -1,4 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste;
 using SkiaSharp;
 using System;
@@ -26,6 +27,15 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Collections
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
+            foreach (T item in source)
+                action(item);
+        }
+
+        public static bool IsEmpty<T>(this IList<T> source) {
+            return source.Count == 0;
+        }
+
         public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isHorizontal) {
             var points = new Point[2];
             var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) :lb.GetListBoxItemRect(index);
@@ -293,13 +303,13 @@ namespace MpWpfApp {
         }
 
 
-        public static Rect GetListBoxItemRect(this ListBox lb, int index) {            
+        public static Rect GetListBoxItemRect(this ListBox lb, int index, bool ignoreScrollViewer = false) {            
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
             Point origin = new Point(); 
-            if (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0) {
+            if (ignoreScrollViewer && (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0)) {
                 origin = lbi.TranslatePoint(new Point(0, 0), lb.GetScrollViewer());
             } else {
                 origin = lbi.TranslatePoint(new Point(0, 0), lb);
@@ -743,7 +753,29 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Colors
+        public static string ToHex(this Brush b) {
+            if(b is SolidColorBrush scb) {
+                return scb.Color.ToHex();
+            }
+            throw new Exception("Brush must be solid color brush but is "+b.GetType().ToString());
+        }
+
+        public static string ToHex(this Color c) {
+            return MpHelpers.Instance.ConvertColorToHex(c);
+        }
+
+        public static Brush ToSolidColorBrush(this string hex) {
+            return (Brush)new SolidColorBrush(hex.ToWinMediaColor());
+        }
+
+        public static Color ToWinMediaColor(this string hex) {
+            return (Color)ColorConverter.ConvertFromString(hex);
+        }
+
+        #endregion
         #region Documents
+
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
             return MpHelpers.Instance.ConvertFlowDocumentToBitmap(
                                 fd.Clone(),

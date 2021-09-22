@@ -102,7 +102,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void ClipTileClipBorder_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
+        public void ClipTileClipBorder_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
 
@@ -111,7 +111,7 @@ namespace MpWpfApp {
             }
             var mp = e.GetPosition(rtblb);
             bool isSubSelection = false;
-            if (ctvm.IsSelected && ctvm.Count > 1) {
+            if (ctvm.IsSelected/* && ctvm.Count > 1*/) {
                 foreach (var rtbvm in ctvm.ItemViewModels) {
                     if (rtbvm.IsHovering) {
                         isSubSelection = true;
@@ -359,9 +359,7 @@ namespace MpWpfApp {
             if(sender == DataContext) {
                 //TileDetailView.Visibility = Visibility.Collapsed;
             }
-        }
-
-        
+        }        
 
         private void Ctvm_OnSearchRequest(object sender, string e) {
             throw new NotImplementedException();

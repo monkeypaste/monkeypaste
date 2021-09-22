@@ -15,7 +15,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
+    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIContentCommands {
         private static string _unsetJoystickIcon64 = "";
         private static string _setJoyStickIcon64 = "";
 
@@ -476,8 +476,9 @@ namespace MpWpfApp {
                     itemSize = new Size(bmp.Width, bmp.Height);
                     break;
                 case MpCopyItemType.FileList:
-                    fc = GetFileList().Count;
-                    ds = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
+                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
+                    fc = fl.Count;
+                    ds = MpHelpers.Instance.FileListSize(fl.ToArray());
                     break;
                 case MpCopyItemType.RichText:
                     lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
@@ -515,6 +516,9 @@ namespace MpWpfApp {
             return info;
         }
 
+        #region Db Events
+        #endregion
+
 
         #region View Request Invokers
 
@@ -529,27 +533,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
-        private void UpdateDetails() {
-            Size itemSize;
-            int fc, lc, cc;
-            double ds;
-            switch (CopyItem.ItemType) {
-                case MpCopyItemType.Image:
-                    var bmp = CopyItem.ItemData.ToBitmapSource();
-                    itemSize = new Size(bmp.Width, bmp.Height);
-                    break;
-                case MpCopyItemType.FileList:
-                    fc = GetFileList().Count;
-                    ds = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
-                    break;
-                case MpCopyItemType.RichText:
-                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
-                    cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-                    break;
-            }
-        }
 
         public void ClearSubDragState() {
             IsSubDragging = false;
@@ -567,64 +550,7 @@ namespace MpWpfApp {
             }
         }
 
-        public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
-            //returns path of tmp file for rt or img and actual paths of filelist
-            var fileList = new List<string>();
-            if (CopyItem.ItemType == MpCopyItemType.FileList) {
-                if (forceType == MpCopyItemType.Image) {
-                    fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
-                } else if (forceType == MpCopyItemType.RichText) {
-                    fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
-                } else {
-                    var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    if (splitArray == null || splitArray.Length == 0) {
-                        throw new Exception("CopyItem GetFileList error, file list should not be empty");
-                    } else {
-                        foreach (string p in splitArray) {
-                            if (!string.IsNullOrEmpty(p.Trim())) {
-                                fileList.Add(p);
-                            }
-                        }
-                    }
-                }
-            } else {
-                string op = Path.GetTempFileName();// MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
-                //file extension
-                switch (CopyItem.ItemType) {
-                    case MpCopyItemType.RichText:
-                        if (forceType == MpCopyItemType.Image) {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
-                        } else {
-                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
-                        }
-                        foreach (var cci in MpCopyItem.GetCompositeChildren(CopyItem)) {
-                            if (forceType == MpCopyItemType.Image) {
-                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
-                            } else {
-                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
-                            }
-                            op = Path.GetTempFileName(); //MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
-                        }
-                        break;
-                    case MpCopyItemType.Image:
-                        if (forceType == MpCopyItemType.RichText) {
-                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToPlainText()));
-                        } else {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
-                        }
-                        break;
-                }
-            }
-
-            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
-                //for temporary files add to mwvm list for shutdown cleanup
-                foreach (var fp in fileList) {
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
-                }
-            }
-            // add temp files to 
-            return fileList;
-        }
+        
 
 
         public void SaveToDatabase() {
@@ -632,6 +558,7 @@ namespace MpWpfApp {
         }
 
         public void RemoveFromDatabase() {
+            Parent.RemoveRange(new List<MpCopyItem>() { CopyItem });
             CopyItem.DeleteFromDatabase();
         }
 
@@ -799,9 +726,7 @@ namespace MpWpfApp {
                         return true;// HasModelChanged
                     });
             }
-        }
-
-        
+        }        
 
         private RelayCommand _editSubTitleCommand;
         public ICommand EditSubTitleCommand {
@@ -822,6 +747,82 @@ namespace MpWpfApp {
         private void EditSubTitle() {
             IsEditingTitle = !IsEditingTitle;
         }
+
+
+        public ICommand ChangeColorCommand {
+            get {
+                return new RelayCommand<Brush>(
+                    (b)=> {
+                        CopyItem.ItemColor = b.ToHex();
+                        TitleSwirlViewModel.ForceBrush(b);
+                        Task.Run(CopyItem.WriteToDatabase);
+                    });
+            }
+        }
+
+        public ICommand BringToFrontCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        Parent.BringToFrontCommand.Execute(null);
+                    },
+                    () => {
+                        return Parent.BringToFrontCommand.CanExecute(null);
+                    });
+            }
+        }
+
+
+        public ICommand CopyCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        MpClipboardManager.Instance.CopyItemsToClipboard(new List<MpCopyItem> { CopyItem });
+                    });
+            }
+        }
+
+        public ICommand CreateQrCodeCommand => throw new NotImplementedException();
+
+        public ICommand DeleteCommand => throw new NotImplementedException();
+
+        public ICommand DuplicateCommand => throw new NotImplementedException();
+
+        public ICommand EditContentCommand => throw new NotImplementedException();
+
+        public ICommand EditTitleCommand => throw new NotImplementedException();
+
+        public ICommand ExcludeApplicationCommand => throw new NotImplementedException();
+
+        public ICommand HotkeyPasteCommand => throw new NotImplementedException();
+
+        public ICommand InvertSelectionCommand => throw new NotImplementedException();
+
+        public ICommand LinkTagToContentCommand => throw new NotImplementedException();
+
+        public ICommand LoadMoreClipsCommand => throw new NotImplementedException();
+
+        public ICommand MergeCommand => throw new NotImplementedException();
+
+        public ICommand PasteCommand => throw new NotImplementedException();
+
+        public ICommand SearchWebCommand => throw new NotImplementedException();
+
+        public ICommand SelectAllCommand => throw new NotImplementedException();
+
+        public ICommand SelectNextCommand => throw new NotImplementedException();
+
+        public ICommand SelectPreviousCommand => throw new NotImplementedException();
+
+        public ICommand SendToEmailCommand => throw new NotImplementedException();
+
+        public ICommand SendToBackCommand => throw new NotImplementedException();
+
+        public ICommand SpeakCommand => throw new NotImplementedException();
+
+        public ICommand TranslateCommand => throw new NotImplementedException();
+
+
         #endregion
     }
 }
