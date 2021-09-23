@@ -28,9 +28,10 @@ namespace MpWpfApp {
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
 
-        public bool IsClearing = false;
+        public List<MpTemplateHyperlink> TemplateViews = new List<MpTemplateHyperlink>();
+        //public bool IsClearing = false;
 
-        public Dictionary<int, List<Hyperlink>> TemplateLookUp = new Dictionary<int, List<Hyperlink>>();
+        //public Dictionary<int, List<Hyperlink>> TemplateLookUp = new Dictionary<int, List<Hyperlink>>();
 
         public MpRtbView() {
             InitializeComponent();
@@ -46,9 +47,11 @@ namespace MpWpfApp {
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
             //if(!MpMainWindowViewModel.IsMainWindowLoading) 
+
             ClearHyperlinks();
 
             rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
+
             rtbvm.CopyItem.WriteToDatabase();
 
             CreateHyperlinks();
@@ -59,23 +62,6 @@ namespace MpWpfApp {
             var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
             if (scvml.Count > 0) {
                 rtbvm.ShortcutKeyString = scvml[0].KeyString;
-            }
-        }
-
-        public void AddTemplate(MpTemplateViewModel thlvm,MpTemplateHyperlink hl) {
-            if (!TemplateLookUp.ContainsKey(thlvm.CopyItemTemplateId)) {
-                TemplateLookUp.Add(thlvm.CopyItemTemplateId, new List<Hyperlink> { hl });
-            } else {
-                TemplateLookUp[thlvm.CopyItemTemplateId].Add(hl);
-            }
-        }
-
-        public void RemoveTemplate(MpTemplateViewModel thlvm, MpTemplateHyperlink hl) {
-            if (TemplateLookUp.ContainsKey(thlvm.CopyItemTemplateId)) {
-                TemplateLookUp[thlvm.CopyItemTemplateId].Remove(hl);
-                if (TemplateLookUp[thlvm.CopyItemTemplateId].Count == 0) {
-                    TemplateLookUp.Remove(thlvm.CopyItemTemplateId);
-                }
             }
         }
 
@@ -97,11 +83,7 @@ namespace MpWpfApp {
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                 }
-
-                //UpdateLayout();
-                //Rtb.UpdateLayout();
                 SyncModels();
-                //_hasLoaded = true;
             }
         }
 
@@ -236,16 +218,7 @@ namespace MpWpfApp {
         }
 
         public void ClearHyperlinks() {
-            IsClearing = true;
             var rtbSelection = Rtb?.Selection;
-            //foreach (var kvp in TemplateLookUp) {
-            //    foreach (var hl in kvp.Value) {
-            //        var thlvm = (MpTemplateViewModel)hl.DataContext;
-            //        hl.Inlines.Clear();
-            //        new Span(new Run(thlvm.TemplateName), hl.ElementStart);
-            //    }
-            //}
-            //
             var hlList = GetAllHyperlinksFromDoc();
             foreach (var hl in hlList) {
                 string linkText;
@@ -258,20 +231,18 @@ namespace MpWpfApp {
                 hl.Inlines.Clear();
                 new Span(new Run(linkText), hl.ElementStart);
             }
-            var sr = Rtb.Document.ContentStart;
-            foreach (var cit in GetTemplatesFromDb()) {
-                var trl = MpHelpers.Instance.FindStringRangesFromPosition(sr, cit.TemplateName);
-                foreach(var tr in trl) {
-                    tr.Text = cit.TemplateName;
-                }
+            foreach (var hl in TemplateViews) {
+                hl.Tag = null;
+                var thlvm = hl.DataContext as MpTemplateViewModel;
+                hl.Inlines.Clear();
+                new Span(new Run(thlvm.TemplateName), hl.ElementStart);
             }
-            TemplateLookUp.Clear();
+            TemplateViews.Clear();
             var rtbvm = Rtb.DataContext as MpContentItemViewModel;
             rtbvm.TemplateCollection.Templates.Clear();
             if (rtbSelection != null) {
                 Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
-            IsClearing = false;
         }
 
         public List<MpCopyItemTemplate> GetTemplatesFromDb() {
@@ -300,8 +271,6 @@ namespace MpWpfApp {
         }
 
         public void CreateHyperlinks() {
-            //templates are ignored when refreshing document after space key is pressed
-
             if (Rtb == null) {
                 return;
             }

@@ -65,6 +65,7 @@ namespace MpWpfApp {
 
             nthl.Rtb = rtb;
 
+            rtb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
             return nthl;
         }
 
@@ -76,7 +77,6 @@ namespace MpWpfApp {
             DataContext = thlvm;
 
             InitializeComponent();
-
         }
 
         private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
@@ -84,30 +84,24 @@ namespace MpWpfApp {
             var thlvm = DataContext as MpTemplateViewModel;
             MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
             Rtb = thl.FindParentOfType<RichTextBox>();
-
-
-            var rtbv = Rtb.FindParentOfType<MpRtbView>();
-            rtbv.AddTemplate(thlvm, this);
         }
 
-        private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {            
-            var thlvm = DataContext as MpTemplateViewModel;
-            var rtbv = Rtb.FindParentOfType<MpRtbView>();
-            rtbv.RemoveTemplate(thlvm, this);
-
-            if(rtbv.IsClearing) {
-                // this should checking false but it seems to be flipped...
+        private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
+            var thl = sender as MpTemplateHyperlink;
+            
+            if(thl.Tag != null) {
+                var thlvm = DataContext as MpTemplateViewModel;
                 if (thlvm != null) {
                     var thlcvm = thlvm.Parent;
                     if (thlcvm != null) {
                         thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
+                        var rtbv = Rtb.FindParentOfType<MpRtbView>();
+                        rtbv.TemplateViews.Remove(this);
+                        rtbv.SyncModels();
                         MpConsole.WriteLine($"template {thlvm.TemplateName} REMOVED from: " + sender.GetType().ToString());
                     }
                 }
-            } else {
-                MpConsole.WriteLine($"template {thlvm.TemplateName} unloaded from: " + sender.GetType().ToString());
             }
-
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
@@ -138,14 +132,22 @@ namespace MpWpfApp {
         private void DeleteAll_Click(object sender, RoutedEventArgs e) {
             var thlvm = DataContext as MpTemplateViewModel;
             var rtbv = Rtb.FindParentOfType<MpRtbView>();
-            foreach(var t in rtbv.TemplateLookUp) {
-                if(t.Key == thlvm.CopyItemTemplateId) {
-                    foreach(var thl in t.Value) {
-                        Rtb.Selection.Select(thl.ElementStart, thl.ElementEnd);
-                        Rtb.Selection.Text = string.Empty;
-                    }
+            var hlToRemove = new List<MpTemplateHyperlink>();
+            
+
+            foreach(var hl in rtbv.TemplateViews) {
+                if(hl.DataContext != thlvm) {
+                    continue;
                 }
+                hlToRemove.Add(hl);
+                hl.Inlines.Clear();
+                new Span(new Run(string.Empty), hl.ElementStart);
             }
+            foreach(var hl2r in hlToRemove) {
+                rtbv.TemplateViews.Remove(hl2r);
+            }
+            Rtb.UpdateLayout();
+            rtbv.SyncModels();
         }
     }
 }

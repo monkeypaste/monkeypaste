@@ -115,8 +115,8 @@ namespace MpWpfApp {
             } else {
                 return null;
             }
-        }        
-        
+        }
+
         public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {
                 return null;
@@ -132,7 +132,7 @@ namespace MpWpfApp {
             while (position != null) {
                 var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
                 if (hlr == null) {
-                    if(nextDocPosition != null) {
+                    if (nextDocPosition != null) {
                         position = nextDocPosition;
                         nextDocPosition = null;
                         continue;
@@ -140,8 +140,11 @@ namespace MpWpfApp {
                     break;
                 } else {
                     matchRangeList.Add(hlr);
-                    if(!hlr.End.IsInSameDocument(orgPosition)) {
+                    if (!hlr.End.IsInSameDocument(orgPosition)) {
                         var phl = (Hyperlink)FindParentOfType(hlr.End.Parent, typeof(Hyperlink));
+                        if(phl == null) {
+                            phl = (MpTemplateHyperlink)FindParentOfType(hlr.End.Parent, typeof(MpTemplateHyperlink));
+                        }
                         nextDocPosition = phl.ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
                     }
                     position = hlr.End;
@@ -154,20 +157,20 @@ namespace MpWpfApp {
         }
 
         public TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
-            if(string.IsNullOrEmpty(matchStr)) {
+            if (string.IsNullOrEmpty(matchStr)) {
                 return null;
             }
-            int curIdx = 0;            
+            int curIdx = 0;
             TextSelection rtbSelection = null;
             var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
-            if(rtb != null) {
+            if (rtb != null) {
                 rtbSelection = rtb.Selection;
             }
             TextPointer postOfUiElement = null;
             TextPointer startPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
             while (position != null || postOfUiElement != null) {
-                if(position == null) {
+                if (position == null) {
                     position = postOfUiElement;
                     postOfUiElement = null;
                 }
@@ -209,7 +212,7 @@ namespace MpWpfApp {
                 if (curIdx == matchStr.Length - 1) {
                     //each character has been matched
                     var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
-                    if(!startPointer.IsInSameDocument(endPointer)) {
+                    if (!startPointer.IsInSameDocument(endPointer)) {
                         endPointer = ((Hyperlink)FindParentOfType(endPointer.Parent, typeof(Hyperlink))).ElementEnd;
                     }
                     //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
@@ -241,7 +244,7 @@ namespace MpWpfApp {
                     position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
                 }
             }
-            if(rtbSelection != null) {
+            if (rtbSelection != null) {
                 rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
             return null;

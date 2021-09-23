@@ -220,7 +220,7 @@
                    Stretch="None"
                    SnapsToDevicePixels="True" />
             <ToggleButton x:Name="SpellCheck"
-                          IsChecked="{local:MpSettingBinding UseSpellCheck}"
+                          IsChecked="{local:MpSettingBinding Path=UseSpellCheck, Mode=TwoWay}"
                           ToolTip="Spell Check?"
                           Template="{StaticResource FlatToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/spellcheck.png"

@@ -1140,6 +1140,8 @@ using System.Speech.Synthesis;
         }
 
         public void SaveToDatabase() {
+            MpConsole.WriteLine("Ignoring save since syncing on changes");
+            return;
             var sw = new Stopwatch();
             sw.Start();
 
