@@ -636,12 +636,21 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        
         public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {            
             Application.Current.Dispatcher.Invoke(action, priority);
         }
 
         public DispatcherOperation RunOnMainThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
             return Application.Current.Dispatcher.InvokeAsync(action, priority);
+        }
+
+        public TResult RunOnMainThread<TResult>(Func<TResult> action, DispatcherPriority priority = DispatcherPriority.Normal) where TResult : class {
+            return Application.Current.Dispatcher.Invoke<TResult>(action, priority);
+        }
+
+        public DispatcherOperation<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, DispatcherPriority priority = DispatcherPriority.Normal) where TResult : class {
+            return Application.Current.Dispatcher.InvokeAsync<TResult>(action, priority);
         }
 
         public string GetTempFileNameWithExtension(string ext) {
@@ -2527,13 +2536,13 @@ namespace MpWpfApp {
         public string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
                 try {
-                    RichTextBox rtb = new RichTextBox();
+                    var rtb = SharedRtb;
                     rtb.SetRtf(richText);
-                    var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                    string pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
                     int rtcount = GetRowCount(richText);
                     int ptcount = GetRowCount(pt);
                     if (rtcount != ptcount) {
-                        return pt.Trim(new char[] { '\r', '\n' });
+                        pt = pt.Trim(new char[] { '\r', '\n' });
                     }
                     return pt;
                 }

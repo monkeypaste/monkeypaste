@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MpWpfApp.MpContentListItemView"
+﻿<UserControl x:Class="MpWpfApp.MpContentItemView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,8 +28,10 @@
                        RelativeSource={RelativeSource Self}}" />
             </Grid.ContextMenu>
             <AdornerDecorator>
-                <local:MpRtbView x:Name="RtbView"
+                <local:MpRtbView x:Name="EditorView"
                                  DataContext="{Binding}" />
+                <!--<local:MpQuillEditorView x:Name="EditorView"
+                                         DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
                                 Visibility="Hidden"

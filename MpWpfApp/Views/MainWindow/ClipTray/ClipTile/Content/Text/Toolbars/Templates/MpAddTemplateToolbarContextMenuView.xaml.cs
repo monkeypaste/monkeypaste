@@ -48,11 +48,14 @@ namespace MpWpfApp {
                 mil.Add(mi);
             }
 
-            mil.Add(new MenuItem() {
-                Header = "Add New...",
-                Icon = MpHelpers.Instance.ConvertStringToBitmapSource(_addIconBase64)
-            });
+            var ami = new MenuItem() {
+                Header = "Add New..."
+            };
+            var icon = new Image();
+            icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));
+            ami.Icon = icon;
 
+            mil.Add(ami);
             foreach (MenuItem mi in mil) {
                 mi.Click += Template_Click;
             }
@@ -61,21 +64,26 @@ namespace MpWpfApp {
         }
 
         private void Template_Click(object sender, RoutedEventArgs e) {
-            var thlcvm = DataContext as MpTemplateCollectionViewModel;
             Rtb.Focus();
-
+            MpTemplateHyperlink thl = null;
             var mi = sender as MenuItem;
             if(mi.DataContext == null) {
                 //when clicking add new
-                var thl = MpTemplateHyperlink.Create(Rtb.Selection,null);
-                var thlvm = thl.DataContext as MpTemplateViewModel;
-                thlvm.EditTemplateCommand.Execute(null);
+                thl = MpTemplateHyperlink.Create(Rtb.Selection,null);
             } else if(mi.DataContext is MpTemplateViewModel thlvm) {
                 //when clicking a pre-existing template
-                var nthl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
-                var nthlvm = nthl.DataContext as MpTemplateViewModel;
-                nthlvm.EditTemplateCommand.Execute(null);
+                thl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
             }
+
+            //add trailing run of one space to allow clicking after template
+            new Run(@" ", thl.ElementEnd);
+
+            var ettbv = thl.Rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
+            ettbv.SetActiveRtb(thl.Rtb);
+
+            (thl.DataContext as MpTemplateViewModel).WasNew = true;
+
+            thl.EditTemplate();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
@@ -83,6 +91,10 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteTraceLine("No rtb or rtb context");
                 return;
             }
+            var rtbv = Rtb.GetVisualAncestor<MpRtbView>();
+            rtbv.NewOriginalText = Rtb.Selection.Text;
+            rtbv.NewStartRange = Rtb.Selection;
+
             var rtbvm = Rtb.DataContext as MpContentItemViewModel;
             if(rtbvm.TemplateCollection.Templates.Count == 0) {
                 //when no templates exist create a new default one

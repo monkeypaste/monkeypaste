@@ -133,23 +133,14 @@ namespace MpWpfApp {
         public MpTemplateViewModel AddItem(MpCopyItemTemplate ncit) {
             MpTemplateViewModel ntvm = null;
 
-            if (ncit == null) {
-                //for new templates create a default name
-                ncit = MpCopyItemTemplate.Create(
-                            Parent.CopyItem.Id,
-                            GetUniqueTemplateName());
-                ncit.WriteToDatabase();
+            //check if template exists (it should)
+            var dupCheck = Templates.Where(x => x.TemplateName == ncit.TemplateName).FirstOrDefault();
+            if (dupCheck == null) {
+                //not sure how this could happen but it may dunno
                 ntvm = new MpTemplateViewModel(this, ncit);
             } else {
-                //check if template exists (it should)
-                var dupCheck = Templates.Where(x => x.TemplateName == ncit.TemplateName).FirstOrDefault();
-                if (dupCheck == null) {
-                    //not sure how this could happen but it may dunno
-                    ntvm = new MpTemplateViewModel(this, ncit);
-                } else {
-                    //set existing thvm for return
-                    ntvm = dupCheck;
-                }
+                //set existing thvm for return
+                ntvm = dupCheck;
             }
             if (ntvm.InstanceCount == 0) {
                 //only add one selection handler
@@ -159,6 +150,19 @@ namespace MpWpfApp {
             ntvm.InstanceCount++;
 
             return ntvm;
+        }
+
+        public string GetFormattedTemplateName(string text) {
+            if (text == null) {
+                text = string.Empty;
+            }
+            if (!text.StartsWith("<")) {
+                text = "<" + text;
+            }
+            if (!text.EndsWith(">")) {
+                text = text + ">";
+            }
+            return text;
         }
 
         public void RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
@@ -171,6 +175,21 @@ namespace MpWpfApp {
                     thlvmToRemove.InstanceCount--;
                 }
             }
+        }
+
+        public string GetUniqueTemplateName() {
+            Parent.SaveToDatabase();
+            int uniqueIdx = 1;
+            string namePrefix = "<Template";
+            string pt = Parent.CopyItem.ItemData.ToPlainText();
+            while (pt.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) ||
+                   Parent
+                    .TemplateCollection
+                    .Templates.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">")
+                    .ToList().Count > 0) {
+                uniqueIdx++;
+            }
+            return namePrefix + uniqueIdx + ">";
         }
         #endregion
 
@@ -194,20 +213,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        private string GetUniqueTemplateName() {
-            Parent.SaveToDatabase();
-            int uniqueIdx = 1;
-            string namePrefix = "<Template";
-            string pt = Parent.CopyItem.ItemData.ToPlainText();
-            while (pt.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) ||
-                   Parent
-                    .TemplateCollection
-                    .Templates.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">")
-                    .ToList().Count > 0) {
-                uniqueIdx++;
-            }
-            return namePrefix + uniqueIdx + ">";
-        }
+        
 
         #endregion
 

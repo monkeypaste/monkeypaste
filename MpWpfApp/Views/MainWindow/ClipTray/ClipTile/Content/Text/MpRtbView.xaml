@@ -14,6 +14,7 @@
                  SelectionChanged="Rtb_SelectionChanged"
                  PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                  PreviewMouseUp="Rtb_PreviewMouseUp"
+                 PreviewKeyUp="Rtb_PreviewKeyUp"
                  IsEnabled="True"
                  AllowDrop="True"
                  AutoWordSelection="False"

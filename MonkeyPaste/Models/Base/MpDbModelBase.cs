@@ -14,6 +14,9 @@ namespace MonkeyPaste {
     public abstract class MpDbModelBase {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
+        
+        [Ignore]
+        public bool HasModelChanged { get; set; }
 
         #region Wpf Compatibility
 

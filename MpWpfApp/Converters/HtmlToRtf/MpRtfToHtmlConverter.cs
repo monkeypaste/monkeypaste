@@ -169,7 +169,7 @@ namespace MpWpfApp {
         }
 
         private string GetFontSize(Span s) {
-            double fs = (double)new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
+            double fs = (double)s.FontSize;//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
             MpRichTextFormatProperties.Instance.AddFontSize(fs);
             return string.Format(@" style='font-size: {0}px;", fs);
         }

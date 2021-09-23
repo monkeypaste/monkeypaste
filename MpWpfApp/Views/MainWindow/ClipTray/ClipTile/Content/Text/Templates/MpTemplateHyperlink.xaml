@@ -8,10 +8,12 @@
            mc:Ignorable="d"
            TextDecorations="{x:Null}"
            IsEnabled="True"
+           Loaded="Hyperlink_Loaded"
            Unloaded="Hyperlink_Unloaded"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
+           
            Tag="{Binding TemplateTokenTag}"
            Cursor="{Binding TemplateTextBlockCursor}">
     <Hyperlink.ContextMenu>
@@ -19,7 +21,7 @@
             <MenuItem Header="Edit" 
                       Command="{Binding EditTemplateCommand}" />
             <MenuItem Header="Delete All"
-                      Command="{Binding DeleteTemplateCommand}" />
+                      Click="DeleteAll_Click"/>
         </ContextMenu>
     </Hyperlink.ContextMenu>
     <Hyperlink.Inlines>
@@ -29,10 +31,6 @@
                     Background="{Binding TemplateBackgroundBrush}"
                     BorderBrush="{Binding TemplateBorderBrush}"
                     Cursor="{Binding TemplateTextBlockCursor}">
-                <Border.RenderTransform>
-                    <TranslateTransform X="0"
-                                        Y="4" />
-                </Border.RenderTransform>
                 <TextBlock x:Name="TemplateTextBlock"
                            Text="{Binding TemplateDisplayValue}"
                            Foreground="{Binding TemplateForegroundBrush}"

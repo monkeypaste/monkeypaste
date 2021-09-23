@@ -43,7 +43,6 @@ using System.Speech.Synthesis;
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
         #endregion
 
-
         #region Properties
 
         #region View Models
@@ -1034,7 +1033,7 @@ using System.Speech.Synthesis;
             //        var ortbvm = octvm.ContentContainerViewModel.ItemViewModels[0];
             //        octvm.ContentContainerViewModel.ItemViewModels.Remove(ortbvm, true);
             //        ContentContainerViewModel.Add(ortbvm,forceIdx, true);
-            //    } else if(ovm is MpContentListItemViewModel ortbvm) {
+            //    } else if(ovm is MpContentItemViewModel ortbvm) {
             //        if (ortbvm.HostClipTileViewModel == this && forceIdx >= 0) {
             //            //occurs when rtbvmc items are resorted
             //            forceIdx = Math.Min(ContentContainerViewModel.Count - 1, forceIdx);

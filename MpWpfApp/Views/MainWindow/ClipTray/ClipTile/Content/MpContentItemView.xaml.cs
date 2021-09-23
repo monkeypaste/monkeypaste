@@ -16,22 +16,22 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpContentListItemView.xaml
+    /// Interaction logic for MpContentItemView.xaml
     /// </summary>
-    public partial class MpContentListItemView : UserControl {
+    public partial class MpContentItemView : UserControl {
         private int _minDragDist = 25;
 
         AdornerLayer RtbItemAdornerLayer;
         MpLineAdorner RtbItemAdorner;
 
-        public MpContentListItemView() : base() {
+        public MpContentItemView() : base() {
             InitializeComponent();            
         }
 
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            RtbItemAdorner = new MpLineAdorner(RtbView);
-            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(RtbView);
+            RtbItemAdorner = new MpLineAdorner(EditorView);
+            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(EditorView);
             RtbItemAdornerLayer?.Add(RtbItemAdorner);
 
             var civm = DataContext as MpContentItemViewModel;
@@ -41,6 +41,14 @@ namespace MpWpfApp {
             } else {
                 civm.ShortcutKeyString = string.Empty;
             }
+        }
+
+        private void MainWindowViewModel_OnTileUnexpand(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private void MainWindowViewModel_OnTileExpand(object sender, EventArgs e) {
+            throw new NotImplementedException();
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -63,7 +71,7 @@ namespace MpWpfApp {
         }
 
         private void Civm_OnScrollWheelRequest(object sender, int e) {
-            throw new NotImplementedException();
+            
         }
 
         #endregion

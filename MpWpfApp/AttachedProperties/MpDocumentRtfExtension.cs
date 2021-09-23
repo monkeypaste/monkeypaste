@@ -29,9 +29,7 @@ namespace MpWpfApp {
                     var fd = ((string)e.NewValue).ToFlowDocument();
                     var ds = fd.GetDocumentSize();
                     rtb.Document = fd;
-                    rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
-                    rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
-                    
+                    rtb.FitDocToRtb();                    
                 }
             });
     }

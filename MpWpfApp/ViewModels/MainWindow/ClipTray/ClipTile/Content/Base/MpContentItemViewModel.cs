@@ -136,7 +136,7 @@ namespace MpWpfApp {
 
         public Visibility TileDetailGridVisibility {
             get {
-                if (Parent.IsAnyEditingContent || Parent.IsAnyEditingTemplate || Parent.IsAnyPastingTemplate) {
+                if (Parent.IsAnyEditingTemplate || Parent.IsAnyPastingTemplate) {
                     return Visibility.Collapsed;
                 }
                 return Visibility.Visible;

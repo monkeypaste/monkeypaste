@@ -38,6 +38,8 @@ namespace MpWpfApp {
         private double _endMainWindowTop;
         private double _deltaHeight = 0;
 
+        private bool _isExpanded = false;
+
         private List<string> _tempFilePathList { get; set; } = new List<string>();
         #endregion
 
@@ -289,6 +291,7 @@ namespace MpWpfApp {
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
+            maxDelta = Math.Min(maxDelta, SystemParameters.PrimaryScreenHeight / 2);
             double ctvmDelta = ctvmToExpand.TotalExpandedSize.Height - ctvmToExpand.ContainerSize.Height;
             if(ctvmToExpand.IsAnyPastingTemplate) {
                 ctvmDelta += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
@@ -302,7 +305,7 @@ namespace MpWpfApp {
                                     _deltaHeight,
                                     ctvmToExpand.IsAnyPastingTemplate ? 0: MpMeasurements.Instance.ClipTileEditToolbarHeight);
 
-
+            _isExpanded = true;
             OnTileExpand?.Invoke(ctvmToExpand, null);
         }
 
@@ -318,7 +321,7 @@ namespace MpWpfApp {
             MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
 
-
+            _isExpanded = false;
             OnTileUnexpand?.Invoke(this, null);
         }
 
@@ -485,7 +488,11 @@ namespace MpWpfApp {
             ///return false;
             return (Application.Current.MainWindow != null &&
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsMainWindowOpening)  || args != null;
+                   !IsShowingDialog && 
+                   !IsMainWindowLocked && 
+                   !_isExpanded &&
+                   IsMainWindowOpen && 
+                   !IsMainWindowOpening)  || args != null;
         }
         private async void HideWindow(object args) {
             IDataObject pasteDataObject = null;

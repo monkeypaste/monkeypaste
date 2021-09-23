@@ -88,7 +88,7 @@ namespace MpWpfApp {
                 var itemRect = rtblb.GetListBoxItemRect(lbiIdx);
                 rtbvm.IsHovering = itemRect.Contains(mp);
                 if (rtbvm.IsHovering) {
-                    var rtbv = lbi.GetVisualDescendent<MpContentListItemView>();
+                    var rtbv = lbi.GetVisualDescendent<MpContentItemView>();
                     var irmp = e.GetPosition(rtbv.DragButton);
                     var dragButtonRect = rtbv.DragButton.RelativeBounds();// new Rect(0, 0, rtbv.DragButton.ActualWidth, rtbv.DragButton.ActualHeight);
                     if (dragButtonRect.Contains(irmp)) {

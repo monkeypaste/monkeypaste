@@ -123,6 +123,7 @@
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
@@ -283,8 +284,8 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentListVIew.xaml.cs">
       <DependentUpon>MpContentListVIew.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentListItemView.xaml.cs">
-      <DependentUpon>MpContentListItemView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentItemView.xaml.cs">
+      <DependentUpon>MpContentItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\Text\Toolbars\Templates\MpAddTemplateToolbarContextMenuView.xaml.cs">
       <DependentUpon>MpAddTemplateToolbarContextMenuView.xaml</DependentUpon>
@@ -407,7 +408,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentListItemView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Content\MpContentItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1925,7 +1926,6 @@
     <Resource Include="Resources\Images\copy.png" />
     <Resource Include="FodyWeavers.xml" />
     <Resource Include="Resources\Images\down_black.png" />
-    <Content Include="Resources\Editor\Editor2.html" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

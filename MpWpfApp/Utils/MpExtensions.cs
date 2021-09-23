@@ -2,6 +2,7 @@
 using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste;
 using SkiaSharp;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +23,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
@@ -204,8 +206,125 @@ namespace MpWpfApp {
             return source;
         }
 
+        /// <summary>
+        /// Gets the next ancestor element which is a drop target.
+        /// </summary>
+        /// <param name="element">The start element.</param>
+        /// <returns>The first element which is a drop target.</returns>
+        public static UIElement TryGetNextAncestorDropTargetElement(this UIElement element) {
+            if (element == null) {
+                return null;
+            }
+
+            var ancestor = element.GetVisualAncestor<UIElement>();
+            while (ancestor != null) {
+                if (ancestor.IsDropTarget()) {
+                    return ancestor;
+                }
+
+                ancestor = ancestor.GetVisualAncestor<UIElement>();
+            }
+
+            return null;
+        }
+
+        internal static DependencyObject FindVisualTreeRoot(this DependencyObject d) {
+            var current = d;
+            var result = d;
+
+            while (current != null) {
+                result = current;
+                if (current is Visual || current is Visual3D) {
+                    break;
+                } else {
+                    // If we're in Logical Land then we must walk 
+                    // up the logical tree until we find a 
+                    // Visual/Visual3D to get us back to Visual Land.
+                    current = LogicalTreeHelper.GetParent(current);
+                }
+            }
+
+            return result;
+        }
+
+        public static T GetVisualAncestor<T>(this DependencyObject d)
+            where T : class {
+            var item = VisualTreeHelper.GetParent(d.FindVisualTreeRoot());
+            
+            while (item != null) {
+                var itemAsT = item as T;
+                if (itemAsT != null) {
+                    return itemAsT;
+                }
+
+                item = VisualTreeHelper.GetParent(item);
+                if (item == null) {
+                    item = VisualTreeHelper.GetParent(d);
+                    d = item;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// find the visual ancestor item by type
+        /// </summary>
+        public static DependencyObject GetVisualAncestor(this DependencyObject d, Type itemSearchType, ItemsControl itemsControl, Type itemContainerSearchType) {
+            if (itemsControl == null) throw new ArgumentNullException(nameof(itemsControl));
+            if (itemContainerSearchType == null) throw new ArgumentNullException(nameof(itemContainerSearchType));
+
+            var visualTreeRoot = d.FindVisualTreeRoot();
+            var currentVisual = VisualTreeHelper.GetParent(visualTreeRoot);
+
+            while (currentVisual != null && itemSearchType != null) {
+                var currentVisualType = currentVisual.GetType();
+                if (currentVisualType == itemSearchType || currentVisualType.IsSubclassOf(itemSearchType)) {
+                    if (currentVisual is TreeViewItem || itemsControl.ItemContainerGenerator.IndexFromContainer(currentVisual) != -1) {
+                        return currentVisual;
+                    }
+                }
+
+                if (itemContainerSearchType.IsAssignableFrom(currentVisualType)) {
+                    // ok, we found an ItemsControl (maybe an empty)
+                    return null;
+                }
+
+                currentVisual = VisualTreeHelper.GetParent(currentVisual);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// find the visual ancestor by type and go through the visual tree until the given itemsControl will be found
+        /// </summary>
+        public static DependencyObject GetVisualAncestor(this DependencyObject d, Type itemSearchType, ItemsControl itemsControl) {
+            if (itemsControl == null) throw new ArgumentNullException(nameof(itemsControl));
+
+            var visualTreeRoot = d.FindVisualTreeRoot();
+            var currentVisual = VisualTreeHelper.GetParent(visualTreeRoot);
+            DependencyObject lastFoundItemByType = null;
+
+            while (currentVisual != null && itemSearchType != null) {
+                if (currentVisual == itemsControl) {
+                    return lastFoundItemByType;
+                }
+
+                var currentVisualType = currentVisual.GetType();
+                if ((currentVisualType == itemSearchType || currentVisualType.IsSubclassOf(itemSearchType))
+                    && (itemsControl.ItemContainerGenerator.IndexFromContainer(currentVisual) != -1)) {
+                    lastFoundItemByType = currentVisual;
+                }
+
+                currentVisual = VisualTreeHelper.GetParent(currentVisual);
+            }
+
+            return lastFoundItemByType;
+        }
+
         public static T GetVisualDescendent<T>(this DependencyObject d)
-           where T : DependencyObject {
+            where T : DependencyObject {
             return d.GetVisualDescendents<T>(null).FirstOrDefault();
         }
 
@@ -240,6 +359,7 @@ namespace MpWpfApp {
 
             yield break;
         }
+
         #endregion
 
         #region Visual Tree
@@ -475,284 +595,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Hyperlinks & Templates
-        public static void ClearHyperlinks(this RichTextBox rtb) {
-            var rtbSelection = rtb?.Selection;
-            var hlList = rtb.GetHyperlinkList();
-            foreach (var hl in hlList) {
-                string linkText = string.Empty;
-                if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
-                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
-                } else {
-                    var thlvm = (MpTemplateViewModel)hl.DataContext;
-                    linkText = thlvm.TemplateName;
-                }
-                hl.Inlines.Clear();
-                new Span(new Run(linkText), hl.ElementStart);
-            }
-            var rtbvm = rtb.DataContext as MpContentItemViewModel;
-            rtbvm.TemplateCollection.Templates.Clear();
-            if (rtbSelection != null) {
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-        }
-
-        public static List<MpCopyItemTemplate> GetTemplates(this RichTextBox rtb) {
-            var rtbvm = rtb.DataContext as MpContentItemViewModel;
-            var tl = new List<MpCopyItemTemplate>();
-            if (rtbvm.CopyItem == null) {
-                return tl;
-            }
-            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
-                                .Where(x => x.CopyItemId == rtbvm.CopyItem.Id)
-                                .ToList();
-        }
-
-        public static string TemplateRegExMatchString(this RichTextBox rtb) {
-            var outStr = string.Empty;
-            foreach (var t in rtb.GetTemplates()) {
-                if (outStr.Contains(t.TemplateName)) {
-                    continue;
-                }
-                outStr += t.TemplateName + "|";
-            }
-            if (!string.IsNullOrEmpty(outStr)) {
-                return outStr.Remove(outStr.Length - 1, 1);
-            }
-            return outStr;
-        }
-
-        public static void CreateHyperlinks(this RichTextBox rtb) {
-            if (rtb == null) {
-                return;
-            }
-
-            var rtbvm = rtb.DataContext as MpContentItemViewModel;
-            var rtbSelection = rtb?.Selection.Clone();
-            string pt = rtbvm.CopyItem.ItemData.ToPlainText();
-            for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
-                var linkType = (MpSubTextTokenType)i;
-                if (linkType == MpSubTextTokenType.StreetAddress) {
-                    //doesn't consistently work and presents bugs so disabling for now
-                    continue;
-                }
-                var lastRangeEnd = rtb.Document.ContentStart;
-                var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
-                if (linkType == MpSubTextTokenType.TemplateSegment) {
-                    regExStr = rtb.TemplateRegExMatchString();
-                }
-                if (string.IsNullOrEmpty(regExStr)) {
-                    //this occurs for templates when copyitem has no templates
-                    continue;
-                }
-                if (linkType == MpSubTextTokenType.TemplateSegment) {
-                    linkType = MpSubTextTokenType.TemplateSegment;
-                }
-                var mc = Regex.Matches(pt, regExStr, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                foreach (Match m in mc) {
-                    foreach (Group mg in m.Groups) {
-                        foreach (Capture c in mg.Captures) {
-                            Hyperlink hl = null;
-                            var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
-                            if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
-                                continue;
-                            }
-                            lastRangeEnd = matchRange.End;
-                            if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = rtb.GetTemplates().Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
-                                matchRange.Text = string.Empty;
-                                var thlvm = rtbvm.TemplateCollection.AddItem(copyItemTemplate);                                                                                                      //CopyItem.GetTemplateByName(matchRange.Text);
-                                hl = new MpTemplateHyperlink(matchRange, thlvm);                              
-                            } else {
-                                var matchRun = new Run(matchRange.Text);
-                                matchRange.Text = "";
-                                // DO NOT REMOVE this extra link ensures selection is retained!
-                                var hlink = new Hyperlink(matchRun, matchRange.Start);
-                                hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                hl = hlink;
-                                var linkText = c.Value;
-                                hl.Tag = linkType;
-                                if (linkText == @"DragAction.Cancel") {
-                                    linkText = linkText;
-                                }
-                                MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
-                                hl.MouseEnter += (s3, e3) => {
-                                    hl.Cursor = rtbvm.Parent.IsSelected ? Cursors.Hand : Cursors.Arrow;
-                                };
-                                hl.MouseLeave += (s3, e3) => {
-                                    hl.Cursor = Cursors.Arrow;
-                                };
-                                hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if (hl.NavigateUri != null && rtbvm.Parent.IsSelected) {
-                                        MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
-                                    }
-                                };
-
-                                var convertToQrCodeMenuItem = new MenuItem();
-                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                                convertToQrCodeMenuItem.Click += (s5, e1) => {
-                                    var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
-                                    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    Clipboard.SetImage(bmpSrc);
-                                };
-                                convertToQrCodeMenuItem.Tag = hl;
-                                hl.ContextMenu = new ContextMenu();
-                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
-
-                                switch ((MpSubTextTokenType)hl.Tag) {
-                                    case MpSubTextTokenType.StreetAddress:
-                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
-                                        break;
-                                    case MpSubTextTokenType.Uri:
-                                        try {
-                                            string urlText = MpHelpers.Instance.GetFullyFormattedUrl(linkText);
-                                            if (MpHelpers.Instance.IsValidUrl(urlText) &&
-                                               Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)) {
-                                                hl.NavigateUri = new Uri(urlText);
-                                            } else {
-                                                MonkeyPaste.MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
-                                                var par = hl.Parent.FindParentOfType<Paragraph>();
-                                                var s = new Span();
-                                                s.Inlines.AddRange(hl.Inlines.ToArray());
-                                                par.Inlines.InsertAfter(hl, s);
-                                                par.Inlines.Remove(hl);
-                                            }
-                                        }
-                                        catch (Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: " + ex);
-                                            var par = hl.Parent.FindParentOfType<Paragraph>();
-                                            var s = new Span();
-                                            s.Inlines.AddRange(hl.Inlines.ToArray());
-                                            par.Inlines.InsertAfter(hl, s);
-                                            par.Inlines.Remove(hl);
-                                            par.Inlines.Remove(hlink);
-                                            break;
-
-                                        }
-                                        MenuItem minifyUrl = new MenuItem();
-                                        minifyUrl.Header = "Minify with bit.ly";
-                                        minifyUrl.Click += async (s1, e2) => {
-                                            Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
-                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
-                                            if (!string.IsNullOrEmpty(minifiedLink)) {
-                                                matchRange.Text = minifiedLink;
-                                                rtb.ClearHyperlinks();
-                                                rtb.CreateHyperlinks();
-                                            }
-                                            //Clipboard.SetText(minifiedLink);
-                                        };
-                                        minifyUrl.Tag = hl;
-                                        hl.ContextMenu.Items.Add(minifyUrl);
-                                        break;
-                                    case MpSubTextTokenType.Email:
-                                        hl.NavigateUri = new Uri("mailto:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.PhoneNumber:
-                                        hl.NavigateUri = new Uri("tel:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.Currency:
-                                        try {
-                                            //"https://www.google.com/search?q=%24500.80+to+yen"
-                                            MenuItem convertCurrencyMenuItem = new MenuItem();
-                                            convertCurrencyMenuItem.Header = "Convert Currency To";
-                                            var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
-                                            foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                                if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
-                                                    continue;
-                                                }
-                                                MenuItem subItem = new MenuItem();
-                                                subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                                subItem.Click += async (s2, e2) => {
-                                                    Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-                                                    var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-                                                        MpHelpers.Instance.GetCurrencyValueFromString(linkText),
-                                                        fromCurrencyType,
-                                                        toCurrencyType);
-                                                    convertedValue = Math.Round(convertedValue, 2);
-                                                    if (rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
-                                                        ((List<Hyperlink>)rtb.Tag).Remove(hl);
-                                                    }
-                                                    Run run = new Run(currency.CurrencySymbol + convertedValue);
-                                                    hl.Inlines.Clear();
-                                                    hl.Inlines.Add(run);
-                                                };
-
-                                                convertCurrencyMenuItem.Items.Add(subItem);
-                                            }
-
-                                            hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
-                                        }
-                                        catch (Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
-                                        }
-                                        break;
-                                    case MpSubTextTokenType.HexColor8:
-                                    case MpSubTextTokenType.HexColor6:
-                                        var rgbColorStr = linkText;
-                                        if (rgbColorStr.Length > 7) {
-                                            rgbColorStr = rgbColorStr.Substring(0, 7);
-                                        }
-                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
-
-                                        MenuItem changeColorItem = new MenuItem();
-                                        changeColorItem.Header = "Change Color";
-                                        changeColorItem.Click += (s, e) => {
-                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
-                                            if (result != null) {
-                                                var run = new Run(result.ToString());
-                                                hl.Inlines.Clear();
-                                                hl.Inlines.Add(run);
-                                                var bgBrush = result;
-                                                var fgBrush = MpHelpers.Instance.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
-                                                var tr = new TextRange(run.ElementStart, run.ElementEnd);
-                                                tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
-                                                tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
-                                            }
-                                        };
-                                        hl.ContextMenu.Items.Add(changeColorItem);
-
-                                        hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
-                                        hl.Foreground = MpHelpers.Instance.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
-                                        break;
-                                    default:
-                                        MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (rtbSelection != null) {
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-        }
-
-        public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
-            if (rtb == null) {
-                return new List<Hyperlink>();
-            }
-            var rtbSelection = rtb?.Selection;
-
-            var hlList = new List<Hyperlink>();
-            for (TextPointer position = rtb.Document.ContentStart;
-                position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
-                position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                    var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
-                    if (hl != null && !hlList.Contains(hl)) {
-                        hlList.Add(hl);
-                    }
-                }
-            }
-            if (rtbSelection != null) {
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-            return hlList;
-        }
-        #endregion
-
         #region Colors
         public static string ToHex(this Brush b) {
             if(b is SolidColorBrush scb) {
@@ -774,7 +616,19 @@ namespace MpWpfApp {
         }
 
         #endregion
+
         #region Documents
+
+        public static void FitDocToRtb(this RichTextBox rtb) {
+            rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
+            rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
+        }
+
+        public static void FitRtbToDoc(this RichTextBox rtb) {
+            var ds = rtb.Document.GetDocumentSize();
+            rtb.Width = ds.Width + rtb.Margin.Left + rtb.Margin.Right + rtb.Padding.Left + rtb.Padding.Right;
+            rtb.Height = ds.Height + rtb.Margin.Top + rtb.Margin.Bottom + rtb.Padding.Top + rtb.Padding.Bottom;
+        }
 
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
             return MpHelpers.Instance.ConvertFlowDocumentToBitmap(
@@ -863,17 +717,19 @@ namespace MpWpfApp {
         }
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
-            var rtbSelection = rtb.Selection;
-            var documentBytes = UTF8Encoding.Default.GetBytes(document);
-            using (var reader = new MemoryStream(documentBytes)) {
-                reader.Position = 0;
-                rtb.SelectAll();
-                rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
-                //rtb.CaretPosition = rtb.Document.ContentStart;
-                if (rtbSelection != null) {
-                    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            MpHelpers.Instance.RunOnMainThread(() => {
+                var rtbSelection = rtb.Selection;
+                var documentBytes = UTF8Encoding.Default.GetBytes(document);
+                using (var reader = new MemoryStream(documentBytes)) {
+                    reader.Position = 0;
+                    rtb.SelectAll();
+                    rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                    //rtb.CaretPosition = rtb.Document.ContentStart;
+                    if (rtbSelection != null) {
+                        rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                    }
                 }
-            }
+            });            
         }
 
         public static string GetRtf(this RichTextBox rtb) {
@@ -961,6 +817,17 @@ namespace MpWpfApp {
             return text.StartsWith(@"<Section xmlns=");
         }
 
+        public static bool IsStringQuillText(this string text) {
+            if(IsStringPlainText(text)) {
+                foreach(var qt in MpQuillFormatProperties.Instance.QuillOpenTags) {
+                    if(text.Contains(qt)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static bool IsStringPlainText(this string text) {
             //returns true for csv
             if (text == null) {
@@ -975,12 +842,22 @@ namespace MpWpfApp {
             return true;
         }
 
+        public static string ToQuillText(this string text) {
+            if(text.IsStringQuillText()) {
+                return text;
+            }
+            return MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(text.ToRichText());
+        }
+
         public static string ToRichText(this string str) {
             if(str == null) {
                 str = string.Empty;
             }
             if(str.IsStringRichText()) {
                 return str;
+            }
+            if(str.IsStringQuillText()) {
+                return MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(str);
             }
             return MpHelpers.Instance.ConvertPlainTextToRichText(str);
         }
@@ -1006,6 +883,9 @@ namespace MpWpfApp {
         public static MpEventEnabledFlowDocument ToFlowDocument(this string str) {
             if(string.IsNullOrEmpty(str)) {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
+            }
+            if(str.IsStringQuillText()) {
+                return str.ToRichText().ToFlowDocument();
             }
             if(MpHelpers.Instance.IsStringPlainText(str)) {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(str));

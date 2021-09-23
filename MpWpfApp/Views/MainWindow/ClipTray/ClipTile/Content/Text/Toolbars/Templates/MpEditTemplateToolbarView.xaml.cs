@@ -21,75 +21,48 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpEditTemplateToolbarView : UserControl {
         private RichTextBox _activeRtb;
-        private Hyperlink _selectedTemplateHyperlink = null;
-        private string _originalText = string.Empty;
-        private string _originalTemplateName = string.Empty;
-        private TextRange _originalSelection = null;
-        private Brush _originalTemplateColor = Brushes.Pink;
 
         public MpEditTemplateToolbarView() {
             InitializeComponent();
-            Visibility = Visibility.Collapsed;
         }
 
         public void SetActiveRtb(RichTextBox trtb) {
             _activeRtb = trtb;
             _activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
-            //var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
-            //foreach(var thlvm in rtbvm.TemplateCollection.Templates) {
-            //    thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
-            //}
         }
 
-        public void CancelCreate() {
-            //var rtb = this.ElementStart.Parent.FindParentOfType<RichTextBox>();
+        public void CancelEdit() {
+            var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
 
-            //rtb.Selection.Select(ElementStart, ElementEnd);
-            //rtb.Selection.Text = string.Empty;
+            thlvm.CancelCommand.Execute(null);
+            if (thlvm.WasNew) {
+                //var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
+                //        SelectedTemplateHyperlinkViewModel.Dispose(false);
+                //        _originalSelection.Text = _originalText;
+                //        var sr = MpHelpers.Instance.FindStringRangeFromPosition(selectionStart, _originalText, true);
+                //        SubSelectedRtbViewModel.Rtb.Selection.Select(sr.Start, sr.End); 
+                var rtbv = _activeRtb.GetVisualAncestor<MpRtbView>();
+                new TextRange(rtbv.LastEditedHyperlink.ElementStart, rtbv.LastEditedHyperlink.ElementEnd).Text = string.Empty;
 
-
-            //var thlvm = DataContext as MpTemplateHyperlinkViewModel;
-
-            //if (thlvm != null) {
-            //    var thlcvm = thlvm.HostTemplateCollectionViewModel;
-            //    if (thlcvm != null) {
-            //        thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
-            //    }
-            //}
-
-            //rtb.Selection.Select(NewStartPointer, NewStartPointer);
-            //rtb.Selection.Text = NewOriginalText;
-        }
-
-        public void ShowToolbar() {
-            var ctdv = this.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpClipTileDetailView>();
-            ctdv.Visibility = Visibility.Collapsed;
-            Visibility = Visibility.Visible;
-        }
-
-        public void HideToolbar() {
-            Visibility = Visibility.Collapsed;
-            var ctdv = this.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpClipTileDetailView>();
-            ctdv.Visibility = Visibility.Visible;            
-        }
-
-        private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
-            DataContext = sender as MpTemplateViewModel;
-            ShowToolbar();
+                _activeRtb.Selection.Select(rtbv.NewStartRange.Start, rtbv.NewStartRange.End);
+                _activeRtb.Selection.Text = string.Empty;
+                _activeRtb.Selection.Text = rtbv.NewOriginalText;
+                thlvm.WasNew = false;
+            }
+            //Visibility = Visibility.Collapsed;
         }
 
         private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var thlvm = DataContext as MpTemplateViewModel;
-            if(thlvm != null) {
-                thlvm.OkCommand.Execute(null);
-                HideToolbar();
-                _activeRtb.Focus();
+            if(Visibility == Visibility.Visible) {
+                var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
+                if (thlvm != null) {
+                    thlvm.OkCommand.Execute(null);
+                }
             }
         }
 
-
         private void TemplateNameEditorTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var thlvm = DataContext as MpTemplateViewModel;
+            var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
             if (e.Key == Key.Escape) {
                 thlvm.CancelCommand.Execute(null);
                 e.Handled = true;
@@ -101,10 +74,7 @@ namespace MpWpfApp {
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e) {
-            var thlvm = DataContext as MpTemplateViewModel;
-            if(thlvm.IsNew) {
-
-            }
+            CancelEdit();
         }
     }
 }

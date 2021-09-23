@@ -63,6 +63,7 @@ namespace MpWpfApp {
                 } else if (iData.GetDataPresent(DataFormats.Rtf)) {
                     itemType = MpCopyItemType.RichText;
                     itemData = (string)iData.GetData(DataFormats.Rtf);
+                    //itemData = itemData.ToQuillText();
                 } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = ((BitmapSource)Clipboard.GetImage()).ToBase64String();
@@ -73,6 +74,7 @@ namespace MpWpfApp {
                         url = MpUrlBuilder.CreateFromHtmlData(htmlData);
                     }
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
+                    //itemData = itemData.ToQuillText();
                 } else {
                     MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
                     return null;

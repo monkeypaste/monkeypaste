@@ -25,21 +25,6 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        public MpContentListItemView GetSubSelectedItemView() {
-            if(ClipTileRichTextBoxListBox.Items.Count == 0) {
-                return null;
-            }
-            var ccvm = DataContext as MpClipTileViewModel;
-            if (ClipTileRichTextBoxListBox.SelectedIndex < 0) {
-                ClipTileRichTextBoxListBox.SelectedItem = ClipTileRichTextBoxListBox.Items[0];
-            }
-            var sciLbi = ClipTileRichTextBoxListBox.GetListBoxItem(ClipTileRichTextBoxListBox.SelectedIndex);
-            if(sciLbi == null) {
-                throw new Exception("Cannot select content item");
-            }
-            return sciLbi.GetVisualDescendent<MpContentListItemView>();
-        }
-
         public void UpdateAdorners() {
             RtbLbAdornerLayer.Update();
             for (int i = 0; i < ClipTileRichTextBoxListBox.Items.Count; i++) {
@@ -48,7 +33,7 @@ namespace MpWpfApp {
                     MonkeyPaste.MpConsole.WriteTraceLine("No Listbox Item at idx: " + i);
                     continue;
                 }
-                var cliv = lbi.GetVisualDescendent<MpContentListItemView>();
+                var cliv = lbi.GetVisualDescendent<MpContentItemView>();
                 cliv?.UpdateAdorner();
             }
         }
@@ -70,14 +55,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTileRichTextBoxListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            var rtblbvm = DataContext as MpClipTileViewModel;
-            // NOTE This is for selection changed from interface from VM is in another handler
-            var srtb = (sender as FrameworkElement).GetVisualDescendent<RichTextBox>();
-            if(srtb != null && rtblbvm.PrimaryItem.IsEditingContent) {
-                EditToolbarView.SetActiveRtb(srtb);
-                EditTemplateView.SetActiveRtb(srtb);
-                PasteTemplateView.SetActiveRtb(srtb);
-            }
+            var rtblbvm = DataContext as MpClipTileViewModel;            
 
             if (rtblbvm.Count > 1) {
                 //order selected tiles by ascending datetime 
@@ -115,6 +93,8 @@ namespace MpWpfApp {
 
         private void MpRtbEditToolbarView_OnTileExpand(object sender, EventArgs e) {
             EditToolbarView.Visibility = Visibility.Visible;
+            var rtbcvm = DataContext as MpClipTileViewModel;
+            rtbcvm.PrimaryItem.IsSelected = true;
             UpdateUi();
         }
         #endregion

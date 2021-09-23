@@ -18,13 +18,14 @@
                    VerticalAlignment="Stretch">
             <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
-                                        DataContext="{Binding SelectedItem}" />
+                                        DataContext="{Binding PrimaryItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              DockPanel.Dock="Bottom"
-                                             DataContext="{Binding SelectedItem.TemplateCollection.SelectedTemplate}" />
+                                             Visibility="{Binding IsEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                             DataContext="{Binding PrimaryItem.TemplateCollection}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
-                                              DataContext="{Binding SelectedItem.TemplateCollection}" />
+                                              DataContext="{Binding PrimaryItem.TemplateCollection}" />
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"
                                         RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"
@@ -81,7 +82,7 @@
                 </local:MpMultiSelectListBox.ItemContainerStyle>
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
-                        <local:MpContentListItemView DataContext="{Binding}" />
+                        <local:MpContentItemView DataContext="{Binding}" />
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>

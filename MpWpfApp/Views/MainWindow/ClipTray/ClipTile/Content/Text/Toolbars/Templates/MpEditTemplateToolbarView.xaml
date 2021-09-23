@@ -22,9 +22,9 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="TemplateColorButton"
                     Grid.Column="0"
-                    Command="{Binding ChangeTemplateColorCommand}"
+                    Command="{Binding SelectedTemplate.ChangeTemplateColorCommand}"
                     CommandParameter="{x:Reference TemplateColorButton}"
-                    Background="{Binding TemplateBrush, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{Binding SelectedTemplate.TemplateBrush, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                     Width="20"
                     Height="20"
                     VerticalAlignment="Center"
@@ -38,9 +38,9 @@
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Top"
-                         BorderBrush="{Binding TemplateNameTextBoxBorderBrush}"
+                         BorderBrush="{Binding SelectedTemplate.TemplateNameTextBoxBorderBrush}"
                          BorderThickness="2"
-                         Text="{Binding TemplateName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding SelectedTemplate.TemplateName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                          PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                          FontSize="14"
                          Height="25"
@@ -49,8 +49,8 @@
                          Margin="0,0,0,0"
                          Padding="0,0,0,0" />
                 <TextBlock x:Name="TemplateNameValidationTextBlock"
-                           Text="{Binding ValidationText}"
-                           Visibility="{Binding HostTemplateCollectionViewModel.ValidationVisibility}"
+                           Text="{Binding SelectedTemplate.ValidationText}"
+                           Visibility="{Binding SelectedTemplate.IsValid, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                            Foreground="Red"
                            FontStyle="Oblique"
                            HorizontalAlignment="Right"
@@ -79,7 +79,7 @@
                         FontSize="14"
                         Content="DONE"
                         HorizontalAlignment="Stretch"
-                        Command="{Binding OkCommand}"
+                        Command="{Binding SelectedTemplate.OkCommand}"
                         IsDefault="True" />
             </StackPanel>
         </Grid>

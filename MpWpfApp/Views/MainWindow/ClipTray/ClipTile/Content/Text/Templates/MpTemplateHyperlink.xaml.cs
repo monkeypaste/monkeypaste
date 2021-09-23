@@ -19,12 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
-    public partial class MpTemplateHyperlink : Hyperlink {
-        public TextPointer NewStartPointer;
-        public string NewOriginalText;
-
-        public bool IsNew = false;
-
+    public partial class MpTemplateHyperlink : Hyperlink {       
         public RichTextBox Rtb;
 
         public static MpTemplateHyperlink Create(TextRange tr,MpCopyItemTemplate cit) {
@@ -47,32 +42,29 @@ namespace MpWpfApp {
                 tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
             }
 
-            var startPointer = tr.Start;
-            string origText = tr.Text;
-
-            tr.Text = string.Empty;
-
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
             var rtbvm = rtb.DataContext as MpContentItemViewModel;
             var thcvm = rtbvm.TemplateCollection;
 
+            string origText = tr.Text;
             bool newCit = cit == null;
+
+            if(cit == null) {
+                //for new templates create a default name
+                cit = MpCopyItemTemplate.Create(
+                            thcvm.Parent.CopyItem.Id,
+                            string.IsNullOrWhiteSpace(origText) ? thcvm.GetUniqueTemplateName():thcvm.GetFormattedTemplateName(origText));
+                cit.WriteToDatabase();
+            }
+
+            tr.Text = string.Empty;
 
             MpTemplateViewModel thlvm = thcvm.AddItem(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
 
-            if(newCit) {
-                nthl.IsNew = true;
-                nthl.NewStartPointer = startPointer;
-                nthl.NewOriginalText = origText;
-
-                var ettbv = rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
-                ettbv.SetActiveRtb(rtb);
-
-                thlvm.IsSelected = true;
-            }
             nthl.Rtb = rtb;
+
             return nthl;
         }
 
@@ -83,20 +75,39 @@ namespace MpWpfApp {
         public MpTemplateHyperlink(TextRange tr, MpTemplateViewModel thlvm) : base(tr.Start,tr.End) {
             DataContext = thlvm;
 
-            var rtbv = tr.Start.Parent.FindParentOfType<MpRtbView>();
-            rtbv.AddTemplate(thlvm, this);
             InitializeComponent();
 
-        }       
-        
-        private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            //var thlvm = DataContext as MpTemplateViewModel;
-            //if (thlvm != null) {
-            //    var thlcvm = thlvm.Parent;
-            //    if (thlcvm != null) {
-            //        thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
-            //    }
-            //}
+        }
+
+        private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
+            var thl = sender as MpTemplateHyperlink;
+            var thlvm = DataContext as MpTemplateViewModel;
+            MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
+            Rtb = thl.FindParentOfType<RichTextBox>();
+
+
+            var rtbv = Rtb.FindParentOfType<MpRtbView>();
+            rtbv.AddTemplate(thlvm, this);
+        }
+
+        private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {            
+            var thlvm = DataContext as MpTemplateViewModel;
+            var rtbv = Rtb.FindParentOfType<MpRtbView>();
+            rtbv.RemoveTemplate(thlvm, this);
+
+            if(rtbv.IsClearing) {
+                // this should checking false but it seems to be flipped...
+                if (thlvm != null) {
+                    var thlcvm = thlvm.Parent;
+                    if (thlcvm != null) {
+                        thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
+                        MpConsole.WriteLine($"template {thlvm.TemplateName} REMOVED from: " + sender.GetType().ToString());
+                    }
+                }
+            } else {
+                MpConsole.WriteLine($"template {thlvm.TemplateName} unloaded from: " + sender.GetType().ToString());
+            }
+
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
@@ -109,14 +120,32 @@ namespace MpWpfApp {
             thlvm.IsHovering = false;
         }
 
-        private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {            
+        private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var thlvm = DataContext as MpTemplateViewModel;
-            thlvm.IsSelected = true;
+            if(thlvm.Parent.Parent.IsEditingContent) {
+                EditTemplate();
+            }
+        }
 
-            var rtb = this.FindParentOfType<RichTextBox>();
-            var ettbv = rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
-            ettbv.DataContext = thlvm;
-            ettbv.ShowToolbar();
+        public void EditTemplate() {
+            var rtbv = Rtb.FindParentOfType<MpRtbView>();
+            rtbv.LastEditedHyperlink = this;
+            var thlvm = DataContext as MpTemplateViewModel;
+
+            thlvm.EditTemplateCommand.Execute(null);
+        }
+
+        private void DeleteAll_Click(object sender, RoutedEventArgs e) {
+            var thlvm = DataContext as MpTemplateViewModel;
+            var rtbv = Rtb.FindParentOfType<MpRtbView>();
+            foreach(var t in rtbv.TemplateLookUp) {
+                if(t.Key == thlvm.CopyItemTemplateId) {
+                    foreach(var thl in t.Value) {
+                        Rtb.Selection.Select(thl.ElementStart, thl.ElementEnd);
+                        Rtb.Selection.Text = string.Empty;
+                    }
+                }
+            }
         }
     }
 }

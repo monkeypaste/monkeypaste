@@ -268,6 +268,8 @@ namespace MpWpfApp {
             }
         }
 
+        public bool WasNew { get; set; } = false;
+
         public int CopyItemTemplateId {
             get {
                 if (CopyItemTemplate == null) {
@@ -291,6 +293,7 @@ namespace MpWpfApp {
                 if (CopyItemTemplate == null) {
                     return "TEMPLATE UNKNOWN";
                 }
+                
                 return CopyItemTemplate.TemplateName;
             }
             set {
@@ -298,16 +301,7 @@ namespace MpWpfApp {
                     return;
                 }
                 if (CopyItemTemplate.TemplateName != value) {
-                    CopyItemTemplate.TemplateName = value;
-                    if(CopyItemTemplate.TemplateName == null) {
-                        CopyItemTemplate.TemplateName = string.Empty;
-                    }
-                    if(!CopyItemTemplate.TemplateName.StartsWith("<")) {
-                        CopyItemTemplate.TemplateName = "<" + CopyItemTemplate.TemplateName;
-                    }
-                    if(!CopyItemTemplate.TemplateName.EndsWith(">")) {
-                        CopyItemTemplate.TemplateName = CopyItemTemplate.TemplateName + ">";
-                    }
+                    CopyItemTemplate.TemplateName = Parent.GetFormattedTemplateName(value);
                 }
 
                 OnPropertyChanged(nameof(TemplateName));
@@ -367,10 +361,23 @@ namespace MpWpfApp {
                     case nameof(IsSelected):
                         if(IsSelected) {
                              OnTemplateSelected?.Invoke(this, null);
+                        } else {
+                            IsEditingTemplate = false;
+                            Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.TileDetailGridVisibility));
+                            Parent.OnPropertyChanged(nameof(Parent.IsEditingTemplate));
                         }
                         break;
                     case nameof(TemplateName):
                         Validate();
+                        break;
+                    case nameof(ValidationText):
+                        if(!string.IsNullOrEmpty(ValidationText)) {
+                            MpConsole.WriteLine("Validation text changed to: " + ValidationText);
+                        }
+                        break;
+                    case nameof(IsEditingTemplate):
+                        Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.TileDetailGridVisibility));
+                        Parent.OnPropertyChanged(nameof(Parent.IsEditingTemplate));
                         break;
                 }
             };
@@ -410,8 +417,8 @@ namespace MpWpfApp {
                     () => {
                         _originalModel = CopyItemTemplate.Clone() as MpCopyItemTemplate;
 
-                        Parent.ClearAllEditing();
-                        Parent.ClearSelection();
+                        //Parent.ClearAllEditing();
+                        //Parent.ClearSelection();
 
                         IsSelected = true;
                         IsEditingTemplate = true;
@@ -450,9 +457,13 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
+                        IsSelected = false;
+                        if (WasNew) {
+                            Parent.RemoveItem(CopyItemTemplate, false);
+                        }
                         CopyItemTemplate = _originalModel;
                         IsEditingTemplate = false;
-                        IsSelected = false;
+                        
                     });
             }
         }
@@ -461,8 +472,8 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        Parent.Parent.RequestSyncModels();
                         CopyItemTemplate.WriteToDatabase();
+                        Parent.Parent.RequestSyncModels();
                         IsEditingTemplate = false;
                         IsSelected = false;
                     },
@@ -503,18 +514,6 @@ namespace MpWpfApp {
         public override string ToString() {
             return TemplateName;
         }
-
-        //public void Dispose(bool fromContextMenu) {
-        //    if(fromContextMenu) {
-        //        HostTemplateCollectionViewModel.Rtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
-        //        HostTemplateCollectionViewModel.Rtb.Selection.Text = string.Empty;
-        //    }
-        //    //remove this individual token reference
-        //    if(HostTemplateCollectionViewModel != null) {
-        //        HostTemplateCollectionViewModel.TemplateHyperlinkCollectionViewModel.Templates.Remove(this);
-        //    }
-            
-        //}
 
         public object Clone() {
             var nthlvm = new MpTemplateViewModel(Parent, CopyItemTemplate);
