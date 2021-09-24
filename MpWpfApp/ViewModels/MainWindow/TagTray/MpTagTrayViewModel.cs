@@ -28,11 +28,11 @@ namespace MpWpfApp {
         #region View Models
         public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
 
-        public MpTagTileViewModel SelectedTagTile {
-            get {
-                return TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
-            }
-        }
+        public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
+
+        public MpTagTileViewModel AllTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.AllTagId).FirstOrDefault();
+
+        public MpTagTileViewModel RecentTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.RecentTagId).FirstOrDefault();
         #endregion
 
         #region Properties
@@ -67,8 +67,6 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
-
-            PropertyChanged += MpTagTrayViewModel_PropertyChanged;
 
             var allTags = MpDb.Instance.GetItems<MpTag>();
             if(allTags.Count == 0) {
@@ -117,8 +115,6 @@ namespace MpWpfApp {
 
             TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
 
-            MpClipTrayViewModel.Instance.OnTilesChanged += ClipTrayViewModels_OnTilesChanged;
-
             OnViewModelLoaded();
         }
 
@@ -128,45 +124,19 @@ namespace MpWpfApp {
             }
 
             RefreshAllCounts();
-            RefreshRecentTag();
         }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
         }
 
-        private void MpTagTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(SelectedTagTile):
-                    if(SelectedTagTile != null && SelectedTagTile.Tag == null) {
-                        //MpClipTrayViewModel.Instance.RefreshClips();
-                    }
-                    break;
-            }
-        }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
-
-
-            //leftButton.MouseDown += (s, e6) => {
-            //    NavLeftCommand.Execute(null);
-            //};
-            //rightButton.MouseDown += (s, e6) => {
-            //    NavRightCommand.Execute(null);
-            //};
             RefreshAllCounts();
 
             UpdateSortOrder(true);
 
-            GetRecentTagTileViewModel().IsSelected = true;
-        }
-
-        public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
-            foreach(var ivm in ctvm.ItemViewModels) {
-                GetHistoryTagTileViewModel().AddClip(ivm);
-
-            }
-            RefreshAllCounts();
+            RecentTagViewModel.IsSelected = true;
         }
 
         public void UpdateSortOrder(bool fromModel = false) {
@@ -191,52 +161,7 @@ namespace MpWpfApp {
             }
         }
 
-        public void RefreshRecentTag() {
-            return;
-            if (GetRecentTagTileViewModel().TagClipCount >= MpMeasurements.Instance.MaxRecentClipItems) {
-                var rtvm = GetRecentTagTileViewModel();
-                var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                    if (rtvm.IsLinked(ctvm)) {
-                        rctvml.Add(ctvm);
-                    }
-                }
-                rctvml = rctvml.OrderBy(x => x.ItemViewModels.Max(y=>y.CopyItem.CopyDateTime)).ToList();
-                int itemsToRemoveCount = rtvm.TagClipCount - MpMeasurements.Instance.MaxRecentClipItems;
-                for (int i = 0; i < itemsToRemoveCount; i++) {
-                    foreach(var rivm in rctvml[i].ItemViewModels) {
-                        rtvm.RemoveClip(rivm);
-                    }
-                }
-
-                if(rtvm.IsSelected) {
-                    //will trigger reselection in Add's property change
-                    rtvm.IsSelected = false;
-                }
-                //rtvm.TagClipCount = MpMeasurements.Instance.MaxRecentClipItems;
-            } else if (GetRecentTagTileViewModel().TagClipCount < MpMeasurements.Instance.MaxRecentClipItems) {
-                var rtvm = GetRecentTagTileViewModel();
-                var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                    if (rtvm.IsLinked(ctvm)) {
-                        rctvml.Add(ctvm);
-                    }
-                }
-                rctvml = rctvml.OrderBy(x => x.ItemViewModels.Max(y => y.CopyItem.CopyDateTime)).ToList();
-                int itemsToRemoveCount = rtvm.TagClipCount - MpMeasurements.Instance.MaxRecentClipItems;
-                for (int i = 0; i < itemsToRemoveCount; i++) {
-                    foreach (var rivm in rctvml[i].ItemViewModels) {
-                        rtvm.RemoveClip(rivm);
-                    }
-                }
-
-                if (rtvm.IsSelected) {
-                    //will trigger reselection in Add's property change
-                    rtvm.IsSelected = false;
-                }
-                //rtvm.TagClipCount = MpMeasurements.Instance.MaxRecentClipItems;
-            }
-        }
+        
         public void Add(MpTagTileViewModel newTagTile) {
             newTagTile.PropertyChanged += NewTagTile_PropertyChanged;
             TagTileViewModels.Add(newTagTile);
@@ -331,14 +256,14 @@ namespace MpWpfApp {
                                 }
                             }
                             if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
-                                //this else if prevents filtered out tiles from being shown while searching and an item is 
+                                //this prevents filtered out tiles from being shown while searching and an item is 
                                 //added while main window is locked
                                 //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
                                 MpClipTrayViewModel.Instance.IsFilteringByApp = false;
                                 MpClipTrayViewModel.Instance.RefreshClips();
                             }
                         } else if (SelectedTagTile == null) {
-                            GetRecentTagTileViewModel().IsSelected = true;
+                            RecentTagViewModel.IsSelected = true;
                         }
                         break;
                 }
@@ -378,8 +303,10 @@ namespace MpWpfApp {
         }
 
         public void ResetTagSelection() {
-            ClearTagSelection();
-            GetRecentTagTileViewModel().IsSelected = true;
+            if(SelectedTagTile != RecentTagViewModel) {
+                ClearTagSelection();
+                RecentTagViewModel.IsSelected = true;
+            }            
         }
 
         public void UpdateTagAssociation() {
@@ -404,13 +331,6 @@ namespace MpWpfApp {
             }
         }
 
-        public MpTagTileViewModel GetHistoryTagTileViewModel() {
-            return TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.AllTagId).ToList()[0];
-        }
-
-        public MpTagTileViewModel GetRecentTagTileViewModel() {
-            return TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.RecentTagId).ToList()[0];
-        }
         #endregion
 
         #region Private Methods

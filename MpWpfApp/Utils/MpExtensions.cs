@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -29,6 +30,10 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Collections
+        public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+            cv.Refresh();
+            MpConsole.WriteTraceLine("Collection refreshed",null,callerName,callerFilePath,lineNum);
+        }
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             foreach (T item in source)
                 action(item);
@@ -619,15 +624,21 @@ namespace MpWpfApp {
 
         #region Documents
 
+        public static void UpdateLayout(this UIElement rtb) {
+            rtb.UpdateLayout();
+        }
+
         public static void FitDocToRtb(this RichTextBox rtb) {
             rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
+            rtb.UpdateLayout();
         }
 
         public static void FitRtbToDoc(this RichTextBox rtb) {
             var ds = rtb.Document.GetDocumentSize();
             rtb.Width = ds.Width + rtb.Margin.Left + rtb.Margin.Right + rtb.Padding.Left + rtb.Padding.Right;
             rtb.Height = ds.Height + rtb.Margin.Top + rtb.Margin.Bottom + rtb.Padding.Top + rtb.Padding.Bottom;
+            rtb.UpdateLayout();
         }
 
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {

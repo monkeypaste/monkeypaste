@@ -43,6 +43,9 @@ namespace MonkeyPaste {
         public MpApp App { get; set; }
 
         [Ignore]
+        public bool IsUrlSource => PrimarySource == Url;
+
+        [Ignore]
         public MpICopyItemSource PrimarySource {
             get {
                 if (UrlId <= 0) {

@@ -21,5 +21,14 @@ namespace MpWpfApp {
         public MpClipTileDetailView() {
             InitializeComponent();
         }
+
+        private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            civm.CycleDetailCommand.Execute(null);
+        }
+
+        private void ClipTileDetailTextBlock_MouseLeave(object sender, MouseEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+        }
     }
 }

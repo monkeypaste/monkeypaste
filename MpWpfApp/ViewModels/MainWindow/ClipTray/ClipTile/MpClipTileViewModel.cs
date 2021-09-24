@@ -32,7 +32,6 @@ using System.Speech.Synthesis;
 
     public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentCommands {
         #region Private Variables
-        private int _detailIdx = 1;
         private List<string> _tempFileList = new List<string>();
 
 
@@ -370,9 +369,20 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Visibility        
+
         public Visibility DetailGridVisibility {
             get {
-                return IsAnyEditingTemplate || IsAnyPastingTemplate ? Visibility.Collapsed : Visibility.Visible;
+                if (IsExpanded) {
+                    if (IsAnyEditingTemplate ||
+                        IsAnyPastingTemplate) {
+                        return Visibility.Collapsed;
+                    }
+                } else {
+                    if (!IsSelected && !IsHovering) {
+                        return Visibility.Collapsed;
+                    }
+                }
+                return Visibility.Visible;
             }
         }
 
@@ -535,6 +545,8 @@ using System.Speech.Synthesis;
         #endregion
 
         #region State Properties 
+        public bool IsFlipped { get; set; } = false;
+
         public string MultiSelectedOrderIdxDisplayValue {
             get {
                 if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {

@@ -982,6 +982,9 @@
         <s:String x:Key="SignOutIcon">/Images/signout.png</s:String>
         <s:String x:Key="CopyIcon">/Images/copy.png</s:String>
         
+        <s:String x:Key="Hide">Hide</s:String>
+        <s:String x:Key="Collapse">Collapse</s:String>
+        
         <!-- Color Palletes -->
         <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
         <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
@@ -1014,5 +1017,7 @@
         <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
         <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
         <local:MpAppModeViewModel x:Key="AppModeViewModel" />
+        <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
+        <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
     </Application.Resources>
 </Application>

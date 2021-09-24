@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         private void Initialize() {
             this.Source = MpMeasurements.Instance;
-            this.Mode = BindingMode.TwoWay;
+            this.Mode = BindingMode.OneWay;
         }
     }
 }

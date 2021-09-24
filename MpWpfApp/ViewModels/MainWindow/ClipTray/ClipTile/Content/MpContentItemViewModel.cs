@@ -19,9 +19,12 @@ namespace MpWpfApp {
         private static string _unsetJoystickIcon64 = "";
         private static string _setJoyStickIcon64 = "";
 
-        #region Abstract Methods
-        
+        #region Private Variables
+        Size itemSize;
+        int fc = 0, lc = 0, cc = 0;
+        double ds = 0;
 
+        private int _detailIdx = 0;
         #endregion
 
         #region Properties
@@ -86,11 +89,11 @@ namespace MpWpfApp {
         #region Appearance
         public Brush DetailTextColor {
             get {
-                if (IsSelected) {
-                    return Brushes.DarkGray;
+                if (IsSelected || Parent.IsSelected) {
+                    return Brushes.Black;//Brushes.DarkGray;
                 }
-                if (IsHovering) {
-                    return Brushes.DimGray;
+                if (IsHovering || Parent.IsHovering) {
+                    return Brushes.Black;//Brushes.DimGray;
                 }
                 return Brushes.Transparent;
             }
@@ -134,14 +137,7 @@ namespace MpWpfApp {
 
         #region Visibility 
 
-        public Visibility TileDetailGridVisibility {
-            get {
-                if (Parent.IsAnyEditingTemplate || Parent.IsAnyPastingTemplate) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
-            }
-        }
+
 
         #endregion
 
@@ -151,14 +147,7 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool WasAddedAtRuntime {
-            get {
-                if(CopyItem == null) {
-                    return true;
-                }
-                return MpPreferences.Instance.StartupDateTime < CopyItem.CopyDateTime;
-            }
-        }
+        public bool IsNewAndFirstLoad { get; set; } = false;
 
         public Cursor RtbCursor {
             get {
@@ -183,18 +172,6 @@ namespace MpWpfApp {
             }
         }
 
-        private int _detailIdx = 1;
-        public int DetailIdx {
-            get {
-                return _detailIdx;
-            }
-            set {
-                if (_detailIdx != value) {
-                    _detailIdx = value;
-                    OnPropertyChanged(nameof(DetailIdx));
-                }
-            }
-        }
 
         public DateTime LastSubSelectedDateTime { get; set; }
 
@@ -260,19 +237,8 @@ namespace MpWpfApp {
         #region Business Logic
         public string TemplateRichText { get; set; }
 
-        public string DetailText {
-            get {
-                if (CopyItem == null) {
-                    return string.Empty;
-                }
-                _detailIdx++;
-                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                    _detailIdx = 1;
-                }
-                // TODO this should aggregate details over all sub items 
-                return GetDetail((MpCopyItemDetailType)_detailIdx);
-            }
-        }
+        public string DetailText { get; set; }
+
         #endregion
 
         #region Icons
@@ -382,8 +348,11 @@ namespace MpWpfApp {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
             CopyItem = ci;
 
+            IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+
+            CycleDetailCommand.Execute(null);
         }
 
         public async Task GatherAnalytics() {
@@ -467,26 +436,10 @@ namespace MpWpfApp {
         }
 
         public string GetDetail(MpCopyItemDetailType detailType) {
-            Size itemSize;
-            int fc = 0, lc = 0, cc = 0;
-            double ds = 0;
-            switch (CopyItem.ItemType) {
-                case MpCopyItemType.Image:
-                    var bmp = CopyItem.ItemData.ToBitmapSource();
-                    itemSize = new Size(bmp.Width, bmp.Height);
-                    break;
-                case MpCopyItemType.FileList:
-                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
-                    fc = fl.Count;
-                    ds = MpHelpers.Instance.FileListSize(fl.ToArray());
-                    break;
-                case MpCopyItemType.RichText:
-                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
-                    cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-                    break;
+            if(CopyItem == null) {
+                return string.Empty;
             }
-            string info = "I dunno";// string.Empty;
+            string info = string.Empty;
             switch (detailType) {
                 //created
                 case MpCopyItemDetailType.DateTimeCreated:
@@ -496,8 +449,7 @@ namespace MpWpfApp {
                 //chars/lines
                 case MpCopyItemDetailType.DataSize:
                     if (CopyItem.ItemType == MpCopyItemType.Image) {
-                        var bmp = CopyItem.ItemData.ToBitmapSource();
-                        info = "(" + (int)bmp.Width + "px) x (" + (int)bmp.Height + "px)";
+                        info = "(" + (int)itemSize.Width + "px) x (" + (int)itemSize.Height + "px)";
                     } else if (CopyItem.ItemType == MpCopyItemType.RichText) {
                         info = cc + " chars | " + lc + " lines";
                     } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
@@ -506,7 +458,7 @@ namespace MpWpfApp {
                     break;
                 //# copies/# pastes
                 case MpCopyItemDetailType.UsageStats:
-                    info = cc + " copies | " + CopyItem.PasteCount + " pastes";
+                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
                     break;
                 default:
                     info = "Unknown detailId: " + (int)detailType;
@@ -515,10 +467,6 @@ namespace MpWpfApp {
 
             return info;
         }
-
-        #region Db Events
-        #endregion
-
 
         #region View Request Invokers
 
@@ -550,9 +498,6 @@ namespace MpWpfApp {
             }
         }
 
-        
-
-
         public void SaveToDatabase() {
             CopyItem.WriteToDatabase();
         }
@@ -568,7 +513,49 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Protected Methods
+
+
+        #region Db Events
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem ci) {
+                if(ci.Id == CopyItem.Id) {
+                }
+            }
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                if (ci.Id == CopyItem.Id) {
+                    CopyItem = ci;
+                    MpConsole.WriteTraceLine("Reset model from db callback");
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Private Methods
+        private void UpdateDetails() {
+            _detailIdx = 1;
+            switch (CopyItem.ItemType) {
+                case MpCopyItemType.Image:
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
+                    break;
+                case MpCopyItemType.FileList:
+                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
+                    fc = fl.Count;
+                    ds = MpHelpers.Instance.FileListSize(fl.ToArray());
+                    break;
+                case MpCopyItemType.RichText:
+                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
+                    cc = CopyItem.ItemData.ToPlainText().Length;
+                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    break;
+            }
+        }
 
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -586,13 +573,25 @@ namespace MpWpfApp {
                         MainWindowViewModel.ShrinkClipTile(Parent);
                     }
                     break;
+                case nameof(CopyItem):
+                    UpdateDetails();
+                    break;
             }
         }
 
         #endregion
 
         #region Commands
-        
+
+        public ICommand CycleDetailCommand => new RelayCommand(
+            () => {
+                _detailIdx++;
+                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                    _detailIdx = 1;
+                }
+                // TODO this should aggregate details over all sub items 
+                DetailText = GetDetail((MpCopyItemDetailType)_detailIdx);                
+            });
 
         public ICommand EditSubContentCommand {
             get {

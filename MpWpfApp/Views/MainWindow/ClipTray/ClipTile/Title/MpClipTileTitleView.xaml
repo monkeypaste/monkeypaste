@@ -106,23 +106,24 @@
               MouseEnter="ClipTileTitleTextGrid_MouseEnter"
               MouseLeave="ClipTileTitleTextGrid_MouseLeave"
               PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_PreviewMouseLeftButtonDown"
-              Margin="15,5,30,25"
-              HorizontalAlignment="Left"
-              Background="{Binding TileTitleTextGridBackgroundBrush}">
+              Margin="10,3,30,25"
+              MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
+              MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
+              HorizontalAlignment="Left">
             <!-- Clip Title TextBlock -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
                        Text="{Binding CopyItem.Title}"
                        FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize, Mode=OneWay}"
+                       Background="{Binding TileTitleTextGridBackgroundBrush}"
                        Foreground="White"
-                       Background="Transparent"
                        Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityFlipConverter}}">
-                    <!--<TextBlock.Effect>
+                    <TextBlock.Effect>
                         <DropShadowEffect ShadowDepth="0.5"
                                             Direction="300"
                                             Color="Black"
-                                            Opacity="1.0"
+                                            Opacity="0.70"
                                             BlurRadius="0.1" />
-                    </TextBlock.Effect>--></TextBlock>
+                    </TextBlock.Effect></TextBlock>
             <!-- Clip Title TextBox -->
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
@@ -163,15 +164,7 @@
                     <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
                 </Button.RenderTransform>
                 <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Exclude Application"
-                                  Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding PlacementTarget.Tag.ExcludeApplicationCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
-                        <MenuItem Header="Add Paste Macro For Application"
-                                  Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
-                                  CommandParameter="{Binding}" />
-                    </ContextMenu>
+                    <local:MpClipTileSourceIconContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
                 </Button.ContextMenu>
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
@@ -188,10 +181,10 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
-                           Stretch="Fill"
+                           Stretch="Uniform"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Visibility="{Binding Parent.ClipTileTitleAppIconImageVisibility}"
+                           Visibility="Visible"
                            Width="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}"
                            Height="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}" />
                     <!--<Viewbox Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"

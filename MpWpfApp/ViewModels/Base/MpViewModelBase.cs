@@ -67,6 +67,8 @@ namespace MpWpfApp {
         //public MpMeasurements Measurements { get; private set; }
         #endregion
 
+        public bool IsChanged { get; set; }
+
         public bool HasViewChanged { get; set; }
 
         private bool _isMouseOverVerticalScrollBar = false;

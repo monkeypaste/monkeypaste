@@ -5,55 +5,147 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RtfTest"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <Storyboard x:Key="FrontToBack">
+            <DoubleAnimation Storyboard.TargetName="front"
+                             Storyboard.TargetProperty="Angle"
+                             From="0"
+                             To="180"
+                             Duration="0:0:1">
+                <DoubleAnimation.EasingFunction>
+                    <ElasticEase Springiness="0.5" Oscillations="0"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="back"
+                             Storyboard.TargetProperty="Angle"
+                             From="180"
+                             To="360"
+                             Duration="0:0:1">
+                <DoubleAnimation.EasingFunction>
+                    <ElasticEase Springiness="0.5" Oscillations="0"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Key="BackToFront">
+            <DoubleAnimation Storyboard.TargetName="front"
+                             Storyboard.TargetProperty="Angle"
+                             From="180"
+                             To="360"
+                             Duration="0:0:1">
+                <DoubleAnimation.EasingFunction>
+                    <ElasticEase Springiness="0.5" Oscillations="0"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="back"
+                             Storyboard.TargetProperty="Angle"
+                             From="360"
+                             To="540"
+                             Duration="0:0:1">
+                <DoubleAnimation.EasingFunction>
+                    <ElasticEase Springiness="0.5" Oscillations="0"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Window.Resources>
-    <Grid Margin="0,4,0,0.5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.07*" />
-            <RowDefinition Height="0.9*" />
-            <RowDefinition Height="0.1*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="0.5*" />
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0"
-               Grid.Column="0"
-               HorizontalContentAlignment="Center"
-               Content="Current Rtf" />
-        <Label Grid.Row="0"
-               Grid.Column="1"
-               HorizontalContentAlignment="Center"
-               Content="Current Flow Document" />
-        <Label Grid.Row="0"
-               Grid.Column="2"
-               HorizontalContentAlignment="Center"
-               Content="Prev Rtf list" />
-        <RichTextBox x:Name="rtf1"
-                     IsReadOnly="True"
-                     Grid.Column="0"
-                     Grid.Row="1" />
-        <RichTextBox x:Name="rtf2"
-                     IsReadOnly="true"
-                     Grid.Column="1"
-                     Grid.Row="1" />
-        <ListBox x:Name="rtf3_lb"
-                 HorizontalContentAlignment="Stretch"
-                 VirtualizingPanel.ScrollUnit="Pixel"
-                 Background="Yellow" 
-                 Grid.Column="3"
-                 Grid.Row="1" />
-        <Button Grid.Row="2"
-                Grid.Column="0"
-                Margin="5,5,20,5"
-                Content="Paste Clipboard"
-                Click="Button_Click" />
-        <Button Grid.Row="2"
-                Grid.Column="2"
-                Margin="20,5,5,5"
-                Content="Clear"
-                Click="Button_Click_1" />
-    </Grid>
+    <Viewport3D>
+        <Viewport3D.Resources>
+            <Style TargetType="Image">
+                <Setter Property="Width"
+                        Value="20" />
+                <Setter Property="Margin"
+                        Value="4" />
+                <Setter Property="Source"
+                        Value="C:\\Users\\tkefauver\\Desktop\\cat.jpg" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="4"
+                                          Direction="0"
+                                          ShadowDepth="0" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Viewport3D.Resources>
+        <Viewport3D.Camera>
+            <PerspectiveCamera Position="0, 0, 4" />
+        </Viewport3D.Camera>
+        
+        <Viewport3D.Children>
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <DirectionalLight Color="#FFFFFFFF"
+                                      Direction="0,0,-1" />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+            
+            <Viewport2DVisual3D>
+                <Viewport2DVisual3D.Transform>
+                    <RotateTransform3D >                        
+                        <RotateTransform3D.Rotation>
+                            <AxisAngleRotation3D x:Name="back" Axis="0, 1, 0"
+                                                 Angle="180" />
+                        </RotateTransform3D.Rotation>
+                    </RotateTransform3D>
+                </Viewport2DVisual3D.Transform>
+                <Viewport2DVisual3D.Geometry>
+                    <MeshGeometry3D Positions="-1 -1 0  1 -1 0  -1 1 0  1 1 0"
+                                    Normals="0 0 1  0 0 1  0 0 1  0 0 1"
+                                    TextureCoordinates="0 1  1 1  0 0  1 0   "
+                                    TriangleIndices="0 1 2  1 3 2" />
+                </Viewport2DVisual3D.Geometry>
+                <Viewport2DVisual3D.Material>
+                    <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
+                </Viewport2DVisual3D.Material>
+                <UniformGrid Columns="3">
+                    <!--host your content here-->
+                    <Border Background="Orange"
+                            MouseEnter="Image_MouseEnter" />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                </UniformGrid>              
+                
+            </Viewport2DVisual3D>
+            
+            <Viewport2DVisual3D>
+                <Viewport2DVisual3D.Transform>
+                    <RotateTransform3D  >
+                        <RotateTransform3D.Rotation>
+                            <AxisAngleRotation3D x:Name="front" Axis="0, 1, 0"
+                                                 Angle="0" />
+                        </RotateTransform3D.Rotation>
+                    </RotateTransform3D>
+                </Viewport2DVisual3D.Transform>
+                <Viewport2DVisual3D.Geometry>
+                    <MeshGeometry3D Positions="-1 -1 0  1 -1 0  -1 1 0  1 1 0"
+                                    Normals="0 0 1  0 0 1  0 0 1  0 0 1"
+                                    TextureCoordinates="0 1  1 1  0 0  1 0   "
+                                    TriangleIndices="0 1 2  1 3 2" />
+                </Viewport2DVisual3D.Geometry>
+                <Viewport2DVisual3D.Material>
+                    <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
+                </Viewport2DVisual3D.Material>
+                <UniformGrid Columns="3">
+                    <!--host your content here-->
+                    <Border Background="Blue"
+                            MouseEnter="Image_MouseEnter" />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                    <Image />
+                </UniformGrid>
+            </Viewport2DVisual3D>
+        </Viewport3D.Children>
+    </Viewport3D>
 </Window>

@@ -95,7 +95,7 @@ namespace MpWpfApp {
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
         public MpClipTileTitleSwirlViewModel(MpContentItemViewModel ctvm) : base(ctvm) {
-            var icon = Parent.CopyItem.Source.App.Icon;
+            var icon = Parent.CopyItem.Source.PrimarySource.SourceIcon;
             var cl = new List<string>() { icon.HexColor1, icon.HexColor2, icon.HexColor3, icon.HexColor4, icon.HexColor5 };
             var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(cl);
             for (int i = 0; i < randomColorList.Count; i++) {

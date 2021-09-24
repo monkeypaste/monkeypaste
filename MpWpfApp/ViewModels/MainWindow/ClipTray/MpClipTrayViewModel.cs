@@ -654,9 +654,9 @@ namespace MpWpfApp {
                     sw2.Stop();
                     MonkeyPaste.MpConsole.WriteLine("New Item WriteToDatabase time: " + sw2.ElapsedMilliseconds + "ms");
                     //if (MainWindowViewModel != null && MainWindowViewModel.TagTrayViewModel != null) {
-                    if (MpTagTrayViewModel.Instance.SelectedTagTile != MpTagTrayViewModel.Instance.GetRecentTagTileViewModel()) {
+                    if (MpTagTrayViewModel.Instance.SelectedTagTile != MpTagTrayViewModel.Instance.RecentTagViewModel) {
                         //always add new clips to recent tag
-                        MpTagTrayViewModel.Instance.GetRecentTagTileViewModel().IsSelected = true;
+                        MpTagTrayViewModel.Instance.RecentTagViewModel.IsSelected = true;
                     }
                     // }
                     sw2.Start();
@@ -684,8 +684,6 @@ namespace MpWpfApp {
 
                     sw2.Stop();
                     MonkeyPaste.MpConsole.WriteLine("Play sound time: " + sw2.ElapsedMilliseconds + "ms");
-                    //MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
-                    //ListBox.Items.Refresh();
                 }
             }
             sw.Stop();
@@ -1824,7 +1822,7 @@ namespace MpWpfApp {
 
         public ICommand ExcludeApplicationCommand {
             get {
-                return new RelayCommand(()=> { });
+                return new RelayCommand<object>((excludeDomain)=> { });
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ using SQLiteNetExtensions.Extensions;
 using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
-    public abstract class MpDbModelBase {
+    public abstract class MpDbModelBase : INotifyPropertyChanged {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
         
@@ -181,5 +182,11 @@ namespace MonkeyPaste {
             }
             return dbo;
         }
+
+        #region PropertyChanged 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsChanged { get; set; }
+        #endregion
     }
 }

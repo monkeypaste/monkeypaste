@@ -363,7 +363,7 @@ namespace MpWpfApp {
                              OnTemplateSelected?.Invoke(this, null);
                         } else {
                             IsEditingTemplate = false;
-                            Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.TileDetailGridVisibility));
+                            Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                             Parent.OnPropertyChanged(nameof(Parent.IsEditingTemplate));
                         }
                         break;
@@ -376,7 +376,7 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(IsEditingTemplate):
-                        Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.TileDetailGridVisibility));
+                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                         Parent.OnPropertyChanged(nameof(Parent.IsEditingTemplate));
                         break;
                 }

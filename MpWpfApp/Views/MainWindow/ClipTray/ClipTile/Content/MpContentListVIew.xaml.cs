@@ -128,7 +128,7 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             this.UpdateLayout();
-            ClipTileRichTextBoxListBox.Items.Refresh();
+            //ClipTileRichTextBoxListBox.Items.Refresh();
         }
 
         public void SyncMultiSelectDragButton(bool isOver, bool isDown) {

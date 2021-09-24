@@ -40,6 +40,9 @@ namespace MpWpfApp {
 
         public void SyncModels() {
             var rtbvm = DataContext as MpContentItemViewModel;
+            if(!rtbvm.CopyItem.IsChanged) {
+                return;
+            }
             UpdateLayout();
             //clear any search highlighting when saving the document then restore after save
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
@@ -63,13 +66,12 @@ namespace MpWpfApp {
             if (scvml.Count > 0) {
                 rtbvm.ShortcutKeyString = scvml[0].KeyString;
             }
+
+            rtbvm.IsChanged = false;
         }
 
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            if(_hasLoaded) {
-                return;
-            }
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
                 rtbivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
                 rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
@@ -78,10 +80,11 @@ namespace MpWpfApp {
                 rtbivm.OnCreateTemplatesRequest += Rtbivm_OnCreateHyperlinksRequest;
                 rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
 
-                if (rtbivm.WasAddedAtRuntime) {
+                if (rtbivm.IsNewAndFirstLoad) {
                     //force new items to have left alignment
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
+                    rtbivm.IsNewAndFirstLoad = false;
                 }
                 SyncModels();
             }

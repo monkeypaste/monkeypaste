@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,30 +13,24 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
-namespace RtfTest {
+namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MpClipTileContainerView.xaml
     /// </summary>
-    public partial class MainWindow : Window {
+    public partial class MpClipTileContainerView : UserControl {
         bool isFlipped = false;
         Storyboard frontToBack, backToFront;
-        public MainWindow() {
+
+        public MpClipTileContainerView() {
             InitializeComponent();
         }
 
-        private void Image_MouseEnter(object sender, MouseEventArgs e) {
-            (sender as Border).Background = Brushes.Pink;
-        }
-
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if(isFlipped) {
-                backToFront.Begin();
-            } else {
-                frontToBack.Begin();
+        private void Viewport3D_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(MpMainWindowViewModel.IsMainWindowLoading || frontToBack == null || backToFront == null) {
+                return;
             }
-            isFlipped = !isFlipped;
+            frontToBack.Begin();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {

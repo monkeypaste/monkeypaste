@@ -127,6 +127,8 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
+    <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
     <Compile Include="Converters\MpBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToImageConverter.cs" />
@@ -221,8 +223,9 @@
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpContentItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpIContentCommands.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Meta\MpContentDescriptionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpIContentCommands.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
@@ -302,6 +305,9 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Detail\MpClipTileDetailView.xaml.cs">
       <DependentUpon>MpClipTileDetailView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileContainerView.xaml.cs">
+      <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileView.xaml.cs">
       <DependentUpon>MpClipTileView.xaml</DependentUpon>
     </Compile>
@@ -310,6 +316,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileTrialExpiredOverlay.xaml.cs">
       <DependentUpon>MpClipTileTrialExpiredOverlay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Title\Context\MpClipTileSourceIconContextMenu.xaml.cs">
+      <DependentUpon>MpClipTileSourceIconContextMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleView.xaml.cs">
       <DependentUpon>MpClipTileTitleView.xaml</DependentUpon>
@@ -432,6 +441,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileContainerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\MpClipTileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -441,6 +454,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Overlays\MpClipTileTrialExpiredOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Title\Context\MpClipTileSourceIconContextMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1944,6 +1961,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Data\" />
+    <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="Views\Settings\" />
   </ItemGroup>

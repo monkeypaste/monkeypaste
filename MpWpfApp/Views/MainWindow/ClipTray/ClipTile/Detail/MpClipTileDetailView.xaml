@@ -9,6 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border Grid.Row="2"
+            Padding="0.5"
             Background="Transparent"
             BorderThickness="0,0,0,0"
             BorderBrush="LightGray">
@@ -30,9 +31,11 @@
                     Template="{StaticResource SearchButtonControlTemplate}">
                 <Image Source="{Binding HotkeyIconSource, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
             </Button>
-            <TextBlock x:Name="ClipTileTitleDetailTextBlock"
+            <TextBlock x:Name="ClipTileDetailTextBlock"
                        Grid.Column="1"
                        Background="Transparent"
+                       MouseEnter="ClipTileDetailTextBlock_MouseEnter"
+                       MouseLeave="ClipTileDetailTextBlock_MouseLeave"
                        Foreground="{Binding DetailTextColor}"
                        FontSize="10"
                        HorizontalAlignment="Center"

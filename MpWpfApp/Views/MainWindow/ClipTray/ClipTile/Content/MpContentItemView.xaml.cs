@@ -34,6 +34,10 @@ namespace MpWpfApp {
             RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(EditorView);
             RtbItemAdornerLayer?.Add(RtbItemAdorner);
 
+            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
+            mwvm.OnTileExpand += MainWindowViewModel_OnTileExpand;
+            mwvm.OnTileUnexpand += MainWindowViewModel_OnTileUnexpand;
+
             var civm = DataContext as MpContentItemViewModel;
             var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItem.Id).ToList();
             if (scvml.Count > 0) {
@@ -44,11 +48,11 @@ namespace MpWpfApp {
         }
 
         private void MainWindowViewModel_OnTileUnexpand(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            EditorView.Rtb.FitDocToRtb();
         }
 
         private void MainWindowViewModel_OnTileExpand(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            EditorView.Rtb.FitRtbToDoc();
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {

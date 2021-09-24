@@ -113,6 +113,7 @@ namespace MpWpfApp {
             }
         }
 
+
         public double ClipTileLoadingSpinnerSize {
             get {
                 return ClipTileMinSize * 0.333;
@@ -179,11 +180,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileTitleTextGridCanvasLeft {
-            get {
-                return 5;
-            }
-        }
 
         public double ClipTileTitleFontSize {
             get {
@@ -209,9 +205,22 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileTitleTextGridWidth {
+
+        public double ClipTileTitleTextGridCanvasLeft {
             get {
-                return ClipTileTitleTextGridCanvasRight - ClipTileTitleTextGridCanvasLeft;
+                return 5;
+            }
+        }
+
+        public double ClipTileTitleTextGridMaxWidth {
+            get {
+                return ClipTileBorderMinSize - ClipTileTitleIconBorderSize;
+            }
+        }
+
+        public double ClipTileTitleTextGridMinWidth {
+            get {
+                return 10;
             }
         }
 

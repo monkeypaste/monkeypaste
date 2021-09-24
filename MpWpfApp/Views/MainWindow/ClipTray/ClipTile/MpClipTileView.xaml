@@ -8,8 +8,8 @@
              xmlns:local="clr-namespace:MpWpfApp"             
              mc:Ignorable="d"             
              d:DesignHeight="450"
-             d:DesignWidth="800">
-    <local:MpClipBorder x:Name="ClipTileClipBorder"
+             d:DesignWidth="800">    
+    <local:MpClipBorder x:Name="ClipTileClipBorder"                        
                         DataContext="{Binding}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin, Converter={StaticResource DoubleToThicknessConverter}, Mode=OneWay}"
                         BorderThickness="{Binding TileBorderThickness}"
@@ -90,8 +90,9 @@
                 <!-- Tile Detail Grid -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
+                                            Margin="1"
                                             Height="{local:MpMeasurementsBinding ClipTileDetailHeight, Mode=OneWay}"
-                                            Visibility="{Binding TileDetailGridVisibility}"
+                                            Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!-- Content Container Canvas -->
                 <local:MpContentListView DataContext="{Binding}" />               

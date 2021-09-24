@@ -32,7 +32,7 @@ namespace MonkeyPaste {
         [Column("fk_MpUrlDomainId")]
         public int UrlDomainId { get; set; }
 
-        [ManyToOne]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUrlDomain UrlDomain { get; set; }
 
         [Indexed]
@@ -95,7 +95,7 @@ namespace MonkeyPaste {
         public string SourcePath => UrlPath;
 
         [Ignore]
-        public string SourceName => UrlTitle;
+        public string SourceName => UrlPath;
 
         [Ignore]
         public int RootId {

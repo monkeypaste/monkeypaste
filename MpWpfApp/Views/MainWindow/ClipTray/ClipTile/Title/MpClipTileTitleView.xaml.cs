@@ -24,7 +24,6 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconBorderImage_Loaded(object sender, RoutedEventArgs e) {
-            ClipTileTitleTextGrid.Width = MpMeasurements.Instance.ClipTileTitleTextGridWidth;
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
         }
 
@@ -125,6 +124,8 @@ namespace MpWpfApp {
 
         private void ClipTileAppIconImageButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
+            ctvm.Parent.IsFlipped = true;
+
             //MpHelpers.Instance.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();
             ctvm.IsSelected = true;
