@@ -76,7 +76,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel; 
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
             var rtbcv = this.GetVisualDescendent<MpContentListView>();
-            if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedClipTiles.Count <= 1) {
+            if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedItems.Count <= 1) {
                 return;
             }
             var mp = e.GetPosition(rtblb);
@@ -106,7 +106,7 @@ namespace MpWpfApp {
             var ctvm = DataContext as MpClipTileViewModel;
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
 
-            if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedClipTiles.Count <= 1) {
+            if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedItems.Count <= 1) {
                 return;
             }
             var mp = e.GetPosition(rtblb);

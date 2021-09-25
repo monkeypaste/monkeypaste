@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppViewModel : MpViewModelBase {
+    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel> {
         #region Properties
 
         #region State
@@ -144,9 +144,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAppViewModel() : this(null) { }
+        public MpAppViewModel() : base(null) { }
 
-        public MpAppViewModel(MpApp app) : base() {
+        public MpAppViewModel(MpAppCollectionViewModel parent, MpApp app) : base(parent) {
             App = app;
         }
         #endregion

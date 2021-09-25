@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +15,11 @@ namespace MonkeyPaste {
     /// </summary>
     public static class UndoManager {
         #region Properties
-        private static MpRangeObservableCollection<MpIUndoRedo> _undoList;
-        public static MpRangeObservableCollection<MpIUndoRedo> UndoList {
+        private static ObservableCollection<MpIUndoRedo> _undoList;
+        public static ObservableCollection<MpIUndoRedo> UndoList {
             get {
                 if (_undoList == null)
-                    _undoList = new MpRangeObservableCollection<MpIUndoRedo>();
+                    _undoList = new ObservableCollection<MpIUndoRedo>();
                 return _undoList;
             }
             private set {
@@ -26,11 +27,11 @@ namespace MonkeyPaste {
             }
         }
 
-        private static MpRangeObservableCollection<MpIUndoRedo> _redoList;
-        public static MpRangeObservableCollection<MpIUndoRedo> RedoList {
+        private static ObservableCollection<MpIUndoRedo> _redoList;
+        public static ObservableCollection<MpIUndoRedo> RedoList {
             get {
                 if (_redoList == null)
-                    _redoList = new MpRangeObservableCollection<MpIUndoRedo>();
+                    _redoList = new ObservableCollection<MpIUndoRedo>();
                 return _redoList;
             }
             private set {
@@ -125,7 +126,9 @@ namespace MonkeyPaste {
                 // Now repopulate the undo and redo lists.
                 UpdateRedoList(copyRedoList);
                 UndoList.Clear();
-                UndoList.AddRange(copyUndoList);
+                foreach(var ui in copyUndoList) {
+                    UndoList.Add(ui);
+                }
             }
         }
 
@@ -156,7 +159,9 @@ namespace MonkeyPaste {
 
         private static void UpdateRedoList(List<MpIUndoRedo> redoList) {
             RedoList.Clear();
-            RedoList.AddRange(redoList);
+            foreach(var ri in redoList) {
+                RedoList.Add(ri);
+            }
         }
     }
 }

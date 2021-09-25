@@ -1,17 +1,34 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerGroupCollectionViewModel : MpObservableCollectionViewModel<MpSoundPlayerViewModel> {
+    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase<object> {
         private static readonly Lazy<MpSoundPlayerGroupCollectionViewModel> _Lazy = new Lazy<MpSoundPlayerGroupCollectionViewModel>(() => new MpSoundPlayerGroupCollectionViewModel());
         public static MpSoundPlayerGroupCollectionViewModel Instance { get { return _Lazy.Value; } }
 
         #region Properties
+
+        #region View Models
+        private ObservableCollection<MpSoundPlayerViewModel> _soundPlayerViewModels = new ObservableCollection<MpSoundPlayerViewModel>();
+        public ObservableCollection<MpSoundPlayerViewModel> SoundPlayerViewModels {
+            get {
+                return _soundPlayerViewModels;
+            }
+            set {
+                if (_soundPlayerViewModels != value) {
+                    _soundPlayerViewModels = value;
+                    OnPropertyChanged(nameof(SoundPlayerViewModels));
+                }
+            }
+        }
+        #endregion
+
         private MpSoundGroup _soundGroup = MpSoundGroup.None;
         public MpSoundGroup SoundGroup {
             get {
@@ -57,21 +74,21 @@ namespace MpWpfApp {
         #region Private Methods
         private MpSoundPlayerGroupCollectionViewModel() : this((MpSoundGroup)Properties.Settings.Default.NotificationSoundGroupIdx) { }
 
-        private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base() {
+        private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base(null) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedSoundGroupNameIdx):
-                        this.Clear();
+                        SoundPlayerViewModels.Clear();
                         SoundGroup = (MpSoundGroup)SelectedSoundGroupNameIdx;
                         switch (SoundGroup) {
                             case MpSoundGroup.None:
                                 //do nothing so collections empty and play commands don't execute
                                 break;
                             case MpSoundGroup.Minimal:
-                                this.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
-                                this.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
-                                this.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
-                                this.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
+                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
+                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
+                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
+                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
                                 break;
                         }
                         Properties.Settings.Default.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
@@ -94,10 +111,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayCopySound() {
-            return Properties.Settings.Default.NotificationDoCopySound && this.Count > 0;
+            return Properties.Settings.Default.NotificationDoCopySound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayCopySound() {
-            this.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
+            SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
         }
 
         private RelayCommand _playLoadedSoundCommand = null;
@@ -110,10 +127,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayLoadedSound() {
-            return Properties.Settings.Default.NotificationDoLoadedSound && this.Count > 0;
+            return Properties.Settings.Default.NotificationDoLoadedSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayLoadedSound() {
-            this.Where(x => x.SoundType == MpSoundType.Loaded).ToList()[0].Play();
+            SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Loaded).ToList()[0].Play();
         }
 
         private RelayCommand<bool> _playModeChangeCommand = null;
@@ -126,10 +143,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayModeChange(bool isOn) {
-            return Properties.Settings.Default.NotificationDoModeChangeSound && this.Count > 0;
+            return Properties.Settings.Default.NotificationDoModeChangeSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayModeChange(bool isOn) {
-            this.Where(x => isOn ? x.SoundType == MpSoundType.AppendOn: x.SoundType == MpSoundType.AppendOff).ToList()[0].Play();
+            SoundPlayerViewModels.Where(x => isOn ? x.SoundType == MpSoundType.AppendOn: x.SoundType == MpSoundType.AppendOff).ToList()[0].Play();
         }
         #endregion
     }

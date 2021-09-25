@@ -635,7 +635,6 @@ namespace MonkeyPaste {
             _connection.CreateTable<MpSyncHistory>();
             _connection.CreateTable<MpTag>();
             _connection.CreateTable<MpUrl>();
-            _connection.CreateTable<MpUrlDomain>();
             _connection.CreateTable<MpUserDevice>();
         }
 
@@ -654,7 +653,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
-            await _connectionAsync.CreateTableAsync<MpUrlDomain>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
         }
 

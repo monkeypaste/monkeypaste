@@ -280,7 +280,7 @@ namespace MpWpfApp {
 
         public void ResetTraySelection() {
             if (!SearchBoxViewModel.HasText) {
-                TagTrayViewModel.ResetTagSelection();
+                //TagTrayViewModel.ResetTagSelection();
                 ClipTrayViewModel.ResetClipSelection();
             }
         }
@@ -438,6 +438,8 @@ namespace MpWpfApp {
                     MpHelpers.Instance.RunOnMainThread(() => {
                         ClipTrayViewModel.RefreshClips();
                         ClipTrayViewModel.WasItemAdded = false;
+
+                        TagTrayViewModel.RefreshAllCounts();
                     }, DispatcherPriority.Normal);
                 });
             }
@@ -541,7 +543,6 @@ namespace MpWpfApp {
                         } else {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
-                        ResetTraySelection();
                     }
                 };
                 timer.Start();

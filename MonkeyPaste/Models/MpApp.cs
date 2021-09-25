@@ -157,9 +157,6 @@ namespace MonkeyPaste {
 
         [Ignore]
         public int RootId => Id;
-
-        [Ignore]
-        public bool IsSubSource => false;
         #endregion
 
         public async Task<object> CreateFromLogs(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

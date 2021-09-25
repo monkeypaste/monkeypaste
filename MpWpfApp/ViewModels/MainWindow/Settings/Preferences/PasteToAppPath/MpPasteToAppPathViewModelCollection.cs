@@ -13,9 +13,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using Xamarin.Forms.Internals;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModelCollection : MpObservableCollectionViewModel<MpPasteToAppPathViewModel> {
+    public class MpPasteToAppPathViewModelCollection : MpViewModelBase<object> {
         private static readonly Lazy<MpPasteToAppPathViewModelCollection> _Lazy = new Lazy<MpPasteToAppPathViewModelCollection>(() => new MpPasteToAppPathViewModelCollection());
         public static MpPasteToAppPathViewModelCollection Instance { get { return _Lazy.Value; } }
 
@@ -23,58 +24,61 @@ namespace MpWpfApp {
 
         #endregion
 
+
+        #region Properties
+
         #region View Models
-        private MpObservableCollection<MpObservableCollection<MpPasteToAppPathViewModel>> _menuItemViewModels = null;
-        public MpObservableCollection<MpObservableCollection<MpPasteToAppPathViewModel>> MenuItemViewModels {
+        private ObservableCollection<ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>> _menuItemViewModels = null;
+        public ObservableCollection<ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>> MenuItemViewModels {
             get {
-                if(_menuItemViewModels == null) {
-                    _menuItemViewModels = new MpObservableCollection<MpObservableCollection<MpPasteToAppPathViewModel>>();
-                    foreach(var kvp in MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary) {
+                if (_menuItemViewModels == null) {
+                    _menuItemViewModels = new ObservableCollection<ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>>();
+                    foreach (var kvp in MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary) {
                         var appName = MpHelpers.Instance.GetProcessApplicationName(kvp.Value[0]);
                         if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
                             continue;
                         }
                         var processPath = kvp.Key;
-                        var processHandles = new MpObservableCollection<MpPasteToAppPathViewModel>();
-                        foreach(var handle in kvp.Value) {
+                        var processHandles = new ObservableCollection<MpPasteToAppPathViewModel>();
+                        foreach (var handle in kvp.Value) {
                             processHandles.Add(
                                 new MpPasteToAppPathViewModel(
                                     new MpPasteToAppPath(
                                         processPath,
                                         MpHelpers.Instance.GetProcessMainWindowTitle(handle),
                                         MpHelpers.Instance.GetIconImage(processPath).ToBase64String(),
-                                        MpHelpers.Instance.IsProcessAdmin(handle)), 
+                                        MpHelpers.Instance.IsProcessAdmin(handle)),
                                     handle));
                         }
-                        //check already created menu items and add handles to AppName if it already exists
-                        int mivmIdx = -1;
-                        foreach(var mivm in _menuItemViewModels) {
-                            if(mivm.Count == 0) {
-                                continue;
+                        foreach (var mivmc in _menuItemViewModels) {
+                            //check already created menu items and add handles to AppName if it already exists
+                            int mivmIdx = -1;
+                            foreach (var mivm in mivmc) {
+                                if (mivm.Count == 0) {
+                                    continue;
+                                }
+                                if (appName.ToLower() == MpHelpers.Instance.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
+                                    mivmIdx = mivmc.IndexOf(mivm);
+                                }
                             }
-                            if(appName.ToLower() == MpHelpers.Instance.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
-                                mivmIdx = _menuItemViewModels.IndexOf(mivm);
+
+                            if (mivmIdx >= 0) {
+                                foreach (var ph in processHandles) {
+                                    mivmc[mivmIdx].Add(ph);
+                                }
+                            } else {
+                                mivmc.Add(processHandles);
                             }
                         }
-                        if(mivmIdx >= 0) {
-                            foreach(var ph in processHandles) {
-                                _menuItemViewModels[mivmIdx].Add(ph);
-                            }
-                        } else {
-                            _menuItemViewModels.Add(processHandles);
-                        }
                     }
-                    foreach(var ptapvm in this) {
-                        _menuItemViewModels.Add(new MpObservableCollection<MpPasteToAppPathViewModel>() { ptapvm });
-                    }
+                    //foreach(var ptapvm in _menuItemViewModels) {
+                    //    _menuItemViewModels.Add(new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>() { ptapvm });
+                    //}
                 }
                 return _menuItemViewModels;
             }
         }
 
-        #endregion
-
-        #region Properties
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel;
         public MpPasteToAppPathViewModel SelectedPasteToAppPathViewModel {
             get {
@@ -87,6 +91,9 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        #endregion
+
 
         private string _validationText = string.Empty;
         private string ValidationText {
@@ -103,7 +110,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPasteToAppPathViewModelCollection() {
+        public MpPasteToAppPathViewModelCollection() : base(null) {
             
         }
 
@@ -118,16 +125,38 @@ namespace MpWpfApp {
             };
 
             foreach (var ptap in MpPasteToAppPath.GetAllPasteToAppPaths()) {
-                this.Add(new MpPasteToAppPathViewModel(ptap));
+                var ptapc = new ObservableCollection<MpPasteToAppPathViewModel>();
+                ptapc.Add(new MpPasteToAppPathViewModel(ptap));
+                var ptapcr = new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>();
+                ptapcr.Add(ptapc);
+
+                MenuItemViewModels.Add(ptapcr);
             }
         }
         public void PasteToAppPathDataGrid_Loaded(object sender, RoutedEventArgs args) {
             var dg = (DataGrid)sender;
             dg.SelectionChanged += (s, e) => {
-                foreach(var ptapvm in this) {
-                    ptapvm.IsSelected = ptapvm == SelectedPasteToAppPathViewModel ? true: false;
+                foreach(var ptapvmcl in MenuItemViewModels) {
+                    foreach(var ptapvmc in ptapvmcl) {
+                        foreach(var ptapvm in ptapvmc) {
+                            ptapvm.IsSelected = ptapvm == SelectedPasteToAppPathViewModel ? true : false;
+                        }
+                    }
                 }
             };
+        }
+
+        public MpPasteToAppPathViewModel FindById(int ptapId) {
+            foreach (var ptapvmcl in MenuItemViewModels) {
+                foreach (var ptapvmc in ptapvmcl) {
+                    foreach(var ptapvm in ptapvmc) {
+                        if(ptapvm.PasteToAppPathId == ptapId) {
+                            return ptapvm;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         public ContextMenu UpdatePasteToMenuItem(ContextMenu cm) {
@@ -151,79 +180,81 @@ namespace MpWpfApp {
             }
             ptamir.Items.Clear();
             bool addedSeperator = false;
-            foreach (var ptamivmc in MpPasteToAppPathViewModelCollection.Instance.MenuItemViewModels) {
-                if (ptamivmc.Count == 0) {
-                    continue;
-                }
-                if (ptamivmc[0].IsRuntime) {
-                    bool areAllHidden = true;
-                    foreach (var ptamivm in ptamivmc) {
-                        if (!ptamivm.IsHidden) {
-                            areAllHidden = false;
-                        }
-                    }
-                    if (areAllHidden) {
+            foreach (var ptamivmcl in MpPasteToAppPathViewModelCollection.Instance.MenuItemViewModels) {
+                foreach(var ptamivmc in ptamivmcl) {
+                    if (ptamivmc.Count == 0) {
                         continue;
                     }
-                    var ptamip = new MenuItem();
-                    ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
-                    ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
-                    foreach (var ptamivm in ptamivmc) {
-                        if (ptamivm.IsHidden) {
+                    if (ptamivmc[0].IsRuntime) {
+                        bool areAllHidden = true;
+                        foreach (var ptamivm in ptamivmc) {
+                            if (!ptamivm.IsHidden) {
+                                areAllHidden = false;
+                            }
+                        }
+                        if (areAllHidden) {
                             continue;
                         }
-                        var ptami = new MenuItem();
-                        var l = new Label();
-                        l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
-
-                        var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
-                        var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
-                        var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
-                        bool isOverButton = false;
-                        btn.MouseEnter += (s, e2) => {
-                            btn.Content = eyeClosedImg;
-                            isOverButton = true;
-                        };
-                        btn.MouseLeave += (s, e2) => {
-                            btn.Content = eyeOpenImg;
-                            isOverButton = false;
-                        };
-                        btn.Click += (s, e2) => {
-                            ptamivm.IsHidden = true;
-                            ptamip.Items.Remove(ptami);
-                            if (ptamip.Items.Count == 0) {
-                                ptamir.Items.Remove(ptamip);
+                        var ptamip = new MenuItem();
+                        ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
+                        ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
+                        foreach (var ptamivm in ptamivmc) {
+                            if (ptamivm.IsHidden) {
+                                continue;
                             }
-                        };
+                            var ptami = new MenuItem();
+                            var l = new Label();
+                            l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
 
-                        var sp = new StackPanel() { Orientation = Orientation.Horizontal };
-                        sp.Children.Add(l);
-                        sp.Children.Add(btn);
+                            var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
+                            var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
+                            var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
+                            bool isOverButton = false;
+                            btn.MouseEnter += (s, e2) => {
+                                btn.Content = eyeClosedImg;
+                                isOverButton = true;
+                            };
+                            btn.MouseLeave += (s, e2) => {
+                                btn.Content = eyeOpenImg;
+                                isOverButton = false;
+                            };
+                            btn.Click += (s, e2) => {
+                                ptamivm.IsHidden = true;
+                                ptamip.Items.Remove(ptami);
+                                if (ptamip.Items.Count == 0) {
+                                    ptamir.Items.Remove(ptamip);
+                                }
+                            };
 
-                        ptami.Header = sp;
-                        ptami.Icon = new Image() { Source = ptamivm.AppIcon };
-                        //ptami.Command = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
-                        //ptami.CommandParameter = ptamivm.Handle;
-                        ptami.Click += (s, e2) => {
-                            if (!isOverButton) {
-                                pasteCommand.Execute(ptamivm.Handle);
-                            }
-                        };
-                        ptamip.Items.Add(ptami);
+                            var sp = new StackPanel() { Orientation = Orientation.Horizontal };
+                            sp.Children.Add(l);
+                            sp.Children.Add(btn);
+
+                            ptami.Header = sp;
+                            ptami.Icon = new Image() { Source = ptamivm.AppIcon };
+                            //ptami.Command = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
+                            //ptami.CommandParameter = ptamivm.Handle;
+                            ptami.Click += (s, e2) => {
+                                if (!isOverButton) {
+                                    pasteCommand.Execute(ptamivm.Handle);
+                                }
+                            };
+                            ptamip.Items.Add(ptami);
+                        }
+                        ptamir.Items.Add(ptamip);
+                    } else {
+                        if (!addedSeperator) {
+                            ptamir.Items.Add(new Separator());
+                            addedSeperator = true;
+                        }
+                        var ptaumi = new MenuItem();
+                        ptaumi.Header = ptamivmc[0].AppName;// + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty) + (ptamivmc[0].IsSilent ? " (Silent)" : string.Empty);
+                        ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon };
+                        ptaumi.Command = pasteCommand;
+                        ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
+
+                        ptamir.Items.Add(ptaumi);
                     }
-                    ptamir.Items.Add(ptamip);
-                } else {
-                    if (!addedSeperator) {
-                        ptamir.Items.Add(new Separator());
-                        addedSeperator = true;
-                    }
-                    var ptaumi = new MenuItem();
-                    ptaumi.Header = ptamivmc[0].AppName;// + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty) + (ptamivmc[0].IsSilent ? " (Silent)" : string.Empty);
-                    ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon };
-                    ptaumi.Command = pasteCommand;
-                    ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
-
-                    ptamir.Items.Add(ptaumi);
                 }
             }
             var addNewMenuItem = new MenuItem();
@@ -237,13 +268,26 @@ namespace MpWpfApp {
             return cm;
         }
 
-        public new void Add(MpPasteToAppPathViewModel ptapvm) {
-            base.Add(ptapvm);
+        public void Add(MpPasteToAppPathViewModel ptapvm) {
+            var ptapc = new ObservableCollection<MpPasteToAppPathViewModel>();
+            ptapc.Add(ptapvm);
+            var ptapcr = new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>();
+            ptapcr.Add(ptapc);
+
+            MenuItemViewModels.Add(ptapcr);
         }
         
-        public new void Remove(MpPasteToAppPathViewModel ptapvm) {
-            if(this.Contains(ptapvm)) {
-                base.Remove(ptapvm);
+        public void Remove(MpPasteToAppPathViewModel ptapvm) {
+            ObservableCollection<MpPasteToAppPathViewModel> collectionToRemoveFrom = null;
+            foreach (var ptapvmcl in MenuItemViewModels) {
+                foreach (var ptapvmc in ptapvmcl) {
+                    if(ptapvmc.Contains(ptapvm)) {
+                        collectionToRemoveFrom = ptapvmc;
+                    }
+                }
+            }
+            if(collectionToRemoveFrom != null) {
+                collectionToRemoveFrom.Remove(ptapvm);
                 ptapvm.Dispose();
             }
         }
@@ -252,8 +296,12 @@ namespace MpWpfApp {
         #region Private Methods
         private bool Validate() {
             ValidationText = string.Empty;
-            foreach(var ptapvm in this) {
-                ValidationText += ptapvm.Validate();
+            foreach (var ptapvmcl in MenuItemViewModels) {
+                foreach (var ptapvmc in ptapvmcl) {
+                    foreach (var ptapvm in ptapvmc) {
+                        ValidationText += ptapvm.Validate();
+                    }
+                }
             }
             return string.IsNullOrEmpty(ValidationText);
         }

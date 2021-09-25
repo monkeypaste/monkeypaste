@@ -14,7 +14,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpSecurityViewModel : MpViewModelBase {
+    public class MpSecurityViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
         #region Private Variables
 
         #endregion
@@ -33,9 +33,9 @@ namespace MpWpfApp {
         //        return eavms;
         //    }
         //}
-        public MpAppCollectionViewModel AppViewModels {
+        public ObservableCollection<MpAppViewModel> AppViewModels {
             get {
-                return MpAppCollectionViewModel.Instance;
+                return MpAppCollectionViewModel.Instance.AppViewModels;
             }
         }
         #endregion
@@ -56,7 +56,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSecurityViewModel() {
+        public MpSecurityViewModel() : base(null) { }
+
+        public MpSecurityViewModel(MpSettingsWindowViewModel parent) : base(parent) {
             MpAppCollectionViewModel.Instance.Init();
         }
 
@@ -107,10 +109,10 @@ namespace MpWpfApp {
                 if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
                     appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
                 }
-                var neavm = AppViewModels.GetAppViewModelByProcessPath(appPath);
+                var neavm = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(appPath);
                 if (neavm == null) {
                     //if unknown app just add it with rejection flag
-                    neavm = new MpAppViewModel(MpApp.Create(appPath,string.Empty,null));
+                    neavm = new MpAppViewModel(MpAppCollectionViewModel.Instance,MpApp.Create(appPath,string.Empty,null));
                     MpAppCollectionViewModel.Instance.Add(neavm);
                 } else if (neavm.IsAppRejected) {
                     //if app is already rejected set it to selected in grid
@@ -120,7 +122,7 @@ namespace MpWpfApp {
                     //otherwise update rejection and prompt about current clips
                     MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
                 }
-                AppViewModels.Refresh();
+                MpAppCollectionViewModel.Instance.Refresh();
             }
             //OnPropertyChanged(nameof(AppViewModels));
         }

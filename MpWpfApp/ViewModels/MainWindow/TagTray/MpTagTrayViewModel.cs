@@ -316,7 +316,7 @@ namespace MpWpfApp {
                 }
 
                 bool isTagLinkedToAnySelectedClips = false;
-                foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedClipTiles) {
+                foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
                     if (ttvm.IsLinked(sctvm)) {
                         isTagLinkedToAnySelectedClips = true;
                     }
@@ -326,7 +326,7 @@ namespace MpWpfApp {
                         }
                     }
                 }
-                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MpClipTrayViewModel.Instance.SelectedClipTiles.Count > 0;
+                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MpClipTrayViewModel.Instance.SelectedItems.Count > 0;
 
             }
         }

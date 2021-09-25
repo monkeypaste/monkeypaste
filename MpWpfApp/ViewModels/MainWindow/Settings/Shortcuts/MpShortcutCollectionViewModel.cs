@@ -258,7 +258,7 @@ namespace MpWpfApp {
                 ApplicationHook.MouseWheel += (s, e) => {
                     if (!MpMainWindowViewModel.IsMainWindowLoading &&
                         MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                        var rtbvm = MpClipTrayViewModel.Instance.PrimarySelectedClipTile.ItemViewModels[0];//SelectedClipTiles[0].RtbItemCollectionViewModel;
+                        var rtbvm = MpClipTrayViewModel.Instance.PrimaryItem.ItemViewModels[0];//SelectedItems[0].RtbItemCollectionViewModel;
                         rtbvm.RequestScrollWheelChange(e.Delta);
 
                         //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();

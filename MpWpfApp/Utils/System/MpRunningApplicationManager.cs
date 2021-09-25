@@ -246,15 +246,12 @@ namespace MpWpfApp {
         #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
-        private event PropertyChangedEventHandler _propertyChanged;
-        public event PropertyChangedEventHandler PropertyChanged {
-            add { _propertyChanged += value; }
-            remove { _propertyChanged -= value; }
-        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
-            PropertyChangedEventHandler handler = _propertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);

@@ -137,7 +137,7 @@ namespace MpWpfApp {
             string innerBrush = isOver ? "#FFE4EFFD" : isDown ? "#FF116EE4" : transBrush;
             string innerBg = isOver ? "#FFDAE7F5" : isDown ? "#FF3272B8" : transBrush;
 
-            //foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedClipTiles) {
+            //foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
             //    foreach (var srtbvm in sctvm.ContentContainerViewModel.SubSelectedContentItems) {
             //        var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
             //        if (outerBorder != null) {

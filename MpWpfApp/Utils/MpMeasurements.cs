@@ -187,17 +187,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double RtbCompositeItemTitleFontSize {
-            get {
-                return 14;
-            }
-        }
-
-        public double RtbEditModeMinMargin {
-            get {
-                return 5;
-            }
-        }
 
         public double ClipTileTitleTextGridCanvasRight {
             get {
@@ -320,33 +309,23 @@ namespace MpWpfApp {
             }
         }
 
-        public double RtbCompositeItemMinHeight {
+        public double ClipTileContentItemMinHeight {
             get {
                 return ClipTileContentHeight / 5;
             }
         }
 
-        public double RtbCompositeAppIconSize {
+
+        public double ClipTileContentItemDragButtonSize {
             get {
-                return ClipTileContentHeight / 14;
+                return ClipTileContentItemMinHeight * 0.5;
             }
         }
 
-        public double RtbCompositeAppIconBorderSizeRatio {
-            get {
-                return 1.5;
-            }
-        }
 
-        public double RtbCompositeAppIconBorderSize {
+        public double ClipTileTitleDefaultFontSize {
             get {
-                return RtbCompositeAppIconSize * RtbCompositeAppIconBorderSizeRatio;
-            }
-        }
-
-        public double RtbCompositeDragButtonSize {
-            get {
-                return ClipTileContentHeight / 7;
+                return 14;
             }
         }
 

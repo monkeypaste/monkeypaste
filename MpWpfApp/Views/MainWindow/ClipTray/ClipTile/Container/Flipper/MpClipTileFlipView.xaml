@@ -9,7 +9,8 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <local:MpClipTileView x:Key="ClipTile" />
+        <local:MpClipTileView x:Key="ClipTileFront" />
+        <local:MpContentItemAnalyticsView x:Key="ClipTileBack" />
         <Storyboard x:Key="FrontToBack">
             <DoubleAnimation Storyboard.TargetName="front"
                              Storyboard.TargetProperty="Angle"
@@ -57,8 +58,7 @@
     </UserControl.Resources>
     <Viewport3D IsVisibleChanged="Viewport3D_IsVisibleChanged"
                 Width="{local:MpMeasurementsBinding ClipTileMinSize}"
-                Height="{local:MpMeasurementsBinding ClipTileMinSize}"
-                Visibility="{Binding IsFlipped, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}">
+                Height="{local:MpMeasurementsBinding ClipTileMinSize}">
         <Viewport3D.Camera>
             <OrthographicCamera Position="0,0,3"
                                 LookDirection="0,0,-1" />
@@ -90,8 +90,8 @@
                 <Viewport2DVisual3D.Material>
                     <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
                 </Viewport2DVisual3D.Material>
-                <local:MpContentItemAnalyticsView x:Name="ContentItemAnalyticsView"
-                                                  DataContext="{Binding PrimaryItem}" />
+                <ContentControl DataContext="{Binding PrimaryItem}" 
+                                Content="{StaticResource ClipTileBack}" />
             </Viewport2DVisual3D>
             <!-- Content View (Front) -->
             <Viewport2DVisual3D>
@@ -113,7 +113,7 @@
                 <Viewport2DVisual3D.Material>
                     <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
                 </Viewport2DVisual3D.Material>
-                <ContentControl Content="{StaticResource ClipTile}" />
+                <ContentControl Content="{StaticResource ClipTileFront}" />
             </Viewport2DVisual3D>
         </Viewport3D.Children>
     </Viewport3D>

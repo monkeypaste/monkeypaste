@@ -52,7 +52,7 @@ namespace MpWpfApp {
     //   - Send Feedback
     //   - About Monkey Paste
 
-    public class MpSettingsWindowViewModel : MpViewModelBase {
+    public class MpSettingsWindowViewModel : MpViewModelBase<object> {
         #region Private Variables
         private Window _windowRef;
         private int _tabToShow = 0;
@@ -189,9 +189,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSettingsWindowViewModel() : base() {
-            PreferencesViewModel = new MpPreferencesViewModel();
-            SecurityViewModel = new MpSecurityViewModel();
+        public MpSettingsWindowViewModel() : base(null) {
+            PreferencesViewModel = new MpPreferencesViewModel(this);
+            SecurityViewModel = new MpSecurityViewModel(this);
         }
 
         public MpSettingsWindowViewModel(int tabToShow,object args = null) : this() {

@@ -542,7 +542,7 @@ namespace MpWpfApp {
             }
             if (ct.IsAnyTileExpanded) {
                 if (HasText) {
-                    IsTextValid = ct.SelectedClipTiles[0].HighlightTextRangeViewModelCollection.Count > 0;
+                    IsTextValid = ct.SelectedItems[0].HighlightTextRangeViewModelCollection.Count > 0;
                 } else {
                     IsTextValid = true;
                 }

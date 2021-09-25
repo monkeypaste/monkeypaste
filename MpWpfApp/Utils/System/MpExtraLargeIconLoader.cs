@@ -222,7 +222,8 @@ namespace MpWpfApp {
             const int ILD_TRANSPARENT = 1;
             var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
             if (retval == 0) {
-                throw new System.IO.FileNotFoundException();
+                // This occurs from a COM exception likely from the AddTileThread so in this case just return the app icon handle
+                return MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle;
             }
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");

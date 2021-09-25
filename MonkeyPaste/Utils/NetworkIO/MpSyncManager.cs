@@ -49,18 +49,16 @@ namespace MonkeyPaste {
 
         #region Properties
         public string[] DbTableSyncOrder { get; private set; } = new string[] {
-            "MpDbImage",
-            "MpIcon",
-            "MpUserDevice",
-            "MpUrl",
-            "MpUrlDomain",
-            "MpApp",
-            "MpSource",
-            "MpCopyItem",
-            "MpTag",
-            "MpCompositeCopyItem",
-            "MpCopyItemTemplate",
-            "MpCopyItemTag"
+            nameof(MpDbImage),
+            nameof(MpIcon),
+            nameof(MpUserDevice),
+            nameof(MpUrl),
+            nameof(MpApp),
+            nameof(MpSource),
+            nameof(MpCopyItem),
+            nameof(MpTag),
+            nameof(MpCopyItemTemplate),
+            nameof(MpCopyItemTag)
         };
 
         public MpDeviceEndpoint ThisEndpoint { get; set; }

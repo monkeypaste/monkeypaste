@@ -10,11 +10,23 @@ using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpObservableCollectionViewModel<MpAppViewModel> {
+    public class MpAppCollectionViewModel : MpViewModelBase<object> {
         private static readonly Lazy<MpAppCollectionViewModel> _Lazy = new Lazy<MpAppCollectionViewModel>(() => new MpAppCollectionViewModel());
         public static MpAppCollectionViewModel Instance { get { return _Lazy.Value; } }
 
         #region View Models
+        private ObservableCollection<MpAppViewModel> _appViewModels = new ObservableCollection<MpAppViewModel>();
+        public ObservableCollection<MpAppViewModel> AppViewModels {
+            get {
+                return _appViewModels;
+            }
+            set {
+                if(_appViewModels != value) {
+                    _appViewModels = value;
+                    OnPropertyChanged(nameof(AppViewModels));
+                }
+            }
+        }
         #endregion
 
         #region Properties
@@ -25,19 +37,19 @@ namespace MpWpfApp {
         public void Init() {
             //empty to initialize singleton
         }
-        private MpAppCollectionViewModel() : base() {
+        private MpAppCollectionViewModel() : base(null) {
             Refresh();
         }
 
         public MpAppViewModel GetAppViewModelByAppId(int appId) {
-            foreach(var avm in this.Where(x => x.AppId == appId)) {
+            foreach(var avm in AppViewModels.Where(x => x.AppId == appId)) {
                 return avm;
             }
             return null;
         }
 
         public MpAppViewModel GetAppViewModelByProcessPath(string processPath) {
-            foreach (var avm in this.Where(x => x.AppPath == processPath)) {
+            foreach (var avm in AppViewModels.Where(x => x.AppPath == processPath)) {
                 return avm;
             }
             return null;
@@ -47,7 +59,7 @@ namespace MpWpfApp {
             if(app.App.IsAppRejected == rejectApp) {
                 return rejectApp;
             }
-            if (this.Contains(app)) {
+            if (AppViewModels.Contains(app)) {
                 bool wasCanceled = false;
                 if (rejectApp) {
                     var ctrvm = MpClipTrayViewModel.Instance;
@@ -76,15 +88,15 @@ namespace MpWpfApp {
                 if (wasCanceled) {
                     return app.IsAppRejected;
                 }
-                int appIdx = this.IndexOf(app);
-                this[appIdx].App.IsAppRejected = rejectApp;
-                this[appIdx].App.WriteToDatabase();
+                int appIdx = AppViewModels.IndexOf(app);
+                AppViewModels[appIdx].App.IsAppRejected = rejectApp;
+                AppViewModels[appIdx].App.WriteToDatabase();
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
                 foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                     foreach (var rtbvm in ctvm.ItemViewModels) {
-                        if (rtbvm.CopyItem.Source.App.Id == this[appIdx].AppId) {
-                            rtbvm.CopyItem.Source.App = this[appIdx].App;
+                        if (rtbvm.CopyItem.Source.App.Id == AppViewModels[appIdx].AppId) {
+                            rtbvm.CopyItem.Source.App = AppViewModels[appIdx].App;
                         }
                     }
                 }
@@ -96,7 +108,7 @@ namespace MpWpfApp {
 
         public new void Add(MpAppViewModel avm) {
             if(avm.IsAppRejected && avm.App != null) {
-                var dupList = this.Where(x => x.AppPath == avm.AppPath).ToList();
+                var dupList = AppViewModels.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {
                     var ctrvm = MpClipTrayViewModel.Instance;
                     var ctvms = ctrvm.GetClipTilesByAppId(dupList[0].AppId);
@@ -134,14 +146,14 @@ namespace MpWpfApp {
             Refresh();
         }
 
-        public new void Remove(MpAppViewModel avm) {
-            base.Remove(avm);
+        public void Remove(MpAppViewModel avm) {
+            AppViewModels.Remove(avm);
         }
 
         public void Refresh() {
-            this.Clear();
+            AppViewModels.Clear();
             foreach (var app in MpDb.Instance.GetItems<MpApp>()) {
-                base.Add(new MpAppViewModel(app));
+                AppViewModels.Add(new MpAppViewModel(this,app));
             }
         }
         #endregion

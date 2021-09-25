@@ -394,7 +394,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         //    var points = new Point[2];
         //    var itemRect = index >= this.Count ? GetListBoxItemRect(this.Count - 1) : GetListBoxItemRect(index);
         //    if(!IsHorizontal) {
-        //        itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+        //        itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
         //    }
         //    if (IsHorizontal) {
         //        if(index < this.Count) {

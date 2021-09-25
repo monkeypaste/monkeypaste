@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using AsyncAwaitBestPractices.MVVM;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIContentCommands {
@@ -58,18 +59,17 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
-        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
+        public List<MpContextMenuItemViewModel> TagMenuItems {
             get {
+                var tmil = new List<MpContextMenuItemViewModel>();
                 if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
-                    return _tagMenuItems;
+                    return tmil;
                 }
-                _tagMenuItems.Clear();
                 foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
                     if (tagTile.IsSudoTag) {
                         continue;
                     }
-                    _tagMenuItems.Add(
+                    tmil.Add(
                         new MpContextMenuItemViewModel(
                             tagTile.TagName,
                             MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
@@ -80,7 +80,7 @@ namespace MpWpfApp {
                             tagTile.ShortcutKeyString,
                             tagTile.Color));
                 }
-                return _tagMenuItems;
+                return tmil;
             }
         }
 
@@ -133,6 +133,21 @@ namespace MpWpfApp {
             }
         }
 
+        public Brush ItemBackgroundBrush {
+            get {
+                if(IsSelected) {
+                    return Brushes.White;
+                }
+                if (IsHovering && Parent.Count > 1) {
+                    return Brushes.LightGray;
+                }
+                if (Parent.IsSelected) {
+                    return Brushes.Gray;
+                }
+                return Brushes.White;
+
+            }
+        }
         #endregion
 
         #region Visibility 
@@ -143,6 +158,45 @@ namespace MpWpfApp {
 
         #region Layout
 
+        public Size ExpandedSize {
+            get {                
+                //get contents actual size
+                var ds = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                
+                //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
+                double w = Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth);
+
+                //let height in expanded mode match content's height
+                double h = ds.Height;
+
+                return new Size(w, h);
+            }
+        }
+
+        public Size UnexpandedSize {
+            get {
+                //item height is divided evenly by items but if there are many (more than 5) 
+                //their will only be 5 visible
+                double h = Math.Max(
+                    MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
+                    MpMeasurements.Instance.ClipTileContentItemMinHeight);
+            return new Size(
+                        MpMeasurements.Instance.ClipTileContentMinWidth,
+                        h);
+            }
+        }
+
+        public Size CurrentSize {
+            get {
+                if(Parent == null) {
+                    return new Size();
+                }
+                if(Parent.IsExpanded) {
+                    return ExpandedSize;
+                }
+                return UnexpandedSize;
+            }
+        }
         #endregion
 
         #region State
@@ -399,6 +453,7 @@ namespace MpWpfApp {
             //OnPropertyChanged(nameof(AppIcon));
         }
 
+        #region UI Invokers
         public void RequestSyncModels() {
             OnSyncModels?.Invoke(this, null);
         }
@@ -414,26 +469,16 @@ namespace MpWpfApp {
         public void RequestCreateHyperlinks() {
             OnCreateTemplatesRequest?.Invoke(this, null);
         }
+        #endregion
+
+
+       
 
         public void Resize(Rect newSize) {
             //throw new Exception("Unemplemented");
         }
 
-        public Size GetExpandedSize() {
-            var ds = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-            return new Size(
-                Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth),
-                Math.Max(ds.Height, MpMeasurements.Instance.ClipTileContentHeight)
-                );
-        }
-
-        public Size GetUnexpandedSize() {
-            double h = base.Parent.ItemViewModels.Count > 1 ?
-                            MpMeasurements.Instance.RtbCompositeItemMinHeight :
-                            MpMeasurements.Instance.ClipTileContentHeight;
-
-            return new Size(MpMeasurements.Instance.ClipTileContentMinWidth, h);
-        }
+        
 
         public string GetDetail(MpCopyItemDetailType detailType) {
             if(CopyItem == null) {
@@ -527,8 +572,8 @@ namespace MpWpfApp {
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 if (ci.Id == CopyItem.Id) {
-                    CopyItem = ci;
-                    MpConsole.WriteTraceLine("Reset model from db callback");
+                    //CopyItem = ci;
+                    //MpConsole.WriteTraceLine("Reset model from db callback");
                 }
             }
         }
@@ -604,7 +649,7 @@ namespace MpWpfApp {
                         }
                     },
                     () => {
-                        return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+                        return MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
                                base.Parent.SelectedItems.Count == 1;
                     });
             }
@@ -675,7 +720,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanExcludeSubSelectedItemApplication() {
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1;
+            return MpClipTrayViewModel.Instance.SelectedItems.Count == 1;
         }
         private void ExcludeSubSelectedItemApplication() {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItem.Source.AppId), true);
@@ -740,7 +785,7 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
-            return MpClipTrayViewModel.Instance.SelectedClipTiles.Count == 1 &&
+            return MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
                    base.Parent.SelectedItems.Count == 1;
         }
         private void EditSubTitle() {

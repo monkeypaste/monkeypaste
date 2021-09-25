@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpPreferencesViewModel : MpViewModelBase<object> {
+    public class MpPreferencesViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
         #region Private Variables
 
         #endregion
@@ -211,7 +211,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPreferencesViewModel() : base(null) {
+        public MpPreferencesViewModel() : base(null) { }
+        public MpPreferencesViewModel(MpSettingsWindowViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsLoadOnLoginChecked):

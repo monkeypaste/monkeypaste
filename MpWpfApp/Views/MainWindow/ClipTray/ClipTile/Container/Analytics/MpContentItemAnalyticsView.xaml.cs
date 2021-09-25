@@ -21,5 +21,10 @@ namespace MpWpfApp {
         public MpContentItemAnalyticsView() {
             InitializeComponent();
         }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            MpClipTrayViewModel.Instance.FlipTileCommand.Execute(civm.Parent);
+        }
     }
 }

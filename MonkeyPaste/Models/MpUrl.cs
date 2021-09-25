@@ -28,42 +28,55 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpUrlDomain))]
-        [Column("fk_MpUrlDomainId")]
-        public int UrlDomainId { get; set; }
+        public int IsRejected { get; set; } = 0;
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpUrlDomain UrlDomain { get; set; }
+        [Ignore]
+        public bool IsDomainRejected {
+            get {
+                return IsRejected == 1;
+            }
+            set {
+                IsRejected = value ? 1 : 0;
+            }
+        }
 
         [Indexed]
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
+
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; } = 0;
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpIcon Icon { get; set; }
 
         public static MpUrl Create(string urlPath,string urlTitle) {
             var dupCheck = MpDb.Instance.GetItems<MpUrl>().Where(x => x.UrlPath == urlPath).FirstOrDefault();
             if(dupCheck != null) {
                 return dupCheck;
             }
-            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
+            
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
-                UrlDomain = MpUrlDomain.Create(domainStr),
                 UrlPath = urlPath,
                 UrlTitle = urlTitle
             };
-            newUrl.UrlDomainId = newUrl.UrlDomain.Id;
+            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
+            if(string.IsNullOrEmpty(domainStr)) {
+                MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
+                return null;
+            } else {
+                var favIconImg64 = MpHelpers.Instance.GetUrlFavicon(domainStr);
+                newUrl.Icon = MpIcon.Create(favIconImg64);
+                newUrl.IconId = newUrl.Icon.Id;
+            }
 
             MpDb.Instance.AddItem<MpUrl>(newUrl);
             
             return newUrl;
         }
-        public MpUrl() {
-        }
-        public MpUrl(string urlPath, string urlTitle) : this() {
-            UrlPath = urlPath;
-            UrlTitle = urlTitle;
-            UrlDomain = MpUrlDomain.GetUrlDomainByPath(MpHelpers.Instance.GetUrlDomain(urlPath));            
-        }
+        public MpUrl() { }
 
         public static async Task<MpUrl> GetUrlByPath(string urlPath) {
             var allUrls = await MpDb.Instance.GetItemsAsync<MpUrl>();
@@ -84,10 +97,10 @@ namespace MonkeyPaste {
         [Ignore]
         public MpIcon SourceIcon {
             get {
-                if (UrlDomain == null || UrlDomain.FavIcon == null) {
+                if (Icon == null) {
                     return null;
                 }
-                return UrlDomain.FavIcon;
+                return Icon;
             }
         }
 
@@ -98,18 +111,7 @@ namespace MonkeyPaste {
         public string SourceName => UrlPath;
 
         [Ignore]
-        public int RootId {
-            get {
-                if (UrlDomain == null) {
-                    return 0;
-                }
-                return UrlDomain.Id;
-            }
-        }
-
-        [Ignore]
-        public bool IsSubSource => true;
-
+        public int RootId => Id;
         #endregion
 
         public async Task<object> CreateFromLogs(string urlGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
@@ -125,9 +127,9 @@ namespace MonkeyPaste {
                     case "MpUrlGuid":
                         url.UrlGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
-                    case "fk_MpUrlDomainId":
-                        url.UrlDomain = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrlDomain", li.AffectedColumnValue) as MpUrlDomain;
-                        url.UrlDomainId = url.UrlDomain.Id;
+                    case "fk_MpIconinId":
+                        url.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
+                        url.IconId = url.Icon.Id;
                         break;
                     case "UrlPath":
                         url.UrlPath = li.AffectedColumnValue;
@@ -150,8 +152,8 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.Parse(objParts[0])
             };
 
-            url.UrlDomain = MpDb.Instance.GetDbObjectByTableGuid("MpUrlDomain", objParts[1]) as MpUrlDomain;
-            url.UrlDomainId = url.UrlDomain.Id;
+            url.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[1]) as MpIcon;
+            url.IconId = url.Icon.Id;
             url.UrlPath = objParts[2];
             url.UrlTitle = objParts[3];
             return url;
@@ -162,7 +164,7 @@ namespace MonkeyPaste {
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
                 ParseToken,
                 UrlGuid.ToString(),
-                UrlDomain.UrlDomainGuid.ToString(),
+                Icon.IconGuid.ToString(),
                 UrlPath,
                 UrlTitle);
         }
@@ -185,10 +187,10 @@ namespace MonkeyPaste {
                 "MpUrlGuid",
                 diffLookup,
                 UrlGuid.ToString());
-            diffLookup = CheckValue(UrlDomainId, other.UrlDomainId,
-                "fk_MpUrlDomainId",
+            diffLookup = CheckValue(IconId, other.IconId,
+                "fk_MpIconId",
                 diffLookup,
-                UrlDomain.UrlDomainGuid.ToString());
+                Icon.IconGuid.ToString());
             diffLookup = CheckValue(UrlPath, other.UrlPath,
                 "UrlPath",
                 diffLookup);

@@ -47,7 +47,7 @@ namespace MpWpfApp {
             var points = new Point[2];
             var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) :lb.GetListBoxItemRect(index);
             if (!isHorizontal) {
-                itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+                itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
             }
             if (isHorizontal) {
                 if (index < lb.Items.Count) {

@@ -8,6 +8,5 @@ namespace MonkeyPaste {
         public abstract string SourcePath { get; }
         public abstract string SourceName { get; }
         public abstract int RootId { get; }
-        public abstract bool IsSubSource { get; }
     }
 }

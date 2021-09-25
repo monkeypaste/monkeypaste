@@ -55,11 +55,11 @@ namespace MpWpfApp {
 
         //    if (dlg.ShowDialog() == CommonFileDialogResult.Ok) {
         //        if ((MpExportType)exportType == MpExportType.Csv) {
-        //            ExportClipsToCsvFile(SelectedClipTiles.ToList(), dlg.FileName);
+        //            ExportClipsToCsvFile(SelectedItems.ToList(), dlg.FileName);
         //        } else if ((MpExportType)exportType == MpExportType.Zip) {
-        //            ExportClipsToZipFile(SelectedClipTiles.ToList(), dlg.FileName);
+        //            ExportClipsToZipFile(SelectedItems.ToList(), dlg.FileName);
         //        } else {
-        //            ExportClipsToFile(SelectedClipTiles.ToList(), dlg.FileName + @"\");
+        //            ExportClipsToFile(SelectedItems.ToList(), dlg.FileName + @"\");
         //        }
         //    }
         //}
@@ -167,7 +167,7 @@ namespace MpWpfApp {
         //public string SelectedClipTilesCsv {
         //    get {
         //        var sb = new StringBuilder();
-        //        foreach (var sctvm in SelectedClipTiles) {
+        //        foreach (var sctvm in SelectedItems) {
         //            if ((sctvm.CopyItemType != MpCopyItemType.RichText) &&
         //                MpHelpers.Instance.IsStringCsv(sctvm.CopyItem.ItemData)) {
         //                sb.Append(sctvm.CopyItem.ItemData + ",");
@@ -183,7 +183,7 @@ namespace MpWpfApp {
         //public string[] SelectedClipTilesFileList {
         //    get {
         //        var fl = new List<string>();
-        //        foreach (var sctvm in SelectedClipTiles) {
+        //        foreach (var sctvm in SelectedItems) {
         //            if (sctvm.CopyItemType != MpCopyItemType.RichText) {
         //                foreach (string f in sctvm.CopyItemFileDropList) {
         //                    fl.Add(f);
@@ -205,7 +205,7 @@ namespace MpWpfApp {
         //public string SelectedClipTilesMergedPlainText {
         //    get {
         //        var sb = new StringBuilder();
-        //        foreach (var sctvm in SelectedClipTiles) {
+        //        foreach (var sctvm in SelectedItems) {
         //            if (sctvm.CopyItemType == MpCopyItemType.RichText) {
         //                sb.Append(sctvm.RtbItemCollectionViewModel.SubSelectedClipTilesMergedPlainText + Environment.NewLine);
         //            } else {
@@ -228,7 +228,7 @@ namespace MpWpfApp {
         //public string SelectedClipTilesMergedRtf {
         //    get {
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
-        //        foreach (var sctvm in SelectedClipTiles) {
+        //        foreach (var sctvm in SelectedItems) {
         //            if (sctvm.CopyItemType == MpCopyItemType.RichText) {
         //                fd = MpHelpers.Instance.CombineFlowDocuments(
         //                    sctvm.RtbItemCollectionViewModel.SubSelectedClipTilesMergedRtf.ToFlowDocument(),

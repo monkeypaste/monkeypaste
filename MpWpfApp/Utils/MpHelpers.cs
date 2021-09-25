@@ -78,7 +78,7 @@ namespace MpWpfApp {
             return idxList;
         }
 
-        public void ApplyBackgroundBrushToRangeList(MpObservableCollection<MpObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
+        public void ApplyBackgroundBrushToRangeList(ObservableCollection<ObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
             }
@@ -639,6 +639,10 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+
+        public bool IsOnMainThread() {
+            return Thread.CurrentThread == System.Windows.Threading.Dispatcher.CurrentDispatcher.Thread;
+        }
         
         public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {            
             Application.Current.Dispatcher.Invoke(action, priority);
@@ -2960,10 +2964,15 @@ namespace MpWpfApp {
             return mc.Success;
         }
 
-        public BitmapSource GetUrlFavicon(String url) {
+        public BitmapSource GetUrlFavicon(String url, int resolution = 128) {
             try {
                 string urlDomain = GetUrlDomain(url);
-                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
+                Uri favicon = new Uri(
+                    string.Format(
+                        @"https://www.google.com/s2/favicons?sz={0}&domain_url={1}",
+                        resolution,
+                        urlDomain)
+                    , UriKind.Absolute);
                 var img = new BitmapImage(favicon);
                 if((img as BitmapSource).IsEqual(_defaultFavIcon)) {
                     return null;

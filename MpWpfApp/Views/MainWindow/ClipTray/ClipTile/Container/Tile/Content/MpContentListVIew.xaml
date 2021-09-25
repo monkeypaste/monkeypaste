@@ -9,7 +9,8 @@
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <AdornerDecorator>
         <DockPanel x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -29,8 +30,7 @@
             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
                                         Loaded="ClipTileRichTextBoxListBox_Loaded"
                                         RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"
-                                        SelectionChanged="ClipTileRichTextBoxListBox_SelectionChanged"
-                                        
+                                        SelectionChanged="ClipTileRichTextBoxListBox_SelectionChanged"                                        
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left"
@@ -82,10 +82,11 @@
                 </local:MpMultiSelectListBox.ItemContainerStyle>
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
-                        <local:MpContentItemView DataContext="{Binding}" />
+                        <local:MpContentItemView DataContext="{Binding}"  
+                                                 Height="{Binding CurrentSize.Height}"/>
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>
         </DockPanel>
     </AdornerDecorator>
-</UserControl>
+</UserControl>  

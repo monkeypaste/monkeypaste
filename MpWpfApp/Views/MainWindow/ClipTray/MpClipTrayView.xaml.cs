@@ -209,8 +209,8 @@ namespace MpWpfApp {
 
             MpTagTrayViewModel.Instance.UpdateTagAssociation();
 
-            if (ctrvm.PrimarySelectedClipTile != null) {
-                ctrvm.PrimarySelectedClipTile.OnPropertyChanged(nameof(ctrvm.PrimarySelectedClipTile.TileBorderBrush));
+            if (ctrvm.PrimaryItem != null) {
+                ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
             }
 
             MpAppModeViewModel.Instance.RefreshState();
@@ -221,7 +221,7 @@ namespace MpWpfApp {
             if (!ctrvm.IsAnyTileExpanded) {
                 return;
             }
-            var selectedClipTilesHoveringOnMouseDown = ctrvm.SelectedClipTiles.Where(x => x.IsHovering).ToList();
+            var selectedClipTilesHoveringOnMouseDown = ctrvm.SelectedItems.Where(x => x.IsHovering).ToList();
             if (selectedClipTilesHoveringOnMouseDown.Count == 0 &&
                !MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
                 ctrvm.ClearClipEditing();

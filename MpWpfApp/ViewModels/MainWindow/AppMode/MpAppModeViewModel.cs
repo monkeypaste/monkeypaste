@@ -241,9 +241,9 @@ namespace MpWpfApp {
 
         private void UpdateAppendMode() {
             if (IsInAppendMode &&
-               MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
-               MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
-                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0]);
+               MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count == 1 &&
+               MainWindowViewModel.ClipTrayViewModel.SelectedItems[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
+                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedItems[0]);
                 MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Move(selectedIdx, 0);
             }
         }
@@ -294,7 +294,7 @@ namespace MpWpfApp {
                 return false;
             }
             //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count <= 1;
+            return !IsAppPaused && MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count <= 1;
         }
         private void ToggleAppendMode() {
             IsInAppendMode = !IsInAppendMode;

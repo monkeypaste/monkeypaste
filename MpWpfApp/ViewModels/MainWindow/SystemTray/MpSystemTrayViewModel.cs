@@ -102,7 +102,6 @@ namespace MpWpfApp {
 
         #region Public Methods
         private MpSystemTrayViewModel() : base(null) {
-            SettingsWindowViewModel = new MpSettingsWindowViewModel();
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
@@ -178,6 +177,8 @@ namespace MpWpfApp {
                 args = (args as MpContentItemViewModel).CopyItem.Source.App;
                 tabIdx = 1;
             }
+
+            SettingsWindowViewModel = new MpSettingsWindowViewModel();
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
 
             MainWindowViewModel.IsShowingDialog = false;

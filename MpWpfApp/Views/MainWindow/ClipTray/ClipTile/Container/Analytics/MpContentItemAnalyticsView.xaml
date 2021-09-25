@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpContentItemViewModel,IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <DataTemplate x:Key="TextAnalysis">
             <local:MpTextAnalysisDocument DataContext="{Binding}" />
@@ -17,9 +18,10 @@
                                           TextAnalysisTemplate="{StaticResource TextAnalysis}"
                                           ImageAnalysisTemplate="{StaticResource ImageAnalysis}" />
     </UserControl.Resources>
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
+    <Grid MouseDown="Grid_MouseDown">        
         <ContentControl Content="{Binding}"
+                        Width="{Binding Parent.TileBorderWidth}"
+                        Height="{Binding Parent.TileBorderHeight}"
                         ContentTemplateSelector="{StaticResource AnalysisDocumentSelector}" />
     </Grid>
 </UserControl>

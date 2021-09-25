@@ -67,8 +67,6 @@ namespace MpWpfApp {
         //public MpMeasurements Measurements { get; private set; }
         #endregion
 
-        public bool IsChanged { get; set; }
-
         public bool HasViewChanged { get; set; }
 
         private bool _isMouseOverVerticalScrollBar = false;
@@ -207,22 +205,28 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; } = false;
+        //#region INotifyPropertyChanged 
+        //public bool ThrowOnInvalidPropertyName { get; private set; } = false;
 
-        private event PropertyChangedEventHandler _propertyChanged;
-        public event PropertyChangedEventHandler PropertyChanged {
-            add { _propertyChanged += value; }
-            remove { _propertyChanged -= value; }
-        }
+        //private event PropertyChangedEventHandler _propertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged {
+        //    add { _propertyChanged += value; }
+        //    remove { _propertyChanged -= value; }
+        //}
 
         public virtual void OnPropertyChanged(string propertyName) {
-            PropertyChangedEventHandler handler = _propertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);
             }
         }
+        //#endregion
+
+        #region PropertyChanged 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsChanged { get; set; }
         #endregion
     }
 }

@@ -23,7 +23,7 @@ namespace MpWpfApp {
         }
         public MpSettingsWindow(int tabToShow, object args = null) {
             InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel(tabToShow,args);
+            DataContext = new MpSettingsWindowViewModel(tabToShow, args);
         }
     }
 }
