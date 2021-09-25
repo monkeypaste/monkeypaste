@@ -576,6 +576,12 @@ namespace MpWpfApp {
             });
         }
 
+        public void UnFlipAllTiles() {
+            foreach(var ctvm in ClipTileViewModels) {
+                ctvm.IsFlipped = false;
+            }
+        }
+
         public void ClearAllDragDropStates() {
             IsTrayDropping = false;
             foreach (var ctvm in ClipTileViewModels) {
@@ -1156,6 +1162,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand FlipTileCommand => new RelayCommand<object>(
+            (tileToFlip) => {
+                UnFlipAllTiles();
+                ClearClipSelection();
+                (tileToFlip as MpClipTileViewModel).IsSelected = true;
+                PrimarySelectedClipTile.IsFlipped = true;
+            },
+            (tileToFlip) => {
+                return tileToFlip != null;
+            });
+
         private RelayCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {
             get {

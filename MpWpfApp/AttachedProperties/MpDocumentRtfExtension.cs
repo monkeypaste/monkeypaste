@@ -9,6 +9,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDocumentRtfExtension : DependencyObject {
+        
         public static string GetDocumentRtf(DependencyObject obj) {
             return (string)obj.GetValue(DocumentRtfProperty);
         }

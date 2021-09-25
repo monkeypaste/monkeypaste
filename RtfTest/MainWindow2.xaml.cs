@@ -20,10 +20,10 @@ namespace RtfTest {
     /// <summary>
     /// Interaction logic for MainWindow2.xaml
     /// </summary>
-    public partial class MainWindow2 : Window {
+    public partial class MainWindow : Window {
         public ObservableCollection<RichTextBox> Rtfs { get; set; }
 
-        public MainWindow2() {
+        public MainWindow() {
             InitializeComponent();
             new TextRange(rtf1.Document.ContentStart, rtf1.Document.ContentEnd).Text = "HELLO!";
         }

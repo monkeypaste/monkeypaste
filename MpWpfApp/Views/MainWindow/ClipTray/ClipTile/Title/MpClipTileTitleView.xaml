@@ -8,7 +8,8 @@
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
@@ -99,6 +100,15 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
+                <Button x:Name="FlipButton"
+                        Visibility="{Binding Parent.Parent.FlipButtonVisibility}"
+                        Background="Green"
+                        Width="12"
+                        Height="12"
+                        Canvas.Top="3"
+                        Canvas.Right="3"
+                        Command="{Binding FlipTileCommand, Source={StaticResource ClipTrayViewModel}}"
+                        CommandParameter="{Binding Parent.Parent}"/>
             </Canvas>
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"
@@ -144,7 +154,7 @@
                Stretch="Fill"
                Visibility="Hidden"
                Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"
-               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"></Image>
+               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}" />
         <!-- Clip Title Icon Image -->
         <Grid Grid.Column="1" >
             <Button x:Name="ClipTileAppIconImageButton"

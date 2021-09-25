@@ -386,6 +386,15 @@ using System.Speech.Synthesis;
             }
         }
 
+        public Visibility FlipButtonVisibility {
+            get {
+                if(IsExpanded) {
+                    return Visibility.Hidden;
+                }
+                return IsSelected || IsHovering ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
         public Visibility AppIconHighlightBorderVisibility {
             get {
                 return HighlightTextRangeViewModelCollection.HasAppMatch ? Visibility.Visible : Visibility.Hidden;

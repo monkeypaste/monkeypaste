@@ -263,6 +263,19 @@
     <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\Container\MpClipTileFlipView.xaml.cs">
+      <DependentUpon>MpClipTileFlipView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\Container\Analytics\MpContentItemAnalyticsView.xaml.cs">
+      <DependentUpon>MpContentItemAnalyticsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
+      <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\Container\Analytics\Documents\MpTextAnalysisDocument.xaml.cs">
+      <DependentUpon>MpTextAnalysisDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\Container\Analytics\Selector\MpAnalysisDocumentSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListCollectionView.xaml.cs">
       <DependentUpon>MpFileListCollectionView.xaml</DependentUpon>
     </Compile>
@@ -382,6 +395,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\Container\MpClipTileFlipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\Container\Analytics\MpContentItemAnalyticsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\Container\Analytics\Documents\MpImageAnalysisDocument.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\Container\Analytics\Documents\MpTextAnalysisDocument.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1963,6 +1992,7 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
+    <Folder Include="Views\MainWindow\ClipTray\Container\Tile\" />
     <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>

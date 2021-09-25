@@ -15,16 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpImageDetectionDocument.xaml
+    /// Interaction logic for MpContentItemAnalyticsView.xaml
     /// </summary>
-    public partial class MpImageAnalysisDocument : UserControl {
-        public MpImageAnalysisDocument() {
+    public partial class MpContentItemAnalyticsView : UserControl {
+        public MpContentItemAnalyticsView() {
             InitializeComponent();
-            DataContext = new MpImageAnalysisViewModel();
-        }
-        public MpImageAnalysisDocument(string analysisData) {
-            InitializeComponent();
-            DataContext = new MpImageAnalysisViewModel(null,analysisData);
         }
     }
 }
