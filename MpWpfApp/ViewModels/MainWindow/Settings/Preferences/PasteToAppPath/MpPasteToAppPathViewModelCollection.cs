@@ -115,6 +115,9 @@ namespace MpWpfApp {
         }
 
         public void Init() {
+            //commented out usage in last window watcher and context menu
+            return;
+
             MpRunningApplicationManager.Instance.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):

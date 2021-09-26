@@ -2921,17 +2921,17 @@ namespace MpWpfApp {
                 return strl[1].Substring(0, strl[1].IndexOf(element));
             }
             return string.Empty;
-            int sIdx = xml.IndexOf(element);
-            if (sIdx < 0) {
-                return string.Empty;
-            }
-            sIdx += element.Length;
-            element = element.Replace(@"<", @"</");
-            int eIdx = xml.IndexOf(element);
-            if (eIdx < 0) {
-                return string.Empty;
-            }
-            return xml.Substring(sIdx, eIdx - sIdx);
+            //int sIdx = xml.IndexOf(element);
+            //if (sIdx < 0) {
+            //    return string.Empty;
+            //}
+            //sIdx += element.Length;
+            //element = element.Replace(@"<", @"</");
+            //int eIdx = xml.IndexOf(element);
+            //if (eIdx < 0) {
+            //    return string.Empty;
+            //}
+            //return xml.Substring(sIdx, eIdx - sIdx);
         }
         
         public async Task<string> GetHttpSourceCode(string url) {

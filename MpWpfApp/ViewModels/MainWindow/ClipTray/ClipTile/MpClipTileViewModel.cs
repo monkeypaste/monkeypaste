@@ -33,8 +33,6 @@ using System.Speech.Synthesis;
     public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentCommands {
         #region Private Variables
         private List<string> _tempFileList = new List<string>();
-
-
         //container
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -43,6 +41,28 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Properties
+
+
+        #region Property Reflection Referencer
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                if (myPropInfo == null) {
+                    throw new Exception("Unable to find property: " + propertyName);
+                }
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+            }
+        }
+        #endregion
 
         #region View Models
         private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection();
@@ -60,7 +80,7 @@ using System.Speech.Synthesis;
 
         
 
-        private ObservableCollection<MpContentItemViewModel> _itemViewModels;
+        private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
         public ObservableCollection<MpContentItemViewModel> ItemViewModels {
             get {
                 return _itemViewModels;
@@ -428,26 +448,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Visibility LoadingSpinnerVisibility {
-            get {
-                if (IsLoading || IsBusy) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        public Visibility ContentVisibility {
-            get {
-                if (IsLoading || IsBusy) {
-                    return Visibility.Collapsed;
-                } else if (IsExpanding) {
-                    return Visibility.Hidden;
-                }
-                return Visibility.Visible;
-            }
-        }
-
         public Visibility TileDetectedImageItemsVisibility {
             get {
                 if (IsSelected) {
@@ -680,7 +680,6 @@ using System.Speech.Synthesis;
                 if (_isExpanding != value) {
                     _isExpanding = value;
                     OnPropertyChanged(nameof(IsExpanding));
-                    OnPropertyChanged(nameof(ContentVisibility));
                 }
             }
         }
@@ -804,28 +803,22 @@ using System.Speech.Synthesis;
         #region Public Methods
         public MpClipTileViewModel() : base(null) { }
 
-        public MpClipTileViewModel(bool isPlaceholder) : this() {
-            if (isPlaceholder) {
-                IsBusy = true;
-            }
-        }
-
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            InitContent(ci);
+            Task.Run(async ()=> await InitContentAsync(ci));
         }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
+                case nameof(IsBusy):                    
+                    
+                    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         if (ItemVisibility != Visibility.Visible && !MpClipTrayViewModel.Instance.IsPastingHotKey) {
                             IsSelected = false;
                             break;
                         }
-                        //if(ContentContainerViewModel.SubSelectedContentItems.Count == 0) {
-                        //    ContentContainerViewModel.ItemViewModels[0].IsSelected = true;
-                        //}
                         LastSelectedDateTime = DateTime.Now;
                         OnTileSelected?.Invoke(this, null);
                     } else {
@@ -879,10 +872,6 @@ using System.Speech.Synthesis;
                     //    rtbvm.UpdateLayout();
                     //}
                     break;
-                case nameof(IsBusy):
-                    OnPropertyChanged(nameof(ContentVisibility));
-                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
-                    break;
                 case nameof(ItemVisibility):
                     if (ItemVisibility == Visibility.Collapsed) {
                         return;
@@ -910,17 +899,21 @@ using System.Speech.Synthesis;
 
         #region Loading Initializers
         public void InitContent(MpCopyItem ci) {
-            if (ci == null) {
-                IsBusy = true;
-                return;
-            }
-            if (ci.Id == 0 && !MpMainWindowViewModel.IsMainWindowLoading) {
-                IsBusy = true;
-            }
-
             OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
 
-            Initialize(ci);
+            MpHelpers.Instance.RunOnMainThread(() => { Initialize(ci); }, DispatcherPriority.Background);
+
+            HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+
+            OnPropertyChanged(nameof(PrimaryItem));
+        }
+
+        public async Task InitContentAsync(MpCopyItem ci) {
+            OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
+
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                Initialize(ci);
+            }, DispatcherPriority.Background);
 
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
@@ -928,9 +921,9 @@ using System.Speech.Synthesis;
         }
 
         #endregion
-  
 
-        
+
+
 
         public void Resize(
             double deltaWidth,
@@ -1184,6 +1177,7 @@ using System.Speech.Synthesis;
 
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
+            await Task.Delay(1);
             if(IsTextItem) {
                 if (SelectedItems.Count == 0) {
                     SubSelectAll();
@@ -1360,6 +1354,8 @@ using System.Speech.Synthesis;
         #region Public Methods
 
         public void Initialize(MpCopyItem headItem) {
+            IsBusy = true;
+
             var ccil = MpCopyItem.GetCompositeChildren(headItem);
             ccil.Insert(0, headItem);
 
@@ -1376,6 +1372,8 @@ using System.Speech.Synthesis;
             }
 
             ResetSubSelection();
+
+            IsBusy = false;
         }
 
         private void BindItemEvents(MpContentItemViewModel ivm) {
@@ -1543,11 +1541,6 @@ using System.Speech.Synthesis;
 
 
         #region Private Methods
-        private void MpContentContainerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                // case nameof(SubSele)
-            }
-        }
         #endregion
 
         #region Commands

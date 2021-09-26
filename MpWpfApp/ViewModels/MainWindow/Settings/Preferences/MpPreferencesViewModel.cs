@@ -219,7 +219,9 @@ namespace MpWpfApp {
                         SetLoadOnLogin(IsLoadOnLoginChecked);
                         break;
                     case nameof(SelectedLanguage):
-                        SetLanguage(SelectedLanguage);
+                        Task.Run(async () => { 
+                            await SetLanguage(SelectedLanguage); 
+                        });
                         break;
                 }
             };

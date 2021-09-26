@@ -348,7 +348,7 @@ namespace MpWpfApp {
             HighlightRangeViewModels.Clear();
         }
 
-        public new void Add(MpHighlightTextRangeViewModel htrvm) {
+        public void Add(MpHighlightTextRangeViewModel htrvm) {
             if(htrvm.HighlightType != MpHighlightType.App) {
                 HighlightRangeViewModels.Add(htrvm);
                 return;

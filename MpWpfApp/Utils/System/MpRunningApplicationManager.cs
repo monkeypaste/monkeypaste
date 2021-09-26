@@ -145,7 +145,7 @@ namespace MpWpfApp {
                 }
                 catch(Exception ex) {
                     //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
-                    //MonkeyPaste.MpConsole.WriteLine($"FgHandle: {fgHandle} already exists...ignoring");
+                    MonkeyPaste.MpConsole.WriteTraceLine($"FgHandle: {fgHandle} already exists...ignoring",ex);
                 }
                 //MonkeyPaste.MpConsole.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
             }
@@ -250,12 +250,12 @@ namespace MpWpfApp {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual void OnPropertyChanged(string propertyName) {
-            this.VerifyPropertyName(propertyName);
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+            //this.VerifyPropertyName(propertyName);
+            //PropertyChangedEventHandler handler = PropertyChanged;
+            //if (handler != null) {
+            //    var e = new PropertyChangedEventArgs(propertyName);
+            //    handler(this, e);
+            //}
         }
 
         [Conditional("DEBUG")]

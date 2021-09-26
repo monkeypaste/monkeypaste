@@ -31,26 +31,6 @@ namespace MpWpfApp {
             }
         }
 
-        #region Property Reflection Referencer
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
-        #endregion
 
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel {
@@ -215,11 +195,11 @@ namespace MpWpfApp {
         //}
 
         public virtual void OnPropertyChanged(string propertyName) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+            //PropertyChangedEventHandler handler = PropertyChanged;
+            //if (handler != null) {
+            //    var e = new PropertyChangedEventArgs(propertyName);
+            //    handler(this, e);
+            //}
         }
         //#endregion
 

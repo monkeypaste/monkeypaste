@@ -19,16 +19,9 @@
                         Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                         Loaded="ClipTileClipBorder_Loaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
-                        PreviewMouseUp="ClipTileClipBorder_PreviewMouseUp"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
-                        MouseMove="ClipTileClipBorder_MouseMove"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
-                        MouseDown="ClipTileClipBorder_MouseDown"
-                        DragLeave="ClipTileClipBorder_DragLeave"
-                        PreviewDragEnter="ClipTileClipBorder_PreviewDragEnter"
-                        PreviewDragOver="ClipTileClipBorder_PreviewDragOver"
-                        PreviewDrop="ClipTileClipBorder_PreviewDrop"
                         Focusable="True"
                         AllowDrop="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -36,6 +29,9 @@
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
+        <i:Interaction.Behaviors>
+            <local:DragBehavior/>
+        </i:Interaction.Behaviors>
         <!--<local:MpClipBorder.Style>
             <Style>
                 <Setter Property="Border.Background"
@@ -100,9 +96,9 @@
             </DockPanel>
             <!-- Overlays -->
             <!-- Loading Spinner -->
-            <local:MpClipTileLoadingOverlayView Visibility="{local:MpSettingBinding IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpClipTileLoadingOverlayView Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
             <!-- Trial Expired -->
-            <local:MpClipTileTrialExpiredOverlay Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </local:MpClipBorder>
 </UserControl>

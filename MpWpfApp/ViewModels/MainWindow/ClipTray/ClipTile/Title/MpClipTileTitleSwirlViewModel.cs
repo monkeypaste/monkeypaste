@@ -99,7 +99,7 @@ namespace MpWpfApp {
             var cl = new List<string>() { icon.HexColor1, icon.HexColor2, icon.HexColor3, icon.HexColor4, icon.HexColor5 };
             var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(cl);
             for (int i = 0; i < randomColorList.Count; i++) {
-                var c = cl[i].ToSkColor().ToWinColor();
+                var c = cl[i].ToWinMediaColor();
                 Swirls.Add(
                     new MpSwirlLayerViewModel(
                         i,
@@ -107,11 +107,6 @@ namespace MpWpfApp {
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
             }
         }
-
-        public void TitleSwirlCanvas_Loaded(object sender, RoutedEventArgs args) {
-            
-        }
-
         public void ForceBrush(Brush forcedBrush, int forceLayerIdx=-1) {
             foreach(var slvm in Swirls) {
                 if(forceLayerIdx >= 0 && Swirls.IndexOf(slvm) == forceLayerIdx) {

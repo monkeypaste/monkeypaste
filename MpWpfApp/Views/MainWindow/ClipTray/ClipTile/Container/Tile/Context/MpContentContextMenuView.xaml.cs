@@ -74,7 +74,7 @@ namespace MpWpfApp {
             }
 
             Tag = DataContext;
-            MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
+            //MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 
             foreach (var mi in Items) {
                 if (mi == null || mi is Separator) {

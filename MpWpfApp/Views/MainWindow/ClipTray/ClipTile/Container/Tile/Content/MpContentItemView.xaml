@@ -10,6 +10,9 @@
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
+    <i:Interaction.Behaviors>
+        <local:DragBehavior/>
+    </i:Interaction.Behaviors>
     <AdornerDecorator AllowDrop="True"
                       DataContext="{Binding}">
         <Grid x:Name="ContentListItemViewGrid"
@@ -62,12 +65,6 @@
                     </ToolTip>
                 </local:MpClipBorder.ToolTip>
                 <Button x:Name="DragButton"
-                        PreviewGiveFeedback="DragButton_PreviewGiveFeedback"
-                        PreviewMouseUp="DragButton_PreviewMouseUp"
-                        PreviewMouseDown="DragButton_PreviewMouseDown"
-                        PreviewMouseMove="DragButton_PreviewMouseMove"
-                        MouseEnter="DragButton_MouseEnter"
-                        MouseLeave="DragButton_MouseLeave"
                         BorderThickness="0"
                         Cursor="SizeAll"
                         Margin="0,0,0,0"

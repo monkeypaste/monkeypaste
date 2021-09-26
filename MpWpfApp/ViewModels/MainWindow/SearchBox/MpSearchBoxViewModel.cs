@@ -514,57 +514,49 @@ namespace MpWpfApp {
             //IsSearching = true;
         }
 
-        private AsyncCommand _performSearchCommand;
-        public IAsyncCommand PerformSearchCommand {
-            get {
-                if(_performSearchCommand == null) {
-                    _performSearchCommand = new AsyncCommand(PerformSearch);
-                }
-                return _performSearchCommand;
-            }
-        }
-        private async Task PerformSearch() {
-            SearchText = Text;
-            if(!HasText) {
-                IsTextValid = true;
-            }
-            var ct = MpClipTrayViewModel.Instance;
-            //wait till all highlighting is complete then hide non-matching tiles at the same time
-            var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
-            bool showMatchNav = false;
-            foreach (var ctvm in ct.ClipTileViewModels) {
-                //var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
-                //newVisibilityDictionary.Add(ctvm, newVisibility);
-                ctvm.RequestSearch(SearchText);
-                if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
-                    showMatchNav = true;
-                }
-            }
-            if (ct.IsAnyTileExpanded) {
-                if (HasText) {
-                    IsTextValid = ct.SelectedItems[0].HighlightTextRangeViewModelCollection.Count > 0;
-                } else {
+        public ICommand PerformSearchCommand => new RelayCommand(
+            () => {
+                SearchText = Text;
+                if (!HasText) {
                     IsTextValid = true;
                 }
-            } else {
-                foreach (var kvp in newVisibilityDictionary) {
-                    foreach(var skvp in kvp.Value) {
-                        if (skvp.Key is MpClipTileViewModel) {
-                            (skvp.Key as MpClipTileViewModel).ItemVisibility = skvp.Value;                            
-                        }
-                        if(skvp.Key is MpClipTileViewModel && skvp.Value == Visibility.Collapsed) {
-                            //if tile is collapsed ignore children visibility
-                            break;
-                        }
-                        if(skvp.Key is MpContentItemViewModel) {
-                            //(skvp.Key as MpContentItemViewModel).SubItemVisibility = skvp.Value;
-                        }
+                var ct = MpClipTrayViewModel.Instance;
+                //wait till all highlighting is complete then hide non-matching tiles at the same time
+                var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
+                bool showMatchNav = false;
+                foreach (var ctvm in ct.ClipTileViewModels) {
+                    //var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
+                    //newVisibilityDictionary.Add(ctvm, newVisibility);
+                    ctvm.RequestSearch(SearchText);
+                    if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
+                        showMatchNav = true;
                     }
-                    
                 }
-            }
-            SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
-        }
+                if (ct.IsAnyTileExpanded) {
+                    if (HasText) {
+                        IsTextValid = ct.SelectedItems[0].HighlightTextRangeViewModelCollection.Count > 0;
+                    } else {
+                        IsTextValid = true;
+                    }
+                } else {
+                    foreach (var kvp in newVisibilityDictionary) {
+                        foreach (var skvp in kvp.Value) {
+                            if (skvp.Key is MpClipTileViewModel) {
+                                (skvp.Key as MpClipTileViewModel).ItemVisibility = skvp.Value;
+                            }
+                            if (skvp.Key is MpClipTileViewModel && skvp.Value == Visibility.Collapsed) {
+                                //if tile is collapsed ignore children visibility
+                                break;
+                            }
+                            if (skvp.Key is MpContentItemViewModel) {
+                                //(skvp.Key as MpContentItemViewModel).SubItemVisibility = skvp.Value;
+                            }
+                        }
+
+                    }
+                }
+                SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
+            });
         
         private RelayCommand _nextMatchCommand;
         public ICommand NextMatchCommand {

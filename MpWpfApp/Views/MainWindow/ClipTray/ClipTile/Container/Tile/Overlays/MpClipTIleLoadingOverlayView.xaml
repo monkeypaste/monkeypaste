@@ -7,12 +7,13 @@
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
+             Background="DimGray"
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox HorizontalAlignment="Center"
-             VerticalAlignment="Center"
-             Width="{local:MpMeasurementsBinding ClipTileLoadingSpinnerSize,Mode=OneWay}"
-             Height="{local:MpMeasurementsBinding ClipTileLoadingSpinnerSize,Mode=OneWay}">
+             VerticalAlignment="Center" Stretch="Uniform">
         <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
-                                     VerticalAlignment="Center" />
+                                     VerticalAlignment="Center" 
+                                     Width="100"
+                                     Height="100"/>
     </Viewbox>
 </UserControl>

@@ -1,7 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste;
-using SkiaSharp;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -1066,9 +1065,9 @@ namespace MpWpfApp {
             }
         }
 
-        public static Color ToWinColor(this SKColor skc) {
-            return Color.FromArgb(skc.Alpha, skc.Red, skc.Green, skc.Blue);
-        }
+        //public static Color ToWinColor(this SKColor skc) {
+        //    return Color.FromArgb(skc.Alpha, skc.Red, skc.Green, skc.Blue);
+        //}
         #endregion
 
         #region Mail

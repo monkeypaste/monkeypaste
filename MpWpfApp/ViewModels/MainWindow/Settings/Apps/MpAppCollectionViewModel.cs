@@ -106,7 +106,7 @@ namespace MpWpfApp {
             return rejectApp;
         }
 
-        public new void Add(MpAppViewModel avm) {
+        public void Add(MpAppViewModel avm) {
             if(avm.IsAppRejected && avm.App != null) {
                 var dupList = AppViewModels.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {

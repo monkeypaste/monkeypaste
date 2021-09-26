@@ -246,7 +246,7 @@ namespace MpWpfApp {
 
         private void NewTagTile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var ttvm = sender as MpTagTileViewModel;
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 switch (e.PropertyName) {
                     case nameof(ttvm.IsSelected):
                         if (ttvm.IsSelected) {
@@ -267,7 +267,7 @@ namespace MpWpfApp {
                         }
                         break;
                 }
-            }));
+            },System.Windows.Threading.DispatcherPriority.Background);
         }
 
         public void Remove(MpTagTileViewModel tagTileToRemove) {

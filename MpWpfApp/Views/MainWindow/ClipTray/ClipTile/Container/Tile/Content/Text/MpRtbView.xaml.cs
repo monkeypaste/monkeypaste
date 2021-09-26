@@ -22,8 +22,6 @@ namespace MpWpfApp {
     /// Interaction logic for Mpxaml
     /// </summary>
     public partial class MpRtbView : UserControl {
-        private bool _hasLoaded = false;
-
         public TextRange NewStartRange;
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
@@ -322,9 +320,9 @@ namespace MpWpfApp {
                                 hl = hlink;
                                 var linkText = c.Value;
                                 hl.Tag = linkType;
-                                if (linkText == @"DragAction.Cancel") {
-                                    linkText = linkText;
-                                }
+                                //if (linkText == @"DragAction.Cancel") {
+                                //    linkText = linkText;
+                                //}
                                 MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
                                 hl.MouseEnter += (s3, e3) => {
                                     hl.Cursor = rtbvm.Parent.IsSelected ? Cursors.Hand : Cursors.Arrow;

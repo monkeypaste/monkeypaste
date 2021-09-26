@@ -41,7 +41,7 @@ namespace MpWpfApp {
             LastHandle = IntPtr.Zero;
             ThisAppPath = MpHelpers.Instance.GetProcessPath(ThisAppHandle);
             
-            MpRunningApplicationManager.Instance.Init();
+            //MpRunningApplicationManager.Instance.Init();
 
             MonkeyPaste.MpConsole.WriteLine("This app's exe: " + ThisAppPath);
             
@@ -49,7 +49,7 @@ namespace MpWpfApp {
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
                 
-                MpRunningApplicationManager.Instance.RefreshHandleStack();
+                //MpRunningApplicationManager.Instance.RefreshHandleStack();
 
                 if (ThisAppHandle == IntPtr.Zero) { 
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
@@ -59,12 +59,11 @@ namespace MpWpfApp {
                     ThisAppHandle != IntPtr.Zero && 
                     currentHandle != IntPtr.Zero &&
                     !MpSettingsWindowViewModel.IsOpen &&
-                    !MpAssignShortcutModalWindowViewModel.IsOpen &&
-                    !MpLoadingWindow.IsOpen) {
+                    !MpAssignShortcutModalWindowViewModel.IsOpen) {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.Instance.GetProcessMainWindowTitle(LastHandle);
 
-                    MpRunningApplicationManager.Instance.UpdateHandleStack(LastHandle);
+                    //MpRunningApplicationManager.Instance.UpdateHandleStack(LastHandle);
 
                     MonkeyPaste.MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})",MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle), _lastHandle));
                 }

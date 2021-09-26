@@ -8,7 +8,8 @@
              xmlns:local="clr-namespace:MpWpfApp"
              DataContext="{StaticResource ClipTrayViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel,IsDesignTimeCreatable=True}">
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>            
             <local:MpMultiSelectListBox x:Name="ClipTray"
@@ -19,9 +20,6 @@
                                         Height="{Binding MainWindowViewModel.ClipTrayHeight}"
                                         Loaded="ClipTray_Loaded" 
                                         DataContextChanged="ClipTray_DataContextChanged"
-                                        DragLeave="ClipTray_DragLeave"
-                                        DragOver="ClipTray_DragOver"
-                                        Drop="ClipTray_Drop"
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         MouseLeftButtonDown="ClipTray_MouseLeftButtonDown"
                                         IsListBoxHorizontal="True"

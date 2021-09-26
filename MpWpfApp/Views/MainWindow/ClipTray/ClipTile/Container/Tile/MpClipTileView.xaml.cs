@@ -26,7 +26,7 @@ namespace MpWpfApp {
         public MpClipTileView() {
             InitializeComponent();
             PreviewMouseUp += MpClipTileView_PreviewMouseUp_DragDrop;
-            MouseMove += MpClipTileView_MouseMove_DragDrop;     
+            MouseMove += MpClipTileView_MouseMove_DragDrop;
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
@@ -40,7 +40,7 @@ namespace MpWpfApp {
                 ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
 
                 Titles.Clear();
-                foreach(var civm in ctvm.ItemViewModels) {
+                foreach (var civm in ctvm.ItemViewModels) {
                     Titles.Add(new TextBlock() {
                         Text = civm.CopyItem.Title
                     });
@@ -54,7 +54,7 @@ namespace MpWpfApp {
 
             var rtbl = this.GetVisualDescendents<RichTextBox>();
             var tl = new List<Tuple<TextBlock, RichTextBox>>();
-            foreach(var rtb in rtbl) {
+            foreach (var rtb in rtbl) {
                 var rtbvm = rtb.DataContext as MpContentItemViewModel;
                 var tb = Titles.Where(x => x.Text == rtbvm.CopyItem.Title).FirstOrDefault();
                 tl.Add(new Tuple<TextBlock, RichTextBox>(tb, rtb));
@@ -70,10 +70,20 @@ namespace MpWpfApp {
             ctvm.IsHovering = true;
         }
 
+        private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {
+            var ctvm = DataContext as MpClipTileViewModel;
+            if (ctvm != null && !ctvm.IsClipDragging) {
+                ctvm.IsHovering = false;
+                foreach (var rtbvm in ctvm.ItemViewModels) {
+                    rtbvm.IsHovering = false;
+                }
+            }
+        }
+
         private void ClipTileClipBorder_MouseMove(object sender, MouseEventArgs e) {
             return;
 
-            var ctvm = DataContext as MpClipTileViewModel; 
+            var ctvm = DataContext as MpClipTileViewModel;
             var rtblb = this.GetVisualDescendent<MpMultiSelectListBox>();
             var rtbcv = this.GetVisualDescendent<MpContentListView>();
             if (!ctvm.IsSelected || MpClipTrayViewModel.Instance.SelectedItems.Count <= 1) {
@@ -92,7 +102,7 @@ namespace MpWpfApp {
                     var irmp = e.GetPosition(rtbv.DragButton);
                     var dragButtonRect = rtbv.DragButton.RelativeBounds();// new Rect(0, 0, rtbv.DragButton.ActualWidth, rtbv.DragButton.ActualHeight);
                     if (dragButtonRect.Contains(irmp)) {
-                        isOverSubSelectedDragButton = true; 
+                        isOverSubSelectedDragButton = true;
                         rtbcv.SyncMultiSelectDragButton(true, e.MouseDevice.LeftButton == MouseButtonState.Pressed);
                     }
                 }
@@ -124,16 +134,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
 
-            if (ctvm != null && !ctvm.IsClipDragging) {
-                ctvm.IsHovering = false;
-                foreach (var rtbvm in ctvm.ItemViewModels) {
-                    rtbvm.IsHovering = false;
-                }
-            }
-        }
 
         private void ClipTileClipBorder_LostFocus(object sender, RoutedEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
@@ -263,8 +264,8 @@ namespace MpWpfApp {
                             rtblb.ScrollIntoView(ctvm.ItemViewModels[dropIdx - 1]);
                         }
                     }
-                    rtblbv.RtbLbAdorner.Point1 = rtblb.GetAdornerPoints(dropIdx,false)[0];
-                    rtblbv.RtbLbAdorner.Point2 = rtblb.GetAdornerPoints(dropIdx,false)[1];
+                    rtblbv.RtbLbAdorner.Point1 = rtblb.GetAdornerPoints(dropIdx, false)[0];
+                    rtblbv.RtbLbAdorner.Point2 = rtblb.GetAdornerPoints(dropIdx, false)[1];
                     ctvm.IsClipDropping = true;
                     e1.Effects = DragDropEffects.Move;
                     e1.Handled = true;
@@ -306,7 +307,7 @@ namespace MpWpfApp {
                             dctvm.SubSelectAll();
                         }
                         if (dctvm.Count == 0) {
-                            dcil.AddRange(dctvm.ItemViewModels.Select(x=>x.CopyItem).ToList());
+                            dcil.AddRange(dctvm.ItemViewModels.Select(x => x.CopyItem).ToList());
                         } else {
                             foreach (var ssrtbvm in dctvm.SelectedItems) {
                                 dcil.Add(ssrtbvm.CopyItem);
@@ -356,10 +357,10 @@ namespace MpWpfApp {
         }
 
         private void Mwvm_OnTileExpand(object sender, EventArgs e) {
-            if(sender == DataContext) {
+            if (sender == DataContext) {
                 //TileDetailView.Visibility = Visibility.Collapsed;
             }
-        }        
+        }
 
         private void Ctvm_OnSearchRequest(object sender, string e) {
             throw new NotImplementedException();

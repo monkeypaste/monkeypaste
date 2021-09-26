@@ -24,7 +24,6 @@ namespace MpWpfApp {
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
         private int _remainingItems = int.MaxValue;
-        private int _headIdx = 0;
 
         public MpClipTrayView() {
             InitializeComponent();
@@ -50,8 +49,9 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnTilesChanged(object sender, object e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+            // NOTE below not thread safe
+            //var ctrvm = DataContext as MpClipTrayViewModel;
+            //_remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
         }
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
@@ -92,7 +92,6 @@ namespace MpWpfApp {
             if (!ctrvm.IsTrayDropping) {
                 return;
             }
-            bool wasDropped = false;
             var dctvml = new List<MpClipTileViewModel>();
             if (e.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                 dctvml = (List<MpClipTileViewModel>)e.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
@@ -129,7 +128,6 @@ namespace MpWpfApp {
                             } else {
                                 ctrvm.ClipTileViewModels.Move(dragCtvmIdx, dropIdx);
                             }
-                            wasDropped = true;
                         } else {
                             //2. if partial selection, remove from parent and make new
                             //   composite in merge then insert at dropidx.
@@ -142,7 +140,6 @@ namespace MpWpfApp {
                             //ctrvm.Add(nctvm, dropIdx);
                             ctrvm.RefreshClips();
                             nctvm.RequestUiUpdate();
-                            wasDropped = true;
                         }
                     }
                 }

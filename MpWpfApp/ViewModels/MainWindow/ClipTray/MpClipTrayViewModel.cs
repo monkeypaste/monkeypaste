@@ -48,7 +48,6 @@ namespace MpWpfApp {
         //private int _expandedTileVisibleIdx = 0;
 
         private int _itemsAdded = 0;
-        private int _currentStartIndex = 0;
         private int _pageSize = 20;
 
         private List<MpClipTileViewModel> _newTileList = new List<MpClipTileViewModel>();
@@ -180,21 +179,7 @@ namespace MpWpfApp {
             }
         }
 
-        //private BitmapSource _filterByAppIcon = null;
-        //public BitmapSource FilterByAppIcon {
-        //    get {
-        //        if(_filterByAppIcon == null) {
-        //            return new BitmapImage();
-        //        }
-        //        return _filterByAppIcon;
-        //    }
-        //    set {
-        //        if(_filterByAppIcon != value) {
-        //            _filterByAppIcon = value;
-        //            OnPropertyChanged(nameof(FilterByAppIcon));
-        //        }
-        //    }
-        //}
+        
 
         public bool IsTrayDropping { get; set; } = false;
 
@@ -227,6 +212,12 @@ namespace MpWpfApp {
                     }
                 }
                 return false;
+            }
+        }
+
+        public bool IsAnyEditing {
+            get {
+                return ClipTileViewModels.Any(x => x.IsAnyEditingContent);
             }
         }
 
@@ -424,9 +415,38 @@ namespace MpWpfApp {
             return _availableTiles[nextIdx];
         }
 
+        public void RefreshClipsAsync(bool isDescending = true, string sortColumn = "CopyDateTime", int start = 0, int count = 0) {
+            Task.Run(() => {//MpHelpers.Instance.RunOnMainThread(() => {
+                int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
+                if(count == 0) {
+                    count = MpMeasurements.Instance.TotalVisibleClipTiles;
+                }
+
+                var sw = new Stopwatch();
+                sw.Start();
+                var page_cil = MpCopyItem.GetPage(tagId, start, count, sortColumn, isDescending);
+                sw.Stop();
+                MpConsole.WriteLine("Model Page time: " + sw.ElapsedMilliseconds);
+                sw.Start();
+                var page_vml = page_cil.Where(x => x.CompositeParentCopyItemId == 0).Select(y => CreateClipTileViewModel(y)).ToList();
+                sw.Stop();
+                MpConsole.WriteLine("Create vm time: " + sw.ElapsedMilliseconds);
+            
+                sw.Start();
+                ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
+                _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+
+                if (!MpMainWindowViewModel.IsMainWindowLoading) {
+                    ResetClipSelection();
+                }
+                sw.Stop();
+                MpConsole.WriteLine("Load list time: " + sw.ElapsedMilliseconds);
+            });
+        }
+
         public void RefreshClips(bool isDescending = true, string sortColumn = "CopyDateTime", int start = 0, int count = 0) {
             int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            if(count == 0) {
+            if (count == 0) {
                 count = MpMeasurements.Instance.TotalVisibleClipTiles;
             }
             var page_cil = MpCopyItem.GetPage(tagId, start, count, sortColumn, isDescending);
@@ -434,7 +454,7 @@ namespace MpWpfApp {
             var page_vml = page_cil.Where(x => x.CompositeParentCopyItemId == 0).Select(y => CreateClipTileViewModel(y)).ToList();
 
 
-            MpHelpers.Instance.RunOnMainThread(() => {
+            MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
                 _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
@@ -540,14 +560,18 @@ namespace MpWpfApp {
         }
 
         public void ClearClipEditing() {
+            bool wasExpanded = IsAnyTileExpanded;
+
             foreach (var ctvm in ClipTileViewModels) {
                 ctvm.ClearEditing();
             }
-            MpHelpers.Instance.RunOnMainThread((Action)delegate {
-                MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
-                MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-            });
-
+            
+            if(wasExpanded) {
+                MpHelpers.Instance.RunOnMainThread((Action)delegate {
+                    MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
+                });
+            }
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
@@ -595,9 +619,6 @@ namespace MpWpfApp {
                 ctvm.RefreshAsyncCommands();
             }
         }
-
-
-        private MpClipTileViewModel _nctvm = null;
 
         private void AddTileThread() {
             var totalAddSw = new Stopwatch();
@@ -659,8 +680,6 @@ namespace MpWpfApp {
             workThread.SetApartmentState(ApartmentState.STA);
             workThread.IsBackground = true;
             workThread.Start(); 
-
-
         }
 
         public void Refresh() {
@@ -731,7 +750,6 @@ namespace MpWpfApp {
 
                 MpHelpers.Instance.RunOnMainThread(() => {
                     RefreshClips();
-
                 });
             }
         }
