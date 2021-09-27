@@ -25,14 +25,16 @@ namespace MpWpfApp {
 
         public MpClipTileView() {
             InitializeComponent();
-            PreviewMouseUp += MpClipTileView_PreviewMouseUp_DragDrop;
-            MouseMove += MpClipTileView_MouseMove_DragDrop;
+            //PreviewMouseUp += MpClipTileView_PreviewMouseUp_DragDrop;
+            //MouseMove += MpClipTileView_MouseMove_DragDrop;
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
             mwvm.OnTileExpand += Mwvm_OnTileExpand;
             mwvm.OnTileUnexpand += Mwvm_OnTileUnexpand;
+
+            //TileDragBehavior.AdornerLayer = this.GetVisualAncestor<MpClipTrayView>().ClipTrayAdornerLayer;
         }
 
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -264,8 +266,8 @@ namespace MpWpfApp {
                             rtblb.ScrollIntoView(ctvm.ItemViewModels[dropIdx - 1]);
                         }
                     }
-                    rtblbv.RtbLbAdorner.Point1 = rtblb.GetAdornerPoints(dropIdx, false)[0];
-                    rtblbv.RtbLbAdorner.Point2 = rtblb.GetAdornerPoints(dropIdx, false)[1];
+                    //rtblbv.RtbLbAdorner.Point1 = rtblb.GetAdornerPoints(dropIdx, false)[0];
+                    //rtblbv.RtbLbAdorner.Point2 = rtblb.GetAdornerPoints(dropIdx, false)[1];
                     ctvm.IsClipDropping = true;
                     e1.Effects = DragDropEffects.Move;
                     e1.Handled = true;

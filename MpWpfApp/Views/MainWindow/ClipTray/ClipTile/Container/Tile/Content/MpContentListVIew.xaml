@@ -11,8 +11,11 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
+    <i:Interaction.Behaviors>
+        <local:MpContentListDropBehavior x:Name="DropBehavior"/>
+    </i:Interaction.Behaviors>
     <AdornerDecorator>
-        <DockPanel x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
+        <DockPanel x:Name="ContentListDockPanel" 
                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                    HorizontalAlignment="Stretch"                   
@@ -27,10 +30,10 @@
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
                                               DataContext="{Binding PrimaryItem.TemplateCollection}" />
-            <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
-                                        Loaded="ClipTileRichTextBoxListBox_Loaded"
-                                        RequestBringIntoView="ClipTileRichTextBoxListBox_RequestBringIntoView"
-                                        SelectionChanged="ClipTileRichTextBoxListBox_SelectionChanged"                                        
+            <local:MpMultiSelectListBox x:Name="ContentListBox"
+                                        Loaded="ContentListBox_Loaded"
+                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"
+                                        SelectionChanged="ContentListBox_SelectionChanged"                                        
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left"

@@ -37,11 +37,19 @@ namespace MonkeyPaste {
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
+        public int CopyItemSortIdx { get; set; } = 0;
+
         #endregion
+
+        #region Statics
 
         public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagIdAsync(int tagId) {
             var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
             return allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
+        }
+
+        public static MpCopyItemTag GetCopyItemTagByCopyItemId(int tagId,int ciid) {
+            return MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == ciid).FirstOrDefault();
         }
 
         public static async Task DeleteAllCopyItemTagsForCopyItemId(int CopyItemId) {
@@ -60,21 +68,39 @@ namespace MonkeyPaste {
             }
         }
 
-        public static MpCopyItemTag Create(int tagId,int copyItemId) {
+        public static MpCopyItemTag Create(int tagId,int copyItemId, int sortIdx = 0) {
             var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
             if(dupCheck != null) {
                 return dupCheck;
             }
+
             var newCopyItemTag = new MpCopyItemTag() {
                 CopyItemTagGuid = System.Guid.NewGuid(),
                 TagId = tagId,
-                CopyItemId = copyItemId
+                CopyItemId = copyItemId,
+                CopyItemSortIdx = sortIdx
             };
 
+            //if(!newCopyItemTag.IsSudoTag()) {
+            //    var citl = MpDb.Instance.GetItems<MpCopyItemTag>();
+            //    if(citl.Count > 0) {
+            //        if(forceSortIdx < 0) {
+            //            newCopyItemTag.CopyItemSortIdx = citl.OrderByDescending(x => x.CopyItemSortIdx).ToList()[0].CopyItemSortIdx;
+            //        } else {
+            //            forceSortIdx = forceSortIdx > citl.Count ? citl.Count : forceSortIdx;
+            //            newCopyItemTag.CopyItemSortIdx = forceSortIdx;
+            //        }
+            //    }
+            //}
             MpDb.Instance.AddItem<MpCopyItemTag>(newCopyItemTag);
 
             return newCopyItemTag;
         }
+
+        #endregion
+              
+
+        #region Sync
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var citdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItemTag", tagGuid);
@@ -161,7 +187,15 @@ namespace MonkeyPaste {
             return diffLookup;
         }
 
+        #endregion
+
+        #region Public Methods
 
         public MpCopyItemTag() { }
+
+        public bool IsSudoTag() {
+            return Id != MpTag.AllTagId && Id != MpTag.RecentTagId;
+        }
+        #endregion
     }
 }

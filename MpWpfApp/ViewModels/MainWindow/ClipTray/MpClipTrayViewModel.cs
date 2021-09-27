@@ -101,9 +101,18 @@ namespace MpWpfApp {
         public MpClipTileViewModel PrimaryItem {
             get {
                 if (SelectedItems.Count == 0) {
-                    return null;
+                    return HeadItem;
                 }
                 return SelectedItems[0];
+            }
+        }
+
+        public MpClipTileViewModel HeadItem {
+            get {
+                if(VisibileClipTiles.Count == 0) {
+                    return null;
+                }
+                return VisibileClipTiles[0];
             }
         }
 
@@ -379,13 +388,6 @@ namespace MpWpfApp {
                         break;
                 }
             };
-
-            //_allTiles = MpDb.Instance.GetItems<MpCopyItem>()
-            //                         .Where(x => x.CompositeParentCopyItemId == 0)
-            //                         .Select(y => CreateClipTileViewModel(y))
-            //                         .ToList();
-
-            //RefreshClips(MpTag.RecentTagId);
         }
 
         #region View Invokers
@@ -413,6 +415,20 @@ namespace MpWpfApp {
                 return null;
             }
             return _availableTiles[nextIdx];
+        }
+
+        public void UpdateSortOrder(bool fromModel = false) {            
+            if (fromModel) {
+                //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
+            } else {
+                if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
+                    //ignore sorting for sudo tags
+                    return;
+                }
+                //foreach (var ivm in ItemViewModels) {
+                //    ivm.CopyItem.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                //}
+            }
         }
 
         public void RefreshClipsAsync(bool isDescending = true, string sortColumn = "CopyDateTime", int start = 0, int count = 0) {
@@ -451,7 +467,13 @@ namespace MpWpfApp {
             }
             var page_cil = MpCopyItem.GetPage(tagId, start, count, sortColumn, isDescending);
 
-            var page_vml = page_cil.Where(x => x.CompositeParentCopyItemId == 0).Select(y => CreateClipTileViewModel(y)).ToList();
+            var page_vml = new List<MpClipTileViewModel>();
+            foreach(var ci in page_cil) {
+                if(ci.CompositeParentCopyItemId != 0) {
+                    continue;
+                }
+                page_vml.Add(CreateClipTileViewModel(ci));
+            }
 
 
             MpHelpers.Instance.RunOnMainThreadAsync(() => {

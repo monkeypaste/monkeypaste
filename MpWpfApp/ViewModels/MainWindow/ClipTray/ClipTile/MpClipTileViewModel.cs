@@ -805,7 +805,7 @@ using System.Speech.Synthesis;
 
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            Task.Run(async ()=> await InitContentAsync(ci));
+            InitContent(ci);
         }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
@@ -1486,7 +1486,7 @@ using System.Speech.Synthesis;
                 if(i == 0) {
                     curModels[i].CompositeParentCopyItemId = 0;
                 } else {
-                    curModels[i].CompositeParentCopyItemId = curModels[i - 1].Id;
+                    curModels[i].CompositeParentCopyItemId = curModels[0].Id;
                 }
                 MpDb.Instance.AddOrUpdate<MpCopyItem>(curModels[i]);
             }

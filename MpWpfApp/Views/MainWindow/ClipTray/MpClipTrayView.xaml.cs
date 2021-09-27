@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpClipTrayView : UserControl {
         public AdornerLayer ClipTrayAdornerLayer;
-        public MpLineAdorner ClipTrayAdorner;
+        //public MpLineAdorner ClipTrayAdorner;
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
         private int _remainingItems = int.MaxValue;
@@ -28,9 +28,9 @@ namespace MpWpfApp {
         public MpClipTrayView() {
             InitializeComponent();
 
-            ClipTrayAdorner = new MpLineAdorner(ClipTray);
+            //ClipTrayAdorner = new MpLineAdorner(ClipTray);
             ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTray);
-            ClipTrayAdornerLayer.Add(ClipTrayAdorner);
+            //ClipTrayAdornerLayer.Add(ClipTrayAdorner); 
         }
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
@@ -78,8 +78,8 @@ namespace MpWpfApp {
                 int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ClipTray));
                 if (dropIdx >= 0/* && (dropIdx >= ctrvm.ClipTileViewModels.Count || (dropIdx < ctrvm.ClipTileViewModels.Count && !this[dropIdx].IsClipOrAnySubItemDragging))*/) {
                     var adornerPoints = ClipTray.GetAdornerPoints(dropIdx,true);
-                    ClipTrayAdorner.Point1 = adornerPoints[0];
-                    ClipTrayAdorner.Point2 = adornerPoints[1];
+                    //ClipTrayAdorner.Point1 = adornerPoints[0];
+                    //ClipTrayAdorner.Point2 = adornerPoints[1];
                     ctrvm.IsTrayDropping = true;
                     e.Effects = DragDropEffects.Move;
                 }

@@ -8,7 +8,10 @@
              xmlns:local="clr-namespace:MpWpfApp"             
              mc:Ignorable="d"             
              d:DesignHeight="450"
-             d:DesignWidth="800">    
+             d:DesignWidth="800">
+    <i:Interaction.Behaviors>
+        <local:MpClipTileDragBehavior x:Name="TileDragBehavior"/>
+    </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"                        
                         DataContext="{Binding}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin, Converter={StaticResource DoubleToThicknessConverter}, Mode=OneWay}"
@@ -29,9 +32,6 @@
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <i:Interaction.Behaviors>
-            <local:DragBehavior/>
-        </i:Interaction.Behaviors>
         <!--<local:MpClipBorder.Style>
             <Style>
                 <Setter Property="Border.Background"
@@ -91,7 +91,8 @@
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!-- Content Container Canvas -->
-                <local:MpContentListView DataContext="{Binding}" />               
+                <local:MpContentListView x:Name="ContentListView" 
+                                         DataContext="{Binding}" />               
                 
             </DockPanel>
             <!-- Overlays -->

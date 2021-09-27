@@ -18,17 +18,18 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
     public partial class MpContentListView : UserControl {
-        AdornerLayer RtbLbAdornerLayer;
-        public MpLineAdorner RtbLbAdorner;
+        public AdornerLayer ContentListAdornerLayer;
+        //public MpLineAdorner RtbLbAdorner;
 
         public MpContentListView() {
             InitializeComponent();
+            ContentListAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListDockPanel);
         }
 
         public void UpdateAdorners() {
-            RtbLbAdornerLayer.Update();
-            for (int i = 0; i < ClipTileRichTextBoxListBox.Items.Count; i++) {
-                var lbi = ClipTileRichTextBoxListBox.GetListBoxItem(i);
+            ContentListAdornerLayer.Update();
+            for (int i = 0; i < ContentListBox.Items.Count; i++) {
+                var lbi = ContentListBox.GetListBoxItem(i);
                 if(lbi == null) {
                     MonkeyPaste.MpConsole.WriteTraceLine("No Listbox Item at idx: " + i);
                     continue;
@@ -37,11 +38,13 @@ namespace MpWpfApp {
                 cliv?.UpdateAdorner();
             }
         }
+
+
         #region Rtb ListBox Events
-        private void ClipTileRichTextBoxListBox_Loaded(object sender, RoutedEventArgs e) {
-            RtbLbAdorner = new MpLineAdorner(ClipTileRichTextBoxListBox);
-            RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTileRichTextBoxListBox);
-            RtbLbAdornerLayer.Add(RtbLbAdorner);
+        private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
+            //RtbLbAdorner = new MpLineAdorner(ContentListBox);
+            //RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
+            //RtbLbAdornerLayer.Add(RtbLbAdorner);
 
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
             mwvm.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
@@ -50,11 +53,11 @@ namespace MpWpfApp {
             UpdateUi();
         }
 
-        private void ClipTileRichTextBoxListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+        private void ContentListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
             e.Handled = true; 
         }
 
-        private void ClipTileRichTextBoxListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
+        private void ContentListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
             var rtblbvm = DataContext as MpClipTileViewModel;            
 
             if (rtblbvm.Count > 1) {
@@ -116,11 +119,11 @@ namespace MpWpfApp {
         }
 
         private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            ClipTileRichTextBoxListBox?.GetScrollViewer().ScrollToHome();
+            ContentListBox?.GetScrollViewer().ScrollToHome();
         }
 
         private void Rtbcvm_OnScrollIntoViewRequest(object sender, object e) {
-            ClipTileRichTextBoxListBox?.ScrollIntoView(e);
+            ContentListBox?.ScrollIntoView(e);
         }
 
         #endregion
@@ -128,7 +131,7 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             this.UpdateLayout();
-            //ClipTileRichTextBoxListBox.Items.Refresh();
+            //ContentListBox.Items.Refresh();
         }
 
         public void SyncMultiSelectDragButton(bool isOver, bool isDown) {

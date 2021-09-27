@@ -21,8 +21,8 @@ namespace MpWpfApp {
     public partial class MpContentItemView : UserControl {
         private int _minDragDist = 25;
 
-        AdornerLayer RtbItemAdornerLayer;
-        MpLineAdorner RtbItemAdorner;
+        //AdornerLayer RtbItemAdornerLayer;
+        //MpLineAdorner RtbItemAdorner;
 
         public MpContentItemView() : base() {
             InitializeComponent();            
@@ -30,9 +30,11 @@ namespace MpWpfApp {
 
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            RtbItemAdorner = new MpLineAdorner(EditorView);
-            RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(EditorView);
-            RtbItemAdornerLayer?.Add(RtbItemAdorner);
+            //RtbItemAdorner = new MpLineAdorner(EditorView);
+            //RtbItemAdornerLayer = AdornerLayer.GetAdornerLayer(EditorView);
+            //RtbItemAdornerLayer?.Add(RtbItemAdorner);
+
+            //UpdateAdorner();
 
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
             mwvm.OnTileExpand += MainWindowViewModel_OnTileExpand;
@@ -63,7 +65,8 @@ namespace MpWpfApp {
         }
 
         public void UpdateAdorner() {
-            RtbItemAdornerLayer.Update();
+            //RtbItemAdorner.Points = 
+            //RtbItemAdornerLayer.Update();
         }
 
         #region Event Handlers

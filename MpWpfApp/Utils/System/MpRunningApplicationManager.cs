@@ -43,7 +43,7 @@ namespace MpWpfApp {
             //called in LastWindowWatcher's timer to remove closed window handles and processes
             var toRemoveProcessNameList = new List<string>();
             var toRemoveHandleKeyValueList = new List<KeyValuePair<string, IntPtr>>();
-            lock(CurrentProcessWindowHandleStackDictionary) {
+            //lock(CurrentProcessWindowHandleStackDictionary) {
                 foreach (var processStack in CurrentProcessWindowHandleStackDictionary) {
                     //loop through all known processes
                     bool isProcessTerminated = true;
@@ -93,7 +93,7 @@ namespace MpWpfApp {
                 if (wasStackChanged) {
                     OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
                 }
-            }
+            //}
             
         }
 
@@ -109,7 +109,7 @@ namespace MpWpfApp {
             }
             bool wasStackChanged = false;
             processName = processName.ToLower();
-            lock (CurrentProcessWindowHandleStackDictionary) {
+            //lock (CurrentProcessWindowHandleStackDictionary) {
                 if (CurrentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
                     //if process is already being tracked 
                     if (CurrentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
@@ -128,7 +128,7 @@ namespace MpWpfApp {
                     ActiveProcessPath = processName;
                     //MonkeyPaste.MpConsole.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
                 }
-            }
+            //}
             
             if (wasStackChanged) {
                 OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));

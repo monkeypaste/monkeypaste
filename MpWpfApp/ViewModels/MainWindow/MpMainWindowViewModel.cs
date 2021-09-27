@@ -256,7 +256,7 @@ namespace MpWpfApp {
 
             MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
 
-            MpPluginManager.Instance.Init();
+            //MpPluginManager.Instance.Init();
 
             MpSystemTrayViewModel.Instance.Init();
             MpSearchBoxViewModel.Instance.Init();

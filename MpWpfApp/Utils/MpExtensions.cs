@@ -42,13 +42,13 @@ namespace MpWpfApp {
             return source.Count == 0;
         }
 
-        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isHorizontal) {
+        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isListBoxHorizontal) {
             var points = new Point[2];
             var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) :lb.GetListBoxItemRect(index);
-            if (!isHorizontal) {
+            if (!isListBoxHorizontal) {
                 itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
             }
-            if (isHorizontal) {
+            if (isListBoxHorizontal) {
                 if (index < lb.Items.Count) {
                     points[0] = itemRect.TopLeft;
                     points[1] = itemRect.BottomLeft;
@@ -180,11 +180,11 @@ namespace MpWpfApp {
             }
         }
         
-        public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
-            var item = collection[oldIdx];
-            collection.RemoveAt(oldIdx);
-            collection.Insert(newIdx, item);
-        }
+        //public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
+        //    var item = collection[oldIdx];
+        //    collection.RemoveAt(oldIdx);
+        //    collection.Insert(newIdx, item);
+        //}
 
         public static ObservableCollection<TSource> Sort<TSource, TKey>(
             this ObservableCollection<TSource> source,
@@ -439,6 +439,28 @@ namespace MpWpfApp {
                 origin = lbi.TranslatePoint(new Point(0, 0), lb);
             }
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
+        }
+
+        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {
+            relativeTo = relativeTo == null ? lb : relativeTo;
+            var rl = new List<Rect>();
+            for(int i = 0;i < lb.Items.Count;i++) {
+                rl.Add(lb.GetListBoxItemRect(i)); 
+            }
+            return rl;
+        }
+
+        public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p) {
+            int idx = lb.GetItemIndexAtPoint(p);
+            return idx < 0 ? null : lb.GetListBoxItem(idx);
+        }
+
+        public static int GetItemIndexAtPoint(this ListBox lb, Point p) {
+            ListBoxItem lbi = null;
+            var lbirl = lb.GetListBoxItemRects();
+            var lbir = lbirl.Where(x => x.Contains(p)).FirstOrDefault();
+
+            return lbirl.IndexOf(lbir);
         }
 
         public static Rect GetListBoxRect(this ListBox lb) {

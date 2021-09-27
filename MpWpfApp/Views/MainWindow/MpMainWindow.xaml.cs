@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public partial class MpMainWindow : Window {
+    public partial class MpMainWindow : Window {        
         public MpMainWindow() {
             InitializeComponent();
         }

@@ -14,9 +14,7 @@ namespace MpWpfApp {
     public class MpLineAdorner : Adorner {
 
         #region Properties
-        public Point Point1 { get; set; }
-        
-        public Point Point2 { get; set; }
+        public Point[] Points { get; set; } = new Point[2];
 
         public Brush Color { get; set; } = Brushes.Red;
 
@@ -26,7 +24,7 @@ namespace MpWpfApp {
 
         public bool IsShowing { get; set; } = false;
 
-        private Pen _pen {
+        private Pen pen {
             get {
                 return new Pen(Color, Thickness) { DashStyle = this.DashStyle };
             }
@@ -42,7 +40,9 @@ namespace MpWpfApp {
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
             if(IsShowing) {
-                drawingContext.DrawLine(_pen, Point1, Point2);
+                drawingContext.DrawLine(pen, Points[0], Points[1]);
+            } else {
+                this.Visibility = Visibility.Hidden;
             }
         }
         #endregion

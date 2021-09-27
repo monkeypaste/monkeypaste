@@ -560,6 +560,7 @@ namespace MonkeyPaste {
             }
             if (_connection == null) {
                 try {
+                    SQLitePCL.Batteries.Init();
                     _connection = new SQLiteConnection(connStr);
                 }catch(Exception ex) {
                     Console.WriteLine(ex);
@@ -857,6 +858,7 @@ namespace MonkeyPaste {
                     , MpCopyItemTagGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpTagId integer NOT NULL
+                    , CopyItemSortIdx integer default 0
                     );
 
                     CREATE TABLE MpShortcut (
