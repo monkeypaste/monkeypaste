@@ -27,7 +27,7 @@
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
-        Height="{Binding MainWindowHeight}"
+        Height="{local:MpMeasurementsBinding ScreenHeight}"
         Width="{Binding MainWindowWidth}"
         DataContext="{StaticResource MainWindowViewModel}">
     <!--<Window.Background>
@@ -36,14 +36,34 @@
     </Window.Background>-->
     <Window.Resources>        
     </Window.Resources>
-    <Canvas x:Name="MainWindowCanvas"
+    <Canvas x:Name="MainWindowCanvas"        
             AllowDrop="True"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
-            Height="{Binding MainWindowHeight}"
+            Height="{local:MpMeasurementsBinding ScreenHeight}"
+            Width="{Binding MainWindowWidth}">
+        <!--<Image Source="{Binding Ss}" 
+                Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}"
-            Background="Transparent">
+                Stretch="Fill"/>
+        <Border Background="#FF545454" 
+                BorderBrush="#FF000000" 
+                BorderThickness="1,1,1,1" 
+                CornerRadius="8,8,8,8">
+            <i:Interaction.Behaviors>
+                <local:MpGlassBehavior Visual="{Binding ElementName=MainWindowCanvas, Mode=OneWay}">
+                    <local:MpGlassBehavior.Effect>
+                        <BlurEffect/>
+                        --><!--<ShaderEffectLibrary:PixelateEffect HorizontalPixelCounts="40" VerticalPixelCounts="40"/>--><!--
+                    </local:MpGlassBehavior.Effect>
+                </local:MpGlassBehavior>
+            </i:Interaction.Behaviors>
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="1"/>
+            </Border.Effect>
+        </Border>-->
         <Grid x:Name="MainWindowGrid"
-              Canvas.Top="{Binding MainWindowGridTop}"              
+              Canvas.Top="{Binding MainWindowGridTop}" 
+              Canvas.Left="0"
               Height="{Binding MainWindowGridHeight}"
               Width="{Binding MainWindowWidth}"
               Background="Green">
@@ -61,7 +81,9 @@
                         Grid.Column="0"
                         Orientation="Horizontal"
                         Background="DarkGreen" 
-                        Visibility="{Binding AppVisibility}"/>
+                        Visibility="{Binding AppVisibility}">
+                <TextBlock Text="{Binding LogText}"/>
+            </StackPanel>
             <!-- FilterMenu -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
@@ -123,7 +145,7 @@
             <Grid Grid.Row="2"
                   Grid.Column="0"
                   Focusable="True"
-                  Background="MediumPurple">
+                  Background="{local:MpThemeColorsBinding Clip_Tray_Background_Color}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
                     <ColumnDefinition Width="*" />

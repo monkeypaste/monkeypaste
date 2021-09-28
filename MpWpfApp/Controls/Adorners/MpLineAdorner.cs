@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         public Brush Color { get; set; } = Brushes.Red;
 
-        public double Thickness { get; set; } = 1.5;
+        public double Thickness { get; set; } = 5;
 
         public DashStyle DashStyle { get; set; }
 
@@ -40,9 +40,10 @@ namespace MpWpfApp {
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
             if(IsShowing) {
+                Visibility = Visibility.Visible; 
                 drawingContext.DrawLine(pen, Points[0], Points[1]);
             } else {
-                this.Visibility = Visibility.Hidden;
+                Visibility = Visibility.Hidden;
             }
         }
         #endregion

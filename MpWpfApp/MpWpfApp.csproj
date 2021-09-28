@@ -106,6 +106,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpDocumentMarginExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
@@ -175,7 +176,6 @@
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
-    <Compile Include="Utils\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
     <Compile Include="Utils\MpWpfDbInfo.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
@@ -187,6 +187,10 @@
     <Compile Include="Utils\RESTful\JsonObjects\MpImageAnalysis.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
+    <Compile Include="Utils\Styling\MpMeasurements.cs" />
+    <Compile Include="Utils\Styling\MpThemeColorsBindingExtension.cs" />
+    <Compile Include="Utils\Styling\MpMeasurementsBindingExtension.cs" />
+    <Compile Include="Utils\Styling\MpThemeColors.cs" />
     <Compile Include="Utils\System\Clipboard\MpClipboardManager.cs" />
     <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
@@ -217,7 +221,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
-    <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Meta\MpContentDescriptionViewModel.cs" />
@@ -260,6 +263,7 @@
     <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
+    <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>

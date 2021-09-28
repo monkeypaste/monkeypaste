@@ -24,7 +24,7 @@
                  IsDocumentEnabled="True"
                  Focusable="{Binding IsEditingContent}"
                  Cursor="{Binding RtbCursor}"
-                 Padding="5"
+                 Padding="{Binding ContentPadding}"
                  local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItem.ItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                  IsUndoEnabled="True"
                  VerticalAlignment="Stretch"
@@ -33,7 +33,7 @@
                  MinHeight="100"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                 BorderThickness="0">        
+                 BorderThickness="0">
         <RichTextBox.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                              Color="Blue" />

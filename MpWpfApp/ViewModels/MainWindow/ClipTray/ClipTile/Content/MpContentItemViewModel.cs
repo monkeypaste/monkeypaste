@@ -141,11 +141,38 @@ namespace MpWpfApp {
                 if (IsHovering && Parent.Count > 1) {
                     return Brushes.LightGray;
                 }
-                if (Parent.IsSelected) {
-                    return Brushes.Gray;
-                }
                 return Brushes.White;
 
+            }
+        }
+
+        public Brush ItemBorderBrush {
+            get {
+                if(Parent == null) {
+                    return Brushes.Transparent;
+                }
+                if(Parent.IsClipDragging && IsSelected) {
+                    return Brushes.Red;
+                }
+                return Brushes.DimGray;
+            }
+        }
+
+        public Thickness ItemBorderThickness {
+            get {
+                if (Parent == null || Parent.ItemViewModels.Count == 1 || MpClipTrayViewModel.Instance.IsAnyClipOrSubItemDragging) {
+                    return new Thickness(0);
+                }
+                double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
+                if(IsSelected) {
+                    return new Thickness(bt,bt,bt,bt);
+                }
+                if (ItemIdx == 0) {
+                    return new Thickness(0, 0, 0, bt);
+                } else if (ItemIdx == Parent.Count - 1) {
+                    return new Thickness(0, bt, 0, 0);
+                }
+                return new Thickness(0, 0, 0, bt);
             }
         }
         #endregion
@@ -195,6 +222,17 @@ namespace MpWpfApp {
                     return ExpandedSize;
                 }
                 return UnexpandedSize;
+            }
+        }
+
+        public Thickness ContentPadding {
+            get {
+                double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
+                if (IsHovering) {
+                    double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
+                    return new Thickness(dp + dbw, dp, dp, dp);
+                }
+                return new Thickness(dp);
             }
         }
         #endregion
@@ -276,6 +314,17 @@ namespace MpWpfApp {
             }
         }
 
+        public int ItemIdx {
+            get {
+                if (Parent == null) {
+                    return -1;
+                }
+                return Parent.ItemViewModels.IndexOf(this);
+            }
+        }
+
+
+
         #region Drag & Drop
 
         public bool IsOverDragButton { get; set; } = false;
@@ -284,6 +333,20 @@ namespace MpWpfApp {
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
 
+
+        public bool IsItemDraggable {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (Parent.IsExpanded) {
+                    if (IsEditingContent) {
+                        return false;
+                    }
+                }
+                return IsHovering;
+            }
+        }
         #endregion
 
         #endregion

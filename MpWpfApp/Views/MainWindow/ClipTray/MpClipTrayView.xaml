@@ -89,7 +89,7 @@
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
-                            <local:MpClipTileContainerView Visibility="{Binding ItemVisibility}" 
+                            <local:MpClipTileView Visibility="{Binding ItemVisibility}" 
                                                            DataContext="{Binding}" />
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using DataGridAsyncDemoMVVM.filtersort;
@@ -31,6 +32,18 @@ namespace MpWpfApp {
                     ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowGridTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
             }
         }
+
+
+        public static void SetLogText(string text, bool append = false) {
+            Task.Run(async () => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                    text = text == null ? string.Empty : text;
+                    var mwvm = (Application.Current.MainWindow as MpMainWindow).DataContext as MpMainWindowViewModel;
+                    mwvm.LogText = append ? mwvm.LogText + text : text;
+                });
+            });
+        }
+
         #endregion
 
         #region Private Variables
@@ -90,11 +103,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Controls
-        //public Canvas MainWindowCanvas { get; set; }
-
-        //public Grid MainWindowGrid { get; set; }
-        #endregion
 
         #region State
         private bool _isMainWindowLocked = false;
@@ -112,6 +120,20 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public string LogText { get; set; }
+
+
+        public BitmapSource Ss { get; set; }
+
+        public ImageBrush SsBrush {
+            get {
+                if(Ss == null) {
+                    return null;
+                }
+                return new ImageBrush(Ss);
+            }
+        }
         #endregion
 
         #region Layout
@@ -124,29 +146,13 @@ namespace MpWpfApp {
             }
         }
 
-        public double MainWindowWidth {
-            get {
-                return SystemParameters.WorkArea.Width;
-            }
-        }
+        public double MainWindowWidth { get; set; } = SystemParameters.WorkArea.Width;
 
-        public double MainWindowHeight {
-            get {
-                return SystemParameters.WorkArea.Height;
-            }
-        }
+        public double MainWindowHeight { get; set; } = SystemParameters.WorkArea.Height;
 
-        public double MainWindowTop {
-            get {
-                return 0;
-            }
-        }
+        public double MainWindowTop { get; set; } = 0;
 
-        public double MainWindowBottom {
-            get {
-                return SystemParameters.WorkArea.Height;
-            }
-        }
+        public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
 
         private double _mainWindowGridTop = SystemParameters.WorkArea.Height;
         public double MainWindowGridTop {
@@ -214,6 +220,8 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Visibility
+
         private Visibility _processinngVisibility = Visibility.Hidden;
         public Visibility ProcessingVisibility {
             get {
@@ -234,6 +242,10 @@ namespace MpWpfApp {
                 return ProcessingVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
             }
         }
+
+        #endregion
+
+
         #endregion
 
         #region Events
@@ -257,6 +269,8 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
 
             //MpPluginManager.Instance.Init();
+
+            MpThemeColors.Instance.Init();
 
             MpSystemTrayViewModel.Instance.Init();
             MpSearchBoxViewModel.Instance.Init();
@@ -473,7 +487,10 @@ namespace MpWpfApp {
                     timer.Stop();
                     IsMainWindowOpening = false;                    
                 }
-            };            
+            };
+
+            //Ss = MpHelpers.Instance.CopyScreen();
+            //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
             timer.Start();
         }
 
@@ -521,7 +538,7 @@ namespace MpWpfApp {
                 double fps = 30;
                 double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 
-                var timer = new DispatcherTimer(DispatcherPriority.Render);
+                var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
 
                 timer.Tick += (s, e32) => {

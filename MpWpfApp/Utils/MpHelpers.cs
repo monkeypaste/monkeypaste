@@ -1461,16 +1461,16 @@ namespace MpWpfApp {
         }
 
         public BitmapSource CopyScreen() {
-            var left = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
-            var top = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
-            var right = System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
-            var bottom = System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
-            var width = right - left;
-            var height = bottom - top;
+            double left = 0;//System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
+            double top = 0;// System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
+            double right = MpMeasurements.Instance.ScreenWidth * MpPreferences.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
+            double bottom = MpMeasurements.Instance.ScreenHeight * MpPreferences.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
+            int width = (int)(right - left);
+            int height = (int)(bottom - top);
 
             using (var screenBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb)) {
                 using (var bmpGraphics = System.Drawing.Graphics.FromImage(screenBmp)) {
-                    bmpGraphics.CopyFromScreen(left, top, 0, 0, new System.Drawing.Size(width, height));
+                    bmpGraphics.CopyFromScreen((int)left, (int)top, 0, 0, new System.Drawing.Size(width, height));
                     return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                         screenBmp.GetHbitmap(),
                         IntPtr.Zero,
@@ -2890,10 +2890,15 @@ namespace MpWpfApp {
 
         public bool IsConnectedToInternet() {
             try {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://www.google.com/")) {
-                    return true;
+                var client = new WebClient();
+                var stream = client.OpenRead("http://www.google.com");
+                bool isConnected = false;
+                if(stream != null) {
+                    isConnected = true;
                 }
+                client.Dispose();
+                stream.Dispose();
+                return isConnected;
             }
             catch (Exception e) {
                 MonkeyPaste.MpConsole.WriteLine(e.ToString());

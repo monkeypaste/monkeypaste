@@ -86,6 +86,8 @@
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpContentItemView DataContext="{Binding}"  
+                                                 BorderBrush="{Binding ItemBorderBrush}"
+                                                 BorderThickness="0"
                                                  Height="{Binding CurrentSize.Height}"/>
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>

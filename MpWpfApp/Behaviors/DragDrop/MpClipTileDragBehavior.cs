@@ -41,7 +41,12 @@ namespace MpWpfApp {
 
             AssociatedObject.MouseLeftButtonUp += (sender, e) => {
                 AssociatedObject.ReleaseMouseCapture();
-                ClipTrayView.DropBehavior.Drop();
+                if(CurrentDropContentListView == null) {
+                    ClipTrayView.DropBehavior.Drop();
+                } else {
+                    CurrentDropContentListView.DropBehavior.Drop();
+                }
+                FinishDrop();
             };
 
             AssociatedObject.MouseMove += (sender, e) => {
@@ -54,19 +59,16 @@ namespace MpWpfApp {
                     if (lbi == null) {
                         //if dragged off of tray
                         ClipTrayView.DropBehavior.CancelDrop();
-                        if (CurrentDropContentListView != null) {
-                            CurrentDropContentListView.DropBehavior.CancelDrop();
-                            CurrentDropContentListView = null;
-                        }
+                        CancelContentListDrop();
                         return;
                     }
                     MpClipTileView ctv = lbi.GetVisualDescendent<MpClipTileView>();
                     if (ctv.ContentListView != CurrentDropContentListView &&
                        CurrentDropContentListView != null) {
                         //when dragged onto a new tile cancel the previous tile drop 
-                        CurrentDropContentListView.DropBehavior.CancelDrop();
+                        CancelContentListDrop();
+                        //CurrentDropContentListView = null;
                     }
-                    CurrentDropContentListView = ctv.ContentListView;
 
                     int ctvIdx = ctlb.GetItemIndexAtPoint(e.GetPosition(ctlb));
                     Rect ctvr = ctlb.GetListBoxItemRect(ctvIdx);
@@ -76,7 +78,7 @@ namespace MpWpfApp {
                     double mouseDistFromMidX = Math.Abs(test - ctvMidX);
                     if(mouseDistFromMidX > maxTileDropDist) {
                         //assume this is a tile resort
-
+                        
                         if (ctvIdx == ClipTrayView.ClipTray.Items.IndexOf(AssociatedObject)) {
                             //ignore resorting a tile to its same position
                             ClipTrayView.DropBehavior.CancelDrop();
@@ -86,45 +88,73 @@ namespace MpWpfApp {
                         if (e.GetPosition(ctv).X > ctvMidX) {
                             //when mouse is more than halfway across tile assume dropping after it
                             ctvIdx = ctvIdx + 1;
-                        }                        
+                        }
 
                         ClipTrayView.DropBehavior.DragOver(
-                            new List<object> {
-                                MpClipTrayViewModel.Instance.SelectedItems
-                            },
+                            MpClipTrayViewModel.Instance.SelectedItems,
                             ctvIdx);
-                        if(CurrentDropContentListView != null) {
-                            CurrentDropContentListView.DropBehavior.CancelDrop();
-                            return;
-                        }
-                    } else {
-                        if(CurrentDropContentListView.ContentListBox.Items.Count == 1) {
-                            MpClipTileView cdclv_ctv = CurrentDropContentListView.GetVisualAncestor<MpClipTileView>();
-                            if(cdclv_ctv == AssociatedObject) {
-                                //when dragging a 1 item tile ignore reordering
-                                CurrentDropContentListView.DropBehavior.CancelDrop();
-                                return;
-                            }
-                        }
-                        var cilb = CurrentDropContentListView.ContentListBox;
-                        int ciIdx = cilb.GetItemIndexAtPoint(e.GetPosition(cilb));
-                        Rect cir = cilb.GetListBoxItemRect(ciIdx);
-                        double ciMidY = cir.Height / 2;
-                        ListBoxItem cilbi = cilb.GetListBoxItem(ciIdx);
 
-                        if (e.GetPosition(cilbi).Y > ciMidY) {
-                            //when mouse is more than halfway across tile assume dropping after it
-                            ciIdx = ciIdx + 1;
+                        CancelContentListDrop();
+                    } else {
+                        StartContentListDrop(ctv.ContentListView);
+
+                        MpClipTileView cdclv_ctv = CurrentDropContentListView.GetVisualAncestor<MpClipTileView>();
+                        if (CurrentDropContentListView.ContentListBox.Items.Count == 1 &&
+                            cdclv_ctv == AssociatedObject) {
+                            CancelContentListDrop();
+                        } else {
+                            var cilb = CurrentDropContentListView.ContentListBox;
+                            int ciIdx = cilb.GetItemIndexAtPoint(e.GetPosition(cilb));
+                            Rect cir = cilb.GetListBoxItemRect(ciIdx);
+                            double ciMidY = cir.Height / 2;
+                            ListBoxItem cilbi = cilb.GetListBoxItem(ciIdx);
+
+                            if (e.GetPosition(cilbi).Y > ciMidY) {
+                                //when mouse is more than halfway across tile assume dropping after it
+                                ciIdx = ciIdx + 1;
+                            }
+                            //even if drag data is drop target we must update drop target to check if its valid
+                            CurrentDropContentListView.DropBehavior.DragOver(
+                                    MpClipTrayViewModel.Instance.SelectedItems,
+                                    ctvIdx);
+
+                            ClipTrayView.DropBehavior.CancelDrop();
                         }
-                        CurrentDropContentListView.DropBehavior.DragOver(
-                            new List<object> {
-                                MpClipTrayViewModel.Instance.SelectedItems
-                            },
-                            ctvIdx);
-                        ClipTrayView.DropBehavior.CancelDrop();
+                        
                     }
                 }
             };
+        }
+
+        public void StartContentListDrop(MpContentListView clv) {
+            CurrentDropContentListView = clv;
+            var ctvm = CurrentDropContentListView.DataContext as MpClipTileViewModel;
+            ctvm.DoCommandSelection();
+            ctvm.IsClipDragging = true;
+
+            MpConsole.WriteLine($"{DateTime.Now} Starting content drop on tile: " + ctvm.HeadItem.CopyItem.ItemData.ToPlainText());
+        }
+        private void CancelContentListDrop() {
+            if(CurrentDropContentListView == null) {
+                return;
+            }
+            CurrentDropContentListView.DropBehavior.CancelDrop();
+            var ctvm = CurrentDropContentListView.DataContext as MpClipTileViewModel;
+            ctvm.IsClipDragging = false;
+            CurrentDropContentListView = null;
+            MpConsole.WriteLine($"{DateTime.Now} Canceling content drop on tile: " + ctvm.HeadItem.CopyItem.ItemData.ToPlainText());
+        }
+
+        private void FinishDrop() {
+            if(CurrentDropContentListView != null) {
+                var ctvm = CurrentDropContentListView.DataContext as MpClipTileViewModel;
+                MpConsole.WriteLine($"{DateTime.Now} Finishing content drop on tile: " + ctvm.HeadItem.CopyItem.ItemData.ToPlainText());
+            }
+            var ctrvm = ClipTrayView.DataContext as MpClipTrayViewModel;
+            foreach (var ctvm in ctrvm.SelectedItems) {
+                ctvm.IsClipDragging = false;
+            }
+            CancelContentListDrop();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace MpWpfApp {
             PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
+
             base.OnStartup(e);
         }
 

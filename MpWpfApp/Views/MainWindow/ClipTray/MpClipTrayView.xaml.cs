@@ -18,21 +18,21 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTrayView.xaml
     /// </summary>
-    public partial class MpClipTrayView : UserControl {
+    public partial class MpClipTrayView : UserControl {// : MpUserControl<MpClipTileViewModel> {
         public AdornerLayer ClipTrayAdornerLayer;
         //public MpLineAdorner ClipTrayAdorner;
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
         private int _remainingItems = int.MaxValue;
 
-        public MpClipTrayView() {
+        public MpClipTrayView() : base() {
             InitializeComponent();
 
             //ClipTrayAdorner = new MpLineAdorner(ClipTray);
             ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTray);
             //ClipTrayAdornerLayer.Add(ClipTrayAdorner); 
         }
-        private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
+        private void ClipTray_Loaded(object sender, RoutedEventArgs e) { 
             var ctrvm = DataContext as MpClipTrayViewModel;
             ctrvm.OnTilesChanged += Ctrvm_OnTilesChanged;
 

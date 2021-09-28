@@ -782,6 +782,14 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Model
+        public MpCopyItemType ItemType {
+            get {
+                if(PrimaryItem == null) {
+                    return MpCopyItemType.None;
+                }
+                return PrimaryItem.CopyItem.ItemType;
+            }
+        }
         public DateTime CopyItemCreatedDateTime {
             get {
                 if (PrimaryItem == null) {

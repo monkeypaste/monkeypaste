@@ -460,7 +460,7 @@ namespace MpWpfApp {
             });
         }
 
-        public void RefreshClips(bool isDescending = true, string sortColumn = "CopyDateTime", int start = 0, int count = 0) {
+        public void RefreshClips(bool isDescending = true, string sortColumn = "default", int start = 0, int count = 0) {
             int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             if (count == 0) {
                 count = MpMeasurements.Instance.TotalVisibleClipTiles;

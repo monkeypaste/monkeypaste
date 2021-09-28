@@ -34,16 +34,14 @@
                                          DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="Hidden"
+                                Visibility="{Binding IsItemDraggable, Converter={StaticResource BoolToVisibilityConverter}}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Background="LightYellow"
+                                Background="Transparent"
                                 Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                 ToolTipService.InitialShowDelay="750"
-                                BorderBrush="Yellow"
-                                BorderThickness="1"
                                 CornerRadius="5">
-                <local:MpClipBorder.ToolTip>
+                <!--<local:MpClipBorder.ToolTip>
                     <ToolTip x:Name="ClipTileTooltip"
                              Visibility="{Binding PlacementTarget.DataContext.SubItemToolTipVisibility, RelativeSource={RelativeSource Self}}"
                              Placement="Top"
@@ -60,17 +58,16 @@
                             </ControlTemplate>
                         </ToolTip.Template>
                     </ToolTip>
-                </local:MpClipBorder.ToolTip>
+                </local:MpClipBorder.ToolTip>-->
                 <Button x:Name="DragButton"
-                        BorderThickness="0"
+                        BorderThickness="0"                        
                         Cursor="SizeAll"
                         Margin="0,0,0,0"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
+                        VerticalAlignment="Top"
                         HorizontalAlignment="Left"
                         Template="{StaticResource SearchButtonControlTemplate}">
-                    <Image Width="75"
-                           Height="75"
+                    <Image Width="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
+                           Height="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
                            Source="/Resources/Images/burger.png"
                            Stretch="Uniform" />
                 </Button>

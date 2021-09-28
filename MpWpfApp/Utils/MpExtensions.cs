@@ -456,7 +456,6 @@ namespace MpWpfApp {
         }
 
         public static int GetItemIndexAtPoint(this ListBox lb, Point p) {
-            ListBoxItem lbi = null;
             var lbirl = lb.GetListBoxItemRects();
             var lbir = lbirl.Where(x => x.Contains(p)).FirstOrDefault();
 

@@ -161,7 +161,7 @@ namespace MpWpfApp {
         public Brush TagBorderBrush {
             get {
                 if (IsAssociated) {
-                    return Brushes.Red;
+                    return Color;
                 }
                 return Brushes.Transparent;
             }
