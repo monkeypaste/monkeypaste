@@ -61,7 +61,26 @@ namespace MpWpfApp {
         }
 
         #region Documents    
+        public Hyperlink CreateAccessibleHyperlink(string uri) {
+            uri = MpHelpers.Instance.GetFullyFormattedUrl(uri);
+            if (Uri.IsWellFormedUriString(uri,UriKind.Absolute)) {
+                var h = new Hyperlink();
+                h.NavigateUri = new Uri(uri);
+                h.Inlines.Add(uri);
+                var click = (MouseButtonEventHandler)((s4, e4) => {
+                    if (h.NavigateUri != null) {
+                        MpHelpers.Instance.OpenUrl(h.NavigateUri.ToString());
+                    }
+                });
+                h.IsEnabled = true;
+                h.MouseLeftButtonDown += click;
 
+                h.Unloaded += (s, e) => {
+                    h.MouseLeftButtonDown -= click;
+                };
+            }
+            return null;
+        }
         public List<int> IndexListOfAll(string text, string matchStr) {
             var idxList = new List<int>();
             int curIdx = text.IndexOf(matchStr);
@@ -766,6 +785,10 @@ namespace MpWpfApp {
             }
 
             return downModKeyList;
+        }
+
+        public bool IsEscapeKeyDown() {
+            return Keyboard.IsKeyDown(Key.Escape);
         }
 
         public bool IsMultiSelectKeyDown() {
@@ -2896,8 +2919,8 @@ namespace MpWpfApp {
                 if(stream != null) {
                     isConnected = true;
                 }
-                client.Dispose();
-                stream.Dispose();
+                stream?.Dispose();
+                client?.Dispose();
                 return isConnected;
             }
             catch (Exception e) {

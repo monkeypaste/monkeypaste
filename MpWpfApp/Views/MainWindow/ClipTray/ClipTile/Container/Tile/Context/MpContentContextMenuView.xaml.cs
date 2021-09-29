@@ -69,7 +69,7 @@ namespace MpWpfApp {
                     civm.Parent.IsSelected = true;
                 }
                 civm.IsContextMenuOpen = true;
-                civm.OnPropertyChanged(nameof(civm.TagMenuItems));
+                civm.OnPropertyChanged_old(nameof(civm.TagMenuItems));
                 app = civm.CopyItem.Source.App;
             }
 

@@ -110,7 +110,12 @@ namespace MonkeyPaste {
                 return false;
             }
 
-            MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id });
+            int sortOrderIdx = 1;
+            var lastcit = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id).OrderByDescending(y => y.CopyItemSortIdx).FirstOrDefault();
+            if(lastcit != null) {
+                sortOrderIdx = lastcit.CopyItemSortIdx + 1;
+            }
+            MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id,CopyItemSortIdx = sortOrderIdx});
 
             //CopyItemList.Add(clip);
             Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);

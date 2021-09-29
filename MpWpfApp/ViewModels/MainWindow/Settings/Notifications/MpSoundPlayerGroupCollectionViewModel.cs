@@ -23,7 +23,7 @@ namespace MpWpfApp {
             set {
                 if (_soundPlayerViewModels != value) {
                     _soundPlayerViewModels = value;
-                    OnPropertyChanged(nameof(SoundPlayerViewModels));
+                    OnPropertyChanged_old(nameof(SoundPlayerViewModels));
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace MpWpfApp {
             set {
                 if (_soundGroup != value) {
                     _soundGroup = value;
-                    OnPropertyChanged(nameof(SoundGroup));
+                    OnPropertyChanged_old(nameof(SoundGroup));
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace MpWpfApp {
             set {
                 if (_selectedSoundGroupNameIdx != value) {
                     _selectedSoundGroupNameIdx = value;
-                    OnPropertyChanged(nameof(SelectedSoundGroupNameIdx));
+                    OnPropertyChanged_old(nameof(SelectedSoundGroupNameIdx));
                 }
             }
         }

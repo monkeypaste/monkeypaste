@@ -91,7 +91,7 @@ namespace MpWpfApp {
                     }
                 }
                 if (wasStackChanged) {
-                    OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
+                    //OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
                 }
             //}
             
@@ -131,7 +131,7 @@ namespace MpWpfApp {
             //}
             
             if (wasStackChanged) {
-                OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
+                //OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
 
                 var placement = WinApi.GetPlacement(fgHandle);
                 if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
@@ -249,14 +249,6 @@ namespace MpWpfApp {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged(string propertyName) {
-            //this.VerifyPropertyName(propertyName);
-            //PropertyChangedEventHandler handler = PropertyChanged;
-            //if (handler != null) {
-            //    var e = new PropertyChangedEventArgs(propertyName);
-            //    handler(this, e);
-            //}
-        }
 
         [Conditional("DEBUG")]
         [DebuggerStepThrough]

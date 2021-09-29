@@ -22,7 +22,7 @@ namespace MpWpfApp {
             set {
                 if(_layerBrush != value) {
                     _layerBrush = value;
-                    OnPropertyChanged(nameof(LayerBrush));
+                    OnPropertyChanged_old(nameof(LayerBrush));
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace MpWpfApp {
             set {
                 if(_layerOpacity != value) {
                     _layerOpacity = value;
-                    OnPropertyChanged(nameof(LayerOpacity));
+                    OnPropertyChanged_old(nameof(LayerOpacity));
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace MpWpfApp {
             set {
                 if(_layerId != value) {
                     _layerId = value;
-                    OnPropertyChanged(nameof(LayerId));
+                    OnPropertyChanged_old(nameof(LayerId));
                 }
             }
         }

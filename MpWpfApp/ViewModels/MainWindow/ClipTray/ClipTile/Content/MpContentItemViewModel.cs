@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using AsyncAwaitBestPractices.MVVM;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
+using SQLite;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace MpWpfApp {
@@ -40,7 +41,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTileTitleSwirlViewModel != value) {
                     _clipTileTitleSwirlViewModel = value;
-                    OnPropertyChanged(nameof(TitleSwirlViewModel));
+                    OnPropertyChanged_old(nameof(TitleSwirlViewModel));
                 }
             }
         }
@@ -54,7 +55,7 @@ namespace MpWpfApp {
             set {
                 if (_templateCollection != value) {
                     _templateCollection = value;
-                    OnPropertyChanged(nameof(TemplateCollection));
+                    OnPropertyChanged_old(nameof(TemplateCollection));
                 }
             }
         }
@@ -119,7 +120,7 @@ namespace MpWpfApp {
                 if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
                     CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(TitleBackgroundColor));
+                    OnPropertyChanged_old(nameof(TitleBackgroundColor));
                 }
             }
         }
@@ -135,11 +136,20 @@ namespace MpWpfApp {
 
         public Brush ItemBackgroundBrush {
             get {
-                if(IsSelected) {
+                if (Parent.IsExpanded && IsSelected) {
                     return Brushes.White;
                 }
-                if (IsHovering && Parent.Count > 1) {
+                if (IsHovering && 
+                    Parent.Count > 1) {
                     return Brushes.LightGray;
+                }
+                if(IsSelected && 
+                    Parent.IsHovering &&
+                    Parent.Count > 1) {                    
+                    return MpHelpers.Instance.GetLighterBrush(
+                        new SolidColorBrush(
+                            RelativePalleteColor.ToWinMediaColor())
+                        );
                 }
                 return Brushes.White;
 
@@ -148,13 +158,13 @@ namespace MpWpfApp {
 
         public Brush ItemBorderBrush {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return Brushes.Transparent;
                 }
-                if(Parent.IsClipDragging && IsSelected) {
+                if (Parent.SelectedItems.Count > 1 && IsSelected) {
                     return Brushes.Red;
                 }
-                return Brushes.DimGray;
+                return Brushes.Transparent;
             }
         }
 
@@ -164,8 +174,8 @@ namespace MpWpfApp {
                     return new Thickness(0);
                 }
                 double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
-                if(IsSelected) {
-                    return new Thickness(bt,bt,bt,bt);
+                if (IsSelected) {
+                    return new Thickness(bt, bt, bt, bt);
                 }
                 if (ItemIdx == 0) {
                     return new Thickness(0, 0, 0, bt);
@@ -186,10 +196,10 @@ namespace MpWpfApp {
         #region Layout
 
         public Size ExpandedSize {
-            get {                
+            get {
                 //get contents actual size
                 var ds = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-                
+
                 //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
                 double w = Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth);
 
@@ -207,18 +217,18 @@ namespace MpWpfApp {
                 double h = Math.Max(
                     MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
                     MpMeasurements.Instance.ClipTileContentItemMinHeight);
-            return new Size(
-                        MpMeasurements.Instance.ClipTileContentMinWidth,
-                        h);
+                return new Size(
+                            MpMeasurements.Instance.ClipTileContentMinWidth,
+                            h);
             }
         }
 
         public Size CurrentSize {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return new Size();
                 }
-                if(Parent.IsExpanded) {
+                if (Parent.IsExpanded) {
                     return ExpandedSize;
                 }
                 return UnexpandedSize;
@@ -243,7 +253,7 @@ namespace MpWpfApp {
 
         public Cursor RtbCursor {
             get {
-                if(IsEditingContent) {
+                if (IsEditingContent) {
                     return Cursors.IBeam;
                 }
                 return Cursors.Arrow;
@@ -257,29 +267,15 @@ namespace MpWpfApp {
             set {
                 if (_isHoveringOnTitleTextGrid != value) {
                     _isHoveringOnTitleTextGrid = value;
-                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
-                    OnPropertyChanged(nameof(TitleTextColor));
+                    OnPropertyChanged_old(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged_old(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged_old(nameof(TitleTextColor));
                 }
             }
         }
 
 
         public DateTime LastSubSelectedDateTime { get; set; }
-
-        private bool _isPrimarySubSelected = false;
-        public bool IsPrimarySubSelected {
-            get {
-                return _isPrimarySubSelected;
-            }
-            set {
-                if (_isPrimarySubSelected != value) {
-                    _isPrimarySubSelected = value;
-                    OnPropertyChanged(nameof(IsPrimarySubSelected));
-                    //OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                }
-            }
-        }
 
         public bool IsSelected { get; set; } = false;
         public bool IsHovering { get; set; } = false;
@@ -301,8 +297,8 @@ namespace MpWpfApp {
             set {
                 if (_isEditingTitle != value) {
                     _isEditingTitle = value;
-                    OnPropertyChanged(nameof(IsEditingTitle));
-                     OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged_old(nameof(IsEditingTitle));
+                    OnPropertyChanged_old(nameof(TileTitleTextGridBackgroundBrush));
                 }
             }
         }
@@ -387,6 +383,36 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        public string[] ColorPallete {
+            get {
+                if(CopyItem == null) {
+                    return new string[] { };
+                }
+                return new string[] {
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor1,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor4,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor5
+                };
+            }
+        }
+
+        public string RelativePalleteColor {
+            //since items will have the same source a lot this will choose relative to list order
+            get {
+                if(CopyItem == null) {
+                    return string.Empty;
+                }
+                int idx = ItemIdx;
+                if(Parent.Count >= ColorPallete.Length) {
+                    idx = Math.Min((int)((ColorPallete.Length / Parent.Count) * idx) - 1,ColorPallete.Length-1);
+                }
+                return ColorPallete[idx];
+            }
+        }
+
         public bool IsCompositeChild {
             get {
                 if (CopyItem == null || base.Parent == null) {
@@ -398,7 +424,7 @@ namespace MpWpfApp {
 
         public DateTime CopyItemCreatedDateTime {
             get {
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return DateTime.MinValue;
                 }
                 return CopyItem.CopyDateTime;
@@ -413,7 +439,7 @@ namespace MpWpfApp {
                 return ShortcutKeyString;
             }
         }
-        
+
         private string _shortcutKeyString = string.Empty;
         public string ShortcutKeyString {
             get {
@@ -422,9 +448,9 @@ namespace MpWpfApp {
             set {
                 if (_shortcutKeyString != value) {
                     _shortcutKeyString = value;
-                    OnPropertyChanged(nameof(ShortcutKeyString));
-                    OnPropertyChanged(nameof(HotkeyIconSource));
-                    OnPropertyChanged(nameof(HotkeyIconTooltip));
+                    OnPropertyChanged_old(nameof(ShortcutKeyString));
+                    OnPropertyChanged_old(nameof(HotkeyIconSource));
+                    OnPropertyChanged_old(nameof(HotkeyIconTooltip));
                 }
             }
         }
@@ -448,13 +474,14 @@ namespace MpWpfApp {
 
         public event EventHandler<int> OnScrollWheelRequest;
         public event EventHandler OnUiUpdateRequest;
-        public event EventHandler OnSubSelected;
+        //public event EventHandler OnSubSelected;
 
 
         public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
         public event EventHandler OnCreateTemplatesRequest;
         public event EventHandler OnSyncModels;
+
         #endregion
 
         #region Public Methods
@@ -532,26 +559,29 @@ namespace MpWpfApp {
         public void RequestCreateHyperlinks() {
             OnCreateTemplatesRequest?.Invoke(this, null);
         }
+
         #endregion
 
 
-       
+
 
         public void Resize(Rect newSize) {
             //throw new Exception("Unemplemented");
         }
 
-        
 
-        public string GetDetail(MpCopyItemDetailType detailType) {
-            if(CopyItem == null) {
-                return string.Empty;
-            }
+
+        public string GetDetailText(MpCopyItemDetailType detailType) {
             string info = string.Empty;
+            if (CopyItem == null) {
+                info = string.Empty;
+            }
+
             switch (detailType) {
                 //created
                 case MpCopyItemDetailType.DateTimeCreated:
                     // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
+
                     info = "Copied " + CopyItem.CopyDateTime.ToString();
                     break;
                 //chars/lines
@@ -567,6 +597,22 @@ namespace MpWpfApp {
                 //# copies/# pastes
                 case MpCopyItemDetailType.UsageStats:
                     info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
+                    break;
+                case MpCopyItemDetailType.UrlInfo:
+                    if (CopyItem.Source.Url == null) {
+                        _detailIdx++;
+                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
+                    } else {
+                        info = CopyItem.Source.Url.UrlPath;
+                    }
+                    break;
+                case MpCopyItemDetailType.AppInfo:
+                    if (CopyItem.Source.App.UserDevice.Guid == MpPreferences.Instance.ThisDeviceGuid) {
+                        info = CopyItem.Source.App.AppPath;
+                    } else {
+                        info = " Platform | " + CopyItem.Source.App.AppPath;
+                    }
+
                     break;
                 default:
                     info = "Unknown detailId: " + (int)detailType;
@@ -600,9 +646,9 @@ namespace MpWpfApp {
             IsEditingContent = false;
             IsEditingTitle = false;
             TemplateCollection.ClearAllEditing();
-            if(IsPastingTemplate) {
+            if (IsPastingTemplate) {
                 IsPastingTemplate = false;
-                MainWindowViewModel.ShrinkClipTile(Parent);                
+                MainWindowViewModel.ShrinkClipTile(Parent);
             }
         }
 
@@ -626,8 +672,8 @@ namespace MpWpfApp {
 
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci) {
-                if(ci.Id == CopyItem.Id) {
+            if (e is MpCopyItem ci) {
+                if (ci.Id == CopyItem.Id) {
                 }
             }
         }
@@ -670,11 +716,10 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
-                        OnSubSelected?.Invoke(this, null);
                     }
                     break;
                 case nameof(IsEditingContent):
-                    if(IsEditingContent) {
+                    if (IsEditingContent) {
                         MainWindowViewModel.ExpandClipTile(Parent);
                     } else {
                         Parent.SaveToDatabase();
@@ -683,6 +728,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(CopyItem):
                     UpdateDetails();
+                    break;
+                case nameof(IsHovering):
+                    Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     break;
             }
         }
@@ -697,8 +745,9 @@ namespace MpWpfApp {
                 if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
                     _detailIdx = 1;
                 }
+
                 // TODO this should aggregate details over all sub items 
-                DetailText = GetDetail((MpCopyItemDetailType)_detailIdx);                
+                DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
             });
 
         public ICommand EditSubContentCommand {
@@ -826,14 +875,14 @@ namespace MpWpfApp {
         public ICommand RefreshDocumentCommand {
             get {
                 return new RelayCommand(
-                    ()=> {
+                    () => {
                         RequestSyncModels();
                     },
-                    ()=> {
+                    () => {
                         return true;// HasModelChanged
                     });
             }
-        }        
+        }
 
         private RelayCommand _editSubTitleCommand;
         public ICommand EditSubTitleCommand {
@@ -859,7 +908,7 @@ namespace MpWpfApp {
         public ICommand ChangeColorCommand {
             get {
                 return new RelayCommand<Brush>(
-                    (b)=> {
+                    (b) => {
                         CopyItem.ItemColor = b.ToHex();
                         TitleSwirlViewModel.ForceBrush(b);
                         Task.Run(CopyItem.WriteToDatabase);

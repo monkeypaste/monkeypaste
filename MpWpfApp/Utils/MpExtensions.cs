@@ -455,13 +455,48 @@ namespace MpWpfApp {
             return idx < 0 ? null : lb.GetListBoxItem(idx);
         }
 
-        public static int GetItemIndexAtPoint(this ListBox lb, Point p) {
+        public static int GetItemIndexAtPoint(this ListBox lb, Point rp) {
             var lbirl = lb.GetListBoxItemRects();
-            var lbir = lbirl.Where(x => x.Contains(p)).FirstOrDefault();
+            var lbir = lbirl.Where(x => x.Contains(rp)).FirstOrDefault();
 
-            return lbirl.IndexOf(lbir);
+            int idx = lbirl.IndexOf(lbir);
+            if(idx < 0 && lb.Items.Count > 0) {
+                //point not over any item in listbox
+                //but this will still give either 0 or Count + 1 idx
+                Rect lbr = lb.GetListBoxRect();
+                if(lbr.Contains(rp)) {
+                    //point is still in listbox
+                    //get first and last lbi rect's
+                    var flbir = lb.GetListBoxItemRect(0); 
+                    var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1);
+                    if (lb.GetOrientation() == Orientation.Horizontal) {
+                        if(rp.X >= 0 && rp.X <= flbir.Left) {
+                            return 0;
+                        }                        
+                        if(rp.X >= llbir.Right && rp.X <= lbr.Right) {
+                            return lb.Items.Count;
+                        }
+                    } else {
+                        if (rp.Y >= 0 && rp.Y <= flbir.Top) {
+                            return 0;
+                        }
+                        if (rp.Y >= llbir.Bottom && rp.Y <= lbr.Bottom) {
+                            return lb.Items.Count;
+                        }
+                    }
+                }                
+            }
+            return idx;
         }
 
+        public static Orientation GetOrientation(this ListBox lb) {
+            DependencyObject dio = lb.ItemsPanel.LoadContent();
+            var vsp = dio?.GetVisualDescendent<VirtualizingStackPanel>();
+            if(vsp == null) {
+                return Orientation.Horizontal;
+            }
+            return vsp.Orientation;
+        }
         public static Rect GetListBoxRect(this ListBox lb) {
             if (lb == null) {
                 return new Rect();
@@ -527,6 +562,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
             if (dpo == null) {
                 return default;

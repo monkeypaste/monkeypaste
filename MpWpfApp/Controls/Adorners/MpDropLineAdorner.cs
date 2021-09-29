@@ -11,14 +11,13 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    public class MpLineAdorner : Adorner {
-
+    public class MpDropLineAdorner : Adorner {
         #region Properties
         public Point[] Points { get; set; } = new Point[2];
 
         public Brush Color { get; set; } = Brushes.Red;
 
-        public double Thickness { get; set; } = 5;
+        public double Thickness { get; set; } = 1.5;
 
         public DashStyle DashStyle { get; set; }
 
@@ -32,7 +31,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpLineAdorner(UIElement uie) : base(uie) {
+        public MpDropLineAdorner(UIElement uie) : base(uie) {
             DashStyle = DashStyles.Dash; 
         }
         #endregion

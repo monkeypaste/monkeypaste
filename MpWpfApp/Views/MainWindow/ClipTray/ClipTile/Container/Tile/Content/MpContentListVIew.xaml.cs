@@ -18,25 +18,23 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
     public partial class MpContentListView : UserControl {
-        public AdornerLayer ContentListAdornerLayer;
-        //public MpLineAdorner RtbLbAdorner;
+        private MpContentItemSeperatorAdorner seperatorAdorner;
+        private AdornerLayer adornerLayer;
 
         public MpContentListView() {
             InitializeComponent();
-            ContentListAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListDockPanel);
         }
 
-        public void UpdateAdorners() {
-            ContentListAdornerLayer.Update();
+        public void UpdateAdorner() {
+            seperatorAdorner.Lines.Clear();
             for (int i = 0; i < ContentListBox.Items.Count; i++) {
-                var lbi = ContentListBox.GetListBoxItem(i);
-                if(lbi == null) {
-                    MonkeyPaste.MpConsole.WriteTraceLine("No Listbox Item at idx: " + i);
-                    continue;
+                Rect lbir = ContentListBox.GetListBoxItemRect(i);
+                if(i < ContentListBox.Items.Count - 1) {
+                    seperatorAdorner.Lines.Add(new Point[] { lbir.BottomLeft, lbir.BottomRight }.ToList());
                 }
-                var cliv = lbi.GetVisualDescendent<MpContentItemView>();
-                cliv?.UpdateAdorner();
             }
+            seperatorAdorner.IsShowing = true;
+            adornerLayer.Update();
         }
 
 
@@ -50,38 +48,19 @@ namespace MpWpfApp {
             mwvm.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
             mwvm.OnTileUnexpand += MpRtbEditToolbarView_OnTileUnexpand;
 
+
+            seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
+            adornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
+            adornerLayer.Add(seperatorAdorner);
+            UpdateAdorner();
+
             UpdateUi();
         }
 
         private void ContentListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
             e.Handled = true; 
         }
-
-        private void ContentListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            var rtblbvm = DataContext as MpClipTileViewModel;            
-
-            if (rtblbvm.Count > 1) {
-                //order selected tiles by ascending datetime 
-                var subSelectedRtbvmListBySelectionTime = rtblbvm.SelectedItems.OrderBy(x => x.LastSubSelectedDateTime).ToList();
-                foreach (var srtbvm in subSelectedRtbvmListBySelectionTime) {
-                    if (srtbvm == subSelectedRtbvmListBySelectionTime[0]) {
-                        srtbvm.IsPrimarySubSelected = true;
-                    } else {
-                        srtbvm.IsPrimarySubSelected = false;
-                    }
-                }
-            } else if (rtblbvm.SelectedItems.Count == 1) {
-                rtblbvm.SelectedItems[0].IsPrimarySubSelected = false;
-            }
-
-            foreach (var osctvm in e.RemovedItems) {
-                if (osctvm.GetType() == typeof(MpContentItemViewModel)) {
-                    ((MpContentItemViewModel)osctvm).IsSelected = false;
-                    ((MpContentItemViewModel)osctvm).IsPrimarySubSelected = false;
-                }
-            }
-        }
-        
+                
         #endregion
 
         #region Toolbar Events

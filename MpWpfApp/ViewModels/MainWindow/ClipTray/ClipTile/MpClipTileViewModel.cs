@@ -73,7 +73,7 @@ using System.Speech.Synthesis;
             set {
                 if (_highlightTextRangeViewModelCollection != value) {
                     _highlightTextRangeViewModelCollection = value;
-                    OnPropertyChanged(nameof(HighlightTextRangeViewModelCollection));
+                    OnPropertyChanged_old(nameof(HighlightTextRangeViewModelCollection));
                 }
             }
         }
@@ -88,8 +88,8 @@ using System.Speech.Synthesis;
             private set {
                 if (_itemViewModels != value) {
                     _itemViewModels = value;
-                    OnPropertyChanged(nameof(ItemViewModels));
-                    OnPropertyChanged(nameof(PrimaryItem));
+                    OnPropertyChanged_old(nameof(ItemViewModels));
+                    OnPropertyChanged_old(nameof(PrimaryItem));
                 }
             }
         }
@@ -101,7 +101,7 @@ using System.Speech.Synthesis;
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                return ItemViewModels.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+                return ItemViewModels.Where(x=>x.CopyItem.CompositeParentCopyItemId == 0).FirstOrDefault();
             }
         }
 
@@ -114,12 +114,27 @@ using System.Speech.Synthesis;
             }
         }
 
+        public MpContentItemViewModel HoverItem {
+            get {
+                if (ItemViewModels == null || ItemViewModels.Count == 0) {
+                    return null;
+                }
+                return ItemViewModels.Where(x => x.IsHovering).FirstOrDefault();
+            }
+        }
+
         public MpContentItemViewModel PrimaryItem {
             get {
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                return SelectedItem == null ? HeadItem : SelectedItem;
+                if(SelectedItem != null) {
+                    return SelectedItem;
+                }
+                if(HoverItem != null) {
+                    return HoverItem;
+                }
+                return HeadItem;
             }
         }
 
@@ -184,7 +199,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileBorderWidth != value) {
                     _tileBorderWidth = value;
-                    OnPropertyChanged(nameof(TileBorderWidth));
+                    OnPropertyChanged_old(nameof(TileBorderWidth));
                 }
             }
         }
@@ -198,7 +213,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileBorderHeight != value) {
                     _tileBorderHeight = value;
-                    OnPropertyChanged(nameof(TileBorderHeight));
+                    OnPropertyChanged_old(nameof(TileBorderHeight));
                 }
             }
         }
@@ -211,7 +226,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileTitleHeight != value) {
                     _tileTitleHeight = value;
-                    OnPropertyChanged(nameof(TileTitleHeight));
+                    OnPropertyChanged_old(nameof(TileTitleHeight));
                 }
             }
         }
@@ -224,7 +239,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileTitleTextGridWidth != value) {
                     _tileTitleTextGridWidth = value;
-                    OnPropertyChanged(nameof(TileTitleTextGridWidth));
+                    OnPropertyChanged_old(nameof(TileTitleTextGridWidth));
                 }
             }
         }
@@ -237,7 +252,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileContentHeight != value) {
                     _tileContentHeight = value;
-                    OnPropertyChanged(nameof(TileContentHeight));
+                    OnPropertyChanged_old(nameof(TileContentHeight));
                 }
             }
         }
@@ -265,7 +280,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileContentWidth != value) {
                     _tileContentWidth = value;
-                    OnPropertyChanged(nameof(TileContentWidth));
+                    OnPropertyChanged_old(nameof(TileContentWidth));
                 }
             }
         }
@@ -278,7 +293,7 @@ using System.Speech.Synthesis;
             set {
                 if (_tileBorderThickness != value) {
                     _tileBorderThickness = value;
-                    OnPropertyChanged(nameof(TileBorderThickness));
+                    OnPropertyChanged_old(nameof(TileBorderThickness));
                 }
             }
         }
@@ -578,7 +593,7 @@ using System.Speech.Synthesis;
             set {
                 if (_isClipDragging != value) {
                     _isClipDragging = value;
-                    OnPropertyChanged(nameof(IsClipDragging));
+                    OnPropertyChanged_old(nameof(IsClipDragging));
                 }
             }
         }
@@ -591,7 +606,7 @@ using System.Speech.Synthesis;
             set {
                 if (_isDropping != value) {
                     _isDropping = value;
-                    OnPropertyChanged(nameof(IsClipDropping));
+                    OnPropertyChanged_old(nameof(IsClipDropping));
                 }
             }
         }
@@ -679,7 +694,7 @@ using System.Speech.Synthesis;
             set {
                 if (_isExpanding != value) {
                     _isExpanding = value;
-                    OnPropertyChanged(nameof(IsExpanding));
+                    OnPropertyChanged_old(nameof(IsExpanding));
                 }
             }
         }
@@ -707,7 +722,7 @@ using System.Speech.Synthesis;
             set {
                 if (_lastSelectedDateTime != value) {
                     _lastSelectedDateTime = value;
-                    OnPropertyChanged(nameof(LastSelectedDateTime));
+                    OnPropertyChanged_old(nameof(LastSelectedDateTime));
                 }
             }
         }
@@ -720,9 +735,9 @@ using System.Speech.Synthesis;
             set {
                 if (_isContextMenuOpened != value) {
                     _isContextMenuOpened = value;
-                    OnPropertyChanged(nameof(IsContextMenuOpened));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged_old(nameof(IsContextMenuOpened));
+                    OnPropertyChanged_old(nameof(TileBorderBrush));
+                    OnPropertyChanged_old(nameof(TileBorderBrushRect));
                 }
             }
         }
@@ -735,14 +750,14 @@ using System.Speech.Synthesis;
             set {
                 if (_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(ToolTipVisibility));
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged_old(nameof(IsSelected));
+                    OnPropertyChanged_old(nameof(ToolTipVisibility));
+                    OnPropertyChanged_old(nameof(TileBorderBrush));
                    //OnPropertyChanged(nameof(DetailTextColor));
-                    OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
-                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged_old(nameof(TileDetectedImageItemsVisibility));
+                    OnPropertyChanged_old(nameof(ToggleEditModeButtonVisibility));
+                    OnPropertyChanged_old(nameof(SelectionOverlayGridVisibility));
+                    OnPropertyChanged_old(nameof(TileBorderBrushRect));
                 }
             }
         }
@@ -755,12 +770,12 @@ using System.Speech.Synthesis;
             set {
                 if (_isHovering != value && (!MpClipTrayViewModel.Instance.IsAnyTileExpanded || IsExpanded)) {
                     _isHovering = value;
-                    OnPropertyChanged(nameof(IsHovering));
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged_old(nameof(IsHovering));
+                    OnPropertyChanged_old(nameof(TileBorderBrush));
                     //OnPropertyChanged(nameof(DetailTextColor));
-                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged_old(nameof(ToggleEditModeButtonVisibility));
+                    OnPropertyChanged_old(nameof(SelectionOverlayGridVisibility));
+                    OnPropertyChanged_old(nameof(TileBorderBrushRect));
                 }
             }
         }
@@ -773,7 +788,7 @@ using System.Speech.Synthesis;
             set {
                 if (_isPlaceholder != value) {
                     _isPlaceholder = value;
-                    OnPropertyChanged(nameof(IsPlaceholder));
+                    OnPropertyChanged_old(nameof(IsPlaceholder));
                 }
             }
         }
@@ -803,7 +818,6 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Events
-        public event EventHandler OnTileSelected;
 
         public event EventHandler<string> OnSearchRequest;
         #endregion
@@ -813,8 +827,20 @@ using System.Speech.Synthesis;
 
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            InitContent(ci);
+            Task.Run(() => Initialize(ci));
         }
+
+        public void RefreshTile() {
+            if(HeadItem == null) {
+                return;
+            }
+            Task.Run(()=>Initialize(HeadItem.CopyItem));
+        }
+
+        public void RequestSearch(string st) {
+            OnSearchRequest?.Invoke(this, st);
+        }
+
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
@@ -828,7 +854,9 @@ using System.Speech.Synthesis;
                             break;
                         }
                         LastSelectedDateTime = DateTime.Now;
-                        OnTileSelected?.Invoke(this, null);
+                        if(SelectedItems.Count == 0 && HeadItem != null) {
+                            HeadItem.IsSelected = true;
+                        }
                     } else {
                         ClearClipSelection();
                         LastSelectedDateTime = DateTime.MaxValue;
@@ -901,38 +929,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public void RequestSearch(string st) {
-            OnSearchRequest?.Invoke(this, st);
-        }
-
-        #region Loading Initializers
-        public void InitContent(MpCopyItem ci) {
-            OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
-
-            MpHelpers.Instance.RunOnMainThread(() => { Initialize(ci); }, DispatcherPriority.Background);
-
-            HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
-            OnPropertyChanged(nameof(PrimaryItem));
-        }
-
-        public async Task InitContentAsync(MpCopyItem ci) {
-            OnSubSelectionChanged += ContentContainerViewModel_OnSubSelectionChanged;
-
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                Initialize(ci);
-            }, DispatcherPriority.Background);
-
-            HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
-            OnPropertyChanged(nameof(PrimaryItem));
-        }
-
-        #endregion
-
-
-
-
+        
         public void Resize(
             double deltaWidth,
             double deltaHeight,
@@ -1256,6 +1253,46 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Private Methods           
+        private async Task Initialize(MpCopyItem headItem) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                var ccil = MpCopyItem.GetCompositeChildren(headItem);
+                ccil.Insert(0, headItem);
+
+                var civml = new List<MpContentItemViewModel>();
+                foreach (var cci in ccil) {
+                    civml.Add(new MpContentItemViewModel(this, cci));
+                }
+
+                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
+                    civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
+
+                foreach (var ivm in ItemViewModels) {
+                    BindItemEvents(ivm);
+                }
+
+                ResetSubSelection();
+
+                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+            }, DispatcherPriority.Background);
+        }
+
+        private void BindItemEvents(MpContentItemViewModel ivm) {
+            ivm.PropertyChanged += Ivm_PropertyChanged;
+        }
+
+        private void Ivm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ivm = sender as MpContentItemViewModel;
+            switch (e.PropertyName) {
+                case nameof(ivm.IsSelected):
+                    if (ivm.IsSelected) {
+                        if (!IsSelected) {
+                            IsSelected = true;
+                        }
+                    }
+                    break;
+            }
+        }
+
         private void ContentContainerViewModel_OnSubSelectionChanged(object sender, object e) {
             if (e != null && !IsSelected) {
                 IsSelected = true;
@@ -1264,7 +1301,7 @@ using System.Speech.Synthesis;
                         ivm.IsSelected = false;
                     }
                 }
-                OnPropertyChanged(nameof(PrimaryItem));
+                OnPropertyChanged_old(nameof(PrimaryItem));
             }
         }
         #endregion
@@ -1361,38 +1398,8 @@ using System.Speech.Synthesis;
 
         #region Public Methods
 
-        public void Initialize(MpCopyItem headItem) {
-            IsBusy = true;
+        
 
-            var ccil = MpCopyItem.GetCompositeChildren(headItem);
-            ccil.Insert(0, headItem);
-
-            var civml = new List<MpContentItemViewModel>();
-            foreach (var cci in ccil) {
-                civml.Add(new MpContentItemViewModel(this, cci));
-            }
-
-            ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
-
-            foreach (var ivm in ItemViewModels) {
-                BindItemEvents(ivm);
-            }
-
-            ResetSubSelection();
-
-            IsBusy = false;
-        }
-
-        private void BindItemEvents(MpContentItemViewModel ivm) {
-            ivm.OnSubSelected += ItemViewModel_OnSubSelected;
-        }
-
-        private void ItemViewModel_OnSubSelected(object sender, EventArgs e) {
-            OnPropertyChanged(nameof(SelectedItems));
-            OnPropertyChanged(nameof(SelectedItem));
-            OnSubSelectionChanged?.Invoke(this, sender);
-        }
 
         #region View Event Invokers
         public void RequestScrollIntoView(object obj) {
@@ -1480,7 +1487,7 @@ using System.Speech.Synthesis;
         }
 
         public string GetDetailText(MpCopyItemDetailType detailType) {
-            return HeadItem.GetDetail(detailType);
+            return HeadItem.GetDetailText(detailType);
         }
 
         public void InsertRange(int idx, List<MpCopyItem> models) {

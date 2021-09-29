@@ -113,7 +113,7 @@ namespace MpWpfApp {
             set {
                 if(_isMainWindowLocked != value) {
                     _isMainWindowLocked = value;
-                    OnPropertyChanged(nameof(IsMainWindowLocked));
+                    OnPropertyChanged_old(nameof(IsMainWindowLocked));
                     if(IsMainWindowLocked) {
                         MpSystemTrayViewModel.Instance.ShowLogDialogCommand.Execute(null);
                     }
@@ -162,7 +162,7 @@ namespace MpWpfApp {
             set {
                 if(_mainWindowGridTop != value) {
                     _mainWindowGridTop = value;
-                    OnPropertyChanged(nameof(MainWindowGridTop));
+                    OnPropertyChanged_old(nameof(MainWindowGridTop));
                 }
             }
         }
@@ -175,7 +175,7 @@ namespace MpWpfApp {
             set {
                 if (_mainWindowGridHeight != value) {
                     _mainWindowGridHeight = value;
-                    OnPropertyChanged(nameof(MainWindowGridHeight));
+                    OnPropertyChanged_old(nameof(MainWindowGridHeight));
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayHeight != value) {
                     _clipTrayHeight = value;
-                    OnPropertyChanged(nameof(ClipTrayHeight));
+                    OnPropertyChanged_old(nameof(ClipTrayHeight));
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayWidth != value) {
                     _clipTrayWidth = value;
-                    OnPropertyChanged(nameof(ClipTrayWidth));
+                    OnPropertyChanged_old(nameof(ClipTrayWidth));
                 }
             }
         }
@@ -230,8 +230,8 @@ namespace MpWpfApp {
             set {
                 if(_processinngVisibility != value) {
                     _processinngVisibility = value;
-                    OnPropertyChanged(nameof(ProcessingVisibility));
-                    OnPropertyChanged(nameof(AppVisibility));
+                    OnPropertyChanged_old(nameof(ProcessingVisibility));
+                    OnPropertyChanged_old(nameof(AppVisibility));
                 }
             }
         }
@@ -251,12 +251,12 @@ namespace MpWpfApp {
         #region Events
         public event EventHandler OnTileExpand;
         public event EventHandler OnTileUnexpand;
+
+        public event EventHandler OnMainWindowHide;
         #endregion
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
-            //MpViewModelBase.MainWindowViewModel = this;
-
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
@@ -264,7 +264,7 @@ namespace MpWpfApp {
             });
 
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
-            MpHelpers.Instance.Init();            
+            MpHelpers.Instance.Init();
 
             MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
 
@@ -287,6 +287,9 @@ namespace MpWpfApp {
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
+        public void FinishLoading() {
+            
+        }
         public void ClearEdits() {
             TagTrayViewModel.ClearTagEditing();
             ClipTrayViewModel.ClearClipEditing();
@@ -300,8 +303,8 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
-            MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-            OnPropertyChanged(nameof(AppModeButtonGridWidth));
+            MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
+            OnPropertyChanged_old(nameof(AppModeButtonGridWidth));
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
@@ -332,8 +335,8 @@ namespace MpWpfApp {
 
             ClipTrayViewModel.RestoreVisibleTiles();
 
-            MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-            OnPropertyChanged(nameof(AppModeButtonGridWidth));
+            MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
+            OnPropertyChanged_old(nameof(AppModeButtonGridWidth));
 
             _isExpanded = false;
             OnTileUnexpand?.Invoke(this, null);
@@ -366,8 +369,8 @@ namespace MpWpfApp {
 
             MainWindowGridTop = _startMainWindowTop;
 
-            OnPropertyChanged(nameof(MainWindowWidth));
-            OnPropertyChanged(nameof(MainWindowHeight));
+            OnPropertyChanged_old(nameof(MainWindowWidth));
+            OnPropertyChanged_old(nameof(MainWindowHeight));
         }
         #endregion
 
@@ -560,6 +563,7 @@ namespace MpWpfApp {
                         } else {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
+                        OnMainWindowHide?.Invoke(this, null);
                     }
                 };
                 timer.Start();

@@ -154,7 +154,7 @@ namespace MpWpfApp {
             if(scvm.IsCustom()) {
                 scvm.Shortcut.DeleteFromDatabase();
                 if (scvm.Shortcut.CopyItemId > 0) {
-                    var ctvm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(scvm.Shortcut.CopyItemId);
+                    var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(scvm.Shortcut.CopyItemId);
                     if(ctvm != null) {
                         ctvm.ShortcutKeyString = string.Empty;
                     } else {
@@ -422,7 +422,7 @@ namespace MpWpfApp {
                     default:
                         try {
                             if (sc.CopyItemId > 0) {
-                                var ctvm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(sc.CopyItemId);
+                                var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sc.CopyItemId);
                                 if(ctvm == null) {
                                     var ci = MpCopyItem.GetCopyItemById(sc.CopyItemId);
                                     if(ci == null) {

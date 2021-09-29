@@ -26,7 +26,7 @@ namespace MpWpfApp {
             set {
                 if(_parent != value) {
                     _parent = value;
-                    OnPropertyChanged(nameof(Parent));
+                    OnPropertyChanged_old(nameof(Parent));
                 }
             }
         }
@@ -57,8 +57,8 @@ namespace MpWpfApp {
             set {
                 if (_isMouseOverVerticalScrollBar != value) {
                     _isMouseOverVerticalScrollBar = value;
-                    OnPropertyChanged(nameof(IsMouseOverVerticalScrollBar));
-                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                    OnPropertyChanged_old(nameof(IsMouseOverVerticalScrollBar));
+                    OnPropertyChanged_old(nameof(IsMouseOverScrollBar));
                 }
             }
         }
@@ -71,8 +71,8 @@ namespace MpWpfApp {
             set {
                 if (_isMouseOverHorizontalScrollBar != value) {
                     _isMouseOverHorizontalScrollBar = value;
-                    OnPropertyChanged(nameof(IsMouseOverHorizontalScrollBar));
-                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                    OnPropertyChanged_old(nameof(IsMouseOverHorizontalScrollBar));
+                    OnPropertyChanged_old(nameof(IsMouseOverScrollBar));
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace MpWpfApp {
             set {
                 if(_isBusy != value) {
                     _isBusy = value;
-                    OnPropertyChanged(nameof(IsBusy));
+                    OnPropertyChanged_old(nameof(IsBusy));
                 }
             }            
         }
@@ -123,7 +123,7 @@ namespace MpWpfApp {
             set {
                 if (_name != value) {
                     _name = value;
-                    OnPropertyChanged(nameof(Name));
+                    OnPropertyChanged_old(nameof(Name));
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace MpWpfApp {
             set {
                 if(_itemVisibility != value) {
                     _itemVisibility = value;
-                    OnPropertyChanged(nameof(ItemVisibility));
+                    OnPropertyChanged_old(nameof(ItemVisibility));
                 }
             }
         }
@@ -194,12 +194,20 @@ namespace MpWpfApp {
         //    remove { _propertyChanged -= value; }
         //}
 
-        public virtual void OnPropertyChanged(string propertyName) {
+        public virtual void OnPropertyChanged_old(string propertyName) {
             //PropertyChangedEventHandler handler = PropertyChanged;
             //if (handler != null) {
             //    var e = new PropertyChangedEventArgs(propertyName);
             //    handler(this, e);
             //}
+        }
+
+        public virtual void OnPropertyChanged(string propertyName) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
         }
         //#endregion
 

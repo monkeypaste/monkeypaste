@@ -11,9 +11,9 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
-    <i:Interaction.Behaviors>
+    <!--i:Interaction.Behaviors>
         <local:MpContentListDropBehavior x:Name="DropBehavior"/>
-    </i:Interaction.Behaviors>
+    </i:Interaction.Behaviors>-->
     <AdornerDecorator>
         <DockPanel x:Name="ContentListDockPanel" 
                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -32,15 +32,14 @@
                                               DataContext="{Binding PrimaryItem.TemplateCollection}" />
             <local:MpMultiSelectListBox x:Name="ContentListBox"
                                         Loaded="ContentListBox_Loaded"
-                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"
-                                        SelectionChanged="ContentListBox_SelectionChanged"                                        
+                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"                                  
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Stretch"
                                         BorderThickness="0"
                                         BorderBrush="Pink"
-                                        SelectionMode="Multiple"
+                                        SelectionMode="Extended"
                                         ScrollToSelectedItem="True"
                                         IsListBoxHorizontal="False"
                                         IsSynchronizedWithCurrentItem="True"
@@ -54,6 +53,9 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                         VirtualizingPanel.IsVirtualizing="True"
                                         Padding="0">
+                <i:Interaction.Behaviors>
+                    <local:MpDropBehavior x:Name="DropBehavior2"/>
+                </i:Interaction.Behaviors>
                 <local:MpMultiSelectListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
@@ -87,7 +89,7 @@
                     <DataTemplate>
                         <local:MpContentItemView DataContext="{Binding}"  
                                                  BorderBrush="{Binding ItemBorderBrush}"
-                                                 BorderThickness="0"
+                                                 BorderThickness="{Binding ItemBorderThickness}"
                                                  Height="{Binding CurrentSize.Height}"/>
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>

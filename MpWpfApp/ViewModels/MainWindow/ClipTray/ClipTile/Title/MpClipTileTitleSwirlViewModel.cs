@@ -30,7 +30,7 @@ namespace MpWpfApp {
             set {
                 if(Swirls.Count > 0 && Swirls[0] != value) {
                     Swirls[0] = value;
-                    OnPropertyChanged(nameof(SwirlLayer0));
+                    OnPropertyChanged_old(nameof(SwirlLayer0));
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 1 && Swirls[1] != value) {
                     Swirls[1] = value;
-                    OnPropertyChanged(nameof(SwirlLayer1));
+                    OnPropertyChanged_old(nameof(SwirlLayer1));
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 2 && Swirls[2] != value) {
                     Swirls[2] = value;
-                    OnPropertyChanged(nameof(SwirlLayer2));
+                    OnPropertyChanged_old(nameof(SwirlLayer2));
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 3 && Swirls[3] != value) {
                     Swirls[3] = value;
-                    OnPropertyChanged(nameof(SwirlLayer3));
+                    OnPropertyChanged_old(nameof(SwirlLayer3));
                 }
             }
         }

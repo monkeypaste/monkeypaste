@@ -50,7 +50,7 @@ namespace MpWpfApp {
             set {
                 if(_maxTagTrayWidth != value) {
                     _maxTagTrayWidth = value;
-                    OnPropertyChanged(nameof(MaxTagTrayWidth));
+                    OnPropertyChanged_old(nameof(MaxTagTrayWidth));
                 }
             }
         }

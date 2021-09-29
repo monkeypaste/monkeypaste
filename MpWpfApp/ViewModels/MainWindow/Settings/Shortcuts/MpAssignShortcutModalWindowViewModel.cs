@@ -55,7 +55,7 @@ namespace MpWpfApp {
             set {
                 if(_keyItems != value) {
                     _keyItems = value;
-                    OnPropertyChanged(nameof(KeyItems));
+                    OnPropertyChanged_old(nameof(KeyItems));
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace MpWpfApp {
             set {
                 if (_duplicatedShortcutViewModel != value) {
                     _duplicatedShortcutViewModel = value;
-                    OnPropertyChanged(nameof(DuplicatedShortcutViewModel));
+                    OnPropertyChanged_old(nameof(DuplicatedShortcutViewModel));
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace MpWpfApp {
             set {
                 if(_shortcutDisplayName != value) {
                     _shortcutDisplayName = value;
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                    OnPropertyChanged_old(nameof(ShortcutDisplayName));
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace MpWpfApp {
             set {
                 if (_warningString != value) {
                     _warningString = value;
-                    OnPropertyChanged(nameof(WarningString));
+                    OnPropertyChanged_old(nameof(WarningString));
                 }
             }
         }
@@ -281,10 +281,10 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(WarningString):
-                        OnPropertyChanged(nameof(WarningBorderBrush));
-                        OnPropertyChanged(nameof(WarningVisibility));
-                        OnPropertyChanged(nameof(WarningBmp));
-                        OnPropertyChanged(nameof(WarningTextBrush));
+                        OnPropertyChanged_old(nameof(WarningBorderBrush));
+                        OnPropertyChanged_old(nameof(WarningVisibility));
+                        OnPropertyChanged_old(nameof(WarningBmp));
+                        OnPropertyChanged_old(nameof(WarningTextBrush));
                         break;
                 }
             };
@@ -329,7 +329,7 @@ namespace MpWpfApp {
                 _keyList[i] = kl;
             }
 
-            OnPropertyChanged(nameof(KeyString));
+            OnPropertyChanged_old(nameof(KeyString));
             Validate();
         }
 
@@ -406,7 +406,7 @@ namespace MpWpfApp {
             _keyList.Clear();
             KeyItems.Clear();
             Validate();
-            OnPropertyChanged(nameof(KeyString));
+            OnPropertyChanged_old(nameof(KeyString));
         }
 
         private RelayCommand _okCommand;
@@ -423,7 +423,7 @@ namespace MpWpfApp {
                 if(DuplicatedShortcutViewModel.IsCustom()) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        MpClipTrayViewModel.Instance.GetCopyItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
+                        MpClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
                     } else {
                         MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
                     }

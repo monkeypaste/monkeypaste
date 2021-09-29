@@ -19,7 +19,7 @@ namespace MpWpfApp {
             set {
                 if (_isSeparator != value) {
                     _isSeparator = value;
-                    OnPropertyChanged(nameof(IsSeparator));
+                    OnPropertyChanged_old(nameof(IsSeparator));
                 }
             }
         }
@@ -32,7 +32,7 @@ namespace MpWpfApp {
             set {
                 if (_isTagLinkedToClip != value) {
                     _isTagLinkedToClip = value;
-                    OnPropertyChanged(nameof(IsChecked));
+                    OnPropertyChanged_old(nameof(IsChecked));
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace MpWpfApp {
             set {
                 if (_menuItemVisibility != value) {
                     _menuItemVisibility = value;
-                    OnPropertyChanged(nameof(MenuItemVisibility));
+                    OnPropertyChanged_old(nameof(MenuItemVisibility));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace MpWpfApp {
             set {
                 if (_header != value) {
                     _header = value;
-                    OnPropertyChanged(nameof(Header));
+                    OnPropertyChanged_old(nameof(Header));
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace MpWpfApp {
             set {
                 if (_command != value) {
                     _command = value;
-                    OnPropertyChanged(nameof(Command));
+                    OnPropertyChanged_old(nameof(Command));
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace MpWpfApp {
             set {
                 if (_commandParameter != value) {
                     _commandParameter = value;
-                    OnPropertyChanged(nameof(CommandParameter));
+                    OnPropertyChanged_old(nameof(CommandParameter));
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
             set {
                 if (_inputGestureText != value) {
                     _inputGestureText = value;
-                    OnPropertyChanged(nameof(InputGestureText));
+                    OnPropertyChanged_old(nameof(InputGestureText));
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace MpWpfApp {
             set {
                 if(_iconSource != value) {
                     _iconSource = value;
-                    OnPropertyChanged(nameof(IconSource));
+                    OnPropertyChanged_old(nameof(IconSource));
                 }
             } 
         }
@@ -123,7 +123,7 @@ namespace MpWpfApp {
             set {
                 if(_iconBackgroundBrush != value) {
                     _iconBackgroundBrush = value;
-                    OnPropertyChanged(nameof(IconBackgroundBrush));
+                    OnPropertyChanged_old(nameof(IconBackgroundBrush));
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace MpWpfApp {
             set {
                 if(_icon != value) {
                     _icon = value;
-                    OnPropertyChanged(nameof(Icon));
+                    OnPropertyChanged_old(nameof(Icon));
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace MpWpfApp {
             set {
                 if(_subItems != value) {
                     _subItems = value;
-                    OnPropertyChanged(nameof(SubItems));
+                    OnPropertyChanged_old(nameof(SubItems));
                 }
             }
         }

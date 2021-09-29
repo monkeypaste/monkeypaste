@@ -31,7 +31,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTileViewModel != value) {
                     _clipTileViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileViewModel));
+                    OnPropertyChanged_old(nameof(ClipTileViewModel));
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTileStrings != value) {
                     _clipTileStrings = value;
-                    OnPropertyChanged(nameof(ClipTileStrings));
+                    OnPropertyChanged_old(nameof(ClipTileStrings));
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace MpWpfApp {
             set {
                 if(_balloonTitle != value) {
                     _balloonTitle = value;
-                    OnPropertyChanged(nameof(BalloonTitle));
+                    OnPropertyChanged_old(nameof(BalloonTitle));
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace MpWpfApp {
             set {
                 if (_balloonContent != value) {
                     _balloonContent = value;
-                    OnPropertyChanged(nameof(BalloonContent));
+                    OnPropertyChanged_old(nameof(BalloonContent));
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace MpWpfApp {
             set {
                 if(_doNotShowAgain != value) {
                     _doNotShowAgain = value;
-                    OnPropertyChanged(nameof(DoNotShowAgain));
+                    OnPropertyChanged_old(nameof(DoNotShowAgain));
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace MpWpfApp {
             set {
                 if(_balloonBitmapSource != value) {
                     _balloonBitmapSource = value;
-                    OnPropertyChanged(nameof(BalloonBitmapSource));
+                    OnPropertyChanged_old(nameof(BalloonBitmapSource));
                 }
             }
         }

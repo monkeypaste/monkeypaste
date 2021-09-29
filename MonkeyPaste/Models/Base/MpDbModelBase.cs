@@ -16,8 +16,6 @@ namespace MonkeyPaste {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
         
-        [Ignore]
-        public bool HasModelChanged { get; set; }
 
         #region Wpf Compatibility
 
@@ -186,6 +184,7 @@ namespace MonkeyPaste {
         #region PropertyChanged 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [Ignore]
         public bool IsChanged { get; set; }
 
         public int Compare(object x, object y) {

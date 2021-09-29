@@ -44,7 +44,7 @@ namespace MpWpfApp {
                 if (_searchByIsCaseSensitive != value) {
                     _searchByIsCaseSensitive = value;
                     Properties.Settings.Default.SearchByIsCaseSensitive = _searchByIsCaseSensitive;
-                    OnPropertyChanged(nameof(SearchByIsCaseSensitive));
+                    OnPropertyChanged_old(nameof(SearchByIsCaseSensitive));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace MpWpfApp {
                 if (_searchByTitle != value) {
                     _searchByTitle = value;
                     Properties.Settings.Default.SearchByTitle = _searchByTitle;
-                    OnPropertyChanged(nameof(SearchByTitle));
+                    OnPropertyChanged_old(nameof(SearchByTitle));
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace MpWpfApp {
                 if (_searchByRichText != value) {
                     _searchByRichText = value;
                     Properties.Settings.Default.SearchByRichText = _searchByRichText;
-                    OnPropertyChanged(nameof(SearchByRichText));
+                    OnPropertyChanged_old(nameof(SearchByRichText));
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace MpWpfApp {
                 if (_searchByUrl != value) {
                     _searchByUrl = value;
                     Properties.Settings.Default.SearchBySourceUrl = _searchByUrl;
-                    OnPropertyChanged(nameof(SearchByUrl));
+                    OnPropertyChanged_old(nameof(SearchByUrl));
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace MpWpfApp {
                 if (_searchByFileList != value) {
                     _searchByFileList = value;
                     Properties.Settings.Default.SearchByFileList = _searchByFileList;
-                    OnPropertyChanged(nameof(SearchByFileList));
+                    OnPropertyChanged_old(nameof(SearchByFileList));
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace MpWpfApp {
                 if (_searchByImage != value) {
                     _searchByImage = value;
                     Properties.Settings.Default.SearchByImage = _searchByImage;
-                    OnPropertyChanged(nameof(SearchByImage));
+                    OnPropertyChanged_old(nameof(SearchByImage));
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace MpWpfApp {
                 if (_searchByApplicationName != value) {
                     _searchByApplicationName = value;
                     Properties.Settings.Default.SearchByApplicationName = _searchByApplicationName;
-                    OnPropertyChanged(nameof(SearchByApplicationName));
+                    OnPropertyChanged_old(nameof(SearchByApplicationName));
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace MpWpfApp {
                 if (_searchByTag != value) {
                     _searchByTag = value;
                     Properties.Settings.Default.SearchByTag = _searchByTitle;
-                    OnPropertyChanged(nameof(SearchByTag));
+                    OnPropertyChanged_old(nameof(SearchByTag));
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace MpWpfApp {
                 if (_searchByProcessName != value) {
                     _searchByProcessName = value;
                     Properties.Settings.Default.SearchByProcessName = _searchByProcessName;
-                    OnPropertyChanged(nameof(SearchByProcessName));
+                    OnPropertyChanged_old(nameof(SearchByProcessName));
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace MpWpfApp {
             set {
                 if (_placeholderText != value) {
                     _placeholderText = value;
-                    OnPropertyChanged(nameof(PlaceholderText));
+                    OnPropertyChanged_old(nameof(PlaceholderText));
                 }
             }
         }
@@ -186,11 +186,11 @@ namespace MpWpfApp {
                 if (_text != value) {
                     _text = value;
                     //SearchText = Text;
-                    OnPropertyChanged(nameof(Text));
-                    OnPropertyChanged(nameof(HasText));
-                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                    OnPropertyChanged(nameof(TextBoxFontStyle));
-                    OnPropertyChanged(nameof(TextBoxBorderBrush));
+                    OnPropertyChanged_old(nameof(Text));
+                    OnPropertyChanged_old(nameof(HasText));
+                    OnPropertyChanged_old(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged_old(nameof(TextBoxFontStyle));
+                    OnPropertyChanged_old(nameof(TextBoxBorderBrush));
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace MpWpfApp {
                 //if (_searchText != value) 
                 {
                     _searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
+                    OnPropertyChanged_old(nameof(SearchText));
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace MpWpfApp {
             set {
                 if (_isTextBoxFocused != value) {
                     _isTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsTextBoxFocused));
+                    OnPropertyChanged_old(nameof(IsTextBoxFocused));
                 }
             }
         }
@@ -230,7 +230,7 @@ namespace MpWpfApp {
             set {
                 if (_isSearchEnabled != value) {
                     _isSearchEnabled = value;
-                    OnPropertyChanged(nameof(IsSearchEnabled));
+                    OnPropertyChanged_old(nameof(IsSearchEnabled));
                 }
             }
         }
@@ -243,8 +243,8 @@ namespace MpWpfApp {
             set {
                 if (_isTextValid != value) {
                     _isTextValid = value;
-                    OnPropertyChanged(nameof(IsTextValid));
-                    OnPropertyChanged(nameof(TextBoxBorderBrush));
+                    OnPropertyChanged_old(nameof(IsTextValid));
+                    OnPropertyChanged_old(nameof(TextBoxBorderBrush));
                 }
             }
         }
@@ -257,9 +257,9 @@ namespace MpWpfApp {
             set {
                 if (_isSearching != value) {
                     _isSearching = value;
-                    OnPropertyChanged(nameof(IsSearching));
-                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                    OnPropertyChanged(nameof(SearchSpinnerVisibility));
+                    OnPropertyChanged_old(nameof(IsSearching));
+                    OnPropertyChanged_old(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged_old(nameof(SearchSpinnerVisibility));
                 }
             }
         }
@@ -336,8 +336,8 @@ namespace MpWpfApp {
             set {
                 if (_searchNavigationButtonPanelVisibility != value) {
                     _searchNavigationButtonPanelVisibility = value;
-                    OnPropertyChanged(nameof(SearchNavigationButtonPanelVisibility));
-                    OnPropertyChanged(nameof(SearchBorderColumnSpan));
+                    OnPropertyChanged_old(nameof(SearchNavigationButtonPanelVisibility));
+                    OnPropertyChanged_old(nameof(SearchBorderColumnSpan));
                 }
             }
         }
@@ -398,8 +398,8 @@ namespace MpWpfApp {
 
                 IsTextBoxFocused = true;
                 MpClipTrayViewModel.Instance.ResetClipSelection(false);
-                OnPropertyChanged(nameof(TextBoxFontStyle));
-                OnPropertyChanged(nameof(TextBoxTextBrush));
+                OnPropertyChanged_old(nameof(TextBoxFontStyle));
+                OnPropertyChanged_old(nameof(TextBoxTextBrush));
             };
 
             SearchTextBox.LostFocus += (s, e5) => {

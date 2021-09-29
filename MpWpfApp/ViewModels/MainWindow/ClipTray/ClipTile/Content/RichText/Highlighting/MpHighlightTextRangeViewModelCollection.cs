@@ -64,7 +64,7 @@ namespace MpWpfApp {
             set {
                 if (_highlightTaskCount != value) {
                     _highlightTaskCount = value;
-                    OnPropertyChanged(nameof(HighlightTaskCount));
+                    OnPropertyChanged_old(nameof(HighlightTaskCount));
                 }
             }
         }
@@ -340,7 +340,7 @@ namespace MpWpfApp {
             ClearSelection();
             if(HighlightRangeViewModels.Count > 0) {
                 HighlightRangeViewModels[0].IsSelected = true;
-                OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+                OnPropertyChanged_old(nameof(SelectedHighlightTextRangeViewModel));
             }
         }
 
@@ -435,7 +435,7 @@ namespace MpWpfApp {
             MonkeyPaste.MpConsole.WriteLine("CurIdx: " + curIdx + " NextIdx: " + nextIdx);
             ClearSelection();
             HighlightRangeViewModels[nextIdx].IsSelected = true;
-            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            OnPropertyChanged_old(nameof(SelectedHighlightTextRangeViewModel));
         }
 
         private RelayCommand _selectPreviousMatchCommand;
@@ -457,7 +457,7 @@ namespace MpWpfApp {
             }
             ClearSelection();
             HighlightRangeViewModels[prevIdx].IsSelected = true;
-            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            OnPropertyChanged_old(nameof(SelectedHighlightTextRangeViewModel));
         }
 
         private RelayCommand<object> _applyHighlightingCommand;
@@ -507,7 +507,7 @@ namespace MpWpfApp {
         private void ClearHighlighting() {
             HideHighlightingCommand.Execute(null);
             HighlightRangeViewModels.Clear();
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIconHighlightBorderVisibility));
+            HostClipTileViewModel.OnPropertyChanged_old(nameof(HostClipTileViewModel.AppIconHighlightBorderVisibility));
         }        
         #endregion
     }

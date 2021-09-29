@@ -178,7 +178,10 @@ namespace MpWpfApp {
             }
             var ctv = this.GetVisualAncestor<MpClipTileView>();
             if(ctv != null) {
-                ctv.ClipTileClipBorder_PreviewMouseUp(sender, e);
+                var ctvm = ctv.DataContext as MpClipTileViewModel;
+                if(!ctvm.IsSelected) {
+                    ctvm.IsSelected = true;
+                }
             }
         }
 

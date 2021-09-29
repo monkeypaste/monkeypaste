@@ -32,9 +32,51 @@ namespace MpWpfApp {
             ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTray);
             //ClipTrayAdornerLayer.Add(ClipTrayAdorner); 
         }
+
+        public MpClipTileView GetClipTileViewByDataContext(MpClipTileViewModel ctvm) {
+            for (int i = 0; i < ClipTray.Items.Count; i++) {
+                ListBoxItem lbi = ClipTray.GetListBoxItem(i);
+                if(lbi.DataContext == ctvm) {
+                    return lbi.GetVisualDescendent<MpClipTileView>();
+                }
+            }
+            return null;
+        }
+
+        public MpContentItemView GetContentItemViewByDataContext(MpContentItemViewModel civm) {
+            var ctv = GetClipTileViewByDataContext(civm.Parent);
+            if(ctv == null) {
+                return null;
+            }
+            for (int i = 0; i < ctv.ContentListView.ContentListBox.Items.Count; i++) {
+                ListBoxItem lbi = ctv.ContentListView.ContentListBox.GetListBoxItem(i);
+                if (lbi.DataContext == civm) {
+                    return lbi.GetVisualDescendent<MpContentItemView>();
+                }
+            }
+            return null;
+        }
+
+
+        public List<Rect> GetSelectedContentItemViewRects(FrameworkElement relativeTo) {
+            var scivml = MpClipTrayViewModel.Instance.SelectedContentItemViewModels;
+            var civl = new List<Rect>();
+            for (int i = 0; i < ClipTray.Items.Count; i++) {
+                var clv = ClipTray.GetListBoxItem(i).GetVisualDescendent<MpContentListView>();
+                for (int j = 0; j < clv.ContentListBox.Items.Count; j++) {
+                    int idx = scivml.IndexOf(clv.ContentListBox.Items[j] as MpContentItemViewModel);
+                    if(idx >= 0) {
+                        var rect = clv.ContentListBox.GetListBoxItemRect(j);
+                        rect.Location = clv.ContentListBox.TranslatePoint(rect.Location, relativeTo);
+                        civl.Add(rect);
+                    }
+                }
+            }
+            return civl;
+        }
+
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) { 
             var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.OnTilesChanged += Ctrvm_OnTilesChanged;
 
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += (s,e1) => ctrvm.AddItemFromClipboard();
@@ -46,12 +88,6 @@ namespace MpWpfApp {
             }
 
             ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
-        }
-
-        private void Ctrvm_OnTilesChanged(object sender, object e) {
-            // NOTE below not thread safe
-            //var ctrvm = DataContext as MpClipTrayViewModel;
-            //_remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
         }
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
@@ -207,7 +243,7 @@ namespace MpWpfApp {
             MpTagTrayViewModel.Instance.UpdateTagAssociation();
 
             if (ctrvm.PrimaryItem != null) {
-                ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
+                ctrvm.PrimaryItem.OnPropertyChanged_old(nameof(ctrvm.PrimaryItem.TileBorderBrush));
             }
 
             MpAppModeViewModel.Instance.RefreshState();

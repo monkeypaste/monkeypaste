@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase<object> {
@@ -20,20 +21,21 @@ namespace MpWpfApp {
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
             get {
-                if (_sortTypes.Count == 0) {
+                if (_sortTypes.Count == 0) {                    
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Date", null));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Application", null));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Title", null));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Content", null));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Type", null));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Usage", null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Manual", null));
                 }
                 return _sortTypes;
             }
             set {
                 if (_sortTypes != value) {
                     _sortTypes = value;
-                    OnPropertyChanged(nameof(SortTypes));
+                    OnPropertyChanged_old(nameof(SortTypes));
                 }
             }
         }
@@ -46,7 +48,7 @@ namespace MpWpfApp {
             set {
                 if (_selectedSortType != value) {
                     _selectedSortType = value;
-                    OnPropertyChanged(nameof(SelectedSortType));
+                    OnPropertyChanged_old(nameof(SelectedSortType));
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace MpWpfApp {
             set {
                 if(_isSorting != value) {
                     _isSorting = value;
-                    OnPropertyChanged(nameof(IsSorting));
+                    OnPropertyChanged_old(nameof(IsSorting));
                 }
             }
         }
@@ -80,7 +82,7 @@ namespace MpWpfApp {
             set {
                 if (_ascSortOrderButtonImageVisibility != value) {
                     _ascSortOrderButtonImageVisibility = value;
-                    OnPropertyChanged(nameof(AscSortOrderButtonImageVisibility));
+                    OnPropertyChanged_old(nameof(AscSortOrderButtonImageVisibility));
                 }
             }
         }
@@ -93,7 +95,7 @@ namespace MpWpfApp {
             set {
                 if (_descSortOrderButtonImageVisibility != value) {
                     _descSortOrderButtonImageVisibility = value;
-                    OnPropertyChanged(nameof(DescSortOrderButtonImageVisibility));
+                    OnPropertyChanged_old(nameof(DescSortOrderButtonImageVisibility));
                 }
             }
         }
@@ -107,7 +109,13 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedSortType):
-                        PerformSelectedSort();
+                        if(SelectedSortType == null) {
+                            break;
+                        }
+                        if (SelectedSortType.Name != "Manual") {
+                            SelectedSortType.IsVisible = false;
+                            PerformSelectedSort();
+                        } 
                         break;
                 }
             };
@@ -118,11 +126,21 @@ namespace MpWpfApp {
         public string GetSortTypeAsMemberPath() {
             return ConvertSortTypeToMemberPath(SelectedSortType.Name);
         }
+
+        public void SetToManualSort() {
+            SelectedSortType = SortTypes.Where(x => x.Header == "Manual").FirstOrDefault();
+            SelectedSortType.IsVisible = true;
+            if(IsSortDescending) {
+                ToggleSortOrder();
+            }            
+        }
         #endregion
 
         #region Private Methods        
         private string ConvertSortTypeToMemberPath(string sortType) {
             switch (sortType) {
+                case "Manual":
+                    return null;
                 case "Date":
                     return "CopyItemCreatedDateTime";
                 case "Application":
@@ -175,21 +193,24 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return;
             }
+
             IsSorting = true;
             var ct = MpClipTrayViewModel.Instance;
-            var sw = new Stopwatch();
-            sw.Start();
+            //var sw = new Stopwatch();
+            //sw.Start();
 
-            ct.ClearClipSelection();
-            ListSortDirection sortDir = AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
-            
+            //ct.ClearClipSelection();
+            //ListSortDirection sortDir = AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
+
             //cvs.SortDescriptions.Clear();
             //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
-            ct.ClipTileViewModels.Sort(x => x[GetSortTypeAsMemberPath()], sortDir == ListSortDirection.Descending);
+            //ct.ClipTileViewModels.Sort(x => x[GetSortTypeAsMemberPath()], sortDir == ListSortDirection.Descending);
+
+            ct.RefreshClips(IsSortDescending, SelectedSortType.Name);
             //ct.Refresh();
-            sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
-            ct.ResetClipSelection();
+            //sw.Stop();
+            //MonkeyPaste.MpConsole.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
+            //ct.ResetClipSelection();
             IsSorting = false;
         }
         #endregion

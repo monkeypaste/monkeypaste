@@ -11,16 +11,21 @@ namespace MpWpfApp {
             set {
                 if (_header != value) {
                     _header = value;
-                    OnPropertyChanged(nameof(Header));
+                    OnPropertyChanged_old(nameof(Header));
                 }
             }
         }
+
+        public bool IsVisible { get; set; } = true;
         #endregion
 
         #region Public Methods
         public MpSortTypeComboBoxItemViewModel(string header, ICommand command) : base(null) {
             Header = header;
             Command = command;
+            if(Header == "Manual") {
+                IsVisible = false;
+            }
         }
         public override string ToString() {
             return Header;
@@ -37,7 +42,7 @@ namespace MpWpfApp {
             set {
                 if (_command != value) {
                     _command = value;
-                    OnPropertyChanged(nameof(Command));
+                    OnPropertyChanged_old(nameof(Command));
                 }
             }
         }

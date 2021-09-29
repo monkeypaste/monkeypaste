@@ -115,7 +115,7 @@ namespace MpWpfApp {
                 if (_isRightClickPasteMode != value) {
                     _isRightClickPasteMode = value;
                     MonkeyPaste.MpConsole.WriteLine("IsRightClickPasteMode changed to: " + _isRightClickPasteMode);
-                    OnPropertyChanged(nameof(IsRightClickPasteMode));
+                    OnPropertyChanged_old(nameof(IsRightClickPasteMode));
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace MpWpfApp {
                 if (_isInAutoAnalyzeMode != value) {
                     _isInAutoAnalyzeMode = value;
                     MonkeyPaste.MpConsole.WriteLine("IsInAutoAnalyzeMode changed to: " + _isInAutoAnalyzeMode);
-                    OnPropertyChanged(nameof(IsInAutoAnalyzeMode));
+                    OnPropertyChanged_old(nameof(IsInAutoAnalyzeMode));
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace MpWpfApp {
                 if (_isInAppendMode != value) {
                     _isInAppendMode = value;
                     MonkeyPaste.MpConsole.WriteLine("IsInAppendMode changed to: " + _isInAppendMode);
-                    OnPropertyChanged(nameof(IsInAppendMode));
+                    OnPropertyChanged_old(nameof(IsInAppendMode));
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace MpWpfApp {
             set {
                 if (_isAutoCopyMode != value) {
                     _isAutoCopyMode = value;
-                    OnPropertyChanged(nameof(IsAutoCopyMode));
+                    OnPropertyChanged_old(nameof(IsAutoCopyMode));
                 }
             }
         }
@@ -169,11 +169,11 @@ namespace MpWpfApp {
             set {
                 if (_isAppPaused != value) {
                     _isAppPaused = value;
-                    OnPropertyChanged(nameof(IsAppPaused));
-                    OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
-                    OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
-                    OnPropertyChanged(nameof(IsAppendModeEnabled));
-                    OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
+                    OnPropertyChanged_old(nameof(IsAppPaused));
+                    OnPropertyChanged_old(nameof(IsAutoCopyModeEnabled));
+                    OnPropertyChanged_old(nameof(IsRighClickPasteModeEnabled));
+                    OnPropertyChanged_old(nameof(IsAppendModeEnabled));
+                    OnPropertyChanged_old(nameof(IsAutoAnalysisModeEnabled));
                 }
             }
         }
@@ -185,8 +185,8 @@ namespace MpWpfApp {
                 switch(e.PropertyName) {
                     case nameof(IsAppPaused):
                         ShowNotifcation("App", IsAppPaused ? "PAUSED" : "ACTIVE", IsAppPaused);
-                        MpSystemTrayViewModel.Instance.OnPropertyChanged(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayHeader));
-                        MpSystemTrayViewModel.Instance.OnPropertyChanged(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayIconSource));
+                        MpSystemTrayViewModel.Instance.OnPropertyChanged_old(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayHeader));
+                        MpSystemTrayViewModel.Instance.OnPropertyChanged_old(nameof(MpSystemTrayViewModel.Instance.PauseOrPlayIconSource));
                         break;
                     case nameof(IsRightClickPasteMode):
                         ShowNotifcation("Right-Click Paste Mode", IsRightClickPasteMode ? "ON" : "OFF", IsRightClickPasteMode);
@@ -210,20 +210,20 @@ namespace MpWpfApp {
             var toggleButtonList = appModeGrid.GetVisualDescendents<ToggleButton>();
             foreach(var tb in toggleButtonList) {
                 tb.MouseEnter += (s, e) => {
-                    OnPropertyChanged(nameof(IsAppendModeTooltip));
-                    OnPropertyChanged(nameof(IsAppPausedTooltip));
-                    OnPropertyChanged(nameof(IsRighClickPasteModeTooltip));
-                    OnPropertyChanged(nameof(IsAutoCopyModeTooltip));
-                    OnPropertyChanged(nameof(IsAutoAnalysisModeTooltip));
+                    OnPropertyChanged_old(nameof(IsAppendModeTooltip));
+                    OnPropertyChanged_old(nameof(IsAppPausedTooltip));
+                    OnPropertyChanged_old(nameof(IsRighClickPasteModeTooltip));
+                    OnPropertyChanged_old(nameof(IsAutoCopyModeTooltip));
+                    OnPropertyChanged_old(nameof(IsAutoAnalysisModeTooltip));
                 };
             }
         }
 
         public void RefreshState() {
-            OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
-            OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
-            OnPropertyChanged(nameof(IsAppendModeEnabled));
-            OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
+            OnPropertyChanged_old(nameof(IsAutoCopyModeEnabled));
+            OnPropertyChanged_old(nameof(IsRighClickPasteModeEnabled));
+            OnPropertyChanged_old(nameof(IsAppendModeEnabled));
+            OnPropertyChanged_old(nameof(IsAutoAnalysisModeEnabled));
 
             UpdateAppendMode();
         }

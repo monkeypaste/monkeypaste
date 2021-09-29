@@ -22,7 +22,7 @@ namespace MpWpfApp {
             set {
                 if (_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged_old(nameof(IsSelected));
                 }
             }
         }
@@ -35,7 +35,7 @@ namespace MpWpfApp {
             set {
                 if (_soundType != value) {
                     _soundType = value;
-                    OnPropertyChanged(nameof(SoundType));
+                    OnPropertyChanged_old(nameof(SoundType));
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace MpWpfApp {
             set {
                 if (_soundDisplayName != value) {
                     _soundDisplayName = value;
-                    OnPropertyChanged(nameof(SoundDisplayName));
+                    OnPropertyChanged_old(nameof(SoundDisplayName));
                 }
             }
         }

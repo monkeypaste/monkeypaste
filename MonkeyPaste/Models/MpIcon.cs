@@ -69,7 +69,10 @@ namespace MonkeyPaste {
         public string HexColor3 { get; set; }
         public string HexColor4 { get; set; }
         public string HexColor5 { get; set; }
+
         #endregion
+
+        #region Statics
 
         public static async Task<MpIcon> GetIconByImageStrAsync(string imgStr) {
             var iconImg = await MpDb.Instance.GetItemsAsync<MpDbImage>();
@@ -198,8 +201,14 @@ namespace MonkeyPaste {
 
             return newIcon;
         }
+
+        #endregion
+
         public MpIcon() {
         }
+
+
+        #region Sync
 
         public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var icon = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
@@ -342,5 +351,7 @@ namespace MonkeyPaste {
                 diffLookup);
             return diffLookup;
         }
+
+        #endregion
     }
 }

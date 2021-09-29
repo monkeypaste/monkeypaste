@@ -52,7 +52,7 @@ namespace MpWpfApp {
             set {
                 if(_menuItemTag != value) {
                     _menuItemTag = value;
-                    OnPropertyChanged(nameof(MenuItemTag));
+                    OnPropertyChanged_old(nameof(MenuItemTag));
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace MpWpfApp {
             set {
                 if (_command != value) {
                     _command = value;
-                    OnPropertyChanged(nameof(Command));
+                    OnPropertyChanged_old(nameof(Command));
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                             RoutingType = (MpRoutingType)i;
                         }
                     }
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                    OnPropertyChanged_old(nameof(SelectedRoutingType));
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(DefaultKeyString));
+                    OnPropertyChanged_old(nameof(DefaultKeyString));
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.CopyItemId != value) {
                     Shortcut.CopyItemId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItemId));
+                    OnPropertyChanged_old(nameof(CopyItemId));
                 }
             }
         }
@@ -235,7 +235,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.TagId != value) {
                     Shortcut.TagId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged_old(nameof(TagId));
                 }
             }
         }
@@ -251,7 +251,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.ShortcutId != value) {
                     Shortcut.ShortcutId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(ShortcutId));
+                    OnPropertyChanged_old(nameof(ShortcutId));
                 }
             }
         }
@@ -283,8 +283,8 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(KeyString));
-                    OnPropertyChanged(nameof(KeyList));
+                    OnPropertyChanged_old(nameof(KeyString));
+                    OnPropertyChanged_old(nameof(KeyList));
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                    OnPropertyChanged_old(nameof(ShortcutDisplayName));
                 }
             }
         }
@@ -316,8 +316,8 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.RoutingType != value) {
                     Shortcut.RoutingType = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged(nameof(RoutingType));
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                    OnPropertyChanged_old(nameof(RoutingType));
+                    OnPropertyChanged_old(nameof(SelectedRoutingType));
                 }
             }
         }
@@ -330,18 +330,18 @@ namespace MpWpfApp {
             set {
                 if(_shortcut != value) {
                     _shortcut = value;
-                    OnPropertyChanged(nameof(Shortcut));
-                    OnPropertyChanged(nameof(RoutingType));
-                    OnPropertyChanged(nameof(KeyString));
-                    OnPropertyChanged(nameof(KeyList));
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
-                    OnPropertyChanged(nameof(ShortcutId));
-                    OnPropertyChanged(nameof(TagId));
-                    OnPropertyChanged(nameof(CopyItemId));
-                    OnPropertyChanged(nameof(DefaultKeyString));
-                    OnPropertyChanged(nameof(ResetButtonVisibility));
-                    OnPropertyChanged(nameof(DeleteButtonVisibility));
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                    OnPropertyChanged_old(nameof(Shortcut));
+                    OnPropertyChanged_old(nameof(RoutingType));
+                    OnPropertyChanged_old(nameof(KeyString));
+                    OnPropertyChanged_old(nameof(KeyList));
+                    OnPropertyChanged_old(nameof(ShortcutDisplayName));
+                    OnPropertyChanged_old(nameof(ShortcutId));
+                    OnPropertyChanged_old(nameof(TagId));
+                    OnPropertyChanged_old(nameof(CopyItemId));
+                    OnPropertyChanged_old(nameof(DefaultKeyString));
+                    OnPropertyChanged_old(nameof(ResetButtonVisibility));
+                    OnPropertyChanged_old(nameof(DeleteButtonVisibility));
+                    OnPropertyChanged_old(nameof(SelectedRoutingType));
                 }
             }
         }
@@ -356,7 +356,7 @@ namespace MpWpfApp {
                     case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
-                                var ctvm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(Shortcut.CopyItemId);
+                                var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
                                 ctvm.ShortcutKeyString = Shortcut.KeyString;
                             } else {
                                 var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();

@@ -36,7 +36,7 @@ namespace MpWpfApp {
             private set {
                 if(_templates != value) {
                     _templates = value;
-                    OnPropertyChanged(nameof(Templates));
+                    OnPropertyChanged_old(nameof(Templates));
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
 
         public MpTemplateCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {           
             Templates.CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(Templates));
+                OnPropertyChanged_old(nameof(Templates));
             };
 
 
@@ -204,7 +204,7 @@ namespace MpWpfApp {
                     thlvm.IsSelected = false;
                 }
             }
-            OnPropertyChanged(nameof(SelectedTemplate));
+            OnPropertyChanged_old(nameof(SelectedTemplate));
         }
 
         #endregion
@@ -244,7 +244,7 @@ namespace MpWpfApp {
                             nextIdx = 0;
                         }
                         Templates[nextIdx].IsSelected = true;
-                        OnPropertyChanged(nameof(SelectedTemplateIdx));
+                        OnPropertyChanged_old(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 
@@ -266,7 +266,7 @@ namespace MpWpfApp {
                             prevIdx = Templates.Count - 1;
                         }
                         Templates[prevIdx].IsSelected = true;
-                        OnPropertyChanged(nameof(SelectedTemplateIdx));
+                        OnPropertyChanged_old(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 

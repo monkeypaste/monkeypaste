@@ -16,7 +16,7 @@ namespace MpWpfApp {
             set {
                 if (_seqIdx != value) {
                     _seqIdx = value;
-                    OnPropertyChanged(nameof(SeqIdx));
+                    OnPropertyChanged_old(nameof(SeqIdx));
                 }
             }
         }
@@ -29,7 +29,7 @@ namespace MpWpfApp {
             set {
                 if(_keyStr != value) {
                     _keyStr = value;
-                    OnPropertyChanged(nameof(KeyStr));
+                    OnPropertyChanged_old(nameof(KeyStr));
                 }
             }
         }
@@ -42,8 +42,8 @@ namespace MpWpfApp {
             set {
                 if(_showPlus != value) {
                     _showPlus = value;
-                    OnPropertyChanged(nameof(ShowPlus));
-                    OnPropertyChanged(nameof(PlusVisibility));
+                    OnPropertyChanged_old(nameof(ShowPlus));
+                    OnPropertyChanged_old(nameof(PlusVisibility));
                 }
             }
         }
@@ -56,8 +56,8 @@ namespace MpWpfApp {
             set {
                 if (_showComma != value) {
                     _showComma = value;
-                    OnPropertyChanged(nameof(ShowComma));
-                    OnPropertyChanged(nameof(CommaVisibility));
+                    OnPropertyChanged_old(nameof(ShowComma));
+                    OnPropertyChanged_old(nameof(CommaVisibility));
                 }
             }
         }

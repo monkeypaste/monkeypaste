@@ -34,7 +34,9 @@ namespace MpWpfApp {
         private static readonly Lazy<MpClipTrayViewModel> _Lazy = new Lazy<MpClipTrayViewModel>(() => new MpClipTrayViewModel());
         public static MpClipTrayViewModel Instance { get { return _Lazy.Value; } }
 
-        public void Init() { }
+        public void Init() {
+            
+        }
         #endregion
 
         #region Private Variables      
@@ -54,7 +56,8 @@ namespace MpWpfApp {
 
         private int _remainingItemsCount = 0;
         private List<MpClipTileViewModel> _availableTiles = new List<MpClipTileViewModel>();
-        //private List<MpClipTileViewModel> _allTiles = new List<MpClipTileViewModel>();
+
+        private MpCopyItem _appendModeCopyItem = null;
         #endregion
 
         #region Properties
@@ -73,7 +76,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTileViewModels != value) {
                     _clipTileViewModels = value;
-                    OnPropertyChanged(nameof(ClipTileViewModels));
+                    OnPropertyChanged_old(nameof(ClipTileViewModels));
                 }
             }
         }
@@ -113,6 +116,26 @@ namespace MpWpfApp {
                     return null;
                 }
                 return VisibileClipTiles[0];
+            }
+        }
+
+        public List<MpContentItemViewModel> SelectedContentItemViewModels {
+            get {
+                var scivml = new List<MpContentItemViewModel>();
+                foreach(var sctvm in SelectedItems) {
+                    scivml.AddRange(sctvm.SelectedItems);
+                }
+                return scivml;
+            }
+        }
+        public List<MpCopyItem> SelectedModels {
+            get {
+                var cil = new List<MpCopyItem>();
+                foreach(var sctvm in SelectedItems) {
+                    sctvm.DoCommandSelection();
+                    cil.AddRange(sctvm.SelectedItems.OrderBy(y=>y.LastSubSelectedDateTime).Select(x=>x.CopyItem));
+                }
+                return cil;
             }
         }
 
@@ -167,6 +190,9 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IgnoreSelectionReset { get; set; } = false;
+
         private int _tagId = 2;
         public int TagId {
             get {
@@ -175,7 +201,7 @@ namespace MpWpfApp {
             set {
                 if (_tagId != value) {
                     _tagId = value;
-                    OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged_old(nameof(TagId));
                 }
             }
         }
@@ -238,7 +264,7 @@ namespace MpWpfApp {
             set {
                 if (_isFilteringByApp != value) {
                     _isFilteringByApp = value;
-                    OnPropertyChanged(nameof(IsFilteringByApp));
+                    OnPropertyChanged_old(nameof(IsFilteringByApp));
                 }
             }
         }
@@ -251,7 +277,7 @@ namespace MpWpfApp {
             set {
                 if (_isMouseDown != value) {
                     _isMouseDown = value;
-                    OnPropertyChanged(nameof(IsMouseDown));
+                    OnPropertyChanged_old(nameof(IsMouseDown));
                 }
             }
         }
@@ -270,7 +296,7 @@ namespace MpWpfApp {
             set {
                 if (_isScrolling != value) {
                     _isScrolling = value;
-                    OnPropertyChanged(nameof(IsScrolling));
+                    OnPropertyChanged_old(nameof(IsScrolling));
                 }
             }
         }
@@ -328,7 +354,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayVisibility != value) {
                     _clipTrayVisibility = value;
-                    OnPropertyChanged(nameof(ClipTrayVisibility));
+                    OnPropertyChanged_old(nameof(ClipTrayVisibility));
                 }
             }
         }
@@ -341,7 +367,7 @@ namespace MpWpfApp {
             set {
                 if (_mergeClipsCommandVisibility != value) {
                     _mergeClipsCommandVisibility = value;
-                    OnPropertyChanged(nameof(MergeClipsCommandVisibility));
+                    OnPropertyChanged_old(nameof(MergeClipsCommandVisibility));
                 }
             }
         }
@@ -351,14 +377,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-        public event EventHandler ItemsVisibilityChanged;
-        public virtual void OnItemsVisibilityChanged() => ItemsVisibilityChanged?.Invoke(this, EventArgs.Empty);
-
         public event EventHandler<object> OnFocusRequest;
 
         public event EventHandler OnUiRefreshRequest;
-
-        public event EventHandler<object> OnTilesChanged;
 
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
@@ -370,24 +391,6 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
-
-
-            ClipTileViewModels.CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(EmptyListMessageVisibility));
-                OnPropertyChanged(nameof(ClipTrayVisibility));
-            };
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(IsFilteringByApp):
-                        foreach (var ctvm in VisibileClipTiles) {
-                            //ctvm.OnPropertyChanged(nameof(ctvm.AppIcon));
-                        }
-                        break;
-                    case nameof(ClipTileViewModels):
-                        OnTilesChanged?.Invoke(this, ClipTileViewModels);
-                        break;
-                }
-            };
         }
 
         #region View Invokers
@@ -409,13 +412,6 @@ namespace MpWpfApp {
         #endregion
 
 
-        public MpClipTileViewModel GetNextItem() {
-            int nextIdx = _availableTiles.IndexOf(ClipTileViewModels[ClipTileViewModels.Count - 1]) + 1;
-            if(nextIdx >= _availableTiles.Count) {
-                return null;
-            }
-            return _availableTiles[nextIdx];
-        }
 
         public void UpdateSortOrder(bool fromModel = false) {            
             if (fromModel) {
@@ -425,64 +421,84 @@ namespace MpWpfApp {
                     //ignore sorting for sudo tags
                     return;
                 }
-                //foreach (var ivm in ItemViewModels) {
-                //    ivm.CopyItem.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
-                //}
+                Task.Run(async()=>{
+                    bool isDesc = MpClipTileSortViewModel.Instance.IsSortDescending;
+                    int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.Tag.Id;
+                    var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
+
+                    int count = isDesc ? citl.Count : 1;
+                    //loop through available tiles and reset tag's sort order, 
+                    //removing existing items from known ones and creating new ones if that's the case (it shouldn't)
+                    foreach(var ctvm in ClipTileViewModels) {
+                        foreach(var civm in ctvm.ItemViewModels) {
+                            MpCopyItemTag cit = citl.Where(x => x.CopyItemId == civm.CopyItem.Id).FirstOrDefault();
+                            if(cit == null) {
+                                cit = MpCopyItemTag.Create(tagId, civm.CopyItem.Id, count);
+                            } else {
+                                cit.CopyItemSortIdx = count;
+                                citl.Remove(cit);
+                            }
+                            cit.WriteToDatabase();
+                            if(isDesc) {
+                                count--;
+                            } else {
+                                count++;
+                            }
+                        }
+                    }
+                    //sort remaining unavailables by their sort order
+                    if (isDesc) {
+                        citl = citl.OrderByDescending(x => x.CopyItemSortIdx).ToList();
+                    } else {
+                        citl = citl.OrderBy(x => x.CopyItemSortIdx).ToList();
+                    }
+                    //update remaining unavailable items going with last count
+                    foreach(var cit in citl) {
+                        cit.CopyItemSortIdx = count;
+                        cit.WriteToDatabase();
+                        if (isDesc) {
+                            count--;
+                        } else {
+                            count++;
+                        }
+                    }
+                });
+                
             }
         }
-
-        public void RefreshClipsAsync(bool isDescending = true, string sortColumn = "CopyDateTime", int start = 0, int count = 0) {
-            Task.Run(() => {//MpHelpers.Instance.RunOnMainThread(() => {
+        public void RefreshClips(bool isDescending = true, string sortColumn = "default", int start = 0, int count = 0) {
+            Task.Run(async () => {
+                while(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
+                    await Task.Delay(100);
+                }
                 int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-                if(count == 0) {
+                if (count == 0) {
                     count = MpMeasurements.Instance.TotalVisibleClipTiles;
                 }
+                IsBusy = true;
+                var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending);
 
-                var sw = new Stopwatch();
-                sw.Start();
-                var page_cil = MpCopyItem.GetPage(tagId, start, count, sortColumn, isDescending);
-                sw.Stop();
-                MpConsole.WriteLine("Model Page time: " + sw.ElapsedMilliseconds);
-                sw.Start();
-                var page_vml = page_cil.Where(x => x.CompositeParentCopyItemId == 0).Select(y => CreateClipTileViewModel(y)).ToList();
-                sw.Stop();
-                MpConsole.WriteLine("Create vm time: " + sw.ElapsedMilliseconds);
-            
-                sw.Start();
-                ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
-                _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+                var page_vml = new List<MpClipTileViewModel>();
+                foreach (var ci in page_cil) {
+                    if (ci.CompositeParentCopyItemId != 0) {
+                        continue;
+                    }
+                    var ctvm = CreateClipTileViewModel(ci);
 
-                if (!MpMainWindowViewModel.IsMainWindowLoading) {
-                    ResetClipSelection();
+                    page_vml.Add(ctvm);
+                    ctvm.IsBusy = true;
                 }
-                sw.Stop();
-                MpConsole.WriteLine("Load list time: " + sw.ElapsedMilliseconds);
-            });
-        }
-
-        public void RefreshClips(bool isDescending = true, string sortColumn = "default", int start = 0, int count = 0) {
-            int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            if (count == 0) {
-                count = MpMeasurements.Instance.TotalVisibleClipTiles;
-            }
-            var page_cil = MpCopyItem.GetPage(tagId, start, count, sortColumn, isDescending);
-
-            var page_vml = new List<MpClipTileViewModel>();
-            foreach(var ci in page_cil) {
-                if(ci.CompositeParentCopyItemId != 0) {
-                    continue;
-                }
-                page_vml.Add(CreateClipTileViewModel(ci));
-            }
 
 
-            MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
-                _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+                await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                    ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
+                    _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
-                if (!MpMainWindowViewModel.IsMainWindowLoading) {
-                    ResetClipSelection();
-                }
+                    if (!MpMainWindowViewModel.IsMainWindowLoading) {
+                        ResetClipSelection();
+                    }
+                });
+                IsBusy = false;
             });
         }
 
@@ -590,8 +606,8 @@ namespace MpWpfApp {
             
             if(wasExpanded) {
                 MpHelpers.Instance.RunOnMainThread((Action)delegate {
-                    MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
+                    MainWindowViewModel.OnPropertyChanged_old(nameof(MainWindowViewModel.AppModeButtonGridWidth));
+                    MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
                 });
             }
         }
@@ -658,20 +674,37 @@ namespace MpWpfApp {
                 return;
             } else if (MpAppModeViewModel.Instance.IsInAppendMode) {
                 //when in append mode just append the new items text to selecteditem
-                PrimaryItem.InsertRange(PrimaryItem.Count, new List<MpCopyItem>() { newCopyItem });
-                if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
-                    // TODO now composite item doesn't roll up children so the buffer needs to be created here
-                    // if I use this at all
-                    MpStandardBalloonViewModel.ShowBalloon(
-                        "Append Buffer",
-                        SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
-                        Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                if(_appendModeCopyItem == null) {
+                    if (PrimaryItem == null) {
+                        _appendModeCopyItem = newCopyItem;
+                    } else {
+                        _appendModeCopyItem = PrimaryItem.HeadItem.CopyItem;
+                    }
+                }
+               
+
+                if (_appendModeCopyItem != newCopyItem) {
+                    newCopyItem.CompositeParentCopyItemId = _appendModeCopyItem.Id;
+                    newCopyItem.CompositeSortOrderIdx = MpCopyItem.GetCompositeChildren(_appendModeCopyItem).Count + 1;
+                    newCopyItem.WriteToDatabase();
+
+                    if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                        // TODO now composite item doesn't roll up children so the buffer needs to be created here
+                        // if I use this at all
+                        MpStandardBalloonViewModel.ShowBalloon(
+                            "Append Buffer",
+                            SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
+                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    }
+
+                    if (Properties.Settings.Default.NotificationDoCopySound) {
+                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                    }
                 }
 
-                if (Properties.Settings.Default.NotificationDoCopySound) {
-                    MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                }
+                
             } else {
+                _appendModeCopyItem = null;
                 if (newCopyItem.Id < 0) {
                     //item is a duplicate
                     newCopyItem.Id *= -1;
@@ -738,17 +771,23 @@ namespace MpWpfApp {
 
         public MpClipTileViewModel CreateClipTileViewModel(MpCopyItem ci) {
             var nctvm = new MpClipTileViewModel(this,ci);
-            nctvm.OnTileSelected += ClipTileViewModel_OnTileSelected;
+            nctvm.PropertyChanged += Nctvm_PropertyChanged;
             return nctvm;
         }
 
-        private void ClipTileViewModel_OnTileSelected(object sender, EventArgs e) {
-            if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                foreach (var ctvm in ClipTileViewModels) {
-                    if (ctvm != sender) {
-                        ctvm.IsSelected = false;
+        private void Nctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ctvm = sender as MpClipTileViewModel;
+            switch(e.PropertyName) {
+                case nameof(ctvm.IsSelected):
+                    if(ctvm.IsSelected && !MpHelpers.Instance.IsMultiSelectKeyDown() && !IgnoreSelectionReset) {
+                        //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
+                        foreach(var octvm in ClipTileViewModels) {
+                            if(octvm != ctvm) {
+                                octvm.ClearClipSelection();
+                            }
+                        }
                     }
-                }
+                    break;
             }
         }
 
@@ -968,7 +1007,7 @@ namespace MpWpfApp {
             return ctvml;
         }
 
-        public MpContentItemViewModel GetCopyItemViewModelById(int ciid) {
+        public MpContentItemViewModel GetContentItemViewModelById(int ciid) {
             foreach (var ctvm in ClipTileViewModels) {
                 foreach (var civm in ctvm.ItemViewModels) {
                     var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
@@ -1048,7 +1087,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                var ivm = GetCopyItemViewModelById(ci.Id);
+                var ivm = GetContentItemViewModelById(ci.Id);
                 //ivm.CopyItem = ci;
             }
         }
@@ -1068,7 +1107,7 @@ namespace MpWpfApp {
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpCopyItem ci) {
-                    var ctvmToRemove = GetCopyItemViewModelById(ci.Id);
+                    var ctvmToRemove = GetContentItemViewModelById(ci.Id);
                     if (ctvmToRemove != null) {
                         ctvmToRemove.CopyItem.StartSync(e.SourceGuid);
                         //ctvmToRemove.CopyItem.Color.StartSync(e.SourceGuid);
@@ -1099,7 +1138,7 @@ namespace MpWpfApp {
                     ci.Source.App.Icon.IconBorderHighlightImage.StartSync(e.SourceGuid);
                     ci.Source.App.Icon.IconBorderHighlightSelectedImage.StartSync(e.SourceGuid);
 
-                    var dupCheck = GetCopyItemViewModelById(ci.Id);
+                    var dupCheck = GetContentItemViewModelById(ci.Id);
                     if (dupCheck == null) {
                         if (ci.Id == 0) {
                             ci.WriteToDatabase();
@@ -1134,25 +1173,6 @@ namespace MpWpfApp {
 
 
         #endregion
-
-        private void ClipTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (e.NewItems != null && e.NewItems.Count > 0) {
-                IsBusy = false;
-                ClipTileViewModels.CollectionChanged -= ClipTileViewModels_CollectionChanged;
-            }
-        }
-
-        private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
-            foreach (MpCopyItem ci in args.NewItems) {
-                _itemsAdded++;
-                ClipTileViewModels.Add(new MpClipTileViewModel(this,ci));
-            }
-            if (_itemsAdded == _pageSize) {
-                var collection = (ObservableCollection<MpCopyItem>)sender;
-                collection.CollectionChanged -= Collection_CollectionChanged;
-            }
-        }
-
 
         #endregion
 
@@ -1302,7 +1322,7 @@ namespace MpWpfApp {
             IsPastingHotKey = true;
             int copyItemId = (int)args;
             IDataObject pasteDataObject = null;
-            var pctvm = GetCopyItemViewModelById(copyItemId);
+            var pctvm = GetContentItemViewModelById(copyItemId);
             if (pctvm != null) {
                 ClearClipSelection();
                 pctvm.IsSelected = true;
@@ -1311,7 +1331,7 @@ namespace MpWpfApp {
                 ClearClipSelection();
             } else {
                 //otherwise check if it is a composite within a tile
-                MpContentItemViewModel prtbvm = GetCopyItemViewModelById(copyItemId) as MpContentItemViewModel;
+                MpContentItemViewModel prtbvm = GetContentItemViewModelById(copyItemId) as MpContentItemViewModel;
                 //foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
                 //    prtbvm = ctvm.ContentContainerViewModel.GetRtbItemByCopyItemId(copyItemId);
                 //    if (prtbvm != null) {
@@ -1777,7 +1797,7 @@ namespace MpWpfApp {
                     //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                     //this.Add(ctvm);
                     RefreshClips();
-                    var ctvm = GetCopyItemViewModelById(clonedCopyItem.Id);
+                    var ctvm = GetContentItemViewModelById(clonedCopyItem.Id);
                     ctvm.IsSelected = true;
                 }
 

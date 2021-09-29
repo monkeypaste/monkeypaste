@@ -135,30 +135,8 @@ namespace MonkeyPaste {
             return MpDb.Instance.GetItems<MpCopyItem>().Where(x => x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx).ToList();
         }
 
-        public static MpCopyItem Merge(
-            MpCopyItem fromItem,
-            MpCopyItem toItem,
-            bool useFileData = false,
-            bool isFileDataMerged = false,
-            int forceIdx = -1) {
-            if (toItem == null) {
-                return fromItem;
-            }
-            if (fromItem.ItemType == MpCopyItemType.Image || toItem.ItemType == MpCopyItemType.Image) {
-                // for now, do not allow combining with image types
-                return null;
-            }
 
-            if (fromItem == toItem) {
-                return toItem;
-            }
-
-            toItem.LinkCompositeChild(fromItem, forceIdx);
-
-            return toItem;
-        }
-
-        public static List<MpCopyItem> GetPage(
+        public static async Task<List<MpCopyItem>> GetPageAsync(
             int tagId,
             int start,
             int count,
@@ -166,103 +144,103 @@ namespace MonkeyPaste {
             bool isDescending = true) {
             List<MpCopyItem> result = new List<MpCopyItem>();
 
-            switch(tagId) {
-                case MpTag.AllTagId:
-                    sortColumn = sortColumn == "default" ? "CopyDateTime" : sortColumn;
-                    if (isDescending) {
-                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                  select ci)
-                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    } else {
-                        result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                  select ci)
-                                 .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    }
-                    break;
-                case MpTag.RecentTagId:
-                    sortColumn = "CopyDateTime";
-                    if(isDescending) {
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                 .OrderByDescending(x => x.CopyDateTime)
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    } else {
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                 .OrderBy(x => x.CopyDateTime)
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    }
-                    
-                             
-                    break;
-                // Add other sudo tags here
-
-                default:
-                    //the default sort for user tags should sort by aascending sort idx
-                    isDescending = sortColumn == "default" && isDescending ? false : isDescending;
-                    if (isDescending) {
-                        if (sortColumn == "default") {
-                            result = (from value in 
-                                         (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                          from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                          where ci.Id == cit.CopyItemId &&
-                                                tagId == cit.TagId
-                                          select new { ci, cit })
-                                     orderby value.cit.CopyItemSortIdx descending
-                                     select value.ci)
-                                     .Take(count)
-                                     .Skip(start)
-                                     .ToList();
-                        } else {
+            await Task.Run(() => {
+                switch (tagId) {
+                    case MpTag.AllTagId:
+                        sortColumn = sortColumn == "default" ? "CopyDateTime" : sortColumn;
+                        if (isDescending) {
                             result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                      from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                      where ci.Id == cit.CopyItemId &&
-                                            tagId == cit.TagId
                                       select ci)
                                      .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                      .Take(count)
                                      .Skip(start)
                                      .ToList();
+                        } else {
+                            result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                      select ci)
+                                     .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                                     .Take(count)
+                                     .Skip(start)
+                                     .ToList();
                         }
-                        
-                    } else {
-                        if (sortColumn == "default") {
-                            result = (from value in
-                                         (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                          from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                          where ci.Id == cit.CopyItemId &&
-                                                tagId == cit.TagId
-                                          select new { ci, cit })
-                                      orderby value.cit.CopyItemSortIdx ascending
-                                      select value.ci)
+                        break;
+                    case MpTag.RecentTagId:
+                        sortColumn = "CopyDateTime";
+                        if (isDescending) {
+                            result = MpDb.Instance.GetItems<MpCopyItem>()
+                                     .OrderByDescending(x => x.CopyDateTime)
                                      .Take(count)
                                      .Skip(start)
                                      .ToList();
                         } else {
-                            result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                      from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                      where ci.Id == cit.CopyItemId &&
-                                            tagId == cit.TagId
-                                      select ci)
-                                 .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
+                            result = MpDb.Instance.GetItems<MpCopyItem>()
+                                     .OrderBy(x => x.CopyDateTime)
+                                     .Take(count)
+                                     .Skip(start)
+                                     .ToList();
                         }
-                        
-                    }
 
 
-                    break;
-            }
+                        break;
+                    // Add other sudo tags here
+
+                    default:
+                        //the default sort for user tags should sort by aascending sort idx
+                        isDescending = sortColumn == "default" && isDescending ? false : isDescending;
+                        if (isDescending) {
+                            if (sortColumn == "default") {
+                                result = (from value in
+                                             (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                              from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                              where ci.Id == cit.CopyItemId &&
+                                                    tagId == cit.TagId
+                                              select new { ci, cit })
+                                          orderby value.cit.CopyItemSortIdx descending
+                                          select value.ci)
+                                         .Take(count)
+                                         .Skip(start)
+                                         .ToList();
+                            } else {
+                                result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                          from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                          where ci.Id == cit.CopyItemId &&
+                                                tagId == cit.TagId
+                                          select ci)
+                                         .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                                         .Take(count)
+                                         .Skip(start)
+                                         .ToList();
+                            }
+
+                        } else {
+                            if (sortColumn == "default") {
+                                result = (from value in
+                                             (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                              from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                              where ci.Id == cit.CopyItemId &&
+                                                    tagId == cit.TagId
+                                              select new { ci, cit })
+                                          orderby value.cit.CopyItemSortIdx ascending
+                                          select value.ci)
+                                         .Take(count)
+                                         .Skip(start)
+                                         .ToList();
+                            } else {
+                                result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                                          from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
+                                          where ci.Id == cit.CopyItemId &&
+                                                tagId == cit.TagId
+                                          select ci)
+                                     .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                                     .Take(count)
+                                     .Skip(start)
+                                     .ToList();
+                            }
+
+                        }
+                        break;
+                }
+            });
 
             return result;
         }
@@ -305,6 +283,14 @@ namespace MonkeyPaste {
          #endregion
 
         public MpCopyItem() : base() { }
+
+        public MpCopyItem GetCompositeParent() {
+            if(CompositeParentCopyItemId == 0) {
+                return null;
+            }
+            return MpCopyItem.GetCopyItemById(CompositeParentCopyItemId);
+        }
+
 
         public void UnlinkCompositeChild(MpCopyItem cci) {
             cci.CompositeParentCopyItemId = 0;
@@ -461,29 +447,23 @@ namespace MonkeyPaste {
         }
 
         public object Clone() {
+            var s = MpSource.GetThisDeviceAppSource();
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
                 Title = this.Title,
                 ItemData = this.ItemData,
                 ItemColor = this.ItemColor,
-                Source = this.Source,
-                CopyCount = this.CopyCount,
-                CopyDateTime = this.CopyDateTime,
+                Source = s,
+                SourceId = s.Id,
+                CopyCount = 1,
+                CopyDateTime = DateTime.Now,
+                CompositeParentCopyItemId = 0,
+                CompositeSortOrderIdx = 0,
                 Id = 0
             };
 
             newItem.WriteToDatabase();
 
-            foreach (var cit in MpDb.Instance.GetItems<MpCopyItemTag>().Where(x=>x.CopyItemId == this.Id).ToList()) {
-                var ncit = new MpCopyItemTag() {
-                    CopyItemId = newItem.Id,
-                    TagId = cit.TagId
-                };
-                ncit.WriteToDatabase();
-            }
-            foreach (var cci in MpCopyItem.GetCompositeChildren(this)) {
-                newItem = MpCopyItem.Merge((MpCopyItem)cci.Clone(), newItem);
-            }
             return newItem;
         }
     }
@@ -492,7 +472,9 @@ namespace MonkeyPaste {
         None = 0,
         DateTimeCreated,
         DataSize,
-        UsageStats
+        UsageStats,
+        UrlInfo,
+        AppInfo
     }
 
     public enum MpCopyItemType {

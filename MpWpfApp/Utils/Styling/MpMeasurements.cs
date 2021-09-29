@@ -333,7 +333,7 @@ namespace MpWpfApp {
 
         public double ClipTileContentItemBorderThickness {
             get {
-                return 3;
+                return 1;
             }
         }
 

@@ -21,7 +21,7 @@ namespace MpWpfApp {
             set {
                 if (_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged_old(nameof(IsSelected));
                 }
             }
         }
@@ -86,8 +86,8 @@ namespace MpWpfApp {
                 if(App != null && App.IsAppRejected != value) {
                     App.IsAppRejected = MpAppCollectionViewModel.Instance.UpdateRejection(this, value); 
                     App.WriteToDatabase();
-                    OnPropertyChanged(nameof(IsAppRejected));
-                    OnPropertyChanged(nameof(App));
+                    OnPropertyChanged_old(nameof(IsAppRejected));
+                    OnPropertyChanged_old(nameof(App));
                 }
             }
         }
@@ -125,15 +125,15 @@ namespace MpWpfApp {
                 //if (_app != value) 
                 {
                     _app = value;
-                    OnPropertyChanged(nameof(App));
-                    OnPropertyChanged(nameof(AppId));
-                    OnPropertyChanged(nameof(AppPath));
-                    OnPropertyChanged(nameof(AppName));
-                    OnPropertyChanged(nameof(IsAppRejected));
-                    OnPropertyChanged(nameof(IconImage));
-                    OnPropertyChanged(nameof(RejectAppVisibility));
-                    OnPropertyChanged(nameof(AddButtonVisibility));
-                    OnPropertyChanged(nameof(PrimaryIconColorList));
+                    OnPropertyChanged_old(nameof(App));
+                    OnPropertyChanged_old(nameof(AppId));
+                    OnPropertyChanged_old(nameof(AppPath));
+                    OnPropertyChanged_old(nameof(AppName));
+                    OnPropertyChanged_old(nameof(IsAppRejected));
+                    OnPropertyChanged_old(nameof(IconImage));
+                    OnPropertyChanged_old(nameof(RejectAppVisibility));
+                    OnPropertyChanged_old(nameof(AddButtonVisibility));
+                    OnPropertyChanged_old(nameof(PrimaryIconColorList));
                 }
 
                 

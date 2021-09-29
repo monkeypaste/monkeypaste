@@ -10,9 +10,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel,IsDesignTimeCreatable=True}">
-    <i:Interaction.Behaviors>
+    <!--<i:Interaction.Behaviors>
         <local:MpClipTrayViewDropBehavior x:Name="DropBehavior"/>
-    </i:Interaction.Behaviors>
+    </i:Interaction.Behaviors>-->
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>            
             <local:MpMultiSelectListBox x:Name="ClipTray"
@@ -43,6 +43,9 @@
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <i:Interaction.Behaviors>
+                    <local:MpDropBehavior x:Name="DropBehavior2"/>    
+                </i:Interaction.Behaviors>                
                 <local:MpMultiSelectListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />

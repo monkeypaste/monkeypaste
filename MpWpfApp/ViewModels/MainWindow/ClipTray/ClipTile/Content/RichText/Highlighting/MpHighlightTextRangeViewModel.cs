@@ -35,7 +35,7 @@ namespace MpWpfApp {
             set {
                 if (_hostClipTileViewModel != value) {
                     _hostClipTileViewModel = value;
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
+                    OnPropertyChanged_old(nameof(HostClipTileViewModel));
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace MpWpfApp {
             set {
                 if (_rtbItemViewModel != value) {
                     _rtbItemViewModel = value;
-                    OnPropertyChanged(nameof(ContentItemViewModel));
+                    OnPropertyChanged_old(nameof(ContentItemViewModel));
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace MpWpfApp {
             set {
                 if(_highlightType != value) {
                     _highlightType = value;
-                    OnPropertyChanged(nameof(HighlightType));
+                    OnPropertyChanged_old(nameof(HighlightType));
                 }
             }
         }
@@ -85,8 +85,8 @@ namespace MpWpfApp {
                 //if(_isSelected != value)
                     {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(HighlightBrush));
+                    OnPropertyChanged_old(nameof(IsSelected));
+                    OnPropertyChanged_old(nameof(HighlightBrush));
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace MpWpfApp {
             set {
                 if (_sortOrderIdx != value) {
                     _sortOrderIdx = value;
-                    OnPropertyChanged(nameof(SortOrderIdx));
+                    OnPropertyChanged_old(nameof(SortOrderIdx));
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace MpWpfApp {
             set {
                 if(_range != value) {
                     _range = value;
-                    OnPropertyChanged(nameof(Range));
+                    OnPropertyChanged_old(nameof(Range));
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace MpWpfApp {
             set {
                 if(_searchBoxViewModel != value) {
                     _searchBoxViewModel = value;
-                    OnPropertyChanged(nameof(SearchBoxViewModel));
+                    OnPropertyChanged_old(nameof(SearchBoxViewModel));
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace MpWpfApp {
             set {
                 if(_textRange != value) {
                     _textRange = value;
-                    OnPropertyChanged(nameof(TextRange));
+                    OnPropertyChanged_old(nameof(TextRange));
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace MpWpfApp {
             set {
                 if (_sortOrderIdx != value) {
                     _sortOrderIdx = value;
-                    OnPropertyChanged(nameof(SortOrderIdx));
+                    OnPropertyChanged_old(nameof(SortOrderIdx));
                 }
             }
         }

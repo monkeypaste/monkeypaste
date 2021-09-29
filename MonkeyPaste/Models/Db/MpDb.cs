@@ -59,9 +59,11 @@ namespace MonkeyPaste {
         public void Init(MpIDbInfo dbInfo) {
             _dbInfo = dbInfo;
             MpPreferences.Instance.StartupDateTime = DateTime.Now;
-            InitDb();            
-            IsLoaded = true;            
+            InitDb();
+            IsLoaded = true;
         }
+
+        #region Queries
 
         public SQLite.TableMapping GetTableMapping(string tableName) {
             if (_connection == null) {
@@ -139,6 +141,7 @@ namespace MonkeyPaste {
             }
             return _connection.GetAllWithChildren<T>(recursive: true);
         }
+
         public async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
                 InitDb();
@@ -377,6 +380,7 @@ namespace MonkeyPaste {
             var dbo = Activator.CreateInstance(typeof(T));
             return (T)dbo;
         }
+        #endregion
 
         public byte[] GetDbFileBytes() {
             var dbPath = _dbInfo.GetDbFilePath();

@@ -2,12 +2,15 @@
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpSource : MpDbModelBase {
+        #region Columns
+
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpSourceId")]
         public override int Id { get; set; }
@@ -42,6 +45,8 @@ namespace MonkeyPaste {
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
         public MpApp App { get; set; }
 
+        #endregion
+
         [Ignore]
         public bool IsUrlSource => PrimarySource == Url;
 
@@ -70,6 +75,26 @@ namespace MonkeyPaste {
                 }
                 return null;
             }
+        }
+
+        #region Statics
+
+        [Ignore]
+        public static int ThisAppSourceId { get; set; }
+
+        public static MpSource GetThisDeviceAppSource() {
+            var s = MpDb.Instance.GetItem<MpSource>(ThisAppSourceId);
+            if(s == null) {
+                var process = Process.GetCurrentProcess();
+                string appPath = process.MainModule.FileName;
+                string appName = MpPreferences.Instance.ApplicationName;
+                var iconStr = new MpImageConverter().Convert(MpHelpers.Instance.LoadBitmapResource(@"MonkeyPaste.Resources.Icons.monkey.png"), typeof(string)) as string;
+                var icon = MpIcon.Create(iconStr);
+                var app = MpApp.Create(appPath, appName, icon);
+                s = MpSource.Create(app, null);
+                ThisAppSourceId = s.Id;
+            }
+            return s;
         }
 
         public static async Task<List<MpSource>> GetAllSourcesAsync() {
@@ -111,6 +136,8 @@ namespace MonkeyPaste {
             MpDb.Instance.AddItem<MpSource>(source);
             return source;
         }
+        #endregion
+
         public MpSource() { }
     }
 }

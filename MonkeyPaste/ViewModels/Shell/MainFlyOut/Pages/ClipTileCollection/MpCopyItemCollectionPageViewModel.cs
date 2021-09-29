@@ -75,8 +75,8 @@ namespace MonkeyPaste {
 
         public void SetTag(int tagId) {
             TagId = tagId; 
-            Device.BeginInvokeOnMainThread(() => {                
-                var clips = MpCopyItem.GetPage(TagId, 0, _pageSize);
+            Device.InvokeOnMainThreadAsync(async () => {                
+                var clips = await MpCopyItem.GetPageAsync(TagId, 0, _pageSize);
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
                     var tl = MpDb.Instance.GetItems<MpTag>();

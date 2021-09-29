@@ -23,7 +23,7 @@ namespace MpWpfApp {
             set {
                 if(_notificationViewModels != value) {
                     _notificationViewModels = value;
-                    OnPropertyChanged(nameof(NotificationViewModels));
+                    OnPropertyChanged_old(nameof(NotificationViewModels));
                 }
             }
         }
