@@ -140,8 +140,8 @@ namespace MonkeyPaste {
             int tagId,
             int start,
             int count,
-            string sortColumn = "default",
-            bool isDescending = true) {
+            string sortColumn,
+            bool isDescending) {
             List<MpCopyItem> result = new List<MpCopyItem>();
 
             await Task.Run(() => {

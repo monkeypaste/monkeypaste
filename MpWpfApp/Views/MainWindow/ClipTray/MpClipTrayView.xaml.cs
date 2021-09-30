@@ -18,45 +18,87 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTrayView.xaml
     /// </summary>
-    public partial class MpClipTrayView : UserControl {// : MpUserControl<MpClipTileViewModel> {
-        public AdornerLayer ClipTrayAdornerLayer;
-        //public MpLineAdorner ClipTrayAdorner;
-        public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
+    public partial class MpClipTrayView : UserControl {
+        public VirtualizingStackPanel TrayItemsPanel;
 
         private int _remainingItems = int.MaxValue;
 
         public MpClipTrayView() : base() {
             InitializeComponent();
-
-            //ClipTrayAdorner = new MpLineAdorner(ClipTray);
-            ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTray);
-            //ClipTrayAdornerLayer.Add(ClipTrayAdorner); 
         }
 
-        public MpClipTileView GetClipTileViewByDataContext(MpClipTileViewModel ctvm) {
+        private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+
+            MpClipboardManager.Instance.Init();
+            MpClipboardManager.Instance.ClipboardChanged += (s, e1) => ctrvm.AddItemFromClipboard();
+
+            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+
+            if (MpPreferences.Instance.IsInitialLoad) {
+                ctrvm.InitIntroItems();
+            }
+
+            ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
+
+            //ClipTray.PreviewMouseLeftButtonDown += (s, e2) => { ShiftLeft(); e2.Handled = true; };
+
+            //ClipTray.PreviewMouseRightButtonDown += (s, e3) => { ShiftRight(); e3.Handled = true; };
+
+            if (ClipTray.Items.Count > 0) {
+                ClipTray.GetListBoxItem(0).Focus();
+            }
+        }
+
+        private void ShiftLeft() {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+            ctrvm.ClipTileViewModels.Move(0, ctrvm.ClipTileViewModels.Count - 1);
+            return;
+            if(ClipTray.Items.Count <= 1) {
+                return;
+            }
+
+            var firstItem = ctrvm.ClipTileViewModels[0];
             for (int i = 0; i < ClipTray.Items.Count; i++) {
-                ListBoxItem lbi = ClipTray.GetListBoxItem(i);
-                if(lbi.DataContext == ctvm) {
-                    return lbi.GetVisualDescendent<MpClipTileView>();
+                var lbi = ClipTray.GetListBoxItem(i).GetVisualDescendent<MpClipTileView>();
+                if(i == ClipTray.Items.Count - 1) {
+                    lbi.DataContext = firstItem;
+                } else {
+                    lbi.DataContext = ctrvm.ClipTileViewModels[i + 1];
                 }
             }
-            return null;
         }
 
-        public MpContentItemView GetContentItemViewByDataContext(MpContentItemViewModel civm) {
-            var ctv = GetClipTileViewByDataContext(civm.Parent);
-            if(ctv == null) {
-                return null;
+        private void ShiftRight() {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+            ctrvm.ClipTileViewModels.Move(0, 1);
+            return;
+
+            if (ClipTray.Items.Count <= 1) {
+                return;
             }
-            for (int i = 0; i < ctv.ContentListView.ContentListBox.Items.Count; i++) {
-                ListBoxItem lbi = ctv.ContentListView.ContentListBox.GetListBoxItem(i);
-                if (lbi.DataContext == civm) {
-                    return lbi.GetVisualDescendent<MpContentItemView>();
+
+            int count = ctrvm.ClipTileViewModels.Count;
+            var lastItem = ctrvm.ClipTileViewModels[count-1];
+            for (int i = count - 1; i >= 0; i--) {
+                var lbi = ClipTray.GetListBoxItem(i);
+                if (i == 0) {
+                    lbi.DataContext = lastItem;
+                } else {
+                    lbi.DataContext = ctrvm.ClipTileViewModels[i - 1];
                 }
             }
-            return null;
         }
 
+        private void ClipTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if (DataContext != null) {
+                var ctrvm = DataContext as MpClipTrayViewModel;
+                ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
+                ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
+                ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
+                ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
+            }
+        }
 
         public List<Rect> GetSelectedContentItemViewRects(FrameworkElement relativeTo) {
             var scivml = MpClipTrayViewModel.Instance.SelectedContentItemViewModels;
@@ -74,166 +116,6 @@ namespace MpWpfApp {
             }
             return civl;
         }
-
-        private void ClipTray_Loaded(object sender, RoutedEventArgs e) { 
-            var ctrvm = DataContext as MpClipTrayViewModel;
-
-            MpClipboardManager.Instance.Init();
-            MpClipboardManager.Instance.ClipboardChanged += (s,e1) => ctrvm.AddItemFromClipboard();
-
-            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
-
-            if (MpPreferences.Instance.IsInitialLoad) {
-                ctrvm.InitIntroItems();
-            }
-
-            ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
-        }
-
-        private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            ClipTrayVirtualizingStackPanel = sender as VirtualizingStackPanel;
-        }
-
-        #region Drag & Drop
-
-        private void ClipTray_DragLeave(object sender, DragEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.IsTrayDropping = false;
-            ClipTrayAdornerLayer.Update();
-        }
-
-        private void ClipTray_DragOver(object sender, DragEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.IsTrayDropping = false;
-            ClipTrayAdornerLayer.Update();
-            if (ctrvm.IsAnyClipDropping) {
-                return;
-            }
-            AutoScrollByMouse();
-            if (e.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ClipTray));
-                if (dropIdx >= 0/* && (dropIdx >= ctrvm.ClipTileViewModels.Count || (dropIdx < ctrvm.ClipTileViewModels.Count && !this[dropIdx].IsClipOrAnySubItemDragging))*/) {
-                    var adornerPoints = ClipTray.GetAdornerPoints(dropIdx,true);
-                    //ClipTrayAdorner.Point1 = adornerPoints[0];
-                    //ClipTrayAdorner.Point2 = adornerPoints[1];
-                    ctrvm.IsTrayDropping = true;
-                    e.Effects = DragDropEffects.Move;
-                }
-            }
-            ClipTrayAdornerLayer.Update();
-        }
-
-        private void ClipTray_Drop(object sender, DragEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            if (!ctrvm.IsTrayDropping) {
-                return;
-            }
-            var dctvml = new List<MpClipTileViewModel>();
-            if (e.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                dctvml = (List<MpClipTileViewModel>)e.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                dctvml = dctvml.OrderByDescending(x => x.SortOrderIdx).ToList();
-                int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ClipTray));
-                if (dropIdx >= 0 && (dropIdx >= ctrvm.ClipTileViewModels.Count || (dropIdx < ctrvm.ClipTileViewModels.Count && !ctrvm.ClipTileViewModels[dropIdx].IsClipDragging))) {
-                    if (dropIdx < ctrvm.ClipTileViewModels.Count && ctrvm.ClipTileViewModels[dropIdx].IsClipDragging) {
-                        //ignore dropping dragged tile onto itself
-                        //e2.Effects = DragDropEffects.None;
-                        e.Handled = true;
-                        ctrvm.IsTrayDropping = false;
-                        ClipTrayAdornerLayer.Update();
-                        return;
-                    }
-                    /* 
-                     On tray drop: 
-                     1. if all rtbvm of sctvm are selected or rtbvm count is 0, do move to dropidx, 
-                     2. if partial selection, remove from parent and make new composite in merge then insert at dropidx. 
-                     3.Order sctvml by asc hctvm.selecttime then subsort composites by asc rtbvm subselectdatetime
-                    */
-                    dctvml.Reverse();
-                    foreach (var dctvm in dctvml) {
-                        int dragCtvmIdx = ctrvm.ClipTileViewModels.IndexOf(dctvm);
-                        bool wasEmptySelection = dctvm.SelectedItems.Count == 0;
-                        if (wasEmptySelection) {
-                            dctvm.SubSelectAll();
-                        }
-                        if (dctvm.Count == 0 ||
-                            wasEmptySelection ||
-                            dctvm.Count == dctvm.SelectedItems.Count) {
-                            //1. if all rtbvm of sctvm are selected or rtbvm count is 0, do move to dropidx
-                            if (dragCtvmIdx < dropIdx) {
-                                ctrvm.ClipTileViewModels.Move(dragCtvmIdx, dropIdx - 1);
-                            } else {
-                                ctrvm.ClipTileViewModels.Move(dragCtvmIdx, dropIdx);
-                            }
-                        } else {
-                            //2. if partial selection, remove from parent and make new
-                            //   composite in merge then insert at dropidx.
-                            var drtbvm = dctvm.SelectedItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
-                            dctvm.ItemViewModels.Remove(drtbvm);
-                            var nctvm = new MpClipTileViewModel(ctrvm,drtbvm.CopyItem);
-                            foreach (var ssrtbvm in dctvm.SelectedItems.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList()) {
-                                nctvm.MergeCopyItemList(new List<MpCopyItem>() { ssrtbvm.CopyItem });
-                            }
-                            //ctrvm.Add(nctvm, dropIdx);
-                            ctrvm.RefreshClips();
-                            nctvm.RequestUiUpdate();
-                        }
-                    }
-                }
-            }
-            e.Handled = true;
-            ctrvm.ClearAllDragDropStates();
-            ClipTrayAdornerLayer.Update();
-        }
-
-        public void AutoScrollByMouse() {
-            double minScrollDist = 20;
-            double autoScrollOffset = 15;
-            var mp = MpHelpers.Instance.GetMousePosition(ClipTray);
-            double leftDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, 0);
-            double rightDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, ActualWidth); 
-            if (leftDiff < minScrollDist) {
-                autoScrollOffset += Math.Pow(leftDiff, 2);
-                ClipTray.ScrollViewer.ScrollToHorizontalOffset(ClipTray.ScrollViewer.HorizontalOffset - autoScrollOffset);
-            } else if (rightDiff < minScrollDist) {
-                autoScrollOffset += Math.Pow(rightDiff, 2);
-                ClipTray.ScrollViewer.ScrollToHorizontalOffset(ClipTray.ScrollViewer.HorizontalOffset + autoScrollOffset);
-            }
-        }
-
-        public int GetDropIdx(Point mp) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            double mdx = mp.X;
-            double minDist = double.MaxValue;
-            int dropIdx = -1;
-            for (int i = 0; i < ClipTray.Items.Count; i++) {
-                if(!ClipTray.IsListBoxItemVisible(i)) {
-                    continue;
-                }
-                Rect lbir = ClipTray.GetListBoxItemRect(i);
-
-                double lbilx = lbir.Left;
-                double lbirx = lbir.Right;
-                double lDist = Math.Abs(mdx - lbilx);
-                double rDist = Math.Abs(mdx - lbirx);
-                double dist = Math.Min(lDist, rDist);
-                if (dist < minDist) {
-                    minDist = dist;
-                    if (minDist == lDist) {
-                        dropIdx = i;
-                    } else {
-                        dropIdx = i + 1;
-                    }
-
-                }
-            }
-            //var overRect = this[dropIdx].TileRect;
-            //double overMidX = overRect.Left + (overRect.Right / 2);
-            //if (mp.X > overMidX) {
-            //    dropIdx++;
-            //}
-            return dropIdx;
-        }
-        #endregion
 
         #region Selection
         private void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -262,16 +144,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-
-        private void ClipTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (DataContext != null) {
-                var ctrvm = DataContext as MpClipTrayViewModel;
-                ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
-                ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
-                ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
-                ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
-            }
-        }
+        #region View Model Requests (should be able to refactor these away
 
         private void Ctrvm_OnUiRefreshRequest(object sender, EventArgs e) {
             ClipTray?.Items.Refresh();
@@ -303,6 +176,12 @@ namespace MpWpfApp {
             if(_remainingItems <= 1 && !MpMainWindowViewModel.IsMainWindowLoading) {
                // ctrvm.RefreshClips(true, "CopyDateTime", leftIdx, MpMeasurements.Instance.TotalVisibleClipTiles * 2);
             }
+        }
+
+        #endregion
+
+        private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
+            TrayItemsPanel = sender as VirtualizingStackPanel;
         }
     }
 }

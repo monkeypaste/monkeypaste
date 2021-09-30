@@ -118,13 +118,6 @@ namespace MpWpfApp {
             OnViewModelLoaded();
         }
 
-        private void ClipTrayViewModels_OnTilesChanged(object sender, object e) {
-            if (MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
-                return;
-            }
-
-            RefreshAllCounts();
-        }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
@@ -260,7 +253,7 @@ namespace MpWpfApp {
                                 //added while main window is locked
                                 //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
                                 MpClipTrayViewModel.Instance.IsFilteringByApp = false;
-                                MpClipTrayViewModel.Instance.RefreshClips();
+                                MpClipTrayViewModel.Instance.RefreshTiles();
                             }
                         } else if (SelectedTagTile == null) {
                             RecentTagViewModel.IsSelected = true;

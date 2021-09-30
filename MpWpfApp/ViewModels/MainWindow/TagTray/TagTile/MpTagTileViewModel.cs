@@ -161,7 +161,7 @@ namespace MpWpfApp {
         public Brush TagBorderBrush {
             get {
                 if (IsAssociated) {
-                    return Color;
+                    return TagColor;
                 }
                 return Brushes.Transparent;
             }
@@ -181,7 +181,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.Instance.IsBright(((SolidColorBrush)Color).Color) ? Brushes.Black : Brushes.White; ;
+                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -267,7 +267,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush Color {
+        public Brush TagColor {
             get {
                 if(Tag == null) {
                     return Brushes.Red;
@@ -278,7 +278,7 @@ namespace MpWpfApp {
                 if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
                     Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     Tag.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(Color));
+                    OnPropertyChanged_old(nameof(TagColor));
                     OnPropertyChanged_old(nameof(TagCountTextColor));
                 }
             }
@@ -292,7 +292,7 @@ namespace MpWpfApp {
             set {
                 if (_tag != value) {
                     _tag = value;
-                    OnPropertyChanged_old(nameof(Color));
+                    OnPropertyChanged_old(nameof(TagColor));
                     OnPropertyChanged_old(nameof(TagName));
                     OnPropertyChanged_old(nameof(TagId));
                     OnPropertyChanged_old(nameof(Tag));
@@ -376,47 +376,11 @@ namespace MpWpfApp {
                     IsEditing = false;
                 }
             };
-            //if tag is created at runtime show tbox w/ all selected
-            if (IsNew) {
-                RenameTagCommand.Execute(null);
-            }
+            
 
             OnViewModelLoaded();
         }
 
-        public void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            var cm = (ContextMenu)sender;
-            cm.DataContext = this;
-            MenuItem cmi = null;
-            foreach (var mi in cm.Items) {
-                if (mi == null || mi is Separator) {
-                    continue;
-                }
-                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
-                    cmi = (MenuItem)mi;
-                    break;
-                }
-            }
-            MpHelpers.Instance.SetColorChooserMenuItem(
-                    cm,
-                    cmi,
-                    (s, e1) => {
-                        ChangeColorCommand.Execute((Brush)((Border)s).Tag);
-                    },
-                    MpHelpers.Instance.GetColorColumn(Color),
-                    MpHelpers.Instance.GetColorRow(Color)
-                );
-        }
-
-        public void TagTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var cm = sender as ContextMenu;
-            var ttvm = (MpTagTileViewModel)cm.DataContext;
-            cm.Tag = ttvm;
-            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
-        }
-
-        public void TagTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
-        }
 
         public void AddClip(MpContentItemViewModel rtbvm) {
             Tag.LinkWithCopyItem(rtbvm.CopyItem);
@@ -538,10 +502,22 @@ namespace MpWpfApp {
         }
         private void ChangeColor(Brush newBrush) {
             if(newBrush != null) {
-                Color = newBrush;
+                TagColor = newBrush;
                 Tag.WriteToDatabase();
             }
         }
+
+        public ICommand CancelRenameTagCommand => new RelayCommand(
+            () => {
+                TagName = _originalTagName;
+                IsEditing = false;
+            });
+
+        public ICommand FinishRenameTagCommand => new RelayCommand(
+            () => {
+                IsEditing = false;
+                Tag.WriteToDatabase();
+            });
 
         private RelayCommand _renameTagCommand;
         public ICommand RenameTagCommand {

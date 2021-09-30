@@ -8,6 +8,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <local:MpClipBorder x:Name="TagTileBorder"
+                        Loaded="TagTileBorder_Loaded"
+                        MouseEnter="TagTileBorder_MouseEnter"
+                        MouseLeave="TagTileBorder_MouseLeave"
+                        LostFocus="TagTileBorder_LostFocus"
+                        PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
                         CornerRadius="10"
                         Margin="5,3,0,0"
                         Padding="7,5,7,5"
@@ -29,21 +34,8 @@
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <local:MpClipBorder.ContextMenu>
-            <ContextMenu>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="TagTile_ContextMenu_Loaded" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="Opened">
-                        <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="TagTile_ContextMenu_Opened" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="Closed">
-                        <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="TagTile_ContextMenu_Closed" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+            <ContextMenu Loaded="ContextMenu_Loaded"
+                         Opened="ContextMenu_Opened">
                 <MenuItem Header="Rename"
                           Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                           Command="{Binding PlacementTarget.Tag.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
@@ -73,7 +65,7 @@
                                 Margin="3,0,0,0"
                                 Padding="5"
                                 BorderThickness="0"
-                                Background="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                Background="{Binding TagColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                 <TextBlock Background="Transparent"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
@@ -93,6 +85,9 @@
                        Foreground="{Binding TagTextColor}"
                        Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"></TextBlock>
             <TextBox x:Name="TagTextBox"
+                     IsVisibleChanged="TagTextBox_IsVisibleChanged"
+                     LostFocus="TagTextBox_LostFocus"
+                     PreviewKeyDown="TagTextBox_PreviewKeyDown"
                      Grid.Row="0"
                      Grid.Column="1"
                      Margin="5,0,0,0"

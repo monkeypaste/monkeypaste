@@ -29,7 +29,7 @@ namespace MpWpfApp {
             get {
                 return Application.Current.MainWindow.DataContext != null && 
                     Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowGridTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
             }
         }
 
@@ -150,32 +150,17 @@ namespace MpWpfApp {
 
         public double MainWindowHeight { get; set; } = SystemParameters.WorkArea.Height;
 
-        public double MainWindowTop { get; set; } = 0;
-
         public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
 
         private double _mainWindowGridTop = SystemParameters.WorkArea.Height;
-        public double MainWindowGridTop {
+        public double MainWindowTop {
             get {
                 return _mainWindowGridTop;
             }
             set {
                 if(_mainWindowGridTop != value) {
                     _mainWindowGridTop = value;
-                    OnPropertyChanged_old(nameof(MainWindowGridTop));
-                }
-            }
-        }
-
-        private double _mainWindowGridHeight = MpMeasurements.Instance.MainWindowMinHeight;
-        public double MainWindowGridHeight {
-            get {
-                return _mainWindowGridHeight;
-            }
-            set {
-                if (_mainWindowGridHeight != value) {
-                    _mainWindowGridHeight = value;
-                    OnPropertyChanged_old(nameof(MainWindowGridHeight));
+                    OnPropertyChanged_old(nameof(MainWindowTop));
                 }
             }
         }
@@ -249,9 +234,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-        public event EventHandler OnTileExpand;
-        public event EventHandler OnTileUnexpand;
-
+        public event EventHandler OnMainWindowShow;
         public event EventHandler OnMainWindowHide;
         #endregion
 
@@ -302,46 +285,6 @@ namespace MpWpfApp {
             }
         }
 
-        public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
-            MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-            OnPropertyChanged_old(nameof(AppModeButtonGridWidth));
-            ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
-
-            double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
-            maxDelta = Math.Min(maxDelta, SystemParameters.PrimaryScreenHeight / 2);
-            double ctvmDelta = ctvmToExpand.TotalExpandedSize.Height - ctvmToExpand.ContainerSize.Height;
-            if(ctvmToExpand.IsAnyPastingTemplate) {
-                ctvmDelta += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-            } else if(ctvmToExpand.IsAnyEditingContent) {
-                ctvmDelta += MpMeasurements.Instance.ClipTileEditToolbarHeight;
-            }
-            _deltaHeight = Math.Min(maxDelta,ctvmDelta);//MpMeasurements.Instance.MainWindowMinHeight);
-            Resize(_deltaHeight);
-            ClipTrayViewModel.Resize(ctvmToExpand,
-                                    ClipTrayWidth - MpMeasurements.Instance.ClipTileBorderMinSize - MpMeasurements.Instance.ClipTileExpandedMargin,
-                                    _deltaHeight,
-                                    ctvmToExpand.IsAnyPastingTemplate ? 0: MpMeasurements.Instance.ClipTileEditToolbarHeight);
-
-            _isExpanded = true;
-            OnTileExpand?.Invoke(ctvmToExpand, null);
-        }
-
-        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
-            Resize(-_deltaHeight);
-            ClipTrayViewModel.Resize(ctvmToShrink,
-                -(ClipTrayWidth - MpMeasurements.Instance.ClipTileBorderMinSize - MpMeasurements.Instance.ClipTileExpandedMargin),
-                -_deltaHeight,
-                ctvmToShrink.IsAnyPastingTemplate ? 0:-MpMeasurements.Instance.ClipTileEditToolbarHeight);
-
-            ClipTrayViewModel.RestoreVisibleTiles();
-
-            MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-            OnPropertyChanged_old(nameof(AppModeButtonGridWidth));
-
-            _isExpanded = false;
-            OnTileUnexpand?.Invoke(this, null);
-        }
-
         public void SetupMainWindowRect() {
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
@@ -367,7 +310,7 @@ namespace MpWpfApp {
                 _endMainWindowTop = SystemParameters.PrimaryScreenHeight - mw.Height;
             }
 
-            MainWindowGridTop = _startMainWindowTop;
+            MainWindowTop = _startMainWindowTop;
 
             OnPropertyChanged_old(nameof(MainWindowWidth));
             OnPropertyChanged_old(nameof(MainWindowHeight));
@@ -377,8 +320,7 @@ namespace MpWpfApp {
         #region Private Methods
         private void Resize(double deltaHeight) {
             var mw = (MpMainWindow)Application.Current.MainWindow;
-            MainWindowGridTop -= deltaHeight;
-            MainWindowGridHeight += deltaHeight;
+            MainWindowTop -= deltaHeight;
             mw.UpdateLayout();
         }
 
@@ -445,6 +387,9 @@ namespace MpWpfApp {
                 !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
         }
         private void ShowWindow() {
+            //Ss = MpHelpers.Instance.CopyScreen();
+            //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
+
             IsMainWindowOpening = true;
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
@@ -453,7 +398,7 @@ namespace MpWpfApp {
             if (ClipTrayViewModel.WasItemAdded) {
                 Task.Run(() => {
                     MpHelpers.Instance.RunOnMainThread(() => {
-                        ClipTrayViewModel.RefreshClips();
+                        ClipTrayViewModel.RefreshTiles();
                         ClipTrayViewModel.WasItemAdded = false;
 
                         TagTrayViewModel.RefreshAllCounts();
@@ -483,17 +428,19 @@ namespace MpWpfApp {
             timer.Interval = TimeSpan.FromMilliseconds(fps);
             
             timer.Tick += (s, e32) => {
-                if (MainWindowGridTop > _endMainWindowTop) {
-                    MainWindowGridTop += dt;
+                if (MainWindowTop > _endMainWindowTop) {
+                    MainWindowTop += dt;
                 } else {
-                    MainWindowGridTop = _endMainWindowTop;
+                    MainWindowTop = _endMainWindowTop;
                     timer.Stop();
-                    IsMainWindowOpening = false;                    
+                    IsMainWindowOpening = false;
+                    MpClipTrayViewModel.Instance.ResetClipSelection();
+
+                    OnMainWindowShow?.Invoke(this, null);
                 }
             };
 
-            //Ss = MpHelpers.Instance.CopyScreen();
-            //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
+            
             timer.Start();
         }
 
@@ -532,7 +479,9 @@ namespace MpWpfApp {
                     IsMainWindowLocked = true;
                 }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(false,true);
-            } 
+            }
+
+            OnMainWindowHide?.Invoke(this, null);
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
@@ -541,14 +490,14 @@ namespace MpWpfApp {
                 double fps = 30;
                 double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 
-                var timer = new DispatcherTimer(DispatcherPriority.Normal);
+                var timer = new DispatcherTimer(DispatcherPriority.Render);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
 
                 timer.Tick += (s, e32) => {
-                    if (MainWindowGridTop < _startMainWindowTop) {
-                        MainWindowGridTop -= dt;
+                    if (MainWindowTop < _startMainWindowTop) {
+                        MainWindowTop -= dt;
                     } else {
-                        MainWindowGridTop = _startMainWindowTop;
+                        MainWindowTop = _startMainWindowTop;
                         timer.Stop();
                         
                         mw.Visibility = Visibility.Collapsed;
@@ -563,7 +512,6 @@ namespace MpWpfApp {
                         } else {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
-                        OnMainWindowHide?.Invoke(this, null);
                     }
                 };
                 timer.Start();

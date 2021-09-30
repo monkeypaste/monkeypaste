@@ -28,8 +28,6 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
-            mwvm.OnTileExpand += Mwvm_OnTileExpand;
-            mwvm.OnTileUnexpand += Mwvm_OnTileUnexpand;
 
             var ctvm = DataContext as MpClipTileViewModel;
             ctvm.IsBusy = false;
@@ -84,20 +82,9 @@ namespace MpWpfApp {
         }
         #endregion
 
-        private void Mwvm_OnTileUnexpand(object sender, EventArgs e) {
-            if (sender == DataContext) {
-                TileDetailView.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void Mwvm_OnTileExpand(object sender, EventArgs e) {
-            if (sender == DataContext) {
-                //TileDetailView.Visibility = Visibility.Collapsed;
-            }
-        }
 
         private void Ctvm_OnSearchRequest(object sender, string e) {
-            throw new NotImplementedException();
+           
         }
     }
 }

@@ -190,10 +190,13 @@ namespace MpWpfApp {
             var civm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Space && civm.IsEditingContent) {
                 // TODO Update regex hyperlink matches (but ignore current ones??)
+                ClearHyperlinks();
+                CreateHyperlinks();
             } 
         }
 
         #region Template/Hyperlinks
+
         public List<Hyperlink> GetAllHyperlinksFromDoc() {
             if (Rtb == null) {
                 return new List<Hyperlink>();

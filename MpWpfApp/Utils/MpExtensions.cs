@@ -490,13 +490,18 @@ namespace MpWpfApp {
         }
 
         public static Orientation GetOrientation(this ListBox lb) {
-            DependencyObject dio = lb.ItemsPanel.LoadContent();
-            var vsp = dio?.GetVisualDescendent<VirtualizingStackPanel>();
+            var vsp = lb.GetVirtualItemsPanel();
             if(vsp == null) {
                 return Orientation.Horizontal;
             }
             return vsp.Orientation;
         }
+
+        public static VirtualizingStackPanel GetVirtualItemsPanel(this ListBox lb) {
+            DependencyObject dio = lb.ItemsPanel.LoadContent();
+            return dio?.GetVisualDescendent<VirtualizingStackPanel>();
+        }
+
         public static Rect GetListBoxRect(this ListBox lb) {
             if (lb == null) {
                 return new Rect();
@@ -685,6 +690,7 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
+            return;
             rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
             rtb.UpdateLayout();
@@ -785,16 +791,17 @@ namespace MpWpfApp {
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
             MpHelpers.Instance.RunOnMainThread(() => {
-                var rtbSelection = rtb.Selection;
+                //var rtbSelection = rtb.Selection;
                 var documentBytes = UTF8Encoding.Default.GetBytes(document);
                 using (var reader = new MemoryStream(documentBytes)) {
                     reader.Position = 0;
-                    rtb.SelectAll();
-                    rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                    new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
+                    //rtb.SelectAll();
+                    //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
                     //rtb.CaretPosition = rtb.Document.ContentStart;
-                    if (rtbSelection != null) {
-                        rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                    }
+                    //if (rtbSelection != null) {
+                    //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                    //}
                 }
             });            
         }

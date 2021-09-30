@@ -83,7 +83,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsEditingTemplate {
+        public bool IsAnyEditingTemplate {
             get {
                 return Templates.Any(x => x.IsEditingTemplate);
             }

@@ -55,10 +55,10 @@
                 Command="{Binding ToggleSortOrderCommand}">
             <Grid>
                 <Image Source="/Resources/Images/asc_black.png"
-                       Visibility="{Binding AscSortOrderButtonImageVisibility}"
+                       Visibility="{Binding IsSortDescending, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                        Stretch="Fill" />
                 <Image Source="/Resources/Images/desc_black.png"
-                       Visibility="{Binding DescSortOrderButtonImageVisibility}"
+                       Visibility="{Binding IsSortDescending, Converter={StaticResource BoolToVisibilityConverter}}"
                        Stretch="Fill" />
             </Grid>
         </Button>

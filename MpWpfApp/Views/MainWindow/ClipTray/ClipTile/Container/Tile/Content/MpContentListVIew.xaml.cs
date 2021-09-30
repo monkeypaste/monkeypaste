@@ -37,16 +37,15 @@ namespace MpWpfApp {
             adornerLayer.Update();
         }
 
+        public void HideToolbars() {
+            EditToolbarView.Visibility = Visibility.Collapsed;
+            EditTemplateView.Visibility = Visibility.Collapsed;
+            PasteTemplateView.Visibility = Visibility.Collapsed;
 
+        }
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
-            //RtbLbAdorner = new MpLineAdorner(ContentListBox);
-            //RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
-            //RtbLbAdornerLayer.Add(RtbLbAdorner);
-
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
-            mwvm.OnTileExpand += MpRtbEditToolbarView_OnTileExpand;
-            mwvm.OnTileUnexpand += MpRtbEditToolbarView_OnTileUnexpand;
 
 
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
@@ -63,23 +62,6 @@ namespace MpWpfApp {
                 
         #endregion
 
-        #region Toolbar Events
-
-        private void MpRtbEditToolbarView_OnTileUnexpand(object sender, EventArgs e) {
-            EditToolbarView.Visibility = Visibility.Collapsed;
-
-            var rtbcvm = DataContext as MpClipTileViewModel;
-            rtbcvm.SaveToDatabase();
-            // TODO save models here
-        }
-
-        private void MpRtbEditToolbarView_OnTileExpand(object sender, EventArgs e) {
-            EditToolbarView.Visibility = Visibility.Visible;
-            var rtbcvm = DataContext as MpClipTileViewModel;
-            rtbcvm.PrimaryItem.IsSelected = true;
-            UpdateUi();
-        }
-        #endregion
 
         #region ViewModel Events
 

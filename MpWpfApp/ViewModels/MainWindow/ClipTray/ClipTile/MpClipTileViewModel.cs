@@ -553,6 +553,9 @@ using System.Speech.Synthesis;
 
         public bool IsTextItem {
             get {
+                if(HeadItem == null) {
+                    return false;
+                }
                 return HeadItem.CopyItem.ItemType == MpCopyItemType.Csv ||
                         HeadItem.CopyItem.ItemType == MpCopyItemType.Html ||
                         HeadItem.CopyItem.ItemType == MpCopyItemType.RichText;
@@ -820,6 +823,9 @@ using System.Speech.Synthesis;
         #region Events
 
         public event EventHandler<string> OnSearchRequest;
+
+        public event EventHandler OnExpandRequest;
+        public event EventHandler OnUnExpandRequest;
         #endregion
 
         #region Public Methods
@@ -841,6 +847,13 @@ using System.Speech.Synthesis;
             OnSearchRequest?.Invoke(this, st);
         }
 
+        public void RequestExpand() {
+            OnExpandRequest?.Invoke(this, null);
+        }
+
+        public void RequestUnexpand() {
+            OnUnExpandRequest?.Invoke(this, null);
+        }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {

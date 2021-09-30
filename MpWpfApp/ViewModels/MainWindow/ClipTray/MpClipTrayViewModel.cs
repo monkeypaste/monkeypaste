@@ -153,14 +153,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Controls
-        // public Grid ClipTrayContainerGrid;
-
-        //public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
-
-        //public AdornerLayer ClipTrayAdornerLayer;
-        #endregion
-
         #region Layout
         public Point DropTopPoint { get; set; }
         public Point DropBottomPoint { get; set; }
@@ -193,19 +185,10 @@ namespace MpWpfApp {
 
         public bool IgnoreSelectionReset { get; set; } = false;
 
-        private int _tagId = 2;
-        public int TagId {
-            get {
-                return _tagId;
-            }
-            set {
-                if (_tagId != value) {
-                    _tagId = value;
-                    OnPropertyChanged_old(nameof(TagId));
-                }
-            }
-        }
+        public int TagId { get; set; } = MpTag.RecentTagId;
+
         public bool IsPastingHotKey { get; set; } = false;
+
         public bool IsPastingSelected { get; set; } = false;
 
         public bool IsAnyContextMenuOpened {
@@ -213,7 +196,6 @@ namespace MpWpfApp {
                 return ClipTileViewModels.Any(x => x.IsAnyContextMenuOpened);
             }
         }
-
         
 
         public bool IsTrayDropping { get; set; } = false;
@@ -411,8 +393,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-
-
         public void UpdateSortOrder(bool fromModel = false) {            
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
@@ -466,15 +446,24 @@ namespace MpWpfApp {
                 
             }
         }
-        public void RefreshClips(bool isDescending = true, string sortColumn = "default", int start = 0, int count = 0) {
+
+        public void RefreshSelectedTiles() {
+            SelectedItems.ForEach(x => x.RefreshTile());
+        }
+
+        public void RefreshTiles(int start = 0, int count = 0) {
             Task.Run(async () => {
-                while(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
-                    await Task.Delay(100);
-                }
+                //while(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
+                //    await Task.Delay(100);
+                //}
                 int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
+                string sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortPath;
+                bool isDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
+
                 if (count == 0) {
                     count = MpMeasurements.Instance.TotalVisibleClipTiles;
                 }
+
                 IsBusy = true;
                 var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending);
 
@@ -494,9 +483,11 @@ namespace MpWpfApp {
                     ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_vml);
                     _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
-                    if (!MpMainWindowViewModel.IsMainWindowLoading) {
-                        ResetClipSelection();
-                    }
+                    //if (!MpMainWindowViewModel.IsMainWindowLoading) {
+                    //    ResetClipSelection();
+                    //} else {
+
+                    //}
                 });
                 IsBusy = false;
             });
@@ -604,12 +595,6 @@ namespace MpWpfApp {
                 ctvm.ClearEditing();
             }
             
-            if(wasExpanded) {
-                MpHelpers.Instance.RunOnMainThread((Action)delegate {
-                    MainWindowViewModel.OnPropertyChanged_old(nameof(MainWindowViewModel.AppModeButtonGridWidth));
-                    MpAppModeViewModel.Instance.OnPropertyChanged_old(nameof(MpAppModeViewModel.Instance.AppModeColumnVisibility));
-                });
-            }
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
@@ -779,7 +764,9 @@ namespace MpWpfApp {
             var ctvm = sender as MpClipTileViewModel;
             switch(e.PropertyName) {
                 case nameof(ctvm.IsSelected):
-                    if(ctvm.IsSelected && !MpHelpers.Instance.IsMultiSelectKeyDown() && !IgnoreSelectionReset) {
+                    if(ctvm.IsSelected && 
+                       !MpHelpers.Instance.IsMultiSelectKeyDown() &&
+                       !IgnoreSelectionReset) {
                         //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
                         foreach(var octvm in ClipTileViewModels) {
                             if(octvm != ctvm) {
@@ -810,7 +797,7 @@ namespace MpWpfApp {
 
 
                 MpHelpers.Instance.RunOnMainThread(() => {
-                    RefreshClips();
+                    RefreshTiles();
                 });
             }
         }
@@ -1796,7 +1783,7 @@ namespace MpWpfApp {
                     //var ctvm = new MpClipTileViewModel(clonedCopyItem);
                     //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                     //this.Add(ctvm);
-                    RefreshClips();
+                    RefreshTiles();
                     var ctvm = GetContentItemViewModelById(clonedCopyItem.Id);
                     ctvm.IsSelected = true;
                 }

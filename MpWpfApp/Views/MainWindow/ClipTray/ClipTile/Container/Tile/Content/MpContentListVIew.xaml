@@ -25,10 +25,11 @@
                                         DataContext="{Binding PrimaryItem}" />
             <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              DockPanel.Dock="Bottom"
-                                             Visibility="{Binding IsEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                             Visibility="{Binding IsAnyEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                              DataContext="{Binding PrimaryItem.TemplateCollection}" />
             <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
+                                              Visibility="{Binding IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                               DataContext="{Binding PrimaryItem.TemplateCollection}" />
             <local:MpMultiSelectListBox x:Name="ContentListBox"
                                         Loaded="ContentListBox_Loaded"

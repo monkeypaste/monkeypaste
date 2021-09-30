@@ -16,6 +16,12 @@ namespace MpWpfApp {
         public double ScreenHeight { get; private set; } = SystemParameters.PrimaryScreenHeight;
 
         public double TaskBarHeight { get; private set; } = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
+        
+        public double WorkAreaBottom { 
+            get {
+                return ScreenHeight - TaskBarHeight;
+            } 
+        }
         #endregion
 
         #region General
@@ -134,7 +140,7 @@ namespace MpWpfApp {
 
         public double ClipTileMargin {
             get {
-                return ClipTrayMinHeight / 50;
+                return ClipTrayMinHeight / 55;
             }
         }
 

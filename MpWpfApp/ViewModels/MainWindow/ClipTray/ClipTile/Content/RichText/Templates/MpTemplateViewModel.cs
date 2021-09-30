@@ -364,7 +364,7 @@ namespace MpWpfApp {
                         } else {
                             IsEditingTemplate = false;
                             Parent.Parent.Parent.OnPropertyChanged_old(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                            Parent.OnPropertyChanged_old(nameof(Parent.IsEditingTemplate));
+                            Parent.OnPropertyChanged_old(nameof(Parent.IsAnyEditingTemplate));
                         }
                         break;
                     case nameof(TemplateName):
@@ -377,7 +377,7 @@ namespace MpWpfApp {
                         break;
                     case nameof(IsEditingTemplate):
                         Parent.Parent.Parent.OnPropertyChanged_old(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                        Parent.OnPropertyChanged_old(nameof(Parent.IsEditingTemplate));
+                        Parent.OnPropertyChanged_old(nameof(Parent.IsAnyEditingTemplate));
                         break;
                 }
             };
@@ -422,6 +422,7 @@ namespace MpWpfApp {
 
                         IsSelected = true;
                         IsEditingTemplate = true;
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     },
                     () => {
                         if (HostClipTileViewModel == null) {

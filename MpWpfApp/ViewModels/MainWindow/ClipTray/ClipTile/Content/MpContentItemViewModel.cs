@@ -79,7 +79,7 @@ namespace MpWpfApp {
                             string.Empty,
                             null,
                             tagTile.ShortcutKeyString,
-                            tagTile.Color));
+                            tagTile.TagColor));
                 }
                 return tmil;
             }
@@ -140,17 +140,20 @@ namespace MpWpfApp {
                     return Brushes.White;
                 }
                 if (IsHovering && 
+                    !IsSelected &&
                     Parent.Count > 1) {
-                    return Brushes.LightGray;
+                    return new SolidColorBrush(
+                            CopyItem.ItemColor.ToWinMediaColor());
                 }
                 if(IsSelected && 
                     Parent.IsHovering &&
                     Parent.Count > 1) {                    
                     return MpHelpers.Instance.GetLighterBrush(
                         new SolidColorBrush(
-                            RelativePalleteColor.ToWinMediaColor())
+                            CopyItem.ItemColor.ToWinMediaColor())
                         );
                 }
+
                 return Brushes.White;
 
             }
@@ -238,7 +241,7 @@ namespace MpWpfApp {
         public Thickness ContentPadding {
             get {
                 double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
-                if (IsHovering) {
+                if (IsHovering && Parent.Count > 1) {
                     double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
                     return new Thickness(dp + dbw, dp, dp, dp);
                 }
@@ -330,7 +333,7 @@ namespace MpWpfApp {
         public IDataObject DragDataObject { get; set; }
 
 
-        public bool IsItemDraggable {
+        public bool IsDragButtonVisible {
             get {
                 if (Parent == null) {
                     return false;
@@ -340,7 +343,7 @@ namespace MpWpfApp {
                         return false;
                     }
                 }
-                return IsHovering;
+                return IsHovering && Parent.Count > 1;
             }
         }
         #endregion
@@ -648,7 +651,7 @@ namespace MpWpfApp {
             TemplateCollection.ClearAllEditing();
             if (IsPastingTemplate) {
                 IsPastingTemplate = false;
-                MainWindowViewModel.ShrinkClipTile(Parent);
+                Parent.RequestUnexpand();
             }
         }
 
@@ -720,10 +723,10 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsEditingContent):
                     if (IsEditingContent) {
-                        MainWindowViewModel.ExpandClipTile(Parent);
+                        Parent.RequestExpand();
                     } else {
-                        Parent.SaveToDatabase();
-                        MainWindowViewModel.ShrinkClipTile(Parent);
+                        Parent.RequestUnexpand();
+                        RequestSyncModels();
                     }
                     break;
                 case nameof(CopyItem):

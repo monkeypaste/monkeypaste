@@ -34,37 +34,31 @@
         <SolidColorBrush Opacity="0.0"
                          Color="White" />GetDataObjectFromSelectedClips
     </Window.Background>-->
-    <Window.Resources>        
+    <Window.Resources>
     </Window.Resources>
-    <Canvas x:Name="MainWindowCanvas"        
+    <Canvas x:Name="MainWindowCanvas"  
             AllowDrop="True"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">
         <!--<Image Source="{Binding Ss}" 
-                Height="{local:MpMeasurementsBinding ScreenHeight}"
-            Width="{Binding MainWindowWidth}"
-                Stretch="Fill"/>
-        <Border Background="#FF545454" 
-                BorderBrush="#FF000000" 
-                BorderThickness="1,1,1,1" 
-                CornerRadius="8,8,8,8">
-            <i:Interaction.Behaviors>
-                <local:MpGlassBehavior Visual="{Binding ElementName=MainWindowCanvas, Mode=OneWay}">
-                    <local:MpGlassBehavior.Effect>
-                        <BlurEffect/>
-                        --><!--<ShaderEffectLibrary:PixelateEffect HorizontalPixelCounts="40" VerticalPixelCounts="40"/>--><!--
-                    </local:MpGlassBehavior.Effect>
-                </local:MpGlassBehavior>
-            </i:Interaction.Behaviors>
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="1"/>
-            </Border.Effect>
-        </Border>-->
+               PreviewMouseUp="Image_PreviewMouseUp"
+               Height="{local:MpMeasurementsBinding ScreenHeight}"
+               Width="{Binding ScreenWidth}"
+               Canvas.Top="0"
+               Canvas.Bottom="{local:MpMeasurementsBinding ScreenHeight}"
+               Canvas.Left="0"
+               Canvas.Right="{local:MpMeasurementsBinding ScreenWidth}"
+               Stretch="Fill"
+               ClipToBounds="True">
+            <Image.Effect>
+                <BlurEffect KernelType="Gaussian"  Radius="15" RenderingBias="Performance"/>
+            </Image.Effect>
+        </Image>-->
         <Grid x:Name="MainWindowGrid"
-              Canvas.Top="{Binding MainWindowGridTop}" 
+              Canvas.Top="{Binding MainWindowTop}" 
+              Canvas.Bottom="{Binding MainWindowBottom}"
               Canvas.Left="0"
-              Height="{Binding MainWindowGridHeight}"
               Width="{Binding MainWindowWidth}"
               Background="Green">
             <Grid.RowDefinitions>
@@ -72,10 +66,10 @@
                 <RowDefinition Height="{Binding FilterMenuHeight}" />
                 <RowDefinition Height="{Binding ClipTrayHeight}" />
             </Grid.RowDefinitions>
-            
+
             <!-- System Tray -->
             <local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />
-            
+
             <!-- Main Menu -->
             <StackPanel Grid.Row="0"
                         Grid.Column="0"
@@ -128,19 +122,19 @@
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
                                       DataContext="{Binding ClipTileSortViewModel}" />
-               
+
                 <!-- Tag Tray -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2" 
                                      DataContext="{Binding TagTrayViewModel}"/>
-                
+
                 <!-- Search -->
                 <local:MpItemSearchView x:Name="SearchView"
                                         Grid.Column="3"
                                         DataContext="{Binding SearchBoxViewModel}" />
-               
+
             </Grid>
-            
+
             <!--3rd row row for tray -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
@@ -153,9 +147,9 @@
                 <!-- Side bar AppState Buttons -->
                 <local:MpAppModeButtonGridView Grid.Row="0"
                                                Grid.Column="0"
-                                               Visibility="{Binding AppModeColumnVisibility, Source={StaticResource AppModeViewModel}}"
+                                               Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />
-                
+
                 <local:MpClipTrayView x:Name="ClipTrayView"
                                       DataContext="{Binding ClipTrayViewModel}"
                                       Grid.Row="0"
@@ -184,8 +178,8 @@
                     </Viewbox>
                 </Grid>
             </Grid>
-            
-            
+
+
         </Grid>
     </Canvas>
 </Window>

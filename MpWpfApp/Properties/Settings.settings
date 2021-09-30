@@ -374,7 +374,7 @@
       <Value Profile="(Default)">MonkeyPaste</Value>
     </Setting>
     <Setting Name="ThisAppDip" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="StartupDateTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />

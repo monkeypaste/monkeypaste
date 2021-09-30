@@ -32,7 +32,8 @@
                                         Margin="0,0,0,0"
                                         Focusable="True"
                                         BorderThickness="0"
-                                        VerticalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center"
                                         Background="Transparent"
                                         SelectionMode="Extended"
                                         VirtualizingPanel.IsVirtualizing="True"
@@ -85,7 +86,7 @@
                                                 IsItemsHost="True"
                                                 CanVerticallyScroll="False"
                                                 CanHorizontallyScroll="True"
-                                                VerticalAlignment="Top"
+                                                VerticalAlignment="Center"
                                                 HorizontalAlignment="Left"
                                                 Orientation="Horizontal" />
                     </ItemsPanelTemplate>

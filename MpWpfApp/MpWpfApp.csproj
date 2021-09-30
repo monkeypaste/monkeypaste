@@ -111,13 +111,13 @@
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
-    <Compile Include="Behaviors\DragDrop\Base\MpDragBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpClipTileDragBehavior.cs" />
-    <Compile Include="Behaviors\DragDrop\Base\MpDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
+    <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDragRectListAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />

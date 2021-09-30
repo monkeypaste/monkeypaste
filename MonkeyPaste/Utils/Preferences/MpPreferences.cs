@@ -837,7 +837,7 @@ namespace MonkeyPaste {
 
         public double ThisAppDip {
             get {
-                return _prefIo.Get(nameof(ThisAppDip), 0);
+                return _prefIo.Get(nameof(ThisAppDip), (double)1);
             }
             set {
                 _prefIo.Set(nameof(ThisAppDip), value);

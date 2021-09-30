@@ -34,7 +34,7 @@
                                          DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="{Binding IsItemDraggable, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Visibility="{Binding IsDragButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Background="Transparent"

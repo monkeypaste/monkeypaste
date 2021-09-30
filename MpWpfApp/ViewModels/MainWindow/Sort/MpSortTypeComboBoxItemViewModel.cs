@@ -1,31 +1,24 @@
 ﻿using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSortTypeComboBoxItemViewModel : MpViewModelBase<object> {
+    public class MpSortTypeComboBoxItemViewModel : MpViewModelBase<MpClipTileSortViewModel> {
         #region Properties
-        private string _header;
-        public string Header {
-            get {
-                return _header;
-            }
-            set {
-                if (_header != value) {
-                    _header = value;
-                    OnPropertyChanged_old(nameof(Header));
-                }
-            }
-        }
+        public string Header { get; set; }
+
+        public string SortPath { get; set; }
 
         public bool IsVisible { get; set; } = true;
         #endregion
 
         #region Public Methods
-        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) : base(null) {
+        public MpSortTypeComboBoxItemViewModel(
+            MpClipTileSortViewModel parent, 
+            string header, 
+            string sortPath,
+            bool isVisible = true) : base(parent) {
             Header = header;
-            Command = command;
-            if(Header == "Manual") {
-                IsVisible = false;
-            }
+            SortPath = sortPath;
+            IsVisible = isVisible;
         }
         public override string ToString() {
             return Header;
@@ -33,19 +26,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
-        private ICommand _command;
-        public ICommand Command {
-            get {
-                return _command;
-            }
-            set {
-                if (_command != value) {
-                    _command = value;
-                    OnPropertyChanged_old(nameof(Command));
-                }
-            }
-        }
         #endregion
 
     }

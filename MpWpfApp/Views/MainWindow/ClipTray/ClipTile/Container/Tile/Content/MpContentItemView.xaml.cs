@@ -26,8 +26,6 @@ namespace MpWpfApp {
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
-            mwvm.OnTileExpand += MainWindowViewModel_OnTileExpand;
-            mwvm.OnTileUnexpand += MainWindowViewModel_OnTileUnexpand;
 
             var civm = DataContext as MpContentItemViewModel;
             var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItem.Id).ToList();
@@ -36,20 +34,6 @@ namespace MpWpfApp {
             } else {
                 civm.ShortcutKeyString = string.Empty;
             }
-
-            
-
-            
-        }
-
-        
-
-        private void MainWindowViewModel_OnTileUnexpand(object sender, EventArgs e) {
-            EditorView.Rtb.FitDocToRtb();
-        }
-
-        private void MainWindowViewModel_OnTileExpand(object sender, EventArgs e) {
-            EditorView.Rtb.FitRtbToDoc();
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {

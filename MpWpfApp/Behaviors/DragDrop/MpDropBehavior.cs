@@ -181,20 +181,20 @@ namespace MpWpfApp {
                 ci.CompositeSortOrderIdx = i;
                 ci.WriteToDatabase();
             }
-                        
+
 
             //clear selection ensure its not reset after refresh 
             MpClipTrayViewModel.Instance.ClearClipSelection();
             MpClipTrayViewModel.Instance.IgnoreSelectionReset = true;
 
             //recreate tiles with new structure
-            MpClipTrayViewModel.Instance.RefreshClips();
+            MpClipTrayViewModel.Instance.RefreshTiles();
 
             //find new or moved dropped tile
             MpClipTileViewModel dropTile = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dropParentId).Parent;
             int dropTileIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dropTile);
 
-            if(curTagVm.IsSudoTag) {
+            if (curTagVm.IsSudoTag) {
                 MpClipTileSortViewModel.Instance.SetToManualSort();
             }
             MpClipTrayViewModel.Instance.ClipTileViewModels.Move(dropTileIdx, dropIdx);
@@ -219,9 +219,6 @@ namespace MpWpfApp {
             //for sudo tag drops refreshclips will change the sort order
             //so move the drop tile back where user wanted it
             MpClipTrayViewModel.Instance.IgnoreSelectionReset = false;
-
-
-
 
             Reset();
         }
