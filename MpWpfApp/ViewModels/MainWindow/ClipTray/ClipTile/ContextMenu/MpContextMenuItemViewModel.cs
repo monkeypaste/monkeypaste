@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpContextMenuItemViewModel : MpViewModelBase<object> {
+    public class MpContextMenuItemViewModel : MpViewModelBase<MpContextMenuViewModel> {
         #region Properties
         private bool _isSeparator = false;
         public bool IsSeparator {
@@ -156,11 +156,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpContextMenuItemViewModel() : base(null) {
+        public MpContextMenuItemViewModel() : base(null) { }
+
+        public MpContextMenuItemViewModel(MpContextMenuViewModel parent) : base(parent)  {
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(IconSource):
-                        if(!string.IsNullOrEmpty(IconSource)) {
+                        if (!string.IsNullOrEmpty(IconSource)) {
                             var icon = new Image();
                             icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
                             Icon = icon;
@@ -171,7 +173,7 @@ namespace MpWpfApp {
                             var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
                             bgBmp = MpHelpers.Instance.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
                             var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                            if(!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                            if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
                                 borderBmp = MpHelpers.Instance.TintBitmapSource(borderBmp, Colors.White, false);
                             }
                             var icon = new Image();
@@ -182,7 +184,7 @@ namespace MpWpfApp {
                                     checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
                                 }
                                 icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
-                            } 
+                            }
                             Icon = icon;
                         }
                         break;
@@ -192,6 +194,7 @@ namespace MpWpfApp {
         }
 
         public MpContextMenuItemViewModel(
+            MpContextMenuViewModel parent,
             string header, 
             ICommand command,
             object commandParameter,

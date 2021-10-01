@@ -29,6 +29,7 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Collections
+
         public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             cv.Refresh();
             MpConsole.WriteTraceLine("Collection refreshed",null,callerName,callerFilePath,lineNum);
@@ -690,17 +691,20 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            return;
             rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
             rtb.UpdateLayout();
         }
 
         public static void FitRtbToDoc(this RichTextBox rtb) {
-            var ds = rtb.Document.GetDocumentSize();
+            var civm = rtb.DataContext as MpContentItemViewModel;
+            var ds = civm.CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
             rtb.Width = ds.Width + rtb.Margin.Left + rtb.Margin.Right + rtb.Padding.Left + rtb.Padding.Right;
             rtb.Height = ds.Height + rtb.Margin.Top + rtb.Margin.Bottom + rtb.Padding.Top + rtb.Padding.Bottom;
+
             rtb.UpdateLayout();
+
+            rtb.FitDocToRtb();
         }
 
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
@@ -790,20 +794,33 @@ namespace MpWpfApp {
         }
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
-            MpHelpers.Instance.RunOnMainThread(() => {
-                //var rtbSelection = rtb.Selection;
-                var documentBytes = UTF8Encoding.Default.GetBytes(document);
-                using (var reader = new MemoryStream(documentBytes)) {
-                    reader.Position = 0;
-                    new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
-                    //rtb.SelectAll();
-                    //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
-                    //rtb.CaretPosition = rtb.Document.ContentStart;
-                    //if (rtbSelection != null) {
-                    //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                    //}
-                }
-            });            
+            //var rtbSelection = rtb.Selection;
+            var documentBytes = UTF8Encoding.Default.GetBytes(document);
+            using (var reader = new MemoryStream(documentBytes)) {
+                reader.Position = 0;
+                new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
+                //rtb.SelectAll();
+                //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                //rtb.CaretPosition = rtb.Document.ContentStart;
+                //if (rtbSelection != null) {
+                //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                //}
+            }
+        }
+
+        public static void SetRtf(this FlowDocument fd, string document) {
+            //var rtbSelection = rtb.Selection;
+            var documentBytes = UTF8Encoding.Default.GetBytes(document);
+            using (var reader = new MemoryStream(documentBytes)) {
+                reader.Position = 0;
+                new TextRange(fd.ContentStart, fd.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
+                //rtb.SelectAll();
+                //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                //rtb.CaretPosition = rtb.Document.ContentStart;
+                //if (rtbSelection != null) {
+                //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                //}
+            }
         }
 
         public static string GetRtf(this RichTextBox rtb) {
@@ -1166,6 +1183,11 @@ namespace MpWpfApp {
                 closeMethod.Invoke(mailWriter, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { }, null);
             }
         }
+        #endregion
+
+        #region Reflection
+
+
         #endregion
     }
 }

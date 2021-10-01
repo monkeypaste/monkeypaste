@@ -24,7 +24,6 @@
                                         Loaded="ClipTray_Loaded" 
                                         DataContextChanged="ClipTray_DataContextChanged"
                                         SelectionChanged="ClipTray_SelectionChanged"
-                                        MouseLeftButtonDown="ClipTray_MouseLeftButtonDown"
                                         IsListBoxHorizontal="True"
                                         AllowDrop="True"
                                         ScrollToSelectedItem="False"
@@ -93,8 +92,10 @@
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
+                        <!--<local:MpClipTileContainerView Visibility="{Binding ItemVisibility}" 
+                                                       DataContext="{Binding}" />-->
                             <local:MpClipTileView Visibility="{Binding ItemVisibility}" 
-                                                           DataContext="{Binding}" />
+                                                  DataContext="{Binding}" />
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>

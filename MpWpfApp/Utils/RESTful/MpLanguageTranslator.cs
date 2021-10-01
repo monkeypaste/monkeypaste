@@ -26,7 +26,7 @@ namespace MpWpfApp {
         // An array of language codes
         private string[] languageCodes;
 
-        private bool isLoaded = false;
+        public bool IsLoaded { get; private set; } = false;
 
         // Dictionary to map language codes from friendly name (sorted case-insensitively on language name)
         private SortedDictionary<string, string> languageCodesAndTitles =
@@ -35,13 +35,15 @@ namespace MpWpfApp {
         public List<string> LanguageList { get; private set; } = new List<string>();
 
         public MpLanguageTranslator() : base("Language Translation") {
-            Init();
         }
         
-        private void Init() {
+        public void Init() {
             try {
-                // at least show an error dialog if there's an unexpected error
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
+
+                if (!MpHelpers.Instance.IsConnectedToNetwork()) {
+                    MonkeyPaste.MpConsole.WriteLine("Client offline. Language Translation is inactive");
+                    return;
+                }
 
                 if (COGNITIVE_SERVICES_KEY.Length != 32) {
                     MessageBox.Show("One or more invalid API subscription keys.\n\n" +
@@ -56,25 +58,18 @@ namespace MpWpfApp {
                         LanguageList.Add(menuItem);
                     }
                 }
-                isLoaded = true;
+                IsLoaded = true;
             }
             catch (Exception ex) {
                 MonkeyPaste.MpConsole.WriteLine("Error trying to connect to internet: " + ex.ToString());
             }
         }
 
-        // Global exception handler to display error message and exit
-        private static void HandleExceptions(object sender, UnhandledExceptionEventArgs args) {
-            Exception e = (Exception)args.ExceptionObject;
-            MessageBox.Show("Caught " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            System.Windows.Application.Current.Shutdown();
-        }
-
         // ***** DETECT LANGUAGE OF TEXT TO BE TRANSLATED
         public string DetectLanguage(string text) {
-            if(!isLoaded) {
+            if(!IsLoaded) {
                 Init();
-                if(!isLoaded) {
+                if(!IsLoaded) {
                     return "Translator not loaded";
                 }                
             }
@@ -117,9 +112,9 @@ namespace MpWpfApp {
         }
 
         public async Task<string> Translate(string textToTranslate, string toLanguage, bool doSpellCheck) {
-            if (!isLoaded) {
+            if (!IsLoaded) {
                 Init();
-                if (!isLoaded) {
+                if (!IsLoaded) {
                     return "Translator not loaded";
                 }
             }
@@ -237,10 +232,6 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
-            if(!MpHelpers.Instance.IsConnectedToNetwork()) {
-                MonkeyPaste.MpConsole.WriteLine("Client offline. Language Translation is inactive");
-                return;
-            }
             // Send a request to get supported language codes
             string uri = String.Format(TEXT_TRANSLATION_API_ENDPOINT, "languages") + "&scope=translation";
             WebRequest WebRequest = WebRequest.Create(uri);

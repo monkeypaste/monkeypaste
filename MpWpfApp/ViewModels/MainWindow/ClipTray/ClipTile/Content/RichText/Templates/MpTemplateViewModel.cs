@@ -497,9 +497,7 @@ namespace MpWpfApp {
                             colorMenuItem,
                             (s1, e1) => {
                                 TemplateBrush = (Brush)((Border)s1).Tag;
-                            },
-                            MpHelpers.Instance.GetColorColumn(TemplateBrush),
-                            MpHelpers.Instance.GetColorRow(TemplateBrush)
+                            }
                         );
                         templateColorButton.ContextMenu = colorContextMenu;
                         colorContextMenu.PlacementTarget = templateColorButton;

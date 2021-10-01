@@ -39,7 +39,7 @@ namespace MpWpfApp {
                 ctrvm.InitIntroItems();
             }
 
-            ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
+           // ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
 
             //ClipTray.PreviewMouseLeftButtonDown += (s, e2) => { ShiftLeft(); e2.Handled = true; };
 
@@ -131,17 +131,6 @@ namespace MpWpfApp {
             MpAppModeViewModel.Instance.RefreshState();
         }
 
-        private void ClipTray_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            if (!ctrvm.IsAnyTileExpanded) {
-                return;
-            }
-            var selectedClipTilesHoveringOnMouseDown = ctrvm.SelectedItems.Where(x => x.IsHovering).ToList();
-            if (selectedClipTilesHoveringOnMouseDown.Count == 0 &&
-               !MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
-                ctrvm.ClearClipEditing();
-            }
-        }
         #endregion
 
         #region View Model Requests (should be able to refactor these away

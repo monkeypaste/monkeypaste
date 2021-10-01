@@ -140,11 +140,15 @@ namespace MpWpfApp {
         private string ApiKey { get; }
 
         private MpCurrencyConverter() : base("Currency Conversion") {
+
+            ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
+        }
+
+        public void Init() {
             try {
                 if (!MpHelpers.Instance.IsConnectedToNetwork()) {
                     return;
                 }
-                ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
                 CurrencyList = GetAllCurrencies();
 
                 CurrencyList = CurrencyList.OrderBy(x => x.CurrencyName).ToList();
@@ -158,13 +162,9 @@ namespace MpWpfApp {
                 }
                 CurrencySymbols = CurrencySymbols.Substring(0, CurrencySymbols.Length - 2);
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 MonkeyPaste.MpConsole.WriteLine("Currency Converter error: " + ex);
             }
-        }
-
-        public void Init() {
-            //empty to populate data in private constructor
         }
 
         public double Convert(double amount, CurrencyType from, CurrencyType to) {

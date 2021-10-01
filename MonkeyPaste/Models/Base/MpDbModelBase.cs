@@ -53,7 +53,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+        public virtual void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (string.IsNullOrEmpty(sourceClientGuid)) {
                 sourceClientGuid = MpPreferences.Instance.ThisDeviceGuid;
             }
@@ -66,8 +66,8 @@ namespace MonkeyPaste {
             var addOrUpdateByDboTypeMethod = addOrUpdateMethod.MakeGenericMethod(new[] { dbot });
             addOrUpdateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
         }
-
-        public void WriteToDatabase() {
+        
+        public virtual void WriteToDatabase() {
             if (IsSyncing) {
                 WriteToDatabase(SyncingWithDeviceGuid, false, true);
             } else {
@@ -75,19 +75,33 @@ namespace MonkeyPaste {
             }
         }
 
-        public void WriteToDatabase(bool isFirstLoad) {
-            WriteToDatabase(MpPreferences.Instance.ThisDeviceGuid, isFirstLoad);
+        public virtual async Task WriteToDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (string.IsNullOrEmpty(sourceClientGuid)) {
+                sourceClientGuid = MpPreferences.Instance.ThisDeviceGuid;
+            }
+            if (string.IsNullOrEmpty(Guid)) {
+                Guid = System.Guid.NewGuid().ToString();
+            }
+
+            var dbot = GetType();
+            var addOrUpdateAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.AddOrUpdateAsync));
+            var addOrUpdateByDboTypeAsyncMethod = addOrUpdateAsyncMethod.MakeGenericMethod(new[] { dbot });
+            await addOrUpdateByDboTypeAsyncMethod.InvokeAsync(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
         }
 
-        public void DeleteFromDatabase() {
+        public virtual async Task WriteToDatabaseAsync() {
             if (IsSyncing) {
-                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+                await WriteToDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                DeleteFromDatabase(MpPreferences.Instance.ThisDeviceGuid);
+                await WriteToDatabaseAsync(MpPreferences.Instance.ThisDeviceGuid);
             }
         }
 
-        public void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+        //public void WriteToDatabase(bool isFirstLoad) {
+        //    WriteToDatabase(MpPreferences.Instance.ThisDeviceGuid, isFirstLoad);
+        //}
+
+        public virtual void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (Id <= 0) {
                 return;
             }
@@ -97,6 +111,35 @@ namespace MonkeyPaste {
             var deleteItemByDboTypeMethod = deleteItemMethod.MakeGenericMethod(new[] { dbot });
             deleteItemByDboTypeMethod.Invoke(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
         }
+
+        public virtual void DeleteFromDatabase() {
+            if (IsSyncing) {
+                DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
+            } else {
+                DeleteFromDatabase(MpPreferences.Instance.ThisDeviceGuid);
+            }
+        }
+
+        public virtual async Task DeleteFromDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (Id <= 0) {
+                return;
+            }
+
+            var dbot = GetType();
+            var deleteItemAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.Instance.DeleteItemAsync));
+            var deleteItemByDboTypeAsyncMethod = deleteItemAsyncMethod.MakeGenericMethod(new[] { dbot });
+            await deleteItemByDboTypeAsyncMethod.InvokeAsync(MpDb.Instance, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
+        }
+
+        public virtual async Task DeleteFromDatabaseAsync() {
+            if (IsSyncing) {
+                await DeleteFromDatabaseAsync(SyncingWithDeviceGuid, false, true);
+            } else {
+                await DeleteFromDatabaseAsync(MpPreferences.Instance.ThisDeviceGuid);
+            }
+        }
+
+
         #endregion
 
 

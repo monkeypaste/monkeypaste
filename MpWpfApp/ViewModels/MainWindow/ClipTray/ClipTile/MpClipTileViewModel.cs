@@ -402,11 +402,11 @@ using System.Speech.Synthesis;
                 if (IsExpanded) {
                     if (IsAnyEditingTemplate ||
                         IsAnyPastingTemplate) {
-                        return Visibility.Collapsed;
+                        return Visibility.Hidden;
                     }
                 } else {
                     if (!IsSelected && !IsHovering) {
-                        return Visibility.Collapsed;
+                        return Visibility.Hidden;
                     }
                 }
                 return Visibility.Visible;
@@ -829,11 +829,40 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : base(null) { }
+        public MpClipTileViewModel() : base(null) {
+            IsBusy = true;
+        }
 
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            Task.Run(() => Initialize(ci));
+            Task.Run(()=>Initialize(ci));
+        }
+
+        public void Initialize(MpCopyItem headItem) {
+            MpHelpers.Instance.RunOnMainThread(() => {
+                IsBusy = true;
+                var ccil = MpCopyItem.GetCompositeChildren(headItem);
+                ccil.Insert(0, headItem);
+
+                var civml = new List<MpContentItemViewModel>();
+                foreach (var cci in ccil) {
+                    civml.Add(new MpContentItemViewModel(this, cci));
+                }
+
+                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
+                    civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
+
+                foreach (var ivm in ItemViewModels) {
+                    BindItemEvents(ivm);
+                }
+
+                ResetSubSelection();
+
+                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+
+                OnViewModelLoaded();
+                IsBusy = false;
+            });
         }
 
         public void RefreshTile() {
@@ -1009,86 +1038,6 @@ using System.Speech.Synthesis;
             return fullDocument;
         }
 
-        public void MergeCopyItemList(
-            List<MpCopyItem> ocil,
-            int forceIdx = -1) {
-            InsertRange(forceIdx, ocil);
-            //IsBusy = true;
-            //foreach (var oci in ocil) {
-            //    if(oci == null) {
-            //        continue;
-            //    }
-            //    //if (oci.Id == CopyItemId) {
-            //    //    return;
-            //    //}
-            //    var ovm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(oci.Id);
-            //    if(ovm == null) {
-            //        //MonkeyPaste.MpConsole.WriteLine(@"ClipTIle.Merge error cannot find copy item w/ id: " + oci.CopyItemId+ " so ignoring" );
-            //        //continue;
-            //        ovm = new MpClipTileViewModel(oci);
-            //    }
-            //    if (ovm is MpClipTileViewModel octvm) {
-            //        //if copyitem is an existing tile remove it
-            //        MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(octvm);
-            //        octvm.IsClipDragging = false;
-            //        //if(CopyItemType == MpCopyItemType.RichText) {
-            //        //    CopyItem = MpCopyItem.Merge(oci, CopyItem, false, false, forceIdx);
-            //        //}
-            //        var ortbvm = octvm.ContentContainerViewModel.ItemViewModels[0];
-            //        octvm.ContentContainerViewModel.ItemViewModels.Remove(ortbvm, true);
-            //        ContentContainerViewModel.Add(ortbvm,forceIdx, true);
-            //    } else if(ovm is MpContentItemViewModel ortbvm) {
-            //        if (ortbvm.HostClipTileViewModel == this && forceIdx >= 0) {
-            //            //occurs when rtbvmc items are resorted
-            //            forceIdx = Math.Min(ContentContainerViewModel.Count - 1, forceIdx);
-            //            ContentContainerViewModel.Move(ContentContainerViewModel.IndexOf(ortbvm), forceIdx);
-            //            ContentContainerViewModel.UpdateSortOrder();
-            //            continue;
-            //        } else {
-            //            //if copyitem is part of composite remove it 
-            //            ortbvm.ContentContainerViewModel.Remove(ortbvm, true);
-            //            ContentContainerViewModel.Add(ortbvm, forceIdx, true);
-            //        }
-            //    }
-
-            //    //CopyItem = MpCopyItem.Merge(oci, CopyItem, false, false, forceIdx);
-            //}
-            //var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
-            //if (scvml.Count > 0) {
-            //    ShortcutKeyString = scvml[0].KeyString;
-            //} else {
-            //    ShortcutKeyString = string.Empty;
-            //}
-
-            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
-
-            //RichTextBoxViewModelCollection.SyncItemsWithModel();
-
-            //MpClipTrayViewModel.Instance.ClearClipSelection();
-            //IsSelected = true;
-
-            SaveToDatabase();
-
-            //IsBusy = false;
-            ClearClipSelection();
-            RequestUiUpdate();
-            MpClipTrayViewModel.Instance.Refresh();
-        }
-        public async Task MergeCopyItemListAsync(
-            List<MpCopyItem> ocil,
-            int forceIdx = -1,
-            DispatcherPriority priority = DispatcherPriority.Background) {
-            await Application.Current.Dispatcher.BeginInvoke(priority, (Action)(() => { MergeCopyItemList(ocil, forceIdx); }));
-        }
-
-        public void ClearDragDropState() {
-            IsClipDragging = false;
-            IsClipDropping = false;
-            MouseDownPosition = new Point();
-            DragDataObject = null;
-
-            ClearAllSubDragDropState();
-        }
         public async Task GatherAnalytics() {
             var analyticsTask = new List<Task>();
             Task itemTask = null;
@@ -1266,28 +1215,6 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Private Methods           
-        private async Task Initialize(MpCopyItem headItem) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                var ccil = MpCopyItem.GetCompositeChildren(headItem);
-                ccil.Insert(0, headItem);
-
-                var civml = new List<MpContentItemViewModel>();
-                foreach (var cci in ccil) {
-                    civml.Add(new MpContentItemViewModel(this, cci));
-                }
-
-                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                    civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
-
-                foreach (var ivm in ItemViewModels) {
-                    BindItemEvents(ivm);
-                }
-
-                ResetSubSelection();
-
-                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-            }, DispatcherPriority.Background);
-        }
 
         private void BindItemEvents(MpContentItemViewModel ivm) {
             ivm.PropertyChanged += Ivm_PropertyChanged;
@@ -1318,33 +1245,6 @@ using System.Speech.Synthesis;
             }
         }
         #endregion
-
-
-        #region Overrides
-
-        //public override string ToString() {
-        //    return CopyItemPlainText;
-        //}
-
-        public void Dispose(bool isMerge = false) {
-            if (MpClipTrayViewModel.Instance.ClipTileViewModels.Contains(this)) {
-                MpClipTrayViewModel.Instance.Remove(this);
-            }
-            if (!isMerge) {
-                DeleteAll();
-            }
-
-            //ClipBorder = null;
-            //TitleTextBox = null;
-            //TitleTextBlock = null;
-            //Image = null;
-            //FileListBox = null;
-            //ClipTileSelectionOverlayGrid = null;
-            //ClipBorder = null;
-            //ClipBorderTranslateTransform = null;
-        }
-        #endregion
-
 
 
         #region Content Container stuff
@@ -1433,12 +1333,6 @@ using System.Speech.Synthesis;
             await Task.Delay(1);
         }
 
-        public void ClearAllSubDragDropState() {
-            foreach (var ivm in ItemViewModels) {
-                ivm.ClearSubDragState();
-            }
-        }
-
         public void ResetSubSelection(List<MpContentItemViewModel> origSel = null) {
             ClearClipSelection();
             if (VisibleItems.Count > 0) {
@@ -1503,26 +1397,26 @@ using System.Speech.Synthesis;
             return HeadItem.GetDetailText(detailType);
         }
 
-        public void InsertRange(int idx, List<MpCopyItem> models) {
-            var curModels = ItemViewModels.Select(x => x.CopyItem).ToList();
+        public async Task InsertRange(int idx, List<MpCopyItem> models) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                var curModels = ItemViewModels.Select(x => x.CopyItem).ToList();
 
-            idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
+                idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
 
-            curModels.InsertRange(idx, models);
-            for (int i = 0; i < curModels.Count; i++) {
-                curModels[i].CompositeSortOrderIdx = i;
-                if(i == 0) {
-                    curModels[i].CompositeParentCopyItemId = 0;
-                } else {
-                    curModels[i].CompositeParentCopyItemId = curModels[0].Id;
+                curModels.InsertRange(idx, models);
+                for (int i = 0; i < curModels.Count; i++) {
+                    curModels[i].CompositeSortOrderIdx = i;
+                    if (i == 0) {
+                        curModels[i].CompositeParentCopyItemId = 0;
+                    } else {
+                        curModels[i].CompositeParentCopyItemId = curModels[0].Id;
+                    }
+                    await curModels[i].WriteToDatabaseAsync();
                 }
-                MpDb.Instance.AddOrUpdate<MpCopyItem>(curModels[i]);
-            }
-            
-            if(Dispatcher.CheckAccess()) {
+
                 //only will occur during drag & drop
                 Initialize(curModels[0]);
-            }
+            });
         }
         public void UpdateSortOrder(bool fromModel = false) {
             if (fromModel) {
@@ -1543,29 +1437,11 @@ using System.Speech.Synthesis;
             }
         }
 
-        public void DeleteAll() {
-            foreach (var ivm in ItemViewModels) {
-                ivm.RemoveFromDatabase();
-            }
-        }
-
         #endregion
         //public abstract string GetItemRtf();
         //public abstract string GetItemPlainText();
         //public abstract string GetItemQuillHtml();
         //public abstract string[] GetItemFileList();
-
-        #region Protected Methods
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci) {
-                var ivm = ItemViewModels.Where(x => x.CopyItem.Id == ci.Id).FirstOrDefault();
-                if(ivm != null) {
-                    ItemViewModels.Remove(ivm);
-                    UpdateSortOrder();
-                }
-            }
-        }
-        #endregion
 
 
         #region Private Methods

@@ -30,10 +30,6 @@
         Height="{local:MpMeasurementsBinding ScreenHeight}"
         Width="{Binding MainWindowWidth}"
         DataContext="{StaticResource MainWindowViewModel}">
-    <!--<Window.Background>
-        <SolidColorBrush Opacity="0.0"
-                         Color="White" />GetDataObjectFromSelectedClips
-    </Window.Background>-->
     <Window.Resources>
     </Window.Resources>
     <Canvas x:Name="MainWindowCanvas"  

@@ -6,6 +6,9 @@ using System.Windows.Data;
 namespace MpWpfApp {
     public class MpBoolToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if(value == null) {
+                return Visibility.Collapsed;
+            }
             if (parameter != null) {
                 return (bool)value ? Visibility.Visible : Visibility.Hidden;
             }

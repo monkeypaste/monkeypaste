@@ -16,6 +16,7 @@ namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileView> {
         private double deltaWidth, deltaHeight, deltaContentHeight;
 
+
         protected override void OnAttached() {
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
@@ -63,7 +64,7 @@ namespace MpWpfApp {
             deltaContentHeight += MpMeasurements.Instance.ClipTileEditToolbarHeight;
 
             //make change in height so window doesn't get smaller but also doesn't extend past top of screen
-            deltaHeight = Math.Min(MpMeasurements.Instance.MainWindowMinHeight, Math.Min(maxDeltaHeight, deltaContentHeight));
+            deltaHeight = Math.Max(MpMeasurements.Instance.MainWindowMinHeight, Math.Min(maxDeltaHeight, deltaContentHeight));
             deltaWidth =  mwvm.ClipTrayWidth - ctvm.TileBorderWidth - MpMeasurements.Instance.ClipTileExpandedMargin;
 
             mwvm.MainWindowTop -= deltaHeight;
@@ -82,10 +83,19 @@ namespace MpWpfApp {
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.EditToolbarView.Visibility = Visibility.Visible;
-            //clv.UpdateLayout();
+            clv.UpdateLayout();
+            //clv.ContentListBox.Items.Refresh();
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());          
+            civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
+
+            var sv = clv.ContentListBox.GetScrollViewer();
+            sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            sv.InvalidateScrollInfo();
+
+            //clv.UpdateAdorner();
+            AssociatedObject.NotifyExpandCompleted();
         }
 
         public void Unexpand() {
@@ -117,8 +127,9 @@ namespace MpWpfApp {
             clv.EditToolbarView.Visibility = Visibility.Collapsed;
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
+            //civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
 
+            AssociatedObject.NotifyUnexpandCompleted();
         }
     }
 }

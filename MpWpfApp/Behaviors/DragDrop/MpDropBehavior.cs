@@ -138,6 +138,7 @@ namespace MpWpfApp {
                         cil.RemoveAt(cil.IndexOf(dci));
                         dropIdx--;
                     }
+
                     cil.Insert(dropIdx, dci);
                 }
             }

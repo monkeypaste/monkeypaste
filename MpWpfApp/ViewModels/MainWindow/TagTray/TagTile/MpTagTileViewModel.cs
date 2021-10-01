@@ -69,6 +69,9 @@ namespace MpWpfApp {
             }
             set {
                 if (_isSelected != value) {// || MpClipTrayViewModel.Instance.IsFilteringByApp) {
+                    if(value == true) {
+                        value = true;
+                    }
                     _isSelected = value;
                     OnPropertyChanged_old(nameof(IsSelected));
                     OnPropertyChanged_old(nameof(TagBorderBackgroundBrush));
@@ -327,6 +330,11 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(Tag):
+                        break;
+                    case nameof(IsSelected):
+                        if(IsSelected) {
+                            MpClipTrayViewModel.Instance.RefreshTiles();
+                        }
                         break;
                 }
             };

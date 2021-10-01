@@ -99,9 +99,7 @@ namespace MpWpfApp {
                     cmi,
                     (s, e1) => {
                         ttvm.ChangeColorCommand.Execute((Brush)((Border)s).Tag);
-                    },
-                    MpHelpers.Instance.GetColorColumn(ttvm.TagColor),
-                    MpHelpers.Instance.GetColorRow(ttvm.TagColor)
+                    }
                 );
         }
 

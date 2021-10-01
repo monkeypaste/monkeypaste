@@ -22,8 +22,19 @@ namespace MpWpfApp {
     public partial class MpClipTileView : UserControl {
         public List<TextBlock> Titles = new List<TextBlock>();
 
+        public event EventHandler OnExpandCompleted;
+        public event EventHandler OnUnexpandCompleted;
+
         public MpClipTileView() {
             InitializeComponent();
+        }
+
+        public void NotifyExpandCompleted() {
+            OnExpandCompleted?.Invoke(this, null);
+        }
+
+        public void NotifyUnexpandCompleted() {
+            OnUnexpandCompleted?.Invoke(this, null);
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
@@ -31,10 +42,17 @@ namespace MpWpfApp {
 
             var ctvm = DataContext as MpClipTileViewModel;
             ctvm.IsBusy = false;
+            //ClipTileBusyView.Visibility = Visibility.Hidden;
+            //ClipTileDockPanel.Visibility = Visibility.Visible;
         }
 
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            //ClipTileDockPanel.Visibility = Visibility.Hidden;
+            //ClipTileBusyView.Visibility = Visibility.Visible;
+
             if (DataContext != null && DataContext is MpClipTileViewModel ctvm) {
+                //ctvm.IsBusy = true;
+                ctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
                 ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
 
                 Titles.Clear();
@@ -43,7 +61,17 @@ namespace MpWpfApp {
                         Text = civm.CopyItem.Title
                     });
                 }
+
+                //Task.Run(async () => {
+                //    await Task.Delay(500);
+                //    ctvm.IsBusy = false;
+                //});
             }
+        }
+
+        private void Ctvm_ViewModelLoaded(object sender, EventArgs e) {
+            var ctvm = DataContext as MpClipTileViewModel;
+          //  ctvm.IsBusy = false;
         }
 
         public async Task<MpHighlightTextRangeViewModelCollection> Search(string hlt) {
@@ -86,5 +114,6 @@ namespace MpWpfApp {
         private void Ctvm_OnSearchRequest(object sender, string e) {
            
         }
+
     }
 }

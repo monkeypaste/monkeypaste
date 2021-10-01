@@ -300,7 +300,7 @@ namespace MpWpfApp {
                     if (MainWindowViewModel.TagTrayViewModel != null && MainWindowViewModel.TagTrayViewModel.IsEditingTagName) {
                         return;
                     }
-                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsEditingClipTitle) {
+                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
                         return;
                     }
                     if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {

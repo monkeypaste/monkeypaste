@@ -240,34 +240,36 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
-            MpMainWindowViewModel.IsMainWindowLoading = true;
+            Task.Run(() => {
+                MpMainWindowViewModel.IsMainWindowLoading = true;
 
-            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
-                IconBuilder = new MpIconBuilder()
+                MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
+                    IconBuilder = new MpIconBuilder()
+                });
+
+                MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
+                MpHelpers.Instance.Init();
+
+                MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+
+                //MpPluginManager.Instance.Init();
+
+                MpThemeColors.Instance.Init();
+
+                MpSystemTrayViewModel.Instance.Init();
+                MpSearchBoxViewModel.Instance.Init();
+                MpClipTrayViewModel.Instance.Init();
+                MpClipTileSortViewModel.Instance.Init();
+                MpAppModeViewModel.Instance.Init();
+                MpTagTrayViewModel.Instance.Init();
+
+                Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
+                Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
+                Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
+                Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
+                Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
+                Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
             });
-
-            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
-            MpHelpers.Instance.Init();
-
-            MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
-
-            //MpPluginManager.Instance.Init();
-
-            MpThemeColors.Instance.Init();
-
-            MpSystemTrayViewModel.Instance.Init();
-            MpSearchBoxViewModel.Instance.Init();
-            MpClipTrayViewModel.Instance.Init();
-            MpClipTileSortViewModel.Instance.Init();
-            MpAppModeViewModel.Instance.Init();
-            MpTagTrayViewModel.Instance.Init();
-
-            Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
-            Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
-            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
-            Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
-            Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
-            Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
         public void FinishLoading() {
@@ -475,7 +477,7 @@ namespace MpWpfApp {
             }
             bool wasMainWindowLocked = IsMainWindowLocked;
             if (pasteSelected) {
-                if(ClipTrayViewModel.IsPastingTemplate) {
+                if(ClipTrayViewModel.IsAnyPastingTemplate) {
                     IsMainWindowLocked = true;
                 }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(false,true);

@@ -300,7 +300,7 @@ namespace MpWpfApp
         private static void OnTargetHorizontalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             AnimatedScrollViewer thisScroller = (AnimatedScrollViewer)d;
-            if (((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsEditingClipTile) {
+            if (((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsAnyEditingClipTile) {
                 return;
             }
             if ((double)e.NewValue != thisScroller._aniHorizontalScrollBar.Value)
@@ -330,7 +330,7 @@ namespace MpWpfApp
         private static void OnHorizontalScrollOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             AnimatedScrollViewer thisSViewer = (AnimatedScrollViewer)d;
-            if (((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsEditingClipTile) {
+            if (((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsAnyEditingClipTile) {
                 return;
             }
             thisSViewer.ScrollToHorizontalOffset((double)e.NewValue);

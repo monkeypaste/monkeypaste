@@ -94,7 +94,7 @@ namespace MpWpfApp {
         public ICommand PerformSelectedSortCommand => new RelayCommand(
                 () => MpClipTrayViewModel.Instance.RefreshTiles()
                 ,
-                () => { return MpMainWindowViewModel.IsMainWindowLoading; 
+                () => { return !MpMainWindowViewModel.IsMainWindowLoading; 
             });
           
         #endregion

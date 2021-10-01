@@ -60,10 +60,14 @@ namespace MpWpfApp {
             }
         }
 
+        public MpContentContextMenuViewModel ContextMenuViewModel { get; set; }
+
+
         public List<MpContextMenuItemViewModel> TagMenuItems {
             get {
                 var tmil = new List<MpContextMenuItemViewModel>();
-                if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
+
+                if (Parent == null) {
                     return tmil;
                 }
                 foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
@@ -72,6 +76,7 @@ namespace MpWpfApp {
                     }
                     tmil.Add(
                         new MpContextMenuItemViewModel(
+                            ContextMenuViewModel,
                             tagTile.TagName,
                             MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
                             tagTile,
@@ -85,6 +90,7 @@ namespace MpWpfApp {
             }
         }
 
+        
         #endregion
 
         #region Appearance
@@ -136,21 +142,14 @@ namespace MpWpfApp {
 
         public Brush ItemBackgroundBrush {
             get {
-                if (Parent.IsExpanded && IsSelected) {
+                if (Parent.IsExpanded) {
                     return Brushes.White;
                 }
                 if (IsHovering && 
-                    !IsSelected &&
                     Parent.Count > 1) {
-                    return new SolidColorBrush(
-                            CopyItem.ItemColor.ToWinMediaColor());
-                }
-                if(IsSelected && 
-                    Parent.IsHovering &&
-                    Parent.Count > 1) {                    
                     return MpHelpers.Instance.GetLighterBrush(
                         new SolidColorBrush(
-                            CopyItem.ItemColor.ToWinMediaColor())
+                            CopyItem.ItemColor.ToWinMediaColor()),0.75
                         );
                 }
 
@@ -167,27 +166,11 @@ namespace MpWpfApp {
                 if (Parent.SelectedItems.Count > 1 && IsSelected) {
                     return Brushes.Red;
                 }
-                return Brushes.Transparent;
+                return Brushes.Black;
             }
         }
 
-        public Thickness ItemBorderThickness {
-            get {
-                if (Parent == null || Parent.ItemViewModels.Count == 1 || MpClipTrayViewModel.Instance.IsAnyClipOrSubItemDragging) {
-                    return new Thickness(0);
-                }
-                double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
-                if (IsSelected) {
-                    return new Thickness(bt, bt, bt, bt);
-                }
-                if (ItemIdx == 0) {
-                    return new Thickness(0, 0, 0, bt);
-                } else if (ItemIdx == Parent.Count - 1) {
-                    return new Thickness(0, bt, 0, 0);
-                }
-                return new Thickness(0, 0, 0, bt);
-            }
-        }
+        
         #endregion
 
         #region Visibility 
@@ -238,14 +221,32 @@ namespace MpWpfApp {
             }
         }
 
-        public Thickness ContentPadding {
+        //public Thickness ContentPadding {
+        //    get {
+        //        double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
+        //        if (IsHovering && Parent.Count > 1 && !Parent.IsExpanded) {
+        //            double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
+        //            return new Thickness(dp + dbw, dp, dp, dp);
+        //        }
+        //        return new Thickness(dp);
+        //    }
+        //}
+
+        public Thickness ItemBorderThickness {
             get {
-                double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
-                if (IsHovering && Parent.Count > 1) {
-                    double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
-                    return new Thickness(dp + dbw, dp, dp, dp);
+                if (Parent == null || Parent.ItemViewModels.Count == 1) {
+                    return new Thickness(0);
                 }
-                return new Thickness(dp);
+                double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
+                if (IsSelected) {
+                    return new Thickness(bt, bt, bt, bt);
+                }
+                if (ItemIdx == 0) {
+                    return new Thickness(0, 0, 0, bt);
+                } else if (ItemIdx == Parent.Count - 1) {
+                    return new Thickness(0, 0, 0, bt);
+                }
+                return new Thickness(0, 0, 0, bt);
             }
         }
         #endregion
@@ -254,14 +255,6 @@ namespace MpWpfApp {
 
         public bool IsNewAndFirstLoad { get; set; } = false;
 
-        public Cursor RtbCursor {
-            get {
-                if (IsEditingContent) {
-                    return Cursors.IBeam;
-                }
-                return Cursors.Arrow;
-            }
-        }
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
             get {
@@ -325,27 +318,25 @@ namespace MpWpfApp {
 
 
         #region Drag & Drop
-
         public bool IsOverDragButton { get; set; } = false;
         public bool IsSubDragging { get; set; } = false;
         public bool IsSubDropping { get; set; } = false;
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
 
-
-        public bool IsDragButtonVisible {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                if (Parent.IsExpanded) {
-                    if (IsEditingContent) {
-                        return false;
-                    }
-                }
-                return IsHovering && Parent.Count > 1;
-            }
-        }
+        //public bool IsDragButtonVisible {
+        //    get {
+        //        if (Parent == null) {
+        //            return false;
+        //        }
+        //        if (Parent.IsExpanded) {
+        //            if (IsEditingContent) {
+        //                return false;
+        //            }
+        //        }
+        //        return IsHovering && Parent.Count > 1;
+        //    }
+        //}
         #endregion
 
         #endregion
@@ -496,6 +487,8 @@ namespace MpWpfApp {
             CopyItem = ci;
 
             IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
+
+            ContextMenuViewModel = new MpContentContextMenuViewModel(this);
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
@@ -639,11 +632,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        public void ClearSubDragState() {
-            IsSubDragging = false;
-            DragDataObject = null;
-            MouseDownPosition = new Point();
-        }
 
         public void ClearEditing() {
             IsEditingContent = false;
@@ -674,21 +662,6 @@ namespace MpWpfApp {
 
 
         #region Db Events
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-                if (ci.Id == CopyItem.Id) {
-                }
-            }
-        }
-
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-                if (ci.Id == CopyItem.Id) {
-                    //CopyItem = ci;
-                    //MpConsole.WriteTraceLine("Reset model from db callback");
-                }
-            }
-        }
         #endregion
 
         #endregion
@@ -713,7 +686,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):

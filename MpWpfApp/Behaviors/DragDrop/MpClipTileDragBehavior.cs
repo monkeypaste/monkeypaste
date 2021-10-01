@@ -14,7 +14,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpClipTileDragBehavior : Behavior<MpClipTileView> {
-        private const double MINIMUM_DRAG_DISTANCE = 20;
+        private const double MINIMUM_DRAG_DISTANCE = 10;
 
         private bool isDropValid = false;
         private bool isDragging = false;
@@ -222,8 +222,8 @@ namespace MpWpfApp {
         private void ShowDragAdorners() {
             var ctv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>();
             dragRectListAdorner.RectList = ctv.GetSelectedContentItemViewRects(AssociatedObject);
-            dragRectListAdorner.IsShowing = true;
-            adornerLayer.Update();
+            //dragRectListAdorner.IsShowing = true;
+            //adornerLayer.Update();
         }
 
         private void HideDragAdorners() {

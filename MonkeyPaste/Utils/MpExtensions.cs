@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -168,6 +169,20 @@ namespace MonkeyPaste {
             //return Color.FromArgb(r, g, b);
             return Color.FromRgba(r, g, b, 255);
         }
-        #endregion        
+        #endregion
+
+        #region Reflection
+
+        public static async Task<T> InvokeAsync<T>(this MethodInfo @this, object obj, params object[] parameters) {
+            dynamic awaitable = @this.Invoke(obj, parameters);
+            await awaitable;
+            return (T)awaitable.GetAwaiter().GetResult();
+        }
+
+        public static async Task InvokeAsync(this MethodInfo @this, object obj, params object[] parameters) {
+            dynamic awaitable = @this.Invoke(obj, parameters);
+            await awaitable;
+        }
+        #endregion
     }
 }

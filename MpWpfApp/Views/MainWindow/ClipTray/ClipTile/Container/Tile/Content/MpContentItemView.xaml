@@ -10,8 +10,7 @@
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <AdornerDecorator AllowDrop="True"
-                      DataContext="{Binding}">
+    <AdornerDecorator>
         <Grid x:Name="ContentListItemViewGrid"
               Loaded="ContentListItemView_Loaded"
               DataContextChanged="ContentListItemView_DataContextChanged"
@@ -20,21 +19,23 @@
               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
               MouseEnter="ContentListItemView_MouseEnter"
               MouseLeave="ContentListItemView_MouseLeave"
-              HorizontalAlignment="Stretch"              
+              PreviewMouseDown="ContentListItemViewGrid_PreviewMouseDown"
+              HorizontalAlignment="Stretch"             
               AllowDrop="True"
               VerticalAlignment="Stretch">
             <Grid.ContextMenu>
-                <local:MpContentContextMenuView DataContext="{Binding PlacementTarget.DataContext,
-                       RelativeSource={RelativeSource Self}}" />
+                <local:MpContentContextMenuView DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
             </Grid.ContextMenu>
             <AdornerDecorator>
                 <local:MpRtbView x:Name="EditorView"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
                                  DataContext="{Binding}" />
                 <!--<local:MpQuillEditorView x:Name="EditorView"
                                          DataContext="{Binding}" />-->
             </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="{Binding IsDragButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Visibility="Hidden"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Background="Transparent"

@@ -24,6 +24,12 @@ namespace MpWpfApp {
         }
 
         private void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
+            //if(!MpLanguageTranslator.Instance.IsLoaded) {
+            //    MpLanguageTranslator.Instance.Init();
+            //    if(!MpLanguageTranslator.Instance)
+            //}
+
+
             MenuItem cmi = null;
             foreach (var mi in Items) {
                 if (mi == null || mi is Separator) {
@@ -45,8 +51,7 @@ namespace MpWpfApp {
                     cmi,
                     (s, e1) => {
                         changeColorCommand.Execute((Brush)((Border)s).Tag);
-                    },
-                   0, 0
+                    }
                 );
         }
 

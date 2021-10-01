@@ -95,13 +95,12 @@ namespace MpWpfApp {
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
         public MpClipTileTitleSwirlViewModel(MpContentItemViewModel ctvm) : base(ctvm) {
-            var icon = Parent.CopyItem.Source.PrimarySource.SourceIcon;
-            var cl = new List<string>() { icon.HexColor1, icon.HexColor2, icon.HexColor3, icon.HexColor4, icon.HexColor5 };
-            var randomColorList = MpHelpers.Instance.GetRandomizedList<string>(cl);
-            for (int i = 0; i < randomColorList.Count; i++) {
+            var cl = MpHelpers.Instance.GetRandomizedList<string>(ctvm.ColorPallete);
+            for (int i = 0; i < cl.Count; i++) {
                 var c = cl[i].ToWinMediaColor();
                 Swirls.Add(
                     new MpSwirlLayerViewModel(
+                        this,
                         i,
                         new SolidColorBrush(c),
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));

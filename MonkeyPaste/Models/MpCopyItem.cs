@@ -135,6 +135,16 @@ namespace MonkeyPaste {
             return MpDb.Instance.GetItems<MpCopyItem>().Where(x => x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx).ToList();
         }
 
+        public static async Task<List<MpCopyItem>> GetCompositeChildrenAsync(MpCopyItem ci) {
+            if (ci == null || ci.Id == 0) {
+                return new List<MpCopyItem>();
+            }
+            //return MpDb.Instance.Query<MpCopyItem>(@"SELECT * FROM MpCopyItem WHERE fk_ParentCopyItemId=? ORDER BY CompositeSortOrderIdx", ci.Id);
+            var cil = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
+            var result = cil.Where(x => x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+            return result;
+        }
+
 
         public static async Task<List<MpCopyItem>> GetPageAsync(
             int tagId,
@@ -147,10 +157,11 @@ namespace MonkeyPaste {
             await Task.Run(() => {
                 switch (tagId) {
                     case MpTag.AllTagId:
-                        sortColumn = sortColumn == "default" ? "CopyDateTime" : sortColumn;
+                        sortColumn = sortColumn == "default" || sortColumn == "Manual" ? "CopyDateTime" : sortColumn;
                         if (isDescending) {
                             result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
                                       select ci)
+                                     .Where(x => x.CompositeParentCopyItemId == 0)
                                      .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                      .Take(count)
                                      .Skip(start)
@@ -158,6 +169,7 @@ namespace MonkeyPaste {
                         } else {
                             result = (from ci in MpDb.Instance.GetItems<MpCopyItem>()
                                       select ci)
+                                     .Where(x => x.CompositeParentCopyItemId == 0)
                                      .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                      .Take(count)
                                      .Skip(start)
@@ -168,12 +180,14 @@ namespace MonkeyPaste {
                         sortColumn = "CopyDateTime";
                         if (isDescending) {
                             result = MpDb.Instance.GetItems<MpCopyItem>()
+                                     .Where(x=>x.CompositeParentCopyItemId == 0)
                                      .OrderByDescending(x => x.CopyDateTime)
                                      .Take(count)
                                      .Skip(start)
                                      .ToList();
                         } else {
                             result = MpDb.Instance.GetItems<MpCopyItem>()
+                                     .Where(x => x.CompositeParentCopyItemId == 0)
                                      .OrderBy(x => x.CopyDateTime)
                                      .Take(count)
                                      .Skip(start)
@@ -197,6 +211,7 @@ namespace MonkeyPaste {
                                               select new { ci, cit })
                                           orderby value.cit.CopyItemSortIdx descending
                                           select value.ci)
+                                          .Where(x => x.CompositeParentCopyItemId == 0)
                                          .Take(count)
                                          .Skip(start)
                                          .ToList();
@@ -206,6 +221,7 @@ namespace MonkeyPaste {
                                           where ci.Id == cit.CopyItemId &&
                                                 tagId == cit.TagId
                                           select ci)
+                                          .Where(x => x.CompositeParentCopyItemId == 0)
                                          .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                          .Take(count)
                                          .Skip(start)
@@ -222,6 +238,7 @@ namespace MonkeyPaste {
                                               select new { ci, cit })
                                           orderby value.cit.CopyItemSortIdx ascending
                                           select value.ci)
+                                          .Where(x => x.CompositeParentCopyItemId == 0)
                                          .Take(count)
                                          .Skip(start)
                                          .ToList();
@@ -231,6 +248,7 @@ namespace MonkeyPaste {
                                           where ci.Id == cit.CopyItemId &&
                                                 tagId == cit.TagId
                                           select ci)
+                                          .Where(x => x.CompositeParentCopyItemId == 0)
                                      .OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x))
                                      .Take(count)
                                      .Skip(start)
@@ -284,6 +302,11 @@ namespace MonkeyPaste {
 
         public MpCopyItem() : base() { }
 
+        public override void DeleteFromDatabase() {
+            base.DeleteFromDatabase();
+        }
+        #region Composites
+
         public MpCopyItem GetCompositeParent() {
             if(CompositeParentCopyItemId == 0) {
                 return null;
@@ -305,9 +328,13 @@ namespace MonkeyPaste {
             WriteToDatabase();
         }
 
+        #endregion
+
         public override string ToString() {
             return $"Id:{Id} Text:{ItemData}" + Environment.NewLine;
         }
+
+        #region Sync
 
         public async Task<object> DeserializeDbObject(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
@@ -445,6 +472,8 @@ namespace MonkeyPaste {
             }
             return newCopyItem;
         }
+
+        #endregion
 
         public object Clone() {
             var s = MpSource.GetThisDeviceAppSource();

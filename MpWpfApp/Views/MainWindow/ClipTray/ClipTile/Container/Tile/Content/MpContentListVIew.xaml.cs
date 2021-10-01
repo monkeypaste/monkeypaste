@@ -27,14 +27,13 @@ namespace MpWpfApp {
 
         public void UpdateAdorner() {
             seperatorAdorner.Lines.Clear();
-            for (int i = 0; i < ContentListBox.Items.Count; i++) {
+            for (int i = 0; i < ContentListBox.Items.Count-1; i++) {
                 Rect lbir = ContentListBox.GetListBoxItemRect(i);
-                if(i < ContentListBox.Items.Count - 1) {
-                    seperatorAdorner.Lines.Add(new Point[] { lbir.BottomLeft, lbir.BottomRight }.ToList());
-                }
+                var l = new Point[] { lbir.BottomLeft, lbir.BottomRight };
+                seperatorAdorner.Lines.Add(l.ToList());
             }
-            seperatorAdorner.IsShowing = true;
-            adornerLayer.Update();
+            //seperatorAdorner.IsShowing = true;
+           // adornerLayer.Update();
         }
 
         public void HideToolbars() {
@@ -71,8 +70,20 @@ namespace MpWpfApp {
                 rtbcvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
                 rtbcvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 rtbcvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                //rtbcvm.SyncItemsWithModel();
+
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
+                ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
+
             } 
+        }
+
+        private void Ctv_OnUnexpandCompleted(object sender, EventArgs e) {
+            UpdateAdorner();
+        }
+
+        private void Ctv_OnExpandCompleted(object sender, EventArgs e) {
+            UpdateAdorner();
         }
 
         private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {

@@ -15,11 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpSystemTrayVIew.xaml
+    /// Interaction logic for MpContextMenuView.xaml
     /// </summary>
-    public partial class MpSystemTrayView : UserControl {
-        public MpSystemTrayView() {
-
+    public partial class MpContextMenuView : ContextMenu {
+        public MpContextMenuView() {
             InitializeComponent();
         }
     }

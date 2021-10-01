@@ -17,6 +17,12 @@ namespace MpWpfApp {
         private Brush _layerBrush = Brushes.Yellow;
         public Brush LayerBrush {
             get {
+                if(Parent == null) {
+                    return _layerBrush;
+                }
+                if(Parent.Parent.IsHovering && !Parent.Parent.Parent.IsExpanded) {
+                    return new SolidColorBrush(Parent.Parent.ColorPallete[LayerId].ToWinMediaColor());
+                }
                 return _layerBrush;
             }
             set {
@@ -64,7 +70,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpSwirlLayerViewModel() : base(null) {  }
 
-        public MpSwirlLayerViewModel(int layerId, Brush layerBrush, double layerOpacity) : this()  {
+        public MpSwirlLayerViewModel(MpClipTileTitleSwirlViewModel parent, int layerId, Brush layerBrush, double layerOpacity) : base(parent)  {
             LayerId = layerId;
             LayerBrush = layerBrush;
             LayerOpacity = layerOpacity;

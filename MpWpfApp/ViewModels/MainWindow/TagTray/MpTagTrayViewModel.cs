@@ -158,83 +158,6 @@ namespace MpWpfApp {
         public void Add(MpTagTileViewModel newTagTile) {
             newTagTile.PropertyChanged += NewTagTile_PropertyChanged;
             TagTileViewModels.Add(newTagTile);
-
-            ////watches Tag IsSelected so recent is selected if none are
-            //newTagTile.PropertyChanged += (s, e) => {
-            //    MpHelpers.Instance.RunOnMainThread((Action)(() => {
-            //        switch (e.PropertyName) {
-            //        case nameof(newTagTile.IsSelected):
-            //                if(newTagTile.IsSelected) {
-            //                    foreach(var ttvm in TagTileViewModels) {
-            //                        if(ttvm != newTagTile) {
-            //                            ttvm.IsSelected = false;
-            //                        }
-            //                    }
-            //                    if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
-            //                        //this else if prevents filtered out tiles from being shown while searching and an item is 
-            //                        //added while main window is locked
-            //                        //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
-            //                        MpClipTrayViewModel.Instance.IsFilteringByApp = false;
-            //                        MpClipTrayViewModel.Instance.RefreshClips();
-            //                    }
-            //                } else if(SelectedTagTile == null) {
-            //                    GetRecentTagTileViewModel().IsSelected = true;
-            //                }
-            //                break;
-            ////ensure at least history is selected
-            //if (newTagTile.IsSelected == false) {
-            //    //find all selected tag tiles
-            //    var selectedTagTiles = TagTileViewModels.Where(tt => tt.IsSelected == true).ToList();
-            //    //if none selected select history tag
-            //    if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
-            //        //GetHistoryTagTileViewModel().IsSelected = true;
-            //        GetRecentTagTileViewModel().IsSelected = true;
-            //    }
-            //} else if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
-            //    //this else if prevents filtered out tiles from being shown while searching and an item is 
-            //    //added while main window is locked
-            //    //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
-            //    MpClipTrayViewModel.Instance.IsFilteringByApp = false;
-            //        MpClipTrayViewModel.Instance.RefreshClips();
-
-            //foreach (MpClipTileViewModel ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-            //    //this ensures when switching between tags the last selected tag in a list reset
-            //    //ctvm.IsSelected = false;
-            //    if (newTagTile.IsLinked(ctvm)) {
-            //        ctvm.ItemVisibility = Visibility.Visible;
-            //        foreach (var rtbvm in ctvm.ItemViewModels) {
-            //            //if composite parent is linked show all children
-            //            rtbvm.ItemVisibility = Visibility.Visible;
-            //        }
-            //    } //below was for composite but fixing just to compile right now
-            //        if (ctvm.IsTextItem) {
-            //        bool hasSubLink = false;
-            //        foreach (var rtbvm in ctvm.ItemViewModels) {
-            //            if (newTagTile.IsLinked(rtbvm)) {
-            //                rtbvm.Parent.ItemVisibility = Visibility.Visible;
-            //                rtbvm.ItemVisibility = Visibility.Visible;
-            //                hasSubLink = true;
-            //            }
-            //        }
-            //        if (!hasSubLink) {
-            //            ctvm.ItemVisibility = Visibility.Collapsed;
-            //        }
-            //    } else {
-            //        ctvm.ItemVisibility = Visibility.Collapsed;
-            //    }
-            //}
-
-            //if (MpClipTrayViewModel.Instance.VisibileClipTiles.Count > 0 &&
-            //    !MpClipTrayViewModel.Instance.IsAnyContextMenuOpened) {
-            //    MpClipTrayViewModel.Instance.ResetClipSelection();
-            //}
-
-            //            }
-
-            //            break;
-            //        }
-            //    }));                
-            //};
         }
 
         private void NewTagTile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -248,19 +171,21 @@ namespace MpWpfApp {
                                     t.IsSelected = false;
                                 }
                             }
-                            if (!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
-                                //this prevents filtered out tiles from being shown while searching and an item is 
-                                //added while main window is locked
-                                //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
-                                MpClipTrayViewModel.Instance.IsFilteringByApp = false;
-                                MpClipTrayViewModel.Instance.RefreshTiles();
-                            }
-                        } else if (SelectedTagTile == null) {
-                            RecentTagViewModel.IsSelected = true;
+                            //if (!MainWindowViewModel.SearchBoxViewModel.HasText && 
+                            //    !MainWindowViewModel.IsMainWindowLocked &&
+                            //    !MpMainWindowViewModel.IsMainWindowLoading) {
+                            //    //this prevents filtered out tiles from being shown while searching and an item is 
+                            //    //added while main window is locked
+                            //    //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
+                            //    MpClipTrayViewModel.Instance.IsFilteringByApp = false;
+                            //    MpClipTrayViewModel.Instance.RefreshTiles();
+                            //}
+                        } else if (SelectedTagTile == null && !MpMainWindowViewModel.IsMainWindowLoading) {
+                            //RecentTagViewModel.IsSelected = true;
                         }
                         break;
                 }
-            },System.Windows.Threading.DispatcherPriority.Background);
+            },System.Windows.Threading.DispatcherPriority.Normal);
         }
 
         public void Remove(MpTagTileViewModel tagTileToRemove) {
@@ -327,6 +252,26 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        #region Db Events
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+            }
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                
+            }
+        }
+
+        #endregion
 
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {

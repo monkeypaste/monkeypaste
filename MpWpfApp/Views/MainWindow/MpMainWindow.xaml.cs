@@ -3,6 +3,7 @@ using MonkeyPaste;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,7 +23,7 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+           // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
             WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
@@ -37,22 +38,29 @@ namespace MpWpfApp {
             if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
                 mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
                 mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
+                MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
+
                 MpPasteToAppPathViewModelCollection.Instance.Init();
 
                 MpShortcutCollectionViewModel.Instance.Init();
 
                 MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-
-                int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
-
-                MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
-                MpStandardBalloonViewModel.ShowBalloon(
-                   "Monkey Paste",
-                   "Successfully loaded w/ " + totalItems + " items",
-                   Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-
-                MpMainWindowViewModel.IsMainWindowLoading = false;
             }
+        }
+
+        private void Instance_ViewModelLoaded(object sender, EventArgs e) {
+            //MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
+
+            int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
+
+            MpStandardBalloonViewModel.ShowBalloon(
+               "Monkey Paste",
+               "Successfully loaded w/ " + totalItems + " items",
+               Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+            MpMainWindowViewModel.IsMainWindowLoading = false;
+
+            MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
         }
 
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
@@ -88,7 +96,7 @@ namespace MpWpfApp {
 
         private void Image_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
             var mwvm = DataContext as MpMainWindowViewModel;
-            mwvm.HideWindowCommand.Execute(null);
+            //mwvm.HideWindowCommand.Execute(null);
         }
 
         private uint _blurOpacity;

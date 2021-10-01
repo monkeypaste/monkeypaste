@@ -11,29 +11,28 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
-    <!--i:Interaction.Behaviors>
-        <local:MpContentListDropBehavior x:Name="DropBehavior"/>
-    </i:Interaction.Behaviors>-->
-    <AdornerDecorator>
-        <DockPanel x:Name="ContentListDockPanel" 
+    <DockPanel x:Name="ContentListDockPanel" 
                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                    HorizontalAlignment="Stretch"                   
                    VerticalAlignment="Stretch">
-            <local:MpRtbEditToolbarView x:Name="EditToolbarView"
+        <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
                                         DataContext="{Binding PrimaryItem}" />
-            <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
+        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                              DockPanel.Dock="Bottom"
                                              Visibility="{Binding IsAnyEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                              DataContext="{Binding PrimaryItem.TemplateCollection}" />
-            <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
+        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                               DockPanel.Dock="Bottom"
-                                              Visibility="{Binding IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                              Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                               DataContext="{Binding PrimaryItem.TemplateCollection}" />
+
+        <AdornerDecorator ClipToBounds="True">
             <local:MpMultiSelectListBox x:Name="ContentListBox"
                                         Loaded="ContentListBox_Loaded"
-                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"                                  
+                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"           
+                                        ClipToBounds="True"
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left"
@@ -41,7 +40,7 @@
                                         BorderThickness="0"
                                         BorderBrush="Pink"
                                         SelectionMode="Extended"
-                                        ScrollToSelectedItem="True"
+                                        ScrollToSelectedItem="False"
                                         IsListBoxHorizontal="False"
                                         IsSynchronizedWithCurrentItem="True"
                                         MinHeight="150"
@@ -54,47 +53,64 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                         VirtualizingPanel.IsVirtualizing="True"
                                         Padding="0">
-                <i:Interaction.Behaviors>
-                    <local:MpDropBehavior x:Name="DropBehavior2"/>
-                </i:Interaction.Behaviors>
-                <local:MpMultiSelectListBox.InputBindings>
-                    <KeyBinding Gesture="Ctrl+A"
+            <i:Interaction.Behaviors>
+                <local:MpDropBehavior x:Name="DropBehavior2"/>
+            </i:Interaction.Behaviors>
+            <local:MpMultiSelectListBox.InputBindings>
+                <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
-                </local:MpMultiSelectListBox.InputBindings>
-                <local:MpMultiSelectListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsItemsHost="True"
+            </local:MpMultiSelectListBox.InputBindings>
+            <local:MpMultiSelectListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True"
                                                 Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </local:MpMultiSelectListBox.ItemsPanel>
-                <local:MpMultiSelectListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="IsSelected"
+                </ItemsPanelTemplate>
+            </local:MpMultiSelectListBox.ItemsPanel>
+            <local:MpMultiSelectListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected"
                                 Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                        <Setter Property="FocusVisualStyle"
+                    <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
-                        <Setter Property="HorizontalContentAlignment"
+                    <Setter Property="HorizontalContentAlignment"
                                 Value="Left" />
-                        <Setter Property="VerticalContentAlignment"
+                    <Setter Property="VerticalContentAlignment"
                                 Value="Top" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </local:MpMultiSelectListBox.ItemContainerStyle>
-                <local:MpMultiSelectListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:MpContentItemView DataContext="{Binding}"  
-                                                 BorderBrush="{Binding ItemBorderBrush}"
-                                                 BorderThickness="{Binding ItemBorderThickness}"
-                                                 Height="{Binding CurrentSize.Height}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </local:MpMultiSelectListBox.ItemContainerStyle>
+            <local:MpMultiSelectListBox.ItemTemplate>
+                <DataTemplate>
+                        <local:MpContentItemView DataContext="{Binding}"
+                                                 BorderThickness="{Binding ItemBorderThickness}">
+                            <local:MpContentItemView.BorderBrush>
+                                <DrawingBrush Viewport="0,0,7,7"
+                                      ViewportUnits="Absolute"
+                                      TileMode="Tile">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Brush="{Binding ItemBorderBrush}">
+                                                <GeometryDrawing.Geometry>
+                                                    <GeometryGroup>
+                                                        <RectangleGeometry Rect="0,0,50,50" />
+                                                        <RectangleGeometry Rect="50,50,50,50" />
+                                                    </GeometryGroup>
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </local:MpContentItemView.BorderBrush>
+                        </local:MpContentItemView>
                     </DataTemplate>
-                </local:MpMultiSelectListBox.ItemTemplate>
+            </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>
-        </DockPanel>
-    </AdornerDecorator>
+        </AdornerDecorator>
+    </DockPanel>        
 </UserControl>  

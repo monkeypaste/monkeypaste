@@ -11,7 +11,7 @@ using System.Reflection;
 using MonkeyPaste;
 
 namespace MpWpfApp {    
-    public abstract class MpViewModelBase<P> : DependencyObject, INotifyPropertyChanged where P: class {
+    public abstract class MpViewModelBase<P> : INotifyPropertyChanged where P: class {
         #region Private Variables
 
         #endregion
@@ -98,6 +98,11 @@ namespace MpWpfApp {
         private bool _isBusy = false;
         public bool IsBusy {
             get {
+                if(Parent != null && Parent is MpViewModelBase vmb) {
+                    if(vmb.IsBusy) {
+                        return true;
+                    }
+                } 
                 return _isBusy;
             }
             set {
@@ -188,18 +193,18 @@ namespace MpWpfApp {
         //#region INotifyPropertyChanged 
         //public bool ThrowOnInvalidPropertyName { get; private set; } = false;
 
-        //private event PropertyChangedEventHandler _propertyChanged;
-        //public event PropertyChangedEventHandler PropertyChanged {
-        //    add { _propertyChanged += value; }
-        //    remove { _propertyChanged -= value; }
+        //private event PropertyChangedEventHandler _propertyChanged_Old;
+        //public event PropertyChangedEventHandler PropertyChanged_Old {
+        //    add { _propertyChanged_Old += value; }
+        //    remove { _propertyChanged_Old -= value; }
         //}
 
         public virtual void OnPropertyChanged_old(string propertyName) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+            //PropertyChangedEventHandler handler = PropertyChanged;
+            //if (handler != null) {
+            //    var e = new PropertyChangedEventArgs(propertyName);
+            //    handler(this, e);
+            //}
         }
 
         public virtual void OnPropertyChanged(string propertyName) {
