@@ -38,10 +38,8 @@ namespace MpWpfApp {
 
         public void SyncModels() {
             var rtbvm = DataContext as MpContentItemViewModel;
-            if(!rtbvm.CopyItem.IsChanged) {
-                return;
-            }
-            UpdateLayout();
+
+
             //clear any search highlighting when saving the document then restore after save
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
 
@@ -51,7 +49,7 @@ namespace MpWpfApp {
 
             ClearHyperlinks();
 
-            rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
+            rtbvm.CopyItemData = Rtb.Document.ToRichText();
 
             rtbvm.CopyItem.WriteToDatabase();
 
@@ -71,6 +69,9 @@ namespace MpWpfApp {
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
+                if(rtbivm.Parent.IsPlaceholder) {
+                    return;
+                }
                 rtbivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
                 rtbivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                 rtbivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
@@ -79,20 +80,23 @@ namespace MpWpfApp {
                 rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
 
                 var ctv = this.GetVisualAncestor<MpClipTileView>();
-                ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
-                ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
+                if(ctv != null) {
+                    ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
+                    ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
+                }
                 if (rtbivm.IsNewAndFirstLoad) {
                     //force new items to have left alignment
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
+                    UpdateLayout();
+                    return;
                 }
                 SyncModels();
             }
         }
 
         private void Ctv_OnUnexpandCompleted(object sender, EventArgs e) {
-
             Rtb.FitDocToRtb();
 
             Rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -171,6 +175,7 @@ namespace MpWpfApp {
             if(e.Changes.Count > 0) {
                 var rtbvm = DataContext as MpContentItemViewModel;
                 rtbvm.HasViewChanged = true;
+                rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
             }
         }
 
@@ -335,7 +340,7 @@ namespace MpWpfApp {
                 if (linkType == MpSubTextTokenType.TemplateSegment) {
                     linkType = MpSubTextTokenType.TemplateSegment;
                 }
-                var mc = Regex.Matches(pt, regExStr, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                var mc = Regex.Matches(pt, regExStr, RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {

@@ -1371,5 +1371,23 @@ namespace MpWpfApp.Properties {
                 this["StartupDateTime"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int MaxTemplateTextLength {
+            get {
+                return ((int)(this["MaxTemplateTextLength"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public int HideMainWindowAnimationMilliseconds {
+            get {
+                return ((int)(this["HideMainWindowAnimationMilliseconds"]));
+            }
+        }
     }
 }

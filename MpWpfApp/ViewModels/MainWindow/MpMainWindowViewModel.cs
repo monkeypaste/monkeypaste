@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using AsyncAwaitBestPractices.MVVM;
 using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
@@ -240,6 +241,8 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
+            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
+            MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
             Task.Run(() => {
                 MpMainWindowViewModel.IsMainWindowLoading = true;
 
@@ -247,10 +250,8 @@ namespace MpWpfApp {
                     IconBuilder = new MpIconBuilder()
                 });
 
-                MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
                 MpHelpers.Instance.Init();
 
-                MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
 
                 //MpPluginManager.Instance.Init();
 
@@ -373,22 +374,18 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand _showWindowCommand;
-        public ICommand ShowWindowCommand {
-            get {
-                if (_showWindowCommand == null) {
-                    _showWindowCommand = new RelayCommand(ShowWindow, CanShowWindow);
-                }
-                return _showWindowCommand;
-            }
-        }
-        private bool CanShowWindow() {
-            return (Application.Current.MainWindow == null ||
-                //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                MpMainWindowViewModel.IsMainWindowLoading ||
-                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
-        }
-        private void ShowWindow() {
+        public ICommand ShowWindowCommand => new RelayCommand(
+            () => {
+                MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow);
+            },
+            () => {
+                return (Application.Current.MainWindow == null ||
+                   //Application.Current.MainWindow.Visibility != Visibility.Visible ||
+                   MpMainWindowViewModel.IsMainWindowLoading ||
+                   !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
+            });
+
+        private async void ShowWindow() {
             //Ss = MpHelpers.Instance.CopyScreen();
             //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
@@ -397,15 +394,12 @@ namespace MpWpfApp {
                 Application.Current.MainWindow = new MpMainWindow();
             }
 
-            if (ClipTrayViewModel.WasItemAdded) {
-                Task.Run(() => {
-                    MpHelpers.Instance.RunOnMainThread(() => {
-                        ClipTrayViewModel.RefreshTiles();
-                        ClipTrayViewModel.WasItemAdded = false;
+            if (ClipTrayViewModel.ItemsAdded > 0) {
+                await MpClipTrayViewModel.Instance.RefreshTiles();
+                ClipTrayViewModel.ItemsAdded = 0;
 
-                        TagTrayViewModel.RefreshAllCounts();
-                    }, DispatcherPriority.Normal);
-                });
+                TagTrayViewModel.RefreshAllCounts();
+                ClipTrayViewModel.VisibileClipTiles[0].IsSelected = true;
             }
 
             SetupMainWindowRect();
@@ -436,36 +430,31 @@ namespace MpWpfApp {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
                     IsMainWindowOpening = false;
-                    MpClipTrayViewModel.Instance.ResetClipSelection();
 
                     OnMainWindowShow?.Invoke(this, null);
                 }
             };
-
             
             timer.Start();
         }
 
-        private RelayCommand<object> _hideWindowCommand;
-        public ICommand HideWindowCommand {
-            get {
-                if (_hideWindowCommand == null) {
-                    _hideWindowCommand = new RelayCommand<object>(HideWindow, CanHideWindow);
-                }
-                return _hideWindowCommand;
+        public IAsyncCommand<object> HideWindowCommand => new AsyncCommand<object>(
+            async (args) => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(async()=> { await HideWindow(args); });
+            },
+            (args) => {
+                return ((Application.Current.MainWindow != null &&
+                      Application.Current.MainWindow.Visibility == Visibility.Visible &&
+                      !IsShowingDialog &&
+                      !_isExpanded &&
+                      IsMainWindowOpen &&
+                      !IsMainWindowOpening) || args != null);
+            });
+
+        private async Task HideWindow(object args) {
+            if(IsMainWindowLocked) {
+                return;
             }
-        }
-        private bool CanHideWindow(object args) {
-            ///return false;
-            return (Application.Current.MainWindow != null &&
-                   Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   !IsShowingDialog && 
-                   !IsMainWindowLocked && 
-                   !_isExpanded &&
-                   IsMainWindowOpen && 
-                   !IsMainWindowOpening)  || args != null;
-        }
-        private async void HideWindow(object args) {
             IDataObject pasteDataObject = null;
             bool pasteSelected = false;
             if(args != null) {
@@ -488,7 +477,7 @@ namespace MpWpfApp {
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
             if(IsMainWindowOpen) {
-                double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+                double tt = Properties.Settings.Default.HideMainWindowAnimationMilliseconds;
                 double fps = 30;
                 double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 

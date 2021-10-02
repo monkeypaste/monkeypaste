@@ -10,12 +10,6 @@
              d:DataContext="{d:DesignInstance local:MpClipTileSortViewModel,IsDesignTimeCreatable=True}">
     <Grid Grid.Column="1"
           Margin="0">
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Loaded">
-                <i:CallMethodAction MethodName="ClipTileSort_Loaded"
-                                    TargetObject="{Binding}" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="4*" />

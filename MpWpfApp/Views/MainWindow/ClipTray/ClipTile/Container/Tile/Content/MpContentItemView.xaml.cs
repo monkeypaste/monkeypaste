@@ -28,7 +28,7 @@ namespace MpWpfApp {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
 
             var civm = DataContext as MpContentItemViewModel;
-            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItem.Id).ToList();
+            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItemId).ToList();
             if (scvml.Count > 0) {
                 civm.ShortcutKeyString = scvml[0].KeyString;
             } else {

@@ -379,5 +379,11 @@
     <Setting Name="StartupDateTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="MaxTemplateTextLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="HideMainWindowAnimationMilliseconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

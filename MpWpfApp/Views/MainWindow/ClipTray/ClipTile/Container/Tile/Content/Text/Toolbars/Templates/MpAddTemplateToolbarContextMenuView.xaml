@@ -9,13 +9,15 @@
              d:DesignWidth="800"
              x:Name="AddTemplateContextMenu">
     <Button x:Name="AddButton"
+            IsEnabledChanged="AddButton_IsEnabledChanged"
             ToolTip="Add Template"
             Click="AddButton_Click"
             Template="{StaticResource FlatButtonControlTemplate}">
         <Button.ContextMenu>
             <ContextMenu Opened="AddTemplateContextMenu_Opened" />
         </Button.ContextMenu>
-        <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
+        <Image x:Name="AddButtonImage" 
+               Source="/Resources/Images/MpRichTextBox/templateadd.png"
                Stretch="None"
                SnapsToDevicePixels="True" />
     </Button>

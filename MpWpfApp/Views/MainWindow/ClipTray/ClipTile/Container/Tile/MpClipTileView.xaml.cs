@@ -40,25 +40,21 @@ namespace MpWpfApp {
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
 
-            var ctvm = DataContext as MpClipTileViewModel;
-            ctvm.IsBusy = false;
-            //ClipTileBusyView.Visibility = Visibility.Hidden;
-            //ClipTileDockPanel.Visibility = Visibility.Visible;
+            HideBusySpinner();
         }
 
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            //ClipTileDockPanel.Visibility = Visibility.Hidden;
-            //ClipTileBusyView.Visibility = Visibility.Visible;
-
             if (DataContext != null && DataContext is MpClipTileViewModel ctvm) {
                 //ctvm.IsBusy = true;
                 ctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
                 ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
+                ctvm.PropertyChanged += Ctvm_PropertyChanged;
 
+                ShowBusySpinner();
                 Titles.Clear();
                 foreach (var civm in ctvm.ItemViewModels) {
                     Titles.Add(new TextBlock() {
-                        Text = civm.CopyItem.Title
+                        Text = civm.CopyItemTitle
                     });
                 }
 
@@ -67,6 +63,29 @@ namespace MpWpfApp {
                 //    ctvm.IsBusy = false;
                 //});
             }
+        }
+
+        private void Ctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ctvm = sender as MpClipTileViewModel;
+            switch (e.PropertyName) {
+                case nameof(ctvm.IsBusy):
+                    if(ctvm.IsBusy) {
+                        ShowBusySpinner();
+                    } else {
+                        HideBusySpinner();
+                    }
+                    break;
+            }
+        }
+
+        private void ShowBusySpinner() {
+            ClipTileBusyView.Visibility = Visibility.Visible;
+            ClipTileDockPanel.Visibility = Visibility.Hidden;
+        }
+
+        private void HideBusySpinner() {
+            ClipTileBusyView.Visibility = Visibility.Hidden;
+            ClipTileDockPanel.Visibility = Visibility.Visible;
         }
 
         private void Ctvm_ViewModelLoaded(object sender, EventArgs e) {

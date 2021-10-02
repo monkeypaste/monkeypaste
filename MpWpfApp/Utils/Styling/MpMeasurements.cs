@@ -122,6 +122,12 @@ namespace MpWpfApp {
             }
         }
 
+        public int TrayPageSize {
+            get {
+                return TotalVisibleClipTiles * 1;
+            }
+        }
+
         public double ClipTrayWidth {
             get {
                 return ScreenWidth - AppStateButtonPanelWidth;

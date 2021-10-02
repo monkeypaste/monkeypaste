@@ -105,5 +105,23 @@ namespace MpWpfApp {
                 AddButton.ContextMenu.IsOpen = true;
             }
         }
+
+        private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(AddButton.IsEnabled) {
+                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Resources/Images/MpRichTextBox/templateadd.png"));
+                AddButton.ToolTip = "Add Template";
+            } else {
+                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Resources/Images/MpRichTextBox/templatedisabled.png"));
+                var tb = new TextBlock() {
+                    Foreground = Brushes.Red,
+                    Background = Brushes.White,
+                    FontSize = 12,
+                    Text = @"-current selection intersects with a template" + Environment.NewLine +
+                            @"-contains a space" + Environment.NewLine +
+                            @"-contains more than 10 characters"
+                };
+                AddButton.ToolTip = tb;
+            }
+        }
     }
 }

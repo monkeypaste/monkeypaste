@@ -47,11 +47,13 @@
                                         MinWidth="150"
                                         ItemsSource="{Binding ItemViewModels}"
                                         Focusable="True"
-                                        IsEnabled="True"
+                                        IsEnabled="True"                                        
+                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.ScrollUnit="Pixel"
+                                        VirtualizingPanel.VirtualizationMode="Recycling"    
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                        VirtualizingPanel.IsVirtualizing="True"
                                         Padding="0">
             <i:Interaction.Behaviors>
                 <local:MpDropBehavior x:Name="DropBehavior2"/>
@@ -63,7 +65,7 @@
             <local:MpMultiSelectListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel IsItemsHost="True"
-                                                Orientation="Vertical" />
+                                            Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </local:MpMultiSelectListBox.ItemsPanel>
             <local:MpMultiSelectListBox.ItemContainerStyle>

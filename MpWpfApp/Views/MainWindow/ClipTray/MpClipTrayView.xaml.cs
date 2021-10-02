@@ -105,6 +105,10 @@ namespace MpWpfApp {
             var civl = new List<Rect>();
             for (int i = 0; i < ClipTray.Items.Count; i++) {
                 var clv = ClipTray.GetListBoxItem(i).GetVisualDescendent<MpContentListView>();
+                if(clv == null) {
+                    //this is null when item is a placeholder
+                    continue;
+                }
                 for (int j = 0; j < clv.ContentListBox.Items.Count; j++) {
                     int idx = scivml.IndexOf(clv.ContentListBox.Items[j] as MpContentItemViewModel);
                     if(idx >= 0) {
@@ -171,6 +175,10 @@ namespace MpWpfApp {
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
             TrayItemsPanel = sender as VirtualizingStackPanel;
+        }
+
+        private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {
+            return;
         }
     }
 }

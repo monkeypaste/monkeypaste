@@ -6,7 +6,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="800">
+             d:DesignHeight="50" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <RichTextBox x:Key="CurrentRtbTarget" />
     </UserControl.Resources>

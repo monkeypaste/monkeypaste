@@ -38,6 +38,7 @@
                                         VirtualizingPanel.IsVirtualizing="True"
                                         VirtualizingPanel.ScrollUnit="Pixel"
                                         VirtualizingPanel.VirtualizationMode="Recycling"         
+                                        VirtualizingStackPanel.CleanUpVirtualizedItem="ClipTray_CleanUpVirtualizedItem"
                                         ScrollViewer.ScrollChanged="ClipTray_ScrollChanged"
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.IsDeferredScrollingEnabled="True"

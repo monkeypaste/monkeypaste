@@ -44,8 +44,8 @@ namespace MpWpfApp {
         }
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
-            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
 
+            
 
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
             adornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
@@ -70,12 +70,25 @@ namespace MpWpfApp {
                 rtbcvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
                 rtbcvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 rtbcvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-
-                var ctv = this.GetVisualAncestor<MpClipTileView>();
-                ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
-                ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
-
+                rtbcvm.PropertyChanged += Rtbcvm_PropertyChanged;
             } 
+        }
+
+        private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var rtbcvm = sender as MpClipTileViewModel;
+            switch(e.PropertyName) {
+                case nameof(rtbcvm.IsBusy):
+                    if(!rtbcvm.IsBusy) {
+                        UpdateLayout();
+                        var ctv = this.GetVisualAncestor<MpClipTileView>();
+                        if (ctv != null) {
+                            ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
+                            ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
+                        }
+                    }
+                    break;
+            }
+            
         }
 
         private void Ctv_OnUnexpandCompleted(object sender, EventArgs e) {
@@ -103,7 +116,7 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             this.UpdateLayout();
-            //ContentListBox.Items.Refresh();
+            ContentListBox.Items.Refresh();
         }
 
         public void SyncMultiSelectDragButton(bool isOver, bool isDown) {
@@ -126,6 +139,5 @@ namespace MpWpfApp {
             //    }
             //}
         }
-
     }
 }

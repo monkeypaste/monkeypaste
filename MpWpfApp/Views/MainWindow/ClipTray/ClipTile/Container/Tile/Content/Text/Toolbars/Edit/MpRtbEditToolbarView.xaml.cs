@@ -82,7 +82,7 @@ namespace MpWpfApp {
             var ertbtvm = DataContext as MpContentItemViewModel;
             ertbtvm.HasModelChanged = true;
             
-            artb.UpdateLayout();
+            //artb.UpdateLayout();
         }
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
@@ -110,24 +110,38 @@ namespace MpWpfApp {
             CenterButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
             RightButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
 
-            //disable add template button if current selection intersects with a template
-            //this may not be necessary since templates are inlineuicontainers...
-            MpTemplateViewModel thlvm = null;
+            AddTemplateButton.IsEnabled = CanAddTemplate(artb.Selection);
+
+            //artb.UpdateLayout();
+        }
+
+        private bool CanAddTemplate(TextSelection ts) {
+            //disable add template button if:
+            //-current selection intersects with a template
+            //-contains a space
+            //-contains more than 10 characters
+            bool canAddTemplate = true;
+
             if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+                MpTemplateViewModel thlvm = null;
                 if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
                     thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
                 } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
                     thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
                 }
-            }
-            if (thlvm == null) {
-                AddTemplateButton.IsEnabled = true;
-            } else {
-                AddTemplateButton.IsEnabled = false;
+                canAddTemplate = thlvm == null;
             }
 
-            artb.UpdateLayout();
+            if(canAddTemplate) {
+                canAddTemplate = !ts.Text.Contains(" ");
+            }
+
+            if(canAddTemplate) {
+                canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.Instance.MaxTemplateTextLength;
+            }
+
+            return canAddTemplate;
         }
 
         private void FontFamilyCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -243,7 +257,7 @@ namespace MpWpfApp {
             // Deselect all buttons
             foreach (var button in buttonGroup) {
                 button.IsChecked = false;
-            }
+            } 
 
             // Select the clicked button
             clickedButton.IsChecked = true;

@@ -267,7 +267,7 @@ namespace MonkeyPaste {
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if (!ignoreTracking) {
-                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+                    MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
                 }
             }
 
@@ -829,7 +829,6 @@ namespace MonkeyPaste {
                     , fk_MpAppId integer NOT NULL
                     ); 
 
-                    
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpCopyItemGuid text not null

@@ -100,7 +100,7 @@
             <!-- Loading Spinner -->
             <local:MpClipTileLoadingOverlayView x:Name="ClipTileBusyView" 
                                                 Background="#FF3D3D3D"
-                                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                Visibility="Hidden" />
             <!-- Trial Expired -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>

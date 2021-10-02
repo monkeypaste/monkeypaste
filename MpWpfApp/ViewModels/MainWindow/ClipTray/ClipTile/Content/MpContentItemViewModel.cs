@@ -183,8 +183,11 @@ namespace MpWpfApp {
 
         public Size ExpandedSize {
             get {
+                if (Parent == null || CopyItem == null) {
+                    return new Size();
+                }
                 //get contents actual size
-                var ds = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
 
                 //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
                 double w = Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth);
@@ -198,11 +201,17 @@ namespace MpWpfApp {
 
         public Size UnexpandedSize {
             get {
+                if (Parent == null || CopyItem == null) {
+                    return new Size();
+                }
                 //item height is divided evenly by items but if there are many (more than 5) 
                 //their will only be 5 visible
-                double h = Math.Max(
-                    MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
-                    MpMeasurements.Instance.ClipTileContentItemMinHeight);
+                var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
+                double h = Math.Min(
+                                ds.Height,
+                                Math.Max(
+                                        MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
+                                        MpMeasurements.Instance.ClipTileContentItemMinHeight));
                 return new Size(
                             MpMeasurements.Instance.ClipTileContentMinWidth,
                             h);
@@ -280,6 +289,10 @@ namespace MpWpfApp {
         public bool IsEditingContent { get; set; } = false;
         public bool IsEditingTemplate {
             get {
+                if(CopyItem == null || TemplateCollection == null) {
+                    return false;
+                }
+
                 return TemplateCollection.Templates.Any(x => x.IsEditingTemplate);
             }
         }
@@ -315,6 +328,7 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsPlaceholder { get; set; } = false;
 
 
         #region Drag & Drop
@@ -458,6 +472,112 @@ namespace MpWpfApp {
             }
         }
 
+        public bool CopyItemIsChanged {
+            get {
+                if (CopyItem == null) {
+                    return true;
+                }
+                return CopyItem.IsChanged;
+            }
+            set {
+                if (CopyItem != null && CopyItem.IsChanged != value) {
+                    CopyItem.IsChanged = value;
+                    OnPropertyChanged(nameof(CopyItemIsChanged));
+                }
+            }
+        }
+
+        public int CompositeSortOrderIdx {
+            get {
+                if(CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CompositeSortOrderIdx;
+            }
+            set {
+                if(CopyItem != null && CopyItem.CompositeSortOrderIdx != value) {
+                    CopyItem.CompositeSortOrderIdx = value;
+                    OnPropertyChanged(nameof(CompositeSortOrderIdx));
+                }
+            }
+        }
+
+        public int CompositeParentCopyItemId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CompositeParentCopyItemId;
+            }
+            set {
+                if (CopyItem != null && CopyItem.CompositeParentCopyItemId != value) {
+                    CopyItem.CompositeParentCopyItemId = value;
+                    OnPropertyChanged(nameof(CompositeParentCopyItemId));
+                }
+            }
+        }
+
+        public string CopyItemTitle {
+            get {
+                if(CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Title;
+            }
+            set {
+                if(CopyItem != null && CopyItem.Title != value) {
+                    CopyItem.Title = value;
+                    OnPropertyChanged(nameof(CopyItemTitle));
+                }
+            }
+        }
+
+        public MpCopyItemType CopyItemType {
+            get {
+                if(CopyItem == null) {
+                    return MpCopyItemType.None;
+                }
+                return CopyItem.ItemType;
+            }
+            set {
+                if(CopyItem != null && CopyItem.ItemType != value) {
+                    CopyItem.ItemType = value;
+                    OnPropertyChanged(nameof(CopyItemType));
+                }
+            }
+        }
+
+        public int CopyItemId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.Id;
+            }
+            set {
+                if (CopyItem != null && CopyItem.Id != value) {
+                    CopyItem.Id = value;
+                    OnPropertyChanged(nameof(CopyItemId));
+                }
+            }
+        }
+
+        public string CopyItemData {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemData;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemData != value) {
+                    CopyItem.ItemData = value;
+                    OnPropertyChanged(nameof(CopyItemData));
+                    OnPropertyChanged(nameof(CurrentSize));
+                }
+            }
+        }
+
         public MpCopyItem CopyItem { get; set; }
 
         #endregion
@@ -484,8 +604,18 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
+            Initialize(ci);
+        }
+
+        public void Initialize(MpCopyItem ci) {
+            if (ci == null) {
+                IsPlaceholder = true;
+            } else {
+                IsPlaceholder = false;
+            }
             CopyItem = ci;
 
+            IsBusy = true;
             IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
 
             ContextMenuViewModel = new MpContentContextMenuViewModel(this);
@@ -493,8 +623,8 @@ namespace MpWpfApp {
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
             CycleDetailCommand.Execute(null);
+            IsBusy = false;
         }
-
         public async Task GatherAnalytics() {
             var analyticTasks = new List<Task>();
             Task<string> urlTask = null, ocrTask = null, cvTask = null;
@@ -568,11 +698,11 @@ namespace MpWpfApp {
 
 
         public string GetDetailText(MpCopyItemDetailType detailType) {
-            string info = string.Empty;
             if (CopyItem == null) {
-                info = string.Empty;
+                return string.Empty;
             }
 
+            string info = string.Empty;
             switch (detailType) {
                 //created
                 case MpCopyItemDetailType.DateTimeCreated:
@@ -702,10 +832,15 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(CopyItem):
+                    OnPropertyChanged(nameof(CopyItemData));
+                    OnPropertyChanged(nameof(CurrentSize));
                     UpdateDetails();
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
+                    break;
+                case nameof(IsPlaceholder):
+                    ItemVisibility = IsPlaceholder ? Visibility.Hidden : Visibility.Visible;
                     break;
             }
         }

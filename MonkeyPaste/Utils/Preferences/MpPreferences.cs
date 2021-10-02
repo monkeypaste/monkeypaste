@@ -177,6 +177,12 @@ namespace MonkeyPaste {
             }
         }
 
+        public int HideMainWindowAnimationMilliseconds {
+            get {
+                return 250;
+            }
+        }
+
         public int SearchBoxTypingDelayInMilliseconds {
             get {
                 return 500;
@@ -270,6 +276,12 @@ namespace MonkeyPaste {
         public int MaxQrCodeCharLength {
             get {
                 return 4296;
+            }
+        }
+
+        public int MaxTemplateTextLength {
+            get {
+                return 10;
             }
         }
         #endregion

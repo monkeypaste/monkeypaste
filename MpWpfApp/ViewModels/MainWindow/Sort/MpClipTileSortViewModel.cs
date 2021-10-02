@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase<object> {
@@ -61,15 +62,13 @@ namespace MpWpfApp {
                             break;
                         }
                         if (SelectedSortType.Name != "Manual") {
-                            SelectedSortType.IsVisible = false;
+                            var manualSort = SortTypes.Where(x => x.Header == "Manual").FirstOrDefault();
+                            manualSort.IsVisible = false;
                             PerformSelectedSortCommand.Execute(null);
                         }
                         break;
                 }
             };
-        }
-        public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            PerformSelectedSortCommand.Execute(null);
         }
 
         public void SetToManualSort() {
@@ -91,11 +90,13 @@ namespace MpWpfApp {
                 PerformSelectedSortCommand.Execute(null);
             });
 
-        public ICommand PerformSelectedSortCommand => new RelayCommand(
-                () => MpClipTrayViewModel.Instance.RefreshTiles()
-                ,
-                () => { return !MpMainWindowViewModel.IsMainWindowLoading; 
-            });
+        public IAsyncCommand PerformSelectedSortCommand => new AsyncCommand(
+                async () => {
+                    await MpClipTrayViewModel.Instance.RefreshTiles();
+                },
+                (args) => { 
+                    return !MpMainWindowViewModel.IsMainWindowLoading; 
+                });
           
         #endregion
     }

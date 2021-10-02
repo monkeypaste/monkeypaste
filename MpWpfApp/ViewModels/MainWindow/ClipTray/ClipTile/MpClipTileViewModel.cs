@@ -32,6 +32,8 @@ using System.Speech.Synthesis;
 
     public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentCommands {
         #region Private Variables
+        private object _itemLockObject;
+
         private List<string> _tempFileList = new List<string>();
         //container
 
@@ -101,7 +103,7 @@ using System.Speech.Synthesis;
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                return ItemViewModels.Where(x=>x.CopyItem.CompositeParentCopyItemId == 0).FirstOrDefault();
+                return ItemViewModels.Where(x=>x.CompositeParentCopyItemId == 0).FirstOrDefault();
             }
         }
 
@@ -110,7 +112,7 @@ using System.Speech.Synthesis;
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                return ItemViewModels.OrderByDescending(x => x.CopyItem.CompositeSortOrderIdx).ToList()[0];
+                return ItemViewModels.OrderByDescending(x => x.CompositeSortOrderIdx).ToList()[0];
             }
         }
 
@@ -556,9 +558,9 @@ using System.Speech.Synthesis;
                 if(HeadItem == null) {
                     return false;
                 }
-                return HeadItem.CopyItem.ItemType == MpCopyItemType.Csv ||
-                        HeadItem.CopyItem.ItemType == MpCopyItemType.Html ||
-                        HeadItem.CopyItem.ItemType == MpCopyItemType.RichText;
+                return HeadItem.CopyItemType == MpCopyItemType.Csv ||
+                        HeadItem.CopyItemType == MpCopyItemType.Html ||
+                        HeadItem.CopyItemType == MpCopyItemType.RichText;
             }
         }
         #endregion
@@ -805,7 +807,7 @@ using System.Speech.Synthesis;
                 if(PrimaryItem == null) {
                     return MpCopyItemType.None;
                 }
-                return PrimaryItem.CopyItem.ItemType;
+                return PrimaryItem.CopyItemType;
             }
         }
         public DateTime CopyItemCreatedDateTime {
@@ -829,17 +831,35 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Public Methods
+
         public MpClipTileViewModel() : base(null) {
             IsBusy = true;
         }
 
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
+            _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             Task.Run(()=>Initialize(ci));
         }
 
-        public void Initialize(MpCopyItem headItem) {
-            MpHelpers.Instance.RunOnMainThread(() => {
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            //throw new NotImplementedException();
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem ci) {
+                var civm = ItemViewModels.Where(x => x.CopyItemId == ci.Id);
+                
+            }
+        }
+
+        public async Task Initialize(MpCopyItem headItem) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                if (headItem == null) {
+                    IsPlaceholder = true;
+                } else {
+                    IsPlaceholder = false;
+                }
                 IsBusy = true;
                 var ccil = MpCopyItem.GetCompositeChildren(headItem);
                 ccil.Insert(0, headItem);
@@ -850,7 +870,8 @@ using System.Speech.Synthesis;
                 }
 
                 ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                    civml.OrderBy(x => x.CopyItem.CompositeSortOrderIdx).ToList());
+                    civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
 
                 foreach (var ivm in ItemViewModels) {
                     BindItemEvents(ivm);
@@ -945,18 +966,8 @@ using System.Speech.Synthesis;
                         TileContentHeight -= TileDetailHeight;
                     }
                     break;
-                case nameof(IsClipDropping):
-                    //foreach (var rtbvm in RichTextBoxViewModelCollection) {
-                    //    rtbvm.UpdateLayout();
-                    //}
-                    break;
-                case nameof(ItemVisibility):
-                    if (ItemVisibility == Visibility.Collapsed) {
-                        return;
-                    }
-                    if (IsPlaceholder) {
-                        ItemVisibility = Visibility.Collapsed;
-                    }
+                case nameof(IsPlaceholder):
+                    ItemVisibility = IsPlaceholder ? Visibility.Collapsed : Visibility.Visible;
                     break;
                 case nameof(IsFlipping):
                     if(IsFlipping) {
@@ -1304,7 +1315,6 @@ using System.Speech.Synthesis;
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
-        public event EventHandler<object> OnSubSelectionChanged;
 
         #endregion
 
@@ -1399,7 +1409,7 @@ using System.Speech.Synthesis;
 
         public async Task InsertRange(int idx, List<MpCopyItem> models) {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                var curModels = ItemViewModels.Select(x => x.CopyItem).ToList();
+                var curModels = ItemViewModels.Where(x=>x.CopyItem != null).Select(x => x.CopyItem).ToList();
 
                 idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
 
@@ -1415,27 +1425,43 @@ using System.Speech.Synthesis;
                 }
 
                 //only will occur during drag & drop
-                Initialize(curModels[0]);
+                await Initialize(curModels[0]);
+            });
+        }
+
+        public async Task RemoveRange(List<MpCopyItem> models) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                for (int i = 0; i < models.Count; i++) {
+                    var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
+                    if (ivm != null) {
+                        ItemViewModels.Remove(ivm);
+                    }
+                }
+                if (ItemViewModels.Count == 0) {
+                    IsPlaceholder = true;
+                    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
+                } else {
+                    UpdateSortOrder();
+                }
             });
         }
         public void UpdateSortOrder(bool fromModel = false) {
             if (fromModel) {
-                ItemViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
+                ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
             } else {
                 foreach (var ivm in ItemViewModels) {
-                    ivm.CopyItem.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                    ivm.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                    if(ivm.CompositeSortOrderIdx == 0) {
+                        ivm.CompositeParentCopyItemId = 0;
+                    } else {
+                        ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
+                    }
+                    ivm.CopyItem.WriteToDatabase();
                 }
             }
         }
 
-        public void RemoveRange(List<MpCopyItem> models) {
-            for (int i = 0; i < models.Count; i++) {
-                var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
-                if (ivm != null) {
-                    ItemViewModels.Remove(ivm);
-                }
-            }
-        }
+        
 
         #endregion
         //public abstract string GetItemRtf();

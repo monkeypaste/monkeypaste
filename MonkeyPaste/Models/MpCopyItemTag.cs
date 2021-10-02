@@ -71,6 +71,10 @@ namespace MonkeyPaste {
         public static MpCopyItemTag Create(int tagId,int copyItemId, int sortIdx = 0) {
             var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
             if(dupCheck != null) {
+                if(dupCheck.CopyItemSortIdx != sortIdx) {
+                    dupCheck.CopyItemSortIdx = sortIdx;
+                    MpDb.Instance.UpdateItem<MpCopyItemTag>(dupCheck);
+                }
                 return dupCheck;
             }
 
@@ -81,17 +85,6 @@ namespace MonkeyPaste {
                 CopyItemSortIdx = sortIdx
             };
 
-            //if(!newCopyItemTag.IsSudoTag()) {
-            //    var citl = MpDb.Instance.GetItems<MpCopyItemTag>();
-            //    if(citl.Count > 0) {
-            //        if(forceSortIdx < 0) {
-            //            newCopyItemTag.CopyItemSortIdx = citl.OrderByDescending(x => x.CopyItemSortIdx).ToList()[0].CopyItemSortIdx;
-            //        } else {
-            //            forceSortIdx = forceSortIdx > citl.Count ? citl.Count : forceSortIdx;
-            //            newCopyItemTag.CopyItemSortIdx = forceSortIdx;
-            //        }
-            //    }
-            //}
             MpDb.Instance.AddItem<MpCopyItemTag>(newCopyItemTag);
 
             return newCopyItemTag;

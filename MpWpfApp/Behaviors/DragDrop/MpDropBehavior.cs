@@ -101,127 +101,44 @@ namespace MpWpfApp {
         }
 
         public void Drop(bool isCopy = false) {
-            //drop is move by default
             if (dragItemList == null || dragItemList.Count == 0) {
                 Reset();
                 return;
             }
-            var affectedClipTiles = new List<MpClipTileViewModel>();
-            foreach (var dci in dragItemList) {
-                //add all tiles involed in the drag drop
-                var dctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dci.Id);
-                if (dctvm != null && !affectedClipTiles.Contains(dctvm.Parent)) {
-                    affectedClipTiles.Add(dctvm.Parent);
-                }
-            }
-            // TODO check for Ctrl down if so clone dragItemList
-            int dropParentId = dragItemList[0].Id;
-            var cil = new List<MpCopyItem>();
-            if (isHorizontal) {
-                cil = dragItemList;
-            } else {
-                var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-                //ensure drop tile is not in affected list
-                if (affectedClipTiles.Contains(ctvm)) {
-                    affectedClipTiles.Remove(ctvm);
-                }
-
-                if (dropIdx > 0) {
-                    dropParentId = ctvm.HeadItem.CopyItem.Id;
-                }
-                cil = ctvm.ItemViewModels.Select(x => x.CopyItem).ToList();
-                cil = cil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                dragItemList.Reverse();
-                foreach (var dci in dragItemList) {
-                    if (cil.Any(x => x.Id == dci.Id)) {
-                        //drag item is part of drop list
-                        cil.RemoveAt(cil.IndexOf(dci));
-                        dropIdx--;
-                    }
-
-                    cil.Insert(dropIdx, dci);
-                }
-            }
-            var curTagVm = MpTagTrayViewModel.Instance.SelectedTagTile;
-            
-            //re-root all affected tiles
-            for (int i = 0; i < affectedClipTiles.Count; i++) {
-                var ndatcil = affectedClipTiles[i].ItemViewModels.Select(x => x.CopyItem).ToList();
-                foreach (var di in dragItemList) {
-                    //for non drop affected tiles remove any dropped items
-                    if (ndatcil.Contains(di)) {
-                        ndatcil.Remove(di);
-                    }
-                }
-                if (ndatcil.Count == 0) {
-                    continue;
-                }
-                //make the lowest sort item the root
-                ndatcil = ndatcil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-
-                //same loop as for drop tile but from sub non-drop list
-                for (int j = 0; j < ndatcil.Count; j++) {
-                    MpCopyItem ci = ndatcil[j];
-                    if (j == 0) {
-                        ci.CompositeParentCopyItemId = 0;
-                    } else {
-                        ci.CompositeParentCopyItemId = ndatcil[0].Id;
-                    }
-                    ci.CompositeSortOrderIdx = j;
-                    ci.WriteToDatabase();
-                }
-            }
-            //loop through drop items and re-root/sort
-            for (int i = 0; i < cil.Count; i++) {
-                MpCopyItem ci = cil[i];
-                if (ci.Id == dropParentId) {
-                    ci.CompositeParentCopyItemId = 0;
-                } else {
-                    ci.CompositeParentCopyItemId = cil[0].Id;
-                }
-                ci.CompositeSortOrderIdx = i;
-                ci.WriteToDatabase();
-            }
-
-
-            //clear selection ensure its not reset after refresh 
-            MpClipTrayViewModel.Instance.ClearClipSelection();
-            MpClipTrayViewModel.Instance.IgnoreSelectionReset = true;
-
-            //recreate tiles with new structure
-            MpClipTrayViewModel.Instance.RefreshTiles();
-
-            //find new or moved dropped tile
-            MpClipTileViewModel dropTile = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dropParentId).Parent;
-            int dropTileIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dropTile);
-
-            if (curTagVm.IsSudoTag) {
-                MpClipTileSortViewModel.Instance.SetToManualSort();
-            }
-            MpClipTrayViewModel.Instance.ClipTileViewModels.Move(dropTileIdx, dropIdx);
-            if(!curTagVm.IsSudoTag) {
-                //resersdf
-                MpClipTrayViewModel.Instance.UpdateSortOrder();
-            }
-            //do reverse to preserve selection order
-            dragItemList.Reverse();
+            int tileCount = MpClipTrayViewModel.Instance.ClipTileViewModels.Count;
+            MpClipTileViewModel dropTile = null;
+            var dragTiles = new List<MpClipTileViewModel>();
             foreach (var di in dragItemList) {
-                var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(di.Id);
-                if (civm != null) {
-                    civm.Parent.IsSelected = true;
-                    civm.IsSelected = true;
-                    if (dropTile == null) {
-                        //reference moved or new tile
-                        dropTile = civm.Parent;
-                    }
+                var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(di.Id);
+                if (dcivm != null && dcivm.Parent != null && !dragTiles.Contains(dcivm.Parent) && dcivm.Parent != dropTile) {
+                    dragTiles.Add(dcivm.Parent);
                 }
             }
 
-            //for sudo tag drops refreshclips will change the sort order
-            //so move the drop tile back where user wanted it
-            MpClipTrayViewModel.Instance.IgnoreSelectionReset = false;
+            if (isHorizontal) {
+                dropIdx = dropIdx < 0 ? 0 : dropIdx >= tileCount ? tileCount - 1 : dropIdx;
+                dropTile = MpClipTrayViewModel.Instance.ClipTileViewModels[tileCount - 1];
+                MpClipTileSortViewModel.Instance.SetToManualSort();
+            } else {
+                dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
+            }
 
-            Reset();
+            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                foreach (var ctvm in dragTiles) {
+                    await ctvm.RemoveRange(dragItemList);
+                }
+                await dropTile.InsertRange(dropIdx, dragItemList);
+
+
+                if (isHorizontal) {
+
+                    await MpClipTrayViewModel.Instance.RefreshTiles();
+                    MpClipTrayViewModel.Instance.ClipTileViewModels.Move(tileCount - 1, dropIdx);
+                }
+
+                dropTile.IsSelected = true;
+                Reset();
+            });
         }
 
         private bool IsDragDataValid(List<MpCopyItem> dcil, int overIdx) {
@@ -272,6 +189,7 @@ namespace MpWpfApp {
         private void Reset() {
             dropIdx = -1;
             dragItemList = null;
+            adornerLayer.Update();
             lineAdorner.IsShowing = false;
             adornerLayer.Update();
         }

@@ -1969,6 +1969,7 @@
     <Resource Include="Resources\Images\copy.png" />
     <Resource Include="FodyWeavers.xml" />
     <Resource Include="Resources\Images\down_black.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\templatedisabled.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

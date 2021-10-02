@@ -314,33 +314,35 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
-            PropertyChanged += (s, e1) => {
-                switch (e1.PropertyName) {
-                    case nameof(IsEditing):
-                        if(IsEditing) {
-                            _wasEditingName = true;
-                            _originalTagName = TagName;
-                        } else {
-                            if(_wasEditingName) {
-                                _wasEditingName = false;
-                                if(TagName != _originalTagName) {
-                                    Tag.WriteToDatabase();
-                                }
-                            }
-                        }
-                        break;
-                    case nameof(Tag):
-                        break;
-                    case nameof(IsSelected):
-                        if(IsSelected) {
-                            MpClipTrayViewModel.Instance.RefreshTiles();
-                        }
-                        break;
-                }
-            };
+            PropertyChanged += MpTagTileViewModel_PropertyChanged;
 
             Tag = tag;
-        }        
+        }
+
+        private async void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsEditing):
+                    if (IsEditing) {
+                        _wasEditingName = true;
+                        _originalTagName = TagName;
+                    } else {
+                        if (_wasEditingName) {
+                            _wasEditingName = false;
+                            if (TagName != _originalTagName) {
+                                Tag.WriteToDatabase();
+                            }
+                        }
+                    }
+                    break;
+                case nameof(Tag):
+                    break;
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        await MpClipTrayViewModel.Instance.RefreshTiles();
+                    }
+                    break;
+            }
+        }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             var tagBorder = (MpClipBorder)sender;
