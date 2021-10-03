@@ -73,6 +73,7 @@ namespace MonkeyPaste {
             } else {
                 WriteToDatabase(MpPreferences.Instance.ThisDeviceGuid);
             }
+            IsChanged = false;
         }
 
         public virtual async Task WriteToDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {

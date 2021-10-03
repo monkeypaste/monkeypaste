@@ -394,13 +394,7 @@ namespace MpWpfApp {
                 Application.Current.MainWindow = new MpMainWindow();
             }
 
-            if (ClipTrayViewModel.ItemsAdded > 0) {
-                await MpClipTrayViewModel.Instance.RefreshTiles();
-                ClipTrayViewModel.ItemsAdded = 0;
-
-                TagTrayViewModel.RefreshAllCounts();
-                ClipTrayViewModel.VisibileClipTiles[0].IsSelected = true;
-            }
+            
 
             SetupMainWindowRect();
 
@@ -423,14 +417,20 @@ namespace MpWpfApp {
             var timer = new DispatcherTimer(DispatcherPriority.Render);
             timer.Interval = TimeSpan.FromMilliseconds(fps);
             
-            timer.Tick += (s, e32) => {
+            timer.Tick += async (s, e32) => {
                 if (MainWindowTop > _endMainWindowTop) {
                     MainWindowTop += dt;
                 } else {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
                     IsMainWindowOpening = false;
+                    if (ClipTrayViewModel.ItemsAdded > 0) {
+                        await MpClipTrayViewModel.Instance.RefreshTiles();
+                        ClipTrayViewModel.ItemsAdded = 0;
 
+                        TagTrayViewModel.RefreshAllCounts();
+                        ClipTrayViewModel.VisibileClipTiles[0].IsSelected = true;
+                    }
                     OnMainWindowShow?.Invoke(this, null);
                 }
             };

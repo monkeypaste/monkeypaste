@@ -28,8 +28,6 @@
             </Grid.ContextMenu>
             <AdornerDecorator>
                 <local:MpRtbView x:Name="EditorView"
-                                 HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Stretch"
                                  DataContext="{Binding}" />
                 <!--<local:MpQuillEditorView x:Name="EditorView"
                                          DataContext="{Binding}" />-->

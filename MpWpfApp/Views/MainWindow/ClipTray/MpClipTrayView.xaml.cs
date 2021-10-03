@@ -50,45 +50,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void ShiftLeft() {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.ClipTileViewModels.Move(0, ctrvm.ClipTileViewModels.Count - 1);
-            return;
-            if(ClipTray.Items.Count <= 1) {
-                return;
-            }
-
-            var firstItem = ctrvm.ClipTileViewModels[0];
-            for (int i = 0; i < ClipTray.Items.Count; i++) {
-                var lbi = ClipTray.GetListBoxItem(i).GetVisualDescendent<MpClipTileView>();
-                if(i == ClipTray.Items.Count - 1) {
-                    lbi.DataContext = firstItem;
-                } else {
-                    lbi.DataContext = ctrvm.ClipTileViewModels[i + 1];
-                }
-            }
-        }
-
-        private void ShiftRight() {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.ClipTileViewModels.Move(0, 1);
-            return;
-
-            if (ClipTray.Items.Count <= 1) {
-                return;
-            }
-
-            int count = ctrvm.ClipTileViewModels.Count;
-            var lastItem = ctrvm.ClipTileViewModels[count-1];
-            for (int i = count - 1; i >= 0; i--) {
-                var lbi = ClipTray.GetListBoxItem(i);
-                if (i == 0) {
-                    lbi.DataContext = lastItem;
-                } else {
-                    lbi.DataContext = ctrvm.ClipTileViewModels[i - 1];
-                }
-            }
-        }
 
         private void ClipTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (DataContext != null) {

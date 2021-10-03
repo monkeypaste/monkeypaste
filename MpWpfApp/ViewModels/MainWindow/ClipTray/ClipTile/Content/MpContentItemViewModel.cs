@@ -90,7 +90,7 @@ namespace MpWpfApp {
             }
         }
 
-        
+
         #endregion
 
         #region Appearance
@@ -145,11 +145,11 @@ namespace MpWpfApp {
                 if (Parent.IsExpanded) {
                     return Brushes.White;
                 }
-                if (IsHovering && 
+                if (IsHovering &&
                     Parent.Count > 1) {
                     return MpHelpers.Instance.GetLighterBrush(
                         new SolidColorBrush(
-                            CopyItem.ItemColor.ToWinMediaColor()),0.75
+                            CopyItem.ItemColor.ToWinMediaColor()), 0.75
                         );
                 }
 
@@ -158,14 +158,16 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush ItemBorderBrush {
+        public Brush ItemSelectionBrush {
             get {
-                if (Parent == null) {
+                if(Parent == null || Parent.Count <= 1 || !IsSelected) {
                     return Brushes.Transparent;
                 }
-                if (Parent.SelectedItems.Count > 1 && IsSelected) {
-                    return Brushes.Red;
-                }
+                return Brushes.Red;
+            }
+        }
+        public Brush ItemBorderBrush {
+            get {
                 return Brushes.Black;
             }
         }
@@ -181,6 +183,14 @@ namespace MpWpfApp {
 
         #region Layout
 
+        public double ContentHeight {
+            get {
+                if(Parent == null || CopyItem == null) {
+                    return 0;
+                }
+                return Parent.IsExpanded ? Double.NaN : UnexpandedSize.Height;
+            }
+        }
         public Size ExpandedSize {
             get {
                 if (Parent == null || CopyItem == null) {
@@ -206,12 +216,16 @@ namespace MpWpfApp {
                 }
                 //item height is divided evenly by items but if there are many (more than 5) 
                 //their will only be 5 visible
+                
                 var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
-                double h = Math.Min(
-                                ds.Height,
-                                Math.Max(
+                double h = 0;
+                if(Parent.Count == 1) {
+                    h = MpMeasurements.Instance.ClipTileContentHeight;
+                } else {
+                    h = Math.Max(
                                         MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
-                                        MpMeasurements.Instance.ClipTileContentItemMinHeight));
+                                        MpMeasurements.Instance.ClipTileContentItemMinHeight);
+                }
                 return new Size(
                             MpMeasurements.Instance.ClipTileContentMinWidth,
                             h);
@@ -247,15 +261,14 @@ namespace MpWpfApp {
                     return new Thickness(0);
                 }
                 double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
-                if (IsSelected) {
-                    return new Thickness(bt, bt, bt, bt);
-                }
-                if (ItemIdx == 0) {
+                //return new Thickness(bt, bt, bt, bt);
+                //if (IsSelected) {
+                //    return new Thickness(bt, bt, bt, bt);
+                //}
+                if (ItemIdx < Parent.Count - 1) {
                     return new Thickness(0, 0, 0, bt);
-                } else if (ItemIdx == Parent.Count - 1) {
-                    return new Thickness(0, 0, 0, bt);
                 }
-                return new Thickness(0, 0, 0, bt);
+                return new Thickness(0);
             }
         }
         #endregion
@@ -821,6 +834,9 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
+                        if(!Parent.IsSelected) {
+                            Parent.IsSelected = true;
+                        }
                     }
                     break;
                 case nameof(IsEditingContent):

@@ -44,9 +44,6 @@ namespace MpWpfApp {
         }
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
-
-            
-
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
             adornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
             adornerLayer.Add(seperatorAdorner);
@@ -116,7 +113,7 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             this.UpdateLayout();
-            ContentListBox.Items.Refresh();
+            //ContentListBox.Items.Refresh();
         }
 
         public void SyncMultiSelectDragButton(bool isOver, bool isDown) {

@@ -72,7 +72,11 @@ namespace MpWpfApp {
         private void ContentListItemViewGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
 
             var civm = DataContext as MpContentItemViewModel;
-            civm.IsSelected = true;
+            if(!civm.IsSelected) {
+                civm.IsSelected = true;
+                e.Handled = true;
+            }
+            
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using SkiaSharp;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -8,6 +10,26 @@ using Xamarin.Forms.PlatformConfiguration;
 
 namespace MonkeyPaste {
     public static class MpExtensions {
+        #region Collections
+
+        public static IOrderedEnumerable<TSource> OrderByDynamic<TSource, TKey>(this IEnumerable<TSource> source, bool isDescending, Func<TSource, TKey> keySelector) {
+            if (isDescending) {
+                return source.OrderByDescending<TSource, TKey>(keySelector);
+            } else {
+                return source.OrderBy<TSource, TKey>(keySelector);
+            }
+        }
+
+        public static IOrderedEnumerable<TSource> OrderByDynamic<TSource, TKey>(this IEnumerable<TSource> source, bool isDescending, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
+            if (isDescending) {
+                return source.OrderByDescending<TSource, TKey>(keySelector,comparer);
+            } else {
+                return source.OrderBy<TSource, TKey>(keySelector,comparer);
+            }
+        }
+
+        public static IEnumerable<TSource> IntersectBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TKey> keys, Func<TSource, TKey> keySelector) => source.Join(keys, keySelector, id => id, (o, id) => o);
+        #endregion
         #region Strings
         public static bool ContainsByUserSensitivity(this string str, string ostr) {
             if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {

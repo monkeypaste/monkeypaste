@@ -174,7 +174,14 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Appearance
-
+        public Cursor EditorCursor {
+            get {
+                if(IsExpanded) {
+                    return Cursors.Arrow;
+                }
+                return Cursors.IBeam;
+            }
+        }
         #endregion
 
         #region Layout
@@ -404,7 +411,7 @@ using System.Speech.Synthesis;
                 if (IsExpanded) {
                     if (IsAnyEditingTemplate ||
                         IsAnyPastingTemplate) {
-                        return Visibility.Hidden;
+                        return Visibility.Collapsed;
                     }
                 } else {
                     if (!IsSelected && !IsHovering) {
@@ -1238,6 +1245,15 @@ using System.Speech.Synthesis;
                     if (ivm.IsSelected) {
                         if (!IsSelected) {
                             IsSelected = true;
+                            MpConsole.WriteLine($"Item {ivm.CopyItemTitle} forced selection of its parent tile");
+                        }
+                        if(SelectedItems.Count > 1 && !MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                            foreach(var oivm in SelectedItems) {
+                                if(oivm != ivm) {
+                                    oivm.IsSelected = false;
+                                    MpConsole.WriteLine($"Item {oivm.CopyItemTitle}'s selection was canceled by Item {ivm.CopyItemTitle}");
+                                }
+                            }
                         }
                     }
                     break;

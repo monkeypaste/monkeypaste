@@ -844,7 +844,8 @@ namespace MonkeyPaste {
                     , fk_SsMpDbImageId integer
                     , ItemData text default ''
                     , ItemDescription text default ''
-                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL    
+                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL  
+                    , ModifiedDateTime datetime DEFAULT (current_timestamp) NOT NULL  
                     );
                     
                     CREATE TABLE MpCopyItemContent (

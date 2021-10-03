@@ -89,8 +89,6 @@ namespace MpWpfApp {
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
-                    UpdateLayout();
-                    return;
                 }
                 SyncModels();
             }

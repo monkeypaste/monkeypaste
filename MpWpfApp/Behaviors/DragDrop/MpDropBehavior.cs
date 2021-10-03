@@ -116,13 +116,42 @@ namespace MpWpfApp {
             }
 
             if (isHorizontal) {
-                dropIdx = dropIdx < 0 ? 0 : dropIdx >= tileCount ? tileCount - 1 : dropIdx;
-                dropTile = MpClipTrayViewModel.Instance.ClipTileViewModels[tileCount - 1];
+                bool isTileResort = dragTiles.All(x => x.SelectedItems.Count == x.ItemViewModels.Count);
+                if (isTileResort) {
+                    //For full tile's moved on tray reverse order and use standard move
+                    dragTiles.Reverse();
+                    foreach (var dragTile in dragTiles) {
+                        int oldIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
+                        if (oldIdx < dropIdx) {
+                            dropIdx--;
+                        }
+                        MpClipTrayViewModel.Instance.ClipTileViewModels.Move(oldIdx, dropIdx);
+                    }
+                } else {
+
+                }
+                //dropIdx = dropIdx < 0 ? 0 : dropIdx >= tileCount ? tileCount - 1 : dropIdx;
+                //dropTile = MpClipTrayViewModel.Instance.ClipTileViewModels[tileCount - 1];
                 MpClipTileSortViewModel.Instance.SetToManualSort();
             } else {
+                bool isContentResort = dragTiles.Count == 1;
+                if (isContentResort) {
+                    //For items moved within a tile reverse order and move
+                    var dragCivml = dragTiles[0].SelectedItems;
+                    dragCivml.Reverse();
+                    foreach (var dragCivm in dragCivml) {
+                        int oldIdx = dragTiles[0].ItemViewModels.IndexOf(dragCivm);
+                        if(oldIdx < dropIdx) {
+                            dropIdx--;
+                        }
+                        dragTiles[0].ItemViewModels.Move(oldIdx, dropIdx);
+                    }
+
+                }
                 dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
             }
-
+            Reset();
+            return;
             MpHelpers.Instance.RunOnMainThreadAsync(async () => {
                 foreach (var ctvm in dragTiles) {
                     await ctvm.RemoveRange(dragItemList);
@@ -136,7 +165,7 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance.ClipTileViewModels.Move(tileCount - 1, dropIdx);
                 }
 
-                dropTile.IsSelected = true;
+                //dropTile.IsSelected = true;
                 Reset();
             });
         }

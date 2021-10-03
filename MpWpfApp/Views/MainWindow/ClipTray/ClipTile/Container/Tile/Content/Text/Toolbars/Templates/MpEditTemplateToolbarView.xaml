@@ -6,7 +6,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="700">    
+             d:DesignHeight="50" d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance local:MpTemplateCollectionViewModel, IsDesignTimeCreatable=True}">    
     <Border x:Name="ClipTileEditTemplateToolbar"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
             Height="40"

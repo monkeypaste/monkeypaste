@@ -133,13 +133,13 @@ namespace MpWpfApp {
                 canAddTemplate = thlvm == null;
             }
 
-            if(canAddTemplate) {
-                canAddTemplate = !ts.Text.Contains(" ");
-            }
+            //if(canAddTemplate) {
+            //    canAddTemplate = !ts.Text.Contains(" ");
+            //}
 
-            if(canAddTemplate) {
-                canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.Instance.MaxTemplateTextLength;
-            }
+            //if(canAddTemplate) {
+            //    canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.Instance.MaxTemplateTextLength;
+            //}
 
             return canAddTemplate;
         }

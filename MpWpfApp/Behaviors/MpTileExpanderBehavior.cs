@@ -88,6 +88,7 @@ namespace MpWpfApp {
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
             civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
+            civl.ForEach(x => (x.DataContext as MpContentItemViewModel).OnPropertyChanged("ContentHeight"));
 
             var sv = clv.ContentListBox.GetScrollViewer();
             sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
@@ -125,6 +126,9 @@ namespace MpWpfApp {
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.EditToolbarView.Visibility = Visibility.Collapsed;
+            var sv = clv.ContentListBox.GetScrollViewer();
+            sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
             //civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());

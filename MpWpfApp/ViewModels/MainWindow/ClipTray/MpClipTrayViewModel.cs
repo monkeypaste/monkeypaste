@@ -27,6 +27,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using MonkeyPaste;
 using Microsoft.WindowsAPICodePack.Shell;
 using static SQLite.SQLite3;
+using static OpenTK.Graphics.OpenGL.GL;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpViewModelBase<object>, MpIContentCommands  {
@@ -457,20 +458,31 @@ namespace MpWpfApp {
 
         public async Task RefreshTiles(int start = 0, int count = 0) {
             int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            string sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortPath;
+            var sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             bool isDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
 
             if (count == 0) {
                 count = MpMeasurements.Instance.TotalVisibleClipTiles;
             }
-            IsBusy = true;
-            var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending);
+            Dictionary<int, int> manualSortOrderLookup = null;
 
-            int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
-            while(placeHoldersToAdd > 0) {
-                page_cil.Add(null);
-                placeHoldersToAdd--;
+            if(sortColumn == MpClipTileSortType.Manual) {
+                manualSortOrderLookup = new Dictionary<int, int>();
+                foreach(var ctvm in ClipTileViewModels) {
+                    if(manualSortOrderLookup.ContainsKey(ctvm.HeadItem.CopyItemId)) {
+                        continue;
+                    }
+                    manualSortOrderLookup.Add(ctvm.HeadItem.CopyItemId, ClipTileViewModels.IndexOf(ctvm));
+                }
             }
+            IsBusy = true;
+            var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending,manualSortOrderLookup);
+
+            //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
+            //while(placeHoldersToAdd > 0) {
+            //    page_cil.Add(null);
+            //    placeHoldersToAdd--;
+            //}
 
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
 
@@ -672,6 +684,7 @@ namespace MpWpfApp {
                         foreach(var octvm in ClipTileViewModels) {
                             if(octvm != ctvm) {
                                 octvm.ClearClipSelection();
+                                MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
                             }
                         }
                     }

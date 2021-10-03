@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Linq;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices.MVVM;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase<object> {
@@ -23,13 +24,14 @@ namespace MpWpfApp {
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
             get {
                 if (_sortTypes.Count == 0) {
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Date", "default"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Application", "CopyItemAppId"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Title", "CopyItemTitle"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Content", "CopyItemPlainText"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Type", "CopyItemType"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Usage", "CopyItemUsageScore"));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Manual", "Manual",false));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Copy Date", MpClipTileSortType.CopyDateTime));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this, "Modified Date", MpClipTileSortType.ModifiedDateTime));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Application", MpClipTileSortType.Source));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Title", MpClipTileSortType.Title));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Content", MpClipTileSortType.PlainText));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Type", MpClipTileSortType.ItemType));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Usage", MpClipTileSortType.UsageScore));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Manual", MpClipTileSortType.Manual, false));
                 }
                 return _sortTypes;
             }
@@ -61,9 +63,13 @@ namespace MpWpfApp {
                         if (SelectedSortType == null) {
                             break;
                         }
-                        if (SelectedSortType.Name != "Manual") {
-                            var manualSort = SortTypes.Where(x => x.Header == "Manual").FirstOrDefault();
-                            manualSort.IsVisible = false;
+                        if (SelectedSortType.SortType != MpClipTileSortType.Manual) {
+                            var manualSort = SortTypes.Where(x => x.SortType == MpClipTileSortType.Manual).FirstOrDefault();
+                            if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
+                                manualSort.IsVisible = false;
+                            } else {
+                                manualSort.IsVisible = true;
+                            }
                             PerformSelectedSortCommand.Execute(null);
                         }
                         break;
@@ -72,11 +78,11 @@ namespace MpWpfApp {
         }
 
         public void SetToManualSort() {
-            SelectedSortType = SortTypes.Where(x => x.Header == "Manual").FirstOrDefault();
+            SelectedSortType = SortTypes.Where(x => x.SortType == MpClipTileSortType.Manual).FirstOrDefault();
             SelectedSortType.IsVisible = true;
-            if (IsSortDescending) {
-                ToggleSortOrderCommand.Execute(null);
-            }
+            //if (IsSortDescending) {
+            //    ToggleSortOrderCommand.Execute(null);
+            //}
         }
         #endregion
 

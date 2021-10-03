@@ -7,37 +7,42 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <RichTextBox x:Name="Rtb"
-                 IsReadOnly="{Binding IsEditingContent}"
-                 Background="{Binding ItemBackgroundBrush}"
-                 Loaded="Rtb_Loaded"
-                 GotFocus="Rtb_GotFocus"
-                 TextChanged="Rtb_TextChanged"
-                 SelectionChanged="Rtb_SelectionChanged"
-                 PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
-                 PreviewMouseUp="Rtb_PreviewMouseUp"
-                 PreviewKeyUp="Rtb_PreviewKeyUp"
-                 IsEnabled="True"
-                 AllowDrop="True"
-                 AutoWordSelection="False"
-                 IsInactiveSelectionHighlightEnabled="True"
-                 IsDocumentEnabled="True"
-                 Focusable="{Binding IsEditingContent}"
-                 local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
-                 IsUndoEnabled="True"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 HorizontalContentAlignment="Stretch"
-                 VerticalContentAlignment="Stretch"
-                 Width="Auto"
-                 Height="Auto"
-                 MinWidth="100"
-                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                 BorderThickness="0">
-        <RichTextBox.Resources>
-            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                             Color="Blue" />
-        </RichTextBox.Resources>
-    </RichTextBox>
+    <Border BorderBrush="{Binding ItemSelectionBrush}"
+            BorderThickness="1">
+        <RichTextBox x:Name="Rtb"
+                     IsReadOnly="{Binding IsEditingContent}"
+                     Background="{Binding ItemBackgroundBrush}"
+                     Loaded="Rtb_Loaded"
+                     GotFocus="Rtb_GotFocus"
+                     TextChanged="Rtb_TextChanged"
+                     SelectionChanged="Rtb_SelectionChanged"
+                     PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
+                     PreviewMouseUp="Rtb_PreviewMouseUp"
+                     PreviewKeyUp="Rtb_PreviewKeyUp"
+                     IsEnabled="True"
+                     AllowDrop="True"
+                     ForceCursor="True"
+                     Cursor="{Binding Parent.EditorCursor}"
+                     AutoWordSelection="False"
+                     IsInactiveSelectionHighlightEnabled="True"
+                     IsDocumentEnabled="True"
+                     Focusable="{Binding IsEditingContent}"
+                     local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
+                     IsUndoEnabled="True"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
+                     Width="Auto"
+                     Height="{Binding ContentHeight}"
+                     MinWidth="100"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     BorderThickness="0">
+            <RichTextBox.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                 Color="Blue" />
+            </RichTextBox.Resources>
+        </RichTextBox>
+    </Border>
 </UserControl>

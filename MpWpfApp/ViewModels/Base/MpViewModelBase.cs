@@ -200,11 +200,11 @@ namespace MpWpfApp {
         //}
 
         public virtual void OnPropertyChanged_old(string propertyName) {
-            //PropertyChangedEventHandler handler = PropertyChanged;
-            //if (handler != null) {
-            //    var e = new PropertyChangedEventArgs(propertyName);
-            //    handler(this, e);
-            //}
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
         }
 
         public virtual void OnPropertyChanged(string propertyName) {

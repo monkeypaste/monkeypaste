@@ -138,6 +138,7 @@ namespace MpWpfApp {
             if (dupCheck == null) {
                 //not sure how this could happen but it may dunno
                 ntvm = new MpTemplateViewModel(this, ncit);
+                ntvm.PropertyChanged += Ntvm_PropertyChanged;
             } else {
                 //set existing thvm for return
                 ntvm = dupCheck;
@@ -150,6 +151,16 @@ namespace MpWpfApp {
             ntvm.InstanceCount++;
 
             return ntvm;
+        }
+
+        private void Ntvm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            var thlvm = sender as MpTemplateViewModel;
+            switch(e.PropertyName) {
+                case nameof(thlvm.IsSelected):
+                    OnPropertyChanged_old(nameof(SelectedTemplate));
+                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
+                    break;
+            }
         }
 
         public string GetFormattedTemplateName(string text) {
@@ -205,6 +216,7 @@ namespace MpWpfApp {
                 }
             }
             OnPropertyChanged_old(nameof(SelectedTemplate));
+            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
         }
 
         #endregion
