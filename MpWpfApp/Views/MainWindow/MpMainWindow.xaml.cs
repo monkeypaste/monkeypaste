@@ -53,12 +53,11 @@ namespace MpWpfApp {
 
             int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
 
-            MpStandardBalloonViewModel.ShowBalloon(
-               "Monkey Paste",
-               "Successfully loaded w/ " + totalItems + " items",
-               Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
-            MpMainWindowViewModel.IsMainWindowLoading = false;
+            MpStandardBalloonViewModel.ShowBalloon(
+           "Monkey Paste",
+           "Successfully loaded w/ " + totalItems + " items",
+           Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
         }

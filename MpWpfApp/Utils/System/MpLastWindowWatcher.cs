@@ -45,7 +45,7 @@ namespace MpWpfApp {
 
             MonkeyPaste.MpConsole.WriteLine("This app's exe: " + ThisAppPath);
             
-            Timer timer = new Timer(100);
+            Timer timer = new Timer(500);
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
                 

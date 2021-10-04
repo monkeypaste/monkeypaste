@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using Microsoft.WindowsAPICodePack.Shell;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -69,9 +70,6 @@ namespace MpWpfApp {
             }
             set {
                 if (_isSelected != value) {// || MpClipTrayViewModel.Instance.IsFilteringByApp) {
-                    if(value == true) {
-                        value = true;
-                    }
                     _isSelected = value;
                     OnPropertyChanged_old(nameof(IsSelected));
                     OnPropertyChanged_old(nameof(TagBorderBackgroundBrush));
@@ -421,6 +419,32 @@ namespace MpWpfApp {
                              .OrderByDescending(x => x.CopyDateTime)
                              .Take(MpMeasurements.Instance.MaxRecentClipItems)
                              .Any(y => y.Id == ci.Id);
+            }
+            return Tag.IsLinkedWithCopyItem(ci);
+        }
+
+        public async Task<bool> IsLinkedAsync(MpCopyItem ci) {
+            if (ci == null ||
+                ci.Id == 0 ||
+                Tag == null ||
+                Tag.Id == 0) {
+                return false;
+            }
+            if (IsAllTag) {
+                return true;
+            }
+            if (IsRecentTag) {
+                //                (from ci in MpDb.Instance.GetItems<MpCopyItem>()
+                //select ci)
+                //                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
+                //                                 .Take(count)
+                //                                 .Skip(start)
+                //                                 .ToList();
+                var result = await MpDb.Instance.QueryAsync("MpCopyItem","select Id from MpCopyItem orderby CopyDateTime limit ?", MpMeasurements.Instance.MaxRecentClipItems);
+                //.OrderByDescending(x => x.CopyDateTime)
+                //.Take(MpMeasurements.Instance.MaxRecentClipItems)
+                //.Any(y => y.Id == ci.Id);
+                return result.Contains(ci.Id);
             }
             return Tag.IsLinkedWithCopyItem(ci);
         }

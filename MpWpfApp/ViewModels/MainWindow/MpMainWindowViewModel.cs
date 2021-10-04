@@ -385,7 +385,7 @@ namespace MpWpfApp {
                    !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
-        private async void ShowWindow() {
+        private void ShowWindow() {
             //Ss = MpHelpers.Instance.CopyScreen();
             //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
@@ -404,11 +404,6 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                MpMainWindowViewModel.IsMainWindowLoading = false;
-                ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
-            } else {
-            }
 
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             double fps = 30;
@@ -426,10 +421,12 @@ namespace MpWpfApp {
                     IsMainWindowOpening = false;
                     if (ClipTrayViewModel.ItemsAdded > 0) {
                         await MpClipTrayViewModel.Instance.RefreshTiles();
-                        ClipTrayViewModel.ItemsAdded = 0;
-
-                        TagTrayViewModel.RefreshAllCounts();
-                        ClipTrayViewModel.VisibileClipTiles[0].IsSelected = true;
+                        if(IsMainWindowLoading || MpClipTrayViewModel.Instance.ItemsAdded > 0) {
+                            MpClipTrayViewModel.Instance.ResetClipSelection();
+                            ClipTrayViewModel.ItemsAdded = 0;
+                            IsMainWindowLoading = false;
+                            TagTrayViewModel.RefreshAllCounts();
+                        }
                     }
                     OnMainWindowShow?.Invoke(this, null);
                 }

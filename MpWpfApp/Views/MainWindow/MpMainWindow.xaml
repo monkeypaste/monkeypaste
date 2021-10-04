@@ -33,7 +33,6 @@
     <Window.Resources>
     </Window.Resources>
     <Canvas x:Name="MainWindowCanvas"  
-            AllowDrop="True"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">

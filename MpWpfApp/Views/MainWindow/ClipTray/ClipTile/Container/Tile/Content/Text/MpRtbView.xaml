@@ -7,26 +7,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <Border BorderBrush="{Binding ItemSelectionBrush}"
-            BorderThickness="1">
-        <RichTextBox x:Name="Rtb"
-                     IsReadOnly="{Binding IsEditingContent}"
+     <RichTextBox x:Name="Rtb"
+                     IsReadOnly="{Binding Parent.IsExpanded}"
                      Background="{Binding ItemBackgroundBrush}"
                      Loaded="Rtb_Loaded"
                      GotFocus="Rtb_GotFocus"
                      TextChanged="Rtb_TextChanged"
                      SelectionChanged="Rtb_SelectionChanged"
                      PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
-                     PreviewMouseUp="Rtb_PreviewMouseUp"
                      PreviewKeyUp="Rtb_PreviewKeyUp"
                      IsEnabled="True"
-                     AllowDrop="True"
                      ForceCursor="True"
-                     Cursor="{Binding Parent.EditorCursor}"
+                     Cursor="{Binding EditorCursor}"
                      AutoWordSelection="False"
                      IsInactiveSelectionHighlightEnabled="True"
                      IsDocumentEnabled="True"
-                     Focusable="{Binding IsEditingContent}"
+                     Focusable="{Binding Parent.IsExpanded}"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                      IsUndoEnabled="True"
                      HorizontalAlignment="Stretch"
@@ -34,7 +30,7 @@
                      HorizontalContentAlignment="Stretch"
                      VerticalContentAlignment="Stretch"
                      Width="Auto"
-                     Height="{Binding ContentHeight}"
+                     Height="{Binding EditorHeight}"
                      MinWidth="100"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -44,5 +40,4 @@
                                  Color="Blue" />
             </RichTextBox.Resources>
         </RichTextBox>
-    </Border>
 </UserControl>

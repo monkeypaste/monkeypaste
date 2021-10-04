@@ -174,14 +174,6 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Appearance
-        public Cursor EditorCursor {
-            get {
-                if(IsExpanded) {
-                    return Cursors.Arrow;
-                }
-                return Cursors.IBeam;
-            }
-        }
         #endregion
 
         #region Layout
@@ -415,7 +407,7 @@ using System.Speech.Synthesis;
                     }
                 } else {
                     if (!IsSelected && !IsHovering) {
-                        return Visibility.Hidden;
+                        return Visibility.Collapsed;
                     }
                 }
                 return Visibility.Visible;
@@ -512,14 +504,10 @@ using System.Speech.Synthesis;
 
         public Rect TileBorderBrushRect {
             get {
-                if (HeadItem == null ||
-                   !IsAnyContextMenuOpened) {
-                    return new Rect(50, 0, 50, 50);
+                if (IsClipDragging || IsAnyContextMenuOpened) {
+                    return MpMeasurements.Instance.DottedBorderRect;
                 }
-                if (IsAnyContextMenuOpened) {
-                    return new Rect(0, 0, 50, 50);
-                }
-                return new Rect(50, 0, 50, 50);
+                return MpMeasurements.Instance.SolidBorderRect;
             }
         }
 
@@ -597,16 +585,9 @@ using System.Speech.Synthesis;
 
         public IDataObject DragDataObject { get; set; }
 
-        private bool _isClipDragging = false;
         public bool IsClipDragging {
             get {
-                return _isClipDragging;
-            }
-            set {
-                if (_isClipDragging != value) {
-                    _isClipDragging = value;
-                    OnPropertyChanged_old(nameof(IsClipDragging));
-                }
+                return ItemViewModels.All(x => x.IsSubDragging);
             }
         }
 
@@ -978,13 +959,13 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsFlipping):
                     if(IsFlipping) {
-                        FrontVisibility = Visibility.Hidden;
-                        BackVisibility = Visibility.Hidden;
+                        FrontVisibility = Visibility.Collapsed;
+                        BackVisibility = Visibility.Collapsed;
                     }
                     break;
                 case nameof(IsFlipped):
-                    FrontVisibility = IsFlipped ? Visibility.Hidden : Visibility.Visible;
-                    BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Hidden;
+                    FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
+                    BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
                     break;
             }
         }
@@ -1284,7 +1265,7 @@ using System.Speech.Synthesis;
         #region Visibility
         public Visibility FrontVisibility { get; set; } = Visibility.Visible;
 
-        public Visibility BackVisibility { get; set; } = Visibility.Hidden;
+        public Visibility BackVisibility { get; set; } = Visibility.Collapsed;
 
         public ScrollBarVisibility HorizontalScrollbarVisibility {
             get {
@@ -1453,15 +1434,15 @@ using System.Speech.Synthesis;
                         ItemViewModels.Remove(ivm);
                     }
                 }
-                if (ItemViewModels.Count == 0) {
-                    IsPlaceholder = true;
-                    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
-                } else {
-                    UpdateSortOrder();
-                }
+                //if (ItemViewModels.Count == 0) {
+                //    IsPlaceholder = true;
+                //    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
+                //} else {
+                //    UpdateSortOrder();
+                //}
             });
         }
-        public void UpdateSortOrder(bool fromModel = false) {
+        public async Task UpdateSortOrder(bool fromModel = false) {
             if (fromModel) {
                 ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
             } else {
@@ -1472,7 +1453,7 @@ using System.Speech.Synthesis;
                     } else {
                         ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
                     }
-                    ivm.CopyItem.WriteToDatabase();
+                    await ivm.CopyItem.WriteToDatabaseAsync();
                 }
             }
         }

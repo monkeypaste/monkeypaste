@@ -79,11 +79,6 @@ namespace MpWpfApp {
                 rtbivm.OnCreateTemplatesRequest += Rtbivm_OnCreateHyperlinksRequest;
                 rtbivm.OnSyncModels += Rtbivm_OnSyncModels;
 
-                var ctv = this.GetVisualAncestor<MpClipTileView>();
-                if(ctv != null) {
-                    ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
-                    ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
-                }
                 if (rtbivm.IsNewAndFirstLoad) {
                     //force new items to have left alignment
                     Rtb.CaretPosition = Rtb.Document.ContentStart;
@@ -93,36 +88,6 @@ namespace MpWpfApp {
                 SyncModels();
             }
         }
-
-        private void Ctv_OnUnexpandCompleted(object sender, EventArgs e) {
-            Rtb.FitDocToRtb();
-
-            Rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            Rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            Rtb.ScrollToHome();
-
-            Rtb.ForceCursor = true;
-            Rtb.Cursor = Cursors.Arrow;
-        }
-
-        private void Ctv_OnExpandCompleted(object sender, EventArgs e) {
-            //var civ = this.GetVisualAncestor<MpContentItemView>();
-            //Rtb.Width = civ.Width;
-            //Rtb.Height = civ.Height;
-            Rtb.FitDocToRtb();
-            Rtb.ForceCursor = true;
-            Rtb.Cursor = Cursors.IBeam;
-            //var ds = Rtb.Document.GetDocumentSize();
-            //if(Rtb.ActualHeight < ds.Height) {
-            //    Rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //}
-
-            //if (Rtb.ActualWidth < ds.Width) {
-            //    Rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //}
-        }
-
-
         private void Rtbivm_OnSyncModels(object sender, EventArgs e) {
             SyncModels();
         }
@@ -204,21 +169,6 @@ namespace MpWpfApp {
             ContextMenu = new MpContentContextMenuView() { DataContext = civm };
             ContextMenu.IsOpen = true;
             e.Handled = true;
-        }
-
-        private void Rtb_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if (civm.IsEditingContent) {
-                e.Handled = false;
-                return;
-            }
-            var ctv = this.GetVisualAncestor<MpClipTileView>();
-            if(ctv != null) {
-                var ctvm = ctv.DataContext as MpClipTileViewModel;
-                if(!ctvm.IsSelected) {
-                    ctvm.IsSelected = true;
-                }
-            }
         }
 
 

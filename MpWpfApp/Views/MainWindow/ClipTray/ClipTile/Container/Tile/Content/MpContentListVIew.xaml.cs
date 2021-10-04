@@ -19,21 +19,35 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpContentListView : UserControl {
         private MpContentItemSeperatorAdorner seperatorAdorner;
-        private AdornerLayer adornerLayer;
+        public AdornerLayer SeperatorAdornerLayer;
 
         public MpContentListView() {
             InitializeComponent();
         }
 
         public void UpdateAdorner() {
+            if(seperatorAdorner == null) {
+                //selection changed is called before load so adorner is null
+                return;
+            }
+            List<int> selectedIdxList = new List<int>();
+            if(ContentListBox.SelectedItem != null) {
+                var ctvm = DataContext as MpClipTileViewModel;
+                selectedIdxList = ctvm.SelectedItems.Select(x => ctvm.ItemViewModels.IndexOf(x)).ToList();
+            }
+            
             seperatorAdorner.Lines.Clear();
             for (int i = 0; i < ContentListBox.Items.Count-1; i++) {
+                if(selectedIdxList.Contains(i) || selectedIdxList.Contains(i+1)) {
+                    //hide dotted line if its going to cover selection box
+                    continue;
+                }
                 Rect lbir = ContentListBox.GetListBoxItemRect(i);
                 var l = new Point[] { lbir.BottomLeft, lbir.BottomRight };
                 seperatorAdorner.Lines.Add(l.ToList());
             }
-            //seperatorAdorner.IsShowing = true;
-           // adornerLayer.Update();
+            seperatorAdorner.IsShowing = true;
+            SeperatorAdornerLayer.Update();
         }
 
         public void HideToolbars() {
@@ -45,8 +59,8 @@ namespace MpWpfApp {
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
-            adornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
-            adornerLayer.Add(seperatorAdorner);
+            SeperatorAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
+            SeperatorAdornerLayer.Add(seperatorAdorner);
             UpdateAdorner();
 
             UpdateUi();
@@ -77,23 +91,10 @@ namespace MpWpfApp {
                 case nameof(rtbcvm.IsBusy):
                     if(!rtbcvm.IsBusy) {
                         UpdateLayout();
-                        var ctv = this.GetVisualAncestor<MpClipTileView>();
-                        if (ctv != null) {
-                            ctv.OnExpandCompleted += Ctv_OnExpandCompleted;
-                            ctv.OnUnexpandCompleted += Ctv_OnUnexpandCompleted;
-                        }
                     }
                     break;
             }
             
-        }
-
-        private void Ctv_OnUnexpandCompleted(object sender, EventArgs e) {
-            UpdateAdorner();
-        }
-
-        private void Ctv_OnExpandCompleted(object sender, EventArgs e) {
-            UpdateAdorner();
         }
 
         private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -135,6 +136,10 @@ namespace MpWpfApp {
             //        }
             //    }
             //}
+        }
+
+        private void ContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            UpdateAdorner();
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpTileExpanderBehavior : Behavior<MpClipTileView> {
+    public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
         private double deltaWidth, deltaHeight, deltaContentHeight;
 
 
@@ -68,8 +68,6 @@ namespace MpWpfApp {
             deltaWidth =  mwvm.ClipTrayWidth - ctvm.TileBorderWidth - MpMeasurements.Instance.ClipTileExpandedMargin;
 
             mwvm.MainWindowTop -= deltaHeight;
-            //Application.Current.MainWindow.UpdateLayout();
-
 
             mwvm.ClipTrayHeight += deltaHeight;
 
@@ -79,24 +77,26 @@ namespace MpWpfApp {
             ctvm.TileContentWidth += deltaWidth;
             ctvm.TileContentHeight += deltaContentHeight;
 
-            //AssociatedObject.UpdateLayout();
-
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.EditToolbarView.Visibility = Visibility.Visible;
             clv.UpdateLayout();
-            //clv.ContentListBox.Items.Refresh();
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
-            civl.ForEach(x => (x.DataContext as MpContentItemViewModel).OnPropertyChanged("ContentHeight"));
+            foreach(var civ in civl) {
+                var civm = civ.DataContext as MpContentItemViewModel;
+                civm.OnPropertyChanged(nameof(civm.EditorHeight));
+                civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                civ.EditorView.Rtb.FitDocToRtb();
+            }
 
             var sv = clv.ContentListBox.GetScrollViewer();
             sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             sv.InvalidateScrollInfo();
 
-            //clv.UpdateAdorner();
-            AssociatedObject.NotifyExpandCompleted();
+            clv.UpdateAdorner();
+
+            ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
         }
 
         public void Unexpand() {
@@ -112,7 +112,6 @@ namespace MpWpfApp {
                 .ForEach(y => y.ItemVisibility = Visibility.Visible);
 
             mwvm.MainWindowTop += deltaHeight;
-            //Application.Current.MainWindow.UpdateLayout();
             
             mwvm.ClipTrayHeight -= deltaHeight;
 
@@ -122,18 +121,23 @@ namespace MpWpfApp {
             ctvm.TileContentWidth -= deltaWidth;
             ctvm.TileContentHeight -= deltaContentHeight;
 
-            //AssociatedObject.UpdateLayout();
-
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.EditToolbarView.Visibility = Visibility.Collapsed;
+            clv.UpdateLayout();
+
             var sv = clv.ContentListBox.GetScrollViewer();
             sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            //civl.ForEach(x => x.EditorView.Rtb.FitDocToRtb());
+            foreach (var civ in civl) {
+                var civm = civ.DataContext as MpContentItemViewModel;
+                civm.OnPropertyChanged(nameof(civm.EditorHeight));
+                civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                civ.EditorView.Rtb.FitDocToRtb();
+            }
 
-            AssociatedObject.NotifyUnexpandCompleted();
+            clv.UpdateAdorner();
         }
     }
 }

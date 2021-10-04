@@ -31,7 +31,8 @@
         <AdornerDecorator ClipToBounds="True">
             <local:MpMultiSelectListBox x:Name="ContentListBox"
                                         Loaded="ContentListBox_Loaded"
-                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"           
+                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"          
+                                        SelectionChanged="ContentListBox_SelectionChanged"
                                         ClipToBounds="True"
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
@@ -89,28 +90,8 @@
             </local:MpMultiSelectListBox.ItemContainerStyle>
             <local:MpMultiSelectListBox.ItemTemplate>
                 <DataTemplate>
-                        <local:MpContentItemView DataContext="{Binding}"
-                                                 BorderThickness="{Binding ItemBorderThickness}">
-                            <local:MpContentItemView.BorderBrush>
-                                <DrawingBrush Viewport="0,0,7,7"
-                                      ViewportUnits="Absolute"
-                                      TileMode="Tile">
-                                    <DrawingBrush.Drawing>
-                                        <DrawingGroup>
-                                            <GeometryDrawing Brush="{Binding ItemBorderBrush}">
-                                                <GeometryDrawing.Geometry>
-                                                    <GeometryGroup>
-                                                        <RectangleGeometry Rect="0,0,50,50" />
-                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                    </GeometryGroup>
-                                                </GeometryDrawing.Geometry>
-                                            </GeometryDrawing>
-                                        </DrawingGroup>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </local:MpContentItemView.BorderBrush>
-                        </local:MpContentItemView>
-                    </DataTemplate>
+                    <local:MpContentItemView DataContext="{Binding}" />
+                </DataTemplate>
             </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>
         </AdornerDecorator>

@@ -27,11 +27,7 @@ namespace MpWpfApp {
 
         private Point mouseStartPosition;
 
-        private MpDragRectListAdorner dragRectListAdorner;
-        private AdornerLayer adornerLayer;
-
         private MpDropBehavior dropBehavior;
-
 
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
@@ -49,12 +45,6 @@ namespace MpWpfApp {
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
             (AssociatedObject.DataContext as MpClipTileViewModel).MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
-
-            dragRectListAdorner = new MpDragRectListAdorner(AssociatedObject);
-            this.adornerLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
-            adornerLayer.Add(dragRectListAdorner);
-
-            adornerLayer.Update();
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -87,7 +77,7 @@ namespace MpWpfApp {
         #endregion
 
 
-        #region Mouse Down/Up/Move Events
+        #region Mouse Events
 
         private void AssociatedObject_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
@@ -98,16 +88,19 @@ namespace MpWpfApp {
             AssociatedObject.ReleaseMouseCapture();
             EndDrop();
             ResetCursor();
+            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = false);
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
             Vector diff = e.GetPosition(Application.Current.MainWindow) - mouseStartPosition;
-            if (AssociatedObject.IsMouseCaptured && diff.Length >= MINIMUM_DRAG_DISTANCE) {
+            if (AssociatedObject.IsMouseCaptured && 
+                (diff.Length >= MINIMUM_DRAG_DISTANCE || isDragging)) {
                 isDragging = true;
+                var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+                ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = x.IsSelected);
                 Drag(e);
-            } else {
-                isDragging = false;
-            }
+            } 
         }
 
         #endregion
@@ -118,12 +111,6 @@ namespace MpWpfApp {
             var parent = Application.Current.MainWindow;
 
             UpdateCursor();
-
-            //if mouse down was on tile
-            if (dropBehavior == null) {
-                //flag content items for drag selection
-                ShowDragAdorners();
-            }
 
             var ClipTrayView = parent.GetVisualDescendent<MpClipTrayView>();
             MpDropBehavior lastDropBehavior = dropBehavior;
@@ -192,9 +179,7 @@ namespace MpWpfApp {
         }
 
         private void StartDrop(int dropIdx) {
-            ShowDragAdorners();
-
-            isDropValid = dropBehavior.StartDrop(MpClipTrayViewModel.Instance.SelectedModels, dropIdx);
+            isDropValid = dropBehavior.StartDrop(MpClipTrayViewModel.Instance.SelectedItems, dropIdx);
 
             UpdateCursor();
         }
@@ -209,7 +194,6 @@ namespace MpWpfApp {
             }
             isDropValid = false;
             isDragging = false;
-            HideDragAdorners();
             AssociatedObject.ReleaseMouseCapture();
 
             UpdateCursor();
@@ -218,19 +202,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Adorner Updates
-
-        private void ShowDragAdorners() {
-            var ctv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>();
-            dragRectListAdorner.RectList = ctv.GetSelectedContentItemViewRects(AssociatedObject);
-            //dragRectListAdorner.IsShowing = true;
-            //adornerLayer.Update();
-        }
-
-        private void HideDragAdorners() {
-            dragRectListAdorner.RectList.Clear();
-            dragRectListAdorner.IsShowing = false;
-            adornerLayer.Update();
-        }
 
         #endregion
 

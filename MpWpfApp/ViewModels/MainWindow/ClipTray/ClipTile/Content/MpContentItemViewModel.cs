@@ -158,21 +158,35 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush ItemSelectionBrush {
+        public Brush ItemBorderBrush {
             get {
-                if(Parent == null || Parent.Count <= 1 || !IsSelected) {
+                if(Parent == null || Parent.Count <= 1 || !IsSelected || Parent.IsClipDragging) {
                     return Brushes.Transparent;
                 }
                 return Brushes.Red;
             }
         }
-        public Brush ItemBorderBrush {
+
+        public Rect ItemBorderBrushRect {
             get {
-                return Brushes.Black;
+                if (IsSubDragging) {
+                    return MpMeasurements.Instance.DottedBorderRect;
+                }
+                return MpMeasurements.Instance.SolidBorderRect;
             }
         }
 
-        
+        public Cursor EditorCursor {
+            get {
+                if(Parent == null) {
+                    return Cursors.Arrow;
+                }
+                if(Parent.IsExpanded && IsSelected) {
+                    return Cursors.IBeam;
+                }
+                return Cursors.Arrow;
+            }
+        }
         #endregion
 
         #region Visibility 
@@ -183,7 +197,7 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double ContentHeight {
+        public double EditorHeight {
             get {
                 if(Parent == null || CopyItem == null) {
                     return 0;
@@ -244,33 +258,6 @@ namespace MpWpfApp {
             }
         }
 
-        //public Thickness ContentPadding {
-        //    get {
-        //        double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
-        //        if (IsHovering && Parent.Count > 1 && !Parent.IsExpanded) {
-        //            double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
-        //            return new Thickness(dp + dbw, dp, dp, dp);
-        //        }
-        //        return new Thickness(dp);
-        //    }
-        //}
-
-        public Thickness ItemBorderThickness {
-            get {
-                if (Parent == null || Parent.ItemViewModels.Count == 1) {
-                    return new Thickness(0);
-                }
-                double bt = MpMeasurements.Instance.ClipTileContentItemBorderThickness;
-                //return new Thickness(bt, bt, bt, bt);
-                //if (IsSelected) {
-                //    return new Thickness(bt, bt, bt, bt);
-                //}
-                if (ItemIdx < Parent.Count - 1) {
-                    return new Thickness(0, 0, 0, bt);
-                }
-                return new Thickness(0);
-            }
-        }
         #endregion
 
         #region State

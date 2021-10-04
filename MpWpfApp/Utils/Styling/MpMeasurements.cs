@@ -34,6 +34,18 @@ namespace MpWpfApp {
 
         public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
 
+
+        public Rect DottedBorderRect {
+            get {
+                return new Rect(0, 0, 50, 50);
+            }
+        }
+
+        public Rect SolidBorderRect {
+            get {
+                return new Rect(50, 0, 50, 50);
+            }
+        }
         #endregion
 
         #region Main Window
@@ -152,7 +164,7 @@ namespace MpWpfApp {
 
         public double ClipTilePadding {
             get {
-                return 15;
+                return 17;
             }
         }
 

@@ -10,7 +10,26 @@
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <AdornerDecorator>
+
+    <Border BorderThickness="1">
+        <Border.BorderBrush>
+            <DrawingBrush Viewport="0,0,7,7"
+                        ViewportUnits="Absolute"
+                        TileMode="Tile">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{Binding ItemBorderBrush}">
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect}" />
+                                    <RectangleGeometry Rect="50,50,50,50" />
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Border.BorderBrush>
         <Grid x:Name="ContentListItemViewGrid"
               Loaded="ContentListItemView_Loaded"
               DataContextChanged="ContentListItemView_DataContextChanged"
@@ -20,8 +39,7 @@
               MouseEnter="ContentListItemView_MouseEnter"
               MouseLeave="ContentListItemView_MouseLeave"
               PreviewMouseDown="ContentListItemViewGrid_PreviewMouseDown"
-              HorizontalAlignment="Stretch"             
-              AllowDrop="True"
+              HorizontalAlignment="Stretch"     
               VerticalAlignment="Stretch">
             <Grid.ContextMenu>
                 <local:MpContentContextMenuView DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
@@ -36,7 +54,8 @@
                                 Visibility="Hidden"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Background="Transparent"
+                                BorderBrush="Green"
+                                BorderThickness="3"
                                 Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                 ToolTipService.InitialShowDelay="750"
                                 CornerRadius="5">
@@ -72,5 +91,5 @@
                 </Button>
             </local:MpClipBorder>
         </Grid>
-    </AdornerDecorator>
+    </Border>
 </UserControl>

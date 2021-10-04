@@ -70,13 +70,14 @@ namespace MpWpfApp {
         #endregion
 
         private void ContentListItemViewGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-
             var civm = DataContext as MpContentItemViewModel;
             if(!civm.IsSelected) {
                 civm.IsSelected = true;
-                e.Handled = true;
+                if(!civm.Parent.IsSelected) {
+                    civm.Parent.IsSelected = true;
+                }
             }
-            
+            e.Handled = false;
         }
     }
 }

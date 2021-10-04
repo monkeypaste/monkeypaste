@@ -157,88 +157,83 @@ namespace MonkeyPaste {
             bool isDescending,
             Dictionary<int,int> manualSortOrderLookup = null) {
             MpCopyItem dummyCi = new MpCopyItem();
-            List<MpCopyItem> result = new List<MpCopyItem>();
+            List<MpCopyItem> result = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
 
-            await Task.Run(() => {
-                switch (tagId) {
-                    case MpTag.RecentTagId:
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                     .Where(x => x.CompositeParentCopyItemId == 0)
-                                     .OrderByDynamic(isDescending, x => x.CopyDateTime)                                     
-                                     .Take(count)
-                                     .Skip(start)
-                                     .ToList();
-                        return;
-                    case MpTag.AllTagId:
-                        result = MpDb.Instance.GetItems<MpCopyItem>()
-                                 .Where(x => x.CompositeParentCopyItemId == 0)
+            switch (tagId) {
+                case MpTag.RecentTagId:
+                    result = result.Where(x => x.CompositeParentCopyItemId == 0)
+                                 .OrderByDynamic(isDescending, x => x.CopyDateTime)
+                                 .Take(count)
+                                 .Skip(start)
                                  .ToList();
-                        break;
-                    default:
-                        if(isDescending) {
-                            result = (from value in
-                                        (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                         from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                         where ci.Id == cit.CopyItemId &&
-                                             tagId == cit.TagId
-                                         select new { ci, cit })
-                                                  orderby value.cit.CopyItemSortIdx descending
-                                                  select value.ci)
-                                                      .Where(x => x.CompositeParentCopyItemId == 0)
-                                                     .ToList();
-                        } else {
-                            result = (from value in
-                                        (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                                         from cit in MpDb.Instance.GetItems<MpCopyItemTag>()
-                                         where ci.Id == cit.CopyItemId &&
-                                             tagId == cit.TagId
-                                         select new { ci, cit })
-                                                  orderby value.cit.CopyItemSortIdx ascending
-                                                  select value.ci)
-                                                      .Where(x => x.CompositeParentCopyItemId == 0)
-                                                     .ToList();
-                        }
-                        break;
-                }
-                switch(sortType) {                    
-                    case MpClipTileSortType.CopyDateTime:
-                        result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.CopyDateTime)).GetValue(x))
-                                     .Take(count)
-                                     .Skip(start)
-                                     .ToList();
-                        break;
-                    case MpClipTileSortType.ItemType:
-                        result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.ItemType)).GetValue(x))
-                                     .Take(count)
-                                     .Skip(start)
-                                     .ToList();
-                        break;
-                    // TODO add rest of sort types
-                    case MpClipTileSortType.Manual:
-                        if(manualSortOrderLookup == null) {
-                            result = result.Take(count).Skip(start).ToList();
-                        } else {
-                            int missingCount = 0;
-                            var missingItems = new List<MpCopyItem>();
-                            foreach(var ci in result) {
-                                if(manualSortOrderLookup.ContainsKey(ci.Id)) {
-                                    ci.ManualSortIdx = manualSortOrderLookup[ci.Id];
+                    return result;
+                case MpTag.AllTagId:
+                    result = result.Where(x => x.CompositeParentCopyItemId == 0).ToList();
+                    break;
+                default:
+                    var citl = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+                    if (isDescending) {
+                        result = (from value in
+                                    (from ci in result
+                                     from cit in citl
+                                     where ci.Id == cit.CopyItemId &&
+                                         tagId == cit.TagId
+                                     select new { ci, cit })
+                                  orderby value.cit.CopyItemSortIdx descending
+                                  select value.ci)
+                                                  .Where(x => x.CompositeParentCopyItemId == 0)
+                                                 .ToList();
+                    } else {
+                        result = (from value in
+                                    (from ci in result
+                                     from cit in citl
+                                     where ci.Id == cit.CopyItemId &&
+                                         tagId == cit.TagId
+                                     select new { ci, cit })
+                                  orderby value.cit.CopyItemSortIdx ascending
+                                  select value.ci)
+                                                  .Where(x => x.CompositeParentCopyItemId == 0)
+                                                 .ToList();
+                    }
+                    break;
+            }
+            switch (sortType) {
+                case MpClipTileSortType.CopyDateTime:
+                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.CopyDateTime)).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    break;
+                case MpClipTileSortType.ItemType:
+                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.ItemType)).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    break;
+                // TODO add rest of sort types
+                case MpClipTileSortType.Manual:
+                    if (manualSortOrderLookup == null) {
+                        result = result.Take(count).Skip(start).ToList();
+                    } else {
+                        int missingCount = 0;
+                        var missingItems = new List<MpCopyItem>();
+                        foreach (var ci in result) {
+                            if (manualSortOrderLookup.ContainsKey(ci.Id)) {
+                                ci.ManualSortIdx = manualSortOrderLookup[ci.Id];
+                            } else {
+                                missingCount++;
+                                if (isDescending) {
+                                    ci.ManualSortIdx = manualSortOrderLookup.Min(x => x.Value) - missingCount;
                                 } else {
-                                    missingCount++;
-                                    if(isDescending) {
-                                        ci.ManualSortIdx = manualSortOrderLookup.Min(x => x.Value) - missingCount;
-                                    } else {
-                                        ci.ManualSortIdx = manualSortOrderLookup.Max(x => x.Value) + missingCount;
-                                    }
-
+                                    ci.ManualSortIdx = manualSortOrderLookup.Max(x => x.Value) + missingCount;
                                 }
-                            }
-                            result = result.OrderByDynamic(isDescending, x => x.ManualSortIdx).Take(count).Skip(start).ToList();
-                        }                        
-                        break;
-                }
-            });
 
+                            }
+                        }
+                        result = result.OrderByDynamic(isDescending, x => x.ManualSortIdx).Take(count).Skip(start).ToList();
+                    }
+                    break;
+            }
             return result;
         }
 

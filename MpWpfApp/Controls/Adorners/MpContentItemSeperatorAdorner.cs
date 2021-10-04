@@ -38,6 +38,8 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
+            var civm = (AdornedElement as FrameworkElement).DataContext as MpContentItemViewModel;
+
             if (IsShowing) {
                 Visibility = Visibility.Visible;
                 foreach(var l in Lines) {

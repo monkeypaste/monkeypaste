@@ -22,20 +22,11 @@ namespace MpWpfApp {
     public partial class MpClipTileView : UserControl {
         public List<TextBlock> Titles = new List<TextBlock>();
 
-        public event EventHandler OnExpandCompleted;
-        public event EventHandler OnUnexpandCompleted;
 
         public MpClipTileView() {
             InitializeComponent();
         }
 
-        public void NotifyExpandCompleted() {
-            OnExpandCompleted?.Invoke(this, null);
-        }
-
-        public void NotifyUnexpandCompleted() {
-            OnUnexpandCompleted?.Invoke(this, null);
-        }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
             var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;

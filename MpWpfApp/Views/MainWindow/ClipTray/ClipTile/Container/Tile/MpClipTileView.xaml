@@ -12,7 +12,6 @@
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <i:Interaction.Behaviors>
         <local:MpClipTileDragBehavior x:Name="TileDragBehavior"/>
-        <local:MpTileExpanderBehavior x:Name="ExpandBehavior"/>
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"                        
                         DataContext="{Binding}"
@@ -27,7 +26,6 @@
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
                         Focusable="True"
-                        AllowDrop="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"

@@ -146,15 +146,28 @@ namespace MpWpfApp {
             var acil = MpDb.Instance.GetItems<MpCopyItem>();
             foreach (var ttvm in TagTileViewModels) {
                 ttvm.TagClipCount = 0;
-                foreach(var ctvm in acil) {
-                    if(ttvm.IsLinked(ctvm)) { 
+                foreach(var ci in acil) {
+                    if(ttvm.IsLinked(ci)) { 
                         ttvm.TagClipCount++;
                     }
                 }
             }
         }
 
-        
+        public async Task RefreshAllCountsAsync() {
+            var acil = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
+            foreach (var ttvm in TagTileViewModels) {
+                ttvm.TagClipCount = 0;
+                foreach (var ctvm in acil) {
+                    bool linked = await ttvm.IsLinkedAsync(ctvm);
+                    if (linked) {
+                        ttvm.TagClipCount++;
+                    }
+                }
+            }
+        }
+
+
         public void Add(MpTagTileViewModel newTagTile) {
             newTagTile.PropertyChanged += NewTagTile_PropertyChanged;
             TagTileViewModels.Add(newTagTile);

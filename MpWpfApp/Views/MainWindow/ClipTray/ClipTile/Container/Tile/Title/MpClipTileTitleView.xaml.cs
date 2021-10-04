@@ -68,7 +68,15 @@ namespace MpWpfApp {
             }
         }
 
-        private void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
+        private async void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(AnimateEnter);
+        }
+
+        private async void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(AnimateLeave);
+        }
+
+        private void AnimateEnter() {
             var ctvm = DataContext as MpContentItemViewModel;
             if (MpClipTrayViewModel.Instance.IsScrolling) {
                 return;
@@ -102,7 +110,7 @@ namespace MpWpfApp {
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
         }
 
-        private void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
+        private void AnimateLeave() {
             var ctvm = DataContext as MpContentItemViewModel;
             if (MpClipTrayViewModel.Instance.IsScrolling || ctvm.Parent.IsContextMenuOpened || ctvm.Parent.IsExpanded) {
                 return;

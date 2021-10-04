@@ -90,7 +90,7 @@ namespace MpWpfApp {
         }
         public List<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return ClipTileViewModels.Where(ct => ct.ItemVisibility == Visibility.Visible).ToList();
+                return ClipTileViewModels.OrderBy(x=>ClipTileViewModels.IndexOf(x)).Where(ct => ct.ItemVisibility == Visibility.Visible).ToList();
             }
         }
 
@@ -457,6 +457,8 @@ namespace MpWpfApp {
         }
 
         public async Task RefreshTiles(int start = 0, int count = 0) {
+            var sw = new Stopwatch();
+            sw.Start();
             int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             var sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             bool isDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
@@ -476,7 +478,7 @@ namespace MpWpfApp {
                 }
             }
             IsBusy = true;
-            var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending,manualSortOrderLookup);
+            var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
 
             //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
             //while(placeHoldersToAdd > 0) {
@@ -485,18 +487,19 @@ namespace MpWpfApp {
             //}
 
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-
                 ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
-                BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
+                //BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
 
                 _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
-                //ResetClipSelection();
 
                 IsBusy = false;
 
                 OnViewModelLoaded();
+                sw.Stop();
+                MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
             });
+
         }
 
 
@@ -681,11 +684,18 @@ namespace MpWpfApp {
                        !MpHelpers.Instance.IsMultiSelectKeyDown() &&
                        !IgnoreSelectionReset) {
                         //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
-                        foreach(var octvm in ClipTileViewModels) {
+                        foreach(var octvm in SelectedItems) {
                             if(octvm != ctvm) {
                                 octvm.ClearClipSelection();
-                                MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
+                                if(octvm.HeadItem != null) {
+                                    MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
+                                }
+                                
                             }
+                        }
+                    } else if(!ctvm.IsSelected) {
+                        if(ctvm.IsFlipped) {
+                            FlipTileCommand.Execute(ctvm);
                         }
                     }
                     break;
@@ -697,10 +707,10 @@ namespace MpWpfApp {
 
             //selection (if all subitems are dragging select host if no subitems are selected select all)
             foreach (var sctvm in SelectedItems) {
-                if (sctvm.SelectedItems.Count == sctvm.Count ||
-                    sctvm.Count <= 1) {
-                    sctvm.IsClipDragging = true;
-                }
+                //if (sctvm.SelectedItems.Count == sctvm.Count ||
+                //    sctvm.Count <= 1) {
+                //    sctvm.IsClipDragging = true;
+                //}
                 if (sctvm.SelectedItems.Count == 0) {
                     sctvm.SubSelectAll();
                 }
@@ -769,7 +779,7 @@ namespace MpWpfApp {
                     if (dctvm.Count == 0 ||
                         dctvm.SelectedItems.Count == dctvm.Count ||
                         dctvm.SelectedItems.Count == 0) {
-                        dctvm.IsClipDragging = true;
+                        //dctvm.IsClipDragging = true;
                     }
                 }
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedItems.ToList());
