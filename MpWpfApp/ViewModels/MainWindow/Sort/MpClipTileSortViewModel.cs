@@ -38,7 +38,7 @@ namespace MpWpfApp {
             set {
                 if (_sortTypes != value) {
                     _sortTypes = value;
-                    OnPropertyChanged_old(nameof(SortTypes));
+                    OnPropertyChanged(nameof(SortTypes));
                 }
             }
         }

@@ -160,17 +160,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if(civm.IsEditingContent) {
-                e.Handled = false;
-                return;
-            }
-            ContextMenu = new MpContentContextMenuView() { DataContext = civm };
-            ContextMenu.IsOpen = true;
-            e.Handled = true;
-        }
-
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;

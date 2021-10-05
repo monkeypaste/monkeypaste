@@ -22,17 +22,25 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase<object>, IDisposable {
+        #region Singleton Definition
+        private static readonly Lazy<MpMainWindowViewModel> _Lazy = new Lazy<MpMainWindowViewModel>(() => new MpMainWindowViewModel());
+        public static MpMainWindowViewModel Instance { get { return _Lazy.Value; } }
+
+        public void Init() {
+
+        }
+        #endregion
         #region Statics
         public static bool IsMainWindowLoading { get; set; } = true;
         public static bool IsMainWindowOpening { get; set; } = false;
 
-        public static bool IsMainWindowOpen {
-            get {
-                return Application.Current.MainWindow.DataContext != null && 
-                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
-            }
-        }
+        public static bool IsMainWindowOpen { get; private set; } = false;
+        //    get {
+        //        return Application.Current.MainWindow.DataContext != null && 
+        //            Application.Current.MainWindow.Visibility == Visibility.Visible &&
+        //            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
+        //    }
+        //}
 
 
         public static void SetLogText(string text, bool append = false) {
@@ -50,7 +58,6 @@ namespace MpWpfApp {
         #region Private Variables
         private double _startMainWindowTop;
         private double _endMainWindowTop;
-        private double _deltaHeight = 0;
 
         private bool _isExpanded = false;
 
@@ -104,7 +111,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region State
         private bool _isMainWindowLocked = false;
         public bool IsMainWindowLocked {
@@ -114,7 +120,7 @@ namespace MpWpfApp {
             set {
                 if(_isMainWindowLocked != value) {
                     _isMainWindowLocked = value;
-                    OnPropertyChanged_old(nameof(IsMainWindowLocked));
+                    OnPropertyChanged(nameof(IsMainWindowLocked));
                     if(IsMainWindowLocked) {
                         MpSystemTrayViewModel.Instance.ShowLogDialogCommand.Execute(null);
                     }
@@ -123,7 +129,6 @@ namespace MpWpfApp {
         }
 
         public string LogText { get; set; }
-
 
         public BitmapSource Ss { get; set; }
 
@@ -161,7 +166,7 @@ namespace MpWpfApp {
             set {
                 if(_mainWindowGridTop != value) {
                     _mainWindowGridTop = value;
-                    OnPropertyChanged_old(nameof(MainWindowTop));
+                    OnPropertyChanged(nameof(MainWindowTop));
                 }
             }
         }
@@ -175,7 +180,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayHeight != value) {
                     _clipTrayHeight = value;
-                    OnPropertyChanged_old(nameof(ClipTrayHeight));
+                    OnPropertyChanged(nameof(ClipTrayHeight));
                 }
             }
         }
@@ -188,7 +193,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayWidth != value) {
                     _clipTrayWidth = value;
-                    OnPropertyChanged_old(nameof(ClipTrayWidth));
+                    OnPropertyChanged(nameof(ClipTrayWidth));
                 }
             }
         }
@@ -216,8 +221,8 @@ namespace MpWpfApp {
             set {
                 if(_processinngVisibility != value) {
                     _processinngVisibility = value;
-                    OnPropertyChanged_old(nameof(ProcessingVisibility));
-                    OnPropertyChanged_old(nameof(AppVisibility));
+                    OnPropertyChanged(nameof(ProcessingVisibility));
+                    OnPropertyChanged(nameof(AppVisibility));
                 }
             }
         }
@@ -243,34 +248,31 @@ namespace MpWpfApp {
         public MpMainWindowViewModel() : base(null) {
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
             MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
-            Task.Run(() => {
-                MpMainWindowViewModel.IsMainWindowLoading = true;
+            MpMainWindowViewModel.IsMainWindowLoading = true;
 
-                MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
-                    IconBuilder = new MpIconBuilder()
-                });
-
-                MpHelpers.Instance.Init();
-
-
-                //MpPluginManager.Instance.Init();
-
-                MpThemeColors.Instance.Init();
-
-                MpSystemTrayViewModel.Instance.Init();
-                MpSearchBoxViewModel.Instance.Init();
-                MpClipTrayViewModel.Instance.Init();
-                MpClipTileSortViewModel.Instance.Init();
-                MpAppModeViewModel.Instance.Init();
-                MpTagTrayViewModel.Instance.Init();
-
-                Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
-                Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
-                Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
-                Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
-                Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
-                Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
+            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
+                IconBuilder = new MpIconBuilder()
             });
+
+            MpHelpers.Instance.Init();
+
+            //MpPluginManager.Instance.Init();
+
+            MpThemeColors.Instance.Init();
+
+            MpSystemTrayViewModel.Instance.Init();
+            MpSearchBoxViewModel.Instance.Init();
+            MpClipTrayViewModel.Instance.Init();
+            MpClipTileSortViewModel.Instance.Init();
+            MpAppModeViewModel.Instance.Init();
+            MpTagTrayViewModel.Instance.Init();
+
+            Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
+            Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
+            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
+            Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
+            Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
+            Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
         }
 
         public void FinishLoading() {
@@ -315,8 +317,8 @@ namespace MpWpfApp {
 
             MainWindowTop = _startMainWindowTop;
 
-            OnPropertyChanged_old(nameof(MainWindowWidth));
-            OnPropertyChanged_old(nameof(MainWindowHeight));
+            OnPropertyChanged(nameof(MainWindowWidth));
+            OnPropertyChanged(nameof(MainWindowHeight));
         }
         #endregion
 
@@ -428,6 +430,7 @@ namespace MpWpfApp {
                             TagTrayViewModel.RefreshAllCounts();
                         }
                     }
+                    IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
                 }
             };
@@ -500,6 +503,7 @@ namespace MpWpfApp {
                         } else {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
+                        IsMainWindowOpen = false;
                     }
                 };
                 timer.Start();

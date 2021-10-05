@@ -3,18 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-     <RichTextBox x:Name="Rtb"
+    <i:Interaction.Behaviors>
+        <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
+    </i:Interaction.Behaviors>
+    <RichTextBox x:Name="Rtb"
                      IsReadOnly="{Binding Parent.IsExpanded}"
                      Background="{Binding ItemBackgroundBrush}"
                      Loaded="Rtb_Loaded"
                      GotFocus="Rtb_GotFocus"
                      TextChanged="Rtb_TextChanged"
                      SelectionChanged="Rtb_SelectionChanged"
-                     PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                      PreviewKeyUp="Rtb_PreviewKeyUp"
                      IsEnabled="True"
                      ForceCursor="True"
@@ -23,6 +26,7 @@
                      IsInactiveSelectionHighlightEnabled="True"
                      IsDocumentEnabled="True"
                      Focusable="{Binding Parent.IsExpanded}"
+                     Padding="{Binding ContentPadding}"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                      IsUndoEnabled="True"
                      HorizontalAlignment="Stretch"

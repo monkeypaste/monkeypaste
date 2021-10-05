@@ -116,11 +116,13 @@
                 <!-- Sort Combobox -->
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
+                                      Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
 
                 <!-- Tag Tray -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2" 
+                                      Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                      DataContext="{Binding TagTrayViewModel}"/>
 
                 <!-- Search -->

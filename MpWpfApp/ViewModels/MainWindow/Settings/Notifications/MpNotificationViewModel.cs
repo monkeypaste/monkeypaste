@@ -17,7 +17,7 @@ namespace MpWpfApp {
             set {
                 if(_notificationType != value) {
                     _notificationType = value;
-                    OnPropertyChanged_old(nameof(NotificationType));
+                    OnPropertyChanged(nameof(NotificationType));
                 }
             }
         }
@@ -30,7 +30,7 @@ namespace MpWpfApp {
             set {
                 if (_isVisual != value) {
                     _isVisual = value;
-                    OnPropertyChanged_old(nameof(IsVisual));
+                    OnPropertyChanged(nameof(IsVisual));
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace MpWpfApp {
             set {
                 if (_isAudible != value) {
                     _isAudible = value;
-                    OnPropertyChanged_old(nameof(IsAudible));
+                    OnPropertyChanged(nameof(IsAudible));
                 }
             }
         }

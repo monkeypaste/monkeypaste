@@ -78,6 +78,9 @@ namespace MonkeyPaste {
 
         public int PasteCount { get; set; } = 0;
 
+
+        [Column("HexColor")]
+        public string ItemColor { get; set; }
         #endregion
 
         #region Fk Objects
@@ -91,8 +94,6 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpDbImage ItemDbImage { get; set; }
 
-        [Column("HexColor")]
-        public string ItemColor { get; set; }
 
         #endregion
 
@@ -264,7 +265,6 @@ namespace MonkeyPaste {
                 Title = "Untitled"+count,
                 ItemData = data,
                 ItemType = itemType,
-                ItemColor = MpHelpers.Instance.GetRandomColor().ToHex(),
                 SourceId = source.Id,
                 Source = source,
                 CopyCount = 1

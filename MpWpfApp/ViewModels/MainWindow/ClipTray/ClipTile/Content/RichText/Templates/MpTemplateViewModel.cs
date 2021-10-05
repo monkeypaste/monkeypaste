@@ -69,8 +69,8 @@ namespace MpWpfApp {
             set {
                 if (_validationText != value) {
                     _validationText = value;
-                    OnPropertyChanged_old(nameof(ValidationText));
-                    OnPropertyChanged_old(nameof(TemplateNameTextBoxBorderBrush));
+                    OnPropertyChanged(nameof(ValidationText));
+                    OnPropertyChanged(nameof(TemplateNameTextBoxBorderBrush));
                 }
             }
         }
@@ -142,11 +142,11 @@ namespace MpWpfApp {
             set {
                 if (_isHovering != value) {
                     _isHovering = value;
-                    OnPropertyChanged_old(nameof(IsHovering));
-                    OnPropertyChanged_old(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged_old(nameof(TemplateBorderBrush));
-                    OnPropertyChanged_old(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TemplateTextBlockCursor));
+                    OnPropertyChanged(nameof(IsHovering));
+                    OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBorderBrush));
+                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
             }
         }
@@ -160,11 +160,11 @@ namespace MpWpfApp {
                 //if (_isSelected != value)  
                     {
                     _isSelected = value;
-                    OnPropertyChanged_old(nameof(IsSelected));
-                    OnPropertyChanged_old(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged_old(nameof(TemplateBorderBrush));
-                    OnPropertyChanged_old(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TemplateTextBlockCursor));
+                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBorderBrush));
+                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
                
             }
@@ -184,7 +184,7 @@ namespace MpWpfApp {
             set {
                 if (_isEditingTemplate != value) {
                     _isEditingTemplate = value;
-                    OnPropertyChanged_old(nameof(IsEditingTemplate));
+                    OnPropertyChanged(nameof(IsEditingTemplate));
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace MpWpfApp {
             set {
                 if (_wasVisited != value) {
                     _wasVisited = value;
-                    OnPropertyChanged_old(nameof(WasVisited));
+                    OnPropertyChanged(nameof(WasVisited));
                 }
 
             }
@@ -211,7 +211,7 @@ namespace MpWpfApp {
             set {
                 if(_instanceCount != value) {
                     _instanceCount = value;
-                    OnPropertyChanged_old(nameof(InstanceCount));
+                    OnPropertyChanged(nameof(InstanceCount));
                 }
             }
         }
@@ -251,8 +251,8 @@ namespace MpWpfApp {
             set {
                 if (_templateText != value) {
                     _templateText = value;
-                    OnPropertyChanged_old(nameof(TemplateText));
-                    OnPropertyChanged_old(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(TemplateText));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
             }
         }
@@ -304,10 +304,10 @@ namespace MpWpfApp {
                     CopyItemTemplate.TemplateName = Parent.GetFormattedTemplateName(value);
                 }
 
-                OnPropertyChanged_old(nameof(TemplateName));
-                OnPropertyChanged_old(nameof(TemplateDisplayValue));
-                OnPropertyChanged_old(nameof(TemplateDisplayName));
-                OnPropertyChanged_old(nameof(CopyItemTemplate));
+                OnPropertyChanged(nameof(TemplateName));
+                OnPropertyChanged(nameof(TemplateDisplayValue));
+                OnPropertyChanged(nameof(TemplateDisplayName));
+                OnPropertyChanged(nameof(CopyItemTemplate));
             }
         }
 
@@ -321,10 +321,10 @@ namespace MpWpfApp {
             set {
                 if (CopyItemTemplate != null) {
                     CopyItemTemplate.HexColor = value.ToString();                    
-                    OnPropertyChanged_old(nameof(TemplateBrush));
-                    OnPropertyChanged_old(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged_old(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged_old(nameof(CopyItemTemplate));
+                    OnPropertyChanged(nameof(TemplateBrush));
+                    OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                    OnPropertyChanged(nameof(CopyItemTemplate));
                 }
             }
         }
@@ -337,13 +337,13 @@ namespace MpWpfApp {
             set {
                 if (_copyItemTemplate != value) {
                     _copyItemTemplate = value;
-                    OnPropertyChanged_old(nameof(CopyItemTemplate));
-                    OnPropertyChanged_old(nameof(TemplateBrush));
-                    OnPropertyChanged_old(nameof(TemplateName)); 
-                    OnPropertyChanged_old(nameof(TemplateDisplayName));
-                    OnPropertyChanged_old(nameof(TemplateDisplayValue));
-                    OnPropertyChanged_old(nameof(CopyItemTemplateId));
-                    OnPropertyChanged_old(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(CopyItemTemplate));
+                    OnPropertyChanged(nameof(TemplateBrush));
+                    OnPropertyChanged(nameof(TemplateName)); 
+                    OnPropertyChanged(nameof(TemplateDisplayName));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(CopyItemTemplateId));
+                    OnPropertyChanged(nameof(CopyItemId));
                 }
             }
         }
@@ -363,8 +363,8 @@ namespace MpWpfApp {
                              OnTemplateSelected?.Invoke(this, null);
                         } else {
                             IsEditingTemplate = false;
-                            Parent.Parent.Parent.OnPropertyChanged_old(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                            Parent.OnPropertyChanged_old(nameof(Parent.IsAnyEditingTemplate));
+                            Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                            Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                         }
                         break;
                     case nameof(TemplateName):
@@ -376,8 +376,8 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(IsEditingTemplate):
-                        Parent.Parent.Parent.OnPropertyChanged_old(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                        Parent.OnPropertyChanged_old(nameof(Parent.IsAnyEditingTemplate));
+                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                         break;
                 }
             };

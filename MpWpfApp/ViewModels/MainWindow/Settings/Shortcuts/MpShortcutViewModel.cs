@@ -52,7 +52,7 @@ namespace MpWpfApp {
             set {
                 if(_menuItemTag != value) {
                     _menuItemTag = value;
-                    OnPropertyChanged_old(nameof(MenuItemTag));
+                    OnPropertyChanged(nameof(MenuItemTag));
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace MpWpfApp {
             set {
                 if (_command != value) {
                     _command = value;
-                    OnPropertyChanged_old(nameof(Command));
+                    OnPropertyChanged(nameof(Command));
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                             RoutingType = (MpRoutingType)i;
                         }
                     }
-                    OnPropertyChanged_old(nameof(SelectedRoutingType));
+                    OnPropertyChanged(nameof(SelectedRoutingType));
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(DefaultKeyString));
+                    OnPropertyChanged(nameof(DefaultKeyString));
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.CopyItemId != value) {
                     Shortcut.CopyItemId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(CopyItemId));
                 }
             }
         }
@@ -235,7 +235,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.TagId != value) {
                     Shortcut.TagId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(TagId));
+                    OnPropertyChanged(nameof(TagId));
                 }
             }
         }
@@ -251,7 +251,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.ShortcutId != value) {
                     Shortcut.ShortcutId = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(ShortcutId));
+                    OnPropertyChanged(nameof(ShortcutId));
                 }
             }
         }
@@ -283,8 +283,8 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(KeyString));
-                    OnPropertyChanged_old(nameof(KeyList));
+                    OnPropertyChanged(nameof(KeyString));
+                    OnPropertyChanged(nameof(KeyList));
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(ShortcutDisplayName));
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
         }
@@ -316,8 +316,8 @@ namespace MpWpfApp {
                 if (Shortcut != null && Shortcut.RoutingType != value) {
                     Shortcut.RoutingType = value;
                     Shortcut.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(RoutingType));
-                    OnPropertyChanged_old(nameof(SelectedRoutingType));
+                    OnPropertyChanged(nameof(RoutingType));
+                    OnPropertyChanged(nameof(SelectedRoutingType));
                 }
             }
         }
@@ -330,18 +330,18 @@ namespace MpWpfApp {
             set {
                 if(_shortcut != value) {
                     _shortcut = value;
-                    OnPropertyChanged_old(nameof(Shortcut));
-                    OnPropertyChanged_old(nameof(RoutingType));
-                    OnPropertyChanged_old(nameof(KeyString));
-                    OnPropertyChanged_old(nameof(KeyList));
-                    OnPropertyChanged_old(nameof(ShortcutDisplayName));
-                    OnPropertyChanged_old(nameof(ShortcutId));
-                    OnPropertyChanged_old(nameof(TagId));
-                    OnPropertyChanged_old(nameof(CopyItemId));
-                    OnPropertyChanged_old(nameof(DefaultKeyString));
-                    OnPropertyChanged_old(nameof(ResetButtonVisibility));
-                    OnPropertyChanged_old(nameof(DeleteButtonVisibility));
-                    OnPropertyChanged_old(nameof(SelectedRoutingType));
+                    OnPropertyChanged(nameof(Shortcut));
+                    OnPropertyChanged(nameof(RoutingType));
+                    OnPropertyChanged(nameof(KeyString));
+                    OnPropertyChanged(nameof(KeyList));
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                    OnPropertyChanged(nameof(ShortcutId));
+                    OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(DefaultKeyString));
+                    OnPropertyChanged(nameof(ResetButtonVisibility));
+                    OnPropertyChanged(nameof(DeleteButtonVisibility));
+                    OnPropertyChanged(nameof(SelectedRoutingType));
                 }
             }
         }

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpContextMenuItemViewModel : MpViewModelBase<MpContextMenuViewModel> {
+    public class MpContextMenuItemViewModel : MpViewModelBase<object> {
         #region Properties
         private bool _isSeparator = false;
         public bool IsSeparator {
@@ -19,20 +19,20 @@ namespace MpWpfApp {
             set {
                 if (_isSeparator != value) {
                     _isSeparator = value;
-                    OnPropertyChanged_old(nameof(IsSeparator));
+                    OnPropertyChanged(nameof(IsSeparator));
                 }
             }
         }
 
-        private bool _isTagLinkedToClip = false;
-        public bool IsChecked {
+        private bool? _isTagLinkedToClip = false;
+        public bool? IsChecked {
             get {
                 return _isTagLinkedToClip;
             }
             set {
                 if (_isTagLinkedToClip != value) {
                     _isTagLinkedToClip = value;
-                    OnPropertyChanged_old(nameof(IsChecked));
+                    OnPropertyChanged(nameof(IsChecked));
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace MpWpfApp {
             set {
                 if (_menuItemVisibility != value) {
                     _menuItemVisibility = value;
-                    OnPropertyChanged_old(nameof(MenuItemVisibility));
+                    OnPropertyChanged(nameof(MenuItemVisibility));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace MpWpfApp {
             set {
                 if (_header != value) {
                     _header = value;
-                    OnPropertyChanged_old(nameof(Header));
+                    OnPropertyChanged(nameof(Header));
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace MpWpfApp {
             set {
                 if (_command != value) {
                     _command = value;
-                    OnPropertyChanged_old(nameof(Command));
+                    OnPropertyChanged(nameof(Command));
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace MpWpfApp {
             set {
                 if (_commandParameter != value) {
                     _commandParameter = value;
-                    OnPropertyChanged_old(nameof(CommandParameter));
+                    OnPropertyChanged(nameof(CommandParameter));
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
             set {
                 if (_inputGestureText != value) {
                     _inputGestureText = value;
-                    OnPropertyChanged_old(nameof(InputGestureText));
+                    OnPropertyChanged(nameof(InputGestureText));
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace MpWpfApp {
             set {
                 if(_iconSource != value) {
                     _iconSource = value;
-                    OnPropertyChanged_old(nameof(IconSource));
+                    OnPropertyChanged(nameof(IconSource));
                 }
             } 
         }
@@ -123,7 +123,7 @@ namespace MpWpfApp {
             set {
                 if(_iconBackgroundBrush != value) {
                     _iconBackgroundBrush = value;
-                    OnPropertyChanged_old(nameof(IconBackgroundBrush));
+                    OnPropertyChanged(nameof(IconBackgroundBrush));
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace MpWpfApp {
             set {
                 if(_icon != value) {
                     _icon = value;
-                    OnPropertyChanged_old(nameof(Icon));
+                    OnPropertyChanged(nameof(Icon));
                 }
             }
         }
@@ -149,16 +149,15 @@ namespace MpWpfApp {
             set {
                 if(_subItems != value) {
                     _subItems = value;
-                    OnPropertyChanged_old(nameof(SubItems));
+                    OnPropertyChanged(nameof(SubItems));
                 }
             }
         }
         #endregion
 
         #region Public Methods
-        public MpContextMenuItemViewModel() : base(null) { }
 
-        public MpContextMenuItemViewModel(MpContextMenuViewModel parent) : base(parent)  {
+        public MpContextMenuItemViewModel() : base(null)  {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IconSource):
@@ -178,8 +177,9 @@ namespace MpWpfApp {
                             }
                             var icon = new Image();
                             icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
-                            if (IsChecked) {
-                                var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/check.png"));
+                            if (IsChecked.Value || !IsChecked.HasValue) {
+                                string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
+                                var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
                                 if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
                                     checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
                                 }
@@ -194,11 +194,10 @@ namespace MpWpfApp {
         }
 
         public MpContextMenuItemViewModel(
-            MpContextMenuViewModel parent,
             string header, 
             ICommand command,
             object commandParameter,
-            bool isChecked,
+            bool? isChecked,
             string iconSource = "",
             ObservableCollection<MpContextMenuItemViewModel> subItems = null,
             string inputGestureText = "",

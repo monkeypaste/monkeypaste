@@ -49,10 +49,6 @@ namespace MpWpfApp {
 
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
-        //private double _originalExpandedTileX = 0;
-        //private int _expandedTileVisibleIdx = 0;
-
-        private int _pageSize = 20;
 
         private List<MpClipTileViewModel> _newTileList = new List<MpClipTileViewModel>();
 
@@ -72,13 +68,13 @@ namespace MpWpfApp {
 
         private ObservableCollection<MpClipTileViewModel> _clipTileViewModels = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTileViewModels {
-            get {
+            get {                
                 return _clipTileViewModels;
             }
             set {
                 if (_clipTileViewModels != value) {
                     _clipTileViewModels = value;
-                    OnPropertyChanged_old(nameof(ClipTileViewModels));
+                    OnPropertyChanged(nameof(ClipTileViewModels));
                 }
             }
         }
@@ -135,7 +131,6 @@ namespace MpWpfApp {
             get {
                 var cil = new List<MpCopyItem>();
                 foreach(var sctvm in SelectedItems) {
-                    sctvm.DoCommandSelection();
                     cil.AddRange(sctvm.SelectedItems.OrderBy(y=>y.LastSubSelectedDateTime).Select(x=>x.CopyItem));
                 }
                 return cil;
@@ -148,13 +143,49 @@ namespace MpWpfApp {
                 if (_translateLanguageMenuItems == null) {
                     _translateLanguageMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
                     foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
-                        _translateLanguageMenuItems.Add(new MpContextMenuItemViewModel(null,languageName, TranslateSelectedClipTextAsyncCommand, languageName, false));
+                        _translateLanguageMenuItems.Add(new MpContextMenuItemViewModel(languageName, TranslateSelectedClipTextAsyncCommand, languageName, false));
                     }
                 }
                 return _translateLanguageMenuItems;
             }
         }
 
+        public List<MpContextMenuItemViewModel> TagMenuItems {
+            get {
+                var tmil = new List<MpContextMenuItemViewModel>();
+
+                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                    if (tagTile.IsSudoTag) {
+                        continue;
+                    }
+                    int isCheckedCount = 0;
+                    foreach (var sm in SelectedModels) {
+                        if(tagTile.IsLinked(sm)) {
+                            isCheckedCount++;
+                        }
+                    }
+                    bool? isChecked;
+                    if (isCheckedCount == SelectedModels.Count) {
+                        isChecked = true;
+                    } else if (isCheckedCount > 0) {
+                        isChecked = null;
+                    } else {
+                        isChecked = false;
+                    }
+                    tmil.Add(
+                        new MpContextMenuItemViewModel(
+                            tagTile.TagName,
+                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                            tagTile,
+                            isChecked,
+                            string.Empty,
+                            null,
+                            tagTile.ShortcutKeyString,
+                            tagTile.TagColor));
+                }
+                return tmil;
+            }
+        }
         #endregion
 
         #region Layout
@@ -250,7 +281,7 @@ namespace MpWpfApp {
             set {
                 if (_isFilteringByApp != value) {
                     _isFilteringByApp = value;
-                    OnPropertyChanged_old(nameof(IsFilteringByApp));
+                    OnPropertyChanged(nameof(IsFilteringByApp));
                 }
             }
         }
@@ -263,7 +294,7 @@ namespace MpWpfApp {
             set {
                 if (_isMouseDown != value) {
                     _isMouseDown = value;
-                    OnPropertyChanged_old(nameof(IsMouseDown));
+                    OnPropertyChanged(nameof(IsMouseDown));
                 }
             }
         }
@@ -282,7 +313,7 @@ namespace MpWpfApp {
             set {
                 if (_isScrolling != value) {
                     _isScrolling = value;
-                    OnPropertyChanged_old(nameof(IsScrolling));
+                    OnPropertyChanged(nameof(IsScrolling));
                 }
             }
         }
@@ -340,7 +371,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTrayVisibility != value) {
                     _clipTrayVisibility = value;
-                    OnPropertyChanged_old(nameof(ClipTrayVisibility));
+                    OnPropertyChanged(nameof(ClipTrayVisibility));
                 }
             }
         }
@@ -353,7 +384,7 @@ namespace MpWpfApp {
             set {
                 if (_mergeClipsCommandVisibility != value) {
                     _mergeClipsCommandVisibility = value;
-                    OnPropertyChanged_old(nameof(MergeClipsCommandVisibility));
+                    OnPropertyChanged(nameof(MergeClipsCommandVisibility));
                 }
             }
         }
@@ -486,18 +517,20 @@ namespace MpWpfApp {
             //    placeHoldersToAdd--;
             //}
 
+            ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
+            BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
+
+            _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+
+            ResetClipSelection();
+            IsBusy = false;
+
+            OnViewModelLoaded();
+            sw.Stop();
+            MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
+
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
-                //BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
-
-                _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
-
-
-                IsBusy = false;
-
-                OnViewModelLoaded();
-                sw.Stop();
-                MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
+                
             });
 
         }
@@ -680,24 +713,24 @@ namespace MpWpfApp {
             var ctvm = sender as MpClipTileViewModel;
             switch(e.PropertyName) {
                 case nameof(ctvm.IsSelected):
-                    if(ctvm.IsSelected && 
-                       !MpHelpers.Instance.IsMultiSelectKeyDown() &&
-                       !IgnoreSelectionReset) {
-                        //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
-                        foreach(var octvm in SelectedItems) {
-                            if(octvm != ctvm) {
-                                octvm.ClearClipSelection();
-                                if(octvm.HeadItem != null) {
-                                    MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
-                                }
+                    //if(ctvm.IsSelected && 
+                    //   !MpHelpers.Instance.IsMultiSelectKeyDown() &&
+                    //   !IgnoreSelectionReset) {
+                    //    //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
+                    //    foreach(var octvm in SelectedItems) {
+                    //        if(octvm != ctvm) {
+                    //            octvm.ClearClipSelection();
+                    //            if(octvm.HeadItem != null) {
+                    //                MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
+                    //            }
                                 
-                            }
-                        }
-                    } else if(!ctvm.IsSelected) {
-                        if(ctvm.IsFlipped) {
-                            FlipTileCommand.Execute(ctvm);
-                        }
-                    }
+                    //        }
+                    //    }
+                    //} else if(!ctvm.IsSelected) {
+                    //    if(ctvm.IsFlipped) {
+                    //        FlipTileCommand.Execute(ctvm);
+                    //    }
+                    //}
                     break;
             }
         }
@@ -1138,42 +1171,17 @@ namespace MpWpfApp {
             }
         }
 
-        private AsyncCommand<Brush> _changeSelectedClipsColorCommand;
-        public IAsyncCommand<Brush> ChangeSelectedClipsColorCommand {
-            get {
-                if (_changeSelectedClipsColorCommand == null) {
-                    _changeSelectedClipsColorCommand = new AsyncCommand<Brush>(ChangeSelectedClipsColor);
+        public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
+            (brush) => {
+                if (brush == null) {
+                    return;
                 }
-                return _changeSelectedClipsColorCommand;
-            }
-        }
-        private async Task ChangeSelectedClipsColor(Brush brush) {
-            if (brush == null) {
-                return;
-            }
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            //BitmapSource sharedSwirl = null;
-                            foreach (var sctvm in SelectedItems) {
-                                sctvm.PrimaryItem.TitleBackgroundColor = brush;
-                                sctvm.PrimaryItem.TitleSwirlViewModel.ForceBrush(brush);
-                                //if (sharedSwirl == null) {
-                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
-                                //    sharedSwirl = sctvm.TitleSwirl;
-                                //} else {
-                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(sharedSwirl);
-                                //}
-                                //sctvm.CopyItem.WriteToDatabase();
-                            }
-                        }));
-            }
-            finally {
-                IsBusy = false;
-            }
-        }
+                var b = brush as Brush;
+                foreach (var scivm in SelectedContentItemViewModels) {
+                    scivm.CopyItemColorBrush = b;
+                    scivm.TitleSwirlViewModel.ForceBrush(b);
+                }
+            });
 
         private AsyncCommand<object> _hotkeyPasteCommand;
         public IAsyncCommand<object> PerformHotkeyPasteCommand {

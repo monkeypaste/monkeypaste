@@ -836,7 +836,7 @@ namespace MonkeyPaste {
                     , fk_MpCopyItemTypeId integer NOT NULL default 0
                     , fk_MpSourceId integer NOT NULL
                     , CompositeSortOrderIdx integer default 0
-                    , HexColor text default '#FFFF0000'
+                    , HexColor text 
                     , Title text NULL default ''
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0

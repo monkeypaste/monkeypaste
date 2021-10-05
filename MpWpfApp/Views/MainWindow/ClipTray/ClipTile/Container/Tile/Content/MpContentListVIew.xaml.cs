@@ -77,11 +77,12 @@ namespace MpWpfApp {
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null) {
-                var rtbcvm = DataContext as MpClipTileViewModel;
-                rtbcvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
-                rtbcvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
-                rtbcvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                rtbcvm.PropertyChanged += Rtbcvm_PropertyChanged;
+                var ctvm = DataContext as MpClipTileViewModel;
+                ctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
+                ctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
+                ctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
+                ctvm.PropertyChanged += Rtbcvm_PropertyChanged;
+                
             } 
         }
 
@@ -114,6 +115,7 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             this.UpdateLayout();
+            UpdateAdorner();
             //ContentListBox.Items.Refresh();
         }
 

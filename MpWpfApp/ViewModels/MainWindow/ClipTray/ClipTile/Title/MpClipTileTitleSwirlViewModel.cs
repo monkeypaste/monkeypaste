@@ -30,7 +30,7 @@ namespace MpWpfApp {
             set {
                 if(Swirls.Count > 0 && Swirls[0] != value) {
                     Swirls[0] = value;
-                    OnPropertyChanged_old(nameof(SwirlLayer0));
+                    OnPropertyChanged(nameof(SwirlLayer0));
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 1 && Swirls[1] != value) {
                     Swirls[1] = value;
-                    OnPropertyChanged_old(nameof(SwirlLayer1));
+                    OnPropertyChanged(nameof(SwirlLayer1));
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 2 && Swirls[2] != value) {
                     Swirls[2] = value;
-                    OnPropertyChanged_old(nameof(SwirlLayer2));
+                    OnPropertyChanged(nameof(SwirlLayer2));
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace MpWpfApp {
             set {
                 if (Swirls.Count > 3 && Swirls[3] != value) {
                     Swirls[3] = value;
-                    OnPropertyChanged_old(nameof(SwirlLayer3));
+                    OnPropertyChanged(nameof(SwirlLayer3));
                 }
             }
         }
@@ -106,14 +106,10 @@ namespace MpWpfApp {
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
             }
         }
-        public void ForceBrush(Brush forcedBrush, int forceLayerIdx=-1) {
+        public void ForceBrush(Brush forcedBrush) {
             foreach(var slvm in Swirls) {
-                if(forceLayerIdx >= 0 && Swirls.IndexOf(slvm) == forceLayerIdx) {
-
-                } else if(forceLayerIdx < 0) {
-                    slvm.LayerBrush = forcedBrush;
-                    slvm.LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
-                }
+                slvm.LayerBrush = forcedBrush;
+                slvm.LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
             }
         }
         #endregion

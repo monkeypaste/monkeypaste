@@ -87,7 +87,7 @@ namespace MpWpfApp {
             set {
                 if (_selectedPasteToAppPathViewModel != value) {
                     _selectedPasteToAppPathViewModel = value;
-                    OnPropertyChanged_old(nameof(SelectedPasteToAppPathViewModel));
+                    OnPropertyChanged(nameof(SelectedPasteToAppPathViewModel));
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace MpWpfApp {
             set {
                 if (_validationText != value) {
                     _validationText = value;
-                    OnPropertyChanged_old(nameof(ValidationText));
+                    OnPropertyChanged(nameof(ValidationText));
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace MpWpfApp {
                 switch (e.PropertyName) {
                     case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):
                         _menuItemViewModels = null;
-                        OnPropertyChanged_old(nameof(MenuItemViewModels));
+                        OnPropertyChanged(nameof(MenuItemViewModels));
                         break;
                 }
             };

@@ -23,7 +23,7 @@ namespace MpWpfApp {
             set {
                 if(_appViewModels != value) {
                     _appViewModels = value;
-                    OnPropertyChanged_old(nameof(AppViewModels));
+                    OnPropertyChanged(nameof(AppViewModels));
                 }
             }
         }

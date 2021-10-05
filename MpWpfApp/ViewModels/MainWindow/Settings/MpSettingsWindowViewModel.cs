@@ -82,7 +82,7 @@ namespace MpWpfApp {
             set {
                 if (_preferencesViewModel != value) {
                     _preferencesViewModel = value;
-                    OnPropertyChanged_old(nameof(PreferencesViewModel));
+                    OnPropertyChanged(nameof(PreferencesViewModel));
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace MpWpfApp {
             set {
                 if (_securityViewModel != value) {
                     _securityViewModel = value;
-                    OnPropertyChanged_old(nameof(SecurityViewModel));
+                    OnPropertyChanged(nameof(SecurityViewModel));
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace MpWpfApp {
             set { 
                 if(_settingsPanel1Visibility != value) {
                     _settingsPanel1Visibility = value;
-                    OnPropertyChanged_old(nameof(SettingsPanel1Visibility));
+                    OnPropertyChanged(nameof(SettingsPanel1Visibility));
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace MpWpfApp {
             set {
                 if (_settingsPanel2Visibility != value) {
                     _settingsPanel2Visibility = value;
-                    OnPropertyChanged_old(nameof(SettingsPanel2Visibility));
+                    OnPropertyChanged(nameof(SettingsPanel2Visibility));
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace MpWpfApp {
             set {
                 if (_settingsPanel3Visibility != value) {
                     _settingsPanel3Visibility = value;
-                    OnPropertyChanged_old(nameof(SettingsPanel3Visibility));
+                    OnPropertyChanged(nameof(SettingsPanel3Visibility));
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace MpWpfApp {
             set {
                 if (_settingsPanel4Visibility != value) {
                     _settingsPanel4Visibility = value;
-                    OnPropertyChanged_old(nameof(SettingsPanel4Visibility));
+                    OnPropertyChanged(nameof(SettingsPanel4Visibility));
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace MpWpfApp {
             set {
                 if (_settingsPanel5Visibility != value) {
                     _settingsPanel5Visibility = value;
-                    OnPropertyChanged_old(nameof(SettingsPanel5Visibility));
+                    OnPropertyChanged(nameof(SettingsPanel5Visibility));
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace MpWpfApp {
             set {
                 if (_selectedShortcutIndex != value) {
                     _selectedShortcutIndex = value;
-                    OnPropertyChanged_old(nameof(SelectedShortcutIndex));
+                    OnPropertyChanged(nameof(SelectedShortcutIndex));
                 }
             }
         }

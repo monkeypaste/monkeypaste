@@ -55,9 +55,9 @@ namespace MpWpfApp {
 
 
             MpStandardBalloonViewModel.ShowBalloon(
-           "Monkey Paste",
-           "Successfully loaded w/ " + totalItems + " items",
-           Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+               "Monkey Paste",
+               "Successfully loaded w/ " + totalItems + " items",
+               Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
         }

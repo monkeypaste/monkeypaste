@@ -49,7 +49,7 @@ namespace MpWpfApp {
             set {
                 if (_selectedExcludedAppIndex != value) {
                     _selectedExcludedAppIndex = value;
-                    OnPropertyChanged_old(nameof(SelectedExcludedAppIndex));
+                    OnPropertyChanged(nameof(SelectedExcludedAppIndex));
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace MpWpfApp {
             var eavm = AppViewModels[SelectedExcludedAppIndex];
             AppViewModels[AppViewModels.IndexOf(eavm)].IsAppRejected = false;
             AppViewModels[AppViewModels.IndexOf(eavm)].App.WriteToDatabase();
-            OnPropertyChanged_old(nameof(AppViewModels));
+            OnPropertyChanged(nameof(AppViewModels));
         }
 
         private RelayCommand _addExcludedAppCommand;

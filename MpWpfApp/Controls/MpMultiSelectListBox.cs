@@ -28,7 +28,8 @@ namespace MpWpfApp {
                 if (_deferSelection) {
                     try {
                         base.OnMouseLeftButtonDown(e);
-                    } finally {
+                    }
+                    finally {
                         _deferSelection = false;
                     }
                 }

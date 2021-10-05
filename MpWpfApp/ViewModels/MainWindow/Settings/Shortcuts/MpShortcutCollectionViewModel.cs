@@ -39,7 +39,7 @@ namespace MpWpfApp {
         public MpShortcutCollectionViewModel() : base(null) { }
 
         public void Init() {
-            InitHotkeys();
+            InitHotkeysAndMouseEvents();
             InitShortcuts();
             OnViewModelLoaded();
         }        
@@ -218,41 +218,47 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Methods
-        private bool InitHotkeys() {
+        #region Private Methods        
+        private bool InitHotkeysAndMouseEvents() {
             try {
                 GlobalHook = Hook.GlobalEvents();
                 ApplicationHook = Hook.AppEvents();
 
                 #region Mouse
                 GlobalHook.MouseMove += (s, e) => {
-                    if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
+                    if(!MpMainWindowViewModel.IsMainWindowOpen) {
+                        if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
                        !Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                        if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                            MainWindowViewModel.ShowWindowCommand.Execute(null);
+                            if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                                MainWindowViewModel.ShowWindowCommand.Execute(null);
+                            }
                         }
-                    }
+                    }                    
                 };
 
                 GlobalHook.MouseUp += (s, e) => {
-                    if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
-                        if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
-                            System.Windows.Forms.SendKeys.SendWait(" ^ c");
+                    if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                        if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
+                            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
+                                System.Windows.Forms.SendKeys.SendWait(" ^ c");
+                            }
                         }
-                    }
-                    if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
-                        if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
-                            System.Windows.Forms.SendKeys.SendWait("^v");
+                        if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
+                            if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
+                                System.Windows.Forms.SendKeys.SendWait("^v");
+                            }
                         }
-                    }
+                    }                        
                 };
 
                 GlobalHook.MouseWheel += (s, e) => {
-                    if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                        if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                            MainWindowViewModel.ShowWindowCommand.Execute(null);
+                    if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                        if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                            if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                                MainWindowViewModel.ShowWindowCommand.Execute(null);
+                            }
                         }
-                    }
+                    }                        
                 };
 
                 ApplicationHook.MouseWheel += (s, e) => {

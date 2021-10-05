@@ -47,7 +47,7 @@ namespace MpWpfApp {
                 if(_selectedWindowState != value) {
                     _selectedWindowState = value;
                     WindowState = (WinApi.ShowWindowCommands)_selectedWindowState;
-                    OnPropertyChanged_old(nameof(SelectedWindowState));
+                    OnPropertyChanged(nameof(SelectedWindowState));
                 }
             }
         }
@@ -60,8 +60,8 @@ namespace MpWpfApp {
             set {
                 if(_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged_old(nameof(IsSelected));
-                    OnPropertyChanged_old(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(IsReadOnly));
                 }
             }
         }
@@ -80,8 +80,8 @@ namespace MpWpfApp {
             set {
                 if (_isValid != value) {
                     _isValid = value;
-                    OnPropertyChanged_old(nameof(IsValid));
-                    OnPropertyChanged_old(nameof(PasteToAppPathDataRowBorderBrush));
+                    OnPropertyChanged(nameof(IsValid));
+                    OnPropertyChanged(nameof(PasteToAppPathDataRowBorderBrush));
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace MpWpfApp {
             set {
                 if (_isRuntime != value) {
                     _isRuntime = value;
-                    OnPropertyChanged_old(nameof(IsRuntime));
+                    OnPropertyChanged(nameof(IsRuntime));
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace MpWpfApp {
             set {
                 if (_isHidden != value) {
                     _isHidden = value;
-                    OnPropertyChanged_old(nameof(IsHidden));
+                    OnPropertyChanged(nameof(IsHidden));
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace MpWpfApp {
             set {
                 if(_handle != value) {
                     _handle = value;
-                    OnPropertyChanged_old(nameof(Handle));
+                    OnPropertyChanged(nameof(Handle));
                 }
             }
         }
@@ -138,7 +138,7 @@ namespace MpWpfApp {
                 if(PasteToAppPath != null && PasteToAppPath.PressEnter != value) {
                     PasteToAppPath.PressEnter = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(PressEnter));
+                    OnPropertyChanged(nameof(PressEnter));
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace MpWpfApp {
                 if (PasteToAppPath.WindowState != (int)value) {
                     PasteToAppPath.WindowState = (int)value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(WindowState));
+                    OnPropertyChanged(nameof(WindowState));
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace MpWpfApp {
                 if(PasteToAppPath != null) {
                     PasteToAppPath.AvatarDbImage.ImageBase64 = value.ToBase64String();
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(AppIcon));
+                    OnPropertyChanged(nameof(AppIcon));
                 }
             }
         }
@@ -191,7 +191,7 @@ namespace MpWpfApp {
                 if(PasteToAppPath != null && PasteToAppPath.Args != value) {
                     PasteToAppPath.Args = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(Args));
+                    OnPropertyChanged(nameof(Args));
                 }
             }
         }
@@ -210,7 +210,7 @@ namespace MpWpfApp {
                 if (PasteToAppPath != null && PasteToAppPath.Label != value) {
                     PasteToAppPath.Label = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(Label));
+                    OnPropertyChanged(nameof(Label));
                 }
             }
         }
@@ -226,8 +226,8 @@ namespace MpWpfApp {
                 if (PasteToAppPath != null && PasteToAppPath.IsSilent != value) {
                     PasteToAppPath.IsSilent = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(IsSilent));
-                    OnPropertyChanged_old(nameof(AppName));
+                    OnPropertyChanged(nameof(IsSilent));
+                    OnPropertyChanged(nameof(AppName));
                 }
             }
         }
@@ -243,8 +243,8 @@ namespace MpWpfApp {
                 if (PasteToAppPath != null && PasteToAppPath.IsAdmin != value) {
                     PasteToAppPath.IsAdmin = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(IsAdmin));
-                    OnPropertyChanged_old(nameof(AppName));
+                    OnPropertyChanged(nameof(IsAdmin));
+                    OnPropertyChanged(nameof(AppName));
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace MpWpfApp {
                 if(PasteToAppPath.AppName != value && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppName = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(AppName));
+                    OnPropertyChanged(nameof(AppName));
                 }
             }
         } 
@@ -279,7 +279,7 @@ namespace MpWpfApp {
                 if (PasteToAppPath != null && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppPath = value;
                     PasteToAppPath.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(AppPath));
+                    OnPropertyChanged(nameof(AppPath));
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.PasteToAppPathId != value) {
                     PasteToAppPath.PasteToAppPathId = value;
-                    OnPropertyChanged_old(nameof(PasteToAppPathId));
+                    OnPropertyChanged(nameof(PasteToAppPathId));
                 }
             }
         }
@@ -307,17 +307,17 @@ namespace MpWpfApp {
             set {
                 if(_pasteToAppPath != value) {
                     _pasteToAppPath = value;
-                    OnPropertyChanged_old(nameof(PasteToAppPath));
-                    OnPropertyChanged_old(nameof(PasteToAppPathId));
-                    OnPropertyChanged_old(nameof(AppPath));
-                    OnPropertyChanged_old(nameof(IsAdmin));
-                    OnPropertyChanged_old(nameof(WindowState));
-                    OnPropertyChanged_old(nameof(IsSilent));
-                    OnPropertyChanged_old(nameof(AppName));
-                    OnPropertyChanged_old(nameof(AppIcon));
-                    OnPropertyChanged_old(nameof(Args));
-                    OnPropertyChanged_old(nameof(Label));
-                    OnPropertyChanged_old(nameof(PressEnter));
+                    OnPropertyChanged(nameof(PasteToAppPath));
+                    OnPropertyChanged(nameof(PasteToAppPathId));
+                    OnPropertyChanged(nameof(AppPath));
+                    OnPropertyChanged(nameof(IsAdmin));
+                    OnPropertyChanged(nameof(WindowState));
+                    OnPropertyChanged(nameof(IsSilent));
+                    OnPropertyChanged(nameof(AppName));
+                    OnPropertyChanged(nameof(AppIcon));
+                    OnPropertyChanged(nameof(Args));
+                    OnPropertyChanged(nameof(Label));
+                    OnPropertyChanged(nameof(PressEnter));
                 }
             }
         }

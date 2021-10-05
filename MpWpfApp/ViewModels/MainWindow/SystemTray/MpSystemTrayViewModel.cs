@@ -24,7 +24,7 @@ namespace MpWpfApp {
             set {
                 if(_settingsWindowViewModel != value) {
                     _settingsWindowViewModel = value;
-                    OnPropertyChanged_old(nameof(SettingsWindowViewModel));
+                    OnPropertyChanged(nameof(SettingsWindowViewModel));
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace MpWpfApp {
             set {
                 if (_systemTrayIconToolTipText != value) {
                     _systemTrayIconToolTipText = value;
-                    OnPropertyChanged_old(nameof(SystemTrayIconToolTipText));
+                    OnPropertyChanged(nameof(SystemTrayIconToolTipText));
                 }
             }
         }
@@ -110,10 +110,10 @@ namespace MpWpfApp {
                 MainWindowViewModel.ShowWindowCommand.Execute(null);
             };
             _taskbarIcon.MouseEnter += (s, e3) => {
-                OnPropertyChanged_old(nameof(AppStatus));
-                OnPropertyChanged_old(nameof(AccountStatus));
-                OnPropertyChanged_old(nameof(TotalItemCount));
-                OnPropertyChanged_old(nameof(DbSizeInMbs));
+                OnPropertyChanged(nameof(AppStatus));
+                OnPropertyChanged(nameof(AccountStatus));
+                OnPropertyChanged(nameof(TotalItemCount));
+                OnPropertyChanged(nameof(DbSizeInMbs));
             };
             //ShowStandardBalloon("Monkey Paste", "Successfully loaded", BalloonIcon.Info);
             //ShowStandardBalloon("Test title", "Test balloon text", BalloonIcon.Info);

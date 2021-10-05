@@ -36,7 +36,7 @@ namespace MpWpfApp {
             private set {
                 if(_templates != value) {
                     _templates = value;
-                    OnPropertyChanged_old(nameof(Templates));
+                    OnPropertyChanged(nameof(Templates));
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
 
         public MpTemplateCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {           
             Templates.CollectionChanged += (s, e) => {
-                OnPropertyChanged_old(nameof(Templates));
+                OnPropertyChanged(nameof(Templates));
             };
 
 
@@ -157,7 +157,7 @@ namespace MpWpfApp {
             var thlvm = sender as MpTemplateViewModel;
             switch(e.PropertyName) {
                 case nameof(thlvm.IsSelected):
-                    OnPropertyChanged_old(nameof(SelectedTemplate));
+                    OnPropertyChanged(nameof(SelectedTemplate));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
                     break;
             }
@@ -215,7 +215,7 @@ namespace MpWpfApp {
                     thlvm.IsSelected = false;
                 }
             }
-            OnPropertyChanged_old(nameof(SelectedTemplate));
+            OnPropertyChanged(nameof(SelectedTemplate));
             HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
         }
 
@@ -256,7 +256,7 @@ namespace MpWpfApp {
                             nextIdx = 0;
                         }
                         Templates[nextIdx].IsSelected = true;
-                        OnPropertyChanged_old(nameof(SelectedTemplateIdx));
+                        OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 
@@ -278,7 +278,7 @@ namespace MpWpfApp {
                             prevIdx = Templates.Count - 1;
                         }
                         Templates[prevIdx].IsSelected = true;
-                        OnPropertyChanged_old(nameof(SelectedTemplateIdx));
+                        OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 

@@ -10,9 +10,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel,IsDesignTimeCreatable=True}">
-    <!--<i:Interaction.Behaviors>
-        <local:MpClipTrayViewDropBehavior x:Name="DropBehavior"/>
-    </i:Interaction.Behaviors>-->
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>            
             <local:MpMultiSelectListBox x:Name="ClipTray"

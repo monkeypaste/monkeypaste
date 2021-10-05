@@ -29,7 +29,6 @@ namespace MpWpfApp {
             //    if(!MpLanguageTranslator.Instance)
             //}
 
-
             MenuItem cmi = null;
             foreach (var mi in Items) {
                 if (mi == null || mi is Separator) {
@@ -40,44 +39,24 @@ namespace MpWpfApp {
                     cmi = (MenuItem)mi;
                 }
             }
-            ICommand changeColorCommand = null;
-            if (DataContext is MpClipTileViewModel ctvm) {
-                changeColorCommand = ctvm.ChangeColorCommand;
-            } else if (DataContext is MpContentItemViewModel civm) {
-                changeColorCommand = civm.ChangeColorCommand;
-            }
             MpHelpers.Instance.SetColorChooserMenuItem(
                     this,
                     cmi,
                     (s, e1) => {
-                        changeColorCommand.Execute((Brush)((Border)s).Tag);
+                        MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
                     }
                 );
         }
 
         private void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
             MpApp app = null;
-            if(DataContext is MpClipTileViewModel ctvm) {
-                if(!ctvm.IsSelected) {
-                    ctvm.IsSelected = true;
-                }
-                if(ctvm.SelectedItems.Count == 1 || ctvm.ItemViewModels.Count == 1) {
-                    //Pass context to content item if only one selected by default
-                    DataContext = ctvm.PrimaryItem;
-                } else {
-                    ctvm.IsContextMenuOpened = true;
-                }
-            } 
-            
-            if(DataContext is MpContentItemViewModel civm) {
-                if(!civm.Parent.IsSelected) {
-                    civm.Parent.IsSelected = true;
-                }
-                civm.IsContextMenuOpen = true;
-                civm.OnPropertyChanged_old(nameof(civm.TagMenuItems));
-                app = civm.CopyItem.Source.App;
+            if (MpClipTrayViewModel.Instance.SelectedModels.Count == 1) {
+                app = MpClipTrayViewModel.Instance.SelectedModels[0].Source.App;
             }
 
+            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.TagMenuItems));
+
+            
             Tag = DataContext;
             //MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 

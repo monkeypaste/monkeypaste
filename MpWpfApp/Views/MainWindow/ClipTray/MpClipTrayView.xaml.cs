@@ -61,27 +61,6 @@ namespace MpWpfApp {
             }
         }
 
-        public List<Rect> GetSelectedContentItemViewRects(FrameworkElement relativeTo) {
-            var scivml = MpClipTrayViewModel.Instance.SelectedContentItemViewModels;
-            var civl = new List<Rect>();
-            for (int i = 0; i < ClipTray.Items.Count; i++) {
-                var clv = ClipTray.GetListBoxItem(i).GetVisualDescendent<MpContentListView>();
-                if(clv == null) {
-                    //this is null when item is a placeholder
-                    continue;
-                }
-                for (int j = 0; j < clv.ContentListBox.Items.Count; j++) {
-                    int idx = scivml.IndexOf(clv.ContentListBox.Items[j] as MpContentItemViewModel);
-                    if(idx >= 0) {
-                        var rect = clv.ContentListBox.GetListBoxItemRect(j);
-                        rect.Location = clv.ContentListBox.TranslatePoint(rect.Location, relativeTo);
-                        civl.Add(rect);
-                    }
-                }
-            }
-            return civl;
-        }
-
         #region Selection
         private void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
@@ -90,7 +69,7 @@ namespace MpWpfApp {
             MpTagTrayViewModel.Instance.UpdateTagAssociation();
 
             if (ctrvm.PrimaryItem != null) {
-                ctrvm.PrimaryItem.OnPropertyChanged_old(nameof(ctrvm.PrimaryItem.TileBorderBrush));
+                ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
             }
 
             MpAppModeViewModel.Instance.RefreshState();

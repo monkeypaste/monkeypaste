@@ -51,7 +51,7 @@ namespace MpWpfApp {
             set {
                 if(_voiceNames != value) {
                     _voiceNames = value;
-                    OnPropertyChanged_old(nameof(VoiceNames));
+                    OnPropertyChanged(nameof(VoiceNames));
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace MpWpfApp {
                     _selectedVoiceName = value;
                     Properties.Settings.Default.SpeechSynthVoiceName = _selectedVoiceName;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(SelectedVoiceName));
+                    OnPropertyChanged(nameof(SelectedVoiceName));
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace MpWpfApp {
                     _maxRtfCharCount = value;
                     Properties.Settings.Default.MaxRtfCharCount = _maxRtfCharCount;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(MaxRtfCharCount));
+                    OnPropertyChanged(nameof(MaxRtfCharCount));
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace MpWpfApp {
                     _selectedLanguage = value;
                     Properties.Settings.Default.UserLanguage = _selectedLanguage;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(SelectedLanguage));
+                    OnPropertyChanged(nameof(SelectedLanguage));
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace MpWpfApp {
                     _ignoreWhiteSpaceCopyItems = value;
                     Properties.Settings.Default.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(IgnoreWhiteSpaceCopyItems));
+                    OnPropertyChanged(nameof(IgnoreWhiteSpaceCopyItems));
                 }
             }
         }
@@ -138,7 +138,7 @@ namespace MpWpfApp {
                     _resetClipboard = value;
                     Properties.Settings.Default.ResetClipboardAfterMonkeyPaste = _resetClipboard;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(ResetClipboard));
+                    OnPropertyChanged(nameof(ResetClipboard));
                 }
             }
         }
@@ -155,13 +155,13 @@ namespace MpWpfApp {
                     Properties.Settings.Default.Save();
                     if(!MpMainWindowViewModel.IsMainWindowLoading) {
                         foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                            ctvm.OnPropertyChanged_old(nameof(ctvm.ToolTipVisibility));
+                            ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
                             foreach(var rtbvm in ctvm.ItemViewModels) {
                                 //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));
                             }
                         }
                     }
-                    OnPropertyChanged_old(nameof(ShowItemPreview));
+                    OnPropertyChanged(nameof(ShowItemPreview));
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace MpWpfApp {
                     _useSpellCheck = value;
                     Properties.Settings.Default.UseSpellCheck = _useSpellCheck;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(UseSpellCheck));
+                    OnPropertyChanged(nameof(UseSpellCheck));
                 }
             }
         }
@@ -191,7 +191,7 @@ namespace MpWpfApp {
                     _ignoreNewDuplicates = value;
                     Properties.Settings.Default.IgnoreNewDuplicates = _ignoreNewDuplicates;
                     Properties.Settings.Default.Save();
-                    OnPropertyChanged_old(nameof(IgnoreNewDuplicates));
+                    OnPropertyChanged(nameof(IgnoreNewDuplicates));
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace MpWpfApp {
             set {
                 if (_isLoadOnLoginChecked != value) {
                     _isLoadOnLoginChecked = value;
-                    OnPropertyChanged_old(nameof(IsLoadOnLoginChecked));
+                    OnPropertyChanged(nameof(IsLoadOnLoginChecked));
                 }
             }
         }        

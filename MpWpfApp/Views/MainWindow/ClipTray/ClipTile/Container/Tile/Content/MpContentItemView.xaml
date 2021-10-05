@@ -7,11 +7,15 @@
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
+             Focusable="True"
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-
-    <Border BorderThickness="1">
+    <i:Interaction.Behaviors>
+        <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
+    </i:Interaction.Behaviors>    
+    <Border BorderThickness="1"
+            Focusable="True">
         <Border.BorderBrush>
             <DrawingBrush Viewport="0,0,7,7"
                         ViewportUnits="Absolute"
@@ -38,24 +42,17 @@
               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
               MouseEnter="ContentListItemView_MouseEnter"
               MouseLeave="ContentListItemView_MouseLeave"
-              PreviewMouseDown="ContentListItemViewGrid_PreviewMouseDown"
               HorizontalAlignment="Stretch"     
               VerticalAlignment="Stretch">
-            <Grid.ContextMenu>
-                <local:MpContentContextMenuView DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
-            </Grid.ContextMenu>
-            <AdornerDecorator>
-                <local:MpRtbView x:Name="EditorView"
+            <local:MpRtbView x:Name="EditorView"
                                  DataContext="{Binding}" />
-                <!--<local:MpQuillEditorView x:Name="EditorView"
+            <!--<local:MpQuillEditorView x:Name="EditorView"
                                          DataContext="{Binding}" />-->
-            </AdornerDecorator>
             <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="Hidden"
+                                Visibility="{Binding IsDragButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                BorderBrush="Green"
-                                BorderThickness="3"
+                                Background="Transparent"
                                 Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                 ToolTipService.InitialShowDelay="750"
                                 CornerRadius="5">
@@ -78,12 +75,17 @@
                     </ToolTip>
                 </local:MpClipBorder.ToolTip>-->
                 <Button x:Name="DragButton"
+                        MouseEnter="DragButton_MouseEnter"
+                        MouseLeave="DragButton_MouseLeave"
                         BorderThickness="0"                        
                         Cursor="SizeAll"
                         Margin="0,0,0,0"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"
                         Template="{StaticResource SearchButtonControlTemplate}">
+                    <i:Interaction.Behaviors>
+                        <local:MpClipTileDragBehavior x:Name="TileDragBehavior"/>
+                    </i:Interaction.Behaviors>
                     <Image Width="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
                            Height="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
                            Source="/Resources/Images/burger.png"

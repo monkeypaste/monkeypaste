@@ -71,9 +71,9 @@ namespace MpWpfApp {
             set {
                 if (_isSelected != value) {// || MpClipTrayViewModel.Instance.IsFilteringByApp) {
                     _isSelected = value;
-                    OnPropertyChanged_old(nameof(IsSelected));
-                    OnPropertyChanged_old(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TagTextColor));
+                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -87,9 +87,9 @@ namespace MpWpfApp {
                 if (_isEditing != value) {
                     _isEditing = value;
 
-                    OnPropertyChanged_old(nameof(IsEditing));
-                    OnPropertyChanged_old(nameof(TextBlockVisibility));
-                    OnPropertyChanged_old(nameof(TextBoxVisibility));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(TextBlockVisibility));
+                    OnPropertyChanged(nameof(TextBoxVisibility));
                 }
             }
         }
@@ -102,9 +102,9 @@ namespace MpWpfApp {
             set {
                 if (_isHovering != value) {
                     _isHovering = value;
-                    OnPropertyChanged_old(nameof(IsHovering));
-                    OnPropertyChanged_old(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TagTextColor));
+                    OnPropertyChanged(nameof(IsHovering));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -117,10 +117,10 @@ namespace MpWpfApp {
             set {
                 if (_isAssociated != value) {
                     _isAssociated = value;
-                    OnPropertyChanged_old(nameof(IsAssociated));
-                    OnPropertyChanged_old(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TagBorderBrush));
-                    OnPropertyChanged_old(nameof(TagTextColor));
+                    OnPropertyChanged(nameof(IsAssociated));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagBorderBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace MpWpfApp {
             set {
                 if (_shortcutKeyString != value) {
                     _shortcutKeyString = value;
-                    OnPropertyChanged_old(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -206,7 +206,7 @@ namespace MpWpfApp {
             set {
                 if (_tagClipCount != value) {
                     _tagClipCount = value;
-                    OnPropertyChanged_old(nameof(TagClipCount));
+                    OnPropertyChanged(nameof(TagClipCount));
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace MpWpfApp {
                 if (Tag.Id != value) {
                     Tag.Id = value;
                     Tag.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(TagId));
+                    OnPropertyChanged(nameof(TagId));
                 }
             }
         }
@@ -247,7 +247,7 @@ namespace MpWpfApp {
                 if (Tag.TagSortIdx != value) {
                     Tag.TagSortIdx = value;
                     Tag.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(TagSortIdx));
+                    OnPropertyChanged(nameof(TagSortIdx));
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace MpWpfApp {
                         Tag.TagName = "Untitled";
                         IsEditing = true;
                     }                    
-                    OnPropertyChanged_old(nameof(TagName));
+                    OnPropertyChanged(nameof(TagName));
                 }
             }
         }
@@ -279,8 +279,8 @@ namespace MpWpfApp {
                 if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
                     Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     Tag.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(TagColor));
-                    OnPropertyChanged_old(nameof(TagCountTextColor));
+                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagCountTextColor));
                 }
             }
         }
@@ -293,10 +293,10 @@ namespace MpWpfApp {
             set {
                 if (_tag != value) {
                     _tag = value;
-                    OnPropertyChanged_old(nameof(TagColor));
-                    OnPropertyChanged_old(nameof(TagName));
-                    OnPropertyChanged_old(nameof(TagId));
-                    OnPropertyChanged_old(nameof(Tag));
+                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagName));
+                    OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged(nameof(Tag));
                 }
             }
         }

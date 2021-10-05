@@ -233,14 +233,11 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Selector\MpContentTemplateSelector.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContentContextMenuViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ContextMenu\MenuItems\ColorChooser\MpColorCellViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ContextMenu\MpContextMenuViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchElementViewModel.cs" />
@@ -342,12 +339,6 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ContextMenu\ColorChooser\MpColorChooserMenuItem.xaml.cs">
-      <DependentUpon>MpColorChooserMenuItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ContextMenu\MpContextMenuView.xaml.cs">
-      <DependentUpon>MpContextMenuView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\MpItemSearchView.xaml.cs">
       <DependentUpon>MpItemSearchView.xaml</DependentUpon>
     </Compile>
@@ -396,7 +387,11 @@
     <Compile Include="Views\SystemTray\MpSystemTrayView.xaml.cs">
       <DependentUpon>MpSystemTrayView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Styles\ResourceDictionary.xaml">
+    <Page Include="Styles\MpAnimatedListBoxResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\MpListBoxScrollBarResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -497,14 +492,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ContextMenu\ColorChooser\MpColorChooserMenuItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ContextMenu\MpContextMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -615,7 +602,6 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>UserUiStrings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="ViewModels\MainWindow\ContextMenu\MenuItems\ColorChooser\MpColorChooserMenuItemViewModel.cs" />
     <Resource Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -761,7 +747,7 @@
       <Version>1.1.0</Version>
     </PackageReference>
     <PackageReference Include="HtmlAgilityPack">
-      <Version>1.11.36</Version>
+      <Version>1.11.37</Version>
     </PackageReference>
     <PackageReference Include="InputSimulatorPlus">
       <Version>1.0.7</Version>
@@ -774,7 +760,7 @@
       <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
-      <Version>10.0.19041.1</Version>
+      <Version>10.0.22000.194</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
       <Version>1.1.37</Version>
@@ -799,9 +785,6 @@
     </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="SkiaSharp">
-      <Version>2.80.3</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.7.335</Version>
@@ -1971,6 +1954,7 @@
     <Resource Include="FodyWeavers.xml" />
     <Resource Include="Resources\Images\down_black.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templatedisabled.png" />
+    <Resource Include="Resources\Images\check_partial.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

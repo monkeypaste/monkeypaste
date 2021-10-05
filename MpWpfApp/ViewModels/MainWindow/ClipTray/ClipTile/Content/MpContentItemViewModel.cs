@@ -41,7 +41,7 @@ namespace MpWpfApp {
             set {
                 if (_clipTileTitleSwirlViewModel != value) {
                     _clipTileTitleSwirlViewModel = value;
-                    OnPropertyChanged_old(nameof(TitleSwirlViewModel));
+                    OnPropertyChanged(nameof(TitleSwirlViewModel));
                 }
             }
         }
@@ -55,41 +55,10 @@ namespace MpWpfApp {
             set {
                 if (_templateCollection != value) {
                     _templateCollection = value;
-                    OnPropertyChanged_old(nameof(TemplateCollection));
+                    OnPropertyChanged(nameof(TemplateCollection));
                 }
             }
         }
-
-        public MpContentContextMenuViewModel ContextMenuViewModel { get; set; }
-
-
-        public List<MpContextMenuItemViewModel> TagMenuItems {
-            get {
-                var tmil = new List<MpContextMenuItemViewModel>();
-
-                if (Parent == null) {
-                    return tmil;
-                }
-                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
-                    if (tagTile.IsSudoTag) {
-                        continue;
-                    }
-                    tmil.Add(
-                        new MpContextMenuItemViewModel(
-                            ContextMenuViewModel,
-                            tagTile.TagName,
-                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
-                            tagTile,
-                            tagTile.IsLinked(CopyItem),
-                            string.Empty,
-                            null,
-                            tagTile.ShortcutKeyString,
-                            tagTile.TagColor));
-                }
-                return tmil;
-            }
-        }
-
 
         #endregion
 
@@ -115,22 +84,6 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush TitleBackgroundColor {
-            get {
-                if (CopyItem == null) {
-                    return Brushes.Transparent;
-                }
-                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(CopyItem.ItemColor));
-            }
-            set {
-                if (CopyItem != null && CopyItem.ItemColor != MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color)) {
-                    CopyItem.ItemColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    CopyItem.WriteToDatabase();
-                    OnPropertyChanged_old(nameof(TitleBackgroundColor));
-                }
-            }
-        }
-
         public Brush TitleTextColor {
             get {
                 if (IsHoveringOnTitleTextGrid) {
@@ -140,6 +93,7 @@ namespace MpWpfApp {
             }
         }
 
+        private Brush _itemBackgroundBrush;
         public Brush ItemBackgroundBrush {
             get {
                 if (Parent.IsExpanded) {
@@ -147,10 +101,14 @@ namespace MpWpfApp {
                 }
                 if (IsHovering &&
                     Parent.Count > 1) {
-                    return MpHelpers.Instance.GetLighterBrush(
-                        new SolidColorBrush(
-                            CopyItem.ItemColor.ToWinMediaColor()), 0.75
-                        );
+                    if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                        if(_itemBackgroundBrush == null) {
+                            _itemBackgroundBrush = MpHelpers.Instance.GetRandomBrushColor();
+                        }
+                    } else if(_itemBackgroundBrush != CopyItemColorBrush) {
+                        _itemBackgroundBrush = CopyItemColorBrush;
+                    }
+                    return MpHelpers.Instance.GetLighterBrush(_itemBackgroundBrush, 0.75);
                 }
 
                 return Brushes.White;
@@ -258,6 +216,20 @@ namespace MpWpfApp {
             }
         }
 
+        public Thickness ContentPadding {
+            get {
+                double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
+                if(Parent == null) {
+                    return new Thickness(dp);
+                }
+                if (IsHovering && Parent.Count > 1) {
+                    double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
+                    return new Thickness(dp + dbw, dp, dp, dp);
+                }
+                return new Thickness(dp);
+            }
+        }
+
         #endregion
 
         #region State
@@ -272,9 +244,9 @@ namespace MpWpfApp {
             set {
                 if (_isHoveringOnTitleTextGrid != value) {
                     _isHoveringOnTitleTextGrid = value;
-                    OnPropertyChanged_old(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged_old(nameof(TileTitleTextGridBackgroundBrush));
-                    OnPropertyChanged_old(nameof(TitleTextColor));
+                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged(nameof(TitleTextColor));
                 }
             }
         }
@@ -306,8 +278,8 @@ namespace MpWpfApp {
             set {
                 if (_isEditingTitle != value) {
                     _isEditingTitle = value;
-                    OnPropertyChanged_old(nameof(IsEditingTitle));
-                    OnPropertyChanged_old(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged(nameof(IsEditingTitle));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
                 }
             }
         }
@@ -338,6 +310,19 @@ namespace MpWpfApp {
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
 
+        public bool IsDragButtonVisible {
+            get {
+                if (Parent == null || Parent.Count <= 1) {
+                    return false;
+                }
+                if (Parent.IsExpanded) {
+                    if (IsEditingContent) {
+                        return false;
+                    }
+                }
+                return IsHovering;
+            }
+        }
         //public bool IsDragButtonVisible {
         //    get {
         //        if (Parent == null) {
@@ -456,9 +441,9 @@ namespace MpWpfApp {
             set {
                 if (_shortcutKeyString != value) {
                     _shortcutKeyString = value;
-                    OnPropertyChanged_old(nameof(ShortcutKeyString));
-                    OnPropertyChanged_old(nameof(HotkeyIconSource));
-                    OnPropertyChanged_old(nameof(HotkeyIconTooltip));
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(HotkeyIconSource));
+                    OnPropertyChanged(nameof(HotkeyIconTooltip));
                 }
             }
         }
@@ -562,6 +547,21 @@ namespace MpWpfApp {
             }
         }
 
+        public Brush CopyItemColorBrush {
+            get {
+                if (CopyItem == null) {
+                    return Brushes.Red;
+                }
+                return new SolidColorBrush(CopyItem.ItemColor.ToWinMediaColor());
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemColor != value.ToHex()) {
+                    CopyItem.ItemColor = value.ToHex();
+                    OnPropertyChanged(nameof(CopyItemColorBrush));
+                }
+            }
+        }
+
         public string CopyItemData {
             get {
                 if (CopyItem == null) {
@@ -618,7 +618,6 @@ namespace MpWpfApp {
             IsBusy = true;
             IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
 
-            ContextMenuViewModel = new MpContentContextMenuViewModel(this);
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
@@ -777,10 +776,6 @@ namespace MpWpfApp {
             CopyItem.WriteToDatabase();
         }
 
-        public void RemoveFromDatabase() {
-            Parent.RemoveRange(new List<MpCopyItem>() { CopyItem });
-            CopyItem.DeleteFromDatabase();
-        }
 
         public void MoveToArchive() {
             // TODO maybe add archiving
@@ -819,12 +814,12 @@ namespace MpWpfApp {
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if (IsSelected) {
-                        LastSubSelectedDateTime = DateTime.Now;
-                        if(!Parent.IsSelected) {
-                            Parent.IsSelected = true;
-                        }
-                    }
+                    //if (IsSelected) {
+                    //    LastSubSelectedDateTime = DateTime.Now;
+                    //    if(!Parent.IsSelected) {
+                    //        Parent.IsSelected = true;
+                    //    }
+                    //}
                     break;
                 case nameof(IsEditingContent):
                     if (IsEditingContent) {
