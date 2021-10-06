@@ -17,6 +17,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using System.Collections;
 using System.Reflection;
 using SkiaSharp;
+using System.Diagnostics;
 
 namespace MonkeyPaste {    
     public class MpDb : MpISync {
@@ -56,11 +57,17 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public void Init(MpIDbInfo dbInfo) {
-            _dbInfo = dbInfo;
-            MpPreferences.Instance.StartupDateTime = DateTime.Now;
-            InitDb();
-            IsLoaded = true;
+        public async Task Init(MpIDbInfo dbInfo) {
+            await Task.Run(async () => {
+                var sw = new Stopwatch();
+                sw.Start();
+                _dbInfo = dbInfo;
+                MpPreferences.Instance.StartupDateTime = DateTime.Now;
+                await InitDb();
+                IsLoaded = true;
+                sw.Stop();
+                MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
+            });
         }
 
         #region Queries
@@ -576,7 +583,7 @@ namespace MonkeyPaste {
             }            
         }
 
-        private void InitDb() {
+        private async Task InitDb() {
             var dbPath = _dbInfo.GetDbFilePath();
             
             //File.Delete(dbPath);
@@ -601,20 +608,16 @@ namespace MonkeyPaste {
                 }
 
                 if (_connectionAsync != null) {
-                    Task.Run(async () => {
-                        await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
-                    });
+                    await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
                 }
             }
 
             InitTables();
 
-            Task.Run(async () => {
-                await InitTablesAsync();
-            });
-            
+            await InitTablesAsync();
 
-            if(isNewDb) {
+
+            if (isNewDb) {
                 InitDefaultData();
             }
 

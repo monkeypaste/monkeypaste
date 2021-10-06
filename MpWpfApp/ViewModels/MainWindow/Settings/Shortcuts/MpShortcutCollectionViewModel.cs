@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpViewModelBase<object> {
@@ -39,9 +40,13 @@ namespace MpWpfApp {
         public MpShortcutCollectionViewModel() : base(null) { }
 
         public void Init() {
+            var sw = new Stopwatch();
+            sw.Start();
             InitHotkeysAndMouseEvents();
             InitShortcuts();
             OnViewModelLoaded();
+            sw.Stop();
+            MpConsole.WriteLine($"Shortcut loading: {sw.ElapsedMilliseconds} ms");
         }        
 
         public string RegisterViewModelShortcut(

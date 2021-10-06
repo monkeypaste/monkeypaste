@@ -180,11 +180,11 @@ namespace MpWpfApp {
                 return null;
             }
             int curIdx = 0;
-            TextSelection rtbSelection = null;
-            var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
-            if (rtb != null) {
-                rtbSelection = rtb.Selection;
-            }
+            //TextSelection rtbSelection = null;
+            //var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
+            //if (rtb != null) {
+            //    rtbSelection = rtb.Selection;
+            //}
             TextPointer postOfUiElement = null;
             TextPointer startPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
@@ -263,9 +263,9 @@ namespace MpWpfApp {
                     position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
                 }
             }
-            if (rtbSelection != null) {
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
+            //if (rtbSelection != null) {
+            //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            //}
             return null;
         }
         /* The idea is to find the offset of the first character (IndexOf) and 

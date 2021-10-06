@@ -63,7 +63,7 @@
             </Grid.RowDefinitions>
 
             <!-- System Tray -->
-            <local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />
+            <!--<local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />-->
 
             <!-- Main Menu -->
             <StackPanel Grid.Row="0"

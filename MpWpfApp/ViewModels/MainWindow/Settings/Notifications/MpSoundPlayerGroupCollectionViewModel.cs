@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,6 +77,8 @@ namespace MpWpfApp {
         private MpSoundPlayerGroupCollectionViewModel() : this((MpSoundGroup)Properties.Settings.Default.NotificationSoundGroupIdx) { }
 
         private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base(null) {
+            var sw = new Stopwatch();
+            sw.Start();
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedSoundGroupNameIdx):
@@ -97,6 +101,8 @@ namespace MpWpfApp {
                 }
             };
             SelectedSoundGroupNameIdx = (int)group;
+            sw.Stop();
+            MpConsole.WriteLine($"Sound player loading: {sw.ElapsedMilliseconds} ms");
         }
         #endregion
 

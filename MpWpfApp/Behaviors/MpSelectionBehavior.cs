@@ -18,6 +18,8 @@ namespace MpWpfApp {
 
         private bool isRightClick, wasSelected;
 
+        public static MpContentItemViewModel LastSelectedContentItem;
+
         protected override void OnAttached() {
             AssociatedObject.PreviewMouseDown += AssociatedObject_PreviewMouseButtonDown;
             AssociatedObject.PreviewMouseUp += AssociatedObject_PreviewMouseUp                ;
@@ -29,28 +31,42 @@ namespace MpWpfApp {
             if (MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count >= 1) {
                 //MpClipTrayViewModel.Instance.IsPreSelection = true;
             }
+            
+            if(AssociatedObject is MpClipTileView) {
+                var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+                ctvm.IsSelected = true;
+                ctvm.LastSelectedDateTime = DateTime.Now;
+                var civm = ctvm.ItemViewModels.Where(x => x.IsHovering).FirstOrDefault();
+                if(civm != null) {
+                    civm.IsSelected = true;
+                    civm.LastSubSelectedDateTime = DateTime.Now;
+                }
+            }
 
             if (AssociatedObject is MpContentItemView) {
                 var civm = AssociatedObject.DataContext as MpContentItemViewModel;
+                LastSelectedContentItem = civm;
                 wasSelected = civm.IsSelected;
                 civm.IsSelected = true;
                 civm.LastSubSelectedDateTime = DateTime.Now;
                 if (!civm.Parent.IsSelected) {
                     civm.Parent.IsSelected = true;
-                    civm.Parent.LastSelectedDateTime = DateTime.Now;
+                    civm.Parent.LastSelectedDateTime = DateTime.Now;                    
                 }
-            } else if(AssociatedObject is MpRtbView) {
+                e.Handled = true;
+            } 
+            else if(AssociatedObject is MpRtbView) {
                 if (isRightClick && (AssociatedObject.DataContext as MpContentItemViewModel).IsEditingContent) {
                     //show default context menu while editing
                     
 
                 } 
             }
+            if(e.Handled != true)
             e.Handled = false;
         }
 
-        private void AssociatedObject_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
-            
+        private void AssociatedObject_PreviewMouseUp(object sender, MouseButtonEventArgs e) {            
             if (AssociatedObject is MpRtbView) {
                 return;
             }
@@ -58,8 +74,44 @@ namespace MpWpfApp {
             //i think this only gets called for the clip tile
             if(wasSelected && isRightClick) {
                 //do nothing and show context menu for all selected items
-            } else if(!MpHelpers.Instance.IsMultiSelectKeyDown()){// || !isAnyContentDragging) {
-                ClearPreviousSelection();
+            } else if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !isAnyContentDragging) {
+                if (AssociatedObject is MpClipTileView) {
+                    var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+                    foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
+                        if (sctvm != ctvm) {
+                            if (sctvm.IsFlipped) {
+                                sctvm.Parent.FlipTileCommand.Execute(sctvm);
+                            }
+                            sctvm.IsSelected = false;
+                        }
+                        foreach (var scivm in sctvm.SelectedItems) {
+                            if (scivm != LastSelectedContentItem) {
+                                scivm.IsSelected = false;
+                            }
+                        }
+                    }
+                } else {
+                    //var civm = AssociatedObject.DataContext as MpContentItemViewModel;
+                    //foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
+                    //    if (sctvm != civm.Parent) {
+                    //        if (sctvm.IsFlipped) {
+                    //            sctvm.Parent.FlipTileCommand.Execute(sctvm);
+                    //        }
+                    //        sctvm.IsSelected = false;
+                    //    }
+                    //    foreach (var scivm in sctvm.SelectedItems) {
+                    //        if (scivm != civm) {
+                    //            scivm.IsSelected = false;
+                    //        }
+                    //    }
+                    //}
+                }
+
+                LastSelectedContentItem = null;
+            }
+
+            if(!isAnyContentDragging && AssociatedObject is MpContentItemView) {
+                e.Handled = true;
             }
 
             if (isRightClick) {
@@ -73,23 +125,6 @@ namespace MpWpfApp {
 
         #region Selection
      
-        private void ClearPreviousSelection() {
-            var civm = AssociatedObject.DataContext as MpContentItemViewModel;
-            foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-                if (sctvm != civm.Parent) {
-                    if(sctvm.IsFlipped) {
-                       sctvm.Parent.FlipTileCommand.Execute(sctvm);
-                    }
-                    sctvm.IsSelected = false;
-                }
-                foreach (var scivm in sctvm.SelectedItems) {
-                    if(scivm != civm) {
-                        scivm.IsSelected = false;
-                    }
-                }
-            }
-        }
-
         private void ShowContextMenu() {
             AssociatedObject.ContextMenu = new MpContentContextMenuView();
             AssociatedObject.ContextMenu.IsOpen = true;

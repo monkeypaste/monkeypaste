@@ -246,8 +246,12 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
+            Task.Run(Initialize);
+        }
+
+        private async Task Initialize() {
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
-            MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+            await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
@@ -296,7 +300,7 @@ namespace MpWpfApp {
             mw.Left = SystemParameters.WorkArea.Left;
             //mw.Height = MpMeasurements.Instance.MainWindowMinHeight;
 
-            _startMainWindowTop = SystemParameters.WorkArea.Bottom;
+            _startMainWindowTop = SystemParameters.PrimaryScreenHeight;
             if (SystemParameters.WorkArea.Top == 0) {
                 //if taskbar is at the bottom
                 mw.Width = SystemParameters.PrimaryScreenWidth;
@@ -376,11 +380,11 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand ShowWindowCommand => new RelayCommand(
-            () => {
-                MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow);
+        public IAsyncCommand ShowWindowCommand => new AsyncCommand(
+            async () => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow,DispatcherPriority.Render);
             },
-            () => {
+            (args) => {
                 return (Application.Current.MainWindow == null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                    MpMainWindowViewModel.IsMainWindowLoading ||
@@ -394,9 +398,7 @@ namespace MpWpfApp {
             IsMainWindowOpening = true;
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
-            }
-
-            
+            }            
 
             SetupMainWindowRect();
 

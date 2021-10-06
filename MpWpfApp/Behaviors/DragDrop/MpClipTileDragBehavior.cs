@@ -32,7 +32,7 @@ namespace MpWpfApp {
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
 
-            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseLeftButtonDown;
 
             AssociatedObject.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
 
@@ -79,7 +79,7 @@ namespace MpWpfApp {
 
         #region Mouse Events
 
-        private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void AssociatedObject_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
         }

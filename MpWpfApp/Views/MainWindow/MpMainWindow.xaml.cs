@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +14,11 @@ using System.Windows.Threading;
 using static MpWpfApp.WinApi;
 
 namespace MpWpfApp {
-    public partial class MpMainWindow : Window {        
+    public partial class MpMainWindow : Window {
+        Stopwatch sw;
         public MpMainWindow() {
+            sw = new Stopwatch();
+            sw.Start();
             InitializeComponent();
         }
 
@@ -32,6 +36,8 @@ namespace MpWpfApp {
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
+            sw.Stop();
+            MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
         }
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {

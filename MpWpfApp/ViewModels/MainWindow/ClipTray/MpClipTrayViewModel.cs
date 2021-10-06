@@ -351,7 +351,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsPreSelection { get; set; } = false;
+        //public bool IsPreSelection { get; set; } = false;
         #endregion
 
         #region Visibility
