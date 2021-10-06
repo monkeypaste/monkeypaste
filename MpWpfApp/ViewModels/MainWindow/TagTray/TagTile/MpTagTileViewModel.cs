@@ -317,7 +317,7 @@ namespace MpWpfApp {
             Tag = tag;
         }
 
-        private async void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private  void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEditing):
                     if (IsEditing) {
@@ -336,7 +336,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        await MpClipTrayViewModel.Instance.RefreshTiles();
+                        Task.Run(async()=> {
+                            await MpClipTrayViewModel.Instance.RefreshTiles(); 
+                        });
                     }
                     break;
             }

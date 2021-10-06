@@ -105,7 +105,7 @@ namespace MpWpfApp {
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
-            _taskbarIcon = (TaskbarIcon)sender;
+            _taskbarIcon = ((TaskbarIcon)sender);
             _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
                 MainWindowViewModel.ShowWindowCommand.Execute(null);
             };

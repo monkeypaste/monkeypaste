@@ -496,8 +496,10 @@ namespace MpWpfApp {
             var sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             bool isDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
 
+            //int totalCount = MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
+
             if (count == 0) {
-                count = MpMeasurements.Instance.TotalVisibleClipTiles;
+                count = MpMeasurements.Instance.TotalVisibleClipTiles + 1;
             }
             Dictionary<int, int> manualSortOrderLookup = null;
 
@@ -1003,10 +1005,10 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                Task.Run(async () => {
-                    //await MpHelpers.Instance.RunOnMainThreadAsync(() => RefreshTiles());
-                   // MpTagTrayViewModel.Instance.RefreshAllCounts();
-                });
+                //Task.Run(async () => {
+                //    //await MpHelpers.Instance.RunOnMainThreadAsync(() => RefreshTiles());
+                //   // MpTagTrayViewModel.Instance.RefreshAllCounts();
+                //});
             }
         }
 
@@ -1502,7 +1504,7 @@ namespace MpWpfApp {
                   SelectedItems[0].IsTextItem;
         }
         private void EditSelectedContent() {
-            SelectedItems[0].PrimaryItem.EditSubContentCommand.Execute(null);
+            SelectedItems[0].PrimaryItem.ToggleEditSubContentCommand.Execute(null);
         }
 
         private RelayCommand _sendSelectedClipsToEmailCommand;
@@ -1694,11 +1696,13 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand EditContentCommand {
-            get {
-                return new RelayCommand(()=> { });
-            }
-        }
+        public ICommand EditContentCommand => new RelayCommand<object>(
+            (civm) => {
+                MpSelectionBehavior.IgnoreSelection = !MpSelectionBehavior.IgnoreSelection;
+                ClearClipSelection();
+                (civm as MpContentItemViewModel).ToggleEditSubContentCommand.Execute(null);
+            },
+            (civm) => { return true; });
 
         public ICommand EditTitleCommand {
             get {

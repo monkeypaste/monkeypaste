@@ -350,7 +350,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) : base(MpShortcutCollectionViewModel.Instance) {
+        public MpShortcutViewModel(MpShortcutCollectionViewModel parent, MpShortcut s, ICommand command, object commandParameter) : base(parent) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeyString):
@@ -462,7 +462,7 @@ namespace MpWpfApp {
         }
 
         public object Clone() {
-            return new MpShortcutViewModel(Shortcut, Command, CommandParameter);
+            return new MpShortcutViewModel(Parent,Shortcut, Command, CommandParameter);
         }
         #endregion
 

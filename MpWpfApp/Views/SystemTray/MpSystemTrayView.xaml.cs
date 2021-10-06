@@ -22,5 +22,10 @@ namespace MpWpfApp {
 
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e) {
+            var stvm = DataContext as MpSystemTrayViewModel;
+            stvm.SystemTrayTaskbarIcon_Loaded(sender, e);
+        }
     }
 }

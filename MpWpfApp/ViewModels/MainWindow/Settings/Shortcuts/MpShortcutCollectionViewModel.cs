@@ -105,6 +105,7 @@ namespace MpWpfApp {
             if (vm.GetType() == typeof(MpContentItemViewModel)) {
                 var ctvm = (MpContentItemViewModel)vm;
                 nscvm = new MpShortcutViewModel(
+                            this,
                             new MpShortcut() {
                                 CopyItemId = ctvm.CopyItem.Id,
                                 TagId = 0,
@@ -115,6 +116,7 @@ namespace MpWpfApp {
             } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
                 var ttvm = (MpTagTileViewModel)vm;
                 nscvm = new MpShortcutViewModel(
+                            this,
                             new MpShortcut() {
                                 CopyItemId = 0,
                                 TagId = ttvm.Tag.Id,
@@ -467,7 +469,7 @@ namespace MpWpfApp {
                         }
                         break;
                 }
-                var scvm = new MpShortcutViewModel(sc, shortcutCommand, commandParameter);
+                var scvm = new MpShortcutViewModel(this,sc, shortcutCommand, commandParameter);
                 scvm.Register();
                 Shortcuts.Add(scvm);
             }

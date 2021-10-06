@@ -46,11 +46,15 @@ namespace MpWpfApp {
                 mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
                 MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
 
-                MpPasteToAppPathViewModelCollection.Instance.Init();
+
+
+               // MpPasteToAppPathViewModelCollection.Instance.Init();
 
                 MpShortcutCollectionViewModel.Instance.Init();
 
                 MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
+                mwvm.FinishLoading();
             }
         }
 

@@ -449,7 +449,7 @@
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal">
                 <Label Content="Only with Scrollwheel" />
-                <CheckBox IsChecked="{local:MpSettingBinding DoShowMainWindowWithMouseEdgeAndScrollDelta}" />
+                <CheckBox IsChecked="{local:MpSettingBinding Path=DoShowMainWindowWithMouseEdgeAndScrollDelta}" />
             </StackPanel>
             <DataGrid Grid.Row="3" 
                       x:Name="ShortcutDatagrid"

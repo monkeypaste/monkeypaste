@@ -18,21 +18,22 @@ namespace MpWpfApp {
 
 
         protected override void OnAttached() {
-            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
         }
 
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
             ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
         }
 
+
         private void Ctvm_OnUnExpandRequest(object sender, EventArgs e) {
-            MpHelpers.Instance.RunOnMainThreadAsync(Unexpand);
+            MpHelpers.Instance.RunOnMainThread(Unexpand);
         }
 
         private void Ctvm_OnExpandRequest(object sender, EventArgs e) {
-            MpHelpers.Instance.RunOnMainThreadAsync(Expand);
+            MpHelpers.Instance.RunOnMainThread(Expand);
         }
 
         private void Expand() {

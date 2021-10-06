@@ -858,7 +858,7 @@ namespace MpWpfApp {
                 DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
             });
 
-        public ICommand EditSubContentCommand {
+        public ICommand ToggleEditSubContentCommand {
             get {
                 return new RelayCommand(
                     () => {
@@ -866,6 +866,7 @@ namespace MpWpfApp {
                             Parent.ClearEditing();
                             Parent.ClearClipSelection();
                             IsSelected = true;
+                            IsEditingContent = true;
                         }
                     },
                     () => {

@@ -83,7 +83,7 @@ namespace MonkeyPaste {
 
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
             var result = await _connectionAsync.QueryAsync<T>(query, args);
             return result;
@@ -99,7 +99,7 @@ namespace MonkeyPaste {
 
         public async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
             TableMapping qtm = null;
             foreach(var tm in _connectionAsync.TableMappings) {
@@ -135,7 +135,7 @@ namespace MonkeyPaste {
 
         public async Task<List<T>> GetItemsAsync<T>() where T : new() {
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb ();
             }
             //return await _connectionAsync.Table<T>().ToListAsync();
             var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
@@ -151,7 +151,7 @@ namespace MonkeyPaste {
 
         public async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
             var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
             return dbo;
@@ -167,7 +167,7 @@ namespace MonkeyPaste {
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
@@ -221,7 +221,7 @@ namespace MonkeyPaste {
         public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
 
             if (item == null) {
@@ -266,7 +266,7 @@ namespace MonkeyPaste {
         public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
-                InitDb();
+                await InitDb();
             }
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");

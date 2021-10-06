@@ -53,5 +53,19 @@ namespace MpWpfApp {
         private void H_Click(object sender, RoutedEventArgs e) {
             MpHelpers.Instance.OpenUrl((sender as Hyperlink).NavigateUri.ToString());
         }
+
+        private void ClipTileToggleEditButton_Click(object sender, RoutedEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            civm.IsSelected = true;
+            civm.Parent.IsSelected = true;
+            civm.IsEditingContent = !civm.IsEditingContent;
+        }
+
+        private void ClipTileToggleEditButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            civm.IsSelected = true;
+            civm.Parent.IsSelected = true;
+            civm.IsEditingContent = !civm.IsEditingContent;
+        }
     }
 }

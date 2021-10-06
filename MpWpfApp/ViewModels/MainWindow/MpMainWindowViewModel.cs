@@ -246,6 +246,9 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
+
+            MpSystemTrayViewModel.Instance.Init();
+            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
             Task.Run(Initialize);
         }
 
@@ -264,7 +267,9 @@ namespace MpWpfApp {
 
             MpThemeColors.Instance.Init();
 
-            MpSystemTrayViewModel.Instance.Init();
+            MpLanguageTranslator.Instance.Init();
+
+
             MpSearchBoxViewModel.Instance.Init();
             MpClipTrayViewModel.Instance.Init();
             MpClipTileSortViewModel.Instance.Init();
@@ -273,7 +278,6 @@ namespace MpWpfApp {
 
             Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
             Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
-            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
             Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
             Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;

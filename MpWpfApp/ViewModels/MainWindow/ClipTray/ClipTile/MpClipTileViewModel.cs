@@ -30,7 +30,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentCommands {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
         #region Private Variables
         private object _itemLockObject;
 
@@ -1437,7 +1437,26 @@ using System.Speech.Synthesis;
                 //}
             });
         }
-        public async Task UpdateSortOrder(bool fromModel = false) {
+
+        public void UpdateSortOrder(bool fromModel = false) {
+            if (fromModel) {
+                ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
+            } else {
+                foreach (var ivm in ItemViewModels) {
+                    ivm.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                    if (ivm.CompositeSortOrderIdx == 0) {
+                        ivm.CompositeParentCopyItemId = 0;
+                    } else {
+                        ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
+                    }
+                    ivm.CopyItem.WriteToDatabase();
+                }
+            }
+            RequestUiUpdate();
+        }
+
+        public async Task UpdateSortOrderAsync(bool fromModel = false) {
+            await Task.Delay(1);
             if (fromModel) {
                 ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
             } else {
@@ -1448,7 +1467,7 @@ using System.Speech.Synthesis;
                     } else {
                         ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
                     }
-                    await ivm.CopyItem.WriteToDatabaseAsync();
+                    ivm.CopyItem.WriteToDatabase();
                 }
             }
             RequestUiUpdate();
@@ -1959,39 +1978,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        public ICommand PasteCommand => throw new NotImplementedException();
-
-        public ICommand DeleteCommand => throw new NotImplementedException();
-
-        public ICommand CreateQrCodeCommand => throw new NotImplementedException();
-
-        public ICommand DuplicateCommand => throw new NotImplementedException();
-
-        public ICommand EditContentCommand => throw new NotImplementedException();
-
-        public ICommand ExcludeApplicationCommand => throw new NotImplementedException();
-
-        public ICommand HotkeyPasteCommand => throw new NotImplementedException();
-
-        public ICommand InvertSelectionCommand => throw new NotImplementedException();
-
-        public ICommand LinkTagToContentCommand => throw new NotImplementedException();
-
-        public ICommand LoadMoreClipsCommand => throw new NotImplementedException();
-
-        public ICommand MergeCommand => throw new NotImplementedException();
-
-        public ICommand SelectNextCommand => throw new NotImplementedException();
-
-        public ICommand SelectPreviousCommand => throw new NotImplementedException();
-
-        public ICommand SendToEmailCommand => throw new NotImplementedException();
-
-        public ICommand SendToBackCommand => throw new NotImplementedException();
-
-        public ICommand SpeakCommand => throw new NotImplementedException();
-
-        public ICommand TranslateCommand => throw new NotImplementedException();
         #endregion
 
         #endregion

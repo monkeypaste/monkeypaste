@@ -8,8 +8,6 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MpWpfApp {
     public class MpLanguageTranslator : MpRestfulApi {
@@ -22,28 +20,25 @@ namespace MpWpfApp {
         // Endpoints for Translator Text and Bing Spell Check
         public static readonly string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
         const string BING_SPELL_CHECK_API_ENDPOINT = "https://westus.api.cognitive.microsoft.com/bing/v7.0/spellcheck/";
-
         // An array of language codes
         private string[] languageCodes;
-
-        public bool IsLoaded { get; private set; } = false;
 
         // Dictionary to map language codes from friendly name (sorted case-insensitively on language name)
         private SortedDictionary<string, string> languageCodesAndTitles =
             new SortedDictionary<string, string>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
 
         public List<string> LanguageList { get; private set; } = new List<string>();
-
-        public MpLanguageTranslator() : base("Language Translation") {
-        }
-        
         public void Init() {
-            try {
 
-                if (!MpHelpers.Instance.IsConnectedToNetwork()) {
-                    MonkeyPaste.MpConsole.WriteLine("Client offline. Language Translation is inactive");
+        }
+        public MpLanguageTranslator() : base("Language Translation") {
+            try {
+                if (!MpHelpers.Instance.IsConnectedToInternet()) {
+                    Console.WriteLine("Client offline. Language Translation is inactive");
                     return;
                 }
+                // at least show an error dialog if there's an unexpected error
+                //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
 
                 if (COGNITIVE_SERVICES_KEY.Length != 32) {
                     MessageBox.Show("One or more invalid API subscription keys.\n\n" +
@@ -58,22 +53,22 @@ namespace MpWpfApp {
                         LanguageList.Add(menuItem);
                     }
                 }
-                IsLoaded = true;
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("Error trying to connect to internet: " + ex.ToString());
+                Console.WriteLine("Error trying to connect to internet: " + ex.ToString());
             }
+
+        }
+
+        // Global exception handler to display error message and exit
+        private static void HandleExceptions(object sender, UnhandledExceptionEventArgs args) {
+            Exception e = (Exception)args.ExceptionObject;
+            MessageBox.Show("Caught " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Windows.Application.Current.Shutdown();
         }
 
         // ***** DETECT LANGUAGE OF TEXT TO BE TRANSLATED
         public string DetectLanguage(string text) {
-            if(!IsLoaded) {
-                Init();
-                if(!IsLoaded) {
-                    return "Translator not loaded";
-                }                
-            }
-
             string detectUri = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "detect");
 
             // Create request to Detect languages with Translator Text
@@ -109,69 +104,6 @@ namespace MpWpfApp {
                 return languageInfo["language"];
             } else
                 return "Unable to confidently detect input language.";
-        }
-
-        public async Task<string> Translate(string textToTranslate, string toLanguage, bool doSpellCheck) {
-            if (!IsLoaded) {
-                Init();
-                if (!IsLoaded) {
-                    return "Translator not loaded";
-                }
-            }
-
-            var apiStatus = CheckRestfulApiStatus();
-            if (apiStatus == null || apiStatus.Value == false) {
-                return string.Empty;
-            }
-
-            try {
-                var fromLanguageCode = DetectLanguage(textToTranslate);
-                var toLanguageCode = languageCodesAndTitles[toLanguage];
-
-                // Spell-check the source text if the source language is English
-                if (doSpellCheck) {
-                    textToTranslate = CorrectSpelling(textToTranslate);
-                }
-
-                // Handle null operations: no text or same source/target languages
-                if (string.IsNullOrEmpty(textToTranslate) || fromLanguageCode == toLanguageCode) {
-                    return textToTranslate;
-                }
-
-                // Send translation request
-                string endpoint = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "translate");
-                string uri = string.Format(endpoint + "&from={0}&to={1}", fromLanguageCode, toLanguageCode);
-
-                System.Object[] body = new System.Object[] { new { Text = textToTranslate } };
-                var requestBody = JsonConvert.SerializeObject(body);
-
-                using (var client = new HttpClient())
-                using (var request = new HttpRequestMessage()) {
-                    request.Method = HttpMethod.Post;
-                    request.RequestUri = new Uri(uri);
-                    request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                    request.Headers.Add("Ocp-Apim-Subscription-Key", COGNITIVE_SERVICES_KEY);
-                    request.Headers.Add("Ocp-Apim-Subscription-Region", "westus");
-                    request.Headers.Add("X-ClientTraceId", Guid.NewGuid().ToString());
-
-                    var response = await client.SendAsync(request);
-                    var responseBody = await response.Content.ReadAsStringAsync();
-
-                    var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
-                    var translatedText = result[0]["translations"][0]["text"];
-                    if (!string.IsNullOrEmpty(translatedText)) {
-                        IncrementCallCount();
-                        return translatedText;
-                    }
-                    ShowError();
-                    return string.Empty;
-                }
-            }
-            catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("LanguageTranslation exception: " + ex.ToString());
-                ShowError();
-                return string.Empty;
-            }
         }
 
         // ***** CORRECT SPELLING OF TEXT TO BE TRANSLATED
@@ -232,6 +164,10 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
+            if (!MpHelpers.Instance.IsConnectedToNetwork()) {
+                Console.WriteLine("Client offline. Language Translation is inactive");
+                return;
+            }
             // Send a request to get supported language codes
             string uri = String.Format(TEXT_TRANSLATION_API_ENDPOINT, "languages") + "&scope=translation";
             WebRequest WebRequest = WebRequest.Create(uri);
@@ -250,17 +186,72 @@ namespace MpWpfApp {
                         languageCodesAndTitles.Add(kv.Value["name"], kv.Key);
                     }
                 }
-            } catch(Exception ex) {
-                if(MpHelpers.Instance.IsConnectedToNetwork()) {
-                    MonkeyPaste.MpConsole.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
+            }
+            catch (Exception ex) {
+                if (MpHelpers.Instance.IsConnectedToNetwork()) {
+                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
                     GetLanguagesForTranslate();
                 } else {
-                    MonkeyPaste.MpConsole.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
+                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
                 }
             }
         }
 
-        #region Rest Method Handlers
+        public async Task<string> Translate(string textToTranslate, string toLanguage, bool doSpellCheck) {
+            var apiStatus = CheckRestfulApiStatus();
+            if (apiStatus == null || apiStatus.Value == false) {
+                return string.Empty;
+            }
+
+            try {
+                var fromLanguageCode = DetectLanguage(textToTranslate);
+                var toLanguageCode = languageCodesAndTitles[toLanguage];
+
+                // Spell-check the source text if the source language is English
+                if (doSpellCheck) {
+                    textToTranslate = CorrectSpelling(textToTranslate);
+                }
+
+                // Handle null operations: no text or same source/target languages
+                if (string.IsNullOrEmpty(textToTranslate) || fromLanguageCode == toLanguageCode) {
+                    return textToTranslate;
+                }
+
+                // Send translation request
+                string endpoint = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "translate");
+                string uri = string.Format(endpoint + "&from={0}&to={1}", fromLanguageCode, toLanguageCode);
+
+                System.Object[] body = new System.Object[] { new { Text = textToTranslate } };
+                var requestBody = JsonConvert.SerializeObject(body);
+
+                using (var client = new HttpClient())
+                using (var request = new HttpRequestMessage()) {
+                    request.Method = HttpMethod.Post;
+                    request.RequestUri = new Uri(uri);
+                    request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                    request.Headers.Add("Ocp-Apim-Subscription-Key", COGNITIVE_SERVICES_KEY);
+                    request.Headers.Add("Ocp-Apim-Subscription-Region", "westus");
+                    request.Headers.Add("X-ClientTraceId", Guid.NewGuid().ToString());
+
+                    var response = await client.SendAsync(request);
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
+                    var translatedText = result[0]["translations"][0]["text"];
+                    if (!string.IsNullOrEmpty(translatedText)) {
+                        IncrementCallCount();
+                        return translatedText;
+                    }
+                    ShowError();
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("LanguageTranslation exception: " + ex.ToString());
+                ShowError();
+                return string.Empty;
+            }
+        }
 
         protected override int GetMaxCallCount() {
             return Properties.Settings.Default.RestfulTranslationMaxCount;
@@ -280,10 +271,68 @@ namespace MpWpfApp {
             Properties.Settings.Default.Save();
         }
 
-        #endregion
+        // ***** PERFORM TRANSLATION ON BUTTON CLICK
+        //private async void TranslateButton_Click(object sender, EventArgs e) {
+        //    string textToTranslate = TextToTranslate.Text.Trim();
 
-        #region Commands
+        //    string fromLanguage = FromLanguageComboBox.SelectedValue.ToString();
+        //    string fromLanguageCode;
 
-        #endregion
+        //    // Auto-detect source language if requested
+        //    if (fromLanguage == "Detect") {
+        //        fromLanguageCode = DetectLanguage(textToTranslate);
+        //        if (!languageCodes.Contains(fromLanguageCode)) {
+        //            MessageBox.Show("The source language could not be detected automatically " +
+        //                "or is not supported for translation.", "Language detection failed",
+        //                MessageBoxButton.OK, MessageBoxImage.Error);
+        //            return;
+        //        }
+        //    } else
+        //        fromLanguageCode = languageCodesAndTitles[fromLanguage];
+
+        //    string toLanguageCode = languageCodesAndTitles[ToLanguageComboBox.SelectedValue.ToString()];
+
+        //    // Spell-check the source text if the source language is English
+        //    if (fromLanguageCode == "en") {
+        //        if (textToTranslate.StartsWith("-"))    // don't spell check in this case
+        //            textToTranslate = textToTranslate.Substring(1);
+        //        else {
+        //            textToTranslate = CorrectSpelling(textToTranslate);
+        //            TextToTranslate.Text = textToTranslate;     // put corrected text into input field
+        //        }
+        //    }
+
+        //    // Handle null operations: no text or same source/target languages
+        //    if (textToTranslate == "" || fromLanguageCode == toLanguageCode) {
+        //        TranslatedTextLabel.Content = textToTranslate;
+        //        return;
+        //    }
+
+        //    // Send translation request
+        //    string endpoint = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "translate");
+        //    string uri = string.Format(endpoint + "&from={0}&to={1}", fromLanguageCode, toLanguageCode);
+
+        //    System.Object[] body = new System.Object[] { new { Text = textToTranslate } };
+        //    var requestBody = JsonConvert.SerializeObject(body);
+
+        //    using (var client = new HttpClient())
+        //    using (var request = new HttpRequestMessage()) {
+        //        request.Method = HttpMethod.Post;
+        //        request.RequestUri = new Uri(uri);
+        //        request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+        //        request.Headers.Add("Ocp-Apim-Subscription-Key", COGNITIVE_SERVICES_KEY);
+        //        request.Headers.Add("Ocp-Apim-Subscription-Region", "westus");
+        //        request.Headers.Add("X-ClientTraceId", Guid.NewGuid().ToString());
+
+        //        var response = await client.SendAsync(request);
+        //        var responseBody = await response.Content.ReadAsStringAsync();
+
+        //        var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
+        //        var translation = result[0]["translations"][0]["text"];
+
+        //        // Update the translation field
+        //        TranslatedTextLabel.Content = translation;
+        //    }
+        //}
     }
 }

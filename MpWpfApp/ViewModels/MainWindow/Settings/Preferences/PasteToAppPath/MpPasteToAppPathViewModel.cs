@@ -326,9 +326,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPasteToAppPathViewModel() : this(null) { }
+        public MpPasteToAppPathViewModel() : base(null) { }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath, IntPtr handle) : base(MpPasteToAppPathViewModelCollection.Instance) {
+        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath, IntPtr handle) : base(parent) {
             //constructor used for running applications
             PasteToAppPath = pasteToAppPath;
             if(handle != IntPtr.Zero) {
@@ -337,7 +337,7 @@ namespace MpWpfApp {
             }            
         }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath) : base(MpPasteToAppPathViewModelCollection.Instance) {
+        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath) : base(parent) {
             //constructor used for user defined paste to applications
             PasteToAppPath = pasteToAppPath;
         }

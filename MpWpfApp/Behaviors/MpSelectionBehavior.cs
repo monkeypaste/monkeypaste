@@ -10,7 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
-
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     public class MpSelectionBehavior : Behavior<FrameworkElement> {
@@ -19,13 +19,29 @@ namespace MpWpfApp {
         private bool isRightClick, wasSelected;
 
         public static MpContentItemViewModel LastSelectedContentItem;
+        public static MpContentItemViewModel ExpandedItem;
+
+        public static bool IgnoreSelection;
 
         protected override void OnAttached() {
+            AttachEvents();
+        }
+
+        private void AttachEvents() {
             AssociatedObject.PreviewMouseDown += AssociatedObject_PreviewMouseButtonDown;
-            AssociatedObject.PreviewMouseUp += AssociatedObject_PreviewMouseUp                ;
+            AssociatedObject.PreviewMouseUp += AssociatedObject_PreviewMouseUp;
+        }
+
+        private void DetachEvents() {
+            AssociatedObject.PreviewMouseDown -= AssociatedObject_PreviewMouseButtonDown;
+            AssociatedObject.PreviewMouseUp -= AssociatedObject_PreviewMouseUp;
         }
 
         private void AssociatedObject_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e) {
+            if(IgnoreSelection) {
+                e.Handled = false;
+                return;
+            }
             isRightClick = e.ChangedButton == MouseButton.Right;
 
             if (MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count >= 1) {
@@ -41,10 +57,8 @@ namespace MpWpfApp {
                     civm.IsSelected = true;
                     civm.LastSubSelectedDateTime = DateTime.Now;
                 }
-            }
-
-            if (AssociatedObject is MpContentItemView) {
-                var civm = AssociatedObject.DataContext as MpContentItemViewModel;
+            }else if ((AssociatedObject is MpContentItemView || AssociatedObject is ToggleButton) &&
+                      AssociatedObject.DataContext is MpContentItemViewModel civm) {
                 LastSelectedContentItem = civm;
                 wasSelected = civm.IsSelected;
                 civm.IsSelected = true;
@@ -53,15 +67,21 @@ namespace MpWpfApp {
                     civm.Parent.IsSelected = true;
                     civm.Parent.LastSelectedDateTime = DateTime.Now;                    
                 }
-                e.Handled = true;
-            } 
-            else if(AssociatedObject is MpRtbView) {
+
+                if(AssociatedObject is ToggleButton) {
+                    MpClipTrayViewModel.Instance.EditContentCommand.Execute(civm);
+                }
+                if(!civm.Parent.IsExpanded) {
+                    e.Handled = true;
+                }
+                
+            }else if(AssociatedObject is MpRtbView) {
                 if (isRightClick && (AssociatedObject.DataContext as MpContentItemViewModel).IsEditingContent) {
                     //show default context menu while editing
                     
 
                 } 
-            }
+            } 
             if(e.Handled != true)
             e.Handled = false;
         }
@@ -72,7 +92,7 @@ namespace MpWpfApp {
             }
             bool isAnyContentDragging = MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Any(x => x.IsSubDragging);
             //i think this only gets called for the clip tile
-            if(wasSelected && isRightClick) {
+             if(wasSelected && isRightClick) {
                 //do nothing and show context menu for all selected items
             } else if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !isAnyContentDragging) {
                 if (AssociatedObject is MpClipTileView) {
@@ -106,7 +126,6 @@ namespace MpWpfApp {
                     //    }
                     //}
                 }
-
                 LastSelectedContentItem = null;
             }
 
@@ -117,7 +136,7 @@ namespace MpWpfApp {
             if (isRightClick) {
                 ShowContextMenu();
             }
-
+            
             isRightClick = false;
             wasSelected = false;
             //MpClipTrayViewModel.Instance.IsPreSelection = false;

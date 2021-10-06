@@ -177,10 +177,9 @@ namespace MpWpfApp {
                                 if(dragIdxToRemove < dropIdx) {
                                     dropIdx--;
                                 }
-                                await MpHelpers.Instance.RunOnMainThreadAsync(
-                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile));
+                                MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile);
                             } else {
-                                await dragTile.UpdateSortOrder();
+                                dragTile.UpdateSortOrder();
                             }
                         }
 
@@ -237,10 +236,9 @@ namespace MpWpfApp {
                                 continue;
                             }
                             if (dragTile.Count == 0) {
-                                await MpHelpers.Instance.RunOnMainThreadAsync(
-                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile));
+                                MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile);
                             } else {
-                                await dragTile.UpdateSortOrder();
+                                dragTile.UpdateSortOrder();
                             }
                         }
                         await dropTile.Initialize(dropModels[0]);
@@ -266,16 +264,22 @@ namespace MpWpfApp {
             AssociatedObject.GetScrollViewer().ScrollToHome();
         }
 
-        public void AutoScrollByMouse() {            
+        public void AutoScrollByMouse() {
             //during drop autoscroll listbox to beginning or end of list
             //if more items are there depending on which half of the visible list
             //the mouse is in
+            var sv = AssociatedObject.GetScrollViewer();
+            
             var mp = MpHelpers.Instance.GetMousePosition(AssociatedObject);
             Rect listBoxRect = AssociatedObject.GetListBoxRect();
             double minScrollDist = 20;
             double autoScrollOffset = 15;
-            var sv = AssociatedObject.GetScrollViewer();
+            
             if(isTrayDrop) {
+                MpConsole.WriteLine($"Tray AutoScroll sv width: {sv.ScrollableWidth} lb width: {AssociatedObject.Width}");
+                if(sv.ScrollableWidth <= AssociatedObject.Width) {
+
+                }
                 double leftDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, 0);
                 double rightDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, listBoxRect.Right);
                 if (leftDiff < minScrollDist) {
@@ -286,6 +290,10 @@ namespace MpWpfApp {
                     sv.ScrollToHorizontalOffset(sv.HorizontalOffset + autoScrollOffset);
                 }
             } else {
+                MpConsole.WriteLine($"Content AutoScroll sv height: {sv.ScrollableHeight} lb height: {AssociatedObject.Height}");
+                if (sv.ScrollableWidth <= AssociatedObject.Width) {
+
+                }
                 double topDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, 0);
                 double bottomDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, listBoxRect.Bottom);
                 if (topDiff < minScrollDist) {
