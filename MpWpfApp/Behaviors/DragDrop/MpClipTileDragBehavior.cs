@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpClipTileDragBehavior : Behavior<FrameworkElement> {
+    public class MpClipTileDragBehavior : Behavior<MpClipTileView> {
         private const double MINIMUM_DRAG_DISTANCE = 10;
 
         private bool isDropValid = false;
@@ -30,17 +30,6 @@ namespace MpWpfApp {
         private MpDropBehavior dropBehavior;
 
         protected override void OnAttached() {            
-            if(AssociatedObject.DataContext is MpClipTileViewModel) {
-                var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-                if(ctvm.Count > 1) {
-                    return;
-                }
-            } else if (AssociatedObject.DataContext is MpContentItemViewModel) {
-                var civm = AssociatedObject.DataContext as MpContentItemViewModel;
-                if (civm.Parent.Count <= 1) {
-                    return;
-                }
-            }
             AssociatedObject.Loaded += AssociatedObject_Loaded;
 
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
@@ -55,7 +44,7 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-           // (AssociatedObject.DataContext as MpWpfApp.MpViewModelBase).MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+           (AssociatedObject.DataContext as MpClipTileViewModel).MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -91,13 +80,6 @@ namespace MpWpfApp {
         #region Mouse Events
 
         private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            //var ctv = sender as MpClipTileView;
-            //var ctvm = ctv.DataContext as MpClipTileViewModel;
-            //if(!ctvm.IsSelected) {
-            //    ctv.SelectionBehavior.SelectTile(false);
-            //} else {
-            //    e.Handled = true;
-            //}
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
         }
@@ -106,14 +88,8 @@ namespace MpWpfApp {
             AssociatedObject.ReleaseMouseCapture();
             EndDrop();
             ResetCursor();
-            if(AssociatedObject is MpClipTileView) {
-                var ctvm = (AssociatedObject.DataContext as MpClipTileViewModel);
-                ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = false);
-            } else {
-                var ctvm = (AssociatedObject.DataContext as MpContentItemViewModel).Parent;
-                ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = false);
-            }
-            
+
+            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsSubDragging = false);
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -121,13 +97,7 @@ namespace MpWpfApp {
             if (AssociatedObject.IsMouseCaptured && 
                 (diff.Length >= MINIMUM_DRAG_DISTANCE || isDragging)) {
                 isDragging = true;
-                if (AssociatedObject is MpClipTileView) {
-                    var ctvm = (AssociatedObject.DataContext as MpClipTileViewModel);
-                    ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = x.IsSelected);
-                } else {
-                    var ctvm = (AssociatedObject.DataContext as MpContentItemViewModel).Parent;
-                    ctvm.ItemViewModels.ForEach(x => x.IsSubDragging = x.IsSelected);
-                }
+                MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsSubDragging = true);
                 Drag(e);
             } 
         }

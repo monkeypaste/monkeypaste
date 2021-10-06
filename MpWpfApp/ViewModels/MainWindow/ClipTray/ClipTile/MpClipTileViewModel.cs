@@ -514,7 +514,8 @@ using System.Speech.Synthesis;
         public Brush TileBorderBrush {
             get {
                 if (MpClipTrayViewModel.Instance.PrimaryItem == this &&
-                    MpClipTrayViewModel.Instance.SelectedItems.Count > 1) {
+                    MpClipTrayViewModel.Instance.SelectedItems.Count > 1 && 
+                    !MpClipTrayViewModel.Instance.IsPreSelection) {
                     return Brushes.Blue;
                 }
                 if (IsSelected) {

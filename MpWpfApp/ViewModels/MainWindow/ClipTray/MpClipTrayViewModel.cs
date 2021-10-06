@@ -350,6 +350,8 @@ namespace MpWpfApp {
                 return false;
             }
         }
+
+        public bool IsPreSelection { get; set; } = false;
         #endregion
 
         #region Visibility
@@ -1002,8 +1004,8 @@ namespace MpWpfApp {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 Task.Run(async () => {
-                    await MpHelpers.Instance.RunOnMainThreadAsync(() => RefreshTiles());
-                    MpTagTrayViewModel.Instance.RefreshAllCounts();
+                    //await MpHelpers.Instance.RunOnMainThreadAsync(() => RefreshTiles());
+                   // MpTagTrayViewModel.Instance.RefreshAllCounts();
                 });
             }
         }

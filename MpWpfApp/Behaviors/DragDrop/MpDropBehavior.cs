@@ -135,6 +135,7 @@ namespace MpWpfApp {
                     Reset();
                     return;
                 }
+                var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
                 int tileCount = MpClipTrayViewModel.Instance.ClipTileViewModels.Count;
                 if (isTrayDrop) {
                     bool isTileResort = dragTiles.All(x => x.SelectedItems.Count == x.ItemViewModels.Count);
@@ -149,9 +150,45 @@ namespace MpWpfApp {
                             MpClipTrayViewModel.Instance.ClipTileViewModels.Move(oldIdx, dropIdx);
                         }
                     } else {
+                        //partial tile drop onto tray, create new tile, remove from source
+                        //update drag models, remove empty tiles updating dropIdx then init new tile
                         var dropTile = MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
-                        MpClipTrayViewModel.Instance.ClipTileViewModels.Insert(dropIdx, dropTile);
-                        await MergeIntoTile(dropTile);
+                        foreach (var dragTile in dragTiles) {
+                            foreach (var dci in dragModels) {
+                                var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
+                                if (dcivm != null) {
+                                    dragTile.ItemViewModels.Remove(dcivm);
+                                }
+                            }
+                        }
+                        dragModels.Reverse();
+                        for (int i = 0; i < dragModels.Count; i++) {
+                            dragModels[i].CompositeSortOrderIdx = i;
+                            if (i == 0) {
+                                dragModels[i].CompositeParentCopyItemId = 0;
+                            } else {
+                                dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
+                            }
+                            dragModels[i].WriteToDatabase();
+                        }
+                        foreach (var dragTile in dragTiles) {
+                            if (dragTile.Count == 0) {
+                                int dragIdxToRemove = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
+                                if(dragIdxToRemove < dropIdx) {
+                                    dropIdx--;
+                                }
+                                await MpHelpers.Instance.RunOnMainThreadAsync(
+                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile));
+                            } else {
+                                await dragTile.UpdateSortOrder();
+                            }
+                        }
+
+                        await MpHelpers.Instance.RunOnMainThreadAsync(
+                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Insert(dropIdx, dropTile));
+                        await dropTile.Initialize(dragModels[0]);
+
+                        dropTile.RequestUiUpdate();
                     }
                     MpClipTileSortViewModel.Instance.SetToManualSort();
                 } else {
@@ -169,57 +206,53 @@ namespace MpWpfApp {
                             dragTiles[0].ItemViewModels.Move(oldIdx, dropIdx);
                         }
                     } else {
-                        await MergeIntoTile(dropTile);
+                        foreach (var dragTile in dragTiles) {
+                            foreach (var dci in dragModels) {
+                                var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
+                                if (dcivm != null) {
+                                    if (dragTile == dropTile) {
+                                        int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
+                                        if (dcivmIdx < dropIdx) {
+                                            dropIdx--;
+                                        }
+                                    }
+                                    dragTile.ItemViewModels.Remove(dcivm);
+                                }
+                            }
+                        }
+                        dragModels.Reverse();
+                        var dropModels = dropTile.ItemViewModels.Select(x => x.CopyItem).ToList();
+                        dropModels.InsertRange(dropIdx, dragModels);
+                        for (int i = 0; i < dropModels.Count; i++) {
+                            dropModels[i].CompositeSortOrderIdx = i;
+                            if (i == 0) {
+                                dropModels[i].CompositeParentCopyItemId = 0;
+                            } else {
+                                dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
+                            }
+                            dropModels[i].WriteToDatabase();
+                        }
+                        foreach (var dragTile in dragTiles) {
+                            if (dragTile == dropTile) {
+                                continue;
+                            }
+                            if (dragTile.Count == 0) {
+                                await MpHelpers.Instance.RunOnMainThreadAsync(
+                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile));
+                            } else {
+                                await dragTile.UpdateSortOrder();
+                            }
+                        }
+                        await dropTile.Initialize(dropModels[0]);
+
+                        var cilv = AssociatedObject.GetVisualAncestor<MpContentListView>();
+                        cilv.UpdateAdorner();
                     }
                 }
                 Reset();
             });
         }
 
-        private async Task MergeIntoTile(MpClipTileViewModel dropTile) {
-            var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
-            foreach (var dragTile in dragTiles) {
-                foreach (var dci in dragModels) {
-                    var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
-                    if (dcivm != null) {
-                        if (dragTile == dropTile) {
-                            int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
-                            if (dcivmIdx < dropIdx) {
-                                dropIdx--;
-                            }
-                        }
-                        dragTile.ItemViewModels.Remove(dcivm);
-                    }
-                }
-            }
-            dragModels.Reverse();
-            var dropModels = dropTile.ItemViewModels.Select(x => x.CopyItem).ToList();
-            dropModels.InsertRange(dropIdx, dragModels);
-            for (int i = 0; i < dropModels.Count; i++) {
-                dropModels[i].CompositeSortOrderIdx = i;
-                if (i == 0) {
-                    dropModels[i].CompositeParentCopyItemId = 0;
-                } else {
-                    dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
-                }
-                dropModels[i].WriteToDatabase();
-            }
-            foreach (var dragTile in dragTiles) {
-                if (dragTile == dropTile) {
-                    continue;
-                }
-                if (dragTile.Count == 0) {
-                    await MpHelpers.Instance.RunOnMainThreadAsync(
-                        () => MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile));
-                } else {
-                    await dragTile.UpdateSortOrder();
-                }
-            }
-            await dropTile.Initialize(dropModels[0]);
-
-            var cilv = AssociatedObject.GetVisualAncestor<MpContentListView>();
-            cilv.UpdateAdorner();
-        }
 
         private void Reset() {
             dropIdx = -1;
