@@ -1303,7 +1303,8 @@ namespace MpWpfApp {
             } catch(Exception ex) {
                 MonkeyPaste.MpConsole.WriteLine("Error getting this application process path: " + ex.ToString());
                 MonkeyPaste.MpConsole.WriteLine("Attempting queryfullprocessimagename...");
-                return GetExecutablePathAboveVista(Process.GetCurrentProcess().Handle);
+                //return GetExecutablePathAboveVista(Process.GetCurrentProcess().Handle);
+                return GetApplicationProcessPath();
             }
         }
 
@@ -1355,7 +1356,8 @@ namespace MpWpfApp {
             }
             catch (Exception e) {
                 MonkeyPaste.MpConsole.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path (w/ Handle "+hwnd.ToString()+") : " + e.ToString());
-                return GetExecutablePathAboveVista(hwnd);
+                //return GetExecutablePathAboveVista(hwnd);
+                return GetApplicationProcessPath();
             }
         }
 

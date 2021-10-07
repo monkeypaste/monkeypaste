@@ -183,15 +183,15 @@
     <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\MpBrowserUrlDetector.cs" />
     <Compile Include="Utils\MpRegEx.cs" />
-    <Compile Include="Utils\MpSettingsBindingExtension.cs" />
+    <Compile Include="Utils\BindingExtensions\MpSettingsBindingExtension.cs" />
     <Compile Include="Utils\MpVisualUtility.cs" />
     <Compile Include="Utils\MpWpfPreferences.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpImageAnalysis.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
-    <Compile Include="Utils\Styling\MpThemeColorsBindingExtension.cs" />
-    <Compile Include="Utils\Styling\MpMeasurementsBindingExtension.cs" />
+    <Compile Include="Utils\BindingExtensions\MpThemeColorsBindingExtension.cs" />
+    <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\Styling\MpThemeColors.cs" />
     <Compile Include="Utils\System\Clipboard\MpClipboardManager.cs" />
     <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
@@ -227,7 +227,6 @@
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Meta\MpContentDescriptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpIContentCommands.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
@@ -786,14 +785,8 @@
     <PackageReference Include="QRCoder">
       <Version>1.4.1</Version>
     </PackageReference>
-    <PackageReference Include="sqlite-net-pcl">
+    <PackageReference Include="sqlite-net-static">
       <Version>1.8.116</Version>
-    </PackageReference>
-    <PackageReference Include="sqlite-net-sqlcipher">
-      <Version>1.8.116</Version>
-    </PackageReference>
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3">
-      <Version>2.0.6</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.115</Version>

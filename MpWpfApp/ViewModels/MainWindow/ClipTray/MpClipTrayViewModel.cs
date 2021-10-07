@@ -30,7 +30,7 @@ using static SQLite.SQLite3;
 using static OpenTK.Graphics.OpenGL.GL;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpViewModelBase<object>, MpIContentCommands  {
+    public class MpClipTrayViewModel : MpViewModelBase<object>  {
         #region Singleton Definition
         private static readonly Lazy<MpClipTrayViewModel> _Lazy = new Lazy<MpClipTrayViewModel>(() => new MpClipTrayViewModel());
         public static MpClipTrayViewModel Instance { get { return _Lazy.Value; } }
@@ -513,7 +513,7 @@ namespace MpWpfApp {
                 }
             }
             IsBusy = true;
-            var page_cil = await MpCopyItem.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
+            var page_cil = await MpCopyItemSource.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
 
             //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
             //while(placeHoldersToAdd > 0) {
@@ -526,16 +526,12 @@ namespace MpWpfApp {
 
             _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
-            ResetClipSelection();
+            //ResetClipSelection();
             IsBusy = false;
 
             OnViewModelLoaded();
             sw.Stop();
             MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
-
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                
-            });
 
         }
 
@@ -1486,26 +1482,16 @@ namespace MpWpfApp {
             SelectedItems[0].EditTitleCommand.Execute(null);
         }
 
-        private RelayCommand _editSelectedContentCommand;
-        public ICommand EditSelectedContentCommand {
-            get {
-                if (_editSelectedContentCommand == null) {
-                    _editSelectedContentCommand = new RelayCommand(EditSelectedContent, CanEditSelectedContent);
+        public ICommand EditSelectedContentCommand => new RelayCommand(
+            () => {
+                PrimaryItem.ToggleTileExpandedCommand.Execute(null);
+            },
+            () => {
+                if (MpMainWindowViewModel.IsMainWindowLoading) {
+                    return false;
                 }
-                return _editSelectedContentCommand;
-            }
-        }
-        private bool CanEditSelectedContent() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
-                return false;
-            }
-            return SelectedItems.Count == 1 &&
-                  SelectedItems[0].SelectedItems.Count <= 1 &&
-                  SelectedItems[0].IsTextItem;
-        }
-        private void EditSelectedContent() {
-            SelectedItems[0].PrimaryItem.ToggleEditSubContentCommand.Execute(null);
-        }
+                return PrimaryItem != null && !IsAnyEditingClipTile;
+            });
 
         private RelayCommand _sendSelectedClipsToEmailCommand;
         public ICommand SendSelectedClipsToEmailCommand {
@@ -1567,7 +1553,7 @@ namespace MpWpfApp {
             return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
         }
         private async Task TranslateSelectedClipTextAsync(string toLanguage) {
-            var translatedText = await MpLanguageTranslator.Instance.Translate(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
+            var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
             if (!string.IsNullOrEmpty(translatedText)) {
                 SelectedItems[0].HeadItem.CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
             }
@@ -1696,13 +1682,24 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand EditContentCommand => new RelayCommand<object>(
-            (civm) => {
-                MpSelectionBehavior.IgnoreSelection = !MpSelectionBehavior.IgnoreSelection;
-                ClearClipSelection();
-                (civm as MpContentItemViewModel).ToggleEditSubContentCommand.Execute(null);
+        public ICommand ToggleTileExpandedCommand => new RelayCommand<object>(
+            (isEditOrPaste) => {
+                PrimaryItem.ToggleTileExpandedCommand.Execute(null);
+                //arg is null for unexpand
+                if (isEditOrPaste.ToString() == "edit") {
+                    PrimaryItem.PrimaryItem.IsEditingContent = true;
+                } else if (isEditOrPaste.ToString() == "paste") {
+                    PrimaryItem.ItemViewModels.Where(x => x.HasTemplates).FirstOrDefault().IsPastingTemplate = true;
+                } else {
+                    PrimaryItem.ClearEditing();
+                }
             },
-            (civm) => { return true; });
+            (isEditOrPaste) => {
+                if (MpMainWindowViewModel.IsMainWindowLoading) {
+                    return false;
+                }
+                return PrimaryItem != null;
+            });
 
         public ICommand EditTitleCommand {
             get {

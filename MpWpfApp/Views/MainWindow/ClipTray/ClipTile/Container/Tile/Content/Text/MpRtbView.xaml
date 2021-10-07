@@ -8,11 +8,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <i:Interaction.Behaviors>
+    <!--<i:Interaction.Behaviors>
         <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
-    </i:Interaction.Behaviors>
+    </i:Interaction.Behaviors>-->
     <RichTextBox x:Name="Rtb"
-                     IsReadOnly="{Binding Parent.IsExpanded}"
+                     IsReadOnly="False"
                      Background="{Binding ItemBackgroundBrush}"
                      Loaded="Rtb_Loaded"
                      GotFocus="Rtb_GotFocus"
@@ -25,8 +25,8 @@
                      AutoWordSelection="False"
                      IsInactiveSelectionHighlightEnabled="True"
                      IsDocumentEnabled="True"
-                     Focusable="{Binding Parent.IsExpanded}"
-                     Padding="{Binding ContentPadding}"
+                     Focusable="True"
+                     Padding="5"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                      IsUndoEnabled="True"
                      HorizontalAlignment="Stretch"

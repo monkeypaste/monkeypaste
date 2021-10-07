@@ -41,18 +41,19 @@
                        Text="{Binding DetailText}"
                        FontSize="10"
                        HorizontalAlignment="Center"/>
-            <ToggleButton x:Name="ClipTileToggleEditButton"
+            <Button x:Name="ClipTileToggleEditButton"
                           Grid.Column="2"
                           HorizontalAlignment="Right"
                           Width="20"
                           Height="20"
                           Margin="0,-5,2,0"
-                          Template="{StaticResource LockToggleButtonControlTemplate}">
+                          Command="{Binding Parent.ToggleTileExpandedCommand}"
+                          Template="{StaticResource SearchButtonControlTemplate}">
                 <i:Interaction.Behaviors>
                     <local:MpSelectionBehavior x:Name="SelectAndOrEditBehavior"/>
                 </i:Interaction.Behaviors>
                 <Image Source="/Resources/Images/edit.png" />
-            </ToggleButton>
+            </Button>
         </Grid>
     </Border>
 </UserControl>

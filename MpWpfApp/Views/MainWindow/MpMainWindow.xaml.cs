@@ -70,6 +70,8 @@ namespace MpWpfApp {
                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
+
+            MpMainWindowViewModel.IsMainWindowLoading = false;
         }
 
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {

@@ -266,6 +266,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Settings 
+        public string AutoSelectionElementTag {
+            get {
+                return "AutoSelectionElement";
+            }
+        }
         public int MaxCommandLineArgumentLength {
             get {
                 return 1024;

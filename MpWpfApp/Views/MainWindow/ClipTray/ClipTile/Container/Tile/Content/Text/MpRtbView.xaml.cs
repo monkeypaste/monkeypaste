@@ -3,6 +3,7 @@ using MonkeyPaste;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -497,5 +498,8 @@ namespace MpWpfApp {
         }
         #endregion
 
+        private void Rtb_MouseDown(object sender, MouseButtonEventArgs e) {
+            Debugger.Break();
+        }
     }
 }

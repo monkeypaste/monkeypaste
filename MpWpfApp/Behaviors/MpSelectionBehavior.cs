@@ -19,11 +19,25 @@ namespace MpWpfApp {
         private bool isRightClick, wasSelected;
 
         public static MpContentItemViewModel LastSelectedContentItem;
-        public static MpContentItemViewModel ExpandedItem;
 
-        public static bool IgnoreSelection;
+        private static bool IgnoreSelection;
+        private static List<MpSelectionBehavior> _selectors = new List<MpSelectionBehavior>();
+
+        public static void SetIgnoreSelection(bool ignore) {
+            IgnoreSelection = ignore;
+            if(IgnoreSelection) {
+                foreach(var s in _selectors) {
+                    s.DetachEvents();
+                }
+            } else {
+                foreach (var s in _selectors) {
+                    s.AttachEvents();
+                }
+            }
+        }
 
         protected override void OnAttached() {
+            _selectors.Add(this);
             AttachEvents();
         }
 
@@ -57,8 +71,7 @@ namespace MpWpfApp {
                     civm.IsSelected = true;
                     civm.LastSubSelectedDateTime = DateTime.Now;
                 }
-            }else if ((AssociatedObject is MpContentItemView || AssociatedObject is ToggleButton) &&
-                      AssociatedObject.DataContext is MpContentItemViewModel civm) {
+            }else if (AssociatedObject.DataContext is MpContentItemViewModel civm) {
                 LastSelectedContentItem = civm;
                 wasSelected = civm.IsSelected;
                 civm.IsSelected = true;
@@ -68,10 +81,12 @@ namespace MpWpfApp {
                     civm.Parent.LastSelectedDateTime = DateTime.Now;                    
                 }
 
-                if(AssociatedObject is ToggleButton) {
-                    MpClipTrayViewModel.Instance.EditContentCommand.Execute(civm);
+                if(AssociatedObject.Name == "ClipTileToggleEditButton") {
+                    MpClipTrayViewModel.Instance.ToggleTileExpandedCommand.Execute("edit");
+                } else if (AssociatedObject.Name == "FlipButton") {
+                    MpClipTrayViewModel.Instance.FlipTileCommand.Execute(civm);
                 }
-                if(!civm.Parent.IsExpanded) {
+                if (!civm.Parent.IsExpanded) {
                     e.Handled = true;
                 }
                 

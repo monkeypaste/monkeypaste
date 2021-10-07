@@ -430,12 +430,12 @@ namespace MpWpfApp {
                     if (ClipTrayViewModel.ItemsAdded > 0) {
                         await MpClipTrayViewModel.Instance.RefreshTiles();
                         if(IsMainWindowLoading || MpClipTrayViewModel.Instance.ItemsAdded > 0) {
-                            MpClipTrayViewModel.Instance.ResetClipSelection();
+                            //MpClipTrayViewModel.Instance.ResetClipSelection();
                             ClipTrayViewModel.ItemsAdded = 0;
-                            IsMainWindowLoading = false;
                             TagTrayViewModel.RefreshAllCounts();
                         }
                     }
+                    ClipTrayViewModel.ResetClipSelection();
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
                 }
@@ -510,6 +510,7 @@ namespace MpWpfApp {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
                         IsMainWindowOpen = false;
+                        
                     }
                 };
                 timer.Start();

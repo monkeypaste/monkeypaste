@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpLanguageTranslator : MpRestfulApi {
@@ -27,10 +28,12 @@ namespace MpWpfApp {
         private SortedDictionary<string, string> languageCodesAndTitles =
             new SortedDictionary<string, string>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
 
-        public List<string> LanguageList { get; private set; } = new List<string>();
-        public void Init() {
+        private bool isConnected = false;
 
-        }
+        private string NoConnectionItemHeader = "Cannot connect to lanugage server";
+
+        public List<string> LanguageList { get; private set; } = new List<string>();
+        public void Init() { }
         public MpLanguageTranslator() : base("Language Translation") {
             try {
                 if (!MpHelpers.Instance.IsConnectedToInternet()) {
@@ -48,9 +51,11 @@ namespace MpWpfApp {
                 } else {
                     // Get languages for drop-downs
                     GetLanguagesForTranslate();
-                    // Populate drop-downs with values from GetLanguagesForTranslate
-                    foreach (string menuItem in languageCodesAndTitles.Keys) {
-                        LanguageList.Add(menuItem);
+                    if(isConnected) {
+                        // Populate drop-downs with values from GetLanguagesForTranslate
+                        foreach (string menuItem in languageCodesAndTitles.Keys) {
+                            LanguageList.Add(menuItem);
+                        }
                     }
                 }
             }
@@ -69,6 +74,10 @@ namespace MpWpfApp {
 
         // ***** DETECT LANGUAGE OF TEXT TO BE TRANSLATED
         public string DetectLanguage(string text) {
+            if (!isConnected) {
+                MpConsole.WriteTraceLine("Is not connected, ignoring translation");
+                return string.Empty;
+            }
             string detectUri = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "detect");
 
             // Create request to Detect languages with Translator Text
@@ -163,11 +172,17 @@ namespace MpWpfApp {
         }
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
-        private void GetLanguagesForTranslate() {
-            if (!MpHelpers.Instance.IsConnectedToNetwork()) {
-                Console.WriteLine("Client offline. Language Translation is inactive");
+        private void GetLanguagesForTranslate(int retryCount = 5) {
+            if(retryCount <= 0) {
+                LanguageList.Clear();
+                LanguageList.Add(NoConnectionItemHeader);
+                isConnected = false;
                 return;
             }
+            //if (!MpHelpers.Instance.IsConnectedToNetwork()) {
+            //    Console.WriteLine("Client offline. Language Translation is inactive");
+            //    return;
+            //}
             // Send a request to get supported language codes
             string uri = String.Format(TEXT_TRANSLATION_API_ENDPOINT, "languages") + "&scope=translation";
             WebRequest WebRequest = WebRequest.Create(uri);
@@ -189,15 +204,20 @@ namespace MpWpfApp {
             }
             catch (Exception ex) {
                 if (MpHelpers.Instance.IsConnectedToNetwork()) {
-                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
-                    GetLanguagesForTranslate();
+                    Console.WriteLine($"Problem connecting to language server, re-attempt #{6-retryCount} to connect..");
+                    GetLanguagesForTranslate(retryCount--);
                 } else {
                     Console.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
                 }
             }
+            isConnected = true;
         }
 
-        public async Task<string> Translate(string textToTranslate, string toLanguage, bool doSpellCheck) {
+        public async Task<string> TranslateAsync(string textToTranslate, string toLanguage, bool doSpellCheck) {
+            if(!isConnected) {
+                MpConsole.WriteTraceLine("Is not connected, ignoring translation");
+                return string.Empty;
+            }
             var apiStatus = CheckRestfulApiStatus();
             if (apiStatus == null || apiStatus.Value == false) {
                 return string.Empty;

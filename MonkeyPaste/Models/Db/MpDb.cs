@@ -39,7 +39,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = true;
+        public bool UseWAL { get; set; } = false;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -489,6 +489,42 @@ namespace MonkeyPaste {
             return dt;
         }
 
+        public async Task<DataTable> ExecuteAsync(string query, Dictionary<string, object> args) {
+            if (string.IsNullOrEmpty(query.Trim())) {
+                return null;
+            }
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
+
+            string tn = GetTableName(query);
+            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tn);
+
+            var tuple = PrepareQuery(query, args);
+
+            var queryMethod = _connectionAsync.GetType().GetMethod("QueryAsync", new Type[] { typeof(string), typeof(object[]) });
+            var queryByDboTypeMethod = queryMethod.MakeGenericMethod(new[] { dbot });
+            var resultObj = queryByDboTypeMethod.InvokeAsync(_connectionAsync, new object[] { tuple.Item1, tuple.Item2 });
+            await resultObj;
+            var result = Activator.CreateInstance(typeof(List<>).MakeGenericType(dbot), resultObj);
+            var dt = new DataTable();
+
+            var tm = GetTableMapping(tn);
+            foreach (var row in result as IList) {
+                var dr = new DataRow();
+                foreach (var rowProp in row.GetType().GetProperties()) {
+                    if (rowProp.GetAttribute<SQLite.IgnoreAttribute>() != null) {
+                        continue;
+                    }
+                    string cn = tm.FindColumnWithPropertyName(rowProp.Name).Name;
+                    dr.AddColumn(cn, rowProp.GetValue(row));
+                }
+                dt.Rows.Add(dr);
+            }
+
+            return dt;
+        }
+
         public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (_connection == null) {
                 CreateConnection();
@@ -548,9 +584,7 @@ namespace MonkeyPaste {
         #region Private Methods  
         private void CreateConnection() {
             SQLiteConnectionString connStr = null;
-
-            if(string.IsNullOrEmpty(_dbInfo.GetDbPassword())) {
-                connStr = new SQLiteConnectionString(
+            connStr = new SQLiteConnectionString(
                     databasePath: _dbInfo.GetDbFilePath(),
                     storeDateTimeAsTicks: false,
                     openFlags: SQLiteOpenFlags.ReadWrite |
@@ -558,20 +592,29 @@ namespace MonkeyPaste {
                                SQLiteOpenFlags.SharedCache |
                                SQLiteOpenFlags.FullMutex
                     );
-            } else {
-                connStr = new SQLiteConnectionString(
-                    databasePath: _dbInfo.GetDbPassword(),
-                    storeDateTimeAsTicks: false,
-                    key: MpPreferences.Instance.DbPassword,
-                    openFlags: SQLiteOpenFlags.ReadWrite |
-                               SQLiteOpenFlags.Create |
-                               SQLiteOpenFlags.SharedCache |
-                               SQLiteOpenFlags.FullMutex
-                    );
-            }
+            //if (string.IsNullOrEmpty(_dbInfo.GetDbPassword())) {
+            //    connStr = new SQLiteConnectionString(
+            //        databasePath: _dbInfo.GetDbFilePath(),
+            //        storeDateTimeAsTicks: false,
+            //        openFlags: SQLiteOpenFlags.ReadWrite |
+            //                   SQLiteOpenFlags.Create |
+            //                   SQLiteOpenFlags.SharedCache |
+            //                   SQLiteOpenFlags.FullMutex
+            //        );
+            //} else {
+            //    connStr = new SQLiteConnectionString(
+            //        databasePath: _dbInfo.GetDbPassword(),
+            //        storeDateTimeAsTicks: false,
+            //        key: MpPreferences.Instance.DbPassword,
+            //        openFlags: SQLiteOpenFlags.ReadWrite |
+            //                   SQLiteOpenFlags.Create |
+            //                   SQLiteOpenFlags.SharedCache |
+            //                   SQLiteOpenFlags.FullMutex
+            //        );
+            //}
             if (_connection == null) {
                 try {
-                    SQLitePCL.Batteries.Init();
+                    //SQLitePCL.Batteries.Init();
                     _connection = new SQLiteConnection(connStr);
                 }catch(Exception ex) {
                     Console.WriteLine(ex);

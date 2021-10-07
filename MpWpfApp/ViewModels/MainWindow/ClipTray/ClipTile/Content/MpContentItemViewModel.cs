@@ -17,7 +17,7 @@ using SQLite;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace MpWpfApp {
-    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIContentCommands {
+    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
         private static string _unsetJoystickIcon64 = "";
         private static string _setJoyStickIcon64 = "";
 
@@ -259,6 +259,7 @@ namespace MpWpfApp {
         public bool IsContextMenuOpen { get; set; } = false;
 
         public bool IsEditingContent { get; set; } = false;
+
         public bool IsEditingTemplate {
             get {
                 if(CopyItem == null || TemplateCollection == null) {
@@ -858,23 +859,6 @@ namespace MpWpfApp {
                 DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
             });
 
-        public ICommand ToggleEditSubContentCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        if (!IsEditingContent) {
-                            Parent.ClearEditing();
-                            Parent.ClearClipSelection();
-                            IsSelected = true;
-                            IsEditingContent = true;
-                        }
-                    },
-                    () => {
-                        return MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
-                               base.Parent.SelectedItems.Count == 1;
-                    });
-            }
-        }
 
         private RelayCommand _sendSubSelectedToEmailCommand;
         public ICommand SendSubSelectedToEmailCommand {
@@ -925,7 +909,7 @@ namespace MpWpfApp {
             return CopyItem.ItemType == MpCopyItemType.RichText;
         }
         private async Task TranslateSubSelectedItemTextAsync(string toLanguage) {
-            var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItem.ItemData.ToPlainText(), toLanguage, false);
+            var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage, false);
             if (!string.IsNullOrEmpty(translatedText)) {
                 CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
             }
@@ -1046,48 +1030,6 @@ namespace MpWpfApp {
                     });
             }
         }
-
-        public ICommand CreateQrCodeCommand => throw new NotImplementedException();
-
-        public ICommand DeleteCommand => throw new NotImplementedException();
-
-        public ICommand DuplicateCommand => throw new NotImplementedException();
-
-        public ICommand EditContentCommand => throw new NotImplementedException();
-
-        public ICommand EditTitleCommand => throw new NotImplementedException();
-
-        public ICommand ExcludeApplicationCommand => throw new NotImplementedException();
-
-        public ICommand HotkeyPasteCommand => throw new NotImplementedException();
-
-        public ICommand InvertSelectionCommand => throw new NotImplementedException();
-
-        public ICommand LinkTagToContentCommand => throw new NotImplementedException();
-
-        public ICommand LoadMoreClipsCommand => throw new NotImplementedException();
-
-        public ICommand MergeCommand => throw new NotImplementedException();
-
-        public ICommand PasteCommand => throw new NotImplementedException();
-
-        public ICommand SearchWebCommand => throw new NotImplementedException();
-
-        public ICommand SelectAllCommand => throw new NotImplementedException();
-
-        public ICommand SelectNextCommand => throw new NotImplementedException();
-
-        public ICommand SelectPreviousCommand => throw new NotImplementedException();
-
-        public ICommand SendToEmailCommand => throw new NotImplementedException();
-
-        public ICommand SendToBackCommand => throw new NotImplementedException();
-
-        public ICommand SpeakCommand => throw new NotImplementedException();
-
-        public ICommand TranslateCommand => throw new NotImplementedException();
-
-
         #endregion
     }
 }

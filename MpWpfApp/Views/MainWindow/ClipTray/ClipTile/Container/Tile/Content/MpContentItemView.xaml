@@ -38,7 +38,7 @@
               Loaded="ContentListItemView_Loaded"
               DataContextChanged="ContentListItemView_DataContextChanged"
               DataContext="{Binding}"
-              Focusable="{Binding Parent.IsExpanded}"
+              Focusable="True"
               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
               MouseEnter="ContentListItemView_MouseEnter"
               MouseLeave="ContentListItemView_MouseLeave"
@@ -48,7 +48,7 @@
                                  DataContext="{Binding}" />
             <!--<local:MpQuillEditorView x:Name="EditorView"
                                          DataContext="{Binding}" />-->
-            <local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
+            <!--<local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
                                 Visibility="Hidden"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
@@ -56,7 +56,7 @@
                                 Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                                 ToolTipService.InitialShowDelay="750"
                                 CornerRadius="5">
-                <!--<local:MpClipBorder.ToolTip>
+                --><!--<local:MpClipBorder.ToolTip>
                     <ToolTip x:Name="ClipTileTooltip"
                              Visibility="{Binding PlacementTarget.DataContext.SubItemToolTipVisibility, RelativeSource={RelativeSource Self}}"
                              Placement="Top"
@@ -73,7 +73,7 @@
                             </ControlTemplate>
                         </ToolTip.Template>
                     </ToolTip>
-                </local:MpClipBorder.ToolTip>-->
+                </local:MpClipBorder.ToolTip>--><!--
                 <Button x:Name="DragButton"
                         MouseEnter="DragButton_MouseEnter"
                         MouseLeave="DragButton_MouseLeave"
@@ -88,7 +88,7 @@
                            Source="/Resources/Images/burger.png"
                            Stretch="Uniform" />
                 </Button>
-            </local:MpClipBorder>
+            </local:MpClipBorder>-->
         </Grid>
     </Border>
 </UserControl>

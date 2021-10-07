@@ -893,11 +893,17 @@ using System.Speech.Synthesis;
         }
 
         public void RequestExpand() {
-            OnExpandRequest?.Invoke(this, null);
+            if(!IsExpanded) {
+                MpSelectionBehavior.SetIgnoreSelection(true);
+                OnExpandRequest?.Invoke(this, null);
+            }            
         }
 
         public void RequestUnexpand() {
-            OnUnExpandRequest?.Invoke(this, null);
+            if (!IsExpanded) {
+                MpSelectionBehavior.SetIgnoreSelection(false);
+                OnUnExpandRequest?.Invoke(this, null);
+            }
         }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
@@ -1093,6 +1099,9 @@ using System.Speech.Synthesis;
         }
 
         public void ClearEditing() {
+            if(IsExpanded) {
+                RequestUnexpand();
+            }
             foreach(var ivm in ItemViewModels) {
                 ivm.ClearEditing();
             }
@@ -1667,6 +1676,15 @@ using System.Speech.Synthesis;
             //this triggers hidewindow to paste selected items
             MainWindowViewModel.HideWindowCommand.Execute(true);
         }
+
+        public ICommand ToggleTileExpandedCommand => new RelayCommand(
+            () => {
+                if(IsExpanded) {
+                    RequestUnexpand();
+                } else {
+                    RequestExpand();
+                }
+            });
 
         public ICommand BringToFrontCommand {
             get {
