@@ -232,6 +232,13 @@ namespace MpWpfApp {
                 }
                 return TemplateName;
             }
+            set {
+                if(Parent.Parent.IsPastingTemplate && TemplateText != value) {
+                    TemplateText = value;
+                } else if(TemplateName != value) {
+                    TemplateName = value;
+                }
+            }
         }
 
         public string TemplateDisplayName {
@@ -474,7 +481,7 @@ namespace MpWpfApp {
                 return new RelayCommand(
                     () => {
                         CopyItemTemplate.WriteToDatabase();
-                        Parent.Parent.RequestSyncModels();
+                        //Parent.Parent.RequestSyncModels();
                         IsEditingTemplate = false;
                         IsSelected = false;
                     },

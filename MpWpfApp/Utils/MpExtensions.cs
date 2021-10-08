@@ -950,6 +950,9 @@ namespace MpWpfApp {
             if(str.IsStringQuillText()) {
                 return MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(str);
             }
+            if(str.IsStringXaml()) {
+                return MpHelpers.Instance.ConvertXamlToRichText(str);
+            }
             return MpHelpers.Instance.ConvertPlainTextToRichText(str);
         }
 
@@ -981,10 +984,33 @@ namespace MpWpfApp {
             if(MpHelpers.Instance.IsStringPlainText(str)) {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(str));
             }
+            if(str.IsStringXaml()) {
+                return MpHelpers.Instance.ConvertXamlToFlowDocument(str); 
+            }
             if(MpHelpers.Instance.IsStringRichText(str)) {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(str);
             }
             throw new Exception("ToFlowDocument exception string must be plain or rich text. Its content is: " + str);
+        }
+
+        public static string ToXaml(this string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return string.Empty.ToRichText().ToXaml();
+            }
+            if (str.IsStringQuillText()) {
+                return str.ToRichText().ToXaml();
+            }
+            if (MpHelpers.Instance.IsStringPlainText(str)) {
+                return str.ToRichText().ToXaml();
+            }
+            if (MpHelpers.Instance.IsStringRichText(str)) {
+                return MpHelpers.Instance.ConvertRichTextToXaml(str);
+            }
+            throw new Exception("ToXaml exception string must be plain or rich text. Its content is: " + str);
+        }
+
+        public static string ToXaml(this FlowDocument fd) {
+            return MpHelpers.Instance.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)fd);
         }
 
         public static Size GetDocumentSize(this FlowDocument doc) {

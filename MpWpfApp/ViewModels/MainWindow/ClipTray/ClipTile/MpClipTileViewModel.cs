@@ -199,7 +199,7 @@ using System.Speech.Synthesis;
             }
             set {
                 if (_tileBorderWidth != value) {
-                    _tileBorderWidth = value;
+                    _tileBorderWidth = Math.Max(0,value);
                     OnPropertyChanged(nameof(TileBorderWidth));
                 }
             }
@@ -213,7 +213,7 @@ using System.Speech.Synthesis;
             }
             set {
                 if (_tileBorderHeight != value) {
-                    _tileBorderHeight = value;
+                    _tileBorderHeight = Math.Max(0,value);
                     OnPropertyChanged(nameof(TileBorderHeight));
                 }
             }
@@ -280,7 +280,7 @@ using System.Speech.Synthesis;
             }
             set {
                 if (_tileContentWidth != value) {
-                    _tileContentWidth = value;
+                    _tileContentWidth = Math.Max(0,value);
                     OnPropertyChanged(nameof(TileContentWidth));
                 }
             }
@@ -871,8 +871,6 @@ using System.Speech.Synthesis;
                     BindItemEvents(ivm);
                 }
 
-                ResetSubSelection();
-
                 HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
                 OnViewModelLoaded();
@@ -893,17 +891,19 @@ using System.Speech.Synthesis;
         }
 
         public void RequestExpand() {
-            if(!IsExpanded) {
-                MpSelectionBehavior.SetIgnoreSelection(true);
-                OnExpandRequest?.Invoke(this, null);
-            }            
+
+            OnExpandRequest?.Invoke(this, null);
+            //if (!IsExpanded) {
+            //    MpSelectionBehavior.SetIgnoreSelection(true);
+            //}            
         }
 
         public void RequestUnexpand() {
-            if (!IsExpanded) {
-                MpSelectionBehavior.SetIgnoreSelection(false);
-                OnUnExpandRequest?.Invoke(this, null);
-            }
+            OnUnExpandRequest?.Invoke(this, null);
+            //if (IsExpanded) {
+            //    MpSelectionBehavior.SetIgnoreSelection(false);
+            //    OnUnExpandRequest?.Invoke(this, null);
+            //}
         }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
@@ -912,17 +912,22 @@ using System.Speech.Synthesis;
                     
                     break;
                 case nameof(IsSelected):
+                    if(!IsSelected) {
+                        if(IsFlipped) {
+                            MpClipTrayViewModel.Instance.FlipTileCommand.Execute(this);
+                        }
+                    }
                     //if (IsSelected) {
                     //    if (ItemVisibility != Visibility.Visible && !MpClipTrayViewModel.Instance.IsPastingHotKey) {
                     //        IsSelected = false;
                     //        break;
                     //    }
                     //    LastSelectedDateTime = DateTime.Now;
-                    //    if(SelectedItems.Count == 0 && HeadItem != null) {
+                    //    if (SelectedItems.Count == 0 && HeadItem != null) {
                     //        HeadItem.IsSelected = true;
                     //    }
                     //} else {
-                    //    ClearClipSelection();
+                    //    ClearSubSelection();
                     //    LastSelectedDateTime = DateTime.MaxValue;
 
                     //    //multi-select label stuff (disabled)
@@ -936,7 +941,7 @@ using System.Speech.Synthesis;
                     //}
 
                     //RefreshAsyncCommands();
-                    //break;
+                    break;
                 case nameof(IsHovering):
                     if (IsHovering) {
                         if (MpClipTrayViewModel.Instance.IsScrolling) {
@@ -1092,10 +1097,13 @@ using System.Speech.Synthesis;
             MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + MpClipTrayViewModel.Instance.VisibileClipTiles.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
-        public void ClearClipSelection() {
+        public void ClearSelection() {
             IsSelected = false;
             LastSelectedDateTime = DateTime.MaxValue;
-            ClearSubClipSelection();
+            ClearEditing();
+            foreach(var civm in ItemViewModels) {
+                civm.IsSelected = false;
+            }
         }
 
         public void ClearEditing() {
@@ -1345,7 +1353,7 @@ using System.Speech.Synthesis;
         }
 
         public void ResetSubSelection(List<MpContentItemViewModel> origSel = null) {
-            ClearClipSelection();
+            ClearSelection();
             if (VisibleItems.Count > 0) {
                 if (origSel == null) {
                     VisibleItems[0].IsSelected = true;
@@ -1359,12 +1367,6 @@ using System.Speech.Synthesis;
                     }
                 }
 
-            }
-        }
-
-        public void ClearSubClipSelection() {
-            foreach (var ivm in ItemViewModels) {
-                ivm.IsSelected = false;
             }
         }
 
@@ -1621,7 +1623,7 @@ using System.Speech.Synthesis;
         }
         private void SelectNextItem() {
             var maxItem = SelectedItems.Max(x => VisibleItems.IndexOf(x));
-            ClearClipSelection();
+            ClearSelection();
             VisibleItems[maxItem + 1].IsSelected = true;
         }
 
@@ -1639,7 +1641,7 @@ using System.Speech.Synthesis;
         }
         private void SelectPreviousItem() {
             var minItem = SelectedItems.Min(x => VisibleItems.IndexOf(x));
-            ClearClipSelection();
+            ClearSelection();
             VisibleItems[minItem - 1].IsSelected = true;
         }
 
@@ -1677,15 +1679,6 @@ using System.Speech.Synthesis;
             MainWindowViewModel.HideWindowCommand.Execute(true);
         }
 
-        public ICommand ToggleTileExpandedCommand => new RelayCommand(
-            () => {
-                if(IsExpanded) {
-                    RequestUnexpand();
-                } else {
-                    RequestExpand();
-                }
-            });
-
         public ICommand BringToFrontCommand {
             get {
                 return new RelayCommand(
@@ -1695,7 +1688,7 @@ using System.Speech.Synthesis;
                             MpHelpers.Instance.RunOnMainThread(
                                     (Action)(() => {
                                         var tempSelectedClipTiles = SelectedItems;
-                                        ClearClipSelection();
+                                        ClearSelection();
 
                                         foreach (var sctvm in tempSelectedClipTiles) {
                                             ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), 0);
@@ -1753,7 +1746,7 @@ using System.Speech.Synthesis;
                         DispatcherPriority.Normal,
                         (Action)(() => {
                             var tempSelectedClipTiles = SelectedItems;
-                            ClearClipSelection();
+                            ClearSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
                                 ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), ItemViewModels.Count - 1);
@@ -1805,7 +1798,7 @@ using System.Speech.Synthesis;
                 lastSelectedClipTileIdx = VisibleItems.IndexOf(ct);
                 ItemViewModels.Remove(ct);
             }
-            ClearClipSelection();
+            ClearSelection();
             if (VisibleItems.Count > 0) {
                 if (lastSelectedClipTileIdx <= 0) {
                     VisibleItems[0].IsSelected = true;
@@ -1886,7 +1879,7 @@ using System.Speech.Synthesis;
         }
         private void InvertSubSelection() {
             var sctvml = SelectedItems;
-            ClearClipSelection();
+            ClearSelection();
             foreach (var vctvm in VisibleItems) {
                 if (!sctvml.Contains(vctvm)) {
                     vctvm.IsSelected = true;
@@ -1953,7 +1946,7 @@ using System.Speech.Synthesis;
         }
         private void DuplicateSubSelectedClips() {
             var tempSubSelectedRtbvml = SelectedItems;
-            ClearClipSelection();
+            ClearSelection();
             foreach (var srtbvm in tempSubSelectedRtbvml) {
                 var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
                 clonedCopyItem.WriteToDatabase();

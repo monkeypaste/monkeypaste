@@ -38,9 +38,8 @@ namespace MpWpfApp {
         }      
 
         public void SyncModels() {
-            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            MpHelpers.Instance.RunOnMainThreadAsync(async () => {                
                 var rtbvm = DataContext as MpContentItemViewModel;
-
 
                 //clear any search highlighting when saving the document then restore after save
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
@@ -48,11 +47,17 @@ namespace MpWpfApp {
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
                 //if(!MpMainWindowViewModel.IsMainWindowLoading) 
+                bool ht = rtbvm.HasTemplates;
 
                 await MpHelpers.Instance.RunOnMainThreadAsync(ClearHyperlinks);
 
                 rtbvm.CopyItemData = Rtb.Document.ToRichText();
 
+                if (ht) {
+                    string xamlTest = Rtb.Document.ToXaml();
+                    MpConsole.WriteLine(xamlTest);
+                    MpConsole.WriteLine(rtbvm.CopyItemData);
+                }
                 rtbvm.CopyItem.WriteToDatabase();
 
                 await CreateHyperlinks();
@@ -64,8 +69,6 @@ namespace MpWpfApp {
                 if (scvml.Count > 0) {
                     rtbvm.ShortcutKeyString = scvml[0].KeyString;
                 }
-
-                rtbvm.IsChanged = false;
             });
         }
 
@@ -94,14 +97,6 @@ namespace MpWpfApp {
         private void Rtbivm_OnSyncModels(object sender, EventArgs e) {
             SyncModels();
         }
-
-        //private void Rtbivm_OnCreateHyperlinksRequest(object sender, EventArgs e) {
-        //    CreateHyperlinks();
-        //}
-
-        //private void Rtbivm_OnClearHyperlinksRequest(object sender, EventArgs e) {
-        //    ClearHyperlinks();
-        //}
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
             Rtb.UpdateLayout();
@@ -140,8 +135,11 @@ namespace MpWpfApp {
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             if(e.Changes.Count > 0) {
                 var rtbvm = DataContext as MpContentItemViewModel;
-                rtbvm.HasViewChanged = true;
+                //rtbvm.HasViewChanged = true;
                 rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
+                var cilv = this.GetVisualAncestor<MpContentListView>();
+                cilv.ContentListBox.ScrollViewer.InvalidateScrollInfo();
+                cilv.UpdateAdorner();
             }
         }
 
@@ -183,7 +181,6 @@ namespace MpWpfApp {
                 return hlList;
             }
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                var rtbSelection = Rtb?.Selection;
 
                 for (TextPointer position = Rtb.Document.ContentStart;
                     position != null && position.CompareTo(Rtb.Document.ContentEnd) <= 0;
@@ -199,9 +196,6 @@ namespace MpWpfApp {
                 //foreach (var thl in TemplateLookUp) {
                 //    hlList.AddRange(thl.Value);
                 //}
-                if (rtbSelection != null) {
-                    Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                }
             });
             return hlList;
         }
@@ -288,14 +282,12 @@ namespace MpWpfApp {
 
         public async Task CreateHyperlinks() {
             var rtbvm = Rtb.DataContext as MpContentItemViewModel;
-            var fd = Rtb.Document;
 
             if (Rtb == null) {
                 return;
             }
             string templateRegEx = await GetTemplateRegExMatchStringAsync();
             var templates = await GetTemplatesFromDbAsync();
-            var rtbSelection = Rtb?.Selection.Clone();
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 string pt = rtbvm.CopyItem.ItemData.ToPlainText();
                 for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
@@ -304,13 +296,11 @@ namespace MpWpfApp {
                         //doesn't consistently work and presents bugs so disabling for now
                         continue;
                     }
-                    var lastRangeEnd = fd.ContentStart;
+                    var lastRangeEnd = Rtb.Document.ContentStart;
                     var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
                     if (linkType == MpSubTextTokenType.TemplateSegment) {
                         regExStr = templateRegEx;
-                    } else {
-                        continue;
-                    }
+                    } 
                     if (string.IsNullOrEmpty(regExStr)) {
                         //this occurs for templates when copyitem has no templates
                         continue;
@@ -326,9 +316,7 @@ namespace MpWpfApp {
                                 }
                                 lastRangeEnd = matchRange.End;
                                 if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                    var copyItemTemplate = GetTemplatesFromDb().Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
-                                                                                                                                                //matchRange.Text = string.Empty;
-                                                                                                                                                //var thlvm = rtbvm.TemplateCollection.AddItem(copyItemTemplate);                                                                                                      //CopyItem.GetTemplateByName(matchRange.Text);
+                                    var copyItemTemplate = templates.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
                                     hl = MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                                 } else {
                                     var matchRun = new Run(matchRange.Text);
@@ -373,8 +361,8 @@ namespace MpWpfApp {
                                         case MpSubTextTokenType.Uri:
                                             try {
                                                 string urlText = MpHelpers.Instance.GetFullyFormattedUrl(linkText);
-                                                if (MpHelpers.Instance.IsValidUrl(urlText) &&
-                                                   Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)) {
+                                                if (MpHelpers.Instance.IsValidUrl(urlText) /*&&
+                                                   Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
                                                     hl.NavigateUri = new Uri(urlText);
                                                 } else {
                                                     MonkeyPaste.MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
@@ -491,15 +479,7 @@ namespace MpWpfApp {
                     }
                 }
             });
-
-            if (rtbSelection != null) {
-                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
         }
         #endregion
-
-        private void Rtb_MouseDown(object sender, MouseButtonEventArgs e) {
-            Debugger.Break();
-        }
     }
 }

@@ -40,7 +40,9 @@ namespace MpWpfApp {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = ctvm.MainWindowViewModel;
 
+
             //trigger app mode column to hide
+            ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
@@ -105,6 +107,7 @@ namespace MpWpfApp {
             var mwvm = ctvm.MainWindowViewModel;
 
             //trigger app mode column to hide
+            ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 

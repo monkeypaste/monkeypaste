@@ -12,10 +12,12 @@
            Unloaded="Hyperlink_Unloaded"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
-           PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
-           
+           PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"   
+           d:DataContext="{d:DesignInstance local:MpTemplateViewModel, IsDesignTimeCreatable=True}"
            Tag="{Binding TemplateTokenTag}"
-           Cursor="{Binding TemplateTextBlockCursor}">
+           Cursor="{Binding TemplateTextBlockCursor}"
+           Foreground="{Binding TemplateForegroundBrush}"
+           Background="{Binding TemplateBackgroundBrush}">
     <Hyperlink.ContextMenu>
         <ContextMenu>
             <MenuItem Header="Edit" 
@@ -24,18 +26,5 @@
                       Click="DeleteAll_Click"/>
         </ContextMenu>
     </Hyperlink.ContextMenu>
-    <Hyperlink.Inlines>
-        <InlineUIContainer>
-            <Border CornerRadius="5"
-                    BorderThickness="1.5"
-                    Background="{Binding TemplateBackgroundBrush}"
-                    BorderBrush="{Binding TemplateBorderBrush}"
-                    Cursor="{Binding TemplateTextBlockCursor}">
-                <TextBlock x:Name="TemplateTextBlock"
-                           Text="{Binding TemplateDisplayValue}"
-                           Foreground="{Binding TemplateForegroundBrush}"
-                           Cursor="{Binding TemplateTextBlockCursor}" />
-            </Border>
-        </InlineUIContainer>
-    </Hyperlink.Inlines>
+    <Run Text="{Binding Path=TemplateDisplayValue}"/>
 </Hyperlink>

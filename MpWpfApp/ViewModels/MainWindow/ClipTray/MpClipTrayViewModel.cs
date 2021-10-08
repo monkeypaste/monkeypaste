@@ -571,12 +571,9 @@ namespace MpWpfApp {
         }
 
         public void ClearClipEditing() {
-            bool wasExpanded = IsAnyTileExpanded;
-
             foreach (var ctvm in ClipTileViewModels) {
                 ctvm.ClearEditing();
-            }
-            
+            }            
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
@@ -585,7 +582,7 @@ namespace MpWpfApp {
                     ClearClipEditing();
                 }
                 foreach (var ctvm in ClipTileViewModels) {
-                    ctvm.ClearClipSelection();
+                    ctvm.ClearSelection();
                 }
             }));
         }
@@ -1222,10 +1219,10 @@ namespace MpWpfApp {
                 if (prtbvm != null) {
                     ClearClipSelection();
                     prtbvm.Parent.IsSelected = true;
-                    prtbvm.Parent.ClearClipSelection();
+                    prtbvm.Parent.ClearSelection();
                     prtbvm.IsSelected = true;
                     pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
-                    prtbvm.Parent.ClearClipSelection();
+                    prtbvm.Parent.ClearSelection();
                     ClearClipSelection();
                 }
             }
@@ -1252,6 +1249,7 @@ namespace MpWpfApp {
         }
         private bool CanPasteSelectedClips(object args) {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
+                !IsAnyTileExpanded &&
                 !IsAnyEditingClipTile &&
                 !IsAnyEditingClipTitle &&
                 !IsAnyPastingTemplate &&
@@ -1484,13 +1482,13 @@ namespace MpWpfApp {
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
             () => {
-                PrimaryItem.ToggleTileExpandedCommand.Execute(null);
+                SelectedItems[0].SelectedItem.IsEditingContent = true;
             },
             () => {
                 if (MpMainWindowViewModel.IsMainWindowLoading) {
                     return false;
                 }
-                return PrimaryItem != null && !IsAnyEditingClipTile;
+                return SelectedItems.Count == 1 && SelectedItems[0].SelectedItems.Count == 1;
             });
 
         private RelayCommand _sendSelectedClipsToEmailCommand;
@@ -1681,25 +1679,6 @@ namespace MpWpfApp {
                 return new RelayCommand(()=> { });
             }
         }
-
-        public ICommand ToggleTileExpandedCommand => new RelayCommand<object>(
-            (isEditOrPaste) => {
-                PrimaryItem.ToggleTileExpandedCommand.Execute(null);
-                //arg is null for unexpand
-                if (isEditOrPaste.ToString() == "edit") {
-                    PrimaryItem.PrimaryItem.IsEditingContent = true;
-                } else if (isEditOrPaste.ToString() == "paste") {
-                    PrimaryItem.ItemViewModels.Where(x => x.HasTemplates).FirstOrDefault().IsPastingTemplate = true;
-                } else {
-                    PrimaryItem.ClearEditing();
-                }
-            },
-            (isEditOrPaste) => {
-                if (MpMainWindowViewModel.IsMainWindowLoading) {
-                    return false;
-                }
-                return PrimaryItem != null;
-            });
 
         public ICommand EditTitleCommand {
             get {

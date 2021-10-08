@@ -409,7 +409,7 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.RedoCommand;
                         break;
                     case 20:
-                        shortcutCommand = MpClipTrayViewModel.Instance.ToggleTileExpandedCommand;
+                        shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedContentCommand;
                         commandParameter = "edit";
                         break;
                     case 21:

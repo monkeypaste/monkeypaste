@@ -258,7 +258,9 @@ namespace MpWpfApp {
         public bool IsHovering { get; set; } = false;
         public bool IsContextMenuOpen { get; set; } = false;
 
-        public bool IsEditingContent { get; set; } = false;
+        public bool IsEditingContent { 
+            get; 
+            set; } = false;
 
         public bool IsEditingTemplate {
             get {
@@ -285,7 +287,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool HasModelChanged { get; set; } = false;
         public bool HasTemplates {
             get {
                 return TemplateCollection.Templates.Count > 0;
@@ -455,21 +456,6 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return CopyItem.CopyCount + CopyItem.PasteCount;
-            }
-        }
-
-        public bool CopyItemIsChanged {
-            get {
-                if (CopyItem == null) {
-                    return true;
-                }
-                return CopyItem.IsChanged;
-            }
-            set {
-                if (CopyItem != null && CopyItem.IsChanged != value) {
-                    CopyItem.IsChanged = value;
-                    OnPropertyChanged(nameof(CopyItemIsChanged));
-                }
             }
         }
 
@@ -814,20 +800,30 @@ namespace MpWpfApp {
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSelected):
-                    //if (IsSelected) {
-                    //    LastSubSelectedDateTime = DateTime.Now;
-                    //    if(!Parent.IsSelected) {
-                    //        Parent.IsSelected = true;
-                    //    }
-                    //}
-                    break;
+                //case nameof(IsSelected):
+                //    if (IsSelected) {
+                //        LastSubSelectedDateTime = DateTime.Now;
+                //        if (!Parent.IsSelected) {
+                //            Parent.IsSelected = true;
+                //        }
+                //    }
+                //    break;
                 case nameof(IsEditingContent):
-                    if (IsEditingContent) {
-                        Parent.RequestExpand();
-                    } else {
-                        Parent.RequestUnexpand();
+                    int editCount = Parent.ItemViewModels.Where(x => x.IsEditingContent).ToList().Count;
+                    if (IsEditingContent) {                        
+                        if(editCount > 1) {
+                            foreach(var civm in Parent.ItemViewModels) {
+                                if(civm != this) {
+                                    civm.IsEditingContent = false;
+                                }
+                            }
+                        } else {
+                            Parent.RequestExpand();
+                        }
+                    } else if(editCount == 0) {
+                        Parent.ClearEditing();
                         RequestSyncModels();
+                        Parent.RequestUnexpand();
                     }
                     break;
                 case nameof(CopyItem):
@@ -840,6 +836,11 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsPlaceholder):
                     ItemVisibility = IsPlaceholder ? Visibility.Hidden : Visibility.Visible;
+                    break;
+                case nameof(IsEditingTitle):
+                    if(!IsEditingTitle) {
+                        CopyItem.WriteToDatabase();
+                    }
                     break;
             }
         }
@@ -943,7 +944,7 @@ namespace MpWpfApp {
         private void PasteSubItem() {
             MpClipTrayViewModel.Instance.ClearClipSelection();
             base.Parent.IsSelected = true;
-            base.Parent.ClearClipSelection();
+            base.Parent.ClearSelection();
             IsSelected = true;
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
@@ -996,7 +997,6 @@ namespace MpWpfApp {
         private void EditSubTitle() {
             IsEditingTitle = !IsEditingTitle;
         }
-
 
         public ICommand ChangeColorCommand {
             get {

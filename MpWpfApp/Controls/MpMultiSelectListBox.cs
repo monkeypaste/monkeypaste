@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,39 +16,65 @@ namespace MpWpfApp {
             //private bool _deferSelection = false;
 
             protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-                //bool isParentSelected = false;
-                //if (DataContext is MpContentItemViewModel civm) {
-                //    return;// isParentSelected = civm.Parent.IsSelected;
-                //}
-                //if (e.ClickCount == 1 && (IsSelected || isParentSelected) && !MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                //    // the user may start a drag by clicking into selected items
-                //    // delay destroying the selection to the Up event
-                //    _deferSelection = true;
-                //} else {
-                //    base.OnMouseLeftButtonDown(e);
-                //}
+                //base.OnMouseLeftButtonDown(e);
+                SelectItem();
             }
 
             protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
-                //if (DataContext is MpContentItemViewModel civm) {
-                //    return;// isParentSelected = civm.Parent.IsSelected;
-                //}
-                //if (_deferSelection) {
-                //    try {
-                //        base.OnMouseLeftButtonDown(e);
-                //    }
-                //    finally {
-                //        _deferSelection = false;
-                //    }
-                //}
-                //base.OnMouseLeftButtonUp(e);
+                base.OnMouseLeftButtonUp(e);
             }
 
-            //protected override void OnMouseLeave(MouseEventArgs e) {
-            //    // abort deferred Down
-            //    _deferSelection = false;
-            //    base.OnMouseLeave(e);
-            //}
+            protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) {
+                SelectItem();
+                if (DataContext is MpClipTileViewModel ctvm) {
+                    if(ctvm.IsAnyEditingContent) {
+                        base.OnMouseRightButtonDown(e);
+                        return;
+                    }
+                } else if (DataContext is MpContentItemViewModel civm) {
+                    if(civm.IsEditingContent) {
+                        base.OnMouseRightButtonDown(e);
+                        return;
+                    }
+                }
+                ContextMenu = new MpContentContextMenuView();
+                ContextMenu.PlacementTarget = this;
+                ContextMenu.IsOpen = true;
+            }
+
+            private void SelectItem() {
+                if (!IsSelected) {
+                    IsSelected = true;
+                }
+                if (DataContext is MpClipTileViewModel ctvm) {
+                    ctvm.LastSelectedDateTime = DateTime.Now;
+                    if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
+                        ctvm.HeadItem.IsSelected = true;
+                        ctvm.HeadItem.LastSubSelectedDateTime = DateTime.Now;
+                    }
+                    if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                        foreach (var octvm in ctvm.Parent.ClipTileViewModels) {
+                            if (octvm != ctvm) {
+                                octvm.ClearSelection();
+                            }
+                        }
+                    }
+                } else if (DataContext is MpContentItemViewModel civm) {
+                    civm.LastSubSelectedDateTime = DateTime.Now;
+                    if (civm.IsSelected && !civm.Parent.IsSelected) {
+                        civm.Parent.IsSelected = true;
+                        civm.Parent.LastSelectedDateTime = DateTime.Now;
+
+                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                            foreach (var octvm in civm.Parent.Parent.ClipTileViewModels) {
+                                if (octvm != civm.Parent) {
+                                    octvm.ClearSelection();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public ScrollViewer ScrollViewer {

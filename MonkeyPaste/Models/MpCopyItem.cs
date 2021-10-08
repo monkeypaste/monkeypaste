@@ -60,8 +60,6 @@ namespace MonkeyPaste {
 
         public DateTime CopyDateTime { get; set; }
 
-        public DateTime ModifiedDateTime { get; set; }
-
         public string ItemData { get; set; } = string.Empty;
 
         [ForeignKey(typeof(MpDbImage))]
@@ -286,9 +284,6 @@ namespace MonkeyPaste {
         }
 
         public override void WriteToDatabase() {
-            if(IsChanged) {
-                ModifiedDateTime = DateTime.Now;
-            }
             base.WriteToDatabase();
         }
         #region Composites

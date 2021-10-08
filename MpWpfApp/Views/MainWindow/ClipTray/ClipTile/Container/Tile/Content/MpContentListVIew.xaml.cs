@@ -54,8 +54,8 @@ namespace MpWpfApp {
             EditToolbarView.Visibility = Visibility.Collapsed;
             EditTemplateView.Visibility = Visibility.Collapsed;
             PasteTemplateView.Visibility = Visibility.Collapsed;
-
         }
+
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
@@ -81,8 +81,7 @@ namespace MpWpfApp {
                 ctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
                 ctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 ctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                ctvm.PropertyChanged += Rtbcvm_PropertyChanged;
-                
+                ctvm.PropertyChanged += Rtbcvm_PropertyChanged;                
             } 
         }
 

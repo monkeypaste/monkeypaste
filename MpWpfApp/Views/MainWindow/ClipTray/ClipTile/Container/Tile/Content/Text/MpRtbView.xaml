@@ -12,7 +12,7 @@
         <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
     </i:Interaction.Behaviors>-->
     <RichTextBox x:Name="Rtb"
-                     IsReadOnly="False"
+                     IsReadOnly="{Binding IsEditingContent}"
                      Background="{Binding ItemBackgroundBrush}"
                      Loaded="Rtb_Loaded"
                      GotFocus="Rtb_GotFocus"
@@ -25,7 +25,7 @@
                      AutoWordSelection="False"
                      IsInactiveSelectionHighlightEnabled="True"
                      IsDocumentEnabled="True"
-                     Focusable="True"
+                     Focusable="{Binding Parent.IsExpanded}"
                      Padding="5"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                      IsUndoEnabled="True"

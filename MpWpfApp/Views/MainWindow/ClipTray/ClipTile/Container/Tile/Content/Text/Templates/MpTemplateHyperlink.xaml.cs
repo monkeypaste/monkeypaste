@@ -84,6 +84,10 @@ namespace MpWpfApp {
             var thlvm = DataContext as MpTemplateViewModel;
             MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
             Rtb = thl.FindParentOfType<RichTextBox>();
+            var rtbv = Rtb.GetVisualAncestor<MpRtbView>();
+            if(!rtbv.TemplateViews.Contains(this)) {
+                rtbv.TemplateViews.Add(this);
+            }
         }
 
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {

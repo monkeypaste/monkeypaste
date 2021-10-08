@@ -62,8 +62,7 @@ namespace MpWpfApp {
                 //MpClipTrayViewModel.Instance.IsPreSelection = true;
             }
             
-            if(AssociatedObject is MpClipTileView) {
-                var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            if(AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
                 ctvm.IsSelected = true;
                 ctvm.LastSelectedDateTime = DateTime.Now;
                 var civm = ctvm.ItemViewModels.Where(x => x.IsHovering).FirstOrDefault();
@@ -81,14 +80,14 @@ namespace MpWpfApp {
                     civm.Parent.LastSelectedDateTime = DateTime.Now;                    
                 }
 
-                if(AssociatedObject.Name == "ClipTileToggleEditButton") {
-                    MpClipTrayViewModel.Instance.ToggleTileExpandedCommand.Execute("edit");
-                } else if (AssociatedObject.Name == "FlipButton") {
-                    MpClipTrayViewModel.Instance.FlipTileCommand.Execute(civm);
-                }
-                if (!civm.Parent.IsExpanded) {
-                    e.Handled = true;
-                }
+                //if(AssociatedObject.Name == "ClipTileToggleEditButton") {
+                //    MpClipTrayViewModel.Instance.ToggleTileExpandedCommand.Execute("edit");
+                //} else if (AssociatedObject.Name == "FlipButton") {
+                //    MpClipTrayViewModel.Instance.FlipTileCommand.Execute(civm);
+                //}
+                //if (!civm.Parent.IsExpanded) {
+                //    e.Handled = true;
+                //}
                 
             }else if(AssociatedObject is MpRtbView) {
                 if (isRightClick && (AssociatedObject.DataContext as MpContentItemViewModel).IsEditingContent) {
@@ -97,8 +96,9 @@ namespace MpWpfApp {
 
                 } 
             } 
-            if(e.Handled != true)
-            e.Handled = false;
+            if(e.Handled != true) {
+                e.Handled = false;
+            }
         }
 
         private void AssociatedObject_PreviewMouseUp(object sender, MouseButtonEventArgs e) {            
@@ -110,8 +110,7 @@ namespace MpWpfApp {
              if(wasSelected && isRightClick) {
                 //do nothing and show context menu for all selected items
             } else if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !isAnyContentDragging) {
-                if (AssociatedObject is MpClipTileView) {
-                    var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+                if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
                     foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
                         if (sctvm != ctvm) {
                             if (sctvm.IsFlipped) {
@@ -144,7 +143,7 @@ namespace MpWpfApp {
                 LastSelectedContentItem = null;
             }
 
-            if(!isAnyContentDragging && AssociatedObject is MpContentItemView) {
+            if(!isAnyContentDragging && AssociatedObject.DataContext is MpContentItemViewModel) {
                 e.Handled = true;
             }
 

@@ -259,7 +259,7 @@ namespace MpWpfApp {
             adornerLayer.Update();
             if(!isTrayDrop) {
                 var clv = AssociatedObject.GetVisualAncestor<MpContentListView>();
-                clv.SeperatorAdornerLayer.Update();
+                clv.UpdateAdorner();
             }
             AssociatedObject.GetScrollViewer().ScrollToHome();
         }

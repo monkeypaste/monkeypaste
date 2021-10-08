@@ -66,24 +66,17 @@ namespace MpWpfApp {
                 b.CommandTarget = trtb;
             }
             trtb.SelectionChanged += CurrentRtb_SelectionChanged;
-            trtb.TextChanged += CurrentRtb_TextChanged;
             artb = trtb;
             artb.IsReadOnly = false;
             artb.IsManipulationEnabled = true;
-
-            
+            artb.Focus();
+            artb.CaretPosition = artb.Document.ContentStart;
+            artb.Selection.Select(artb.Document.ContentStart, artb.Document.ContentStart);
             CurrentRtb_SelectionChanged(this, null);
             
         }
 
         #region Toolbar Events
-
-        public void CurrentRtb_TextChanged(object sender, TextChangedEventArgs e) {
-            var ertbtvm = DataContext as MpContentItemViewModel;
-            ertbtvm.HasModelChanged = true;
-            
-            //artb.UpdateLayout();
-        }
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var ertbtvm = DataContext as MpContentItemViewModel;

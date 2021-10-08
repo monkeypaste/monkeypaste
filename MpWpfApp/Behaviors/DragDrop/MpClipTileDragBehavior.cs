@@ -32,7 +32,7 @@ namespace MpWpfApp {
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
 
-            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.MouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
 
             AssociatedObject.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
 

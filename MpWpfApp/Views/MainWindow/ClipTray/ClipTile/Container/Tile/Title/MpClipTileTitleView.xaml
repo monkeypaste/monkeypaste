@@ -100,13 +100,13 @@
                         Width="12"
                         Height="12"
                         Canvas.Top="3"
-                        Canvas.Right="3">
+                        Canvas.Right="3"
+                        Command="{Binding FlipTileCommand, Source={StaticResource ClipTrayViewModel}}"
+                        CommandParameter="{Binding Parent.Parent}">
                     <i:Interaction.Behaviors>
                         <local:MpSelectionBehavior x:Name="SelectAndOrEditBehavior"/>
                     </i:Interaction.Behaviors>
                 </Button>
-                        <!--Command="{Binding FlipTileCommand, Source={StaticResource ClipTrayViewModel}}"
-                        CommandParameter="{Binding Parent.Parent}"/>-->
             </Canvas>
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"

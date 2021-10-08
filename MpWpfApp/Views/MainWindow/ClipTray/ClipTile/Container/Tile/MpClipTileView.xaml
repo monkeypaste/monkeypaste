@@ -11,7 +11,6 @@
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <i:Interaction.Behaviors>
-        <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
         <local:MpClipTileDragBehavior x:Name="DragBehavior"/>
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"                        
@@ -99,6 +98,16 @@
                                                 Visibility="Hidden" />
             <!-- Trial Expired -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <!--<Border x:Name="ClipTileSelectionOverlay"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="Orange"
+                    Opacity="0.5"
+                    Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                <i:Interaction.Behaviors>
+                    <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
+                </i:Interaction.Behaviors>
+            </Border>-->
         </Grid>
     </local:MpClipBorder>
 </UserControl>

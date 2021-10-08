@@ -30,7 +30,7 @@
         <MenuItem Header="_Edit Content"
                   Tag="20"
                   Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding ToggleEditContentCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Command="{Binding EditSelectedContentCommand, Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="_Rename"
                   Tag="21"
                   Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"

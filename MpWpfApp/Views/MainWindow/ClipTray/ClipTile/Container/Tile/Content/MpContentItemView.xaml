@@ -7,15 +7,13 @@
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
-             Focusable="True"
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <i:Interaction.Behaviors>
+    <!--<i:Interaction.Behaviors>
         <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
-    </i:Interaction.Behaviors>
-    <Border BorderThickness="1"
-            Focusable="True">
+    </i:Interaction.Behaviors>-->
+    <Border BorderThickness="1">
         <Border.BorderBrush>
             <DrawingBrush Viewport="0,0,7,7"
                         ViewportUnits="Absolute"
@@ -38,7 +36,6 @@
               Loaded="ContentListItemView_Loaded"
               DataContextChanged="ContentListItemView_DataContextChanged"
               DataContext="{Binding}"
-              Focusable="True"
               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
               MouseEnter="ContentListItemView_MouseEnter"
               MouseLeave="ContentListItemView_MouseLeave"
@@ -89,6 +86,16 @@
                            Stretch="Uniform" />
                 </Button>
             </local:MpClipBorder>-->
-        </Grid>
+        <!--<Border x:Name="ContentItemSelectionOverlay"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"                
+                    Background="Pink"
+                    Opacity="0.5"
+                    Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityFlipConverter}}">
+            <i:Interaction.Behaviors>
+                <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
+            </i:Interaction.Behaviors>
+        </Border>-->
+    </Grid>
     </Border>
 </UserControl>

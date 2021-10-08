@@ -179,7 +179,7 @@ namespace MpWpfApp {
             }
             set {
                 if (_clipTrayHeight != value) {
-                    _clipTrayHeight = value;
+                    _clipTrayHeight = Math.Max(0,value);
                     OnPropertyChanged(nameof(ClipTrayHeight));
                 }
             }
@@ -192,7 +192,7 @@ namespace MpWpfApp {
             }
             set {
                 if (_clipTrayWidth != value) {
-                    _clipTrayWidth = value;
+                    _clipTrayWidth = Math.Max(0,value);
                     OnPropertyChanged(nameof(ClipTrayWidth));
                 }
             }
@@ -430,12 +430,11 @@ namespace MpWpfApp {
                     if (ClipTrayViewModel.ItemsAdded > 0) {
                         await MpClipTrayViewModel.Instance.RefreshTiles();
                         if(IsMainWindowLoading || MpClipTrayViewModel.Instance.ItemsAdded > 0) {
-                            //MpClipTrayViewModel.Instance.ResetClipSelection();
+                            MpClipTrayViewModel.Instance.ResetClipSelection();
                             ClipTrayViewModel.ItemsAdded = 0;
                             TagTrayViewModel.RefreshAllCounts();
                         }
                     }
-                    ClipTrayViewModel.ResetClipSelection();
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
                 }
@@ -496,7 +495,8 @@ namespace MpWpfApp {
                     } else {
                         MainWindowTop = _startMainWindowTop;
                         timer.Stop();
-                        
+
+                        ClipTrayViewModel.ResetClipSelection();
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteDataObject != null) {
                             ClipTrayViewModel.PasteDataObject(pasteDataObject);
