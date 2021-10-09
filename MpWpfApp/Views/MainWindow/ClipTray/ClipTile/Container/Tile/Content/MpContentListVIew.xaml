@@ -36,7 +36,7 @@
                                         ClipToBounds="True"
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Left"
+                                        HorizontalContentAlignment="Stretch"
                                         VerticalContentAlignment="Stretch"
                                         BorderThickness="0"
                                         BorderBrush="Pink"
@@ -44,8 +44,6 @@
                                         ScrollToSelectedItem="False"
                                         IsListBoxHorizontal="False"
                                         IsSynchronizedWithCurrentItem="False"
-                                        MinHeight="150"
-                                        MinWidth="150"
                                         ItemsSource="{Binding ItemViewModels}"
                                         Focusable="True"
                                         IsEnabled="True"                                        
@@ -55,6 +53,7 @@
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                        ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
                                         Padding="0">
             <i:Interaction.Behaviors>
                 <local:MpDropBehavior x:Name="DropBehavior2"/>

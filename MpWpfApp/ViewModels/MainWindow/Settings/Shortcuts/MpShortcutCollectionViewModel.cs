@@ -268,16 +268,6 @@ namespace MpWpfApp {
                     }                        
                 };
 
-                ApplicationHook.MouseWheel += (s, e) => {
-                    if (!MpMainWindowViewModel.IsMainWindowLoading &&
-                        MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                        var rtbvm = MpClipTrayViewModel.Instance.PrimaryItem.ItemViewModels[0];//SelectedItems[0].RtbItemCollectionViewModel;
-                        rtbvm.RequestScrollWheelChange(e.Delta);
-
-                        //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-                        //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
-                    }
-                };
                 #endregion
 
                 #region Keyboard

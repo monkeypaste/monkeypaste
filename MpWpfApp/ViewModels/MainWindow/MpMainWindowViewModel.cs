@@ -255,6 +255,8 @@ namespace MpWpfApp {
         private async Task Initialize() {
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
             await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+            MpCopyItemSource.Instance.Init();
+
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {

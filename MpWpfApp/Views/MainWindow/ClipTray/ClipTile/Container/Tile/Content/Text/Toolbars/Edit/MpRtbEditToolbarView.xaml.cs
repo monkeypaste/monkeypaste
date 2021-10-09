@@ -39,6 +39,9 @@ namespace MpWpfApp {
         }
 
         public void SetActiveRtb(RichTextBox trtb) {
+            if(artb == trtb) {
+                return;
+            }
             AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
             DataContext = artb.DataContext as MpContentItemViewModel;

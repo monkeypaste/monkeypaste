@@ -109,8 +109,15 @@ namespace MpWpfApp {
             ContentListBox?.ScrollIntoView(e);
         }
 
+
         #endregion
 
+        public void Civm_OnScrollWheelRequest(object sender, int e) {
+            var ctvm = DataContext as MpClipTileViewModel;
+            if (ctvm.IsExpanded) {
+                ContentListBox.ScrollViewer.ScrollToVerticalOffset(ContentListBox.ScrollViewer.VerticalOffset + e);
+            }
+        }
 
         public void UpdateUi() {
             this.UpdateLayout();
@@ -118,28 +125,11 @@ namespace MpWpfApp {
             //ContentListBox.Items.Refresh();
         }
 
-        public void SyncMultiSelectDragButton(bool isOver, bool isDown) {
-            string transBrush = Brushes.Transparent.ToString();
-            string outerBrush = isOver ? "#FF7CA0CC" : isDown ? "#FF2E4E76" : transBrush;
-            string innerBrush = isOver ? "#FFE4EFFD" : isDown ? "#FF116EE4" : transBrush;
-            string innerBg = isOver ? "#FFDAE7F5" : isDown ? "#FF3272B8" : transBrush;
-
-            //foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-            //    foreach (var srtbvm in sctvm.ContentContainerViewModel.SubSelectedContentItems) {
-            //        var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
-            //        if (outerBorder != null) {
-            //            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(outerBrush);
-            //        }
-            //        var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
-            //        if (innerBorder != null) {
-            //            innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(innerBrush);
-            //            innerBorder.Background = (Brush)new BrushConverter().ConvertFromString(innerBg);
-            //        }
-            //    }
-            //}
+        private void ContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            UpdateAdorner();
         }
 
-        private void ContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void ContentListBox_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             UpdateAdorner();
         }
     }

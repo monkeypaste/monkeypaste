@@ -34,12 +34,14 @@ namespace MpWpfApp {
                 trSHl.Inlines.Clear();
                 var span = new Span(new Run(linkText), trSHl.ElementStart);
                 tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+                MpConsole.WriteLine("Splitting range");
             }
             if (trEHl != null && trEHl != trSHl) {
                 var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
                 trEHl.Inlines.Clear();
                 var span = new Span(new Run(linkText), trEHl.ElementStart);
                 tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+                MpConsole.WriteLine("Splitting range");
             }
 
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
@@ -47,12 +49,11 @@ namespace MpWpfApp {
             var thcvm = rtbvm.TemplateCollection;
 
             string origText = tr.Text;
-            bool newCit = cit == null;
 
             if(cit == null) {
                 //for new templates create a default name
                 cit = MpCopyItemTemplate.Create(
-                            thcvm.Parent.CopyItem.Id,
+                            thcvm.Parent.CopyItemId,
                             string.IsNullOrWhiteSpace(origText) ? thcvm.GetUniqueTemplateName():thcvm.GetFormattedTemplateName(origText));
                 cit.WriteToDatabase();
             }
@@ -61,7 +62,7 @@ namespace MpWpfApp {
 
             MpTemplateViewModel thlvm = thcvm.AddItem(cit);
 
-            var nthl = new MpTemplateHyperlink(tr, thlvm);
+            var nthl = new MpTemplateHyperlink(tr,thlvm);
 
             nthl.Rtb = rtb;
 
@@ -69,7 +70,7 @@ namespace MpWpfApp {
             return nthl;
         }
 
-        public MpTemplateHyperlink() {
+        public MpTemplateHyperlink() : base() {
             InitializeComponent();
         }
 

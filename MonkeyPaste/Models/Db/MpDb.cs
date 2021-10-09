@@ -622,7 +622,7 @@ namespace MonkeyPaste {
             }
 
             if (_connectionAsync == null) {
-                _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
+                _connectionAsync = new SQLiteAsyncConnection(connStr);
             }            
         }
 

@@ -48,6 +48,12 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Fk Models
+
+        [ManyToOne]
+        public MpCopyItem CopyItem { get; set; }
+        #endregion
+
         public static MpCopyItemTemplate Create(int copyItemId,string templateName, string templateColor = "") {
             var dupCheck = MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
             if (dupCheck != null) {

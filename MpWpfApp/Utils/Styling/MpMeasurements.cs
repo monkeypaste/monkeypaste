@@ -122,7 +122,7 @@ namespace MpWpfApp {
 
         #region Clip Tray
 
-        public int MaxRecentClipItems {
+        public int MaxRecentClipTiles {
             get {
                 return TotalVisibleClipTiles;
             }

@@ -1,14 +1,70 @@
 ﻿using MonkeyPaste;
+using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public static class MpCopyItemSource {
+    public class MpCopyItemSource {
+        #region Singleton Definition
+        private static readonly Lazy<MpCopyItemSource> _Lazy = new Lazy<MpCopyItemSource>(() => new MpCopyItemSource());
+        public static MpCopyItemSource Instance { get { return _Lazy.Value; } }
 
-        public static async Task<List<int>> QueryForIds(
+        public void Init() {
+            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
+            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
+
+            Task.Run(async () => {
+                string query = "select count(Id) from MpCopyItem";
+                var result = await MpDb.Instance.QueryAsync("MpCopyItem", query);
+                TotalItemCount = (int)result[0];
+            });
+        }
+
+        #endregion
+
+        #region Private Variables
+        private Dictionary<int, MpCopyItem> _itemLookup = new Dictionary<int, MpCopyItem>();
+        #endregion
+
+        #region Properties
+        public List<MpCopyItem> AllItems { 
+            get {
+                return _itemLookup.Select(x => x.Value).ToList();
+            }
+        }
+
+        public int TotalItemCount { get; private set; }
+        #endregion
+
+        #region Public Methods
+
+        public List<MpCopyItem> GetRecentItems() {
+            string query = @"select * from MpCopyItem where pk_MpCopyItemId in (
+                                select distinct pci.pk_MpCopyItemId from MpCopyItem aci
+                                inner join MpCopyItem pci 
+                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+                                order by aci.CopyDateTime desc limit ?)";
+            var result = MpDb.Instance.Query<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
+
+            return result;
+        }
+
+        public async Task<List<MpCopyItem>> GetRecentItemsAsync() {
+            string query = @"select * from MpCopyItem where pk_MpCopyItemId in (
+                                select distinct pci.pk_MpCopyItemId from MpCopyItem aci
+                                inner join MpCopyItem pci 
+                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+                                order by aci.CopyDateTime desc limit ?)";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
+
+            return result;
+        }
+
+        public async Task<List<int>> QueryForIds(
             int tagId,
             MpClipTileSortType sortType,
             bool isDescending,
@@ -36,7 +92,7 @@ namespace MonkeyPaste {
             return result.Cast<int>().ToList();
         }
 
-        public static async Task<List<MpCopyItem>> GetPageAsync(
+        public async Task<List<MpCopyItem>> GetPageAsync(
             int tagId,
             int start,
             int count,
@@ -123,5 +179,109 @@ namespace MonkeyPaste {
             }
             return result;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        #region Db Event Handlers
+
+        private void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem) {
+                TotalItemCount++;
+            }
+            //if (e is MpCopyItem ci) {
+            //    if (_itemLookup.ContainsKey(ci.Id)) {
+            //        _itemLookup[ci.Id] = ci;
+            //    } else {
+            //        _itemLookup.Add(ci.Id, ci);
+            //    }
+            //    return;
+            //}
+            //int ciid = 0;
+            //if (e is MpCopyItemTag cit) {
+            //    ciid = cit.CopyItemId;
+            //} else if (e is MpCopyItemTemplate template) {
+            //    ciid = template.CopyItemId;
+            //} else if (e is MpShortcut s) {
+            //    ciid = s.CopyItemId;
+            //}
+
+            //if (ciid > 0) {
+            //    Task.Run(async () => {
+            //        MpCopyItem ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ciid);
+            //        if (_itemLookup.ContainsKey(ciid)) {
+            //            _itemLookup[ciid] = ci;
+            //        } else {
+            //            _itemLookup.Add(ciid, ci);
+            //        }
+            //    });
+            //}
+        }
+
+        private void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                if (_itemLookup.ContainsKey(ci.Id)) {
+                    _itemLookup[ci.Id] = ci;
+                } else {
+                    _itemLookup.Add(ci.Id, ci);
+                }
+                return;
+            }
+            int ciid = 0;
+            if (e is MpCopyItemTag cit) {
+                ciid = cit.CopyItemId;
+            } else if (e is MpCopyItemTemplate template) {
+                ciid = template.CopyItemId;
+            } else if (e is MpShortcut s) {
+                ciid = s.CopyItemId;
+            }
+
+            if (ciid > 0) {
+                Task.Run(async () => {
+                    MpCopyItem ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ciid);
+                    if (_itemLookup.ContainsKey(ciid)) {
+                        _itemLookup[ciid] = ci;
+                    } else {
+                        _itemLookup.Add(ciid, ci);
+                    }
+                });
+            }
+        }
+
+        private void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem) {
+                TotalItemCount--;
+            }
+            //if (e is MpCopyItem ci) {
+            //    if (_itemLookup.ContainsKey(ci.Id)) {
+            //        _itemLookup.Remove(ci.Id);
+            //    }
+            //    return;
+            //}
+            //int ciid = 0;
+            //if (e is MpCopyItemTag cit) {
+            //    ciid = cit.CopyItemId;
+            //} else if (e is MpCopyItemTemplate template) {
+            //    ciid = template.CopyItemId;
+            //} else if (e is MpShortcut s) {
+            //    ciid = s.CopyItemId;
+            //}
+
+            //if (ciid > 0) {
+            //    Task.Run(async () => {
+            //        MpCopyItem ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ciid);
+            //        if (_itemLookup.ContainsKey(ciid)) {
+            //            _itemLookup[ciid] = ci;
+            //        } else {
+            //            _itemLookup.Add(ciid, ci);
+            //        }
+            //    });
+            //}
+        }
+
+        #endregion
+
+        #endregion
     }
 }

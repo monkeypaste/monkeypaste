@@ -25,6 +25,9 @@ namespace MpWpfApp {
             Visibility = Visibility.Collapsed;
         }
         public void SetActiveRtb(RichTextBox trtb) {
+            if (_activeRtb == trtb) {
+                return;
+            }
             _activeRtb = trtb;
             var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
             foreach (var thlvm in rtbvm.TemplateCollection.Templates) {

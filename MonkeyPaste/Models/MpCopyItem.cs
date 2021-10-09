@@ -76,12 +76,11 @@ namespace MonkeyPaste {
 
         public int PasteCount { get; set; } = 0;
 
-
         [Column("HexColor")]
         public string ItemColor { get; set; }
         #endregion
 
-        #region Fk Objects
+        #region Fk Models
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
         public MpSource Source { get; set; }
@@ -92,7 +91,17 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpDbImage ItemDbImage { get; set; }
 
+        [OneToMany(inverseProperty: nameof(Parent), CascadeOperations = CascadeOperation.CascadeRead)]
+        public List<MpCopyItem> CompositeItems { get; set; }
 
+        [ManyToOne(inverseProperty: nameof(CompositeItems), CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpCopyItem Parent { get; set; }
+
+        [OneToMany]
+        public List<MpCopyItemTemplate> Templates { get; set; }
+
+        [OneToMany]
+        public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
         #region Static Methods

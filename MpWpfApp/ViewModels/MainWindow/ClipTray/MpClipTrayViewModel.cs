@@ -513,7 +513,7 @@ namespace MpWpfApp {
                 }
             }
             IsBusy = true;
-            var page_cil = await MpCopyItemSource.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
+            var page_cil = await MpCopyItemSource.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
 
             //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
             //while(placeHoldersToAdd > 0) {

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -89,6 +90,7 @@ namespace MpWpfApp {
                 var civm = civ.DataContext as MpContentItemViewModel;
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
                 civ.EditorView.Rtb.FitDocToRtb();
             }
 
@@ -100,7 +102,9 @@ namespace MpWpfApp {
             clv.UpdateAdorner();
 
             ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
-        }
+
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
+        }        
 
         public void Unexpand() {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
@@ -136,12 +140,22 @@ namespace MpWpfApp {
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
             foreach (var civ in civl) {
                 var civm = civ.DataContext as MpContentItemViewModel;
+                civm.ClearEditing();
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
                 civ.EditorView.Rtb.FitDocToRtb();
             }
 
             clv.UpdateAdorner();
+
+
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
+        }
+
+        private void ApplicationHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
+            var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
+            clv.Civm_OnScrollWheelRequest(this, -e.Delta);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace MpWpfApp {
             }
 
             //add trailing run of one space to allow clicking after template
-            new Run(@" ", thl.ElementEnd);
+            //new Run(@" ", thl.ElementEnd);
 
             var ettbv = thl.Rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
             ettbv.SetActiveRtb(thl.Rtb);

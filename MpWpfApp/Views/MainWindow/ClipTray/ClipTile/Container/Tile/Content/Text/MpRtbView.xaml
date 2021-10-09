@@ -33,7 +33,7 @@
                      VerticalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"
                      VerticalContentAlignment="Stretch"
-                     Width="Auto"
+                 Width="Auto"
                      Height="{Binding EditorHeight}"
                      MinWidth="100"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"

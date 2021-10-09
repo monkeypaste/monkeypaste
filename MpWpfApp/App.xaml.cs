@@ -15,8 +15,13 @@ namespace MpWpfApp {
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
-
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             base.OnStartup(e);
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+            Debugger.Break();
+            MonkeyPaste.MpConsole.WriteLine(e);
         }
 
         //from https://stackoverflow.com/questions/12769264/openclipboard-failed-when-copy-pasting-data-from-wpf-datagrid

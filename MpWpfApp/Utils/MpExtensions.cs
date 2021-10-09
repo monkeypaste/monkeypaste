@@ -696,16 +696,6 @@ namespace MpWpfApp {
             rtb.UpdateLayout();
         }
 
-        public static void FitRtbToDoc(this RichTextBox rtb) {
-            var civm = rtb.DataContext as MpContentItemViewModel;
-            var ds = civm.CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-            rtb.Width = ds.Width + rtb.Margin.Left + rtb.Margin.Right + rtb.Padding.Left + rtb.Padding.Right;
-            rtb.Height = ds.Height + rtb.Margin.Top + rtb.Margin.Bottom + rtb.Padding.Top + rtb.Padding.Bottom;
-
-            rtb.UpdateLayout();
-
-            rtb.FitDocToRtb();
-        }
 
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
             return MpHelpers.Instance.ConvertFlowDocumentToBitmap(

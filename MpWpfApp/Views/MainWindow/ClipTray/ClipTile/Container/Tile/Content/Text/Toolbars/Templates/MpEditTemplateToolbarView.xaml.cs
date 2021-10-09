@@ -27,6 +27,9 @@ namespace MpWpfApp {
         }
 
         public void SetActiveRtb(RichTextBox trtb) {
+            if (_activeRtb == trtb) {
+                return;
+            }
             _activeRtb = trtb;
             _activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
         }

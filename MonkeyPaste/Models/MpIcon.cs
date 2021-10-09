@@ -21,18 +21,11 @@ namespace MonkeyPaste {
         [Column("MpIconGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Ignore]
-        public Guid IconGuid {
-            get {
-                if (string.IsNullOrEmpty(Guid)) {
-                    return System.Guid.Empty;
-                }
-                return System.Guid.Parse(Guid);
-            }
-            set {
-                Guid = value.ToString();
-            }
-        }
+        public string HexColor1 { get; set; }
+        public string HexColor2 { get; set; }
+        public string HexColor3 { get; set; }
+        public string HexColor4 { get; set; }
+        public string HexColor5 { get; set; }
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_IconDbImageId")]
@@ -51,7 +44,8 @@ namespace MonkeyPaste {
         public int IconBorderHighlightSelectedImageId { get; set; }
         #endregion
 
-        #region Fk Objects
+        #region Fk Models
+
         [OneToOne(foreignKey:nameof(IconImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconImage { get; set; }
 
@@ -64,11 +58,22 @@ namespace MonkeyPaste {
         [OneToOne(foreignKey: nameof(IconBorderHighlightSelectedImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderHighlightSelectedImage { get; set; }
 
-        public string HexColor1 { get; set; }
-        public string HexColor2 { get; set; }
-        public string HexColor3 { get; set; }
-        public string HexColor4 { get; set; }
-        public string HexColor5 { get; set; }
+        #endregion
+
+        #region Properties
+
+        [Ignore]
+        public Guid IconGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
 
         #endregion
 

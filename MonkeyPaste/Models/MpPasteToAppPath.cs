@@ -5,12 +5,44 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     public class MpPasteToAppPath : MpDbModelBase {
+        #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpPasteToAppPathId")]
         public override int Id { get; set; }
 
         [Column("MpPasteToAppPathGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+              
+        public string AppPath { get; set; }
+        public string AppName { get; set; }
+
+        [Column("IsAdmin")]
+        public int Admin { get; set; }        
+
+        [Column("IsSilent")]
+        public int Silent { get; set; }        
+
+        [Column("PressEnter")]
+        public int Enter { get; set; }
+        
+        public string Args { get; set; }
+        public string Label { get; set; }
+
+        [Column("fk_MpDbImageId")]
+        [ForeignKey(typeof(MpDbImage))]
+        public int AvatarId { get; set; }
+
+        public int WindowState { get; set; }
+
+        #endregion
+
+        #region Fk Models
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpDbImage AvatarDbImage { get; set; }
+        #endregion
+
+        #region Properties
 
         [Ignore]
         public Guid PasteToAppPathGuid {
@@ -35,38 +67,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public string AppPath { get; set; }
-        public string AppName { get; set; }
-
-        [Column("IsAdmin")]
-        public int Admin { get; set; }
-
-        [Ignore]
-        public bool IsAdmin { 
-            get {
-                return Admin == 1;
-            }
-            set {
-                Admin = value == true ? 1 : 0;
-            }
-        }
-
-        [Column("IsSilent")]
-        public int Silent { get; set; }
-
-        [Ignore]
-        public bool IsSilent { 
-            get {
-                return Silent == 1;
-            } 
-            set {
-                Silent = value == true ? 1 : 0;
-            }
-        }
-
-        [Column("PressEnter")]
-        public int Enter { get; set; }
-
         [Ignore]
         public bool PressEnter {
             get {
@@ -76,19 +76,27 @@ namespace MonkeyPaste {
                 Enter = value == true ? 1 : 0;
             }
         }
-        public string Args { get; set; }
-        public string Label { get; set; }
 
-        [Column("fk_MpDbImageId")]
-        [ForeignKey(typeof(MpDbImage))]
-        public int AvatarId { get; set; }
+        [Ignore]
+        public bool IsSilent {
+            get {
+                return Silent == 1;
+            }
+            set {
+                Silent = value == true ? 1 : 0;
+            }
+        }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpDbImage AvatarDbImage { get; set; }
-
-        public int WindowState { get; set; }
-
-
+        [Ignore]
+        public bool IsAdmin {
+            get {
+                return Admin == 1;
+            }
+            set {
+                Admin = value == true ? 1 : 0;
+            }
+        }
+        #endregion
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
             var pasteToAppPathList = new List<MpPasteToAppPath>();
             DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);

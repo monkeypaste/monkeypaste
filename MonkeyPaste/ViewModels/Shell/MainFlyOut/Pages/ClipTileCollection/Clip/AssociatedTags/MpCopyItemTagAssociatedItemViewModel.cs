@@ -50,7 +50,7 @@ namespace MonkeyPaste {
         private async Task Initialize() {
             await UpdateAssocation();
 
-            Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
+            Tag.CopyItems = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
         }
 
         private async Task UpdateAssocation() {

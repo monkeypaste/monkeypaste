@@ -28,10 +28,10 @@ namespace MonkeyPaste {
 
         public int CopyItemCount {
             get {
-                if (Tag == null || Tag.CopyItemList == null) {
+                if (Tag == null || Tag.CopyItems == null) {
                     return 0;
                 }
-                return Tag.CopyItemList.Count;
+                return Tag.CopyItems.Count;
             }
         }              
 
@@ -121,8 +121,8 @@ namespace MonkeyPaste {
                         //if(true) { 
                         //occurs when copy item is linked to tag
                         var nci = await MpCopyItem.GetCopyItemByIdAsync(ncit.CopyItemId);
-                        if (!Tag.CopyItemList.Contains(nci)) {
-                            Tag.CopyItemList.Add(nci);
+                        if (!Tag.CopyItems.Contains(nci)) {
+                            Tag.CopyItems.Add(nci);
 
                             OnPropertyChanged(nameof(CopyItemCount));
                         }
@@ -134,7 +134,7 @@ namespace MonkeyPaste {
                         isLinked = Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId;
                     } 
                     if (isLinked) {// && !Tag.CopyItemList.Any(x => x.CopyItemGuid == nci.CopyItemGuid)) {
-                        Tag.CopyItemList.Add(nci);
+                        Tag.CopyItems.Add(nci);
                         OnPropertyChanged(nameof(CopyItemCount));
                     }
                 }
@@ -157,16 +157,16 @@ namespace MonkeyPaste {
                 if (e is MpCopyItemTag dcit) {
                     if (dcit.TagId == Tag.Id) {
                         //when CopyItem unlinked
-                        var ci = Tag.CopyItemList.Where(x => x.Id == dcit.CopyItemId).FirstOrDefault();
+                        var ci = Tag.CopyItems.Where(x => x.Id == dcit.CopyItemId).FirstOrDefault();
                         if (ci != null) {
-                            Tag.CopyItemList.Remove(ci);
+                            Tag.CopyItems.Remove(ci);
                             OnPropertyChanged(nameof(CopyItemCount));
                         }
                     }
                 } else if (e is MpCopyItem dci) {
                     //when copy item deleted
-                    if (Tag.CopyItemList.Any(x => x.Id == dci.Id)) {
-                        Tag.CopyItemList.Remove(dci);
+                    if (Tag.CopyItems.Any(x => x.Id == dci.Id)) {
+                        Tag.CopyItems.Remove(dci);
                         OnPropertyChanged(nameof(CopyItemCount));
                     }
                 }

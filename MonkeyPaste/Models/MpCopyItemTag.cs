@@ -41,6 +41,15 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Fk Models
+
+        [OneToOne]
+        public MpCopyItem CopyItem { get; set; }
+
+        [OneToOne]
+        public MpTag Tag { get; set; }
+        #endregion
+
         #region Statics
 
         public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagIdAsync(int tagId) {

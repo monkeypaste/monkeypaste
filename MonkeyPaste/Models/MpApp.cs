@@ -8,17 +8,61 @@ using System.Linq;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpICopyItemSource, MpISyncableDbObject {
+        #region Columns
         [Column("pk_MpAppId")]
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
         [Column("MpAppGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+        [Indexed]
+        [Column("SourcePath")]
+        public string AppPath { get; set; } = string.Empty;
+
+        public string AppName { get; set; } = string.Empty;
+
+        [Column("IsAppRejected")]
+        public int IsRejected { get; set; } = 0;        
+
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; }
+
+        [ForeignKey(typeof(MpUserDevice))]
+        [Column("fk_MpUserDeviceId")]
+        public int UserDeviceId { get; set; }
+
+        #endregion
+
+        #region Fk Models
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpIcon Icon { get; set; }
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpUserDevice UserDevice { get; set; }
+
+        #endregion
+
+        #region Properties
+
+        [Ignore]
+        public bool IsAppRejected {
+            get {
+                return IsRejected == 1;
+            }
+            set {
+                if (IsAppRejected != value) {
+                    IsRejected = value ? 1 : 0;
+                }
+            }
+        }
+
         [Ignore]
         public Guid AppGuid {
             get {
-                if(string.IsNullOrEmpty(Guid)) {
+                if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
                 }
                 return System.Guid.Parse(Guid);
@@ -28,45 +72,7 @@ namespace MonkeyPaste {
             }
         }
 
-        [Indexed]
-        [Column("SourcePath")]
-        public string AppPath { get; set; } = string.Empty;
-        
-        public string AppName { get; set; } = string.Empty;
-
-        [Column("IsAppRejected")]
-        public int IsRejected { get; set; } = 0;
-
-        [Ignore]
-        public bool IsAppRejected
-        {
-            get
-            {
-                return IsRejected == 1;
-            }
-            set
-            {
-                if(IsAppRejected != value)
-                {
-                    IsRejected = value ? 1 : 0;
-                }
-            }
-        }
-
-        [ForeignKey(typeof(MpIcon))]
-        [Column("fk_MpIconId")]
-        public int IconId { get; set; }
-
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpIcon Icon { get; set; }
-
-        [ForeignKey(typeof(MpUserDevice))]
-        [Column("fk_MpUserDeviceId")]
-        public int UserDeviceId { get; set; }
-
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpUserDevice UserDevice { get; set; }
-
+        #endregion
         public static MpApp GetAppByPath(string appPath, string deviceGuid = "") {
             if (string.IsNullOrEmpty(deviceGuid)) {
                 deviceGuid = MpPreferences.Instance.ThisDeviceGuid;
@@ -89,8 +95,8 @@ namespace MonkeyPaste {
         }
 
         public static bool IsAppRejectedByPath(string appPath, string deviceGuid = "") {
-            var app = GetAppByPath(appPath,deviceGuid);
-            if(app == null) {
+            var app = GetAppByPath(appPath, deviceGuid);
+            if (app == null) {
                 return false;
             }
             return app.IsAppRejected;
@@ -120,9 +126,9 @@ namespace MonkeyPaste {
             return newApp;
         }
 
-        public static async Task<MpApp> CreateAsync(string appPath,string appName, MpIcon icon) {
+        public static async Task<MpApp> CreateAsync(string appPath, string appName, MpIcon icon) {
             var dupApp = MpApp.GetAppByPath(appPath);
-            if(dupApp != null) {
+            if (dupApp != null) {
                 return dupApp;
             }
             //if app doesn't exist create image,icon,app and source
@@ -205,7 +211,7 @@ namespace MonkeyPaste {
             };
             a.UserDevice = MpDb.Instance.GetDbObjectByTableGuid("MpUserDevice", objParts[1]) as MpUserDevice;
             a.UserDeviceId = a.UserDevice.Id;
-            a.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[2]) as MpIcon;            
+            a.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[2]) as MpIcon;
             a.IconId = a.Icon.Id;
 
             a.AppPath = objParts[3];

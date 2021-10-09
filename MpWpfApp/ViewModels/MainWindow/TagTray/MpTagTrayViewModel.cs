@@ -143,30 +143,23 @@ namespace MpWpfApp {
         }
 
         public void RefreshAllCounts() {
-            var acil = MpDb.Instance.GetItems<MpCopyItem>();
+            //var acil = MpDb.Instance.GetItems<MpCopyItem>();
             foreach (var ttvm in TagTileViewModels) {
-                ttvm.TagClipCount = 0;
-                foreach(var ci in acil) {
-                    if(ttvm.IsLinked(ci)) { 
-                        ttvm.TagClipCount++;
-                    }
+                if (ttvm.IsAllTag) {
+                    ttvm.TagClipCount = MpCopyItemSource.Instance.TotalItemCount;
+                } else if (ttvm.IsRecentTag) {
+                    ttvm.TagClipCount = MpCopyItemSource.Instance.GetRecentItems().Count;
+                } else {
+                    ttvm.TagClipCount = ttvm.Tag.CopyItems.Count;
                 }
+                //ttvm.TagClipCount = 0;
+                //foreach(var ci in acil) {
+                //    if(ttvm.IsLinked(ci)) { 
+                //        ttvm.TagClipCount++;
+                //    }
+                //}
             }
         }
-
-        public async Task RefreshAllCountsAsync() {
-            var acil = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
-            foreach (var ttvm in TagTileViewModels) {
-                ttvm.TagClipCount = 0;
-                foreach (var ctvm in acil) {
-                    bool linked = await ttvm.IsLinkedAsync(ctvm);
-                    if (linked) {
-                        ttvm.TagClipCount++;
-                    }
-                }
-            }
-        }
-
 
         public void Add(MpTagTileViewModel newTagTile) {
             newTagTile.PropertyChanged += NewTagTile_PropertyChanged;
@@ -248,13 +241,9 @@ namespace MpWpfApp {
 
                 bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-                    if (ttvm.IsLinked(sctvm)) {
+                    if(sctvm.ItemViewModels.Select(x=>x.CopyItemId).Any(x=>ttvm.Tag.CopyItems.Select(y=>y.Id).Contains(x))) {
                         isTagLinkedToAnySelectedClips = true;
-                    }
-                    foreach(var srtbvm in sctvm.ItemViewModels) {
-                        if(ttvm.IsLinked(srtbvm)) {
-                            isTagLinkedToAnySelectedClips = true;
-                        }
+                        break;
                     }
                 }
                 ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MpClipTrayViewModel.Instance.SelectedItems.Count > 0;

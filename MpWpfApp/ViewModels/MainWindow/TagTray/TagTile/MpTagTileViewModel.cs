@@ -342,55 +342,7 @@ namespace MpWpfApp {
                     }
                     break;
             }
-        }
-
-        public void TagTile_Loaded(object sender, RoutedEventArgs e) {
-            var tagBorder = (MpClipBorder)sender;
-            tagBorder.MouseEnter += (s, e1) => {
-                IsHovering = true;
-            };
-            tagBorder.MouseLeave += (s, e1) => {
-                IsHovering = false;
-            };
-            tagBorder.LostFocus += (s, e4) => {
-                if (!IsSelected) {
-                    IsEditing = false;
-                }
-            };
-            tagBorder.PreviewMouseLeftButtonDown += (s, e7) => {
-                if(e7.ClickCount == 2) {
-                    RenameTagCommand.Execute(null);
-                } else {
-                    SelectTagCommand.Execute(null);
-                }
-            };
-
-            var tagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
-            //this is called 
-            tagTextBox.IsVisibleChanged += (s, e1) => {
-                if(TextBoxVisibility == Visibility.Visible) {
-                    tagTextBox.Focus();
-                    tagTextBox.SelectAll();
-                } else {
-                    Tag.WriteToDatabase();
-                }
-            };
-            tagTextBox.LostFocus += (s, e2) => {
-                IsEditing = false;
-            };
-            tagTextBox.PreviewKeyDown += (s, e3) => {
-                if(e3.Key == Key.Enter) {
-                    IsEditing = false;
-                } else if(e3.Key == Key.Escape) {
-                    TagName = _originalTagName;
-                    IsEditing = false;
-                }
-            };
-            
-
-            OnViewModelLoaded();
-        }
-
+        }        
 
         public void AddClip(MpContentItemViewModel rtbvm) {
             Tag.LinkWithCopyItem(rtbvm.CopyItem);
@@ -401,10 +353,7 @@ namespace MpWpfApp {
         }
 
         public bool IsLinked(MpCopyItem ci) {
-            if (ci == null ||
-                ci.Id == 0 ||
-                Tag == null ||
-                Tag.Id == 0) {
+            if (ci == null || ci.Id == 0 || Tag == null ||  Tag.Id == 0) {
                 return false;
             }
             if (IsAllTag) {
@@ -417,36 +366,24 @@ namespace MpWpfApp {
                 //                                 .Take(count)
                 //                                 .Skip(start)
                 //                                 .ToList();
-                return MpDb.Instance.GetItems<MpCopyItem>()
-                             .OrderByDescending(x => x.CopyDateTime)
-                             .Take(MpMeasurements.Instance.MaxRecentClipItems)
-                             .Any(y => y.Id == ci.Id);
-            }
-            return Tag.IsLinkedWithCopyItem(ci);
-        }
-
-        public async Task<bool> IsLinkedAsync(MpCopyItem ci) {
-            if (ci == null ||
-                ci.Id == 0 ||
-                Tag == null ||
-                Tag.Id == 0) {
+                var recentCil = MpDb.Instance.GetItems<MpCopyItem>()
+                                .OrderByDescending(x => x.CopyDateTime)
+                                .Take(MpMeasurements.Instance.MaxRecentClipTiles).ToList();
+                foreach(var rci in recentCil) {
+                    if(rci.Id == ci.Id) {
+                        return true;
+                    } 
+                    if(rci.CompositeParentCopyItemId == ci.Id) {
+                        return true;
+                    }
+                    if(rci.CompositeItems.Any(x=>x.Id == ci.Id)) {
+                        return true;
+                    }
+                    if(rci.Parent != null && rci.Parent.CompositeItems.Any(x=>x.Id == ci.Id)) {
+                        return true;
+                    }
+                }
                 return false;
-            }
-            if (IsAllTag) {
-                return true;
-            }
-            if (IsRecentTag) {
-                //                (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                //select ci)
-                //                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
-                //                                 .Take(count)
-                //                                 .Skip(start)
-                //                                 .ToList();
-                var result = await MpDb.Instance.QueryAsync("MpCopyItem","select Id from MpCopyItem orderby CopyDateTime limit ?", MpMeasurements.Instance.MaxRecentClipItems);
-                //.OrderByDescending(x => x.CopyDateTime)
-                //.Take(MpMeasurements.Instance.MaxRecentClipItems)
-                //.Any(y => y.Id == ci.Id);
-                return result.Contains(ci.Id);
             }
             return Tag.IsLinkedWithCopyItem(ci);
         }

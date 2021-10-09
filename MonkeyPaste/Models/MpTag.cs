@@ -51,10 +51,12 @@ namespace MonkeyPaste {
         public string TagName { get; set; } = string.Empty;
         #endregion
 
-        #region Fk Objects
+        #region Fk Models
         [ManyToMany(typeof(MpCopyItemTag))]
-        public List<MpCopyItem> CopyItemList { get; set; } = new List<MpCopyItem>();
+        public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
 
+        [OneToMany]
+        public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
         #region Statics
