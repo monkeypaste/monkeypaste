@@ -1166,5 +1166,6 @@
         <local:MpAppModeViewModel x:Key="AppModeViewModel" />
         <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
         <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
+        <local:MpBoolFlipConverter x:Key="BoolFlipConverter"/>
     </Application.Resources>
 </Application>

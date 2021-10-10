@@ -132,7 +132,7 @@ namespace MpWpfApp {
 
         private void ClipTileAppIconImageButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
-            ctvm.Parent.IsFlipped = true;
+            //ctvm.Parent.IsFlipped = true;
 
             //MpHelpers.Instance.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();

@@ -26,7 +26,7 @@ namespace MpWpfApp {
         }
 
         private void Viewport3D_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (MpMainWindowViewModel.IsMainWindowLoading || frontToBack == null || backToFront == null) {
+            if (frontToBack == null || backToFront == null) {
                 return;
             }
             var ctvm = DataContext as MpClipTileViewModel;

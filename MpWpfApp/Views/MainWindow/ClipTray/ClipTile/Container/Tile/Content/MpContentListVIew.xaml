@@ -56,7 +56,7 @@
                                         ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
                                         Padding="0">
             <i:Interaction.Behaviors>
-                <local:MpDropBehavior x:Name="DropBehavior2"/>
+                <local:MpDropBehavior x:Name="DropBehavior"/>
             </i:Interaction.Behaviors>
             <local:MpMultiSelectListBox.InputBindings>
                 <KeyBinding Gesture="Ctrl+A"

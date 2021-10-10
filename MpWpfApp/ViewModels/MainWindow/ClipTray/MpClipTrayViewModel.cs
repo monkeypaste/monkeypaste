@@ -51,11 +51,13 @@ namespace MpWpfApp {
 
 
         private List<MpClipTileViewModel> _newTileList = new List<MpClipTileViewModel>();
-
-        private int _remainingItemsCount = 0;
+        
         private List<MpClipTileViewModel> _availableTiles = new List<MpClipTileViewModel>();
 
         private MpCopyItem _appendModeCopyItem = null;
+
+        private int _remainingItemsCount = 0;
+        private List<int> _filterIds;
         #endregion
 
         #region Properties
@@ -444,7 +446,7 @@ namespace MpWpfApp {
                     int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.Tag.Id;
                     var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
 
-                    int count = isDesc ? citl.Count : 1;
+                    int count = isDesc ? citl.Count : 1; 
                     //loop through available tiles and reset tag's sort order, 
                     //removing existing items from known ones and creating new ones if that's the case (it shouldn't)
                     foreach(var ctvm in ClipTileViewModels) {
@@ -499,7 +501,7 @@ namespace MpWpfApp {
             //int totalCount = MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
 
             if (count == 0) {
-                count = MpMeasurements.Instance.TotalVisibleClipTiles + 1;
+                count = MpMeasurements.Instance.TotalVisibleClipTiles + 1; //int.MaxValue;//
             }
             Dictionary<int, int> manualSortOrderLookup = null;
 
@@ -513,6 +515,9 @@ namespace MpWpfApp {
                 }
             }
             IsBusy = true;
+
+            _filterIds = await MpCopyItemSource.Instance.QueryForIds(tagId, sortColumn, isDescending, manualSortOrderLookup);
+            
             var page_cil = await MpCopyItemSource.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
 
             //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
@@ -520,11 +525,11 @@ namespace MpWpfApp {
             //    page_cil.Add(null);
             //    placeHoldersToAdd--;
             //}
-
+            
             ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
             BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
 
-            _remainingItemsCount = ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+            _remainingItemsCount = _filterIds.Count - page_cil.Count;
 
             //ResetClipSelection();
             IsBusy = false;
@@ -532,10 +537,28 @@ namespace MpWpfApp {
             OnViewModelLoaded();
             sw.Stop();
             MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
-
         }
 
+        public void RecycleLeftItem() {
+            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                if (_remainingItemsCount <= 0) {
+                    return;
+                }
 
+                int rightIdx = _filterIds.Count - _remainingItemsCount;
+                if (rightIdx + 1 < _filterIds.Count - 1) {
+                    int nextItemId = _filterIds[rightIdx + 1];
+                    var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(nextItemId);
+
+                    int tailIdx = ClipTileViewModels.Count - 1;
+                    ClipTileViewModels.Move(0, tailIdx);
+                    _remainingItemsCount--;
+                    await ClipTileViewModels[tailIdx].Initialize(nci);
+
+                    RequestUiRefresh();
+                }
+            });
+        }
         //public void HideVisibleTiles(double ms = 1000) {
         //    double delay = 0;
         //    double curDelay = 0;
@@ -719,8 +742,7 @@ namespace MpWpfApp {
                     //            octvm.ClearClipSelection();
                     //            if(octvm.HeadItem != null) {
                     //                MpConsole.WriteLine($"Tile with Head Item {octvm.HeadItem.CopyItemTitle} was canceled selection by {ctvm.HeadItem.CopyItemTitle}");
-                    //            }
-                                
+                    //            }                                
                     //        }
                     //    }
                     //} else if(!ctvm.IsSelected) {
@@ -1482,7 +1504,7 @@ namespace MpWpfApp {
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
             () => {
-                SelectedItems[0].SelectedItem.IsEditingContent = true;
+                SelectedItems[0].IsExpanded = true;
             },
             () => {
                 if (MpMainWindowViewModel.IsMainWindowLoading) {
@@ -1704,11 +1726,10 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand LoadMoreClipsCommand {
-            get {
-                return new RelayCommand(()=> { });
-            }
-        }
+        public ICommand LoadMoreClipsCommand => new RelayCommand(
+            () => {
+
+            });
 
         public ICommand MergeCommand {
             get {

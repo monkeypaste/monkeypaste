@@ -25,7 +25,6 @@ namespace MpWpfApp {
             get {
                 if (_sortTypes.Count == 0) {
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Copy Date", MpClipTileSortType.CopyDateTime));
-                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this, "Modified Date", MpClipTileSortType.ModifiedDateTime));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Application", MpClipTileSortType.Source));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Title", MpClipTileSortType.Title));
                     _sortTypes.Add(new MpSortTypeComboBoxItemViewModel(this,"Content", MpClipTileSortType.PlainText));

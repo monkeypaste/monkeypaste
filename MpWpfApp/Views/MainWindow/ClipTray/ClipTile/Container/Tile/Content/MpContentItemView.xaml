@@ -10,9 +10,9 @@
              d:DesignHeight="100"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
-    <!--<i:Interaction.Behaviors>
-        <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
-    </i:Interaction.Behaviors>-->
+    <i:Interaction.Behaviors>
+        <local:MpContentDragBehavior x:Name="DragBehavior"/>
+    </i:Interaction.Behaviors>
     <Border BorderThickness="1">
         <Border.BorderBrush>
             <DrawingBrush Viewport="0,0,7,7"
@@ -86,16 +86,6 @@
                            Stretch="Uniform" />
                 </Button>
             </local:MpClipBorder>-->
-        <!--<Border x:Name="ContentItemSelectionOverlay"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"                
-                    Background="Pink"
-                    Opacity="0.5"
-                    Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityFlipConverter}}">
-            <i:Interaction.Behaviors>
-                <local:MpSelectionBehavior x:Name="SelectionBehavior"/>
-            </i:Interaction.Behaviors>
-        </Border>-->
     </Grid>
     </Border>
 </UserControl>

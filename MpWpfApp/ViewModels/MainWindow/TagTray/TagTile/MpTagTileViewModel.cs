@@ -360,30 +360,10 @@ namespace MpWpfApp {
                 return true;
             }
             if (IsRecentTag) {
-                //                (from ci in MpDb.Instance.GetItems<MpCopyItem>()
-                //select ci)
-                //                                 .OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x))
-                //                                 .Take(count)
-                //                                 .Skip(start)
-                //                                 .ToList();
-                var recentCil = MpDb.Instance.GetItems<MpCopyItem>()
-                                .OrderByDescending(x => x.CopyDateTime)
-                                .Take(MpMeasurements.Instance.MaxRecentClipTiles).ToList();
-                foreach(var rci in recentCil) {
-                    if(rci.Id == ci.Id) {
-                        return true;
-                    } 
-                    if(rci.CompositeParentCopyItemId == ci.Id) {
-                        return true;
-                    }
-                    if(rci.CompositeItems.Any(x=>x.Id == ci.Id)) {
-                        return true;
-                    }
-                    if(rci.Parent != null && rci.Parent.CompositeItems.Any(x=>x.Id == ci.Id)) {
-                        return true;
-                    }
-                }
-                return false;
+                return MpDb.Instance.GetItems<MpCopyItem>()
+                             .OrderByDescending(x => x.CopyDateTime)
+                             .Take(MpPreferences.Instance.MaxRecentClipItems)
+                             .Any(y => y.Id == ci.Id);
             }
             return Tag.IsLinkedWithCopyItem(ci);
         }

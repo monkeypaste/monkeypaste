@@ -47,19 +47,16 @@ namespace MpWpfApp {
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
 
-                //await MpHelpers.Instance.RunOnMainThreadAsync(ClearHyperlinks);
+                await MpHelpers.Instance.RunOnMainThreadAsync(ClearHyperlinks);
 
                 rtbvm.CopyItemData = Rtb.Document.ToRichText();
 
                 rtbvm.CopyItem.WriteToDatabase();
 
-                foreach(var thlvm in rtbvm.TemplateCollection.Templates) {
-                    thlvm.CopyItemTemplate.WriteToDatabase();
-                }
 
-                //await MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
+                await MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
 
-                //MpHelpers.Instance.RunOnMainThread(UpdateLayout);
+                MpHelpers.Instance.RunOnMainThread(UpdateLayout);
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
 
                 var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
@@ -88,8 +85,8 @@ namespace MpWpfApp {
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
                 }
-                //SyncModels();
-                MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
+                SyncModels();
+                //MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
             }
         }
         private void Rtbivm_OnSyncModels(object sender, EventArgs e) {
@@ -131,8 +128,8 @@ namespace MpWpfApp {
         }
 
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            if(e.Changes.Count > 0) {
-                var rtbvm = DataContext as MpContentItemViewModel;
+            var rtbvm = DataContext as MpContentItemViewModel;
+            if (rtbvm.IsEditingContent && e.Changes.Count > 0) {
                 //rtbvm.HasViewChanged = true;
                 rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
                 var cilv = this.GetVisualAncestor<MpContentListView>();
@@ -143,7 +140,7 @@ namespace MpWpfApp {
         private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
             if(rtbvm.Parent.IsExpanded) {
-                rtbvm.IsEditingContent = true;
+                //rtbvm.IsEditingContent = true;
                 var plv = this.GetVisualAncestor<MpContentListView>();
                 if (plv != null) {
                     var et = plv.GetVisualDescendent<MpRtbEditToolbarView>();

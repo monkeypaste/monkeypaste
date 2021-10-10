@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpMultiSelectListBox : AnimatedListBox {
+        private static MpContentContextMenuView _contentContextMenu;
 
         protected override DependencyObject GetContainerForItemOverride() {
             return new MpMultiSelectListBoxItem();
@@ -37,7 +38,11 @@ namespace MpWpfApp {
                         return;
                     }
                 }
-                ContextMenu = new MpContentContextMenuView();
+
+                if (_contentContextMenu == null) {
+                    _contentContextMenu = new MpContentContextMenuView();
+                }
+                ContextMenu = _contentContextMenu;
                 ContextMenu.PlacementTarget = this;
                 ContextMenu.IsOpen = true;
             }
@@ -45,30 +50,31 @@ namespace MpWpfApp {
             private void SelectItem() {
                 if (!IsSelected) {
                     IsSelected = true;
-                }
-                if (DataContext is MpClipTileViewModel ctvm) {
-                    ctvm.LastSelectedDateTime = DateTime.Now;
-                    if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
-                        ctvm.HeadItem.IsSelected = true;
-                        ctvm.HeadItem.LastSubSelectedDateTime = DateTime.Now;
-                    }
-                    if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                        foreach (var octvm in ctvm.Parent.ClipTileViewModels) {
-                            if (octvm != ctvm) {
-                                octvm.ClearSelection();
+
+                    if (DataContext is MpClipTileViewModel ctvm) {
+                        ctvm.LastSelectedDateTime = DateTime.Now;
+                        if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
+                            ctvm.HeadItem.IsSelected = true;
+                            ctvm.HeadItem.LastSubSelectedDateTime = DateTime.Now;
+                        }
+                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                            foreach (var octvm in ctvm.Parent.ClipTileViewModels) {
+                                if (octvm != ctvm) {
+                                    octvm.ClearSelection();
+                                }
                             }
                         }
-                    }
-                } else if (DataContext is MpContentItemViewModel civm) {
-                    civm.LastSubSelectedDateTime = DateTime.Now;
-                    if (civm.IsSelected && !civm.Parent.IsSelected) {
-                        civm.Parent.IsSelected = true;
-                        civm.Parent.LastSelectedDateTime = DateTime.Now;
+                    } else if (DataContext is MpContentItemViewModel civm) {
+                        civm.LastSubSelectedDateTime = DateTime.Now;
+                        if (civm.IsSelected && !civm.Parent.IsSelected) {
+                            civm.Parent.IsSelected = true;
+                            civm.Parent.LastSelectedDateTime = DateTime.Now;
 
-                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                            foreach (var octvm in civm.Parent.Parent.ClipTileViewModels) {
-                                if (octvm != civm.Parent) {
-                                    octvm.ClearSelection();
+                            if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                                foreach (var octvm in civm.Parent.Parent.ClipTileViewModels) {
+                                    if (octvm != civm.Parent) {
+                                        octvm.ClearSelection();
+                                    }
                                 }
                             }
                         }

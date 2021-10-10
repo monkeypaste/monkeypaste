@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpPagingListBox : DependencyObject {
+    public class MpListBoxItemRecycler : DependencyObject {
         public static int GetRemainingItemsThreshold(DependencyObject obj) {
             return (int)obj.GetValue(RemainingItemsThresholdProperty);
         }
@@ -20,7 +20,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "RemainingItemsThreshold",
             typeof(int),
-            typeof(MpPagingListBox),
+            typeof(MpListBoxItemRecycler),
             new FrameworkPropertyMetadata());
 
         public static ICommand GetRemainingItemsThresholdReachedCommand(DependencyObject obj) {
@@ -33,7 +33,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "RemainingItemsThresholdReachedCommand",
             typeof(ICommand),
-            typeof(MpPagingListBox),
+            typeof(MpListBoxItemRecycler),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
                     if(e.NewValue == null) {

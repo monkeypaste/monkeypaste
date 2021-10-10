@@ -254,13 +254,20 @@ namespace MpWpfApp {
 
         public DateTime LastSubSelectedDateTime { get; set; }
 
-        public bool IsSelected { get; set; } = false;
+        public bool IsSelected { 
+            get; 
+            set; }
         public bool IsHovering { get; set; } = false;
         public bool IsContextMenuOpen { get; set; } = false;
 
         public bool IsEditingContent { 
-            get; 
-            set; } = false;
+            get {
+                if(Parent == null || !Parent.IsExpanded) {
+                    return false;
+                }
+                return IsSelected;
+            }
+        }
 
         public bool IsEditingTemplate {
             get {
@@ -306,25 +313,25 @@ namespace MpWpfApp {
 
 
         #region Drag & Drop
-        public bool IsOverDragButton { get; set; } = false;
+        //public bool IsOverDragButton { get; set; } = false;
         public bool IsSubDragging { get; set; } = false;
         public bool IsSubDropping { get; set; } = false;
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
 
-        public bool IsDragButtonVisible {
-            get {
-                if (Parent == null || Parent.Count <= 1) {
-                    return false;
-                }
-                if (Parent.IsExpanded) {
-                    if (IsEditingContent) {
-                        return false;
-                    }
-                }
-                return IsHovering;
-            }
-        }
+        //public bool IsDragButtonVisible {
+        //    get {
+        //        if (Parent == null || Parent.Count <= 1) {
+        //            return false;
+        //        }
+        //        if (Parent.IsExpanded) {
+        //            if (IsEditingContent) {
+        //                return false;
+        //            }
+        //        }
+        //        return IsHovering;
+        //    }
+        //}
         //public bool IsDragButtonVisible {
         //    get {
         //        if (Parent == null) {
@@ -611,6 +618,7 @@ namespace MpWpfApp {
             CycleDetailCommand.Execute(null);
             IsBusy = false;
         }
+
         public async Task GatherAnalytics() {
             var analyticTasks = new List<Task>();
             Task<string> urlTask = null, ocrTask = null, cvTask = null;
@@ -750,7 +758,7 @@ namespace MpWpfApp {
 
 
         public void ClearEditing() {
-            IsEditingContent = false;
+            //IsEditingContent = false;
             IsEditingTitle = false;
             TemplateCollection.ClearAllEditing();
             if (IsPastingTemplate) {
@@ -800,30 +808,25 @@ namespace MpWpfApp {
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(IsSelected):
-                //    if (IsSelected) {
-                //        LastSubSelectedDateTime = DateTime.Now;
-                //        if (!Parent.IsSelected) {
-                //            Parent.IsSelected = true;
-                //        }
-                //    }
-                //    break;
-                case nameof(IsEditingContent):
-                    int editCount = Parent.ItemViewModels.Where(x => x.IsEditingContent).ToList().Count;
-                    if (IsEditingContent) {                        
-                        if(editCount > 1) {
-                            foreach(var civm in Parent.ItemViewModels) {
-                                if(civm != this) {
-                                    civm.IsEditingContent = false;
-                                }
-                            }
-                        } else {
-                            Parent.RequestExpand();
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        LastSubSelectedDateTime = DateTime.Now;
+                        if (!Parent.IsSelected) {
+                            Parent.IsSelected = true;
                         }
-                    } else if(editCount == 0) {
-                        Parent.ClearEditing();
-                        RequestSyncModels();
-                        Parent.RequestUnexpand();
+                        if(!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                            MpClipTrayViewModel.Instance.SelectedItems
+                                .Where(x => x != Parent)
+                                .ForEach(y => y.IsSelected = false);
+
+                            Parent.SelectedItems
+                                .Where(x => x != this)
+                                .ForEach(y => y.IsSelected = false);
+                        }
+
+                        if(Parent.IsExpanded) {
+                            OnPropertyChanged(nameof(EditorCursor));
+                        }
                     }
                     break;
                 case nameof(CopyItem):

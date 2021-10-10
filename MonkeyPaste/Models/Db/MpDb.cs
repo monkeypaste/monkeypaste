@@ -83,7 +83,7 @@ namespace MonkeyPaste {
 
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
-                await InitDb();
+                CreateConnection();
             }
             var result = await _connectionAsync.QueryAsync<T>(query, args);
             return result;
@@ -99,7 +99,7 @@ namespace MonkeyPaste {
 
         public async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
             if (_connectionAsync == null) {
-                await InitDb();
+                CreateConnection();
             }
             TableMapping qtm = null;
             foreach(var tm in _connectionAsync.TableMappings) {
@@ -130,6 +130,22 @@ namespace MonkeyPaste {
                 return new List<object>();
             }
             var result = _connection.Query(qtm, query, args);
+            return result;
+        }
+
+        public async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
+            if(_connectionAsync == null) {
+                CreateConnection();
+            }
+            var result = await _connectionAsync.ExecuteScalarAsync<T>(query, args);
+            return result;
+        }
+
+        public async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
+            var result = await _connectionAsync.QueryScalarsAsync<T>(query, args);
             return result;
         }
 

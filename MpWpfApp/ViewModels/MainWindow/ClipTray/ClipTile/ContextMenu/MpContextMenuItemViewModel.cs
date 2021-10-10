@@ -177,7 +177,7 @@ namespace MpWpfApp {
                             }
                             var icon = new Image();
                             icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
-                            if (IsChecked.Value || !IsChecked.HasValue) {
+                            if (!IsChecked.HasValue || IsChecked.Value) {
                                 string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
                                 var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
                                 if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {

@@ -46,12 +46,17 @@ namespace MpWpfApp {
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = true;
-            
+
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
+
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
         #region Event Handlers
 
@@ -84,14 +89,14 @@ namespace MpWpfApp {
             //e.Handled = false;
         }
 
-        private void DragButton_MouseEnter(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            civm.IsOverDragButton = true;
-        }
+        //private void DragButton_MouseEnter(object sender, MouseEventArgs e) {
+        //    var civm = DataContext as MpContentItemViewModel;
+        //    civm.IsOverDragButton = true;
+        //}
 
-        private void DragButton_MouseLeave(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            civm.IsOverDragButton = false;
-        }
+        //private void DragButton_MouseLeave(object sender, MouseEventArgs e) {
+        //    var civm = DataContext as MpContentItemViewModel;
+        //    civm.IsOverDragButton = false;
+        //}
     }
 }

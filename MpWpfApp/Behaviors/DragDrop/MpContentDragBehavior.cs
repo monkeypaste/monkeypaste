@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpClipTileDragBehavior : Behavior<MpClipTileView> {
+    public class MpContentDragBehavior : Behavior<FrameworkElement> {
         private const double MINIMUM_DRAG_DISTANCE = 10;
 
         private bool isDropValid = false;
@@ -44,7 +44,7 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-           (AssociatedObject.DataContext as MpClipTileViewModel).MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+           MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -126,7 +126,7 @@ namespace MpWpfApp {
                     if (mpXDistFromDropTileMidX <= dropTileRect.Width * 0.25) {
                         MpContentListView clv = ctrvlb.GetListBoxItem(ctvIdx).GetVisualDescendent<MpContentListView>();
                         var clvlb = clv.ContentListBox;
-                        dropBehavior = clv.DropBehavior2;
+                        dropBehavior = clv.DropBehavior;
                         ctvIdx = clv.ContentListBox.GetItemIndexAtPoint(e.GetPosition(clv.ContentListBox));
                         if (ctvIdx < clvlb.Items.Count) {
                             Rect dropItemRect = clvlb.GetListBoxItemRect(ctvIdx);
@@ -140,11 +140,11 @@ namespace MpWpfApp {
                         if (trayMp.X > dropTileMidX) {
                             ctvIdx = ctvIdx + 1;
                         }
-                        dropBehavior = ClipTrayView.DropBehavior2;
+                        dropBehavior = ClipTrayView.DropBehavior;
                     }
                 } else {
                     //dragging to the right of last item so assume its a tray drop
-                    dropBehavior = ClipTrayView.DropBehavior2;
+                    dropBehavior = ClipTrayView.DropBehavior;
                 }
             } else {
                 //outside of tray

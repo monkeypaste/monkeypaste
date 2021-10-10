@@ -70,7 +70,6 @@ namespace MpWpfApp {
             }
             trtb.SelectionChanged += CurrentRtb_SelectionChanged;
             artb = trtb;
-            artb.IsReadOnly = false;
             artb.IsManipulationEnabled = true;
             artb.Focus();
             artb.CaretPosition = artb.Document.ContentStart;

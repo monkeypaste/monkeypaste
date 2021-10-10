@@ -143,22 +143,24 @@ namespace MpWpfApp {
         }
 
         public void RefreshAllCounts() {
-            //var acil = MpDb.Instance.GetItems<MpCopyItem>();
-            foreach (var ttvm in TagTileViewModels) {
-                if (ttvm.IsAllTag) {
-                    ttvm.TagClipCount = MpCopyItemSource.Instance.TotalItemCount;
-                } else if (ttvm.IsRecentTag) {
-                    ttvm.TagClipCount = MpCopyItemSource.Instance.GetRecentItems().Count;
-                } else {
-                    ttvm.TagClipCount = ttvm.Tag.CopyItems.Count;
+            Task.Run(async () => {
+                //var acil = MpDb.Instance.GetItems<MpCopyItem>();
+                foreach (var ttvm in TagTileViewModels) {
+                    if (ttvm.IsAllTag) {
+                        ttvm.TagClipCount = await MpCopyItemSource.Instance.GetTotalCopyItemCount();
+                    } else if (ttvm.IsRecentTag) {
+                        ttvm.TagClipCount = await MpCopyItemSource.Instance.GetRecentCopyItemCount();
+                    } else {
+                        ttvm.TagClipCount = ttvm.Tag.CopyItems.Count;
+                    }
+                    //ttvm.TagClipCount = 0;
+                    //foreach(var ci in acil) {
+                    //    if(ttvm.IsLinked(ci)) { 
+                    //        ttvm.TagClipCount++;
+                    //    }
+                    //}
                 }
-                //ttvm.TagClipCount = 0;
-                //foreach(var ci in acil) {
-                //    if(ttvm.IsLinked(ci)) { 
-                //        ttvm.TagClipCount++;
-                //    }
-                //}
-            }
+            });
         }
 
         public void Add(MpTagTileViewModel newTagTile) {

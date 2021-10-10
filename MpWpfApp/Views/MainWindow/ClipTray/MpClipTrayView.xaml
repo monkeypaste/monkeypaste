@@ -41,7 +41,7 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Behaviors>
-                    <local:MpDropBehavior x:Name="DropBehavior2"/>    
+                    <local:MpDropBehavior x:Name="DropBehavior"/>    
                 </i:Interaction.Behaviors>                
                 <local:MpMultiSelectListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
@@ -78,13 +78,13 @@
                 <local:MpMultiSelectListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                Loaded="ClipTrayVirtualizingStackPanel_Loaded"
-                                                IsItemsHost="True"
-                                                CanVerticallyScroll="False"
-                                                CanHorizontallyScroll="True"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Left"
-                                                Orientation="Horizontal" />
+                                    Loaded="ClipTrayVirtualizingStackPanel_Loaded"
+                                    IsItemsHost="True"
+                                    CanVerticallyScroll="False"
+                                    CanHorizontallyScroll="True"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>

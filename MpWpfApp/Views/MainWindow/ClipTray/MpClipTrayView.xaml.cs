@@ -80,7 +80,8 @@ namespace MpWpfApp {
         #region View Model Requests (should be able to refactor these away
 
         private void Ctrvm_OnUiRefreshRequest(object sender, EventArgs e) {
-            ClipTray?.Items.Refresh();
+            //ClipTray?.Items.Refresh();
+            UpdateLayout();
         }
 
         private void Ctrvm_OnFocusRequest(object sender, object e) {
@@ -97,24 +98,25 @@ namespace MpWpfApp {
 
         private void ClipTray_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
-
-            int leftIdx = -1;
-            for (int i = 0; i < ClipTray.Items.Count; i++) {                
-                var lbir = ClipTray.GetListBoxItemRect(i,true);
-                if(lbir.Right < 0) {
-                    _remainingItems--;
-                    leftIdx = i + 1;
+            double min_thresh = 18;
+            if(e.HorizontalChange > 0) {
+                //scrolling higher
+                var left_lbir = ClipTray.GetListBoxItemRect(0);
+                if(left_lbir.Right < min_thresh) {
+                    //left item off screen:
+                    //-move to end of list
+                    //-set datacontext to next item
+                    ctrvm.RecycleLeftItem();
                 }
-            }
-            if(_remainingItems <= 1 && !MpMainWindowViewModel.IsMainWindowLoading) {
-               // ctrvm.RefreshClips(true, "CopyDateTime", leftIdx, MpMeasurements.Instance.TotalVisibleClipTiles * 2);
+            } else if(e.HorizontalChange < 0) {
+
             }
         }
 
         #endregion
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            TrayItemsPanel = sender as VirtualizingStackPanel;
+            //TrayItemsPanel = sender as VirtualizingStackPanel;
         }
 
         private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {

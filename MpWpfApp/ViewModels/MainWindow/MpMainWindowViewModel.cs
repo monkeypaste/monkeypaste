@@ -255,7 +255,6 @@ namespace MpWpfApp {
         private async Task Initialize() {
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
             await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
-            MpCopyItemSource.Instance.Init();
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
@@ -437,6 +436,7 @@ namespace MpWpfApp {
                             TagTrayViewModel.RefreshAllCounts();
                         }
                     }
+                    MpMainWindowViewModel.IsMainWindowLoading = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
                 }

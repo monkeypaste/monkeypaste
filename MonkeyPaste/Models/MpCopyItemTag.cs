@@ -43,11 +43,11 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToOne]
-        public MpCopyItem CopyItem { get; set; }
+        //[OneToOne]
+        //public MpCopyItem CopyItem { get; set; }
 
-        [OneToOne]
-        public MpTag Tag { get; set; }
+        //[OneToOne]
+        //public MpTag Tag { get; set; }
         #endregion
 
         #region Statics

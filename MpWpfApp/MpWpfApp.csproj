@@ -108,16 +108,16 @@
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentMarginExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
+    <Compile Include="AttachedProperties\MpListBoxItemRecycler.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
-    <Compile Include="Behaviors\DragDrop\MpClipTileDragBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
-    <Compile Include="Behaviors\MpSelectionBehavior.cs" />
     <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDragRectListAdorner.cs" />
@@ -133,6 +133,7 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />

@@ -693,14 +693,16 @@ using System.Speech.Synthesis;
             }
         }
 
-        public bool IsExpanded {
-            get {
-                if (IsAnyPastingTemplate || IsAnyEditingTemplate || IsAnyEditingContent) {
-                    return true;
-                }
-                return false;
-            }
-        }
+        //public bool IsExpanded {
+        //    get {
+        //        if (IsAnyPastingTemplate || IsAnyEditingTemplate || IsAnyEditingContent) {
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //}
+
+        public bool IsExpanded { get; set; } = false;
 
         public bool IsRtbReadOnly {
             get {
@@ -736,25 +738,41 @@ using System.Speech.Synthesis;
             }
         }
 
-        private bool _isSelected = false;
         public bool IsSelected {
             get {
-                return _isSelected;
+                return ItemViewModels.Any(x => x.IsSelected);
             }
             set {
-                if (_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(ToolTipVisibility));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                   //OnPropertyChanged(nameof(DetailTextColor));
-                    OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
-                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                if(value) {
+                    if(!IsSelected) {
+                        if(HeadItem != null) {
+                            HeadItem.IsSelected = value;
+                        }
+                    }
+                } else {
+                    SelectedItems.ForEach(x => x.IsSelected = false);
                 }
             }
         }
+        //private bool _isSelected = false;
+        //public bool IsSelected {
+        //    get {
+        //        return _isSelected;
+        //    }
+        //    set {
+        //        if (_isSelected != value) {
+        //            _isSelected = value;
+        //            OnPropertyChanged(nameof(IsSelected));
+        //            OnPropertyChanged(nameof(ToolTipVisibility));
+        //            OnPropertyChanged(nameof(TileBorderBrush));
+        //           //OnPropertyChanged(nameof(DetailTextColor));
+        //            OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
+        //            OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
+        //            OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
+        //            OnPropertyChanged(nameof(TileBorderBrushRect));
+        //        }
+        //    }
+        //}
 
         private bool _isHovering = false;
         public bool IsHovering {
@@ -788,11 +806,11 @@ using System.Speech.Synthesis;
         }
 
 
-        public bool IsAnyOverDragButton {
-            get {
-                return ItemViewModels.Any(x => x.IsOverDragButton);
-            }
-        }
+        //public bool IsAnyOverDragButton {
+        //    get {
+        //        return ItemViewModels.Any(x => x.IsOverDragButton);
+        //    }
+        //}
         #endregion
 
         #region Model
@@ -899,6 +917,7 @@ using System.Speech.Synthesis;
         }
 
         public void RequestUnexpand() {
+            ItemViewModels.ForEach(x => x.RequestSyncModels());
             OnUnExpandRequest?.Invoke(this, null);
             //if (IsExpanded) {
             //    MpSelectionBehavior.SetIgnoreSelection(false);
@@ -956,6 +975,16 @@ using System.Speech.Synthesis;
                         //}
                     } else {
                         //_detailIdx = 1;
+                    }
+                    break;
+                case nameof(IsExpanded):
+                    if(IsExpanded) {
+                        RequestExpand();
+                    } else {
+                        RequestUnexpand();
+                    }
+                    if(SelectedItems.Count > 0) {
+                        SelectedItems.ForEach(x => x.OnPropertyChanged(nameof(x.EditorCursor)));
                     }
                     break;
                 case nameof(IsAnyEditingTemplate):

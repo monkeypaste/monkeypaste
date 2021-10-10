@@ -55,6 +55,9 @@ namespace MpWpfApp {
                 MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
                 mwvm.FinishLoading();
+
+
+                MpMainWindowViewModel.IsMainWindowLoading = false;
             }
         }
 
@@ -71,7 +74,6 @@ namespace MpWpfApp {
 
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
 
-            MpMainWindowViewModel.IsMainWindowLoading = false;
         }
 
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {

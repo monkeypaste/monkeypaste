@@ -101,7 +101,9 @@ namespace MpWpfApp {
 
             clv.UpdateAdorner();
 
-            ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
+            AssociatedObject.UpdateLayout();
+
+            //ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
         }        

@@ -50,8 +50,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne]
-        public MpCopyItem CopyItem { get; set; }
+        //[ManyToOne]
+        //public MpCopyItem CopyItem { get; set; }
         #endregion
 
         public static MpCopyItemTemplate Create(int copyItemId,string templateName, string templateColor = "") {

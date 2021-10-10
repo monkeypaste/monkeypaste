@@ -28,6 +28,9 @@ namespace MpWpfApp {
             }
 
             var ci = (item as MpContentItemViewModel).CopyItem;
+            if(ci == null) {
+                return null;
+            }
             switch (ci.ItemType) {
                 case MpCopyItemType.RichText:
                     return TextAnalysisTemplate;
