@@ -21,12 +21,23 @@ namespace MpWpfApp {
         }
 
         public int FetchCount() {
+            if(_modelProvider == null) {
+                return 0;
+            }
             return _modelProvider.FetchCount();
         }
 
         public IList<MpClipTileViewModel> FetchRange(int startIndex, int count) {
+            if (_modelProvider == null) {
+                return new List<MpClipTileViewModel>();
+            }
             var ml = _modelProvider.FetchRange(startIndex, count);
-            return ml.AsParallel().Select(x=>MpClipTrayViewModel.Instance.CreateClipTileViewModel(x)).ToList();
+            var vml = new List<MpClipTileViewModel>();
+            foreach(var m in ml) {
+                vml.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(m));
+            }
+            return vml;
+           // return ml.AsParallel().Select(x=>MpClipTrayViewModel.Instance.CreateClipTileViewModel(x)).ToList();
         }
     }
 }

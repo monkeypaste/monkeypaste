@@ -29,28 +29,29 @@ namespace MpWpfApp {
 
         protected override void OnAttached() {
             base.OnAttached();
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-            lineAdorner = new MpDropLineAdorner(AssociatedObject);
-            this.adornerLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
-            adornerLayer.Add(lineAdorner);
+        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(AssociatedObject.DataContext != null) {
+                lineAdorner = new MpDropLineAdorner(AssociatedObject);
+                this.adornerLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
+                adornerLayer.Add(lineAdorner);
 
-            adornerLayer.Update();
+                adornerLayer.Update();
 
-            MpMainWindowViewModel mwvm = null;
-            if (AssociatedObject.DataContext is MpClipTrayViewModel) {
-                containerType = MpCopyItemType.None;
-                mwvm = (AssociatedObject.DataContext as MpClipTrayViewModel).MainWindowViewModel;
-            } else if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
-                containerType = ctvm.ItemType;
-                mwvm = (AssociatedObject.DataContext as MpClipTileViewModel).MainWindowViewModel;
+                MpMainWindowViewModel mwvm = null;
+                if (AssociatedObject.DataContext is MpClipTrayViewModel) {
+                    containerType = MpCopyItemType.None;
+                    mwvm = (AssociatedObject.DataContext as MpClipTrayViewModel).MainWindowViewModel;
+                } else if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                    containerType = ctvm.ItemType;
+                    mwvm = (AssociatedObject.DataContext as MpClipTileViewModel).MainWindowViewModel;
+                }
+
+                mwvm.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
             }
-
-            mwvm.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
-
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
         }
@@ -130,24 +131,24 @@ namespace MpWpfApp {
         }
 
         public void Drop(bool isCopy = false) {
-            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
                 if (this.dragTiles == null || this.dragTiles.Count == 0) {
                     Reset();
                     return;
                 }
                 var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
-                int tileCount = MpClipTrayViewModel.Instance.ClipTileViewModels.Count;
+                int tileCount = MpClipTrayViewModel.Instance.Items.Count;
                 if (isTrayDrop) {
                     bool isTileResort = dragTiles.All(x => x.SelectedItems.Count == x.ItemViewModels.Count);
                     if (isTileResort) {
                         //For full tile's moved on tray reverse order and use standard move
                         dragTiles.Reverse();
                         foreach (var dragTile in dragTiles) {
-                            int oldIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
+                            int oldIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
                             if (oldIdx < dropIdx) {
                                 dropIdx--;
                             }
-                            MpClipTrayViewModel.Instance.ClipTileViewModels.Move(oldIdx, dropIdx);
+                            MpClipTrayViewModel.Instance.Items.Move(oldIdx, dropIdx);
                         }
                     } else {
                         //partial tile drop onto tray, create new tile, remove from source
@@ -173,19 +174,19 @@ namespace MpWpfApp {
                         }
                         foreach (var dragTile in dragTiles) {
                             if (dragTile.Count == 0) {
-                                int dragIdxToRemove = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
+                                int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
                                 if(dragIdxToRemove < dropIdx) {
                                     dropIdx--;
                                 }
-                                MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile);
+                                MpClipTrayViewModel.Instance.Items.Remove(dragTile);
                             } else {
                                 dragTile.UpdateSortOrder();
                             }
                         }
 
                         await MpHelpers.Instance.RunOnMainThreadAsync(
-                                    () => MpClipTrayViewModel.Instance.ClipTileViewModels.Insert(dropIdx, dropTile));
-                        await dropTile.Initialize(dragModels[0]);
+                                    (Action)(() => MpClipTrayViewModel.Instance.Items.Insert(dropIdx, dropTile)));
+                        await dropTile.InitializeAsync(dragModels[0]);
 
                         dropTile.RequestUiUpdate();
                     }
@@ -236,19 +237,19 @@ namespace MpWpfApp {
                                 continue;
                             }
                             if (dragTile.Count == 0) {
-                                MpClipTrayViewModel.Instance.ClipTileViewModels.Remove(dragTile);
+                                MpClipTrayViewModel.Instance.Items.Remove(dragTile);
                             } else {
                                 dragTile.UpdateSortOrder();
                             }
                         }
-                        await dropTile.Initialize(dropModels[0]);
+                        await dropTile.InitializeAsync(dropModels[0]);
 
                         var cilv = AssociatedObject.GetVisualAncestor<MpContentListView>();
                         cilv.UpdateAdorner();
                     }
                 }
                 Reset();
-            });
+            }));
         }
 
 

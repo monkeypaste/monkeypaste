@@ -58,7 +58,7 @@ namespace MpWpfApp {
                             ctvm.HeadItem.LastSubSelectedDateTime = DateTime.Now;
                         }
                         if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                            foreach (var octvm in ctvm.Parent.ClipTileViewModels) {
+                            foreach (var octvm in ctvm.Parent.Items) {
                                 if (octvm != ctvm) {
                                     octvm.ClearSelection();
                                 }
@@ -71,7 +71,7 @@ namespace MpWpfApp {
                             civm.Parent.LastSelectedDateTime = DateTime.Now;
 
                             if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                                foreach (var octvm in civm.Parent.Parent.ClipTileViewModels) {
+                                foreach (var octvm in civm.Parent.Parent.Items) {
                                     if (octvm != civm.Parent) {
                                         octvm.ClearSelection();
                                     }

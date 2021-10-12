@@ -29,7 +29,7 @@ namespace MpWpfApp {
         /// <param name="pageSize">Size of the page.</param>
         public MpAsyncVirtualizingCollection(MpIItemsProvider<T> itemsProvider, int pageSize)
             : base(itemsProvider, pageSize) {
-            _synchronizationContext = SynchronizationContext.Current;
+            _synchronizationContext = SynchronizationContext.Current; 
         }
 
         /// <summary>
@@ -118,22 +118,43 @@ namespace MpWpfApp {
         #region IsLoading
 
         private bool _isLoading;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the collection is loading.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this collection is loading; otherwise, <c>false</c>.
-        /// </value>
         public bool IsLoading {
             get {
                 return _isLoading;
             }
             set {
-                if (value != _isLoading) {
+                if (_isLoading != value) {
                     _isLoading = value;
+                    FirePropertyChanged(nameof(IsLoading));
                 }
-                FirePropertyChanged("IsLoading");
+            }
+        }
+
+        private bool _isLoadingCount;
+        public bool IsLoadingCount {
+            get {
+                return _isLoadingCount;
+            }
+            set {
+                if(_isLoadingCount != value) {
+                    _isLoadingCount = value;
+                    FirePropertyChanged(nameof(IsLoadingCount));
+                    FirePropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
+
+        private bool _isLoadingData = true;
+        public bool IsLoadingData {
+            get {
+                return _isLoadingData;
+            }
+            set {
+                if (_isLoadingData != value) {
+                    _isLoadingData = value;
+                    FirePropertyChanged(nameof(IsLoadingData));
+                    FirePropertyChanged(nameof(IsLoading));
+                }
             }
         }
 
@@ -147,6 +168,7 @@ namespace MpWpfApp {
         protected override void LoadCount() {
             Count = 0;
             IsLoading = true;
+            IsLoadingCount = true;
             ThreadPool.QueueUserWorkItem(LoadCountWork);
         }
 
@@ -165,6 +187,7 @@ namespace MpWpfApp {
         /// <param name="args">Number of items returned.</param>
         private void LoadCountCompleted(object args) {
             Count = (int)args;
+            IsLoadingCount = false;
             IsLoading = false;
             FireCollectionReset();
         }
@@ -174,6 +197,7 @@ namespace MpWpfApp {
         /// </summary>
         /// <param name="index">The index.</param>
         protected override void LoadPage(int index) {
+            IsLoadingData = true;
             IsLoading = true;
             ThreadPool.QueueUserWorkItem(LoadPageWork, index);
         }
@@ -198,6 +222,7 @@ namespace MpWpfApp {
 
             PopulatePage(pageIndex, page);
             IsLoading = false;
+            IsLoadingData = false;
             FireCollectionReset();
         }
 

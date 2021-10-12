@@ -28,6 +28,8 @@ namespace MonkeyPaste {
         /// <param name="count">The number of items to fetch.</param>
         /// <returns></returns>
         IList<T> FetchRange(int startIndex, int count);
+
+
     }
 
 
@@ -35,14 +37,28 @@ namespace MonkeyPaste {
         #region Singleton Definition
         private static readonly Lazy<MpCopyItemProvider> _Lazy = new Lazy<MpCopyItemProvider>(() => new MpCopyItemProvider());
         public static MpCopyItemProvider Instance { get { return _Lazy.Value; } }
+        
+        private MpCopyItemProvider() {
+            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
+            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
+
+            var sl = MpDb.Instance.GetItems<MpSource>();
+            _sourceLookup = new Dictionary<int, MpSource>();
+            sl.ForEach(x => _sourceLookup.Add(x.Id, x));
+
+            _queryInfo = new MpQueryInfo();
+        }
+
         #endregion
 
         #region Private Variables
         private MpQueryInfo _queryInfo;
+
+        private Dictionary<int, MpSource> _sourceLookup;
         #endregion
 
         #region Properties
-
 
         #endregion
 
@@ -328,8 +344,8 @@ namespace MonkeyPaste {
                     break;
             }
 
-            var result = new List<MpCopyItem>();
-            result = MpDb.Instance.Query<MpCopyItem>(query);
+            var result = MpDb.Instance.Query<MpCopyItem>(query);
+            result.ForEach(x => x.Source = _sourceLookup[x.SourceId]);
 
             return result;
         }
@@ -341,6 +357,40 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
+
+        #region Db Event Handlers
+
+        private void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpSource s) {
+                if(!_sourceLookup.ContainsKey(s.Id)) {
+                    _sourceLookup.Add(s.Id, s);
+                }
+            }
+        }
+
+        private void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpApp a) {
+                var sa = _sourceLookup.Where(x => x.Value.AppId == a.Id).FirstOrDefault();
+                if (sa.Value != null) {
+                    _sourceLookup[sa.Key].App = a;
+                }
+            } else if (e is MpUrl url) {
+                var sa = _sourceLookup.Where(x => x.Value.UrlId == url.Id).FirstOrDefault();
+                if (sa.Value != null) {
+                    _sourceLookup[sa.Key].Url = url;
+                }
+            }
+        }
+
+        private void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpSource s) {
+                if (_sourceLookup.ContainsKey(s.Id)) {
+                    _sourceLookup.Remove(s.Id);
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
     }

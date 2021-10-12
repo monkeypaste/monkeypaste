@@ -851,7 +851,8 @@ using System.Speech.Synthesis;
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            Task.Run(()=>Initialize(ci));
+            //MpHelpers.Instance.RunOnMainThread(()=>InitializeAsync(ci));
+            Initialize(ci);
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -864,8 +865,32 @@ using System.Speech.Synthesis;
                 
             }
         }
+        public void Initialize(MpCopyItem headItem) {
+            if (headItem == null) {
+                IsPlaceholder = true;
+            } else {
+                IsPlaceholder = false;
 
-        public async Task Initialize(MpCopyItem headItem) {
+                IsBusy = true;
+                var ccil = MpCopyItem.GetCompositeChildren(headItem);
+                ccil.Insert(0, headItem);
+
+                var civml = new List<MpContentItemViewModel>();
+                foreach (var cci in ccil) {
+                    civml.Add(new MpContentItemViewModel(this, cci));
+                }
+
+                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
+                    civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
+
+                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+
+                OnViewModelLoaded();
+                IsBusy = false;
+            }
+        }
+        public async Task InitializeAsync(MpCopyItem headItem) {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 if (headItem == null) {
                     IsPlaceholder = true;
@@ -894,7 +919,7 @@ using System.Speech.Synthesis;
         }
 
         public async Task ClearContent() {
-            await Initialize(null);
+            await InitializeAsync(null);
         } 
 
 
@@ -902,7 +927,7 @@ using System.Speech.Synthesis;
             if(HeadItem == null) {
                 return;
             }
-            Task.Run(()=>Initialize(HeadItem.CopyItem));
+            Task.Run(()=>InitializeAsync(HeadItem.CopyItem));
         }
 
         public void RequestSearch(string st) {
@@ -1401,7 +1426,7 @@ using System.Speech.Synthesis;
                 }
 
                 //only will occur during drag & drop
-                await Initialize(curModels[0]);
+                await InitializeAsync(curModels[0]);
             });
         }
 

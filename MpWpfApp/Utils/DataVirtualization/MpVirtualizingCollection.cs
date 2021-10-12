@@ -53,6 +53,10 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region IsLoading
+
+        #endregion
+
         #region ItemsProvider
 
         private readonly MpIItemsProvider<T> _itemsProvider;
@@ -157,12 +161,18 @@ namespace MpWpfApp {
                 // return requested item
                 return _pages[pageIndex][pageOffset];
             }
-            set { throw new NotSupportedException(); }
+            set {
+                //Debugger.Break();
+                /////throw new NotSupportedException("no set item at index for index: "+index); 
+            }
         }
 
         object IList.this[int index] {
             get { return this[index]; }
-            set { throw new NotSupportedException(); }
+            set {
+                //Debugger.Break();
+                ////throw new NotSupportedException("no set item at index for index: " + index);
+            }
         }
 
         #endregion
@@ -179,13 +189,12 @@ namespace MpWpfApp {
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<T> GetEnumerator() {
-            return new MpVirtualizingEnumerator<T>(this);
+            //return new MpVirtualizingEnumerator<T>(this);
 
             // Old:
-            //for (int i = 0; i < Count; i++)
-            //{
-            //      yield return this[i];
-            //}
+            for (int i = 0; i < Count; i++) {
+                yield return this[i];
+            }
         }
 
         /// <summary>
@@ -210,11 +219,14 @@ namespace MpWpfApp {
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
         public void Add(T item) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            ////throw new NotSupportedException("no add item ");
         }
 
         int IList.Add(object value) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
+            return 0;
         }
 
         #endregion
@@ -247,7 +259,8 @@ namespace MpWpfApp {
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
         public void Clear() {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            ////throw new NotSupportedException();
         }
 
         #endregion
@@ -266,12 +279,12 @@ namespace MpWpfApp {
         /// Always -1.
         /// </returns>
         public int IndexOf(T item) {
-            foreach (var keyValuePair in _pages) {
-                int indexWithinPage = keyValuePair.Value.IndexOf(item);
-                if (indexWithinPage != -1) {
-                    return PageSize * keyValuePair.Key + indexWithinPage;
-                }
-            }
+            //foreach (var keyValuePair in _pages) {
+            //    int indexWithinPage = keyValuePair.Value.IndexOf(item);
+            //    if (indexWithinPage != -1) {
+            //        return PageSize * keyValuePair.Key + indexWithinPage;
+            //    }
+            //}
             return -1;
         }
 
@@ -291,7 +304,8 @@ namespace MpWpfApp {
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
         public void Insert(int index, T item) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            ////throw new NotSupportedException();
         }
 
         void IList.Insert(int index, object value) {
@@ -313,11 +327,13 @@ namespace MpWpfApp {
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
         public void RemoveAt(int index) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
         }
 
         void IList.Remove(object value) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
         }
 
         /// <summary>
@@ -331,9 +347,18 @@ namespace MpWpfApp {
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
         public bool Remove(T item) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
+            return true;
         }
 
+        #endregion
+
+        #region Move
+
+        public void Move(int oldIdx,int newIdx) {
+            MpConsole.WriteLine($"Ignoring move from {oldIdx} to {newIdx}...");
+        }
         #endregion
 
         #region CopyTo
@@ -359,11 +384,13 @@ namespace MpWpfApp {
         /// Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
         /// </exception>
         public void CopyTo(T[] array, int arrayIndex) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
         }
 
         void ICollection.CopyTo(Array array, int index) {
-            throw new NotSupportedException();
+            //Debugger.Break();
+            //throw new NotSupportedException();
         }
 
         #endregion
@@ -388,7 +415,7 @@ namespace MpWpfApp {
         /// <returns>Always false.
         /// </returns>
         public bool IsSynchronized {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>

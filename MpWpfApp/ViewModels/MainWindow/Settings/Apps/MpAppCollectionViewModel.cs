@@ -93,7 +93,7 @@ namespace MpWpfApp {
                 AppViewModels[appIdx].App.WriteToDatabase();
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
-                foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
                     foreach (var rtbvm in ctvm.ItemViewModels) {
                         if (rtbvm.CopyItem.Source.App.Id == AppViewModels[appIdx].AppId) {
                             rtbvm.CopyItem.Source.App = AppViewModels[appIdx].App;

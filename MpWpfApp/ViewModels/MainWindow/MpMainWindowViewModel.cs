@@ -145,7 +145,7 @@ namespace MpWpfApp {
         #region Layout
         public double AppModeButtonGridWidth {
             get {
-                if(ClipTrayViewModel == null || !ClipTrayViewModel.IsAnyTileExpanded) {
+                if(IsMainWindowLoading || ClipTrayViewModel == null || !ClipTrayViewModel.IsAnyTileExpanded) {
                     return MpMeasurements.Instance.AppStateButtonPanelWidth;
                 }
                 return 0;
@@ -249,12 +249,11 @@ namespace MpWpfApp {
 
             MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
-            Task.Run(Initialize);
+            //Task.Run(Initialize);
+            Initialize();
         }
 
-        private async Task Initialize() {
-            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
-            await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+        private void Initialize() {
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
 
@@ -498,7 +497,7 @@ namespace MpWpfApp {
                         MainWindowTop = _startMainWindowTop;
                         timer.Stop();
 
-                        ClipTrayViewModel.ResetClipSelection();
+                        //ClipTrayViewModel.ResetClipSelection();
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteDataObject != null) {
                             ClipTrayViewModel.PasteDataObject(pasteDataObject);

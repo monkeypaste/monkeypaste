@@ -470,7 +470,7 @@ namespace MpWpfApp {
                 //wait till all highlighting is complete then hide non-matching tiles at the same time
                 var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
                 bool showMatchNav = false;
-                foreach (var ctvm in ct.ClipTileViewModels) {
+                foreach (var ctvm in ct.Items) {
                     //var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
                     //newVisibilityDictionary.Add(ctvm, newVisibility);
                     ctvm.RequestSearch(SearchText);

@@ -19,15 +19,15 @@ namespace MpWpfApp {
 
 
         protected override void OnAttached() {
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
-            ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
+        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(AssociatedObject.DataContext != null && AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
+                ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
+            }
         }
-
 
         private void Ctvm_OnUnExpandRequest(object sender, EventArgs e) {
             MpHelpers.Instance.RunOnMainThread(Unexpand);
@@ -48,7 +48,7 @@ namespace MpWpfApp {
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
             //collapse all other tiles
-            ctvm.Parent.ClipTileViewModels
+            ctvm.Parent.Items
                 .Where(x => x != ctvm)
                 .ForEach(y => y.ItemVisibility = Visibility.Collapsed);
 
@@ -117,7 +117,7 @@ namespace MpWpfApp {
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
-            ctvm.Parent.ClipTileViewModels
+            ctvm.Parent.Items
                 .Where(x => x != ctvm)
                 .ForEach(y => y.ItemVisibility = Visibility.Visible);
 

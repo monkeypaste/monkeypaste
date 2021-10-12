@@ -12,7 +12,7 @@ namespace MonkeyPaste {
 
         public string SearchText { get; set; } = string.Empty;
 
-        public MpContentFilterType FilterFlags { get; set; }
+        public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
 
 
     }

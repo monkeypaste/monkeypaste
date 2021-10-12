@@ -33,13 +33,19 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += (s, e1) => ctrvm.AddItemFromClipboard();
 
-            _remainingItems = ctrvm.ClipTileViewModels.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
+            _remainingItems = ctrvm.Items.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
             if (MpPreferences.Instance.IsInitialLoad) {
                 ctrvm.InitIntroItems();
             }
 
-           // ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
+            ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
+            ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
+            ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
+            ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
+
+
+            // ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
 
             //ClipTray.PreviewMouseLeftButtonDown += (s, e2) => { ShiftLeft(); e2.Handled = true; };
 
@@ -50,16 +56,6 @@ namespace MpWpfApp {
             }
         }
 
-
-        private void ClipTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (DataContext != null) {
-                var ctrvm = DataContext as MpClipTrayViewModel;
-                ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
-                ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
-                ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
-                ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
-            }
-        }
 
         #region Selection
         private void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -80,6 +76,8 @@ namespace MpWpfApp {
         #region View Model Requests (should be able to refactor these away
 
         private void Ctrvm_OnUiRefreshRequest(object sender, EventArgs e) {
+            var ctrvm = DataContext as MpClipTrayViewModel;
+            //ClipTray.ItemsSource = ctrvm.Items;
             //ClipTray?.Items.Refresh();
             UpdateLayout();
         }
@@ -106,7 +104,7 @@ namespace MpWpfApp {
                     //left item off screen:
                     //-move to end of list
                     //-set datacontext to next item
-                    ctrvm.RecycleLeftItem();
+                    //ctrvm.RecycleLeftItem();
                 }
             } else if(e.HorizontalChange < 0) {
 

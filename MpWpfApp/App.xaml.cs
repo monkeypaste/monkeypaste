@@ -9,13 +9,17 @@ namespace MpWpfApp {
     /// Simple application. Check the XAML for comments.
     /// </summary>
     public partial class App : Application {
-        protected override void OnStartup(StartupEventArgs e) {
+        protected override async void OnStartup(StartupEventArgs e) {
             //PresentationTraceSources.Refresh();
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
+            await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());
+
             base.OnStartup(e);
         }
 

@@ -57,7 +57,7 @@ namespace MpWpfApp {
                 mwvm.FinishLoading();
 
 
-                MpMainWindowViewModel.IsMainWindowLoading = false;
+                //MpMainWindowViewModel.IsMainWindowLoading = false;
             }
         }
 

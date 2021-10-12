@@ -154,7 +154,7 @@ namespace MpWpfApp {
                     Properties.Settings.Default.ShowItemPreview = _showItemPreview;
                     Properties.Settings.Default.Save();
                     if(!MpMainWindowViewModel.IsMainWindowLoading) {
-                        foreach(var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
+                        foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
                             foreach(var rtbvm in ctvm.ItemViewModels) {
                                 //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));

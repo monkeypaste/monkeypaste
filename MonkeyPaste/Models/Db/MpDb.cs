@@ -196,6 +196,13 @@ namespace MonkeyPaste {
             return _connection.GetWithChildren<T>(id,true);
         }
 
+        public List<T> GetItemsById<T>(List<int> idl) where T:new() {
+            if(_connection == null) {
+                CreateConnection();
+            }
+            return _connection.GetAllWithChildren<T>(x => idl.Contains((x as MpDbModelBase).Id));
+        }
+
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {

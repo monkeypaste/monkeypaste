@@ -243,8 +243,8 @@ namespace MpWpfApp {
             if (IsInAppendMode &&
                MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count == 1 &&
                MainWindowViewModel.ClipTrayViewModel.SelectedItems[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
-                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedItems[0]);
-                MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Move(selectedIdx, 0);
+                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.Items.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedItems[0]);
+                MainWindowViewModel.ClipTrayViewModel.Items.Move(selectedIdx, 0);
             }
         }
         #endregion
@@ -290,7 +290,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanToggleAppendMode() {
-            if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+            if(MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
             //only allow append mode to activate if app is not paused and only ONE clip is selected

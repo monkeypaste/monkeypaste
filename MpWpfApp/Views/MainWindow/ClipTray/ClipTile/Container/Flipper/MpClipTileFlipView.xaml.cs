@@ -30,12 +30,13 @@ namespace MpWpfApp {
                 return;
             }
             var ctvm = DataContext as MpClipTileViewModel;
-            if(ctvm.IsFlipped) {
-                backToFront.Begin();
-            } else {
-                frontToBack.Begin();
-            }
-            
+            if(ctvm != null) {
+                if (ctvm.IsFlipped) {
+                    backToFront.Begin();
+                } else {
+                    frontToBack.Begin();
+                }
+            }            
         }
 
         private void ClipTileFlipView_Loaded(object sender, RoutedEventArgs e) {
