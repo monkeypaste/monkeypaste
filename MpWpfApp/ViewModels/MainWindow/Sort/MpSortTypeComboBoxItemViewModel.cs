@@ -6,7 +6,7 @@ namespace MpWpfApp {
         #region Properties
         public string Header { get; set; }
 
-        public MpClipTileSortType SortType { get; set; }
+        public MpContentSortType SortType { get; set; }
 
         public bool IsVisible { get; set; } = true;
         #endregion
@@ -15,7 +15,7 @@ namespace MpWpfApp {
         public MpSortTypeComboBoxItemViewModel(
             MpClipTileSortViewModel parent, 
             string header,
-            MpClipTileSortType sortType,
+            MpContentSortType sortType,
             bool isVisible = true) : base(parent) {
             Header = header;
             SortType = sortType;

@@ -29,8 +29,6 @@ namespace MpWpfApp {
 
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
-            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
-
             HideBusySpinner();
         }
 

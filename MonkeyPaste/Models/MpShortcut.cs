@@ -100,14 +100,16 @@ namespace MonkeyPaste {
 
         #region Static Methods
         public static List<MpShortcut> GetAllShortcuts() {
-            List<MpShortcut> commands = new List<MpShortcut>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    commands.Add(new MpShortcut(dr));
-                }
-            }
-            return commands;
+            //List<MpShortcut> commands = new List<MpShortcut>();
+            //DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
+            //if (dt != null && dt.Rows.Count > 0) {
+            //    foreach (DataRow dr in dt.Rows) {
+            //        commands.Add(new MpShortcut(dr));
+            //    }
+            //}
+            //return commands;
+
+            return MpDb.Instance.GetItems<MpShortcut>();
         }
         public static List<MpShortcut> GetShortcutByName(string shortcutName) {
             return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();

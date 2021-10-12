@@ -19,7 +19,6 @@
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
-                        Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
                         Loaded="ClipTileClipBorder_Loaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"

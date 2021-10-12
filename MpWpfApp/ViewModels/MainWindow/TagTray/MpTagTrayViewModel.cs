@@ -145,13 +145,17 @@ namespace MpWpfApp {
         public void RefreshAllCounts() {
             Task.Run(async () => {
                 //var acil = MpDb.Instance.GetItems<MpCopyItem>();
+                var countTasks = new Dictionary<int,Task<int>>();
                 foreach (var ttvm in TagTileViewModels) {
                     if (ttvm.IsAllTag) {
-                        ttvm.TagClipCount = await MpCopyItemSource.Instance.GetTotalCopyItemCount();
+                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetTotalCopyItemCountAsync());
+                        //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTotalCopyItemCountAsync();
                     } else if (ttvm.IsRecentTag) {
-                        ttvm.TagClipCount = await MpCopyItemSource.Instance.GetRecentCopyItemCount();
+                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetRecentCopyItemCountAsync());
+                        //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetRecentCopyItemCountAsync();
                     } else {
-                        ttvm.TagClipCount = ttvm.Tag.CopyItems.Count;
+                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetTagItemCountAsync(ttvm.TagId));
+                        //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTagItemCountAsync(ttvm.TagId);
                     }
                     //ttvm.TagClipCount = 0;
                     //foreach(var ci in acil) {
@@ -159,6 +163,16 @@ namespace MpWpfApp {
                     //        ttvm.TagClipCount++;
                     //    }
                     //}
+                }
+
+                await Task.WhenAll(countTasks.Values.ToArray());
+
+                foreach(var ct in countTasks) {
+                    int count = await ct.Value;
+                    var ttvm = TagTileViewModels.Where(x => x.TagId == ct.Key).FirstOrDefault();
+                    if(ttvm != null) {
+                        ttvm.TagClipCount = count;
+                    }
                 }
             });
         }
@@ -240,10 +254,11 @@ namespace MpWpfApp {
                 if (ttvm.IsSudoTag || ttvm.IsSelected) {
                     continue;
                 }
+                var ciidl = MpCopyItemProvider.Instance.GetCopyItemIdsForTag(ttvm.TagId);
 
                 bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-                    if(sctvm.ItemViewModels.Select(x=>x.CopyItemId).Any(x=>ttvm.Tag.CopyItems.Select(y=>y.Id).Contains(x))) {
+                    if(sctvm.ItemViewModels.Select(x=>x.CopyItemId).Any(x=>ciidl.Contains(x))) {
                         isTagLinkedToAnySelectedClips = true;
                         break;
                     }

@@ -51,7 +51,7 @@ namespace MpWpfApp {
 
                 rtbvm.CopyItemData = Rtb.Document.ToRichText();
 
-                rtbvm.CopyItem.WriteToDatabase();
+                await rtbvm.CopyItem.WriteToDatabaseAsync();
 
 
                 await MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
@@ -316,6 +316,7 @@ namespace MpWpfApp {
                             } else {
                                 var matchRun = new Run(matchRange.Text);
                                 matchRange.Text = "";
+
                                 // DO NOT REMOVE this extra link ensures selection is retained!
                                 var hlink = new Hyperlink(matchRun, matchRange.Start);
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);

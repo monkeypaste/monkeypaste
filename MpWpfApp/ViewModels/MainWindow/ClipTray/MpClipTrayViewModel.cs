@@ -56,8 +56,12 @@ namespace MpWpfApp {
 
         private MpCopyItem _appendModeCopyItem = null;
 
+        private int _pageCount = 0;
         private int _remainingItemsCount = 0;
         private List<int> _filterIds;
+
+        private MpClipTileViewModelProvider _viewModelProvider; 
+        private MpWpfQueryInfo _queryInfo;
         #endregion
 
         #region Properties
@@ -80,6 +84,8 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public MpAsyncVirtualizingCollection<MpClipTileViewModel> Items { get; set; } = new MpAsyncVirtualizingCollection<MpClipTileViewModel>();
 
         public List<MpClipTileViewModel> SelectedItems {
             get {
@@ -413,7 +419,31 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
             _tileLockObject = new object();
+
+            _queryInfo = new MpWpfQueryInfo();
+            _queryInfo.InfoChanged += _queryInfo_InfoChanged;
+
+            _viewModelProvider = new MpClipTileViewModelProvider(MpMeasurements.Instance.TotalVisibleClipTiles * 2);
+
+            Items = new MpAsyncVirtualizingCollection<MpClipTileViewModel>(
+                _viewModelProvider,
+                MpMeasurements.Instance.TotalVisibleClipTiles * 2);
+
+            
+            //var phvml = new List<MpClipTileViewModel>();
+            //_pageCount = (MpMeasurements.Instance.MaxRecentClipTiles + 1) * 2;
+            //int placeHoldersToAdd = _pageCount - ClipTileViewModels.Count;
+            //while (placeHoldersToAdd > 0) {
+            //    phvml.Add(CreateClipTileViewModel(null));
+            //    placeHoldersToAdd--;
+            //}
+            //ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(phvml);
+            //BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
         }
+        private void _queryInfo_InfoChanged(object sender, EventArgs e) {
+            _viewModelProvider.SetQueryInfo(_queryInfo);
+        }
+
 
         #region View Invokers
         public void RequestScrollIntoView(object obj) {
@@ -494,18 +524,25 @@ namespace MpWpfApp {
         public async Task RefreshTiles(int start = 0, int count = 0) {
             var sw = new Stopwatch();
             sw.Start();
+
+            //var clearTasks = ClipTileViewModels.Select(x => x.ClearContent());
+            //Task.WaitAll(clearTasks.ToArray());
+
             int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             var sortColumn = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             bool isDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
 
-            //int totalCount = MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
 
             if (count == 0) {
-                count = MpMeasurements.Instance.TotalVisibleClipTiles + 1; //int.MaxValue;//
+                if(tagId == MpTag.RecentTagId) {
+                    count = MpMeasurements.Instance.TotalVisibleClipTiles + 1;
+                } else {
+                    count = int.MaxValue;//_pageCount;// //
+                }                
             }
             Dictionary<int, int> manualSortOrderLookup = null;
 
-            if(sortColumn == MpClipTileSortType.Manual) {
+            if(sortColumn == MpContentSortType.Manual) {
                 manualSortOrderLookup = new Dictionary<int, int>();
                 foreach(var ctvm in ClipTileViewModels) {
                     if(manualSortOrderLookup.ContainsKey(ctvm.HeadItem.CopyItemId)) {
@@ -516,16 +553,10 @@ namespace MpWpfApp {
             }
             IsBusy = true;
 
-            _filterIds = await MpCopyItemSource.Instance.QueryForIds(tagId, sortColumn, isDescending, manualSortOrderLookup);
+            _filterIds = await MpCopyItemProvider.Instance.QueryForIds(tagId, sortColumn, isDescending, manualSortOrderLookup);
             
-            var page_cil = await MpCopyItemSource.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
-
-            //int placeHoldersToAdd = MpMeasurements.Instance.TrayPageSize - page_cil.Count;
-            //while(placeHoldersToAdd > 0) {
-            //    page_cil.Add(null);
-            //    placeHoldersToAdd--;
-            //}
-            
+            var page_cil = await MpCopyItemProvider.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
+                                   
             ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
             BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
 

@@ -1389,5 +1389,17 @@ namespace MpWpfApp.Properties {
                 return ((int)(this["HideMainWindowAnimationMilliseconds"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SearchByDescription {
+            get {
+                return ((bool)(this["SearchByDescription"]));
+            }
+            set {
+                this["SearchByDescription"] = value;
+            }
+        }
     }
 }

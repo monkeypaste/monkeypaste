@@ -18,6 +18,8 @@
                                         Visibility="{Binding ClipTrayVisibility}"
                                         Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                         Height="{Binding MainWindowViewModel.ClipTrayHeight}"
+                                        local:MpPagingListBox.RemainingItemsThreshold="3"
+                                        local:MpPagingListBox.RemainingItemsThresholdReachedCommand=""
                                         Loaded="ClipTray_Loaded" 
                                         DataContextChanged="ClipTray_DataContextChanged"
                                         SelectionChanged="ClipTray_SelectionChanged"

@@ -1,8 +1,8 @@
 ﻿using AsyncAwaitBestPractices.MVVM;
-using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,8 +15,10 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MonkeyPaste;
 
 namespace MpWpfApp {
+
     public class MpSearchBoxViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
@@ -29,10 +31,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties     
-
-        #region Controls
-        public TextBox SearchTextBox { get; set; } = null;
-        #endregion
 
         #region SearchBy Property Settings
         private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;
@@ -147,7 +145,6 @@ namespace MpWpfApp {
             }
         }
 
-
         private bool _searchByProcessName = Properties.Settings.Default.SearchByProcessName;
         public bool SearchByProcessName {
             get {
@@ -161,23 +158,68 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
 
-        #region Business Logic Properties
-        private string _placeholderText = "Placeholder Text";
-        public string PlaceholderText {
+        private bool _searchByDescription = Properties.Settings.Default.SearchByDescription;
+        public bool SearchByDescription {
             get {
-                return _placeholderText;
+                return _searchByDescription;
             }
             set {
-                if (_placeholderText != value) {
-                    _placeholderText = value;
-                    OnPropertyChanged(nameof(PlaceholderText));
+                if (_searchByDescription != value) {
+                    _searchByDescription = value;
+                    Properties.Settings.Default.SearchByDescription = _searchByDescription;
+                    OnPropertyChanged(nameof(SearchByDescription));
                 }
             }
         }
 
-        private string _text = Properties.Settings.Default.SearchPlaceHolderText;
+        public MpContentFilterType FilterType {
+            get {
+                MpContentFilterType ft = MpContentFilterType.None;
+                if(SearchByIsCaseSensitive) {
+                    ft |= MpContentFilterType.CaseSensitive;
+                }
+                if(SearchByTitle) {
+                    ft |= MpContentFilterType.Title;
+                }
+                if(SearchByRichText) {
+                    ft |= MpContentFilterType.Text;
+                }
+                if(SearchByFileList) {
+                    ft |= MpContentFilterType.File;
+                }
+                if(SearchByImage) {
+                    ft |= MpContentFilterType.Image;
+                }
+                if(SearchByUrl) {
+                    ft |= MpContentFilterType.Url;
+                }
+                if(SearchByApplicationName) {
+                    ft |= MpContentFilterType.AppName;
+                }
+                if(SearchByProcessName) {
+                    ft |= MpContentFilterType.AppPath;
+                }
+                if(SearchByTag) {
+                    ft |= MpContentFilterType.Tag;
+                }
+                if(SearchByDescription) {
+                    ft |= MpContentFilterType.Meta;
+                }
+                return ft;
+            }
+        }
+
+        #endregion
+
+        #region Business Logic Properties
+        public string PlaceholderText {
+            get {
+                return Properties.Settings.Default.SearchPlaceHolderText;
+            }
+        }
+
+        private string _text = string.Empty;
         public string Text {
             get {
                 return _text;
@@ -347,12 +389,16 @@ namespace MpWpfApp {
 
         #region Events
         public event EventHandler<string> OnSearchTextChanged;
+
+        public event EventHandler OnSearchTextBoxFocusRequest;
         #endregion
 
         #region Public Methods
         public MpSearchBoxViewModel() : base(null) {
+            Text = PlaceholderText;
+
             var timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 0, 0, Properties.Settings.Default.SearchBoxTypingDelayInMilliseconds);
+            timer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.SearchBoxTypingDelayInMilliseconds);
             timer.Tick += (s, e) => {
                 PerformSearchCommand.Execute(null);
                 timer.Stop();
@@ -361,8 +407,18 @@ namespace MpWpfApp {
                 switch (e7.PropertyName) {
                     case nameof(IsTextBoxFocused):
                         if(IsTextBoxFocused) {
-                            SearchTextBox.Focus();
+                            if (!HasText) {
+                                Text = string.Empty;
+                            }
+
+                            MpClipTrayViewModel.Instance.ResetClipSelection(false);                            
+                        } else {
+                            if(!HasText) {
+                                Text = PlaceholderText;
+                            }
                         }
+                        OnPropertyChanged(nameof(TextBoxFontStyle));
+                        OnPropertyChanged(nameof(TextBoxTextBrush));
                         break;
                     case nameof(Text):
                         OnSearchTextChanged?.Invoke(this, Text);
@@ -372,125 +428,16 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText;
         }
 
-        public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {
-            var searchBorder = (MpClipBorder)sender;
-            SearchTextBox = (TextBox)searchBorder.FindName("SearchBox");
-            var searchByButton = (Button)searchBorder.FindName("SearchDropDownButton");
-            var clearSearchBoxButton = (Button)searchBorder.FindName("ClearTextBoxButton");
-            //SearchTextBox.AllowDrop = true;
-            //SearchTextBox.DragEnter += (s, e) => {
-            //    if (!HasText) {
-            //        Text = string.Empty;
-            //    }
-            //};
-            //SearchTextBox.DragLeave += (s, e) => {
-            //    if (!HasText) {
-            //        Text = Properties.Settings.Default.SearchPlaceHolderText;
-            //    }
-            //};
-            SearchTextBox.GotFocus += (s, e4) => {
-                if (!HasText) {
-                    Text = string.Empty;
-                }
-
-                IsTextBoxFocused = true;
-                MpClipTrayViewModel.Instance.ResetClipSelection(false);
-                OnPropertyChanged(nameof(TextBoxFontStyle));
-                OnPropertyChanged(nameof(TextBoxTextBrush));
-            };
-
-            SearchTextBox.LostFocus += (s, e5) => {
-                IsTextBoxFocused = false;
-                if (!HasText) {
-                    Text = Properties.Settings.Default.SearchPlaceHolderText;
-                }
-            };
-
-            searchByButton.PreviewMouseDown += (s, e3) => {
-                var searchByContextMenu = new ContextMenu();
-
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Case Sensitive", SearchByIsCaseSensitive));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Collection", SearchByTag));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Title", SearchByTitle));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Text", SearchByRichText));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Source Url", SearchByUrl));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("File List", SearchByFileList));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Image", SearchByImage));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Application Name", SearchByApplicationName));
-                searchByContextMenu.Items.Add(
-                    CreateSearchByMenuItem("Process Name", SearchByProcessName));
-
-
-                ((MenuItem)searchByContextMenu.Items[1]).Visibility = Visibility.Collapsed;
-
-                searchByContextMenu.Closed += (s1, e) => {
-                    for (int i = 0; i < searchByContextMenu.Items.Count; i++) {
-                        var isChecked = ((CheckBox)((MenuItem)searchByContextMenu.Items[i]).Icon).IsChecked.Value;
-                        switch(i) {
-                            case 0:
-                                SearchByIsCaseSensitive = isChecked;
-                                break;
-                            case 1:
-                                SearchByTag = isChecked;
-                                break;
-                            case 2:
-                                SearchByTitle = isChecked;
-                                break;
-                            case 3:
-                                SearchByRichText = isChecked;
-                                break;
-                            case 4:
-                                SearchByUrl = isChecked;
-                                break;
-                            case 5:
-                                SearchByFileList = isChecked;
-                                break;
-                            case 6:
-                                SearchByImage = isChecked;
-                                break;
-                            case 7:
-                                SearchByApplicationName = isChecked;
-                                break;
-                            case 8:
-                                SearchByProcessName = isChecked;
-                                break;
-                        }
-                    }
-                    Properties.Settings.Default.Save();
-                };
-
-                searchByButton.ContextMenu = searchByContextMenu;
-                searchByContextMenu.PlacementTarget = searchBorder;
-                searchByContextMenu.IsOpen = true;
-            };       
+        public void RequestSearchBoxFocus() {
+            OnSearchTextBoxFocusRequest?.Invoke(this, new EventArgs());
         }
+
         #endregion
 
         #region Private Methods
-        private MenuItem CreateSearchByMenuItem(string label, bool propertyValue) {
-            var cb = new CheckBox();
-            cb.IsChecked = propertyValue;
-            
-            var l = new Label();
-            l.Content = label;
-
-            var menuItem = new MenuItem();
-            menuItem.Icon = cb;
-            menuItem.Header = l;
-
-            return menuItem;
-        }
+        
         #endregion
 
         #region Commands
@@ -509,7 +456,6 @@ namespace MpWpfApp {
         private void ClearText() {
             Text = string.Empty;
             SearchText = Text;
-            SearchTextBox.Focus();
             MpClipTrayViewModel.Instance.ResetClipSelection();
             //IsSearching = true;
         }

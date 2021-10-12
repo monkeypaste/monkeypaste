@@ -294,34 +294,7 @@ namespace MpWpfApp {
                 }});
 
                 ApplicationHook.KeyPress += (s, e) => {
-                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                        return;
-                    }
-                    if (MainWindowViewModel.SearchBoxViewModel != null && MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
-                        return;
-                    }
-                    if (MainWindowViewModel.TagTrayViewModel != null && MainWindowViewModel.TagTrayViewModel.IsEditingTagName) {
-                        return;
-                    }
-                    if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
-                        return;
-                    }
-                    if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
-                        return;
-                    }
-                    if (!char.IsControl(e.KeyChar)) {
-                        foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {
-                        }
-                        if (!MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
-                            MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused = true;
-                            if (MainWindowViewModel.SearchBoxViewModel.HasText) {
-                                MainWindowViewModel.SearchBoxViewModel.SearchTextBox.Text += e.KeyChar.ToString();
-                            } else {
-                                MainWindowViewModel.SearchBoxViewModel.SearchTextBox.Text = e.KeyChar.ToString();
-                            }
-                            MainWindowViewModel.SearchBoxViewModel.SearchTextBox.Select(MainWindowViewModel.SearchBoxViewModel.SearchTextBox.Text.Length, 0);
-                        }
-                    }
+                    //AutoSearchOnKeyPress(e.KeyChar);
                 };
                 #endregion
             }
@@ -330,6 +303,38 @@ namespace MpWpfApp {
                 return false;
             }
             return true;
+        }
+
+        private void AutoSearchOnKeyPress(char keyChar) {
+            var sbvm = MpSearchBoxViewModel.Instance;
+
+            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+            if (sbvm != null && sbvm.IsTextBoxFocused) {
+                return;
+            }
+            if (MainWindowViewModel.TagTrayViewModel != null && MainWindowViewModel.TagTrayViewModel.IsEditingTagName) {
+                return;
+            }
+            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
+                return;
+            }
+            if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
+                return;
+            }
+            if (!char.IsControl(keyChar)) {
+                foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {
+                }
+                if (!sbvm.IsTextBoxFocused) {
+                    if (sbvm.HasText) {
+                        sbvm.Text += keyChar.ToString();
+                    } else {
+                        sbvm.Text = keyChar.ToString();
+                    }
+                    sbvm.RequestSearchBoxFocus();
+                }
+            }
         }
 
         private void InitShortcuts() {

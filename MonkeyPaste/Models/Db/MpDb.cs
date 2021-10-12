@@ -141,11 +141,27 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public T QueryScalar<T>(string query, params object[] args) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var result = _connection.ExecuteScalar<T>(query, args);
+            return result;
+        }
+
         public async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
             var result = await _connectionAsync.QueryScalarsAsync<T>(query, args);
+            return result;
+        }
+
+        public List<T> QueryScalars<T>(string query, params object[] args) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var result = _connection.QueryScalars<T>(query, args);
             return result;
         }
 

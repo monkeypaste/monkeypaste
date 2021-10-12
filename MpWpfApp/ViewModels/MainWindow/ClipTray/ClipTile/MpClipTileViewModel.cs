@@ -871,30 +871,31 @@ using System.Speech.Synthesis;
                     IsPlaceholder = true;
                 } else {
                     IsPlaceholder = false;
+
+                    IsBusy = true;
+                    var ccil = MpCopyItem.GetCompositeChildren(headItem);
+                    ccil.Insert(0, headItem);
+
+                    var civml = new List<MpContentItemViewModel>();
+                    foreach (var cci in ccil) {
+                        civml.Add(new MpContentItemViewModel(this, cci));
+                    }
+
+                    ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
+                        civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                    BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
+
+                    HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+
+                    OnViewModelLoaded();
+                    IsBusy = false;
                 }
-                IsBusy = true;
-                var ccil = MpCopyItem.GetCompositeChildren(headItem);
-                ccil.Insert(0, headItem);
-
-                var civml = new List<MpContentItemViewModel>();
-                foreach (var cci in ccil) {
-                    civml.Add(new MpContentItemViewModel(this, cci));
-                }
-
-                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                    civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
-                BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
-
-                foreach (var ivm in ItemViewModels) {
-                    BindItemEvents(ivm);
-                }
-
-                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
-                OnViewModelLoaded();
-                IsBusy = false;
             });
         }
+
+        public async Task ClearContent() {
+            await Initialize(null);
+        } 
 
 
         public void RefreshTile() {
@@ -936,30 +937,6 @@ using System.Speech.Synthesis;
                             MpClipTrayViewModel.Instance.FlipTileCommand.Execute(this);
                         }
                     }
-                    //if (IsSelected) {
-                    //    if (ItemVisibility != Visibility.Visible && !MpClipTrayViewModel.Instance.IsPastingHotKey) {
-                    //        IsSelected = false;
-                    //        break;
-                    //    }
-                    //    LastSelectedDateTime = DateTime.Now;
-                    //    if (SelectedItems.Count == 0 && HeadItem != null) {
-                    //        HeadItem.IsSelected = true;
-                    //    }
-                    //} else {
-                    //    ClearSubSelection();
-                    //    LastSelectedDateTime = DateTime.MaxValue;
-
-                    //    //multi-select label stuff (disabled)
-                    //    //OnPropertyChanged(nameof(MultiSelectOrderMarkerVisibility));
-                    //    //OnPropertyChanged(nameof(ClipTileTitleAppIconImageVisibility));
-
-                    //    //foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                    //    //    rtbvm.OnPropertyChanged(nameof(rtbvm.MultiSelectOrderMarkerVisibility));
-                    //    //    rtbvm.OnPropertyChanged(nameof(rtbvm.AppIconImageVisibility));
-                    //    //}
-                    //}
-
-                    //RefreshAsyncCommands();
                     break;
                 case nameof(IsHovering):
                     if (IsHovering) {
@@ -967,15 +944,7 @@ using System.Speech.Synthesis;
                             IsHovering = false;
                             ClearSubHovering();
                         }
-                        //foreach (var vctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
-                        //    if (vctvm != this) {
-                        //        IsHovering = false;
-                        //        ClearSubHovering();
-                        //    }
-                        //}
-                    } else {
-                        //_detailIdx = 1;
-                    }
+                    } 
                     break;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
@@ -1268,31 +1237,6 @@ using System.Speech.Synthesis;
 
         #region Private Methods           
 
-        private void BindItemEvents(MpContentItemViewModel ivm) {
-            ivm.PropertyChanged += Ivm_PropertyChanged;
-        }
-
-        private void Ivm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var ivm = sender as MpContentItemViewModel;
-            switch (e.PropertyName) {
-                case nameof(ivm.IsSelected):
-                    //if (ivm.IsSelected) {
-                    //    if (!IsSelected) {
-                    //        IsSelected = true;
-                    //        MpConsole.WriteLine($"Item {ivm.CopyItemTitle} forced selection of its parent tile");
-                    //    }
-                    //    if(SelectedItems.Count > 1 && !MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                    //        foreach(var oivm in SelectedItems) {
-                    //            if(oivm != ivm) {
-                    //                oivm.IsSelected = false;
-                    //                MpConsole.WriteLine($"Item {oivm.CopyItemTitle}'s selection was canceled by Item {ivm.CopyItemTitle}");
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    break;
-            }
-        }
         #endregion
 
 

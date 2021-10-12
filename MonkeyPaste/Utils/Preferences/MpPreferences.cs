@@ -293,7 +293,16 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region User Properties
+        #region User Properties        
+
+        public bool SearchByDescription {
+            get {
+                return _prefIo.Get(nameof(SearchByDescription), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByDescription), value);
+            }
+        }
 
         public DateTime StartupDateTime {
             get {

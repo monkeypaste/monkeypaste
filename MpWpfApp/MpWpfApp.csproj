@@ -107,6 +107,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentMarginExtension.cs" />
+    <Compile Include="AttachedProperties\MpPagedItem.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpListBoxItemRecycler.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
@@ -162,16 +163,11 @@
       <DependentUpon>UserUiStrings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utils\Builders\MpIconBuilder.cs" />
-    <Compile Include="Utils\DataVirtualization\DescriptionList.cs" />
-    <Compile Include="Utils\DataVirtualization\FilterDescription.cs" />
-    <Compile Include="Utils\DataVirtualization\FilterDescriptionList.cs" />
-    <Compile Include="Utils\DataVirtualization\IFilteredSortedSourceProviderAsync.cs" />
-    <Compile Include="Utils\DataVirtualization\IFilterOrderDescription.cs" />
-    <Compile Include="Utils\DataVirtualization\MemberPathFilterText.cs" />
-    <Compile Include="Utils\DataVirtualization\MemberPathSortingDirection.cs" />
-    <Compile Include="Utils\DataVirtualization\ParentOfTypeExtensions.cs" />
-    <Compile Include="Utils\DataVirtualization\SortDescription.cs" />
-    <Compile Include="Utils\DataVirtualization\SortDescriptionList.cs" />
+    <Compile Include="Utils\DataVirtualization\MpAsyncVirtualizingCollection.cs" />
+    <Compile Include="Utils\DataVirtualization\MpClipTileViewModelProvider.cs" />
+    <Compile Include="Utils\DataVirtualization\MpVirtualizingEnumerator.cs" />
+    <Compile Include="Utils\DataVirtualization\MpWpfQueryInfo.cs" />
+    <Compile Include="Utils\DataVirtualization\MpVirtualizingCollection.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
@@ -235,6 +231,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Selector\MpContentTemplateSelector.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpPagedItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />

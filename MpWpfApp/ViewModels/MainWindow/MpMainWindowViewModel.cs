@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using AsyncAwaitBestPractices.MVVM;
-using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -30,6 +29,7 @@ namespace MpWpfApp {
 
         }
         #endregion
+
         #region Statics
         public static bool IsMainWindowLoading { get; set; } = true;
         public static bool IsMainWindowOpening { get; set; } = false;

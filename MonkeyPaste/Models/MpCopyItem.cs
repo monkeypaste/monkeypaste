@@ -161,7 +161,7 @@ namespace MonkeyPaste {
             int tagId,
             int start,
             int count,
-            MpClipTileSortType sortType,
+            MpContentSortType sortType,
             bool isDescending,
             Dictionary<int,int> manualSortOrderLookup = null) {
             MpCopyItem dummyCi = new MpCopyItem();
@@ -206,20 +206,20 @@ namespace MonkeyPaste {
                     break;
             }
             switch (sortType) {
-                case MpClipTileSortType.CopyDateTime:
+                case MpContentSortType.CopyDateTime:
                     result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.CopyDateTime)).GetValue(x))
                                  .Take(count)
                                  .Skip(start)
                                  .ToList();
                     break;
-                case MpClipTileSortType.ItemType:
+                case MpContentSortType.ItemType:
                     result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.ItemType)).GetValue(x))
                                  .Take(count)
                                  .Skip(start)
                                  .ToList();
                     break;
                 // TODO add rest of sort types
-                case MpClipTileSortType.Manual:
+                case MpContentSortType.Manual:
                     if (manualSortOrderLookup == null) {
                         result = result.Take(count).Skip(start).ToList();
                     } else {
@@ -506,15 +506,29 @@ namespace MonkeyPaste {
         Html
     }
 
-    public enum MpClipTileSortType {
+    public enum MpContentSortType {
         None = 0,
         CopyDateTime,
-        //ModifiedDateTime,
         Source,
         Title,
-        PlainText,
+        ItemData,
         ItemType,
         UsageScore,
         Manual
+    }
+
+    [Flags]
+    public enum MpContentFilterType {
+        None = 0,
+        CaseSensitive = 1,
+        Title = 2,
+        Text = 4,
+        File = 8,
+        Image = 16,
+        Url = 32,
+        AppName = 64,
+        AppPath = 128,
+        Meta = 256,
+        Tag = 512
     }
 }

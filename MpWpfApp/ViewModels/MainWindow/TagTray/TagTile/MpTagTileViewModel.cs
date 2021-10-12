@@ -335,11 +335,11 @@ namespace MpWpfApp {
                 case nameof(Tag):
                     break;
                 case nameof(IsSelected):
-                    if (IsSelected) {
-                        Task.Run(async()=> {
-                            await MpClipTrayViewModel.Instance.RefreshTiles(); 
-                        });
-                    }
+                    //if (IsSelected) {
+                    //    Task.Run(async()=> {
+                    //        await MpClipTrayViewModel.Instance.RefreshTiles(); 
+                    //    });
+                    //}
                     break;
             }
         }        

@@ -55,8 +55,8 @@ namespace MonkeyPaste {
         [ManyToMany(typeof(MpCopyItemTag))]
         public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
 
-        [OneToMany]
-        public List<MpShortcut> Shortcuts { get; set; }
+        //[OneToMany]
+        //public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
         #region Statics
