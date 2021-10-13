@@ -389,6 +389,7 @@ namespace MpWpfApp {
 
         #region Events
         public event EventHandler<string> OnSearchTextChanged;
+        public event EventHandler<MpContentFilterType> OnFilterFlagsChanged;
 
         public event EventHandler OnSearchTextBoxFocusRequest;
         #endregion
@@ -421,13 +422,24 @@ namespace MpWpfApp {
                         OnPropertyChanged(nameof(TextBoxTextBrush));
                         break;
                     case nameof(Text):
-                        OnSearchTextChanged?.Invoke(this, Text);
+                        if(!HasText && !string.IsNullOrWhiteSpace(SearchText) && SearchText != PlaceholderText) {
+                            //when there WAS search text but user has deleted all text
+                            OnSearchTextChanged?.Invoke(this, Text);
+                        } else if(HasText) {
+                            OnSearchTextChanged?.Invoke(this, Text);
+                        }
+                        
 
                         timer.Stop();
                         timer.Start();
                         break;
+                    case nameof(FilterType):
+                        OnFilterFlagsChanged?.Invoke(this, FilterType);
+                        break;
                 }
             };
+
+            OnViewModelLoaded();
         }
 
         public void RequestSearchBoxFocus() {

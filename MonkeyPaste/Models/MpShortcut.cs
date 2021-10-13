@@ -132,15 +132,6 @@ namespace MonkeyPaste {
             CopyItemId = 0;
             TagId = 0;
         }
-        public MpShortcut(int hkId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut where pk_MpShortcutId=@hkid",
-                new Dictionary<string, object> {
-                    { "@hkid", hkId }
-                });
-            if (dt != null && dt.Rows.Count > 0) {
-                LoadDataRow(dt.Rows[0]);
-            }
-        }
         public MpShortcut(int copyItemId, int tagId, string keyString, string shortcutName) : this() {
             ShortcutName = shortcutName;
             CopyItemId = copyItemId;
@@ -167,41 +158,41 @@ namespace MonkeyPaste {
             RoutingType = (MpRoutingType)Convert.ToInt32(dr["RoutingType"].ToString());            
         }
 
-        public override void WriteToDatabase() {
-            if (ShortcutId == 0) {
-                MpDb.Instance.ExecuteWrite(
-                    "insert into MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@ks,@dks,@ciid,@tid)",
-                    new Dictionary<string, object> {
-                        { "@sn", ShortcutName},
-                        { "@rt", (int)RoutingType},
-                        { "@ks", KeyString},
-                        { "@dks", DefaultKeyString},
-                        { "@ciid", CopyItemId},
-                        { "@tid", TagId}
-                    });
-                ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
-            } else {
-                MpDb.Instance.ExecuteWrite(
-                    "update MpShortcut set ShortcutName=@sn, KeyString=@ks, DefaultKeyString=@dks, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
-                    new Dictionary<string, object> {
-                        { "@sn", ShortcutName},
-                        { "@rtid", (int)RoutingType},
-                        { "@ks", KeyString},
-                        { "@dks", DefaultKeyString},
-                        { "@ciid", CopyItemId},
-                        { "@tid", TagId},
-                        { "@sid", ShortcutId }
-                    });
-            }
-        }
+        //public override void WriteToDatabase() {
+        //    if (ShortcutId == 0) {
+        //        MpDb.Instance.ExecuteWrite(
+        //            "insert into MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@ks,@dks,@ciid,@tid)",
+        //            new Dictionary<string, object> {
+        //                { "@sn", ShortcutName},
+        //                { "@rt", (int)RoutingType},
+        //                { "@ks", KeyString},
+        //                { "@dks", DefaultKeyString},
+        //                { "@ciid", CopyItemId},
+        //                { "@tid", TagId}
+        //            });
+        //        ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
+        //    } else {
+        //        MpDb.Instance.ExecuteWrite(
+        //            "update MpShortcut set ShortcutName=@sn, KeyString=@ks, DefaultKeyString=@dks, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
+        //            new Dictionary<string, object> {
+        //                { "@sn", ShortcutName},
+        //                { "@rtid", (int)RoutingType},
+        //                { "@ks", KeyString},
+        //                { "@dks", DefaultKeyString},
+        //                { "@ciid", CopyItemId},
+        //                { "@tid", TagId},
+        //                { "@sid", ShortcutId }
+        //            });
+        //    }
+        //}
 
-        public override void DeleteFromDatabase() {
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpShortcut where pk_MpShortcutId=@sid",
-                new Dictionary<string, object> {
-                    { "@sid", ShortcutId }
-                });
-        }
+        //public override void DeleteFromDatabase() {
+        //    MpDb.Instance.ExecuteWrite(
+        //        "delete from MpShortcut where pk_MpShortcutId=@sid",
+        //        new Dictionary<string, object> {
+        //            { "@sid", ShortcutId }
+        //        });
+        //}
 
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;

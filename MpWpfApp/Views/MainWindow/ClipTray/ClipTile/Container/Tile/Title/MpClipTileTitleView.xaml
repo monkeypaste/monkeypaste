@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <Viewbox Grid.ColumnSpan="2"
                  Stretch="Fill">
-            <Canvas x:Name="TitleSwirlCanvas"
+            <Canvas x:Name="TitleSwirlCanvas" 
                     Visibility="Visible"
                     Width="{local:MpMeasurementsBinding ClipTileBorderMinSize, Mode=OneWay}"
                     Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
@@ -116,7 +116,7 @@
               HorizontalAlignment="Left">
             <!-- Clip Title TextBlock -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
-                       Text="{Binding CopyItem.Title}"
+                       Text="{Binding Path=Text, ElementName=ClipTileTitleTextBox}"
                        FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize, Mode=OneWay}"
                        Background="{Binding TileTitleTextGridBackgroundBrush}"
                        Foreground="White"
@@ -138,7 +138,7 @@
                      FontSize="20"
                      IsReadOnly="False"
                      Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Text="{Binding CopyItem.Title, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
+                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
             
         </Grid>
         <Image x:Name="ClipTileAppIconHighlightedBorderImage"

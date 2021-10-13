@@ -46,7 +46,7 @@ namespace MpWpfApp {
                 var l = new Point[] { lbir.BottomLeft, lbir.BottomRight };
                 seperatorAdorner.Lines.Add(l.ToList());
             }
-            seperatorAdorner.IsShowing = true;
+            seperatorAdorner.IsShowing = ContentListBox.Items.Count > 1;
             SeperatorAdornerLayer.Update();
         }
 
@@ -120,8 +120,8 @@ namespace MpWpfApp {
         }
 
         public void UpdateUi() {
-            this.UpdateLayout();
             UpdateAdorner();
+            this.UpdateLayout();
             //ContentListBox.Items.Refresh();
         }
 

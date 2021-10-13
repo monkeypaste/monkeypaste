@@ -51,6 +51,13 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<MpContentSortType> OnSortTypeChanged;
+        public event EventHandler<bool> OnIsDescendingChanged;
+
+        #endregion
+
         #region Public Methods
         public MpClipTileSortViewModel() : base(null) {
             //must be set before property changed registered for loading order
@@ -71,9 +78,15 @@ namespace MpWpfApp {
                             }
                             PerformSelectedSortCommand.Execute(null);
                         }
+                        OnSortTypeChanged?.Invoke(this, SelectedSortType.SortType);
+                        break;
+                    case nameof(IsSortDescending):
+                        OnIsDescendingChanged?.Invoke(this, IsSortDescending);
                         break;
                 }
             };
+
+            OnViewModelLoaded();
         }
 
         public void SetToManualSort() {

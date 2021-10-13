@@ -7,37 +7,59 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTileViewModelProvider : MpIItemsProvider<MpClipTileViewModel> {
-        private MpCopyItemProvider _modelProvider;
+        public MpCopyItemProvider ModelProvider { get; set; }
+
         private int _pageSize;
 
 
         public MpClipTileViewModelProvider(int pageSize) {
             _pageSize = pageSize;
-            _modelProvider = MpCopyItemProvider.Instance;
+            ModelProvider = MpCopyItemProvider.Instance;
         }
 
         public void SetQueryInfo(MpQueryInfo info) {
-            _modelProvider.SetQueryInfo(info);
+            ModelProvider.SetQueryInfo(info);
         }
 
         public int FetchCount() {
-            if(_modelProvider == null) {
+            if(ModelProvider == null) {
                 return 0;
             }
-            return _modelProvider.FetchCount();
+            return ModelProvider.FetchCount();
+        }
+
+        public async Task<int> FetchCountAsync() {
+            if (ModelProvider == null) {
+                return 0;
+            }
+            int count = await ModelProvider.FetchCountAsync();
+            return count;
         }
 
         public IList<MpClipTileViewModel> FetchRange(int startIndex, int count) {
-            if (_modelProvider == null) {
+            if (ModelProvider == null) {
                 return new List<MpClipTileViewModel>();
             }
-            var ml = _modelProvider.FetchRange(startIndex, count);
+            var ml = ModelProvider.FetchRange(startIndex, count);
             var vml = new List<MpClipTileViewModel>();
             foreach(var m in ml) {
                 vml.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(m));
             }
             return vml;
            // return ml.AsParallel().Select(x=>MpClipTrayViewModel.Instance.CreateClipTileViewModel(x)).ToList();
+        }
+
+        public async Task<IList<MpClipTileViewModel>> FetchRangeAsync(int startIndex, int count) {
+            if (ModelProvider == null) {
+                return new List<MpClipTileViewModel>();
+            }
+            var ml = await ModelProvider.FetchRangeAsync(startIndex, count);
+            var vml = new List<MpClipTileViewModel>();
+            foreach (var m in ml) {
+                vml.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(m));
+            }
+            return vml;
+            // return ml.AsParallel().Select(x=>MpClipTrayViewModel.Instance.CreateClipTileViewModel(x)).ToList();
         }
     }
 }

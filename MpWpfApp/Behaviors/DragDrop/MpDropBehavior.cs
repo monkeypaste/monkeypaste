@@ -29,16 +29,13 @@ namespace MpWpfApp {
 
         protected override void OnAttached() {
             base.OnAttached();
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(AssociatedObject.DataContext != null) {
-                lineAdorner = new MpDropLineAdorner(AssociatedObject);
-                this.adornerLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
-                adornerLayer.Add(lineAdorner);
-
-                adornerLayer.Update();
+        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
+            InitAdorner();
+            if (AssociatedObject.DataContext != null) {
 
                 MpMainWindowViewModel mwvm = null;
                 if (AssociatedObject.DataContext is MpClipTrayViewModel) {
@@ -52,8 +49,20 @@ namespace MpWpfApp {
                 mwvm.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
             }
         }
+
+        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            
+        }
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
+        }
+
+        private void InitAdorner() {
+            lineAdorner = new MpDropLineAdorner(AssociatedObject);
+            this.adornerLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
+            adornerLayer.Add(lineAdorner);
+
+            adornerLayer.Update();
         }
 
         public bool StartDrop(List<MpClipTileViewModel> dctvml, int overIdx) {
@@ -104,6 +113,7 @@ namespace MpWpfApp {
                 overRect = AssociatedObject.GetListBoxItemRect(AssociatedObject.Items.Count - 1);
                 isTail = true;
             }
+
             if (isTrayDrop) {
                 if (isTail) {
                     lineAdorner.Points[0] = overRect.TopRight;
@@ -193,6 +203,7 @@ namespace MpWpfApp {
                     MpClipTileSortViewModel.Instance.SetToManualSort();
                 } else {
                     MpClipTileViewModel dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
+                    //dropTile.IsClipDropping = true;
                     bool isContentResort = dragTiles.Count == 1 && dragTiles[0] == dropTile;
                     if (isContentResort) {
                         //For items moved within a tile reverse order and move
@@ -240,12 +251,16 @@ namespace MpWpfApp {
                                 MpClipTrayViewModel.Instance.Items.Remove(dragTile);
                             } else {
                                 dragTile.UpdateSortOrder();
+                                //dragTile.RequestUiUpdate();
                             }
                         }
                         await dropTile.InitializeAsync(dropModels[0]);
 
+                        //dropTile.ItemViewModels.ForEach(x => x.IsSelected = dropModels.Contains(x.CopyItem));
+                        //dropTile.IsSelected = true;
                         var cilv = AssociatedObject.GetVisualAncestor<MpContentListView>();
-                        cilv.UpdateAdorner();
+                        cilv.UpdateUi();
+                        //dropTile.IsClipDropping = false;
                     }
                 }
                 Reset();

@@ -63,20 +63,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isSelected = false;
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                if (_isSelected != value) {// || MpClipTrayViewModel.Instance.IsFilteringByApp) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged(nameof(TagTextColor));
-                }
-            }
-        }
+        public bool IsSelected { get; set; }
 
         private bool _isEditing = false;
         public bool IsEditing {

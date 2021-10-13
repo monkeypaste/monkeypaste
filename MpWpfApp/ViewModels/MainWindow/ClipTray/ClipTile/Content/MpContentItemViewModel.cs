@@ -465,16 +465,15 @@ namespace MpWpfApp {
                 return CopyItem.CopyCount + CopyItem.PasteCount;
             }
         }
-
         public int CompositeSortOrderIdx {
             get {
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return 0;
                 }
                 return CopyItem.CompositeSortOrderIdx;
             }
             set {
-                if(CopyItem != null && CopyItem.CompositeSortOrderIdx != value) {
+                if (CopyItem != null && CopyItem.CompositeSortOrderIdx != value) {
                     CopyItem.CompositeSortOrderIdx = value;
                     OnPropertyChanged(nameof(CompositeSortOrderIdx));
                 }
@@ -495,7 +494,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
         public string CopyItemTitle {
             get {
                 if(CopyItem == null) {
@@ -572,6 +570,7 @@ namespace MpWpfApp {
             }
         }
 
+
         public MpCopyItem CopyItem { get; set; }
 
         #endregion
@@ -598,7 +597,11 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
-            Initialize(ci);
+            Task.Run(async () => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                    await InitializeAsync(ci);
+                });
+            });
         }
 
         public void Initialize(MpCopyItem ci) {
@@ -606,6 +609,10 @@ namespace MpWpfApp {
                 IsPlaceholder = true;
             } else {
                 IsPlaceholder = false;
+            }
+
+            if (ci.Source == null) {
+                ci.Source = MpDb.Instance.GetItem<MpSource>(ci.SourceId);
             }
             CopyItem = ci;
 
@@ -616,6 +623,29 @@ namespace MpWpfApp {
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
             CycleDetailCommand.Execute(null);
+            IsBusy = false;
+        }
+
+        public async Task InitializeAsync(MpCopyItem ci) {
+            if (ci == null) {
+                IsPlaceholder = true;
+            } else {
+                IsPlaceholder = false;
+            }
+
+            if (ci.Source == null) {
+                ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
+            }
+            CopyItem = ci;
+
+            IsBusy = true;
+            IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
+
+            TemplateCollection = new MpTemplateCollectionViewModel(this);
+            TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+
+            CycleDetailCommand.Execute(null);
+            RequestUiUpdate();
             IsBusy = false;
         }
 
@@ -760,7 +790,7 @@ namespace MpWpfApp {
         public void ClearEditing() {
             //IsEditingContent = false;
             IsEditingTitle = false;
-            TemplateCollection.ClearAllEditing();
+            TemplateCollection?.ClearAllEditing();
             if (IsPastingTemplate) {
                 IsPastingTemplate = false;
                 Parent.RequestUnexpand();
@@ -814,7 +844,7 @@ namespace MpWpfApp {
                         if (!Parent.IsSelected) {
                             Parent.IsSelected = true;
                         }
-                        if(!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                        if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !Parent.IsClipDropping) {
                             MpClipTrayViewModel.Instance.SelectedItems
                                 .Where(x => x != Parent)
                                 .ForEach(y => y.IsSelected = false);
@@ -830,9 +860,13 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(CopyItem):
+                    if(CopyItem == null) {
+                        break;
+                    }
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
                     UpdateDetails();
+                    RequestUiUpdate();
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));

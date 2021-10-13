@@ -76,7 +76,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-
         #region Mouse Events
 
         private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

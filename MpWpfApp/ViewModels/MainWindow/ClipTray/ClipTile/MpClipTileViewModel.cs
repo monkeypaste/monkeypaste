@@ -851,8 +851,12 @@ using System.Speech.Synthesis;
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            //MpHelpers.Instance.RunOnMainThread(()=>InitializeAsync(ci));
-            Initialize(ci);
+
+            
+            MpHelpers.Instance.RunOnMainThread(async()=> {
+                await InitializeAsync(ci);
+            });
+           // Initialize(ci);
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -866,13 +870,14 @@ using System.Speech.Synthesis;
             }
         }
         public void Initialize(MpCopyItem headItem) {
+            IsBusy = true;
             if (headItem == null) {
                 IsPlaceholder = true;
             } else {
                 IsPlaceholder = false;
 
-                IsBusy = true;
-                var ccil = MpCopyItem.GetCompositeChildren(headItem);
+
+                var ccil = MpCopyItemProvider.Instance.GetCompositeChildren(headItem.Id);
                 ccil.Insert(0, headItem);
 
                 var civml = new List<MpContentItemViewModel>();
@@ -880,25 +885,26 @@ using System.Speech.Synthesis;
                     civml.Add(new MpContentItemViewModel(this, cci));
                 }
 
-                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                    civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+
                 BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
 
                 HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
+                RequestUiUpdate();
                 OnViewModelLoaded();
-                IsBusy = false;
             }
+            IsBusy = false;
         }
         public async Task InitializeAsync(MpCopyItem headItem) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
+                IsBusy = true;
                 if (headItem == null) {
                     IsPlaceholder = true;
                 } else {
                     IsPlaceholder = false;
+                    ItemViewModels.Clear();
 
-                    IsBusy = true;
-                    var ccil = MpCopyItem.GetCompositeChildren(headItem);
+                    var ccil = await MpCopyItemProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                     ccil.Insert(0, headItem);
 
                     var civml = new List<MpContentItemViewModel>();
@@ -906,15 +912,16 @@ using System.Speech.Synthesis;
                         civml.Add(new MpContentItemViewModel(this, cci));
                     }
 
-                    ItemViewModels = new ObservableCollection<MpContentItemViewModel>(
-                        civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                    ItemViewModels = new ObservableCollection<MpContentItemViewModel>(civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
                     BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
 
                     HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
+                    RequestUiUpdate();
+
                     OnViewModelLoaded();
-                    IsBusy = false;
                 }
+                IsBusy = false;
             });
         }
 
@@ -1277,6 +1284,8 @@ using System.Speech.Synthesis;
 
         public Visibility BackVisibility { get; set; } = Visibility.Collapsed;
 
+        public Visibility SideVisibility { get; set; } = Visibility.Collapsed;
+
         public ScrollBarVisibility HorizontalScrollbarVisibility {
             get {
                 if (Parent == null) {
@@ -1461,7 +1470,7 @@ using System.Speech.Synthesis;
                     ivm.CopyItem.WriteToDatabase();
                 }
             }
-            RequestUiUpdate();
+            //RequestUiUpdate();
         }
 
         public async Task UpdateSortOrderAsync(bool fromModel = false) {

@@ -691,8 +691,8 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            rtb.Document.PageWidth = rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom;
+            rtb.Document.PageWidth = Math.Max(0,rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+            rtb.Document.PageHeight = Math.Max(0,rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             rtb.UpdateLayout();
         }
 

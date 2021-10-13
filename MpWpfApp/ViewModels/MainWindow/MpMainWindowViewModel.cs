@@ -281,6 +281,8 @@ namespace MpWpfApp {
             Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
             Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
+
+            MpClipTrayViewModel.Instance.InitQueryInfo();
         }
 
         public void FinishLoading() {

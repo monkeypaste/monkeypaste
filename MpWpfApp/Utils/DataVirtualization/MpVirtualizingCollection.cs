@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
+using DynamicData.Binding;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -17,7 +21,7 @@ namespace MpWpfApp {
     /// data bound to a suitable ItemsControl.
     /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public class MpVirtualizingCollection<T> : IList<T>, IList {
+    public class MpVirtualizingCollection<T> : IList<T>, IList, IObservableCollection<T> {
         #region Constructors
 
         public MpVirtualizingCollection() : base() { }
@@ -527,6 +531,21 @@ namespace MpWpfApp {
         /// <returns></returns>
         protected int FetchCount() {
             return ItemsProvider.FetchCount();
+        }
+
+        public void Load(IEnumerable<T> items) {
+            throw new NotImplementedException();
+        }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public IDisposable SuspendCount() {
+            throw new NotImplementedException();
+        }
+
+        public IDisposable SuspendNotifications() {
+            throw new NotImplementedException();
         }
 
         #endregion

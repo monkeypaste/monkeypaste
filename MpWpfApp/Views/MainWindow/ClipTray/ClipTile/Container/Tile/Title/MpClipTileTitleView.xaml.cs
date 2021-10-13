@@ -64,6 +64,7 @@ namespace MpWpfApp {
         private void ClipTileTitleTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Enter || e.Key == Key.Escape) {
+                //ctvm.CopyItemTitle = ClipTileTitleTextBox.Text;
                 ctvm.IsEditingTitle = false;
             }
         }

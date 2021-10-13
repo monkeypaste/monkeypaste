@@ -61,7 +61,7 @@ namespace MpWpfApp {
         private List<int> _filterIds;
 
         private MpClipTileViewModelProvider _viewModelProvider; 
-        private MpWpfQueryInfo _queryInfo;
+        
         #endregion
 
         #region Properties
@@ -70,6 +70,7 @@ namespace MpWpfApp {
 
         public int ItemsAdded { get; set; }
 
+        public MpWpfQueryInfo QueryInfo { get; set; }
         #region View Models
 
         //private ObservableCollection<MpClipTileViewModel> _clipTileViewModels = new ObservableCollection<MpClipTileViewModel>();
@@ -85,13 +86,10 @@ namespace MpWpfApp {
         //    }
         //}
 
-        public MpAsyncVirtualizingCollection<MpClipTileViewModel> Items { get; set; }// = new MpAsyncVirtualizingCollection<MpClipTileViewModel>();
+        public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
         public List<MpClipTileViewModel> SelectedItems {
             get {
-                if(Items == null || Items.IsLoading) {
-                    return new List<MpClipTileViewModel>();
-                }
                 return Items.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
             }
         }
@@ -423,17 +421,15 @@ namespace MpWpfApp {
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
             _tileLockObject = new object();
 
-            _queryInfo = new MpWpfQueryInfo();
-            _queryInfo.InfoChanged += _queryInfo_InfoChanged;
 
-            _viewModelProvider = new MpClipTileViewModelProvider(MpMeasurements.Instance.TotalVisibleClipTiles * 2);
-
-            Items = new MpAsyncVirtualizingCollection<MpClipTileViewModel>(
-                _viewModelProvider,
-                MpMeasurements.Instance.TotalVisibleClipTiles * 2);
-            BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
-            Items.PropertyChanged += Items_PropertyChanged;
+            _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles * 2;
+            _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);
             
+
+            BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
+            for (int i = 0; i < _pageCount; i++) {
+                Items.Add(CreateClipTileViewModel(null));
+            }
             //var phvml = new List<MpClipTileViewModel>();
             //_pageCount = (MpMeasurements.Instance.MaxRecentClipTiles + 1) * 2;
             //int placeHoldersToAdd = _pageCount - ClipTileViewModels.Count;
@@ -445,18 +441,40 @@ namespace MpWpfApp {
             //BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
         }
 
-        private void Items_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(Items.IsLoading):
-                    if(!Items.IsLoadingData) {
-                        RequestUiRefresh();
-                    }
-                    break;
-            }
+        public void InitQueryInfo() {
+            QueryInfo = new MpWpfQueryInfo();
+            QueryInfo.InfoChanged += _queryInfo_InfoChanged;
+            //_queryInfo_InfoChanged(this, new EventArgs());
         }
 
-        private void _queryInfo_InfoChanged(object sender, EventArgs e) {
-            _viewModelProvider.SetQueryInfo(_queryInfo);
+        private async void _queryInfo_InfoChanged(object sender, EventArgs e) {
+            _viewModelProvider.SetQueryInfo(QueryInfo);
+
+            await Task.Run(async () => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
+
+                    var initTasks = new List<Task>();
+                    for (int i = 0; i < ivml.Count; i++) {
+                        //Items[i].IsBusy = true;
+                        //Items[i].IsPlaceholder = false;
+                        initTasks.Add(Items[i].InitializeAsync(ivml[i]));
+                    }
+                    if(ivml.Count < Items.Count) {
+                        for (int i = ivml.Count; i < Items.Count; i++) {
+                            //Items[i].IsPlaceholder = true;
+                            initTasks.Add(Items[i].InitializeAsync(null));
+                        }
+                    }
+
+                    await Task.WhenAll(initTasks);
+                    ResetClipSelection();
+                    sw.Stop();
+                    MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+                });
+            });
         }
 
 

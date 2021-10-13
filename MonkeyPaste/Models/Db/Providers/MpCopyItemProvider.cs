@@ -39,13 +39,13 @@ namespace MonkeyPaste {
         public static MpCopyItemProvider Instance { get { return _Lazy.Value; } }
         
         private MpCopyItemProvider() {
-            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
-            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
+            //MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
+            //MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
+            //MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
 
-            var sl = MpDb.Instance.GetItems<MpSource>();
-            _sourceLookup = new Dictionary<int, MpSource>();
-            sl.ForEach(x => _sourceLookup.Add(x.Id, x));
+            //var sl = MpDb.Instance.GetItems<MpSource>();
+            //_sourceLookup = new Dictionary<int, MpSource>();
+            //sl.ForEach(x => _sourceLookup.Add(x.Id, x));
 
             _queryInfo = new MpQueryInfo();
         }
@@ -55,7 +55,7 @@ namespace MonkeyPaste {
         #region Private Variables
         private MpQueryInfo _queryInfo;
 
-        private Dictionary<int, MpSource> _sourceLookup;
+        //private Dictionary<int, MpSource> _sourceLookup;
         #endregion
 
         #region Properties
@@ -63,6 +63,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
+        #region Select queries
 
         public async Task<int> GetTotalCopyItemCountAsync() {
             string query = "select count(pk_MpCopyItemId) from MpCopyItem";
@@ -161,6 +162,63 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task<List<MpCopyItem>> GetCompositeChildrenAsync(int ciid) {
+            string query = string.Format(
+                @"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
+
+        public List<MpCopyItem> GetCompositeChildren(int ciid) {
+            string query = string.Format(
+                @"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
+            var result = MpDb.Instance.Query<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<List<MpCopyItemTemplate>> GetTemplatesAsync(int ciid) {
+            string query = string.Format(
+                @"select * from MpCopyItemTemplate where fk_MpCopyItemId={0}", ciid);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItemTemplate>(query);
+            return result;
+        }
+
+        public List<MpCopyItemTemplate> GetTemplates(int ciid) {
+            string query = string.Format(
+                @"select * from MpCopyItemTemplate where fk_MpCopyItemId={0}", ciid);
+            var result = MpDb.Instance.Query<MpCopyItemTemplate>(query);
+            return result;
+        }
+
+        public async Task<List<MpShortcut>> GetCopyItemShortcutsAsync(int ciid) {
+            string query = string.Format(
+                @"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
+            var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
+            return result;
+        }
+
+        public List<MpShortcut> GetCopyItemShortcuts(int ciid) {
+            string query = string.Format(
+                @"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
+            var result = MpDb.Instance.Query<MpShortcut>(query);
+            return result;
+        }
+
+        public async Task<List<MpShortcut>> GetTagShortcutsAsync(int tid) {
+            string query = string.Format(
+                @"select * from MpShortcut where fk_MpTagId={0}", tid);
+            var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
+            return result;
+        }
+
+        public List<MpShortcut> GetTagShortcuts(int tid) {
+            string query = string.Format(
+                @"select * from MpShortcut where fk_MpTagId={0}", tid);
+            var result = MpDb.Instance.Query<MpShortcut>(query);
+            return result;
+        }
+
+        #endregion
 
         public async Task<List<int>> QueryForIds(
             int tagId,
@@ -291,7 +349,24 @@ namespace MonkeyPaste {
                     count = GetRecentCopyItemCount();
                     break;
                 default:
+                    count = GetTagItemCount(_queryInfo.TagId);
+                    break;
+            }
 
+            return count;
+        }
+
+        public async Task<int> FetchCountAsync() {
+            int count = 0;
+            switch (_queryInfo.TagId) {
+                case MpTag.AllTagId:
+                    count = await GetTotalCopyItemCountAsync();
+                    break;
+                case MpTag.RecentTagId:
+                    count = await GetRecentCopyItemCountAsync();
+                    break;
+                default:
+                    count = await GetTagItemCountAsync(_queryInfo.TagId);
                     break;
             }
 
@@ -299,6 +374,26 @@ namespace MonkeyPaste {
         }
 
         public IList<MpCopyItem> FetchRange(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+            string query = GetFetchQuery(startIndex, count);
+            var result = MpDb.Instance.Query<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<IList<MpCopyItem>> FetchRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+            string query = GetFetchQuery(startIndex, count);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
+
+        public IList<MpCopyItem> FetchRange(int startIndex, int count) {
+            return FetchRange(startIndex, count, null);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private string GetFetchQuery(int startIndex,int count) {
             int tagId = _queryInfo.TagId;
             string descStr = _queryInfo.IsDescending ? "DESC" : "ASC";
             string sortStr = Enum.GetName(typeof(MpContentSortType), _queryInfo.SortType);
@@ -306,26 +401,26 @@ namespace MonkeyPaste {
             if (st == MpContentSortType.Source ||
                 st == MpContentSortType.UsageScore ||
                 st == MpContentSortType.Manual) {
-                if(st != MpContentSortType.Manual) {
+                if (st != MpContentSortType.Manual) {
                     MpConsole.WriteLine("Ignoring unimplemented sort type: " + sortStr + " and sorting by id...");
                 }
                 sortStr = "pk_MpCopyItemId";
             }
-            
+
             string query = string.Empty;
 
             switch (tagId) {
                 case MpTag.RecentTagId:
                     query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
                                             select pci.pk_MpCopyItemId from MpCopyItem aci
-                                            inner join MpCopyItem pci 
+                                            inner join MpCopyItem pci  
                                             ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
                                             order by aci.{0} {1}) limit {2} offset {3}",
-                                           sortStr, descStr,count,startIndex);
+                                           sortStr, descStr, count, startIndex);
                     break;
                 case MpTag.AllTagId:
                     query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId = 0 
-                                            order by {0} {1}) limit {2} offset {3}",
+                                            order by {0} {1} limit {2} offset {3}",
                                            sortStr, descStr, count, startIndex);
                     break;
                 default:
@@ -338,57 +433,45 @@ namespace MonkeyPaste {
 			                                            fk_ParentCopyItemId
 	                                            end
 	                                            from MpCopyItem where pk_MpCopyItemId in 
-                                                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}))
+                                                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={4}))
                                            order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex);
+                                           sortStr, descStr, count, startIndex,tagId);
                     break;
             }
-
-            var result = MpDb.Instance.Query<MpCopyItem>(query);
-            result.ForEach(x => x.Source = _sourceLookup[x.SourceId]);
-
-            return result;
+            return query;
         }
-
-        public IList<MpCopyItem> FetchRange(int startIndex, int count) {
-            return FetchRange(startIndex, count, null);
-        }
-
-        #endregion
-
-        #region Private Methods
 
         #region Db Event Handlers
 
-        private void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpSource s) {
-                if(!_sourceLookup.ContainsKey(s.Id)) {
-                    _sourceLookup.Add(s.Id, s);
-                }
-            }
-        }
+        //private void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+        //    if(e is MpSource s) {
+        //        if(!_sourceLookup.ContainsKey(s.Id)) {
+        //            _sourceLookup.Add(s.Id, s);
+        //        }
+        //    }
+        //}
 
-        private void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpApp a) {
-                var sa = _sourceLookup.Where(x => x.Value.AppId == a.Id).FirstOrDefault();
-                if (sa.Value != null) {
-                    _sourceLookup[sa.Key].App = a;
-                }
-            } else if (e is MpUrl url) {
-                var sa = _sourceLookup.Where(x => x.Value.UrlId == url.Id).FirstOrDefault();
-                if (sa.Value != null) {
-                    _sourceLookup[sa.Key].Url = url;
-                }
-            }
-        }
+        //private void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        //    if (e is MpApp a) {
+        //        var sa = _sourceLookup.Where(x => x.Value.AppId == a.Id).FirstOrDefault();
+        //        if (sa.Value != null) {
+        //            _sourceLookup[sa.Key].App = a;
+        //        }
+        //    } else if (e is MpUrl url) {
+        //        var sa = _sourceLookup.Where(x => x.Value.UrlId == url.Id).FirstOrDefault();
+        //        if (sa.Value != null) {
+        //            _sourceLookup[sa.Key].Url = url;
+        //        }
+        //    }
+        //}
 
-        private void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpSource s) {
-                if (_sourceLookup.ContainsKey(s.Id)) {
-                    _sourceLookup.Remove(s.Id);
-                }
-            }
-        }
+        //private void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        //    if (e is MpSource s) {
+        //        if (_sourceLookup.ContainsKey(s.Id)) {
+        //            _sourceLookup.Remove(s.Id);
+        //        }
+        //    }
+        //}
 
         #endregion
 

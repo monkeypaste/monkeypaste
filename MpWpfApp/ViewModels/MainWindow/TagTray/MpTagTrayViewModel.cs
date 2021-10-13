@@ -110,7 +110,7 @@ namespace MpWpfApp {
             }
             //create tiles for all the tags
             foreach (MpTag t in MpDb.Instance.GetItems<MpTag>()) {
-                this.Add(new MpTagTileViewModel(this,t));
+                this.Add(CreateTagTileViewModel(t));
             }
 
             TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
@@ -123,6 +123,22 @@ namespace MpWpfApp {
             UpdateSortOrder();
         }
 
+        public MpTagTileViewModel CreateTagTileViewModel(MpTag tag) {
+            var ttvm = new MpTagTileViewModel(this, tag);
+            ttvm.PropertyChanged += Ttvm_PropertyChanged;
+            return ttvm;
+        }
+
+        private void Ttvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ttvm = sender as MpTagTileViewModel;
+            switch(e.PropertyName) {
+                case nameof(ttvm.IsSelected):
+                    if(ttvm.IsSelected) {
+                        OnTagSelectionChanged?.Invoke(this, ttvm.TagId);
+                    }
+                    break;
+            }
+        }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
             RefreshAllCounts();

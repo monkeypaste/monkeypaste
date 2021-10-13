@@ -98,25 +98,15 @@ namespace MonkeyPaste {
         }
         #endregion
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
-            var pasteToAppPathList = new List<MpPasteToAppPath>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    pasteToAppPathList.Add(new MpPasteToAppPath(dr));
-                }
-            }
-            return pasteToAppPathList;
-        }
-
-        public MpPasteToAppPath(int pasteToAppPathId) {
-            DataTable dt = MpDb.Instance.Execute(
-                "select * from MpPasteToAppPath where pk_MpPasteToAppPathId=@cid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                    { "@cid", pasteToAppPathId }
-                });
-            if (dt != null && dt.Rows.Count > 0) {
-                LoadDataRow(dt.Rows[0]);
-            }
+            //var pasteToAppPathList = new List<MpPasteToAppPath>();
+            //DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);
+            //if (dt != null && dt.Rows.Count > 0) {
+            //    foreach (DataRow dr in dt.Rows) {
+            //        pasteToAppPathList.Add(new MpPasteToAppPath(dr));
+            //    }
+            //}
+            //return pasteToAppPathList;
+            return MpDb.Instance.GetItems<MpPasteToAppPath>();
         }
 
         public MpPasteToAppPath(
@@ -144,23 +134,23 @@ namespace MonkeyPaste {
         }
         public MpPasteToAppPath() : this(string.Empty,string.Empty) { }
 
-        public MpPasteToAppPath(DataRow dr) {
-            LoadDataRow(dr);
-        }
-        public void LoadDataRow(DataRow dr) {
-            PasteToAppPathId = Convert.ToInt32(dr["pk_MpPasteToAppPathId"].ToString());
-            AppPath = dr["AppPath"].ToString();
-            AppName = dr["AppName"].ToString();
-            IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
-            IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
-            PressEnter = Convert.ToInt32(dr["PressEnter"].ToString()) > 0 ? true : false;
-            WindowState = Convert.ToInt32(dr["WindowState"].ToString());
+        //public MpPasteToAppPath(DataRow dr) {
+        //    LoadDataRow(dr);
+        //}
+        //public void LoadDataRow(DataRow dr) {
+        //    PasteToAppPathId = Convert.ToInt32(dr["pk_MpPasteToAppPathId"].ToString());
+        //    AppPath = dr["AppPath"].ToString();
+        //    AppName = dr["AppName"].ToString();
+        //    IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
+        //    IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
+        //    PressEnter = Convert.ToInt32(dr["PressEnter"].ToString()) > 0 ? true : false;
+        //    WindowState = Convert.ToInt32(dr["WindowState"].ToString());
 
-            AvatarId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
-            AvatarDbImage = MpDbImage.GetDbImageById(AvatarId);
-            Label = dr["Label"].ToString();
-            Args = dr["Args"].ToString();
-        }
+        //    AvatarId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
+        //    AvatarDbImage = MpDbImage.GetDbImageById(AvatarId);
+        //    Label = dr["Label"].ToString();
+        //    Args = dr["Args"].ToString();
+        //}
 
         //public void DeleteFromDatabase() {
         //    if (PasteToAppPathId <= 0) {

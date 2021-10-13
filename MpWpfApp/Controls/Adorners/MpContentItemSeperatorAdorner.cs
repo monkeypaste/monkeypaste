@@ -38,6 +38,10 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
+            if((AdornedElement as ListBox).Items.Count <= 1) {
+                Lines.Clear();
+                IsShowing = false;
+            }
             var civm = (AdornedElement as FrameworkElement).DataContext as MpContentItemViewModel;
 
             if (IsShowing) {

@@ -24,12 +24,12 @@
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         IsListBoxHorizontal="True"
                                         ScrollToSelectedItem="False"
-                                        IsSynchronizedWithCurrentItem="True"
+                                        IsSynchronizedWithCurrentItem="False"
                                         Margin="0,0,0,0"
                                         Focusable="True"
                                         BorderThickness="0"
                                         VerticalAlignment="Center"
-                                        VerticalContentAlignment="Center"
+                                        VerticalContentAlignment="Top"
                                         Background="Transparent"
                                         SelectionMode="Extended"
                                         VirtualizingPanel.IsVirtualizing="True"
@@ -79,14 +79,7 @@
                 <local:MpMultiSelectListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                    Loaded="ClipTrayVirtualizingStackPanel_Loaded"
                                                     IsItemsHost="True"
-                                                    CanVerticallyScroll="False"
-                                                    CanHorizontallyScroll="True"
-                                                    Width="{Binding MainWindowViewModel.ClipTrayWidth}"
-                                                    Height="{Binding MainWindowViewModel.ClipTrayHeight}"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Left"
                                                     Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                 </local:MpMultiSelectListBox.ItemsPanel>

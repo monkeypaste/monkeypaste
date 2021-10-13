@@ -18,6 +18,7 @@ using System.Collections;
 using System.Reflection;
 using SkiaSharp;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace MonkeyPaste {    
     public class MpDb : MpISync {
@@ -196,11 +197,19 @@ namespace MonkeyPaste {
             return _connection.GetWithChildren<T>(id,true);
         }
 
-        public List<T> GetItemsById<T>(List<int> idl) where T:new() {
+        public List<T> GetAllWithChildren<T>(Expression<Func<T,bool>> exp, bool recursive = true) where T:new() {
             if(_connection == null) {
                 CreateConnection();
             }
-            return _connection.GetAllWithChildren<T>(x => idl.Contains((x as MpDbModelBase).Id));
+            return _connection.GetAllWithChildren<T>(exp,recursive);
+        }
+
+        public async Task<List<T>> GetAllWithChildrenAsync<T>(Expression<Func<T, bool>> exp, bool recursive = true) where T : new() {
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
+            var result = await _connectionAsync.GetAllWithChildrenAsync<T>(exp, recursive);
+            return result;
         }
 
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -466,6 +475,7 @@ namespace MonkeyPaste {
             return tableName;
         }
         private Tuple<string,object[]> PrepareQuery(string query, Dictionary<string, object> args) {
+            MpConsole.WriteLine("Prepare @ " + DateTime.Now);
             if (string.IsNullOrEmpty(query.Trim())) {
                 return null;
             }
@@ -974,10 +984,10 @@ namespace MonkeyPaste {
                     ,('39a6b8b5-a585-455b-af83-015fd97ac3fa','Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
                     ,('166abd7e-7295-47f2-bbae-c96c03aa6082','Bring to front',1,'Control+Home','Control+Home')
                     ,('84c11b86-3acc-4d22-b8e9-3bd785446f72','Send to back',1,'Control+End','Control+End')
-                    ,('6487f6ff-da0c-475b-a2ae-ef1484233de0','Assign Hotkey',1,'A','A')
-                    ,('837e0c20-04b8-4211-ada0-3b4236da0821','Change Color',1,'C','C')
-                    ,('4a567aff-33a8-4a1f-8484-038196812849','Say',1,'S','S')
-                    ,('330afa20-25c3-425c-8e18-f1423eda9066','Merge',1,'M','M')
+                    ,('6487f6ff-da0c-475b-a2ae-ef1484233de0','Assign Hotkey',1,'Control+Shift+H','Control+Shift+H')
+                    ,('837e0c20-04b8-4211-ada0-3b4236da0821','Change Color',1,'Control+Shift+Alt+C','Control+Shift+Alt+C')
+                    ,('4a567aff-33a8-4a1f-8484-038196812849','Say',1,'Control+Shift+S','Control+Shift+S')
+                    ,('330afa20-25c3-425c-8e18-f1423eda9066','Merge',1,'Control+Shift+M','Control+Shift+M')
                     ,('118a2ca6-7021-47a0-8458-7ebc31094329','Undo',1,'Control+Z','Control+Z')
                     ,('3980efcc-933b-423f-9cad-09e455c6824a','Redo',1,'Control+Y','Control+Y')
                     ,('7a7580d1-4129-432d-a623-2fff0dc21408','Edit',1,'Control+E','Control+E')

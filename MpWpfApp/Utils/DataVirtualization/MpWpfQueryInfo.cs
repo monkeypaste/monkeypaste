@@ -7,52 +7,74 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpWpfQueryInfo : MpQueryInfo {
+
+        public override bool IsDescending {
+            get {
+                return MpClipTileSortViewModel.Instance.IsSortDescending;
+            }
+        }
+
+        public override MpContentSortType SortType { 
+            get {
+                if(MpClipTileSortViewModel.Instance.SelectedSortType == null) {
+                    return MpContentSortType.None;
+                }
+                return MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
+            }        
+        }
+
+        public override int TagId {
+            get {
+                if(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
+                    return MpTag.RecentTagId;
+                }
+                return MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
+            }
+        }
+
+        public override string SearchText {
+            get {
+                if(!MpSearchBoxViewModel.Instance.HasText) {
+                    return string.Empty;
+                }
+                return MpSearchBoxViewModel.Instance.Text;
+            }
+        }
+               
+
+        public override MpContentFilterType FilterFlags {
+            get {
+                return MpSearchBoxViewModel.Instance.FilterType;
+            }
+        }
         public event EventHandler InfoChanged;
 
         public MpWpfQueryInfo() {
-            MpTagTrayViewModel.Instance.PropertyChanged += TagTray_PropertyChanged;
-            MpSearchBoxViewModel.Instance.PropertyChanged += SearchBox_PropertyChanged;
-            MpClipTileSortViewModel.Instance.PropertyChanged += Sort_PropertyChanged;
+            MpTagTrayViewModel.Instance.OnTagSelectionChanged += Instance_OnTagSelectionChanged;
+            MpSearchBoxViewModel.Instance.OnFilterFlagsChanged += Instance_OnFilterFlagsChanged;
+            MpSearchBoxViewModel.Instance.OnSearchTextChanged += Instance_OnSearchTextChanged;
+            MpClipTileSortViewModel.Instance.OnIsDescendingChanged += Instance_OnIsDescendingChanged;
+            MpClipTileSortViewModel.Instance.OnSortTypeChanged += Instance_OnSortTypeChanged;
         }
 
-
-        private void Sort_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(MpClipTileSortViewModel.Instance.IsSortDescending):
-                    IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
-                    InfoChanged?.Invoke(this, new EventArgs());
-                    break;
-                case nameof(MpClipTileSortViewModel.Instance.SelectedSortType):
-                    SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
-                    InfoChanged?.Invoke(this, new EventArgs());
-                    break;
-            }
+        private void Instance_OnSortTypeChanged(object sender, MpContentSortType e) {
+            InfoChanged?.Invoke(this, new EventArgs());
         }
 
-        private void SearchBox_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(MpSearchBoxViewModel.Instance.SearchText):
-                    SearchText = MpSearchBoxViewModel.Instance.SearchText;
-                    InfoChanged?.Invoke(this, new EventArgs());
-                    break;
-                case nameof(MpSearchBoxViewModel.Instance.FilterType):
-                    FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
-                    InfoChanged?.Invoke(this, new EventArgs());
-                    break;
-            }
+        private void Instance_OnIsDescendingChanged(object sender, bool e) {
+            InfoChanged?.Invoke(this, new EventArgs());
         }
 
-        private void TagTray_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(MpTagTrayViewModel.Instance.SelectedTagTile):
-                    if(MpTagTrayViewModel.Instance.SelectedTagTile != null) {
-                        TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-                    } else {
-                        TagId = 0;
-                    }
-                    InfoChanged?.Invoke(this, new EventArgs());
-                    break;
-            }
+        private void Instance_OnSearchTextChanged(object sender, string e) {
+            InfoChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void Instance_OnFilterFlagsChanged(object sender, MpContentFilterType e) {
+            InfoChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void Instance_OnTagSelectionChanged(object sender, int e) {
+            InfoChanged?.Invoke(this, new EventArgs());
         }
     }
 }

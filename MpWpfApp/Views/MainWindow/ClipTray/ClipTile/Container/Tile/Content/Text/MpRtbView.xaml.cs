@@ -46,7 +46,6 @@ namespace MpWpfApp {
 
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
-
                 await MpHelpers.Instance.RunOnMainThreadAsync(ClearHyperlinks);
 
                 rtbvm.CopyItemData = Rtb.Document.ToRichText();
