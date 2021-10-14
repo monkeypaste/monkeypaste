@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
-using Microsoft.WindowsAPICodePack.Shell;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {

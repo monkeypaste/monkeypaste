@@ -271,27 +271,29 @@ namespace MpWpfApp {
                 #endregion
 
                 #region Keyboard
-                GlobalHook.OnCombination(new Dictionary<Combination, Action> {{
-                        Combination.FromString("Control+V"), () => {
-                            try {
-                                string cbText = Clipboard.GetText();
-                                if(!string.IsNullOrEmpty(cbText)) {
-                                    Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
-                                        foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
-                                            foreach(var rtbvm in ctvm.ItemViewModels) {
-                                                if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
-                                                    rtbvm.CopyItem.PasteCount++;
-                                                }
-                                            }
-                                        }
-                                    }),System.Windows.Threading.DispatcherPriority.Background);
-                                }
-                            } catch(Exception ex) {
-                                MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
-                            }
+                GlobalHook.OnCombination(new Dictionary<Combination, Action> {
+                    //{
+                    //    Combination.FromString("Control+V"), () => {
+                    //        try {
+                    //            string cbText = Clipboard.GetText();
+                    //            if(!string.IsNullOrEmpty(cbText)) {
+                    //                Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
+                    //                    foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
+                    //                        foreach(var rtbvm in ctvm.ItemViewModels) {
+                    //                            if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
+                    //                                rtbvm.CopyItem.PasteCount++;
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }),System.Windows.Threading.DispatcherPriority.Background);
+                    //            }
+                    //        } catch(Exception ex) {
+                    //            MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
+                    //        }
 
-                        }
-                }});
+                    //    }
+                    //}
+                });
 
                 ApplicationHook.KeyPress += (s, e) => {
                     //AutoSearchOnKeyPress(e.KeyChar);

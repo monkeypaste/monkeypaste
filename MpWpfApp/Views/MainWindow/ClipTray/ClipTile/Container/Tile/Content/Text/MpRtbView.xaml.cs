@@ -343,7 +343,7 @@ namespace MpWpfApp {
                                 convertToQrCodeMenuItem.Click += (s5, e1) => {
                                     var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
                                     var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    Clipboard.SetImage(bmpSrc);
+                                    MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
                                 };
                                 convertToQrCodeMenuItem.Tag = hl;
                                 hl.ContextMenu = new ContextMenu();

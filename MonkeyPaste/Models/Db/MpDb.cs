@@ -40,7 +40,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = false;
+        public bool UseWAL { get; set; } = true;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -682,9 +682,13 @@ namespace MonkeyPaste {
 
             bool isNewDb = !File.Exists(dbPath);
 
+            if(isNewDb) {
+                using (File.Create(dbPath)) ;
+            }
             CreateConnection();
 
-            if(isNewDb) {
+
+            if (isNewDb) {
                 foreach (var c in GetCreateString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries)) {
                     if (string.IsNullOrEmpty(c.Trim().Replace(Environment.NewLine, string.Empty))) {
                         continue;
@@ -695,7 +699,7 @@ namespace MonkeyPaste {
 
             if (UseWAL) {
                 // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                if(_connection != null) {
+                if (_connection != null) {
                     _connection.EnableWriteAheadLogging();
                 }
 
@@ -801,7 +805,7 @@ namespace MonkeyPaste {
             };
             AddItem<MpTag>(helpTag, "", true, true);
 
-            MpConsole.WriteTraceLine(@"Create all default tables");
+            MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
         private void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {

@@ -118,16 +118,33 @@ namespace MpWpfApp {
 
         public Brush ItemBorderBrush {
             get {
-                if(Parent == null || Parent.Count <= 1 || !IsSelected || Parent.IsClipDragging) {
+                if(Parent == null || 
+                   Parent.Count <= 1 || 
+                   !IsSelected/* || 
+                   Parent.IsAnyItemDragging*/) {
                     return Brushes.Transparent;
                 }
                 return Brushes.Red;
             }
         }
 
+        public Brush ItemSeparatorBrush {
+            get {
+                if(Parent == null ||
+                   Parent.Count == 1 ||
+                   ItemIdx == Parent.Count - 1 ||
+                   (ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
+                   IsSelected ||
+                   Parent.SelectedItems.Any(x=>x.ItemIdx == ItemIdx + 1)) {
+                    return Brushes.Transparent;
+                }
+                return Brushes.DimGray;
+            }
+        }
+
         public Rect ItemBorderBrushRect {
             get {
-                if (IsSubDragging) {
+                if (IsItemDragging) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -313,38 +330,9 @@ namespace MpWpfApp {
 
 
         #region Drag & Drop
-        //public bool IsOverDragButton { get; set; } = false;
-        public bool IsSubDragging { get; set; } = false;
-        public bool IsSubDropping { get; set; } = false;
+        public bool IsItemDragging { get; set; } = false;
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
-
-        //public bool IsDragButtonVisible {
-        //    get {
-        //        if (Parent == null || Parent.Count <= 1) {
-        //            return false;
-        //        }
-        //        if (Parent.IsExpanded) {
-        //            if (IsEditingContent) {
-        //                return false;
-        //            }
-        //        }
-        //        return IsHovering;
-        //    }
-        //}
-        //public bool IsDragButtonVisible {
-        //    get {
-        //        if (Parent == null) {
-        //            return false;
-        //        }
-        //        if (Parent.IsExpanded) {
-        //            if (IsEditingContent) {
-        //                return false;
-        //            }
-        //        }
-        //        return IsHovering && Parent.Count > 1;
-        //    }
-        //}
         #endregion
 
         #endregion
@@ -844,7 +832,8 @@ namespace MpWpfApp {
                         if (!Parent.IsSelected) {
                             Parent.IsSelected = true;
                         }
-                        if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !Parent.IsClipDropping) {
+                        if(!MpHelpers.Instance.IsMultiSelectKeyDown() && 
+                            !Parent.IsDroppingOnTile) {
                             MpClipTrayViewModel.Instance.SelectedItems
                                 .Where(x => x != Parent)
                                 .ForEach(y => y.IsSelected = false);
@@ -857,6 +846,11 @@ namespace MpWpfApp {
                         if(Parent.IsExpanded) {
                             OnPropertyChanged(nameof(EditorCursor));
                         }
+                    }
+                    if (ItemIdx > 0) {
+                        //trigger so prev item shows/hides separator line
+                        var pcivm = Parent.ItemViewModels[ItemIdx - 1];
+                        pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     break;
                 case nameof(CopyItem):
@@ -931,7 +925,7 @@ namespace MpWpfApp {
         }
         private void CreateQrCodeFromSubSelectedItem() {
             var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());
-            System.Windows.Clipboard.SetImage(bmpSrc);
+            MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
         private AsyncCommand<string> _translateSubSelectedItemTextAsyncCommand;

@@ -504,7 +504,7 @@ using System.Speech.Synthesis;
 
         public Rect TileBorderBrushRect {
             get {
-                if (IsClipDragging || IsAnyContextMenuOpened) {
+                if (IsAnyItemDragging || IsAnyContextMenuOpened) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -559,6 +559,8 @@ using System.Speech.Synthesis;
                         HeadItem.CopyItemType == MpCopyItemType.RichText;
             }
         }
+
+        public int DropIdx { get; set; } = -1;
         #endregion
 
         #region State Properties 
@@ -586,142 +588,31 @@ using System.Speech.Synthesis;
 
         public IDataObject DragDataObject { get; set; }
 
-        public bool IsClipDragging {
-            get {
-                return ItemViewModels.All(x => x.IsSubDragging);
-            }
-        }
+        public bool IsAnyItemDragging => ItemViewModels.All(x => x.IsItemDragging);
 
-        private bool _isDropping = false;
-        public bool IsClipDropping {
-            get {
-                return _isDropping;
-            }
-            set {
-                if (_isDropping != value) {
-                    _isDropping = value;
-                    OnPropertyChanged(nameof(IsClipDropping));
-                }
-            }
-        }
+        public bool IsDroppingOnTile => DropIdx >= 0;
 
-        public bool IsClipOrAnySubItemDragging {
-            get {
-                return IsClipDragging || IsAnySubItemDragging;
-            }
-        }
+        public bool IsAnyContextMenuOpened => ItemViewModels.Any(x => x.IsContextMenuOpen);
 
-        public bool IsAnySubItemDragging {
-            get {
-                return IsClipDragging || ItemViewModels.Any(x => x.IsSubDragging);
-            }
-        }
+        public bool IsAnySelected => ItemViewModels.Any(x => x.IsSelected);
 
-        public bool IsAnyContentDragging {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDragging);
-            }
-        }
+        public bool HasTemplates => ItemViewModels.Any(x => x.HasTemplates);
 
-        public bool IsAnyContentDropping {
-            get {
-                return ItemViewModels.Any(x => x.IsSubDropping);
-            }
-        }
+        public int Count => ItemViewModels.Count;
 
-        public bool IsAnyContextMenuOpened {
-            get {
-                return ItemViewModels.Any(x => x.IsContextMenuOpen);
-            }
-        }
+        public bool IsAnyEditingContent => ItemViewModels.Any(x => x.IsEditingContent);
 
-        public bool IsAnySelected {
-            get {
-                return ItemViewModels.Any(x => x.IsSelected);
-            }
-        }
+        public bool IsAnyEditingTitle => ItemViewModels.Any(x => x.IsEditingTitle);
 
-        public bool HasTemplates {
-            get {
-                return ItemViewModels.Any(x => x.HasTemplates);
-            }
-        }
+        public bool IsAnyEditingTemplate => ItemViewModels.Any(x => x.IsEditingTemplate);
 
-        public int Count {
-            get {
-                return ItemViewModels.Count;
-            }
-        }
+        public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPastingTemplate);
 
-        public bool IsAnyEditingContent {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                return ItemViewModels.Any(x => x.IsEditingContent);
-            }
-        }
-
-        public bool IsAnyEditingTitle {
-            get {
-                return ItemViewModels.Any(x => x.IsEditingTitle);
-            }
-        }
-
-        public bool IsAnyEditingTemplate {
-            get {
-                return ItemViewModels.Any(x => x.IsEditingTemplate);
-            }
-        }
-
-        public bool IsAnyPastingTemplate {
-            get {
-                return ItemViewModels.Any(x => x.IsPastingTemplate);
-            }
-        }
-
-        private bool _isExpanding = false;
-        public bool IsExpanding {
-            get {
-                return _isExpanding;
-            }
-            set {
-                if (_isExpanding != value) {
-                    _isExpanding = value;
-                    OnPropertyChanged(nameof(IsExpanding));
-                }
-            }
-        }
-
-        //public bool IsExpanded {
-        //    get {
-        //        if (IsAnyPastingTemplate || IsAnyEditingTemplate || IsAnyEditingContent) {
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //}
+        public bool IsExpanding { get; set; }
 
         public bool IsExpanded { get; set; } = false;
 
-        public bool IsRtbReadOnly {
-            get {
-                return !IsAnyEditingContent;
-            }
-        }
-
-        private DateTime _lastSelectedDateTime;
-        public DateTime LastSelectedDateTime {
-            get {
-                return _lastSelectedDateTime;
-            }
-            set {
-                if (_lastSelectedDateTime != value) {
-                    _lastSelectedDateTime = value;
-                    OnPropertyChanged(nameof(LastSelectedDateTime));
-                }
-            }
-        }
+        public DateTime LastSelectedDateTime { get; set; }
 
         private bool _isContextMenuOpened = false;
         public bool IsContextMenuOpened {
@@ -754,25 +645,6 @@ using System.Speech.Synthesis;
                 }
             }
         }
-        //private bool _isSelected = false;
-        //public bool IsSelected {
-        //    get {
-        //        return _isSelected;
-        //    }
-        //    set {
-        //        if (_isSelected != value) {
-        //            _isSelected = value;
-        //            OnPropertyChanged(nameof(IsSelected));
-        //            OnPropertyChanged(nameof(ToolTipVisibility));
-        //            OnPropertyChanged(nameof(TileBorderBrush));
-        //           //OnPropertyChanged(nameof(DetailTextColor));
-        //            OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
-        //            OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-        //            OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
-        //            OnPropertyChanged(nameof(TileBorderBrushRect));
-        //        }
-        //    }
-        //}
 
         private bool _isHovering = false;
         public bool IsHovering {
@@ -780,7 +652,7 @@ using System.Speech.Synthesis;
                 return _isHovering;
             }
             set {
-                if (_isHovering != value && (!MpClipTrayViewModel.Instance.IsAnyTileExpanded || IsExpanded)) {
+                if (_isHovering != value) {// && (!MpClipTrayViewModel.Instance.IsAnyTileExpanded || IsExpanded)) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -792,25 +664,8 @@ using System.Speech.Synthesis;
             }
         }
 
-        private bool _isPlaceholder = false;
-        public bool IsPlaceholder {
-            get {
-                return _isPlaceholder;
-            }
-            set {
-                if (_isPlaceholder != value) {
-                    _isPlaceholder = value;
-                    OnPropertyChanged(nameof(IsPlaceholder));
-                }
-            }
-        }
+        public bool IsPlaceholder { get; set; }
 
-
-        //public bool IsAnyOverDragButton {
-        //    get {
-        //        return ItemViewModels.Any(x => x.IsOverDragButton);
-        //    }
-        //}
         #endregion
 
         #region Model
@@ -1335,9 +1190,7 @@ using System.Speech.Synthesis;
         #endregion
 
 
-        #region Public Methods
-
-        
+        #region Public Methods       
 
 
         #region View Event Invokers
@@ -1518,7 +1371,7 @@ using System.Speech.Synthesis;
         //}
         //private void CreateQrCodeFromClip() {
         //    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItemPlainText);
-        //    System.Windows.Clipboard.SetImage(bmpSrc);
+        //    System.Windows.MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         //}
 
         //private RelayCommand _sendClipToEmailCommand;

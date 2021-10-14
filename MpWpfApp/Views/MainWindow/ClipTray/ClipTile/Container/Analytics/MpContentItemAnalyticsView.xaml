@@ -1,27 +1,32 @@
-﻿<UserControl x:Class="MpWpfApp.MpContentItemAnalyticsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:MpContentItemViewModel,IsDesignTimeCreatable=True}">
+﻿<UserControl
+    x:Class="MpWpfApp.MpContentItemAnalyticsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance local:MpContentItemViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="TextAnalysis">
             <local:MpTextAnalysisDocument DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate x:Key="ImageAnalysis">
-            <local:MpImageAnalysisDocument DataContext="{Binding}"/>
+            <local:MpImageAnalysisDocument DataContext="{Binding}" />
         </DataTemplate>
-        <local:MpAnalysisDocumentSelector x:Key="AnalysisDocumentSelector" 
-                                          TextAnalysisTemplate="{StaticResource TextAnalysis}"
-                                          ImageAnalysisTemplate="{StaticResource ImageAnalysis}" />
+        <local:MpAnalysisDocumentSelector
+            x:Key="AnalysisDocumentSelector"
+            ImageAnalysisTemplate="{StaticResource ImageAnalysis}"
+            TextAnalysisTemplate="{StaticResource TextAnalysis}" />
     </UserControl.Resources>
-    <Grid MouseDown="Grid_MouseDown">        
-        <ContentControl Content="{Binding}"
-                        Width="{Binding Parent.TileBorderWidth}"
-                        Height="{Binding Parent.TileBorderHeight}"
-                        ContentTemplateSelector="{StaticResource AnalysisDocumentSelector}" />
+    <Grid MouseDown="Grid_MouseDown">
+        <ContentControl
+            Width="{Binding Parent.TileBorderWidth}"
+            Height="{Binding Parent.TileBorderHeight}"
+            Content="{Binding}"
+            ContentTemplateSelector="{StaticResource AnalysisDocumentSelector}" />
     </Grid>
 </UserControl>

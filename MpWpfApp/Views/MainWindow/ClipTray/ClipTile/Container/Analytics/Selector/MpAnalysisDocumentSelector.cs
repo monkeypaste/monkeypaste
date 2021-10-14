@@ -29,6 +29,8 @@ namespace MpWpfApp {
 
             var ci = (item as MpContentItemViewModel).CopyItem;
             if(ci == null) {
+                // TODO need to trigger template selection after initial load since all models are null,
+                // especially for other content types
                 return TextAnalysisTemplate;
             }
             switch (ci.ItemType) {

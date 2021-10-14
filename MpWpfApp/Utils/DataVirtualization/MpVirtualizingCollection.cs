@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using DynamicData.Binding;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -21,7 +20,7 @@ namespace MpWpfApp {
     /// data bound to a suitable ItemsControl.
     /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public class MpVirtualizingCollection<T> : IList<T>, IList, IObservableCollection<T> {
+    public class MpVirtualizingCollection<T> : IList<T>, IList {
         #region Constructors
 
         public MpVirtualizingCollection() : base() { }

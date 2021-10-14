@@ -23,11 +23,7 @@ using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using MonkeyPaste;
-using Microsoft.WindowsAPICodePack.Shell;
-using static SQLite.SQLite3;
-using static OpenTK.Graphics.OpenGL.GL;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpViewModelBase<object>  {
@@ -235,52 +231,17 @@ namespace MpWpfApp {
 
         public bool IsPastingSelected { get; set; } = false;
 
-        public bool IsAnyContextMenuOpened {
-            get {
-                return Items.Any(x => x.IsAnyContextMenuOpened);
-            }
-        }
-        
+        public bool IsAnyContextMenuOpened => Items.Any(x => x.IsAnyContextMenuOpened);
 
         public bool IsTrayDropping { get; set; } = false;
 
-        public bool IsAnyClipOrSubItemDragging {
-            get {
-                foreach (var ctvm in VisibileClipTiles) {
-                    if (ctvm.IsClipDragging || ctvm.IsAnySubItemDragging) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        public bool IsAnyTileItemDragging => Items.Any(x => x.IsAnyItemDragging);
 
-        public bool IsAnyClipDropping {
-            get {
-                foreach (var ctvm in VisibileClipTiles) {
-                    if (ctvm.IsClipDropping) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        public bool IsAnyTileExpanded {
-            get {
-                foreach (var ctvm in Items) {
-                    if (ctvm.IsExpanded) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        public bool IsAnyDropOnTile => Items.Any(x => x.IsDroppingOnTile);
 
-        public bool IsAnyEditing {
-            get {
-                return Items.Any(x => x.IsAnyEditingContent);
-            }
-        }
+        public bool IsAnyTileExpanded => Items.Any(x => x.IsExpanded);
+
+        public bool IsAnyEditing => Items.Any(x => x.IsAnyEditingContent);
 
         private bool _isFilteringByApp = false;
         public bool IsFilteringByApp {
@@ -308,11 +269,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsAnyHovering {
-            get {
-                return VisibileClipTiles.Where(x => x.IsHovering).ToList().Count > 0;
-            }
-        }
+        public bool IsAnyHovering => Items.Any(x => x.IsHovering);
 
         private bool _isScrolling = false;
         public bool IsScrolling {
@@ -430,15 +387,6 @@ namespace MpWpfApp {
             for (int i = 0; i < _pageCount; i++) {
                 Items.Add(CreateClipTileViewModel(null));
             }
-            //var phvml = new List<MpClipTileViewModel>();
-            //_pageCount = (MpMeasurements.Instance.MaxRecentClipTiles + 1) * 2;
-            //int placeHoldersToAdd = _pageCount - ClipTileViewModels.Count;
-            //while (placeHoldersToAdd > 0) {
-            //    phvml.Add(CreateClipTileViewModel(null));
-            //    placeHoldersToAdd--;
-            //}
-            //ClipTileViewModels = new ObservableCollection<MpClipTileViewModel>(phvml);
-            //BindingOperations.EnableCollectionSynchronization(ClipTileViewModels, _tileLockObject);
         }
 
         public void InitQueryInfo() {
@@ -452,24 +400,26 @@ namespace MpWpfApp {
 
             await Task.Run(async () => {
                 await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
-                    var sw = new Stopwatch();
+                    var sw = new Stopwatch(); dragTiles.Reverse();
+                    foreach (var dragTile in dragTiles) {
+                        int oldIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
+                        if (oldIdx < dropIdx) {
+                            dropIdx--;
+                        }
+                        MpClipTrayViewModel.Instance.ClipTileViewModels.Move(oldIdx, dropIdx);
+                    }
                     sw.Start();
-                    var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
-
                     var initTasks = new List<Task>();
+                    int itemsToAdd = _pageCount - Items.Count;
+                    var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
                     for (int i = 0; i < ivml.Count; i++) {
-                        //Items[i].IsBusy = true;
-                        //Items[i].IsPlaceholder = false;
                         initTasks.Add(Items[i].InitializeAsync(ivml[i]));
                     }
-                    if(ivml.Count < Items.Count) {
-                        for (int i = ivml.Count; i < Items.Count; i++) {
-                            //Items[i].IsPlaceholder = true;
-                            initTasks.Add(Items[i].InitializeAsync(null));
-                        }
+                    for (int i = ivml.Count; i < Items.Count; i++) {
+                        initTasks.Add(Items[i].InitializeAsync(null));
                     }
-
                     await Task.WhenAll(initTasks);
+
                     ResetClipSelection();
                     sw.Stop();
                     MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
@@ -602,27 +552,6 @@ namespace MpWpfApp {
             sw.Stop();
             MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
         }
-
-        public void RecycleLeftItem() {
-            MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
-                if (_remainingItemsCount <= 0) {
-                    return;
-                }
-
-                int rightIdx = _filterIds.Count - _remainingItemsCount;
-                if (rightIdx + 1 < _filterIds.Count - 1) {
-                    int nextItemId = _filterIds[rightIdx + 1];
-                    var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(nextItemId);
-
-                    int tailIdx = this.Items.Count - 1;
-                    //this.Items.Move(0, tailIdx);
-                    _remainingItemsCount--;
-                    await this.Items[tailIdx].InitializeAsync(nci);
-
-                    RequestUiRefresh();
-                }
-            }));
-        }
         //public void HideVisibleTiles(double ms = 1000) {
         //    double delay = 0;
         //    double curDelay = 0;
@@ -693,6 +622,7 @@ namespace MpWpfApp {
                     //    RequestFocus(SelectedItems[0]);
                     //}
                 }
+                RequestScrollToHome();
             });
         }
 
@@ -960,7 +890,8 @@ namespace MpWpfApp {
                             new MpPasteHistory() {
                                 AppId = aid,
                                 CopyItemId = ivm.CopyItem.Id,
-                                UserDeviceId = MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid).Id
+                                UserDeviceId = MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid).Id,
+                                PasteDateTime = DateTime.Now
                             }.WriteToDatabase();
                         }
                     }
@@ -1667,7 +1598,7 @@ namespace MpWpfApp {
         }
         private void CreateQrCodeFromSelectedClips() {
             var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(SelectedClipTilesMergedPlainText);
-            System.Windows.Clipboard.SetImage(bmpSrc);
+            MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
         private AsyncCommand _speakSelectedClipsCommand;

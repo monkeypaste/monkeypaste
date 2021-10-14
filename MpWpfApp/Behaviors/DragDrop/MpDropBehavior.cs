@@ -30,7 +30,6 @@ namespace MpWpfApp {
         protected override void OnAttached() {
             base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Loaded;
-            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
@@ -48,10 +47,6 @@ namespace MpWpfApp {
 
                 mwvm.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
             }
-        }
-
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            
         }
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
@@ -77,6 +72,9 @@ namespace MpWpfApp {
 
             dragTiles = dctvml;
             dropIdx = overIdx;
+            if(!isTrayDrop) {
+                (AssociatedObject.DataContext as MpClipTileViewModel).DropIdx = dropIdx;
+            }
 
             AutoScrollByMouse();
             UpdateDropLineAdorner();
@@ -172,7 +170,7 @@ namespace MpWpfApp {
                                 }
                             }
                         }
-                        dragModels.Reverse();
+                        //dragModels.Reverse();
                         for (int i = 0; i < dragModels.Count; i++) {
                             dragModels[i].CompositeSortOrderIdx = i;
                             if (i == 0) {
@@ -188,7 +186,8 @@ namespace MpWpfApp {
                                 if(dragIdxToRemove < dropIdx) {
                                     dropIdx--;
                                 }
-                                MpClipTrayViewModel.Instance.Items.Remove(dragTile);
+                                dragTile.IsPlaceholder = true;
+                                MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
                                 dragTile.UpdateSortOrder();
                             }
@@ -200,7 +199,7 @@ namespace MpWpfApp {
 
                         dropTile.RequestUiUpdate();
                     }
-                    MpClipTileSortViewModel.Instance.SetToManualSort();
+                    //MpClipTileSortViewModel.Instance.SetToManualSort();
                 } else {
                     MpClipTileViewModel dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
                     //dropTile.IsClipDropping = true;
@@ -248,7 +247,9 @@ namespace MpWpfApp {
                                 continue;
                             }
                             if (dragTile.Count == 0) {
-                                MpClipTrayViewModel.Instance.Items.Remove(dragTile);
+                                int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
+                                dragTile.IsPlaceholder = true;
+                                MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
                                 dragTile.UpdateSortOrder();
                                 //dragTile.RequestUiUpdate();
@@ -276,11 +277,13 @@ namespace MpWpfApp {
             if(!isTrayDrop) {
                 var clv = AssociatedObject.GetVisualAncestor<MpContentListView>();
                 clv.UpdateAdorner();
+                (AssociatedObject.DataContext as MpClipTileViewModel).DropIdx = -1;
             }
-            AssociatedObject.GetScrollViewer().ScrollToHome();
+            AssociatedObject.GetScrollViewer()?.ScrollToHome();
         }
 
         public void AutoScrollByMouse() {
+            return;
             //during drop autoscroll listbox to beginning or end of list
             //if more items are there depending on which half of the visible list
             //the mouse is in
@@ -290,7 +293,7 @@ namespace MpWpfApp {
             Rect listBoxRect = AssociatedObject.GetListBoxRect();
             double minScrollDist = 20;
             double autoScrollOffset = 15;
-            
+            double exp = 1;
             if(isTrayDrop) {
                 MpConsole.WriteLine($"Tray AutoScroll sv width: {sv.ScrollableWidth} lb width: {AssociatedObject.Width}");
                 if(sv.ScrollableWidth <= AssociatedObject.Width) {
@@ -299,10 +302,10 @@ namespace MpWpfApp {
                 double leftDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, 0);
                 double rightDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, listBoxRect.Right);
                 if (leftDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(leftDiff, 2);
+                    autoScrollOffset += Math.Pow(leftDiff, exp);
                     sv.ScrollToHorizontalOffset(sv.HorizontalOffset - autoScrollOffset);
                 } else if (rightDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(rightDiff, 2);
+                    autoScrollOffset += Math.Pow(rightDiff, exp);
                     sv.ScrollToHorizontalOffset(sv.HorizontalOffset + autoScrollOffset);
                 }
             } else {
@@ -313,10 +316,10 @@ namespace MpWpfApp {
                 double topDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, 0);
                 double bottomDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, listBoxRect.Bottom);
                 if (topDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(topDiff, 2);
+                    autoScrollOffset += Math.Pow(topDiff, exp);
                     sv.ScrollToVerticalOffset(sv.VerticalOffset - autoScrollOffset);
                 } else if (bottomDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(bottomDiff, 2);
+                    autoScrollOffset += Math.Pow(bottomDiff, exp);
                     sv.ScrollToVerticalOffset(sv.VerticalOffset + autoScrollOffset);
                 }
             }

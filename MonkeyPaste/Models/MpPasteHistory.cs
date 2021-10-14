@@ -17,6 +17,8 @@ namespace MonkeyPaste {
         [Column("SourceClientGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+        public DateTime PasteDateTime { get; set; }
+
         [Ignore]
         public Guid SourceClientGuid {
             get {

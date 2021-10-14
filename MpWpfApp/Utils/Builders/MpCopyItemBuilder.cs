@@ -42,7 +42,7 @@ namespace MpWpfApp {
 
                 MpUrl url = null;
 
-                IDataObject iData = Clipboard.GetDataObject();
+                var iData = MpClipboardManager.Instance.GetDataObjectWrapper();
                 if (iData == null) {
                     return null;
                 }
@@ -66,7 +66,7 @@ namespace MpWpfApp {
                     //itemData = itemData.ToQuillText();
                 } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
-                    itemData = ((BitmapSource)Clipboard.GetImage()).ToBase64String();
+                    itemData = ((BitmapSource)MpClipboardManager.Instance.GetImageWrapper()).ToBase64String();
                 } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
                     itemType = MpCopyItemType.RichText;
                     if (iData.GetDataPresent(DataFormats.Html)) {

@@ -1,11 +1,4 @@
-﻿using MonkeyPaste;
-using MpWpfApp;
-using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace MpWpfApp {
     public class MpWpfDbInfo : MonkeyPaste.MpIDbInfo {
@@ -16,7 +9,8 @@ namespace MpWpfApp {
                 Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();
-                SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
+                //MpHelpers.Instance.WriteTextToFile(Properties.Settings.Default.DbPath, string.Empty);
+                //SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
             }
             return Properties.Settings.Default.DbPath;
         }

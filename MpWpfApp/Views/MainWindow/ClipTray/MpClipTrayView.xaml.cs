@@ -44,13 +44,6 @@ namespace MpWpfApp {
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
 
-
-            // ClipTray.ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
-
-            //ClipTray.PreviewMouseLeftButtonDown += (s, e2) => { ShiftLeft(); e2.Handled = true; };
-
-            //ClipTray.PreviewMouseRightButtonDown += (s, e3) => { ShiftRight(); e3.Handled = true; };
-
             if (ClipTray.Items.Count > 0) {
                 ClipTray.GetListBoxItem(0).Focus();
             }
@@ -60,13 +53,13 @@ namespace MpWpfApp {
         #region Selection
         private void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
-            ctrvm.MergeClipsCommandVisibility = ctrvm.MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
+            //ctrvm.MergeClipsCommandVisibility = ctrvm.MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
 
             MpTagTrayViewModel.Instance.UpdateTagAssociation();
 
-            if (ctrvm.PrimaryItem != null) {
-                ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
-            }
+            //if (ctrvm.PrimaryItem != null) {
+            //    ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
+            //}
 
             MpAppModeViewModel.Instance.RefreshState();
         }

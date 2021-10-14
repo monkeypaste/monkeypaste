@@ -284,10 +284,6 @@ namespace MpWpfApp {
 
             MpClipTrayViewModel.Instance.InitQueryInfo();
         }
-
-        public void FinishLoading() {
-            
-        }
         public void ClearEdits() {
             TagTrayViewModel.ClearTagEditing();
             ClipTrayViewModel.ClearClipEditing();

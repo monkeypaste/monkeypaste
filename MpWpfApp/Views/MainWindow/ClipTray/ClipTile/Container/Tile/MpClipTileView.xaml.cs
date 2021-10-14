@@ -66,6 +66,9 @@ namespace MpWpfApp {
                        // ContentListView.UpdateAdorner();
                     }
                     break;
+                case nameof(ctvm.HeadItem):
+                    return;
+                    break;
             }
         }
 

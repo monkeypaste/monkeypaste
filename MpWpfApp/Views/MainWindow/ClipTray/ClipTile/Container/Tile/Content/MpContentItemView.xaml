@@ -9,13 +9,22 @@
              mc:Ignorable="d"
              d:DesignHeight="100"
              d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}"
+             Loaded="ContentListItemView_Loaded"
+              DataContextChanged="ContentListItemView_DataContextChanged"
+              DataContext="{Binding}"
+              MouseEnter="ContentListItemView_MouseEnter"
+              MouseLeave="ContentListItemView_MouseLeave"
+              HorizontalAlignment="Stretch"     
+              VerticalAlignment="Stretch">
     <i:Interaction.Behaviors>
         <local:MpContentDragBehavior x:Name="DragBehavior"/>
     </i:Interaction.Behaviors>
-    <Border BorderThickness="1">
-        <Border.BorderBrush>
-            <DrawingBrush Viewport="0,0,7,7"
+    <local:MpRtbView x:Name="EditorView"
+                         BorderThickness="1"
+                         DataContext="{Binding}">
+        <local:MpRtbView.BorderBrush>
+            <DrawingBrush Viewport="0,0,7,7"                              
                         ViewportUnits="Absolute"
                         TileMode="Tile">
                 <DrawingBrush.Drawing>
@@ -31,61 +40,8 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-        </Border.BorderBrush>
-        <Grid x:Name="ContentListItemViewGrid"
-              Loaded="ContentListItemView_Loaded"
-              DataContextChanged="ContentListItemView_DataContextChanged"
-              DataContext="{Binding}"
-              Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
-              MouseEnter="ContentListItemView_MouseEnter"
-              MouseLeave="ContentListItemView_MouseLeave"
-              HorizontalAlignment="Stretch"     
-              VerticalAlignment="Stretch">
-            <local:MpRtbView x:Name="EditorView"
-                                 DataContext="{Binding}" />
-            <!--<local:MpQuillEditorView x:Name="EditorView"
+        </local:MpRtbView.BorderBrush>
+    </local:MpRtbView>
+    <!--<local:MpQuillEditorView x:Name="EditorView"
                                          DataContext="{Binding}" />-->
-            <!--<local:MpClipBorder x:Name="ContentListItemViewOverlayBorder"
-                                Visibility="Hidden"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Background="Transparent"
-                                Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
-                                ToolTipService.InitialShowDelay="750"
-                                CornerRadius="5">
-                --><!--<local:MpClipBorder.ToolTip>
-                    <ToolTip x:Name="ClipTileTooltip"
-                             Visibility="{Binding PlacementTarget.DataContext.SubItemToolTipVisibility, RelativeSource={RelativeSource Self}}"
-                             Placement="Top"
-                             HorizontalOffset="{Binding PlacementTarget.DataContext.Parent.TileBorderWidth, RelativeSource={RelativeSource Self}}">
-                        <ToolTip.Template>
-                            <ControlTemplate>
-                                <Border Background="White"
-                                        BorderThickness="1"
-                                        BorderBrush="Black"
-                                        Padding="5">
-                                    <Image Stretch="Fill"
-                                           Source="{Binding PlacementTarget.Tag.CopyItemBmp,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:MpClipBorder}}" />
-                                </Border>
-                            </ControlTemplate>
-                        </ToolTip.Template>
-                    </ToolTip>
-                </local:MpClipBorder.ToolTip>--><!--
-                <Button x:Name="DragButton"
-                        MouseEnter="DragButton_MouseEnter"
-                        MouseLeave="DragButton_MouseLeave"
-                        BorderThickness="0"                        
-                        Cursor="SizeAll"
-                        Margin="0,0,0,0"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left"
-                        Template="{StaticResource SearchButtonControlTemplate}">
-                    <Image Width="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
-                           Height="{local:MpMeasurementsBinding ClipTileContentItemDragButtonSize}"
-                           Source="/Resources/Images/burger.png"
-                           Stretch="Uniform" />
-                </Button>
-            </local:MpClipBorder>-->
-    </Grid>
-    </Border>
 </UserControl>

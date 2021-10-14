@@ -1,13 +1,15 @@
-﻿<UserControl x:Class="MpWpfApp.MpImageAnalysisDocument"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:System="clr-namespace:System;assembly=mscorlib"
-             xmlns:Collections="clr-namespace:System.Collections;assembly=mscorlib"
-             xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d"
-             d:DesignHeight="550" d:DesignWidth="500">
+﻿<UserControl
+    x:Class="MpWpfApp.MpImageAnalysisDocument"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Collections="clr-namespace:System.Collections;assembly=mscorlib"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="550"
+    d:DesignWidth="500"
+    mc:Ignorable="d">
     <!--
     {
     "categories": [
@@ -75,10 +77,10 @@
         "isBWImg": true
     }
 }
-    
-    
-    
-    
+
+
+
+
     <UserControl.DataContext>
         <local:MpImageAnalysisViewModel />
     </UserControl.DataContext>

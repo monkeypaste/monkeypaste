@@ -49,13 +49,12 @@ namespace MpWpfApp {
         private IntPtr _nextClipboardViewer;
         private IDictionary<string, object> _lastDataObject = null;
 
-        private MpClipboardManager() {
-        }
+        private MpClipboardManager() { }
 
         public void Init() {
             sim = new InputSimulator();
 
-            UIPermission clipBoard = new UIPermission(PermissionState.None);
+            UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
             clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
             HwndSource hwnd = (HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow);
@@ -76,6 +75,32 @@ namespace MpWpfApp {
         public event EventHandler ClipboardChanged;
         protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
 
+        #region Wrapper work-around methods
+
+        public System.Windows.Forms.IDataObject GetDataObjectWrapper() {
+            MpConsole.WriteLine($"Accessing cb at {DateTime.Now}");
+            return System.Windows.Forms.Clipboard.GetDataObject();
+            //return Clipboard.GetDataObject();
+        }
+
+        public void SetDataObjectWrapper(object iDataObject, bool copy = true, int retryTimes = 0, int retryDely = 0) {
+            if(iDataObject is IDataObject ido) {
+                //throw new Exception("Try converting to win forms version");
+                Clipboard.SetDataObject(iDataObject as IDataObject, copy);
+            } else if(iDataObject is System.Windows.Forms.IDataObject wf_ido) {
+                System.Windows.Forms.Clipboard.SetDataObject(wf_ido,copy,retryTimes,retryDely);
+            }            
+        }
+
+        public void SetImageWrapper(BitmapSource bmpSrc) {
+            MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
+        }
+
+        public BitmapSource GetImageWrapper() {
+            return Clipboard.GetImage();
+        }
+
+        #endregion
         public void CopyItemsToClipboard(List<MpCopyItem> cil, params object[] formatOrder) {
             if (formatOrder.Length == 0) {
                 if (cil.All(x => x.ItemType == MpCopyItemType.Image)) {
@@ -113,7 +138,7 @@ namespace MpWpfApp {
                     _lastDataObject = GetClipboardData();
                 }
 
-                Clipboard.SetDataObject(dataObject);
+                SetDataObjectWrapper(dataObject);
                 WinApi.SetForegroundWindow(handle);
                 WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
@@ -134,13 +159,13 @@ namespace MpWpfApp {
 
         public void SetDataObject(IDataObject dataObject) {
             MpHelpers.Instance.RunOnMainThread(() => {
-                Clipboard.SetDataObject(dataObject, true);
+                SetDataObjectWrapper(dataObject, true);
             });            
         }
 
         private IDictionary<string, object> GetClipboardData() {
             var dict = new Dictionary<string, object>();
-            var dataObject = Clipboard.GetDataObject();
+            var dataObject = GetDataObjectWrapper();
             foreach (var format in dataObject.GetFormats()) {
                 dict.Add(format, dataObject.GetData(format));
             }
@@ -152,7 +177,7 @@ namespace MpWpfApp {
             foreach (var kvp in dict) {
                 d.SetData(kvp.Key, kvp.Value);
             }
-            System.Windows.Forms.Clipboard.SetDataObject(d, true, 10, 100);
+            SetDataObjectWrapper(d, true, 10, 100);
             Thread.Sleep(1000);
             IgnoreClipboardChangeEvent = false;
         }
@@ -177,18 +202,16 @@ namespace MpWpfApp {
                             Task.Run(OnClipboardChanged);
                         }
                     }
-                    if(_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
-                        WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
-                    }
-                    
+                    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
                     break;
                 case WM_CHANGECBCHAIN:
                     if (wParam == _nextClipboardViewer) {
                         _nextClipboardViewer = lParam;
                     } else {
-                        if (_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
-                            WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
-                        }                            
+                        WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                        //if (_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
+                        //    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                        //}                            
                     }
                     break;
             }

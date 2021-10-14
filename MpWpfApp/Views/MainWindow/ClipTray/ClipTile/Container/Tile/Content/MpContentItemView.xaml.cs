@@ -77,26 +77,5 @@ namespace MpWpfApp {
         #endregion
 
         #endregion
-
-        private void ContentListItemViewGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            //var civm = DataContext as MpContentItemViewModel;
-            //if(!civm.IsSelected) {
-            //    civm.IsSelected = true;
-            //    if(!civm.Parent.IsSelected) {
-            //        civm.Parent.IsSelected = true;
-            //    }
-            //}
-            //e.Handled = false;
-        }
-
-        //private void DragButton_MouseEnter(object sender, MouseEventArgs e) {
-        //    var civm = DataContext as MpContentItemViewModel;
-        //    civm.IsOverDragButton = true;
-        //}
-
-        //private void DragButton_MouseLeave(object sender, MouseEventArgs e) {
-        //    var civm = DataContext as MpContentItemViewModel;
-        //    civm.IsOverDragButton = false;
-        //}
     }
 }

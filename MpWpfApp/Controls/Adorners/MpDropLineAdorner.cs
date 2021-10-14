@@ -39,7 +39,7 @@ namespace MpWpfApp {
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
             if(IsShowing) {
-                Visibility = Visibility.Visible; 
+                Visibility = Visibility.Visible;
                 drawingContext.DrawLine(pen, Points[0], Points[1]);
             } else {
                 Visibility = Visibility.Hidden;

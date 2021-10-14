@@ -36,26 +36,34 @@ namespace MpWpfApp {
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
+            MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
             sw.Stop();
             MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
+
         }
 
         private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
                 mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
                 mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
-                MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
+                //MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
 
-
-
-               // MpPasteToAppPathViewModelCollection.Instance.Init();
 
                 MpShortcutCollectionViewModel.Instance.Init();
 
-                MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+                // MpPasteToAppPathViewModelCollection.Instance.Init();
 
-                mwvm.FinishLoading();
 
+
+
+                int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
+
+
+                MpStandardBalloonViewModel.ShowBalloon(
+                   "Monkey Paste",
+                   "Successfully loaded w/ " + totalItems + " items",
+                   Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
                 //MpMainWindowViewModel.IsMainWindowLoading = false;
             }
@@ -64,13 +72,7 @@ namespace MpWpfApp {
         private void Instance_ViewModelLoaded(object sender, EventArgs e) {
             //MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
 
-            int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
-
-
-            MpStandardBalloonViewModel.ShowBalloon(
-               "Monkey Paste",
-               "Successfully loaded w/ " + totalItems + " items",
-               Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+           
 
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
 

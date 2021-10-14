@@ -89,7 +89,7 @@ namespace MpWpfApp {
             EndDrop();
             ResetCursor();
 
-            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsSubDragging = false);
+            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = false);
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -97,7 +97,7 @@ namespace MpWpfApp {
             if (AssociatedObject.IsMouseCaptured && 
                 (diff.Length >= MINIMUM_DRAG_DISTANCE || isDragging)) {
                 isDragging = true;
-                MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsSubDragging = true);
+                MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = true);
                 Drag(e);
             } 
         }
