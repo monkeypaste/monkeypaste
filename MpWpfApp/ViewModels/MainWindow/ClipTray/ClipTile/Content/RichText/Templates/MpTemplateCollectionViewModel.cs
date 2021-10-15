@@ -16,6 +16,11 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
+        #region Constants
+        public const string TEMPLATE_PREFIX = "<";
+        public const string TEMPLATE_SUFFIX = ">";
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -24,70 +29,41 @@ namespace MpWpfApp {
                 if(Parent == null) {
                     return null;
                 }
-                return Parent.Parent as MpClipTileViewModel;
+                return Parent.Parent;
             }
         }
 
-        private ObservableCollection<MpTemplateViewModel> _templates = new ObservableCollection<MpTemplateViewModel>();
-        public ObservableCollection<MpTemplateViewModel> Templates {
-            get {
-                return _templates;
-            }
-            private set {
-                if(_templates != value) {
-                    _templates = value;
-                    OnPropertyChanged(nameof(Templates));
-                }
-            }
-        }
+        public ObservableCollection<MpTemplateViewModel> Templates { get; set; } = new ObservableCollection<MpTemplateViewModel>();
 
-        public MpTemplateViewModel SelectedTemplate {
-            get {
-                return Templates.Where(x => x.IsSelected).FirstOrDefault();
-            }
-        }
+        public MpTemplateViewModel SelectedTemplate => Templates.Where(x => x.IsSelected).FirstOrDefault();
         #endregion
 
         #region Business Logic Properties
-        public bool HasMultipleTemplates {
-            get {
-                return Templates.Count > 1;
-            }
-        }
+        public bool HasMultipleTemplates => Templates.Count > 1;
 
-        public string PasteButtonText {
-            get {
-                return IsAllTemplatesFilled ? "PASTE" : "CONTINUE";
-            }
-        }
+        public string PasteButtonText => IsAllTemplatesFilled ? "PASTE" : "CONTINUE";
+
         #endregion
 
         #region State
-        public bool IsAllTemplatesFilled {
-            get {
-                return Templates.Any(x => x.HasText);
-            }
-        }
-        public int SelectedTemplateIdx {
-            get {
-                if(SelectedTemplate == null) {
-                    return 0;
-                }
-                return Templates.IndexOf(SelectedTemplate);
-            }
-            set {
-                if(value >= 0 && value < Templates.Count) {
-                    ClearSelection();
-                    Templates[value].IsSelected = true;
-                }
-            }
-        }
+        public bool IsAllTemplatesFilled => Templates.Any(x => x.HasText);
 
-        public bool IsAnyEditingTemplate {
-            get {
-                return Templates.Any(x => x.IsEditingTemplate);
-            }
-        }
+        //public int SelectedTemplateIdx {
+        //    get {
+        //        if(SelectedTemplate == null) {
+        //            return 0;
+        //        }
+        //        return Templates.IndexOf(SelectedTemplate);
+        //    }
+        //    set {
+        //        if(value >= 0 && value < Templates.Count) {
+        //            ClearSelection();
+        //            Templates[value].IsSelected = true;
+        //        }
+        //    }
+        //}
+
+        public bool IsAnyEditingTemplate => Templates.Any(x => x.IsEditingTemplate);
         #endregion
 
         #endregion
@@ -95,20 +71,17 @@ namespace MpWpfApp {
         #region Public Methods
         public MpTemplateCollectionViewModel() : base(null) { }
 
-        public MpTemplateCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {           
-            Templates.CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(Templates));
-            };
-
-
-            HostClipTileViewModel.PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(HostClipTileViewModel.IsAnyPastingTemplate):
-                        ResetAll();
-                        break;
-                }
-            };
+        public MpTemplateCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {
+            HostClipTileViewModel.PropertyChanged += HostClipTileViewModel_PropertyChanged;
             //templates are added in the CreateHyperlinks rtb extension
+        }
+
+        private void HostClipTileViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(HostClipTileViewModel.IsAnyPastingTemplate):
+                    ResetAll();
+                    break;
+            }
         }
 
         public void ClearAllEditing() {
@@ -130,7 +103,7 @@ namespace MpWpfApp {
             ClearSelection();
         }
 
-        public MpTemplateViewModel AddItem(MpCopyItemTemplate ncit) {
+        public MpTemplateViewModel CreateTemplateViewModel(MpCopyItemTemplate ncit) {
             MpTemplateViewModel ntvm = null;
 
             //check if template exists (it should)
@@ -157,6 +130,9 @@ namespace MpWpfApp {
             var thlvm = sender as MpTemplateViewModel;
             switch(e.PropertyName) {
                 case nameof(thlvm.IsSelected):
+                    if(thlvm.IsSelected) {
+                        Templates.Where(x => x != thlvm).ForEach(x => x.IsSelected = false);
+                    }
                     OnPropertyChanged(nameof(SelectedTemplate));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
                     break;
@@ -167,31 +143,35 @@ namespace MpWpfApp {
             if (text == null) {
                 text = string.Empty;
             }
-            if (!text.StartsWith("<")) {
-                text = "<" + text;
-            }
-            if (!text.EndsWith(">")) {
-                text = text + ">";
-            }
+            
+            //if (!text.StartsWith(TEMPLATE_PREFIX)) {
+            //    text = TEMPLATE_PREFIX + text;
+            //}
+            //if (!text.EndsWith(TEMPLATE_SUFFIX)) {
+            //    text = text + TEMPLATE_SUFFIX;
+            //}
             return text;
         }
 
-        public void RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+        public bool RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+            //returns true if this was the last instance of the template
             var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
                     thlvmToRemove.CopyItemTemplate.DeleteFromDatabase();
+                    thlvmToRemove.InstanceCount = 0;
                     Templates.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;
                 }
+                return thlvmToRemove.InstanceCount == 0;
             }
+            return false;
         }
 
         public string GetUniqueTemplateName() {
-            Parent.SaveToDatabase();
             int uniqueIdx = 1;
-            string namePrefix = "<Template";
+            string namePrefix = $"{TEMPLATE_PREFIX}Template";
             string pt = Parent.CopyItem.ItemData.ToPlainText();
             while (pt.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) ||
                    Parent
@@ -202,6 +182,22 @@ namespace MpWpfApp {
             }
             return namePrefix + uniqueIdx + ">";
         }
+
+        #region IDisposable
+
+        public override void Dispose() {
+            base.Dispose();
+            HostClipTileViewModel.PropertyChanged -= HostClipTileViewModel_PropertyChanged;
+            foreach (var thlvm in Templates) {
+                thlvm.Dispose();
+                thlvm.PropertyChanged -= Ntvm_PropertyChanged;
+                thlvm.OnTemplateSelected -= Ntvm_OnTemplateSelected;
+            } 
+
+        }
+
+        #endregion
+
         #endregion
 
         #region Private Methods
@@ -256,7 +252,6 @@ namespace MpWpfApp {
                             nextIdx = 0;
                         }
                         Templates[nextIdx].IsSelected = true;
-                        OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 
@@ -278,7 +273,6 @@ namespace MpWpfApp {
                             prevIdx = Templates.Count - 1;
                         }
                         Templates[prevIdx].IsSelected = true;
-                        OnPropertyChanged(nameof(SelectedTemplateIdx));
                     },
                     () => {
                         return Parent != null && 
@@ -303,6 +297,7 @@ namespace MpWpfApp {
                     });
             }
         }
+
         #endregion
     }
 }

@@ -1,13 +1,12 @@
-﻿<UserControl
-    x:Class="MpWpfApp.MpTextAnalysisDocument"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MpWpfApp"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="550"
-    d:DesignWidth="500"
-    mc:Ignorable="d">
+﻿<UserControl x:Class="MpWpfApp.MpTextAnalysisDocument"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MpWpfApp"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="550"
+             d:DesignWidth="500"
+             mc:Ignorable="d">
     <!--
         Detect Language
         Analyze Sentiment
@@ -22,11 +21,10 @@
     <FlowDocumentReader Background="White">
         <FlowDocument Background="White">
             <Paragraph>
-                <Image
-                    Width="90"
-                    Height="90"
-                    Margin="0,0,30,0"
-                    Source="/Resources/Images/monkey (2).png" />
+                <Image Width="90"
+                       Height="90"
+                       Margin="0,0,30,0"
+                       Source="/Resources/Images/monkey (2).png" />
                 <Run FontSize="50">Image Analysis</Run>
             </Paragraph>
 
@@ -56,7 +54,8 @@
 
             <Table CellSpacing="0">
                 <TableRowGroup>
-                    <TableRow Background="Gainsboro" FontWeight="Bold">
+                    <TableRow Background="Gainsboro"
+                              FontWeight="Bold">
                         <TableCell />
                         <TableCell>
                             <Paragraph TextAlignment="Right">WinForms</Paragraph>
@@ -69,7 +68,8 @@
 
                 <TableRowGroup>
                     <TableRow>
-                        <TableCell Background="Gainsboro" FontWeight="Bold">
+                        <TableCell Background="Gainsboro"
+                                   FontWeight="Bold">
                             <Paragraph>Lines of code</Paragraph>
                         </TableCell>
                         <TableCell>
@@ -82,7 +82,8 @@
                 </TableRowGroup>
                 <TableRowGroup>
                     <TableRow>
-                        <TableCell Background="Gainsboro" FontWeight="Bold">
+                        <TableCell Background="Gainsboro"
+                                   FontWeight="Bold">
                             <Paragraph>Developers</Paragraph>
                         </TableCell>
                         <TableCell>
@@ -94,7 +95,10 @@
                     </TableRow>
                 </TableRowGroup>
             </Table>
-            <Paragraph FontStyle="Italic" Foreground="Silver">A table of made up WinForms/WPF numbers</Paragraph>
+            <Paragraph FontStyle="Italic"
+                       Foreground="Silver">
+                A table of made up WinForms/WPF numbers
+            </Paragraph>
         </FlowDocument>
     </FlowDocumentReader>
 </UserControl>

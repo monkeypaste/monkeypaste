@@ -48,6 +48,7 @@ namespace MpWpfApp {
                 mwvm.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
             }
         }
+
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
         }
@@ -82,7 +83,6 @@ namespace MpWpfApp {
             return true;
         }
 
-
         private bool IsDragDataValid(List<MpClipTileViewModel> dcil, int overIdx) {
             if (dcil == null || dcil.Count == 0) {
                 return false;
@@ -92,7 +92,7 @@ namespace MpWpfApp {
             if (!areDragItemsSameType) {
                 return false;
             }
-            if (!isTrayDrop) {
+            if(!isTrayDrop) {
                 bool areDragItemsSameTypeAsDropContainer = dcil.All(x => x.ItemType == containerType);
                 if (!areDragItemsSameTypeAsDropContainer) {
                     return false;
@@ -100,7 +100,6 @@ namespace MpWpfApp {
             }
             return true;
         }
-
 
         private void UpdateDropLineAdorner() {
             Rect overRect;
@@ -139,7 +138,7 @@ namespace MpWpfApp {
         }
 
         public void Drop(bool isCopy = false) {
-            MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
+            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
                 if (this.dragTiles == null || this.dragTiles.Count == 0) {
                     Reset();
                     return;
@@ -186,7 +185,6 @@ namespace MpWpfApp {
                                 if(dragIdxToRemove < dropIdx) {
                                     dropIdx--;
                                 }
-                                dragTile.IsPlaceholder = true;
                                 MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
                                 dragTile.UpdateSortOrder();
@@ -248,7 +246,6 @@ namespace MpWpfApp {
                             }
                             if (dragTile.Count == 0) {
                                 int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                                dragTile.IsPlaceholder = true;
                                 MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
                                 dragTile.UpdateSortOrder();
@@ -265,7 +262,7 @@ namespace MpWpfApp {
                     }
                 }
                 Reset();
-            }));
+            });
         }
 
 

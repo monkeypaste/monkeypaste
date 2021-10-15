@@ -27,7 +27,7 @@ namespace MpWpfApp {
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
 
-        public List<MpTemplateHyperlink> TemplateViews = new List<MpTemplateHyperlink>();
+        //public List<MpTemplateHyperlink> TemplateViews = new List<MpTemplateHyperlink>();
         //public bool IsClearing = false;
 
         //public Dictionary<int, List<Hyperlink>> TemplateLookUp = new Dictionary<int, List<Hyperlink>>();
@@ -54,6 +54,8 @@ namespace MpWpfApp {
 
 
                 await MpHelpers.Instance.RunOnMainThreadAsync(CreateHyperlinks);
+
+                MpRtbTemplateCollection.CreateTemplateViews(Rtb);
 
                 MpHelpers.Instance.RunOnMainThread(UpdateLayout);
                 //rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
@@ -197,6 +199,7 @@ namespace MpWpfApp {
 
         public async Task ClearHyperlinks() {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                MpRtbTemplateCollection.ClearTemplateViews(Rtb);
                 //var rtbSelection = Rtb?.Selection;
                 var hlList = await GetAllHyperlinksFromDoc();
                 foreach (var hl in hlList) {
@@ -204,21 +207,22 @@ namespace MpWpfApp {
                     if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
                         linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                     } else {
-                        var thlvm = (MpTemplateViewModel)hl.DataContext;
-                        linkText = thlvm.TemplateName;
+                        throw new Exception("This template should be cleared from attached property");
+                        //var thlvm = (MpTemplateViewModel)hl.DataContext;
+                        //linkText = thlvm.TemplateName;
                     }
                     hl.Inlines.Clear();
                     new Span(new Run(linkText), hl.ElementStart);
                 }
-                foreach (var hl in TemplateViews) {
-                    hl.Tag = null;
-                    var thlvm = hl.DataContext as MpTemplateViewModel;
-                    hl.Inlines.Clear();
-                    new Span(new Run(thlvm.TemplateName), hl.ElementStart);
-                }
-                TemplateViews.Clear();
-                var rtbvm = Rtb.DataContext as MpContentItemViewModel;
-                rtbvm.TemplateCollection.Templates.Clear();
+                //foreach (var hl in TemplateViews) {
+                //    hl.Tag = null;
+                //    var thlvm = hl.DataContext as MpTemplateViewModel;
+                //    hl.Inlines.Clear();
+                //    new Span(new Run(thlvm.TemplateName), hl.ElementStart);
+                //}
+                //TemplateViews.Clear();
+                //var rtbvm = Rtb.DataContext as MpContentItemViewModel;
+                //rtbvm.TemplateCollection.Templates.Clear();
                 //if ( rtbSelection != null) {
                 //    Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 //}
@@ -293,7 +297,8 @@ namespace MpWpfApp {
                 var lastRangeEnd = Rtb.Document.ContentStart;
                 var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
                 if (linkType == MpSubTextTokenType.TemplateSegment) {
-                    regExStr = templateRegEx;
+                    //regExStr = templateRegEx;
+                    continue;
                 }
                 if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates
@@ -479,5 +484,16 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            if(DataContext != null && DataContext is MpContentItemViewModel rtbvm) {
+                rtbvm.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
+                rtbvm.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
+                rtbvm.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
+                //rtbivm.OnClearTemplatesRequest -= Rtbivm_OnClearHyperlinksRequest;
+                //rtbivm.OnCreateTemplatesRequest -= Rtbivm_OnCreateHyperlinksRequest;
+                rtbvm.OnSyncModels -= Rtbivm_OnSyncModels;
+            }
+        }
     }
 }

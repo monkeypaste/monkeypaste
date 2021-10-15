@@ -46,15 +46,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance Properties
-        public Cursor TemplateTextBlockCursor {
-            get {
-                if(Parent != null && 
-                  (HostClipTileViewModel.IsAnyEditingContent || HostClipTileViewModel.IsAnyEditingTemplate)) {
-                    return Cursors.Hand;
-                }
-                return Cursors.Arrow;
-            }
-        }
         #endregion
 
         #region Visibility Properties
@@ -146,7 +137,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
             }
         }
@@ -164,17 +154,12 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
                
             }
         }
 
-        public bool HasText {
-            get {
-                return !string.IsNullOrEmpty(TemplateText);
-            }
-        }
+        public bool HasText => !string.IsNullOrEmpty(TemplateText);
 
         private bool _isEditingTemplate = false;
         public bool IsEditingTemplate {
@@ -226,27 +211,33 @@ namespace MpWpfApp {
 
         public string TemplateDisplayValue {
             get {
-                if (HostClipTileViewModel.IsAnyPastingTemplate && 
-                    HasText) {
-                    return TemplateText;
-                }
-                return TemplateName;
-            }
-            set {
-                if(Parent.Parent.IsPastingTemplate && TemplateText != value) {
-                    TemplateText = value;
-                } else if(TemplateName != value) {
-                    TemplateName = value;
-                }
-            }
-        }
-
-        public string TemplateDisplayName {
-            get {
-                if(string.IsNullOrEmpty(TemplateName)) {
+                if(Parent == null) {
                     return string.Empty;
                 }
-                return TemplateName.Replace("<", String.Empty).Replace(">", string.Empty);
+                string nameOrInputText = string.Empty;
+                if (HostClipTileViewModel.IsAnyPastingTemplate && 
+                    HasText) {
+                    nameOrInputText = TemplateText;
+                } else {
+                    nameOrInputText = TemplateName;
+                }
+                return string.Format(
+                    @"{0}{1}{2}",
+                    MpTemplateCollectionViewModel.TEMPLATE_PREFIX,
+                    nameOrInputText,
+                    MpTemplateCollectionViewModel.TEMPLATE_SUFFIX);
+            }
+            set {
+                if(value == null) {
+                    value = string.Empty;
+                }
+                string decodedValue = value.Replace(MpTemplateCollectionViewModel.TEMPLATE_PREFIX, string.Empty)
+                                           .Replace(MpTemplateCollectionViewModel.TEMPLATE_SUFFIX, string.Empty);
+                if(Parent.Parent.IsPastingTemplate && TemplateText != decodedValue) {
+                    TemplateText = decodedValue;
+                } else if(TemplateName != decodedValue) {
+                    TemplateName = decodedValue;
+                }
             }
         }
 
@@ -308,12 +299,11 @@ namespace MpWpfApp {
                     return;
                 }
                 if (CopyItemTemplate.TemplateName != value) {
-                    CopyItemTemplate.TemplateName = Parent.GetFormattedTemplateName(value);
+                    CopyItemTemplate.TemplateName = value;
                 }
 
                 OnPropertyChanged(nameof(TemplateName));
                 OnPropertyChanged(nameof(TemplateDisplayValue));
-                OnPropertyChanged(nameof(TemplateDisplayName));
                 OnPropertyChanged(nameof(CopyItemTemplate));
             }
         }
@@ -347,7 +337,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CopyItemTemplate));
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateName)); 
-                    OnPropertyChanged(nameof(TemplateDisplayName));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                     OnPropertyChanged(nameof(CopyItemTemplateId));
                     OnPropertyChanged(nameof(CopyItemId));
@@ -363,31 +352,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpTemplateViewModel() : base(null) { }
         public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(IsSelected):
-                        if(IsSelected) {
-                             OnTemplateSelected?.Invoke(this, null);
-                        } else {
-                            IsEditingTemplate = false;
-                            Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                            Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
-                        }
-                        break;
-                    case nameof(TemplateName):
-                        Validate();
-                        break;
-                    case nameof(ValidationText):
-                        if(!string.IsNullOrEmpty(ValidationText)) {
-                            MpConsole.WriteLine("Validation text changed to: " + ValidationText);
-                        }
-                        break;
-                    case nameof(IsEditingTemplate):
-                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
-                        Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
-                        break;
-                }
-            };
+            PropertyChanged += MpTemplateViewModel_PropertyChanged;
             CopyItemTemplate = cit;         
         }
 
@@ -397,12 +362,14 @@ namespace MpWpfApp {
                 if (pt.Contains(TemplateName) ||
                     Parent.Templates.Any(x => x.TemplateName == TemplateName && x != this)) {
                     ValidationText = $"{TemplateName} must have a unique name";
+                    MpConsole.WriteLine($"Template invalidated: {ValidationText}");
                     return false;
                 }
             }
 
             if (string.IsNullOrEmpty(TemplateName.Trim())) {
                 ValidationText = "Name cannot be empty!";
+                MpConsole.WriteLine($"Template invalidated: {ValidationText}");
                 return false;
             }
 
@@ -413,6 +380,42 @@ namespace MpWpfApp {
         public void Reset() {
             TemplateText = string.Empty;
             IsEditingTemplate = false;
+        }
+
+        public override void Dispose() {
+            PropertyChanged -= MpTemplateViewModel_PropertyChanged;
+            Reset();
+            base.Dispose();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpTemplateViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        OnTemplateSelected?.Invoke(this, null);
+                    } else {
+                        IsEditingTemplate = false;
+                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+                    }
+                    break;
+                case nameof(TemplateName):
+                    Validate();
+                    break;
+                case nameof(ValidationText):
+                    if (!string.IsNullOrEmpty(ValidationText)) {
+                        MpConsole.WriteLine("Validation text changed to: " + ValidationText);
+                    }
+                    break;
+                case nameof(IsEditingTemplate):
+                    Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+                    break;
+            }
         }
 
         #endregion

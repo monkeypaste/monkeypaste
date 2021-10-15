@@ -107,6 +107,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentMarginExtension.cs" />
+    <Compile Include="AttachedProperties\MpRtbTemplateCollection.cs" />
     <Compile Include="AttachedProperties\MpPagedItem.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpListBoxItemRecycler.cs" />

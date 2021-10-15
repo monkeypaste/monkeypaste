@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <Viewbox Grid.ColumnSpan="2"
                  Stretch="Fill">
-            <Canvas x:Name="TitleSwirlCanvas" 
+            <Canvas x:Name="TitleSwirlCanvas"
                     Visibility="Visible"
                     Width="{local:MpMeasurementsBinding ClipTileBorderMinSize, Mode=OneWay}"
                     Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
@@ -102,7 +102,7 @@
                         Canvas.Top="3"
                         Canvas.Right="3"
                         Command="{Binding FlipTileCommand, Source={StaticResource ClipTrayViewModel}}"
-                        CommandParameter="{Binding Parent.Parent}"/>
+                        CommandParameter="{Binding Parent.Parent}" />
             </Canvas>
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"
@@ -114,21 +114,22 @@
               MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
               MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
               HorizontalAlignment="Left">
-            <!-- Clip Title TextBlock -->
+            <!--  Clip Title TextBlock  -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
                        Text="{Binding Path=Text, ElementName=ClipTileTitleTextBox}"
                        FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize, Mode=OneWay}"
                        Background="{Binding TileTitleTextGridBackgroundBrush}"
                        Foreground="White"
                        Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityFlipConverter}}">
-                    <TextBlock.Effect>
-                        <DropShadowEffect ShadowDepth="0.5"
-                                            Direction="300"
-                                            Color="Black"
-                                            Opacity="0.70"
-                                            BlurRadius="0.1" />
-                    </TextBlock.Effect></TextBlock>
-            <!-- Clip Title TextBox -->
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0.5"
+                                      Direction="300"
+                                      Color="Black"
+                                      Opacity="0.70"
+                                      BlurRadius="0.1" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <!--  Clip Title TextBox  -->
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
                      LostFocus="ClipTileTitleTextBox_LostFocus"
@@ -139,7 +140,7 @@
                      IsReadOnly="False"
                      Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityConverter}}"
                      Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-            
+
         </Grid>
         <Image x:Name="ClipTileAppIconHighlightedBorderImage"
                Grid.Column="1"
@@ -149,15 +150,15 @@
                Visibility="Hidden"
                Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"
                Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}" />
-        <!-- Clip Title Icon Image -->
-        <Grid Grid.Column="1" >
+        <!--  Clip Title Icon Image  -->
+        <Grid Grid.Column="1">
             <Button x:Name="ClipTileAppIconImageButton"
                     MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                     MouseLeave="ClipTileAppIconImageButton_MouseLeave"
-                    PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"                    
+                    PreviewMouseLeftButtonUp="ClipTileAppIconImageButton_PreviewMouseLeftButtonUp"
                     Style="{StaticResource Transparent_Button}"
                     Visibility="Visible"
-                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
+                    Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}}"
                     HorizontalAlignment="Right"
                     Margin="0,0,20,0"
                     VerticalAlignment="Center"
@@ -172,7 +173,7 @@
                 </Button.ContextMenu>
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
-                          Loaded="ClipTileAppIconBorderImage_Loaded"
+                           Loaded="ClipTileAppIconBorderImage_Loaded"
                            Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"

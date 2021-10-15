@@ -37,7 +37,7 @@ namespace MpWpfApp {
             var mil = new List<MenuItem>();
             foreach(var thvm in tc) {
                 var mi = new MenuItem() {
-                    Header = thvm.TemplateDisplayName,
+                    Header = thvm.TemplateName,
                     Icon = new Border() { 
                         BorderBrush = Brushes.Black,
                         Background = thvm.TemplateBrush
@@ -56,13 +56,13 @@ namespace MpWpfApp {
 
             mil.Add(ami);
             foreach (MenuItem mi in mil) {
-                mi.Click += Template_Click;
+                mi.Click += TemplateDropDownItem_Click;
             }
 
             AddButton.ContextMenu.ItemsSource = mil;
         }
 
-        private void Template_Click(object sender, RoutedEventArgs e) {
+        private void TemplateDropDownItem_Click(object sender, RoutedEventArgs e) {
             Rtb.Focus();
             MpTemplateHyperlink thl = null;
             var mi = sender as MenuItem;

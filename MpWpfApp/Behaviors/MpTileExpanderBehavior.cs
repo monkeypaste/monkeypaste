@@ -26,7 +26,13 @@ namespace MpWpfApp {
             if(AssociatedObject.DataContext != null && AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
                 ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
                 ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
+                ctvm.MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
             }
+        }
+
+        private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
+            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            ctvm.IsExpanded = false;
         }
 
         private void Ctvm_OnUnExpandRequest(object sender, EventArgs e) {
@@ -65,10 +71,10 @@ namespace MpWpfApp {
             if (ctvm.IsAnyPastingTemplate) {
                 deltaContentHeight += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
             }
-            deltaContentHeight += MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            deltaContentHeight = 0;//+= MpMeasurements.Instance.ClipTileEditToolbarHeight;
 
             //make change in height so window doesn't get smaller but also doesn't extend past top of screen
-            deltaHeight = Math.Max(MpMeasurements.Instance.MainWindowMinHeight, Math.Min(maxDeltaHeight, deltaContentHeight));
+            deltaHeight = 0;// Math.Max(MpMeasurements.Instance.MainWindowMinHeight, Math.Min(maxDeltaHeight, deltaContentHeight));
             deltaWidth =  mwvm.ClipTrayWidth - ctvm.TileBorderWidth - MpMeasurements.Instance.ClipTileExpandedMargin;
 
             mwvm.MainWindowTop -= deltaHeight;
@@ -81,6 +87,8 @@ namespace MpWpfApp {
             ctvm.TileContentWidth += deltaWidth;
             ctvm.TileContentHeight += deltaContentHeight;
 
+
+            //ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.EditToolbarView.Visibility = Visibility.Visible;
             clv.UpdateLayout();
@@ -90,8 +98,13 @@ namespace MpWpfApp {
                 var civm = civ.DataContext as MpContentItemViewModel;
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                 //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
                 civ.EditorView.Rtb.FitDocToRtb();
+                if(civm.IsSelected) {
+                    civ.EditorView.Rtb.Focus();
+                    civ.EditorView.Rtb.CaretPosition = civ.EditorView.Rtb.Document.ContentStart;
+                }
             }
 
             var sv = clv.ContentListBox.GetScrollViewer();
@@ -102,8 +115,6 @@ namespace MpWpfApp {
             clv.UpdateAdorner();
 
             AssociatedObject.UpdateLayout();
-
-            //ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
         }        
@@ -118,7 +129,7 @@ namespace MpWpfApp {
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
             ctvm.Parent.Items
-                .Where(x => x != ctvm)
+                .Where(x => x != ctvm && !x.IsPlaceholder)
                 .ForEach(y => y.ItemVisibility = Visibility.Visible);
 
             mwvm.MainWindowTop += deltaHeight;

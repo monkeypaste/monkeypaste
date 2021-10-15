@@ -11,7 +11,7 @@ using System.Reflection;
 using MonkeyPaste;
 
 namespace MpWpfApp {    
-    public abstract class MpViewModelBase<P> : INotifyPropertyChanged where P: class {
+    public abstract class MpViewModelBase<P> : INotifyPropertyChanged, IDisposable where P: class {
         #region Private Variables
 
         #endregion
@@ -31,7 +31,6 @@ namespace MpWpfApp {
             }
         }
 
-
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel {
             get {
@@ -46,6 +45,7 @@ namespace MpWpfApp {
 
         //public MpMeasurements Measurements { get; private set; }
         #endregion
+
         private bool _isMouseOverVerticalScrollBar = false;
         public bool IsMouseOverVerticalScrollBar {
             get {
@@ -150,6 +150,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        public virtual void Dispose() {
+            MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
+            MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
+            MpDb.Instance.SyncAdd -= Instance_SyncAdd;
+            MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
+            MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+        }
+
         #endregion
 
         #region Protected Methods

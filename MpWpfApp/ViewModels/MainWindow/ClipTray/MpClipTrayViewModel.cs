@@ -45,8 +45,7 @@ namespace MpWpfApp {
 
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
-
-        private List<MpClipTileViewModel> _newTileList = new List<MpClipTileViewModel>();
+        private List<MpCopyItem> _newModels = new List<MpCopyItem>();
         
         private List<MpClipTileViewModel> _availableTiles = new List<MpClipTileViewModel>();
 
@@ -63,8 +62,6 @@ namespace MpWpfApp {
         #region Properties
         public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
         public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
-
-        public int ItemsAdded { get; set; }
 
         public MpWpfQueryInfo QueryInfo { get; set; }
         #region View Models
@@ -121,6 +118,8 @@ namespace MpWpfApp {
                 return Items[0];
             }
         }
+
+        public List<MpClipTileViewModel> NewItems { get; set; } = new List<MpClipTileViewModel>();
 
 
         public List<MpContentItemViewModel> SelectedContentItemViewModels {
@@ -363,9 +362,7 @@ namespace MpWpfApp {
 
         #region Events
         public event EventHandler<object> OnFocusRequest;
-
         public event EventHandler OnUiRefreshRequest;
-
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
         #endregion
@@ -380,8 +377,7 @@ namespace MpWpfApp {
 
 
             _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles * 2;
-            _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);
-            
+            _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);            
 
             BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
             for (int i = 0; i < _pageCount; i++) {
@@ -395,22 +391,25 @@ namespace MpWpfApp {
             //_queryInfo_InfoChanged(this, new EventArgs());
         }
 
+        public void RecycleItem(MpClipTileViewModel ctvm) {
+            RecycleItem(Items.IndexOf(ctvm));
+        }
+
+        public void RecycleItem(int itemIdx) {
+            //
+            if(itemIdx < 0 || itemIdx >= Items.Count) {
+                throw new Exception($"Cannot recycle out of bounds ({Items.Count}) index ({itemIdx})");
+            }
+        }
+
         private async void _queryInfo_InfoChanged(object sender, EventArgs e) {
             _viewModelProvider.SetQueryInfo(QueryInfo);
 
             await Task.Run(async () => {
                 await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
-                    var sw = new Stopwatch(); dragTiles.Reverse();
-                    foreach (var dragTile in dragTiles) {
-                        int oldIdx = MpClipTrayViewModel.Instance.ClipTileViewModels.IndexOf(dragTile);
-                        if (oldIdx < dropIdx) {
-                            dropIdx--;
-                        }
-                        MpClipTrayViewModel.Instance.ClipTileViewModels.Move(oldIdx, dropIdx);
-                    }
+                    var sw = new Stopwatch(); 
                     sw.Start();
                     var initTasks = new List<Task>();
-                    int itemsToAdd = _pageCount - Items.Count;
                     var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
                     for (int i = 0; i < ivml.Count; i++) {
                         initTasks.Add(Items[i].InitializeAsync(ivml[i]));
@@ -445,6 +444,27 @@ namespace MpWpfApp {
             OnUiRefreshRequest?.Invoke(this, null);
         }
         #endregion
+
+        public void AddNewModels() {
+            Task.Run(async () => {
+                await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                    if (_newModels.Count == 0) {
+                        return;
+                    }
+                    int tileCount = Items.Count;
+                    var initTasks = new List<Task>();
+                    foreach (var nci in _newModels) {
+                        var newTile = Items[tileCount - 1];
+                        Items.Move(tileCount - 1, 0);
+                        initTasks.Add(newTile.InitializeAsync(nci));
+                    }
+                    await Task.WhenAll(initTasks.ToArray());
+                    _newModels.Clear();
+                    ResetClipSelection();
+                    MpTagTrayViewModel.Instance.RefreshAllCounts();
+                });
+            });
+        }
 
         public void UpdateSortOrder(bool fromModel = false) {            
             if (fromModel) {
@@ -704,18 +724,13 @@ namespace MpWpfApp {
                             Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                     }
 
-                    int tileCount = Items.Count;
-                    var newTile = Items[tileCount - 1];
-                    //ClipTileViewModels.Move(tileCount - 1, 0);
-                    //MpHelpers.Instance.RunOnMainThreadAsync(async () => { 
-                    //    await newTile.Initialize(newCopyItem); 
-                    //});                            
+                    
                 }
             }
             totalAddSw.Stop();
             MonkeyPaste.MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
-            ItemsAdded++;
+            _newModels.Add(newCopyItem);
         }
 
         public void AddItemFromClipboard() {
@@ -1073,7 +1088,7 @@ namespace MpWpfApp {
                             ci.WriteToDatabase();
                         }
                         var nctvm = new MpClipTileViewModel(this, ci);
-                        _newTileList.Add(nctvm);
+                        NewItems.Add(nctvm);
                         //AddNewTiles();
                     } else {
                         MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");

@@ -73,9 +73,9 @@ namespace MpWpfApp {
         }
 
         public event EventHandler ClipboardChanged;
-        protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
 
         #region Wrapper work-around methods
+
 
         public System.Windows.Forms.IDataObject GetDataObjectWrapper() {
             MpConsole.WriteLine($"Accessing cb at {DateTime.Now}");
@@ -195,11 +195,14 @@ namespace MpWpfApp {
                         if(MpAppModeViewModel.Instance.IsAppPaused) {
                             MonkeyPaste.MpConsole.WriteLine("App Paused, ignoring copy");
                         }
-                        else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
-                            MonkeyPaste.MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
-                        } else {
+                        // TODO uncomment below, its commented out trying to debug ucrt issue
+                        //else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
+                        //    MonkeyPaste.MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
+                        //} 
+                        else {
+                            ClipboardChanged?.Invoke(this, EventArgs.Empty);
                             //MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
-                            Task.Run(OnClipboardChanged);
+                            //Task.Run(OnClipboardChanged);
                         }
                     }
                     WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);

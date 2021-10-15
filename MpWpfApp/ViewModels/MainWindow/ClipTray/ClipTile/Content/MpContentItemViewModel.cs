@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using AsyncAwaitBestPractices.MVVM;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using SQLite;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
@@ -326,8 +324,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsPlaceholder { get; set; } = false;
-
+        public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
         public bool IsItemDragging { get; set; } = false;
@@ -593,12 +590,6 @@ namespace MpWpfApp {
         }
 
         public void Initialize(MpCopyItem ci) {
-            if (ci == null) {
-                IsPlaceholder = true;
-            } else {
-                IsPlaceholder = false;
-            }
-
             if (ci.Source == null) {
                 ci.Source = MpDb.Instance.GetItem<MpSource>(ci.SourceId);
             }
@@ -615,12 +606,6 @@ namespace MpWpfApp {
         }
 
         public async Task InitializeAsync(MpCopyItem ci) {
-            if (ci == null) {
-                IsPlaceholder = true;
-            } else {
-                IsPlaceholder = false;
-            }
-
             if (ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
@@ -682,6 +667,7 @@ namespace MpWpfApp {
         }
 
         #region UI Invokers
+
         public void RequestSyncModels() {
             OnSyncModels?.Invoke(this, null);
         }
@@ -698,15 +684,17 @@ namespace MpWpfApp {
             OnCreateTemplatesRequest?.Invoke(this, null);
         }
 
-        #endregion
-
-
-
-
-        public void Resize(Rect newSize) {
-            //throw new Exception("Unemplemented");
+        public void RequestScrollWheelChange(int delta) {
+            //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
+            //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
+            OnScrollWheelRequest?.Invoke(this, delta);
         }
 
+        public void RequestUiUpdate() {
+            OnUiUpdateRequest?.Invoke(this, null);
+        }
+
+        #endregion
 
 
         public string GetDetailText(MpCopyItemDetailType detailType) {
@@ -760,21 +748,6 @@ namespace MpWpfApp {
             return info;
         }
 
-        #region View Request Invokers
-
-        public void RequestScrollWheelChange(int delta) {
-            //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-            //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
-            OnScrollWheelRequest?.Invoke(this, delta);
-        }
-
-        public void RequestUiUpdate() {
-            OnUiUpdateRequest?.Invoke(this, null);
-        }
-
-        #endregion
-
-
         public void ClearEditing() {
             //IsEditingContent = false;
             IsEditingTitle = false;
@@ -785,14 +758,21 @@ namespace MpWpfApp {
             }
         }
 
-        public void SaveToDatabase() {
-            CopyItem.WriteToDatabase();
-        }
-
 
         public void MoveToArchive() {
             // TODO maybe add archiving
         }
+
+        #region IDisposable
+
+        public override void Dispose() {
+            base.Dispose();
+            PropertyChanged -= MpContentItemViewModel_PropertyChanged;
+            TemplateCollection.Dispose();
+            TitleSwirlViewModel.Dispose();
+        }
+
+        #endregion
 
         #endregion
 
@@ -921,7 +901,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanCreateQrCodeFromSubSelectedItem() {
-            return CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+            return true;//CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= Properties.Settings.Default.MaxQrCodeCharLength;
         }
         private void CreateQrCodeFromSubSelectedItem() {
             var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());

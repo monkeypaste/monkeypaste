@@ -75,6 +75,10 @@ namespace MpWpfApp {
             LayerBrush = layerBrush;
             LayerOpacity = layerOpacity;
         }
+
+        public override void Dispose() {
+            base.Dispose();
+        }
         #endregion
     }
 }

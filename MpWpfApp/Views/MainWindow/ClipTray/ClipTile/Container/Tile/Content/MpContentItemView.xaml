@@ -11,22 +11,23 @@
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}"
              Loaded="ContentListItemView_Loaded"
-              DataContextChanged="ContentListItemView_DataContextChanged"
-              DataContext="{Binding}"
-              MouseEnter="ContentListItemView_MouseEnter"
-              MouseLeave="ContentListItemView_MouseLeave"
-              HorizontalAlignment="Stretch"     
-              VerticalAlignment="Stretch">
+             DataContextChanged="ContentListItemView_DataContextChanged"
+             DataContext="{Binding}"
+             MouseEnter="ContentListItemView_MouseEnter"
+             MouseLeave="ContentListItemView_MouseLeave"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
     <i:Interaction.Behaviors>
-        <local:MpContentDragBehavior x:Name="DragBehavior"/>
+        <local:MpContentDragBehavior x:Name="DragBehavior" />
     </i:Interaction.Behaviors>
     <local:MpRtbView x:Name="EditorView"
-                         BorderThickness="1"
-                         DataContext="{Binding}">
+                     BorderThickness="1"
+                     Focusable="True"
+                     DataContext="{Binding}">
         <local:MpRtbView.BorderBrush>
-            <DrawingBrush Viewport="0,0,7,7"                              
-                        ViewportUnits="Absolute"
-                        TileMode="Tile">
+            <DrawingBrush Viewport="0,0,7,7"
+                          ViewportUnits="Absolute"
+                          TileMode="Tile">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
                         <GeometryDrawing Brush="{Binding ItemBorderBrush}">

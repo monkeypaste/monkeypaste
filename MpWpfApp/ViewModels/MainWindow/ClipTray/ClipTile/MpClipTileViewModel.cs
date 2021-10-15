@@ -664,7 +664,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public bool IsPlaceholder { get; set; }
+        public bool IsPlaceholder => ItemViewModels.Count == 0;
 
         #endregion
 
@@ -706,7 +706,6 @@ using System.Speech.Synthesis;
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-
             
             MpHelpers.Instance.RunOnMainThread(async()=> {
                 await InitializeAsync(ci);
@@ -724,39 +723,10 @@ using System.Speech.Synthesis;
                 
             }
         }
-        public void Initialize(MpCopyItem headItem) {
-            IsBusy = true;
-            if (headItem == null) {
-                IsPlaceholder = true;
-            } else {
-                IsPlaceholder = false;
-
-
-                var ccil = MpCopyItemProvider.Instance.GetCompositeChildren(headItem.Id);
-                ccil.Insert(0, headItem);
-
-                var civml = new List<MpContentItemViewModel>();
-                foreach (var cci in ccil) {
-                    civml.Add(new MpContentItemViewModel(this, cci));
-                }
-
-                ItemViewModels = new ObservableCollection<MpContentItemViewModel>(civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
-
-                BindingOperations.EnableCollectionSynchronization(ItemViewModels, _itemLockObject);
-
-                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-                RequestUiUpdate();
-                OnViewModelLoaded();
-            }
-            IsBusy = false;
-        }
         public async Task InitializeAsync(MpCopyItem headItem) {
             await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
                 IsBusy = true;
-                if (headItem == null) {
-                    IsPlaceholder = true;
-                } else {
-                    IsPlaceholder = false;
+                if (headItem != null) {
                     ItemViewModels.Clear();
 
                     var ccil = await MpCopyItemProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
@@ -777,6 +747,7 @@ using System.Speech.Synthesis;
                     OnViewModelLoaded();
                 }
                 IsBusy = false;
+                OnPropertyChanged(nameof(IsPlaceholder));
             });
         }
 
@@ -824,6 +795,7 @@ using System.Speech.Synthesis;
                             MpClipTrayViewModel.Instance.FlipTileCommand.Execute(this);
                         }
                     }
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     break;
                 case nameof(IsHovering):
                     if (IsHovering) {
@@ -843,20 +815,20 @@ using System.Speech.Synthesis;
                         SelectedItems.ForEach(x => x.OnPropertyChanged(nameof(x.EditorCursor)));
                     }
                     break;
-                case nameof(IsAnyEditingTemplate):
-                    if (IsAnyEditingTemplate) {
-                        TileContentHeight += TileDetailHeight;
-                    } else {
-                        TileContentHeight -= TileDetailHeight;
-                    }
-                    break;
-                case nameof(IsAnyPastingTemplate):
-                    if (IsAnyPastingTemplate) {
-                        TileContentHeight += TileDetailHeight;
-                    } else {
-                        TileContentHeight -= TileDetailHeight;
-                    }
-                    break;
+                //case nameof(IsAnyEditingTemplate):
+                //    if (IsAnyEditingTemplate) {
+                //        TileContentHeight += TileDetailHeight;
+                //    } else {
+                //        TileContentHeight -= TileDetailHeight;
+                //    }
+                //    break;
+                //case nameof(IsAnyPastingTemplate):
+                //    if (IsAnyPastingTemplate) {
+                //        TileContentHeight += TileDetailHeight;
+                //    } else {
+                //        TileContentHeight -= TileDetailHeight;
+                //    }
+                //    break;
                 case nameof(IsPlaceholder):
                     ItemVisibility = IsPlaceholder ? Visibility.Collapsed : Visibility.Visible;
                     break;
@@ -870,27 +842,10 @@ using System.Speech.Synthesis;
                     FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
                     BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
                     break;
+                case nameof(DropIdx):
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
+                    break;
             }
-        }
-
-        
-        public void Resize(
-            double deltaWidth,
-            double deltaHeight,
-            double deltaEditToolbarTop) {
-            TileBorderWidth += deltaWidth;
-            TileContentWidth += deltaWidth;
-
-            TileBorderHeight += deltaHeight;
-            TileContentHeight += deltaHeight;
-
-            foreach(var civm in ItemViewModels) {
-                civm.Resize(new Rect());
-            }
-           // ContentContainerViewModel.Resize(deltaEditToolbarTop, deltaWidth, deltaHeight);
-
-            //EditTemplateToolbarViewModel.Resize(deltaHeight,deltaWidth);
-
         }
 
         public void RefreshAsyncCommands() {
@@ -1021,7 +976,7 @@ using System.Speech.Synthesis;
             var rtsw = new Stopwatch();
             rtsw.Start();
             foreach (var ivm in ItemViewModels) {
-                ivm.SaveToDatabase();
+                //ivm.SaveToDatabase();
             }
             rtsw.Stop();
             MonkeyPaste.MpConsole.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
@@ -1120,12 +1075,27 @@ using System.Speech.Synthesis;
         public void ResetContentScroll() {
             RequestScrollToHome();
         }
+
+        #region IDisposable
+
+        public override void Dispose() {
+            base.Dispose();
+            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            ClearSelection();
+            ItemViewModels.ForEach(x => x.Dispose());
+            ItemViewModels.Clear();
+
+        }
+
+        #endregion
+
         #endregion
 
         #region Private Methods           
 
-        #endregion
 
+
+        #endregion
 
         #region Content Container stuff
 
@@ -1757,12 +1727,7 @@ using System.Speech.Synthesis;
             }
         }
         private bool CanSpeakSubSelectedClipsAsync(object args) {
-            foreach (var sctvm in SelectedItems) {
-                if (!string.IsNullOrEmpty(sctvm.CopyItem.ItemData.ToPlainText())) {
-                    return true;
-                }
-            }
-            return false;
+            return IsTextItem;
         }
         private async Task SpeakSubSelectedClipsAsync() {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
@@ -1778,6 +1743,7 @@ using System.Speech.Synthesis;
                 speechSynthesizer.SelectVoice(voiceName);
 
                 speechSynthesizer.Rate = 0;
+
                 speechSynthesizer.SpeakCompleted += (s, e) => {
                     speechSynthesizer.Dispose();
                 };

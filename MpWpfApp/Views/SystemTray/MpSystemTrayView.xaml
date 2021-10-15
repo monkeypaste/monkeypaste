@@ -6,11 +6,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tb="http://www.hardcodet.net/taskbar"
              xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
     <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
                     IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
-                    Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
+                    Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}}"
                     ToolTipText="{Binding SystemTrayIconToolTipText}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="Loaded">
@@ -24,7 +25,7 @@
                           Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                           Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
                           CommandParameter="{StaticResource SettingsTabAccount}" />
-                <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
                           Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}, Source={StaticResource SystemTrayViewModel}}"
                           Command="{Binding AppModeViewModel.ToggleIsAppPausedCommand, Source={StaticResource MainWindowViewModel}}" />
                 <MenuItem Header="Help"
@@ -32,15 +33,15 @@
                           Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
                           CommandParameter="{StaticResource SettingsTabHelp}" />
                 <MenuItem Header="Log..."
-                          Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
+                          Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                 <Separator />
                 <MenuItem Header="Exit"
                           Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                          Command="{Binding PlacementTarget.Tag.ExitApplicationCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}" />
+                          Command="{Binding PlacementTarget.Tag.ExitApplicationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
             </ContextMenu>
         </tb:TaskbarIcon.ContextMenu>
         <tb:TaskbarIcon.TrayToolTip>
-            <Border DataContext="{StaticResource SystemTrayViewModel}" 
+            <Border DataContext="{StaticResource SystemTrayViewModel}"
                     Background="{StaticResource AppColorDark}"
                     BorderBrush="{StaticResource AppColorLight}"
                     BorderThickness="2"

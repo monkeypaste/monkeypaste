@@ -48,26 +48,45 @@ namespace MpWpfApp {
             var rtbvm = rtb.DataContext as MpContentItemViewModel;
             var thcvm = rtbvm.TemplateCollection;
 
-            string origText = tr.Text;
+            string templateName = tr.Text;
 
-            if(cit == null) {
-                //for new templates create a default name
+            if (cit == null) {
+                //occurs when its a new template
+                if(string.IsNullOrWhiteSpace(templateName)) {
+                    templateName = thcvm.GetUniqueTemplateName();
+                } else {
+                    templateName = thcvm.GetFormattedTemplateName(templateName);
+                }
                 cit = MpCopyItemTemplate.Create(
                             thcvm.Parent.CopyItemId,
-                            string.IsNullOrWhiteSpace(origText) ? thcvm.GetUniqueTemplateName():thcvm.GetFormattedTemplateName(origText));
+                            templateName);
                 cit.WriteToDatabase();
             }
 
             tr.Text = string.Empty;
 
-            MpTemplateViewModel thlvm = thcvm.AddItem(cit);
+            MpTemplateViewModel thlvm = thcvm.CreateTemplateViewModel(cit);
 
             var nthl = new MpTemplateHyperlink(tr,thlvm);
 
             nthl.Rtb = rtb;
 
-            rtb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
+            var thlc = MpRtbTemplateCollection.GetTemplateViews(rtb);
+            thlc.Add(nthl);
+            MpRtbTemplateCollection.SetTemplateViews(rtb,thlc);
+
+            nthl.Tag = MpSubTextTokenType.TemplateSegment;
             return nthl;
+        }
+
+        public static Span ConvertToSpan(MpTemplateHyperlink thl) {
+            if (thl.DataContext != null && thl.DataContext is MpTemplateViewModel thlvm) {
+                //making Tag null lets unloaded event know not to remove this template instance
+                thl.Tag = null;
+                thl.Inlines.Clear();
+                return new Span(new Run(thlvm.TemplateDisplayValue), thl.ElementStart);
+            }
+            return null;
         }
 
         public MpTemplateHyperlink() : base() {
@@ -80,29 +99,39 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
+        
+
         private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
             var thl = sender as MpTemplateHyperlink;
             var thlvm = DataContext as MpTemplateViewModel;
             MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
-            Rtb = thl.FindParentOfType<RichTextBox>();
-            var rtbv = Rtb.GetVisualAncestor<MpRtbView>();
-            if(!rtbv.TemplateViews.Contains(this)) {
-                rtbv.TemplateViews.Add(this);
-            }
+            //Rtb = thl.FindParentOfType<RichTextBox>();
+            //var rtbv = Rtb.GetVisualAncestor<MpRtbView>();
+            //if(!rtbv.TemplateViews.Contains(this)) {
+            //    rtbv.TemplateViews.Add(this);
+            //}
         }
 
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
+            return;
             var thl = sender as MpTemplateHyperlink;
             
             if(thl.Tag != null) {
+                //Tag is null when formatting is cleared, it is non-null when the instance should be removed
                 var thlvm = DataContext as MpTemplateViewModel;
                 if (thlvm != null) {
                     var thlcvm = thlvm.Parent;
                     if (thlcvm != null) {
                         thlcvm.RemoveItem(thlvm.CopyItemTemplate, false);
-                        var rtbv = Rtb.FindParentOfType<MpRtbView>();
-                        rtbv.TemplateViews.Remove(this);
-                        rtbv.SyncModels();
+                        var tvc = MpRtbTemplateCollection.GetTemplateViews(Rtb);
+                        if(tvc.Contains(thl)) {
+                            tvc.Remove(thl);
+                            MpRtbTemplateCollection.SetTemplateViews(Rtb,tvc);
+                        }
+
+                        //var rtbv = Rtb.FindParentOfType<MpRtbView>();
+                        //rtbv.TemplateViews.Remove(this);
+                        //rtbv.SyncModels();
                         MpConsole.WriteLine($"template {thlvm.TemplateName} REMOVED from: " + sender.GetType().ToString());
                     }
                 }
@@ -138,9 +167,9 @@ namespace MpWpfApp {
             var thlvm = DataContext as MpTemplateViewModel;
             var rtbv = Rtb.FindParentOfType<MpRtbView>();
             var hlToRemove = new List<MpTemplateHyperlink>();
-            
 
-            foreach(var hl in rtbv.TemplateViews) {
+            var tvc = MpRtbTemplateCollection.GetTemplateViews(Rtb);
+            foreach(var hl in tvc) {
                 if(hl.DataContext != thlvm) {
                     continue;
                 }
@@ -149,10 +178,15 @@ namespace MpWpfApp {
                 new Span(new Run(string.Empty), hl.ElementStart);
             }
             foreach(var hl2r in hlToRemove) {
-                rtbv.TemplateViews.Remove(hl2r);
+                tvc.Remove(hl2r);
             }
+            MpRtbTemplateCollection.SetTemplateViews(Rtb, tvc);
             Rtb.UpdateLayout();
             rtbv.SyncModels();
+        }
+
+        private void Hyperlink_TextInput(object sender, TextCompositionEventArgs e) {
+
         }
     }
 }

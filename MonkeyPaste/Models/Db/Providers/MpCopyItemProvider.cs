@@ -415,7 +415,7 @@ namespace MonkeyPaste {
                                             select pci.pk_MpCopyItemId from MpCopyItem aci
                                             inner join MpCopyItem pci  
                                             ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                            order by aci.{0} {1}) limit {2} offset {3}",
+                                            order by aci.{0} {1}) order by {0} {1} limit {2} offset {3}",
                                            sortStr, descStr, count, startIndex);
                     break;
                 case MpTag.AllTagId:

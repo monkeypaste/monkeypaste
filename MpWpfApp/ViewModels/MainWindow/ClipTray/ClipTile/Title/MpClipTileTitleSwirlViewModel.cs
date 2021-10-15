@@ -112,9 +112,13 @@ namespace MpWpfApp {
                 slvm.LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
             }
         }
+
+        public override void Dispose() {
+            base.Dispose();
+        }
         #endregion
 
-        #region Private Variables
+        #region Private Methods
 
         #endregion
 

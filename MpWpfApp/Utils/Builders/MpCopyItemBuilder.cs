@@ -42,43 +42,48 @@ namespace MpWpfApp {
 
                 MpUrl url = null;
 
-                var iData = MpClipboardManager.Instance.GetDataObjectWrapper();
-                if (iData == null) {
-                    return null;
-                }
                 string itemData = null;
                 MpCopyItemType itemType = MpCopyItemType.None;
 
-                if (iData.GetDataPresent(DataFormats.FileDrop)) {
-                    itemType = MpCopyItemType.FileList;
-                    var paths = (string[])iData.GetData(DataFormats.FileDrop, true);
-                    var sb = new StringBuilder();
-                    foreach(var path in paths) {
-                        sb.AppendLine(path);
+                var iData = MpClipboardManager.Instance.GetDataObjectWrapper(); 
+                lock(iData) {
+                    if (iData == null) {
+                        return null;
                     }
-                    itemData = sb.ToString();
-                } else if (iData.GetDataPresent(DataFormats.CommaSeparatedValue)) {
-                    itemType = MpCopyItemType.Csv;
-                    itemData = (string)iData.GetData(DataFormats.CommaSeparatedValue);
-                } else if (iData.GetDataPresent(DataFormats.Rtf)) {
-                    itemType = MpCopyItemType.RichText;
-                    itemData = (string)iData.GetData(DataFormats.Rtf);
-                    //itemData = itemData.ToQuillText();
-                } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
-                    itemType = MpCopyItemType.Image;
-                    itemData = ((BitmapSource)MpClipboardManager.Instance.GetImageWrapper()).ToBase64String();
-                } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
-                    itemType = MpCopyItemType.RichText;
-                    if (iData.GetDataPresent(DataFormats.Html)) {
-                        var htmlData = (string)iData.GetData(DataFormats.Html);
-                        url = MpUrlBuilder.CreateFromHtmlData(htmlData);
+
+                    if (iData.GetDataPresent(DataFormats.FileDrop, false)) {
+                        itemType = MpCopyItemType.FileList;
+                        var paths = (string[])iData.GetData(DataFormats.FileDrop, true);
+                        var sb = new StringBuilder();
+                        foreach (var path in paths) {
+                            sb.AppendLine(path);
+                        }
+                        itemData = sb.ToString();
+                    } else if (iData.GetDataPresent(DataFormats.CommaSeparatedValue, false)) {
+                        itemType = MpCopyItemType.Csv;
+                        itemData = (string)iData.GetData(DataFormats.CommaSeparatedValue, false);
+                    } else if (iData.GetDataPresent(DataFormats.Rtf, false)) {
+                        itemType = MpCopyItemType.RichText;
+                        itemData = (string)iData.GetData(DataFormats.Rtf, false);
+                        //itemData = itemData.ToQuillText();
+                    } else if (iData.GetDataPresent(DataFormats.Bitmap, false)) {
+                        itemType = MpCopyItemType.Image;
+                        itemData = ((BitmapSource)MpClipboardManager.Instance.GetImageWrapper()).ToBase64String();
+                    } else if ((iData.GetDataPresent(DataFormats.Html, false) || iData.GetDataPresent(DataFormats.Text, false)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text, false))) {
+                        itemType = MpCopyItemType.RichText;
+                        if (iData.GetDataPresent(DataFormats.Html, false)) {
+                            var htmlData = (string)iData.GetData(DataFormats.Html, false);
+                            url = MpUrlBuilder.CreateFromHtmlData(htmlData);
+                        }
+                        itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText, false));
+                        //itemData = itemData.ToQuillText();
+                    } else {
+                        MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
+                        return null;
                     }
-                    itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
-                    //itemData = itemData.ToQuillText();
-                } else {
-                    MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
-                    return null;
                 }
+                
+                
                 if (itemType == MpCopyItemType.RichText && ((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
                     itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
                     if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {

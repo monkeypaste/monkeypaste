@@ -424,16 +424,9 @@ namespace MpWpfApp {
                 } else {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
-                    IsMainWindowOpening = false;
-                    if (ClipTrayViewModel.ItemsAdded > 0) {
-                        await MpClipTrayViewModel.Instance.RefreshTiles();
-                        if(IsMainWindowLoading || MpClipTrayViewModel.Instance.ItemsAdded > 0) {
-                            MpClipTrayViewModel.Instance.ResetClipSelection();
-                            ClipTrayViewModel.ItemsAdded = 0;
-                            TagTrayViewModel.RefreshAllCounts();
-                        }
-                    }
+                    MpClipTrayViewModel.Instance.AddNewModels();
                     MpMainWindowViewModel.IsMainWindowLoading = false;
+                    IsMainWindowOpening = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
                 }
