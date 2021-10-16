@@ -34,12 +34,11 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (DataContext != null && DataContext is MpClipTileViewModel ctvm) {
-                ctvm.IsBusy = true;
+                //ctvm.IsBusy = true;
                 ctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
                 ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
                 ctvm.PropertyChanged += Ctvm_PropertyChanged;
 
-                ShowBusySpinner();
                 Titles.Clear();
                 foreach (var civm in ctvm.ItemViewModels) {
                     Titles.Add(new TextBlock() {
@@ -73,13 +72,13 @@ namespace MpWpfApp {
         }
 
         private void ShowBusySpinner() {
-            //ClipTileBusyView.Visibility = Visibility.Visible;
-            //ClipTileDockPanel.Visibility = Visibility.Hidden;
+            ClipTileBusyView.Visibility = Visibility.Visible;
+            ClipTileDockPanel.Visibility = Visibility.Hidden;
         }
 
         private void HideBusySpinner() {
-            //ClipTileBusyView.Visibility = Visibility.Hidden;
-            //ClipTileDockPanel.Visibility = Visibility.Visible;
+            ClipTileBusyView.Visibility = Visibility.Hidden;
+            ClipTileDockPanel.Visibility = Visibility.Visible;
         }
 
         private void Ctvm_ViewModelLoaded(object sender, EventArgs e) {
@@ -128,5 +127,10 @@ namespace MpWpfApp {
            
         }
 
+        private void ClipTileClipBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(ClipTileClipBorder.Visibility == Visibility.Visible) {
+               // ShowBusySpinner();
+            }
+        }
     }
 }

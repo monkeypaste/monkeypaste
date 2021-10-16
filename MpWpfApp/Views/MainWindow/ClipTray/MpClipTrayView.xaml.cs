@@ -31,8 +31,7 @@ namespace MpWpfApp {
             var ctrvm = DataContext as MpClipTrayViewModel;
 
             MpClipboardManager.Instance.Init();
-            MpClipboardManager.Instance.ClipboardChanged += (s, e1) => ctrvm.AddItemFromClipboard();
-
+            MpClipboardManager.Instance.ClipboardChanged += ctrvm.AddItemFromClipboard;
             _remainingItems = ctrvm.Items.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
             if (MpPreferences.Instance.IsInitialLoad) {

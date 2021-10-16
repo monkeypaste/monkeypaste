@@ -16,17 +16,36 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
         private double deltaWidth, deltaHeight, deltaContentHeight;
-
-
+        private object _dc;
         protected override void OnAttached() {
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
         private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(AssociatedObject.DataContext != null && AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+            Init();
+        }
+
+        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
+            Init();
+        }
+
+        private void Init() {
+            //since tiles are re-used I need to unregister and register new dc's
+            if(_dc == AssociatedObject.DataContext) {
+                return;
+            }
+            if (_dc != null) {
+                var octvm = _dc as MpClipTileViewModel;
+                octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
+                octvm.OnUnExpandRequest -= Ctvm_OnUnExpandRequest;
+                octvm.MainWindowViewModel.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
+            }
+            if (AssociatedObject.DataContext != null && AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
                 ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
                 ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
                 ctvm.MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+                _dc = ctvm;
             }
         }
 
@@ -44,7 +63,12 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
+            var ctrv = AssociatedObject.GetVisualAncestor<MpClipTrayView>();
+            var lbi = AssociatedObject.GetVisualAncestor<ListBoxItem>();
+            
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            int ctcvIdx = ctrv.ClipTray.Items.IndexOf(ctvm);
+
             var mwvm = ctvm.MainWindowViewModel;
 
 
@@ -90,8 +114,10 @@ namespace MpWpfApp {
 
             //ctvm.OnPropertyChanged(nameof(ctvm.IsExpanded));
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
-            clv.EditToolbarView.Visibility = Visibility.Visible;
-            clv.UpdateLayout();
+            if(clv != null) {
+                clv.EditToolbarView.Visibility = Visibility.Visible;
+                clv.UpdateLayout();
+            }
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
             foreach(var civ in civl) {
@@ -113,6 +139,7 @@ namespace MpWpfApp {
             sv.InvalidateScrollInfo();
 
             clv.UpdateAdorner();
+            //clv.ContentListBox.Items.Refresh();
 
             AssociatedObject.UpdateLayout();
 
@@ -156,7 +183,7 @@ namespace MpWpfApp {
                 civm.ClearEditing();
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.EditorCursor));
-                //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
+                civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                 civ.EditorView.Rtb.FitDocToRtb();
             }
 

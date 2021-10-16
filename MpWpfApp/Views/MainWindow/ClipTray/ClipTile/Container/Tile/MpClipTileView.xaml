@@ -24,6 +24,7 @@
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
+                        IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
                         Focusable="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"

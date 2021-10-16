@@ -259,7 +259,7 @@ namespace MpWpfApp {
                 };
 
                 GlobalHook.MouseWheel += (s, e) => {
-                    if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                    if (!MpMainWindowViewModel.IsMainWindowOpen && !MpMainWindowViewModel.IsMainWindowOpening) {
                         if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                             if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
                                 MainWindowViewModel.ShowWindowCommand.Execute(null);

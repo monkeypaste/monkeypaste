@@ -27,7 +27,7 @@ namespace MpWpfApp {
         FileList
     }
 
-    public class MpClipboardManager : IDisposable {
+    public class MpClipboardManager : MpClipboardListener, IDisposable {
         private static readonly Lazy<MpClipboardManager> _Lazy = new Lazy<MpClipboardManager>(() => new MpClipboardManager());
         public static MpClipboardManager Instance { get { return _Lazy.Value; } }
 
@@ -37,19 +37,17 @@ namespace MpWpfApp {
         private const int WM_CHANGECBCHAIN = 0x030D;
         private const int WM_PASTE = 0x0302;
 
-        public MpLastWindowWatcher LastWindowWatcher { get; set; }
-
-        public bool IgnoreClipboardChangeEvent { get; set; }
+        //public new EventHandler<IDataObject> ClipboardChanged;
 
         public MpCopyHelper Copy { get; private set; }
         public MpPasteHelper Paste { get; private set; }
 
-        private HwndSourceHook hook;
-        private HwndSource hwndSource;
-        private IntPtr _nextClipboardViewer;
+        //private HwndSourceHook hook;
+        //private HwndSource hwndSource;
+        //private IntPtr _nextClipboardViewer;
         private IDictionary<string, object> _lastDataObject = null;
 
-        private MpClipboardManager() { }
+        private MpClipboardManager() : base() { }
 
         public void Init() {
             sim = new InputSimulator();
@@ -60,19 +58,20 @@ namespace MpWpfApp {
             HwndSource hwnd = (HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow);
             LastWindowWatcher = new MpLastWindowWatcher(hwnd.Handle);
 
-            hwndSource = hwnd;
-            hook = new HwndSourceHook(WndProc);
-            hwndSource.AddHook(hook);
+            Start();
+            //hwndSource = hwnd;
+            //hook = new HwndSourceHook(WndProc);
+            //hwndSource.AddHook(hook);
 
-            IgnoreClipboardChangeEvent = true;
-            _nextClipboardViewer = WinApi.SetClipboardViewer(hwndSource.Handle);
-            IgnoreClipboardChangeEvent = false;
+            //IgnoreClipboardChangeEvent = true;
+            //_nextClipboardViewer = WinApi.SetClipboardViewer(hwndSource.Handle);
+            //IgnoreClipboardChangeEvent = false;
 
             Copy = new MpCopyHelper();
             Paste = new MpPasteHelper();
         }
 
-        public event EventHandler ClipboardChanged;
+        //public event EventHandler ClipboardChanged;
 
         #region Wrapper work-around methods
 
@@ -186,40 +185,40 @@ namespace MpWpfApp {
             SetClipboardData(_lastDataObject);
         }
 
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
-            switch (msg) {
-                case WM_DRAWCLIPBOARD:
-                    if (IgnoreClipboardChangeEvent) {
-                        //do nothing
-                    } else {
-                        if(MpAppModeViewModel.Instance.IsAppPaused) {
-                            MonkeyPaste.MpConsole.WriteLine("App Paused, ignoring copy");
-                        }
-                        // TODO uncomment below, its commented out trying to debug ucrt issue
-                        //else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
-                        //    MonkeyPaste.MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
-                        //} 
-                        else {
-                            ClipboardChanged?.Invoke(this, EventArgs.Empty);
-                            //MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
-                            //Task.Run(OnClipboardChanged);
-                        }
-                    }
-                    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
-                    break;
-                case WM_CHANGECBCHAIN:
-                    if (wParam == _nextClipboardViewer) {
-                        _nextClipboardViewer = lParam;
-                    } else {
-                        WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
-                        //if (_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
-                        //    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
-                        //}                            
-                    }
-                    break;
-            }
-            return IntPtr.Zero;
-        }
+        //private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+        //    switch (msg) {
+        //        case WM_DRAWCLIPBOARD:
+        //            if (IgnoreClipboardChangeEvent) {
+        //                //do nothing
+        //            } else {
+        //                if(MpAppModeViewModel.Instance.IsAppPaused) {
+        //                    MonkeyPaste.MpConsole.WriteLine("App Paused, ignoring copy");
+        //                }
+        //                // TODO uncomment below, its commented out trying to debug ucrt issue
+        //                //else if(MpApp.IsAppRejectedByPath(MpHelpers.Instance.GetProcessPath(LastWindowWatcher.LastHandle))) {
+        //                //    MonkeyPaste.MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
+        //                //} 
+        //                else {
+        //                    ClipboardChanged?.Invoke(this, EventArgs.Empty);
+        //                    //MpHelpers.Instance.RunOnMainThread(OnClipboardChanged);
+        //                    //Task.Run(OnClipboardChanged);
+        //                }
+        //            }
+        //            WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+        //            break;
+        //        case WM_CHANGECBCHAIN:
+        //            if (wParam == _nextClipboardViewer) {
+        //                _nextClipboardViewer = lParam;
+        //            } else {
+        //                WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+        //                //if (_nextClipboardViewer != LastWindowWatcher.ThisAppHandle) {
+        //                //    WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+        //                //}                            
+        //            }
+        //            break;
+        //    }
+        //    return IntPtr.Zero;
+        //}
                 
         #region Destructor
         private bool disposed;
@@ -228,8 +227,9 @@ namespace MpWpfApp {
                 return;
             }
             if (disposing) {
-                WinApi.ChangeClipboardChain(hwndSource.Handle, _nextClipboardViewer);
-                hwndSource.RemoveHook(hook);
+                //WinApi.ChangeClipboardChain(hwndSource.Handle, _nextClipboardViewer);
+                //hwndSource.RemoveHook(hook);
+                base.Dispose();
             }
             disposed = true;
         }

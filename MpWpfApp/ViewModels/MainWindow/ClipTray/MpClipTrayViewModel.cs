@@ -402,30 +402,44 @@ namespace MpWpfApp {
             }
         }
 
-        private async void _queryInfo_InfoChanged(object sender, EventArgs e) {
+        private void _queryInfo_InfoChanged(object sender, EventArgs e) {
+            MpConsole.WriteLine("Query info changed");
             _viewModelProvider.SetQueryInfo(QueryInfo);
 
-            await Task.Run(async () => {
-                await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
-                    var sw = new Stopwatch(); 
-                    sw.Start();
-                    var initTasks = new List<Task>();
-                    var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
-                    for (int i = 0; i < ivml.Count; i++) {
-                        initTasks.Add(Items[i].InitializeAsync(ivml[i]));
-                    }
-                    for (int i = ivml.Count; i < Items.Count; i++) {
-                        initTasks.Add(Items[i].InitializeAsync(null));
-                    }
-                    await Task.WhenAll(initTasks);
-
-                    ResetClipSelection();
-                    sw.Stop();
-                    MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
-                });
+            Task.Run(async () => {
+                await UpdateTiles();
             });
         }
 
+        public async Task UpdateTiles() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                var sw = new Stopwatch();
+                sw.Start();
+                ClearClipSelection();
+                var initTasks = new List<Task>();
+                var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
+                for (int i = 0; i < ivml.Count; i++) {
+                    initTasks.Add(Items[i].InitializeAsync(ivml[i]));
+                }
+                for (int i = ivml.Count; i < VisibileClipTiles.Count; i++) {
+                    initTasks.Add(Items[i].InitializeAsync(null));
+                }
+                await Task.WhenAll(initTasks);
+
+                ResetClipSelection();
+                sw.Stop();
+                MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+            });
+        }
+        public async Task AddNewModels() {
+            if (_newModels.Count == 0) {
+                return;
+            }
+            await UpdateTiles(); //Task.WhenAll(initTasks.ToArray());
+            _newModels.Clear();
+            MpTagTrayViewModel.Instance.RefreshAllCounts();
+            //ResetClipSelection();
+        }
 
         #region View Invokers
         public void RequestScrollIntoView(object obj) {
@@ -445,26 +459,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        public void AddNewModels() {
-            Task.Run(async () => {
-                await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                    if (_newModels.Count == 0) {
-                        return;
-                    }
-                    int tileCount = Items.Count;
-                    var initTasks = new List<Task>();
-                    foreach (var nci in _newModels) {
-                        var newTile = Items[tileCount - 1];
-                        Items.Move(tileCount - 1, 0);
-                        initTasks.Add(newTile.InitializeAsync(nci));
-                    }
-                    await Task.WhenAll(initTasks.ToArray());
-                    _newModels.Clear();
-                    ResetClipSelection();
-                    MpTagTrayViewModel.Instance.RefreshAllCounts();
-                });
-            });
-        }
+       
 
         public void UpdateSortOrder(bool fromModel = false) {            
             if (fromModel) {
@@ -661,13 +656,13 @@ namespace MpWpfApp {
             }
         }
 
-        private void AddTileThread() {
+        private void AddTileThread(System.Windows.Forms.IDataObject ido) {
             var totalAddSw = new Stopwatch();
             totalAddSw.Start();
 
             var createItemSw = new Stopwatch();
             createItemSw.Start();
-            var newCopyItem = MpCopyItemBuilder.CreateFromClipboard();
+            var newCopyItem = MpCopyItemBuilder.CreateFromClipboard(ido);
 
             MonkeyPaste.MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -733,11 +728,16 @@ namespace MpWpfApp {
             _newModels.Add(newCopyItem);
         }
 
-        public void AddItemFromClipboard() {
-            var workThread = new Thread(new ThreadStart(AddTileThread));
-            workThread.SetApartmentState(ApartmentState.STA);
-            workThread.IsBackground = true;
-            workThread.Start(); 
+        public void AddItemFromClipboard(object sender, System.Windows.Forms.IDataObject ido) {
+            //var workThread = new Thread(new ThreadStart(AddTileThread));
+            //workThread.SetApartmentState(ApartmentState.STA);
+            //workThread.IsBackground = true;
+            //workThread.Start(); 
+            //Task.Run(async () => {
+            //    await Task.Delay(500);
+            //    MpHelpers.Instance.RunOnMainThread(AddTileThread);
+            //});
+            AddTileThread(ido);
         }
 
 

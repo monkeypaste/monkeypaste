@@ -582,10 +582,8 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
-            Task.Run(async () => {
-                await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                    await InitializeAsync(ci);
-                });
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                await InitializeAsync(ci);
             });
         }
 

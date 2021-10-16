@@ -24,7 +24,7 @@
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         IsListBoxHorizontal="True"
                                         ScrollToSelectedItem="False"
-                                        IsSynchronizedWithCurrentItem="False"
+                                        IsSynchronizedWithCurrentItem="True"
                                         Margin="0,0,0,0"
                                         Focusable="True"
                                         BorderThickness="0"

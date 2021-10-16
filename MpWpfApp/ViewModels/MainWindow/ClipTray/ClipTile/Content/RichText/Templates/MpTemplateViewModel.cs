@@ -223,16 +223,16 @@ namespace MpWpfApp {
                 }
                 return string.Format(
                     @"{0}{1}{2}",
-                    MpTemplateCollectionViewModel.TEMPLATE_PREFIX,
+                    MpCopyItemTemplate.TEMPLATE_PREFIX,
                     nameOrInputText,
-                    MpTemplateCollectionViewModel.TEMPLATE_SUFFIX);
+                    MpCopyItemTemplate.TEMPLATE_SUFFIX);
             }
             set {
                 if(value == null) {
                     value = string.Empty;
                 }
-                string decodedValue = value.Replace(MpTemplateCollectionViewModel.TEMPLATE_PREFIX, string.Empty)
-                                           .Replace(MpTemplateCollectionViewModel.TEMPLATE_SUFFIX, string.Empty);
+                string decodedValue = value.Replace(MpCopyItemTemplate.TEMPLATE_PREFIX, string.Empty)
+                                           .Replace(MpCopyItemTemplate.TEMPLATE_SUFFIX, string.Empty);
                 if(Parent.Parent.IsPastingTemplate && TemplateText != decodedValue) {
                     TemplateText = decodedValue;
                 } else if(TemplateName != decodedValue) {
@@ -378,6 +378,7 @@ namespace MpWpfApp {
         }
 
         public void Reset() {
+            IsSelected = false;            
             TemplateText = string.Empty;
             IsEditingTemplate = false;
         }

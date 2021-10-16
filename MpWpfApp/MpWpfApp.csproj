@@ -107,7 +107,6 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentMarginExtension.cs" />
-    <Compile Include="AttachedProperties\MpRtbTemplateCollection.cs" />
     <Compile Include="AttachedProperties\MpPagedItem.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpListBoxItemRecycler.cs" />
@@ -190,6 +189,7 @@
     <Compile Include="Utils\BindingExtensions\MpThemeColorsBindingExtension.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\Styling\MpThemeColors.cs" />
+    <Compile Include="Utils\System\Clipboard\ClipboardManager.cs" />
     <Compile Include="Utils\System\Clipboard\MpClipboardManager.cs" />
     <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />

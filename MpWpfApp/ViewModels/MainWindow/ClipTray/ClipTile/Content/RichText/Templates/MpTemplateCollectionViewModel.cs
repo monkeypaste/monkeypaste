@@ -16,10 +16,7 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
-        #region Constants
-        public const string TEMPLATE_PREFIX = "<";
-        public const string TEMPLATE_SUFFIX = ">";
-        #endregion
+        
 
         #region Properties
 
@@ -136,6 +133,23 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SelectedTemplate));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
                     break;
+                case nameof(thlvm.IsEditingTemplate):
+                    if(thlvm.IsEditingTemplate) {
+                        foreach(var vm in Templates) {
+                            if (vm == thlvm) {
+                                vm.IsSelected = true;
+                            } else {
+                                vm.IsSelected = false;
+                                vm.IsEditingTemplate = false;
+                                vm.OnPropertyChanged(nameof(vm.IsEditingTemplate));
+                            }
+                        }
+                    } else {
+                        thlvm.IsSelected = false;
+                    }
+                    OnPropertyChanged(nameof(IsAnyEditingTemplate));
+                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
+                    break;
             }
         }
 
@@ -144,11 +158,11 @@ namespace MpWpfApp {
                 text = string.Empty;
             }
             
-            //if (!text.StartsWith(TEMPLATE_PREFIX)) {
-            //    text = TEMPLATE_PREFIX + text;
+            //if (!text.StartsWith(MpCopyItemTemplate.TEMPLATE_PREFIX)) {
+            //    text = MpCopyItemTemplate.TEMPLATE_PREFIX + text;
             //}
-            //if (!text.EndsWith(TEMPLATE_SUFFIX)) {
-            //    text = text + TEMPLATE_SUFFIX;
+            //if (!text.EndsWith(MpCopyItemTemplate.TEMPLATE_SUFFIX)) {
+            //    text = text + MpCopyItemTemplate.TEMPLATE_SUFFIX;
             //}
             return text;
         }
@@ -171,16 +185,24 @@ namespace MpWpfApp {
 
         public string GetUniqueTemplateName() {
             int uniqueIdx = 1;
-            string namePrefix = $"{TEMPLATE_PREFIX}Template";
-            string pt = Parent.CopyItem.ItemData.ToPlainText();
-            while (pt.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) ||
-                   Parent
-                    .TemplateCollection
-                    .Templates.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">")
-                    .ToList().Count > 0) {
+            string uniqueName = $"Template";
+            string testName = string.Format(
+                                        @"{0}{1}{2}{3}",
+                                        MpCopyItemTemplate.TEMPLATE_PREFIX,
+                                        uniqueName.ToLower(),
+                                        uniqueIdx,
+                                        MpCopyItemTemplate.TEMPLATE_SUFFIX);
+            string pt = Parent.CopyItem.ItemData.ToPlainText().ToLower();
+            while (pt.Contains(testName) || Templates.Any(x => x.TemplateDisplayValue.ToLower() == testName)) {
                 uniqueIdx++;
+                testName = string.Format(
+                                        @"{0}{1}{2}{3}",
+                                        MpCopyItemTemplate.TEMPLATE_PREFIX,
+                                        uniqueName.ToLower(),
+                                        uniqueIdx,
+                                        MpCopyItemTemplate.TEMPLATE_SUFFIX);
             }
-            return namePrefix + uniqueIdx + ">";
+            return uniqueName + uniqueIdx;
         }
 
         #region IDisposable
@@ -192,8 +214,7 @@ namespace MpWpfApp {
                 thlvm.Dispose();
                 thlvm.PropertyChanged -= Ntvm_PropertyChanged;
                 thlvm.OnTemplateSelected -= Ntvm_OnTemplateSelected;
-            } 
-
+            }
         }
 
         #endregion

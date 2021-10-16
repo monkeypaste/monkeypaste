@@ -82,8 +82,7 @@ namespace MpWpfApp {
             //DisableBlur();
         }
 
-        private void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
-            //EnableBlur();
+        private async void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
         }
 
         private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

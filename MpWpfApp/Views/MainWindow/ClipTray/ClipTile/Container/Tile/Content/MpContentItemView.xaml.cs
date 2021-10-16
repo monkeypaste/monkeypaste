@@ -47,16 +47,16 @@ namespace MpWpfApp {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = true;
 
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = civm.EditorCursor;
+            //Application.Current.MainWindow.ForceCursor = true;
+            //Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
 
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = civm.EditorCursor;
+            //Application.Current.MainWindow.ForceCursor = true;
+            //Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
         #region Event Handlers
 

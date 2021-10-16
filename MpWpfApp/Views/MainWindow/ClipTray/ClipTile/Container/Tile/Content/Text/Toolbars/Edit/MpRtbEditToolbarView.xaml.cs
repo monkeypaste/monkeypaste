@@ -74,7 +74,7 @@ namespace MpWpfApp {
             artb.Focus();
             artb.CaretPosition = artb.Document.ContentStart;
             artb.Selection.Select(artb.Document.ContentStart, artb.Document.ContentStart);
-            CurrentRtb_SelectionChanged(this, null);
+            //CurrentRtb_SelectionChanged(this, null);
             
         }
 

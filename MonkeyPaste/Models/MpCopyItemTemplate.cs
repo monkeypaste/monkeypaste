@@ -13,6 +13,11 @@ using System.Text;
 namespace MonkeyPaste {
     [Table("MpCopyItemTemplate")]
     public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable, ICloneable {
+        #region Constants
+        public const string TEMPLATE_PREFIX = "<";
+        public const string TEMPLATE_SUFFIX = ">";
+        #endregion
+
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemTemplateId")]
@@ -45,6 +50,17 @@ namespace MonkeyPaste {
 
         [Ignore]
         public string TemplateText { get; set; }
+
+        [Ignore]
+        public string TemplateToken {
+            get {
+                return string.Format(
+                                        @"{0}{1}{2}",
+                                        "<",
+                                        TemplateName,
+                                        ">");
+            }
+        }
 
         #endregion
 

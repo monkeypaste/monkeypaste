@@ -384,6 +384,7 @@ namespace MpWpfApp {
 
         public IAsyncCommand ShowWindowCommand => new AsyncCommand(
             async () => {
+                IsMainWindowOpening = true;
                 await MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow,DispatcherPriority.Render);
             },
             (args) => {
@@ -397,7 +398,6 @@ namespace MpWpfApp {
             //Ss = MpHelpers.Instance.CopyScreen();
             //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
-            IsMainWindowOpening = true;
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }            
@@ -409,6 +409,7 @@ namespace MpWpfApp {
             mw.Activate();
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
+
 
 
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
@@ -424,15 +425,17 @@ namespace MpWpfApp {
                 } else {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
-                    MpClipTrayViewModel.Instance.AddNewModels();
                     MpMainWindowViewModel.IsMainWindowLoading = false;
                     IsMainWindowOpening = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
+                    await MpClipTrayViewModel.Instance.AddNewModels();
                 }
             };
             
             timer.Start();
+
+            
         }
 
         public IAsyncCommand<object> HideWindowCommand => new AsyncCommand<object>(
