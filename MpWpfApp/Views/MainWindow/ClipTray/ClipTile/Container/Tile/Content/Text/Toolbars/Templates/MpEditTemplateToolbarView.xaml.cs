@@ -38,7 +38,7 @@ namespace MpWpfApp {
             var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
 
             thlvm.CancelCommand.Execute(null);
-            if (thlvm.WasNew) {
+            if (thlvm.WasNewOnEdit) {
                 //var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
                 //        SelectedTemplateHyperlinkViewModel.Dispose(false);
                 //        _originalSelection.Text = _originalText;
@@ -50,7 +50,7 @@ namespace MpWpfApp {
                 _activeRtb.Selection.Select(rtbv.NewStartRange.Start, rtbv.NewStartRange.End);
                 _activeRtb.Selection.Text = string.Empty;
                 _activeRtb.Selection.Text = rtbv.NewOriginalText;
-                thlvm.WasNew = false;
+                thlvm.WasNewOnEdit = false;
             }
             //Visibility = Visibility.Collapsed;
         }

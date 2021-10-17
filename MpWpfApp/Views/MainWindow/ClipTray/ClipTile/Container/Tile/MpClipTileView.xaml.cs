@@ -26,33 +26,37 @@ namespace MpWpfApp {
         public MpClipTileView() {
             InitializeComponent();
         }
+        private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+                octvm.ViewModelLoaded -= Ctvm_ViewModelLoaded;
+                octvm.OnSearchRequest -= Ctvm_OnSearchRequest;
+                octvm.PropertyChanged -= Ctvm_PropertyChanged;
+            }
+            if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
+                if (!nctvm.IsPlaceholder) {
+                    //ctvm.IsBusy = true;
+                    nctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
+                    nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
+                    nctvm.PropertyChanged += Ctvm_PropertyChanged;
 
+                    Titles.Clear();
+                    foreach (var civm in nctvm.ItemViewModels) {
+                        Titles.Add(new TextBlock() {
+                            Text = civm.CopyItemTitle
+                        });
+                    }
+
+                    ShowBusySpinner();
+                    //Task.Run(async () => {
+                    //    await Task.Delay(500);
+                    //    ctvm.IsBusy = false;
+                    //});
+                }
+            }
+        }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
             HideBusySpinner();
-        }
-
-        private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (DataContext != null && DataContext is MpClipTileViewModel ctvm) {
-                //ctvm.IsBusy = true;
-                ctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
-                ctvm.OnSearchRequest += Ctvm_OnSearchRequest;
-                ctvm.PropertyChanged += Ctvm_PropertyChanged;
-
-                Titles.Clear();
-                foreach (var civm in ctvm.ItemViewModels) {
-                    Titles.Add(new TextBlock() {
-                        Text = civm.CopyItemTitle
-                    });
-                }
-
-                //Task.Run(async () => {
-                //    await Task.Delay(500);
-                //    ctvm.IsBusy = false;
-                //});
-            } else {
-
-            }
         }
 
         private void Ctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -132,5 +136,7 @@ namespace MpWpfApp {
                // ShowBusySpinner();
             }
         }
+
+        
     }
 }

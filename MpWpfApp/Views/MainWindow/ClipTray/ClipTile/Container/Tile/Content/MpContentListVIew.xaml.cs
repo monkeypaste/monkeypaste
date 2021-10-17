@@ -76,12 +76,19 @@ namespace MpWpfApp {
         #region ViewModel Events
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext != null) {
-                var ctvm = DataContext as MpClipTileViewModel;
-                ctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
-                ctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
-                ctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                ctvm.PropertyChanged += Rtbcvm_PropertyChanged;                
+            if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+                octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
+                octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
+                octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
+                octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
+            }
+            if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
+                if(!nctvm.IsPlaceholder) {
+                    nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
+                    nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
+                    nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
+                    nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
+                }                
             } 
         }
 

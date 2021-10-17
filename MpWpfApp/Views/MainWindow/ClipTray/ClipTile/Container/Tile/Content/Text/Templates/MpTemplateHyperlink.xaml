@@ -6,28 +6,34 @@
            xmlns:local="clr-namespace:MpWpfApp"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            d:DataContext="{d:DesignInstance local:MpTemplateViewModel, IsDesignTimeCreatable=True}"
-           Background="{Binding TemplateBackgroundBrush}"
-           Cursor="Arrow"
-           Foreground="{Binding TemplateForegroundBrush}"
+           Background="Transparent"
+           Cursor="Hand"
            IsEnabled="True"
            Loaded="Hyperlink_Loaded"
-           Unloaded="Hyperlink_Unloaded"           
+           Unloaded="Hyperlink_Unloaded"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
-           TextInput="Hyperlink_TextInput"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
            Tag="{Binding TemplateTokenTag}"
            TextDecorations="{x:Null}"
            mc:Ignorable="d">
     <Hyperlink.ContextMenu>
         <ContextMenu>
-            <MenuItem Command="{Binding EditTemplateCommand}"
-                      Header="Edit" />
-            <MenuItem x:Name="ClipTileColorContextMenuItem"
-                      Style="{StaticResource ColorPalleteMenuItemStyle}" />
             <MenuItem Click="DeleteAll_Click"
                       Header="Delete All" />
         </ContextMenu>
     </Hyperlink.ContextMenu>
-    <Run Text="{Binding Path=TemplateDisplayValue}" />
+    <Border CornerRadius="0"
+            BorderThickness="1.5"
+            Margin="0"
+            Background="{Binding TemplateBackgroundBrush}"
+            BorderBrush="{Binding TemplateBorderBrush}">
+        <Border.RenderTransform>
+            <TranslateTransform X="0" Y="3"/>
+        </Border.RenderTransform>
+        <TextBlock x:Name="TemplateTextBlock"
+                   Text="{Binding TemplateDisplayValue}"
+                   Foreground="{Binding TemplateForegroundBrush}"
+                   Background="{Binding TemplateBackgroundBrush}" />
+    </Border>
 </Hyperlink>

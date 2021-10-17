@@ -666,7 +666,7 @@ namespace MpWpfApp {
 
         #region UI Invokers
 
-        public void RequestSyncModels() {
+        public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
         }
 
@@ -979,7 +979,8 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        RequestSyncModels();
+                        RequestSyncModel();
+                        MessageBox.Show(TemplateCollection.ToString());
                     },
                     () => {
                         return true;// HasModelChanged

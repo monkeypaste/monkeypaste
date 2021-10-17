@@ -328,18 +328,15 @@ namespace MpWpfApp {
             return lastFoundItemByType;
         }
 
-        public static T GetVisualDescendent<T>(this DependencyObject d)
-            where T : DependencyObject {
+        public static T GetVisualDescendent<T>(this DependencyObject d) where T : DependencyObject {
             return d.GetVisualDescendents<T>(null).FirstOrDefault();
         }
 
-        public static T GetVisualDescendent<T>(this DependencyObject d, string childName)
-            where T : DependencyObject {
+        public static T GetVisualDescendent<T>(this DependencyObject d, string childName) where T : DependencyObject {
             return d.GetVisualDescendents<T>(childName).FirstOrDefault();
         }
 
-        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d)
-            where T : DependencyObject {
+        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d) where T : DependencyObject {
             return d.GetVisualDescendents<T>(null);
         }
 

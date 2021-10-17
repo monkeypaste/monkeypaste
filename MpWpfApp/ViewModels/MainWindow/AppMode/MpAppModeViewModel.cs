@@ -242,7 +242,7 @@ namespace MpWpfApp {
         private void UpdateAppendMode() {
             if (IsInAppendMode &&
                MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count == 1 &&
-               MainWindowViewModel.ClipTrayViewModel.SelectedItems[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
+               MainWindowViewModel.ClipTrayViewModel.SelectedItems[0] != MainWindowViewModel.ClipTrayViewModel.VisibleItems[0]) {
                 int selectedIdx = MainWindowViewModel.ClipTrayViewModel.Items.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedItems[0]);
                 MainWindowViewModel.ClipTrayViewModel.Items.Move(selectedIdx, 0);
             }

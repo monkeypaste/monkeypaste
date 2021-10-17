@@ -526,7 +526,7 @@ namespace MpWpfApp {
             }
         }
         private void NextMatch() {
-            foreach(var ctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
+            foreach(var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
                 ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
             }
         }
@@ -541,7 +541,7 @@ namespace MpWpfApp {
             }
         }
         private void PrevMatch() {
-            foreach (var ctvm in MpClipTrayViewModel.Instance.VisibileClipTiles) {
+            foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
                 ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
             }
         }

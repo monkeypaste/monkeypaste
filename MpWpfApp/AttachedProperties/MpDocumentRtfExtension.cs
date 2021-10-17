@@ -23,12 +23,14 @@ namespace MpWpfApp {
             typeof(MpDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
+                    string rtf = string.Empty;
                     if (string.IsNullOrEmpty((string)e.NewValue)) {
-                        return;
+                        rtf = string.Empty;
+                    } else {
+                        rtf = (string)e.NewValue;
                     }
                     var rtb = (RichTextBox)obj;
                     var fd = ((string)e.NewValue).ToFlowDocument();
-                    var ds = fd.GetDocumentSize();
                     rtb.Document = fd;
                     rtb.FitDocToRtb();                    
                 }

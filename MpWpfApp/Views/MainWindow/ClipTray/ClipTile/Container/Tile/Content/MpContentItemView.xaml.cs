@@ -37,9 +37,15 @@ namespace MpWpfApp {
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext != null && DataContext is MpContentItemViewModel civm) {
-                civm.OnScrollWheelRequest += Civm_OnScrollWheelRequest;
-                civm.OnUiUpdateRequest += Civm_OnUiUpdateRequest;
+            if (e.OldValue != null && e.OldValue is MpContentItemViewModel ocivm) {
+                ocivm.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
+                ocivm.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
+            }
+            if (e.NewValue != null && e.NewValue is MpContentItemViewModel ncivm) {
+                if (!ncivm.IsPlaceholder) {
+                    ncivm.OnScrollWheelRequest += Civm_OnScrollWheelRequest;
+                    ncivm.OnUiUpdateRequest += Civm_OnUiUpdateRequest;
+                }
             }
         }
 

@@ -188,18 +188,7 @@ namespace MpWpfApp {
             }
         }
 
-        private int _instanceCount = 0;
-        public int InstanceCount {
-            get {
-                return _instanceCount;            
-            }
-            set {
-                if(_instanceCount != value) {
-                    _instanceCount = value;
-                    OnPropertyChanged(nameof(InstanceCount));
-                }
-            }
-        }
+        public int InstanceCount { get; set; }
         #endregion
 
         #region Business Logic Properties
@@ -214,31 +203,24 @@ namespace MpWpfApp {
                 if(Parent == null) {
                     return string.Empty;
                 }
-                string nameOrInputText = string.Empty;
-                if (HostClipTileViewModel.IsAnyPastingTemplate && 
+                if(Parent.Parent.IsPastingTemplate &&
                     HasText) {
-                    nameOrInputText = TemplateText;
-                } else {
-                    nameOrInputText = TemplateName;
+                    return TemplateText;
                 }
-                return string.Format(
-                    @"{0}{1}{2}",
-                    MpCopyItemTemplate.TEMPLATE_PREFIX,
-                    nameOrInputText,
-                    MpCopyItemTemplate.TEMPLATE_SUFFIX);
+                return CopyItemTemplate.TemplateToken;
             }
-            set {
-                if(value == null) {
-                    value = string.Empty;
-                }
-                string decodedValue = value.Replace(MpCopyItemTemplate.TEMPLATE_PREFIX, string.Empty)
-                                           .Replace(MpCopyItemTemplate.TEMPLATE_SUFFIX, string.Empty);
-                if(Parent.Parent.IsPastingTemplate && TemplateText != decodedValue) {
-                    TemplateText = decodedValue;
-                } else if(TemplateName != decodedValue) {
-                    TemplateName = decodedValue;
-                }
-            }
+            //set {
+            //    if(value == null) {
+            //        value = string.Empty;
+            //    }
+            //    string decodedValue = value.Replace(MpCopyItemTemplate.TEMPLATE_PREFIX, string.Empty)
+            //                               .Replace(MpCopyItemTemplate.TEMPLATE_SUFFIX, string.Empty);
+            //    if(Parent.Parent.IsPastingTemplate && TemplateText != decodedValue) {
+            //        TemplateText = decodedValue;
+            //    } else if(TemplateName != decodedValue) {
+            //        TemplateName = decodedValue;
+            //    }
+            //}
         }
 
         private string _templateText = string.Empty;
@@ -254,6 +236,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         #endregion
 
         #region Model Properties
@@ -266,7 +249,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool WasNew { get; set; } = false;
+        public bool WasNewOnEdit { get; set; } = false;
 
         public int CopyItemTemplateId {
             get {
@@ -357,17 +340,13 @@ namespace MpWpfApp {
         }
 
         public bool Validate() {
-            if(IsNew) {
-                string pt = Parent.Parent.CopyItem.ItemData.ToPlainText();
-                if (pt.Contains(TemplateName) ||
-                    Parent.Templates.Any(x => x.TemplateName == TemplateName && x != this)) {
-                    ValidationText = $"{TemplateName} must have a unique name";
-                    MpConsole.WriteLine($"Template invalidated: {ValidationText}");
-                    return false;
-                }
+            if (Parent.Templates.Any(x => x.TemplateName.ToLower() == TemplateName.ToLower() && x != this)) {
+                ValidationText = $"'{Parent.Parent.CopyItemTitle}' already contains a '{TemplateName}' template";
+                MpConsole.WriteLine($"Template invalidated: {ValidationText}");
+                return false;
             }
 
-            if (string.IsNullOrEmpty(TemplateName.Trim())) {
+            if (string.IsNullOrWhiteSpace(TemplateName)) {
                 ValidationText = "Name cannot be empty!";
                 MpConsole.WriteLine($"Template invalidated: {ValidationText}");
                 return false;
@@ -415,6 +394,9 @@ namespace MpWpfApp {
                 case nameof(IsEditingTemplate):
                     Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+                    if(!IsEditingTemplate) {
+                        Parent.Parent.RequestSyncModel();
+                    }
                     break;
             }
         }
@@ -470,7 +452,7 @@ namespace MpWpfApp {
                 return new RelayCommand(
                     () => {
                         IsSelected = false;
-                        if (WasNew) {
+                        if (WasNewOnEdit) {
                             Parent.RemoveItem(CopyItemTemplate, false);
                         }
                         CopyItemTemplate = _originalModel;
@@ -486,6 +468,7 @@ namespace MpWpfApp {
                     () => {
                         CopyItemTemplate.WriteToDatabase();
                         //Parent.Parent.RequestSyncModels();
+                        WasNewOnEdit = false; 
                         IsEditingTemplate = false;
                         IsSelected = false;
                     },
@@ -512,8 +495,8 @@ namespace MpWpfApp {
                         );
                         templateColorButton.ContextMenu = colorContextMenu;
                         colorContextMenu.PlacementTarget = templateColorButton;
-                        colorContextMenu.Width = 200;
-                        colorContextMenu.Height = 100;
+                        //colorContextMenu.Width = 200;
+                        //colorContextMenu.Height = 100;
                         colorContextMenu.IsOpen = true;
                     });
             }
@@ -522,7 +505,9 @@ namespace MpWpfApp {
 
         #region Overrides
         public override string ToString() {
-            return TemplateName;
+            return string.Format(
+                @"Name:{0} Text:{1} Count:{2} IsEditing:{3} IsSelected:{4} WasNew:{5} IsNew:{6}",
+                TemplateName,TemplateText,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
         }
 
         public object Clone() {

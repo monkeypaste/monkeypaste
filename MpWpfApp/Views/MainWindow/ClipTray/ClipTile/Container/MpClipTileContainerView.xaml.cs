@@ -13,13 +13,19 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.Storage;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileContainerView.xaml
     /// </summary>
     public partial class MpClipTileContainerView : UserControl {
+        private static int tileCount = 0;
+        public int _TileId = -1;
         public MpClipTileContainerView() {
+            if(_TileId < 0) {
+                _TileId = tileCount++;
+            }
             InitializeComponent();
         }
     }

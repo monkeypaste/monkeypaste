@@ -77,10 +77,10 @@ namespace MpWpfApp {
             //add trailing run of one space to allow clicking after template
             //new Run(@" ", thl.ElementEnd);
 
-            var ettbv = thl.Rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
-            ettbv.SetActiveRtb(thl.Rtb);
+            var ettbv = Rtb.GetVisualAncestor<MpContentListView>().GetVisualDescendent<MpEditTemplateToolbarView>();
+            ettbv.SetActiveRtb(Rtb);
 
-            (thl.DataContext as MpTemplateViewModel).WasNew = true;
+            (thl.DataContext as MpTemplateViewModel).WasNewOnEdit = true;
 
             thl.EditTemplate();
         }

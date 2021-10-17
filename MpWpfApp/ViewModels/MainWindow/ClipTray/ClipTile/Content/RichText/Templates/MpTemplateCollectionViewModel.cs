@@ -141,7 +141,7 @@ namespace MpWpfApp {
                             } else {
                                 vm.IsSelected = false;
                                 vm.IsEditingTemplate = false;
-                                vm.OnPropertyChanged(nameof(vm.IsEditingTemplate));
+                                //vm.OnPropertyChanged(nameof(vm.IsEditingTemplate));
                             }
                         }
                     } else {
@@ -153,27 +153,13 @@ namespace MpWpfApp {
             }
         }
 
-        public string GetFormattedTemplateName(string text) {
-            if (text == null) {
-                text = string.Empty;
-            }
-            
-            //if (!text.StartsWith(MpCopyItemTemplate.TEMPLATE_PREFIX)) {
-            //    text = MpCopyItemTemplate.TEMPLATE_PREFIX + text;
-            //}
-            //if (!text.EndsWith(MpCopyItemTemplate.TEMPLATE_SUFFIX)) {
-            //    text = text + MpCopyItemTemplate.TEMPLATE_SUFFIX;
-            //}
-            return text;
-        }
-
         public bool RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+            MpConsole.WriteLine("Removing template: " + cit.TemplateName);
             //returns true if this was the last instance of the template
             var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
                     thlvmToRemove.CopyItemTemplate.DeleteFromDatabase();
-                    thlvmToRemove.InstanceCount = 0;
                     Templates.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;
@@ -319,6 +305,15 @@ namespace MpWpfApp {
             }
         }
 
+        #endregion
+
+        #region Overrides
+
+        public override string ToString() {
+            var sb = new StringBuilder();
+            Templates.ForEach(x => sb.AppendLine(x.ToString()));
+            return sb.ToString();
+        }
         #endregion
     }
 }

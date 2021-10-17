@@ -18,23 +18,29 @@ namespace MpWpfApp {
         private double deltaWidth, deltaHeight, deltaContentHeight;
         private object _dc;
         protected override void OnAttached() {
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            if (AssociatedObject.DataContext != _dc) {
+                
+            }
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
-
+        
         private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            Init();
-        }
-
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-            Init();
-        }
-
-        private void Init() {
-            //since tiles are re-used I need to unregister and register new dc's
-            if(_dc == AssociatedObject.DataContext) {
-                return;
+           if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+                octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
+                octvm.OnUnExpandRequest -= Ctvm_OnUnExpandRequest;
+                octvm.MainWindowViewModel.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
             }
+           if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
+                nctvm.OnExpandRequest += Ctvm_OnExpandRequest;
+                nctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
+                nctvm.MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+            }
+            _dc = e.NewValue;
+        }
+
+        public void Reattach() {
+            //since tiles are re-used I need to unregister and register new dc's
+            
             if (_dc != null) {
                 var octvm = _dc as MpClipTileViewModel;
                 octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
@@ -45,8 +51,8 @@ namespace MpWpfApp {
                 ctvm.OnExpandRequest += Ctvm_OnExpandRequest;
                 ctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
                 ctvm.MainWindowViewModel.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
-                _dc = ctvm;
             }
+            _dc = AssociatedObject.DataContext;
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -63,12 +69,7 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
-            var ctrv = AssociatedObject.GetVisualAncestor<MpClipTrayView>();
-            var lbi = AssociatedObject.GetVisualAncestor<ListBoxItem>();
-            
-            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            int ctcvIdx = ctrv.ClipTray.Items.IndexOf(ctvm);
-
+            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;    
             var mwvm = ctvm.MainWindowViewModel;
 
 
@@ -133,12 +134,14 @@ namespace MpWpfApp {
                 }
             }
 
-            var sv = clv.ContentListBox.GetScrollViewer();
-            sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            sv.InvalidateScrollInfo();
+            if(clv != null) {
+                var sv = clv.ContentListBox.GetScrollViewer();
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                sv.InvalidateScrollInfo();
 
-            clv.UpdateAdorner();
+                clv.UpdateAdorner();
+            }
             //clv.ContentListBox.Items.Refresh();
 
             AssociatedObject.UpdateLayout();
@@ -170,25 +173,28 @@ namespace MpWpfApp {
             ctvm.TileContentHeight -= deltaContentHeight;
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
-            clv.EditToolbarView.Visibility = Visibility.Collapsed;
-            clv.UpdateLayout();
+            if(clv != null) {
+                clv.EditToolbarView.Visibility = Visibility.Collapsed;
+                clv.UpdateLayout();
 
-            var sv = clv.ContentListBox.GetScrollViewer();
-            sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                var sv = clv.ContentListBox.GetScrollViewer();
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
-            var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            foreach (var civ in civl) {
-                var civm = civ.DataContext as MpContentItemViewModel;
-                civm.ClearEditing();
-                civm.OnPropertyChanged(nameof(civm.EditorHeight));
-                civm.OnPropertyChanged(nameof(civm.EditorCursor));
-                civm.OnPropertyChanged(nameof(civm.IsEditingContent));
-                civ.EditorView.Rtb.FitDocToRtb();
+                var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
+                foreach (var civ in civl) {
+                    var civm = civ.DataContext as MpContentItemViewModel;
+                    civm.ClearEditing();
+                    civm.OnPropertyChanged(nameof(civm.EditorHeight));
+                    civm.OnPropertyChanged(nameof(civm.EditorCursor));
+                    civm.OnPropertyChanged(nameof(civm.IsEditingContent));
+                    civ.EditorView.Rtb.FitDocToRtb();
+                }
+
+                clv.UpdateAdorner();
             }
 
-            clv.UpdateAdorner();
-
+            
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
         }

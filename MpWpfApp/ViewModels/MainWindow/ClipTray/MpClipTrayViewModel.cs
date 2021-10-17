@@ -86,9 +86,9 @@ namespace MpWpfApp {
                 return Items.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
             }
         }
-        public List<MpClipTileViewModel> VisibileClipTiles {
+        public List<MpClipTileViewModel> VisibleItems {
             get {
-                return Items.OrderBy(x=>Items.IndexOf(x)).Where(ct => ct.ItemVisibility == Visibility.Visible).ToList();
+                return Items.Where(x=>!x.IsPlaceholder).OrderBy(x=>Items.IndexOf(x)).ToList();
             }
         }
 
@@ -323,7 +323,7 @@ namespace MpWpfApp {
 
         public Visibility EmptyListMessageVisibility {
             get {
-                if (VisibileClipTiles.Count == 0) {
+                if (VisibleItems.Count == 0) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -365,6 +365,7 @@ namespace MpWpfApp {
         public event EventHandler OnUiRefreshRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
+        public event EventHandler<int> OnItemsChanged;
         #endregion
 
         #region Public Methods
@@ -379,7 +380,7 @@ namespace MpWpfApp {
             _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles * 2;
             _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);            
 
-            BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
+            //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
             for (int i = 0; i < _pageCount; i++) {
                 Items.Add(CreateClipTileViewModel(null));
             }
@@ -417,16 +418,17 @@ namespace MpWpfApp {
                 sw.Start();
                 ClearClipSelection();
                 var initTasks = new List<Task>();
-                var ivml = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
-                for (int i = 0; i < ivml.Count; i++) {
-                    initTasks.Add(Items[i].InitializeAsync(ivml[i]));
+                var cil = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
+                for (int i = 0; i < cil.Count; i++) {
+                    await Items[i].InitializeAsync(cil[i]);
                 }
-                for (int i = ivml.Count; i < VisibileClipTiles.Count; i++) {
-                    initTasks.Add(Items[i].InitializeAsync(null));
+                for (int i = cil.Count; i < VisibleItems.Count; i++) {
+                    await Items[i].InitializeAsync(null);
                 }
-                await Task.WhenAll(initTasks);
+                //await Task.WhenAll(initTasks);
 
                 ResetClipSelection();
+
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
             });
@@ -435,10 +437,14 @@ namespace MpWpfApp {
             if (_newModels.Count == 0) {
                 return;
             }
-            await UpdateTiles(); //Task.WhenAll(initTasks.ToArray());
+            foreach (var nci in _newModels) {
+                Items.Move(Items.Count - 1, 0);
+                await Items[0].InitializeAsync(nci);
+            }
+            NotifyItemsChanged(_newModels.Count);
             _newModels.Clear();
             MpTagTrayViewModel.Instance.RefreshAllCounts();
-            //ResetClipSelection();
+            ResetClipSelection();
         }
 
         #region View Invokers
@@ -456,6 +462,10 @@ namespace MpWpfApp {
 
         public void RequestUiRefresh() {
             OnUiRefreshRequest?.Invoke(this, null);
+        }
+
+        public void NotifyItemsChanged(int count) {
+            OnItemsChanged?.Invoke(this, count);
         }
         #endregion
 
@@ -630,9 +640,9 @@ namespace MpWpfApp {
             MpHelpers.Instance.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
 
-                if (VisibileClipTiles.Count > 0 && VisibileClipTiles[0] != null) {
+                if (VisibleItems.Count > 0 && VisibleItems[0] != null) {
 
-                    VisibileClipTiles[0].IsSelected = true;
+                    VisibleItems[0].IsSelected = true;
                     //if (!MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
                     //    RequestFocus(SelectedItems[0]);
                     //}
@@ -1039,10 +1049,50 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                //Task.Run(async () => {
-                //    //await MpHelpers.Instance.RunOnMainThreadAsync(() => RefreshTiles());
-                //   // MpTagTrayViewModel.Instance.RefreshAllCounts();
-                //});
+                Task.Run(() => {
+                    var ctvm = Items.Where(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id)).FirstOrDefault();
+                    int tileIdx = Items.IndexOf(ctvm);
+                    var civm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ci.Id).FirstOrDefault();
+                    int itemIdx = ctvm.ItemViewModels.IndexOf(civm);
+                    civm.IsSelected = false;
+                    if (ctvm.ItemViewModels.Count == 1 && ctvm.IsSelected && SelectedItems.Count == 1) {
+                        //when removing multiple items wait until the last one to reset selection, prefering next item
+                        ctvm.IsSelected = false;
+                        int newSelectedIdx = tileIdx + 1;
+                        if (newSelectedIdx >= VisibleItems.Count) {
+                            //this was the last item 
+                            if (VisibleItems.Count == 1) {
+                                //there are no other items to select
+                                newSelectedIdx = -1;
+                            } else {
+                                //select previous item
+                                newSelectedIdx = tileIdx - 1;
+                            }
+                        }
+                        if (newSelectedIdx >= 0) {
+                            VisibleItems[newSelectedIdx].IsSelected = true;
+                        }
+                    } else if (ctvm.ItemViewModels.Count > 1 && ctvm.SelectedItems.Count == 0) {
+                        //when removing a composite item wait and not all removed, wait until last one and prefer selecting next item
+                        int newSubSelectedIdx = itemIdx + 1;
+                        if (newSubSelectedIdx >= ctvm.ItemViewModels.Count) {
+                            if (ctvm.ItemViewModels.Count == 1) {
+                                //no more items to sub select
+                                newSubSelectedIdx = -1;
+                            } else {
+                                newSubSelectedIdx = itemIdx - 1;
+                            }
+                            if (newSubSelectedIdx >= 0) {
+                                ctvm.ItemViewModels[newSubSelectedIdx].IsSelected = true;
+                            }
+                        }
+                    }
+                    ctvm.ItemViewModels.RemoveAt(itemIdx);
+                    if (ctvm.ItemViewModels.Count == 0) {
+                        ctvm.OnPropertyChanged(nameof(ctvm.IsPlaceholder));
+                        Items.Move(Items.IndexOf(ctvm), Items.Count - 1);
+                    }
+                });
             }
         }
 
@@ -1167,12 +1217,12 @@ namespace MpWpfApp {
         }
         private bool CanSelectNextItem() {
             return SelectedItems.Count > 0 &&
-                   SelectedItems.Any(x => VisibileClipTiles.IndexOf(x) != VisibileClipTiles.Count - 1);
+                   SelectedItems.Any(x => VisibleItems.IndexOf(x) != VisibleItems.Count - 1);
         }
         private void SelectNextItem() {
-            var maxItem = SelectedItems.Max(x => VisibileClipTiles.IndexOf(x));
+            var maxItem = SelectedItems.Max(x => VisibleItems.IndexOf(x));
             ClearClipSelection();
-            VisibileClipTiles[maxItem + 1].IsSelected = true;
+            VisibleItems[maxItem + 1].IsSelected = true;
         }
 
         private RelayCommand _selectPreviousItemCommand;
@@ -1185,12 +1235,12 @@ namespace MpWpfApp {
             }
         }
         private bool CanSelectPreviousItem() {
-            return SelectedItems.Count > 0 && SelectedItems.Any(x => VisibileClipTiles.IndexOf(x) != 0);
+            return SelectedItems.Count > 0 && SelectedItems.Any(x => VisibleItems.IndexOf(x) != 0);
         }
         private void SelectPreviousItem() {
-            var minItem = SelectedItems.Min(x => VisibileClipTiles.IndexOf(x));
+            var minItem = SelectedItems.Min(x => VisibleItems.IndexOf(x));
             ClearClipSelection();
-            VisibileClipTiles[minItem - 1].IsSelected = true;
+            VisibleItems[minItem - 1].IsSelected = true;
         }
 
         private RelayCommand _selectAllCommand;
@@ -1204,7 +1254,7 @@ namespace MpWpfApp {
         }
         private void SelectAll() {
             ClearClipSelection();
-            foreach (var ctvm in VisibileClipTiles) {
+            foreach (var ctvm in VisibleItems) {
                 ctvm.IsSelected = true;
             }
         }
@@ -1328,13 +1378,13 @@ namespace MpWpfApp {
         private bool CanBringSelectedClipTilesToFront(object arg) {
             if (IsBusy ||
                 MpMainWindowViewModel.IsMainWindowLoading ||
-                VisibileClipTiles.Count == 0 ||
+                VisibleItems.Count == 0 ||
                 SelectedItems.Count == 0) {
                 return false;
             }
             bool canBringForward = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibileClipTiles.Count; i++) {
-                if (!SelectedItems.Contains(VisibileClipTiles[i])) {
+            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                if (!SelectedItems.Contains(VisibleItems[i])) {
                     canBringForward = true;
                     break;
                 }
@@ -1374,13 +1424,13 @@ namespace MpWpfApp {
         private bool CanSendSelectedClipTilesToBack(object args) {
             if (IsBusy ||
                 MpMainWindowViewModel.IsMainWindowLoading ||
-                VisibileClipTiles.Count == 0 ||
+                VisibleItems.Count == 0 ||
                 SelectedItems.Count == 0) {
                 return false;
             }
             bool canSendBack = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibileClipTiles.Count; i++) {
-                if (!SelectedItems.Contains(VisibileClipTiles[VisibileClipTiles.Count - 1 - i])) {
+            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
                     canSendBack = true;
                     break;
                 }
@@ -1410,9 +1460,23 @@ namespace MpWpfApp {
 
         public IAsyncCommand DeleteSelectedClipsCommand => new AsyncCommand(
             async () => {
-                foreach (var ci in SelectedModels) {
-                    await ci.DeleteFromDatabaseAsync();
-                }
+                //int lastSelectedClipTileIdx = SelectedItems.Max(x => Items.IndexOf(x));
+                //foreach (var ct in SelectedItems) {
+                //    lastSelectedClipTileIdx = VisibileClipTiles.IndexOf(ct);
+                //    if()
+                //}
+                //ClearClipSelection();
+                //if (VisibileClipTiles.Count > 0) {
+                //    if (lastSelectedClipTileIdx <= 0) {
+                //        VisibileClipTiles[0].IsSelected = true;
+                //    } else if (lastSelectedClipTileIdx < VisibileClipTiles.Count) {
+                //        VisibileClipTiles[lastSelectedClipTileIdx].IsSelected = true;
+                //    } else {
+                //        VisibileClipTiles[lastSelectedClipTileIdx - 1].IsSelected = true;
+                //    }
+                //}
+                var deleteTasks = SelectedModels.Select(x => x.DeleteFromDatabaseAsync());
+                await Task.WhenAll(deleteTasks.ToArray());
             },
             (args) => {
                 return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
@@ -1489,12 +1553,12 @@ namespace MpWpfApp {
             }
         }
         private bool CanInvertSelection() {
-            return SelectedItems.Count != VisibileClipTiles.Count;
+            return SelectedItems.Count != VisibleItems.Count;
         }
         private void InvertSelection() {
             var sctvml = SelectedItems;
             ClearClipSelection();
-            foreach (var vctvm in VisibileClipTiles) {
+            foreach (var vctvm in VisibleItems) {
                 if (!sctvml.Contains(vctvm)) {
                     vctvm.IsSelected = true;
                 }

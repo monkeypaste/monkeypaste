@@ -18,8 +18,6 @@
                                         Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                         Height="{Binding MainWindowViewModel.ClipTrayHeight}"
                                         ItemsSource="{Binding Items}"
-                                        local:MpPagingListBox.RemainingItemsThreshold="3"
-                                        local:MpPagingListBox.RemainingItemsThresholdReachedCommand=""
                                         Loaded="ClipTray_Loaded" 
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         IsListBoxHorizontal="True"

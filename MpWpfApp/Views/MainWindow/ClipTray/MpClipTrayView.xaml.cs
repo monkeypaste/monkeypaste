@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     /// <summary>
@@ -20,6 +22,8 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpClipTrayView : UserControl {
         public VirtualizingStackPanel TrayItemsPanel;
+
+        private static MpClipTileViewModel _DummyTileVm;
 
         private int _remainingItems = int.MaxValue;
 
@@ -42,9 +46,23 @@ namespace MpWpfApp {
             ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
-
+            ctrvm.Items.CollectionChanged += Items_CollectionChanged;
             if (ClipTray.Items.Count > 0) {
                 ClipTray.GetListBoxItem(0).Focus();
+            }
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            MpConsole.WriteLine("Tray collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
+            if(e.Action == NotifyCollectionChangedAction.Move) {
+                //when items are 'added' the tail view thinks it has the new head view model
+                //so set the tail view to the actual tail view model
+                if(_DummyTileVm == null) {
+                    _DummyTileVm = new MpClipTileViewModel(MpClipTrayViewModel.Instance, null);
+                }
+                var olbi = ClipTray.GetListBoxItem(e.OldStartingIndex);
+                olbi.DataContext = MpClipTrayViewModel.Instance.Items[e.OldStartingIndex];
+                return;
             }
         }
 
