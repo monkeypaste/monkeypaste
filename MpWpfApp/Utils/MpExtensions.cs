@@ -537,15 +537,6 @@ namespace MpWpfApp {
             }
         }
 
-
-        /// <summary>
-        /// This method is an alternative to WPF's
-        /// <see cref="VisualTreeHelper.GetChild"/> method, which also
-        /// supports content elements. Do note, that for content elements,
-        /// this method falls back to the logical tree of the element.
-        /// </summary>
-        /// <param name="parent">The item to be processed.</param>
-        /// <returns>The submitted item's child elements, if available.</returns>
         public static IEnumerable<DependencyObject> GetChildObjects(
                                                     this DependencyObject parent) {
             if (parent == null) yield break;
@@ -566,6 +557,31 @@ namespace MpWpfApp {
             }
         }
 
+        //public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
+        //    if (dpo == null) {
+        //        return default;
+        //    }
+        //    if (dpo is T t) {
+        //        return t;
+        //    }
+        //    if (dpo is FrameworkContentElement fce) {
+        //        if(fce.Parent != null) {
+        //            return FindParentOfType<T>(fce.Parent);
+        //        } 
+        //        if(fce.TemplatedParent != null) {
+        //            return FindParentOfType<T>(fce.TemplatedParent);
+        //        }
+
+        //    } else if (dpo is FrameworkElement fe) {
+        //        if (fe.Parent != null) {
+        //            return FindParentOfType<T>(fe.Parent);
+        //        } 
+        //        if (fe.TemplatedParent != null) {
+        //            return FindParentOfType<T>(fe.TemplatedParent);
+        //        }
+        //    }
+        //    return null;
+        //}
         public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
             if (dpo == null) {
                 return default;
@@ -574,44 +590,9 @@ namespace MpWpfApp {
                 return (dpo as T);
             }
             if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
-                if(((FrameworkContentElement)dpo).Parent != null) {
-                    return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
-                } 
-                if(((FrameworkContentElement)dpo).TemplatedParent != null) {
-                    return FindParentOfType<T>(((FrameworkContentElement)dpo).TemplatedParent);
-                }
-                
-            } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
-                if (((FrameworkElement)dpo).Parent != null) {
-                    return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
-                } 
-                if (((FrameworkElement)dpo).TemplatedParent != null) {
-                    return FindParentOfType<T>(((FrameworkElement)dpo).TemplatedParent);
-                }
-            }
-
-            return null;
-        }
-        public static T FindParentDataContextWithType<T>(this DependencyObject dpo) where T : class {
-            if (dpo == null) {
-                return default;
-            }
-            if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement)) &&
-                ((FrameworkContentElement)dpo).DataContext != null &&
-                ((FrameworkContentElement)dpo).DataContext.GetType() == typeof(T)) {
-                return (((FrameworkContentElement)dpo).DataContext as T);
-            }
-
-            if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement)) && 
-                ((FrameworkElement)dpo).DataContext != null  &&
-                ((FrameworkElement)dpo).DataContext.GetType() == typeof(T)) {
-                return (((FrameworkElement)dpo).DataContext as T);
-            }
-
-            if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
                 if (((FrameworkContentElement)dpo).Parent != null) {
                     return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
-                } 
+                }
                 if (((FrameworkContentElement)dpo).TemplatedParent != null) {
                     return FindParentOfType<T>(((FrameworkContentElement)dpo).TemplatedParent);
                 }
@@ -619,42 +600,12 @@ namespace MpWpfApp {
             } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
                 if (((FrameworkElement)dpo).Parent != null) {
                     return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
-                } 
+                }
                 if (((FrameworkElement)dpo).TemplatedParent != null) {
                     return FindParentOfType<T>(((FrameworkElement)dpo).TemplatedParent);
                 }
             }
-            return null;
-        }
-        public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
-            if (depObj == null) {
-                return null;
-            }
 
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                var child = VisualTreeHelper.GetChild(depObj, i);
-
-                var result = (child as T) ?? GetDescendantOfType<T>(child);
-                if (result != null) {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        private static T GetDescendantOfType<T>(this DependencyObject depObj, List<T> curList) where T : DependencyObject {
-            if (depObj == null) {
-                return null;
-            }
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                var child = VisualTreeHelper.GetChild(depObj, i);
-
-                var result = (child as T) ?? GetDescendantOfType<T>(child, curList);
-                if (result != null && curList.Contains(result)) {
-                    return result;
-                }
-            }
             return null;
         }
         #endregion
@@ -728,43 +679,6 @@ namespace MpWpfApp {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
                 return clonedDoc;
-            }
-        }
-
-        public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
-            var fullText = MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
-            if (string.IsNullOrEmpty(findText) || string.IsNullOrEmpty(fullText) || findText.Length > fullText.Length)
-                return null;
-
-            var textbox = rtb;
-            var leftPos = textbox.CaretPosition;
-            var rightPos = textbox.CaretPosition;
-
-            while (true) {
-                var previous = leftPos.GetNextInsertionPosition(LogicalDirection.Backward);
-                var next = rightPos.GetNextInsertionPosition(LogicalDirection.Forward);
-                if (previous == null && next == null)
-                    return null; //can no longer move outward in either direction and text wasn't found
-
-                if (previous != null)
-                    leftPos = previous;
-                if (next != null)
-                    rightPos = next;
-
-                var range = new TextRange(leftPos, rightPos);
-                var offset = range.Text.IndexOf(findText, StringComparison.InvariantCultureIgnoreCase);
-                if (offset < 0)
-                    continue; //text not found, continue to move outward
-
-                //rtf has broken text indexes that often come up too low due to not considering hidden chars.  Increment up until we find the real position
-                var findTextLower = findText.ToLower();
-                var endOfDoc = textbox.Document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
-                for (var start = range.Start.GetPositionAtOffset(offset); start != endOfDoc; start = start.GetPositionAtOffset(1)) {
-                    var result = new TextRange(start, start.GetPositionAtOffset(findText.Length));
-                    if (result.Text?.ToLower() == findTextLower) {
-                        return result;
-                    }
-                }
             }
         }
 

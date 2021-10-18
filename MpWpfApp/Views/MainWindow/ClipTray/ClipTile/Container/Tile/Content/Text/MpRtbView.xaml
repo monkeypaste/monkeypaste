@@ -15,6 +15,7 @@
                  Height="{Binding EditorHeight}"
                  MinWidth="100"
                  Padding="5,0,5,0"
+                 Cursor="{Binding EditorCursor}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  HorizontalContentAlignment="Stretch"

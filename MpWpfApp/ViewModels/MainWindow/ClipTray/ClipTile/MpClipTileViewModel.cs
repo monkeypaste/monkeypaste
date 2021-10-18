@@ -245,18 +245,8 @@ using System.Speech.Synthesis;
             }
         }
 
-        private double _tileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
-        public double TileContentHeight {
-            get {
-                return _tileContentHeight;
-            }
-            set {
-                if (_tileContentHeight != value) {
-                    _tileContentHeight = value;
-                    OnPropertyChanged(nameof(TileContentHeight));
-                }
-            }
-        }
+        
+        public double TileContentHeight { get; set; }= MpMeasurements.Instance.ClipTileContentHeight;
 
         public double TileDetailHeight {
             get {
@@ -453,7 +443,7 @@ using System.Speech.Synthesis;
 
         public Visibility ClipTileTitleAppIconImageVisibility {
             get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
+                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
                     return Visibility.Visible;
                 }
                 if (MpClipTrayViewModel.Instance.SelectedItems.Count > 1 &&
@@ -489,7 +479,7 @@ using System.Speech.Synthesis;
 
         public Visibility MultiSelectOrderMarkerVisibility {
             get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null) {
+                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null) {
                     return Visibility.Hidden;
                 }
                 if (IsSelected && MpClipTrayViewModel.Instance.SelectedItems.Count > 1) {
@@ -570,7 +560,7 @@ using System.Speech.Synthesis;
 
         public string MultiSelectedOrderIdxDisplayValue {
             get {
-                if (MainWindowViewModel == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
+                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
                     return string.Empty;
                 }
                 int multiIdx = MpClipTrayViewModel.Instance.GetSelectionOrderIdxForItem(this);
@@ -695,6 +685,11 @@ using System.Speech.Synthesis;
 
         public event EventHandler OnExpandRequest;
         public event EventHandler OnUnExpandRequest;
+        public event EventHandler OnListBoxRefresh;
+        public event EventHandler OnUiUpdateRequest;
+        public event EventHandler<object> OnScrollIntoViewRequest;
+        public event EventHandler OnScrollToHomeRequest;
+
         #endregion
 
         #region Public Methods
@@ -729,7 +724,7 @@ using System.Speech.Synthesis;
                 if (headItem != null) {
                     ItemViewModels.Clear();
 
-                    var ccil = await MpCopyItemProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
+                    var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                     ccil.Insert(0, headItem);
 
                     var civml = new List<MpContentItemViewModel>();
@@ -763,26 +758,37 @@ using System.Speech.Synthesis;
             Task.Run(()=>InitializeAsync(HeadItem.CopyItem));
         }
 
+        #region View Event Invokers
+
+        public void RequestListRefresh() {
+            OnListBoxRefresh?.Invoke(this, null);
+        }
+
+        public void RequestScrollIntoView(object obj) {
+            OnScrollIntoViewRequest?.Invoke(this, obj);
+        }
+
+        public void RequestScrollToHome() {
+            OnScrollToHomeRequest?.Invoke(this, null);
+        }
+
+        public void RequestUiUpdate() {
+            OnUiUpdateRequest?.Invoke(this, null);
+        }
+
         public void RequestSearch(string st) {
             OnSearchRequest?.Invoke(this, st);
         }
 
         public void RequestExpand() {
-
             OnExpandRequest?.Invoke(this, null);
-            //if (!IsExpanded) {
-            //    MpSelectionBehavior.SetIgnoreSelection(true);
-            //}            
         }
 
         public void RequestUnexpand() {
-            ItemViewModels.ForEach(x => x.RequestSyncModel());
             OnUnExpandRequest?.Invoke(this, null);
-            //if (IsExpanded) {
-            //    MpSelectionBehavior.SetIgnoreSelection(false);
-            //    OnUnExpandRequest?.Invoke(this, null);
-            //}
         }
+
+        #endregion
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
@@ -1003,7 +1009,7 @@ using System.Speech.Synthesis;
                     SelectedItems.Where(x => x.HasTemplates).Select(y => y.IsPastingTemplate = true);
                     TemplateRichText = string.Empty.ToRichText();
                     if (!MpMainWindowViewModel.IsMainWindowOpen) {
-                        MainWindowViewModel.ShowWindowCommand.Execute(null);
+                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                     RequestUiUpdate();
                     //if(!Application.Current.MainWindow.IsActive) {
@@ -1127,42 +1133,22 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Layout
-        
+
         #endregion
 
         #region State
 
+
+        #endregion
+
+        #endregion
+
        
-        #endregion
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler OnUiUpdateRequest;
-        public event EventHandler<object> OnScrollIntoViewRequest;
-        public event EventHandler OnScrollToHomeRequest;
-
-        #endregion
-
 
         #region Public Methods       
 
 
-        #region View Event Invokers
-        public void RequestScrollIntoView(object obj) {
-            OnScrollIntoViewRequest?.Invoke(this, obj);
-        }
 
-        public void RequestScrollToHome() {
-            OnScrollToHomeRequest?.Invoke(this, null);
-        }
-
-        public void RequestUiUpdate() {
-            OnUiUpdateRequest?.Invoke(this, null);
-        }
-
-        #endregion
 
         public async Task UserPreparingDynamicPaste() {
             await Task.Delay(1);
@@ -1279,7 +1265,7 @@ using System.Speech.Synthesis;
                     ivm.CopyItem.WriteToDatabase();
                 }
             }
-            //RequestUiUpdate();
+            RequestUiUpdate();
         }
 
         public async Task UpdateSortOrderAsync(bool fromModel = false) {
@@ -1492,7 +1478,7 @@ using System.Speech.Synthesis;
             }
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
-            MainWindowViewModel.HideWindowCommand.Execute(true);
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
         }
 
         public ICommand BringToFrontCommand {
@@ -1661,8 +1647,8 @@ using System.Speech.Synthesis;
                     tagToLink.AddClip(srtbvm);
                 }
             }
-            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
-            MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
         }
 
         private RelayCommand _assignHotkeyCommand;
@@ -1763,7 +1749,7 @@ using System.Speech.Synthesis;
                 var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
                 clonedCopyItem.WriteToDatabase();
                 var rtbvm = new MpContentItemViewModel(this, clonedCopyItem);
-                //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
+                //MpMainWindowViewModel.Instance.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                 ItemViewModels.Add(rtbvm);
                 rtbvm.IsSelected = true;
             }

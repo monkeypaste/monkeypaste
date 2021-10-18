@@ -12,6 +12,7 @@ using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
 using WindowsInput;
 using MonkeyPaste;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel> {
@@ -351,41 +352,42 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpShortcutViewModel(MpShortcutCollectionViewModel parent, MpShortcut s, ICommand command, object commandParameter) : base(parent) {
-            PropertyChanged += (s1, e) => {
-                switch (e.PropertyName) {
-                    case nameof(KeyString):
-                        if (IsCustom()) {
-                            if (Shortcut.CopyItemId > 0) {
-                                var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
-                                ctvm.ShortcutKeyString = Shortcut.KeyString;
-                            } else {
-                                var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
-                                ttvm.ShortcutKeyString = Shortcut.KeyString;
-                            }
-                        }
-                        break;
-                }
-            };
-
+            PropertyChanged += MpShortcutViewModel_PropertyChanged;
             Shortcut = s;
             Command = command;
             CommandParameter = commandParameter;
         }
 
-        public void Register() {
+        private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(KeyString):
+                    if (IsCustom()) {
+                        if (Shortcut.CopyItemId > 0) {
+                            var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
+                            ctvm.ShortcutKeyString = Shortcut.KeyString;
+                        } else {
+                            var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                            ttvm.ShortcutKeyString = Shortcut.KeyString;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        public async Task RegisterAsync() {
             //only register if non-empty keysstring
             if (string.IsNullOrEmpty(KeyString)) {
                 if(!IsSequence()) {
                     Unregister();
                 }
-                Shortcut.WriteToDatabase();
+                await Shortcut.WriteToDatabaseAsync();
                 return;
             } else {
                 try {
                     if (RoutingType == MpRoutingType.None) {
                         throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
-                    var hook = RoutingType == MpRoutingType.Internal ? MpShortcutCollectionViewModel.Instance.ApplicationHook : MpShortcutCollectionViewModel.Instance.GlobalHook;
+                    var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
                     
                     if (IsSequence()) {
                         if(MpMainWindowViewModel.IsMainWindowLoading) {
@@ -410,7 +412,7 @@ namespace MpWpfApp {
                     MonkeyPaste.MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
                     return;
                 }
-                Shortcut.WriteToDatabase();
+                await Shortcut.WriteToDatabaseAsync();
                 MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
@@ -487,8 +489,8 @@ namespace MpWpfApp {
                MpClipTrayViewModel.Instance.IsAnyPastingTemplate ||
                MpClipTrayViewModel.Instance.IsAnyEditingClipTile ||
                MpClipTrayViewModel.Instance.IsAnyEditingClipTitle ||
-               MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
-               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
+               MpMainWindowViewModel.Instance.TagTrayViewModel.IsEditingTagName ||
+               MpMainWindowViewModel.Instance.SearchBoxViewModel.IsTextBoxFocused) {
                 return false;
             }
             //otherwise check basic type routing for validity

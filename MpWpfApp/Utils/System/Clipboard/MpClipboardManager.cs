@@ -233,7 +233,8 @@ namespace MpWpfApp {
             }
             disposed = true;
         }
-        public void Dispose() {
+        public override void Dispose() {
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }

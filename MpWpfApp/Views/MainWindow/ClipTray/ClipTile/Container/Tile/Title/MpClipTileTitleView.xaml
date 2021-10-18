@@ -109,7 +109,7 @@
               Grid.Column="0"
               MouseEnter="ClipTileTitleTextGrid_MouseEnter"
               MouseLeave="ClipTileTitleTextGrid_MouseLeave"
-              PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_PreviewMouseLeftButtonDown"
+              MouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
               Margin="10,3,30,25"
               MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
               MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"

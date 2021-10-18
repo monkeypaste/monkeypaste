@@ -164,13 +164,13 @@ namespace MpWpfApp {
                 var countTasks = new Dictionary<int,Task<int>>();
                 foreach (var ttvm in TagTileViewModels) {
                     if (ttvm.IsAllTag) {
-                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetTotalCopyItemCountAsync());
+                        countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTotalCopyItemCountAsync());
                         //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTotalCopyItemCountAsync();
                     } else if (ttvm.IsRecentTag) {
-                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetRecentCopyItemCountAsync());
+                        countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetRecentCopyItemCountAsync());
                         //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetRecentCopyItemCountAsync();
                     } else {
-                        countTasks.Add(ttvm.TagId, MpCopyItemProvider.Instance.GetTagItemCountAsync(ttvm.TagId));
+                        countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTagItemCountAsync(ttvm.TagId));
                         //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTagItemCountAsync(ttvm.TagId);
                     }
                     //ttvm.TagClipCount = 0;
@@ -234,15 +234,6 @@ namespace MpWpfApp {
                 tagTileToRemove.Tag.DeleteFromDatabase();
             }
 
-            //remove any shortcuts associated with clip
-            var scvmToRemoveList = new List<MpShortcutViewModel>();
-            foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.TagId == tagTileToRemove.TagId).ToList()) {
-                scvmToRemoveList.Add(scvmToRemove);
-            }
-            foreach (var scvmToRemove in scvmToRemoveList) {
-                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-            }
-
             ResetTagSelection();
         }
 
@@ -270,7 +261,7 @@ namespace MpWpfApp {
                 if (ttvm.IsSudoTag || ttvm.IsSelected) {
                     continue;
                 }
-                var ciidl = MpCopyItemProvider.Instance.GetCopyItemIdsForTag(ttvm.TagId);
+                var ciidl = MpDataModelProvider.Instance.GetCopyItemIdsForTag(ttvm.TagId);
 
                 bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {

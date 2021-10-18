@@ -15,7 +15,7 @@ namespace MpWpfApp {
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
-            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             MonkeyPaste.MpPreferences.Instance.Init(new MpWpfPreferences());
             await MonkeyPaste.MpDb.Instance.Init(new MpWpfDbInfo());

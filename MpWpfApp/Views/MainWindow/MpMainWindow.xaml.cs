@@ -19,6 +19,7 @@ namespace MpWpfApp {
         public MpMainWindow() {
             sw = new Stopwatch();
             sw.Start();
+            DataContext = MpMainWindowViewModel.Instance;
             InitializeComponent();
         }
 
@@ -26,38 +27,28 @@ namespace MpWpfApp {
                       
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-           // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
-
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e) {
             WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
-            MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
-            sw.Stop();
-            MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
-
-        }
-
-        private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
+                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+                
+                var mwvm = DataContext as MpMainWindowViewModel;
+                Application.Current.Resources["MainWindowViewModel"] = mwvm;
                 mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
                 mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
                 //MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
-
-
-                MpShortcutCollectionViewModel.Instance.Init();
+                await MpShortcutCollectionViewModel.Instance.Init();
 
                 // MpPasteToAppPathViewModelCollection.Instance.Init();
-
-
-
-
-                int totalItems = MpDb.Instance.GetItems<MpCopyItem>().Count;
+                int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
 
 
                 MpStandardBalloonViewModel.ShowBalloon(
@@ -66,23 +57,31 @@ namespace MpWpfApp {
                    Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
                 //MpMainWindowViewModel.IsMainWindowLoading = false;
+                MpMainWindowViewModel.Instance.SetupMainWindowRect();
+
+                sw.Stop();
+                MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
+            });
+        }
+
+        private async void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
+
+
+                
             }
         }
 
         private void Instance_ViewModelLoaded(object sender, EventArgs e) {
             //MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
-
-           
-
             MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
-
         }
 
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
             //DisableBlur();
         }
 
-        private async void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
+        private void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
         }
 
         private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

@@ -65,7 +65,7 @@ namespace MpWpfApp {
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
             nthl.Tag = MpSubTextTokenType.TemplateSegment;
-            rtb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
+           //tb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
             return nthl;
         }
 
@@ -90,26 +90,40 @@ namespace MpWpfApp {
         }
 
         private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
-            var thl = sender as MpTemplateHyperlink;
+            Tag = MpSubTextTokenType.TemplateSegment;
+            var rtbv = ElementStart.Parent.FindParentOfType<MpRtbView>();
+            rtbv.TemplateViews.Add(this);
+
             var thlvm = DataContext as MpTemplateViewModel;
             MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
         }
 
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            if (Tag != null) {
-                //Tag is null when formatting is cleared, it is non-null when the instance should be removed
-                var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
-                if(rtb != null) {
-                    var rtbv = rtb.FindParentOfType<MpRtbView>();
-                    if(rtbv != null) {
-                        if(rtbv.TemplateViews.Contains(this)) {
-                            rtbv.TemplateViews.Remove(this);
-                        }
-                    }
-                }
-                var thlvm = DataContext as MpTemplateViewModel;
-                thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
+            var rtbv = ElementStart.Parent.FindParentOfType<MpRtbView>();
+            if(rtbv != null) {
+                rtbv.TemplateViews.Remove(this);
             }
+
+            var thlvm = DataContext as MpTemplateViewModel;
+            bool wasMovedToDiffTile = thlvm.HostClipTileViewModel.IsPlaceholder;
+            MpConsole.WriteLine("Ignoring unload");
+            //return;
+            //if (Tag != null && !wasMovedToDiffTile) {
+            //    MpConsole.WriteLine($"UNLOAD-DELETING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
+            //    //Tag is null when formatting is cleared, it is non-null when the instance should be removed
+            //    var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
+            //    if (rtb != null) {
+            //        var rtbv = rtb.FindParentOfType<MpRtbView>();
+            //        if (rtbv != null) {
+            //            if (rtbv.TemplateViews.Contains(this)) {
+            //                rtbv.TemplateViews.Remove(this);
+            //            }
+            //        }
+            //    }
+            //    thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
+            //} else {
+            //    MpConsole.WriteLine($"UNLOAD-CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
+            //}
         }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
@@ -124,9 +138,15 @@ namespace MpWpfApp {
 
         private void Hyperlink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var thlvm = DataContext as MpTemplateViewModel;
-            if (thlvm.Parent.Parent.IsEditingContent) {
-                EditTemplate();
+            
+            if (!thlvm.Parent.Parent.IsSelected) {
+                //only works with preview, clicking unexpanded item template doesn't select item/tile
+                //without doing this
+                thlvm.Parent.Parent.IsSelected = true;
             }
+            if (thlvm.HostClipTileViewModel.IsExpanded) {
+                EditTemplate();
+            }            
         }
 
         public void EditTemplate() {
@@ -139,25 +159,27 @@ namespace MpWpfApp {
         }
 
         public void Clear() {
+            var thlvm = DataContext as MpTemplateViewModel;
+            MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //flag Tag so unloaded doesn't delete
             Tag = null;
-            var thlvm = DataContext as MpTemplateViewModel;
             string text = thlvm.TemplateDisplayValue;
             Inlines.Clear();
             new Span(new Run(text), ElementStart);
         }
 
         public void Delete() {
+            var thlvm = DataContext as MpTemplateViewModel;
+            MpConsole.WriteLine($"DELETING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //ensure Tag is non null so deleted in unload
             Tag = MpSubTextTokenType.TemplateSegment;
             Inlines.Clear();
             new Span(new Run(string.Empty), ElementStart);
 
-            var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
-            var rtbv = rtb.FindParentOfType<MpRtbView>();
-            rtbv.TemplateViews.Remove(this);
-            var thlvm = DataContext as MpTemplateViewModel;
-            thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
+            //var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
+            //var rtbv = rtb.FindParentOfType<MpRtbView>();
+            //rtbv.TemplateViews.Remove(this);
+            //thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
         }
 
         private void DeleteAll_Click(object sender, RoutedEventArgs e) {

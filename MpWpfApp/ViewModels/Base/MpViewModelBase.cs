@@ -32,16 +32,16 @@ namespace MpWpfApp {
         }
 
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel {
-            get {
-                return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-                //object mwvm = null;
-                //Application.Current.Dispatcher.Invoke((Action)delegate {
-                //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
-                //});
-                //return mwvm as MpMainWindowViewModel;
-            }
-        }
+        //public MpMainWindowViewModel MainWindowViewModel {
+        //    get {
+        //        return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+        //        //object mwvm = null;
+        //        //Application.Current.Dispatcher.Invoke((Action)delegate {
+        //        //    mwvm = (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+        //        //});
+        //        //return mwvm as MpMainWindowViewModel;
+        //    }
+        //}
 
         //public MpMeasurements Measurements { get; private set; }
         #endregion

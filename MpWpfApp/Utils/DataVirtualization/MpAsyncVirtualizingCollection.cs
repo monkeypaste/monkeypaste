@@ -9,7 +9,7 @@ namespace MpWpfApp {
     /// Derived VirtualizatingCollection, performing loading asychronously.
     /// </summary>
     /// <typeparam name="T">The type of items in the collection</typeparam>
-    public class MpAsyncVirtualizingCollection<T> : MpVirtualizingCollection<T>, INotifyCollectionChanged, INotifyPropertyChanged {
+    public class MpAsyncVirtualizingCollection<T> : MpVirtualizingCollection<T>, INotifyCollectionChanged {
         #region Constructors
 
         public MpAsyncVirtualizingCollection() : base() { }
@@ -60,60 +60,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region INotifyCollectionChanged
-
-        /// <summary>
-        /// Occurs when the collection changes.
-        /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        /// <summary>
-        /// Raises the <see cref="E:CollectionChanged"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
-            NotifyCollectionChangedEventHandler h = CollectionChanged;
-            if (h != null)
-                h(this, e);
-        }
-
-        /// <summary>
-        /// Fires the collection reset event.
-        /// </summary>
-        private void FireCollectionReset() {
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            OnCollectionChanged(e);
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) {
-            PropertyChangedEventHandler h = PropertyChanged;
-            if (h != null)
-                h(this, e);
-        }
-
-        /// <summary>
-        /// Fires the property changed event.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        private void FirePropertyChanged(string propertyName) {
-            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
-            OnPropertyChanged(e);
-        }
-
-        #endregion
+        
 
         #region IsLoading
 
@@ -125,7 +72,7 @@ namespace MpWpfApp {
             set {
                 if (_isLoading != value) {
                     _isLoading = value;
-                    FirePropertyChanged(nameof(IsLoading));
+                    OnPropertyChanged(nameof(IsLoading));
                 }
             }
         }
@@ -138,8 +85,8 @@ namespace MpWpfApp {
             set {
                 if(_isLoadingCount != value) {
                     _isLoadingCount = value;
-                    FirePropertyChanged(nameof(IsLoadingCount));
-                    FirePropertyChanged(nameof(IsLoading));
+                    OnPropertyChanged(nameof(IsLoadingCount));
+                    OnPropertyChanged(nameof(IsLoading));
                 }
             }
         }
@@ -152,8 +99,8 @@ namespace MpWpfApp {
             set {
                 if (_isLoadingData != value) {
                     _isLoadingData = value;
-                    FirePropertyChanged(nameof(IsLoadingData));
-                    FirePropertyChanged(nameof(IsLoading));
+                    OnPropertyChanged(nameof(IsLoadingData));
+                    OnPropertyChanged(nameof(IsLoading));
                 }
             }
         }

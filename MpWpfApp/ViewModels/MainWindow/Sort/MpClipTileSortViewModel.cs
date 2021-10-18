@@ -77,8 +77,8 @@ namespace MpWpfApp {
                                 manualSort.IsVisible = true;
                             }
                             PerformSelectedSortCommand.Execute(null);
+                            OnSortTypeChanged?.Invoke(this, SelectedSortType.SortType);
                         }
-                        OnSortTypeChanged?.Invoke(this, SelectedSortType.SortType);
                         break;
                     case nameof(IsSortDescending):
                         OnIsDescendingChanged?.Invoke(this, IsSortDescending);

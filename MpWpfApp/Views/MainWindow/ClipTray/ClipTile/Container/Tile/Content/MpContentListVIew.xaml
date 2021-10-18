@@ -28,12 +28,10 @@
                                               Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                               DataContext="{Binding PrimaryItem.TemplateCollection}" />
 
-        <AdornerDecorator ClipToBounds="True">
+        <AdornerDecorator>
             <local:MpMultiSelectListBox x:Name="ContentListBox"
-                                        Loaded="ContentListBox_Loaded"
-                                        RequestBringIntoView="ContentListBox_RequestBringIntoView"          
+                                        Loaded="ContentListBox_Loaded"         
                                         SelectionChanged="ContentListBox_SelectionChanged"                                        
-                                        ClipToBounds="True"
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
@@ -49,7 +47,7 @@
                                         IsEnabled="True"                                        
                                         VirtualizingPanel.IsVirtualizing="True"
                                         VirtualizingPanel.ScrollUnit="Pixel"
-                                        VirtualizingPanel.VirtualizationMode="Recycling"    
+                                        VirtualizingPanel.VirtualizationMode="Recycling"                                            
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -86,16 +84,6 @@
                                         <Border BorderThickness="0.75"
                                                 HorizontalAlignment="Stretch">
                                             <Border.BorderBrush>
-                                                <!--<VisualBrush>
-                                                    <VisualBrush.Visual>
-                                                        <Rectangle StrokeDashArray="4 4" 
-                                                                   RadiusX="10" RadiusY="10"
-                                                                   Stroke="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}" 
-                                                                   StrokeThickness="1"
-                                                                   Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
-                                                                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>          
-                                                    </VisualBrush.Visual>
-                                                </VisualBrush>-->
                                                 <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
                                                     <DrawingBrush.Drawing>
                                                         <DrawingGroup>

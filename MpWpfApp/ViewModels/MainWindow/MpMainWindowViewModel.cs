@@ -154,11 +154,23 @@ namespace MpWpfApp {
 
         public double MainWindowWidth { get; set; } = SystemParameters.WorkArea.Width;
 
+        //public double MainWindowHeight {
+        //    get {
+        //        return TitleMenuHeight + FilterMenuHeight + ClipTrayHeight;
+        //    }
+        //}
+
+        //public double MainWindowBottom {
+        //    get {
+        //        return MainWindowTop + MainWindowHeight;
+        //    }
+        //}
+
         public double MainWindowHeight { get; set; } = SystemParameters.WorkArea.Height;
 
         public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
 
-        private double _mainWindowGridTop = SystemParameters.WorkArea.Height;
+        private double _mainWindowGridTop = SystemParameters.PrimaryScreenHeight;
         public double MainWindowTop {
             get {
                 return _mainWindowGridTop;
@@ -246,10 +258,8 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
-
             MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
-            //Task.Run(Initialize);
             Initialize();
         }
 
@@ -281,7 +291,6 @@ namespace MpWpfApp {
             Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
             Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
-
             MpClipTrayViewModel.Instance.InitQueryInfo();
         }
         public void ClearEdits() {
@@ -329,11 +338,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private void Resize(double deltaHeight) {
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            MainWindowTop -= deltaHeight;
-            mw.UpdateLayout();
-        }
 
         public void AddTempFile(string fp) {
             if(_tempFilePathList.Contains(fp.ToLower())) {
@@ -344,9 +348,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Disposable
-        public void Dispose() {
-           // MonkeyPaste.MpSyncManager.Instance.Dispose();
-           
+        public override void Dispose() {
+            // MonkeyPaste.MpSyncManager.Instance.Dispose();
+            base.Dispose();
             foreach (string tfp in _tempFilePathList) {
                 if(File.Exists(tfp)) {
                     try {
@@ -409,8 +413,6 @@ namespace MpWpfApp {
             mw.Activate();
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
-
-
 
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             double fps = 30;

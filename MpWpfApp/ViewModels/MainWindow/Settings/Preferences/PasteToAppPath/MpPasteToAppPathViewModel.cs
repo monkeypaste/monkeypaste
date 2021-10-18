@@ -351,7 +351,8 @@ namespace MpWpfApp {
             }
             return string.Empty;
         }
-        public void Dispose() {
+        public override void Dispose() {
+            base.Dispose();
             PasteToAppPath.DeleteFromDatabase();
         }
         #endregion

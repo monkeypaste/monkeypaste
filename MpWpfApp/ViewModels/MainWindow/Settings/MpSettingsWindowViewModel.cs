@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using MonkeyPaste;
+using AsyncAwaitBestPractices.MVVM;
 
 namespace MpWpfApp {
     // + Account
@@ -266,56 +267,34 @@ namespace MpWpfApp {
 
         }
 
-        private RelayCommand _reassignShortcutCommand;
-        public ICommand ReassignShortcutCommand {
-            get {
-                if (_reassignShortcutCommand == null) {
-                    _reassignShortcutCommand = new RelayCommand(ReassignShortcut);
-                }
-                return _reassignShortcutCommand;
-            }
-        }
-        private void ReassignShortcut() {
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-            MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
-                scvm,
-                scvm.ShortcutDisplayName,
-                scvm.KeyString,
-                scvm.Command,
-                scvm.CommandParameter
-            );
-        }
+        public IAsyncCommand ReassignShortcutCommand => new AsyncCommand(
+            async () => {
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                    scvm,
+                    scvm.ShortcutDisplayName,
+                    scvm.KeyString,
+                    scvm.Command,
+                    scvm.CommandParameter
+                );
+            });
 
-        private RelayCommand _deleteShortcutCommand;
-        public ICommand DeleteShortcutCommand {
-            get {
-                if (_deleteShortcutCommand == null) {
-                    _deleteShortcutCommand = new RelayCommand(DeleteShortcut);
-                }
-                return _deleteShortcutCommand;
-            }
-        }
-        private void DeleteShortcut() {
-            MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-            MpShortcutCollectionViewModel.Instance.Remove(scvm);
-        }
+        public IAsyncCommand DeleteShortcutCommand => new AsyncCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                //await MpShortcutCollectionViewModel.Instance.RemoveAsync(scvm);
+                await MpDb.Instance.DeleteItemAsync<MpShortcut>(scvm.Shortcut);
+            });
 
-        private RelayCommand _resetShortcutCommand;
-        public ICommand ResetShortcutCommand {
-            get {
-                if (_resetShortcutCommand == null) {
-                    _resetShortcutCommand = new RelayCommand(ResetShortcut);
-                }
-                return _resetShortcutCommand;
-            }
-        }
-        private void ResetShortcut() {
-            MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
-            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].KeyString = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Shortcut.DefaultKeyString;
-            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Register();
-            MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex].Shortcut.WriteToDatabase();
-        }
+        public IAsyncCommand ResetShortcutCommand => new AsyncCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                scvm.KeyString = scvm.Shortcut.DefaultKeyString;
+                await scvm.RegisterAsync();
+                await scvm.Shortcut.WriteToDatabaseAsync();
+            });
 
         private RelayCommand<int> _clickSettingsPanelCommand;
         public ICommand ClickSettingsPanelCommand {

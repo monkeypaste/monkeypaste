@@ -50,7 +50,7 @@ namespace MpWpfApp {
 
         public string AppStatus {
             get {
-                if(MainWindowViewModel == null) {
+                if(MpMainWindowViewModel.Instance == null) {
                     return string.Empty;
                 }
                 return @"Monkey Paste [" + (MpAppModeViewModel.Instance.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
@@ -77,7 +77,7 @@ namespace MpWpfApp {
 
         public string PauseOrPlayIconSource {
             get {
-                if(MainWindowViewModel == null || MpAppModeViewModel.Instance == null) {
+                if(MpMainWindowViewModel.Instance == null || MpAppModeViewModel.Instance == null) {
                     return string.Empty;
                 }
                 if(MpAppModeViewModel.Instance.IsAppPaused) {
@@ -89,7 +89,7 @@ namespace MpWpfApp {
 
         public string PauseOrPlayHeader {
             get {
-                if (MainWindowViewModel == null || MpAppModeViewModel.Instance == null) {
+                if (MpMainWindowViewModel.Instance == null || MpAppModeViewModel.Instance == null) {
                     return string.Empty;
                 }
                 if (MpAppModeViewModel.Instance.IsAppPaused) {
@@ -107,7 +107,7 @@ namespace MpWpfApp {
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
             _taskbarIcon = ((TaskbarIcon)sender);
             _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
-                MainWindowViewModel.ShowWindowCommand.Execute(null);
+                MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             };
             _taskbarIcon.MouseEnter += (s, e3) => {
                 OnPropertyChanged(nameof(AppStatus));
@@ -138,7 +138,7 @@ namespace MpWpfApp {
             }
         }
         private void ExitApplication() {
-            MainWindowViewModel.Dispose();
+            MpMainWindowViewModel.Instance.Dispose();
             Application.Current.Shutdown();
         }
 
@@ -165,8 +165,8 @@ namespace MpWpfApp {
             }
         }
         private void ShowSettingsWindow(object args) {
-            MainWindowViewModel.IsShowingDialog = true;
-            MainWindowViewModel.HideWindowCommand.Execute(null);
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             int tabIdx = 0;
             if(args is int) {
                 tabIdx = (int)args;
@@ -181,7 +181,7 @@ namespace MpWpfApp {
             SettingsWindowViewModel = new MpSettingsWindowViewModel();
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
 
-            MainWindowViewModel.IsShowingDialog = false;
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
         }
         #endregion
     }

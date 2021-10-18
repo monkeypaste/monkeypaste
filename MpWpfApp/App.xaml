@@ -1159,6 +1159,7 @@
         <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
         <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
         <local:MpDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
+
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
         <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
         <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />

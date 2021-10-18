@@ -69,40 +69,41 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public void Init() {
+        public async Task Init() {
+            await SetSoundGroupIdx(MpPreferences.Instance.NotificationSoundGroupIdx);
+        }
+
+        public async Task SetSoundGroupIdx(int soundGroupIdx) {
+            await Task.Run(() => {
+                SoundPlayerViewModels.Clear();
+                SoundGroup = (MpSoundGroup)soundGroupIdx;
+                switch (SoundGroup) {
+                    case MpSoundGroup.None:
+                        //do nothing so collections empty and play commands don't execute
+                        break;
+                    case MpSoundGroup.Minimal:
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
+                        break;
+                }
+                MpPreferences.Instance.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
+            });
         }
         #endregion
 
         #region Private Methods
-        private MpSoundPlayerGroupCollectionViewModel() : this((MpSoundGroup)Properties.Settings.Default.NotificationSoundGroupIdx) { }
+        private MpSoundPlayerGroupCollectionViewModel() : base(null) {
+            PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
+        }
 
-        private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base(null) {
-            var sw = new Stopwatch();
-            sw.Start();
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(SelectedSoundGroupNameIdx):
-                        SoundPlayerViewModels.Clear();
-                        SoundGroup = (MpSoundGroup)SelectedSoundGroupNameIdx;
-                        switch (SoundGroup) {
-                            case MpSoundGroup.None:
-                                //do nothing so collections empty and play commands don't execute
-                                break;
-                            case MpSoundGroup.Minimal:
-                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
-                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
-                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
-                                SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
-                                break;
-                        }
-                        Properties.Settings.Default.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
-                        Properties.Settings.Default.Save();
-                        break;
-                }
-            };
-            SelectedSoundGroupNameIdx = (int)group;
-            sw.Stop();
-            MpConsole.WriteLine($"Sound player loading: {sw.ElapsedMilliseconds} ms");
+        private async void MpSoundPlayerGroupCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedSoundGroupNameIdx):
+                    await SetSoundGroupIdx(SelectedSoundGroupNameIdx);
+                    break;
+            }
         }
         #endregion
 

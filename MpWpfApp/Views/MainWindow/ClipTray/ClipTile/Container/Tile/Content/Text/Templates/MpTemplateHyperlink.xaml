@@ -8,7 +8,7 @@
            d:DataContext="{d:DesignInstance local:MpTemplateViewModel, IsDesignTimeCreatable=True}"
            Background="Transparent"
            Cursor="Hand"
-           IsEnabled="True"
+           IsEnabled="{Binding Parent.Parent.Parent.IsExpanded}"
            Loaded="Hyperlink_Loaded"
            Unloaded="Hyperlink_Unloaded"
            MouseEnter="Hyperlink_MouseEnter"

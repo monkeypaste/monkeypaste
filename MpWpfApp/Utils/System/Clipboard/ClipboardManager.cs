@@ -199,7 +199,7 @@ namespace MpWpfApp {
             return false;
         }
 
-        public void Dispose() {
+        public virtual void Dispose() {
             if(_workThread != null) {
                 _workThread.Abort();
             }

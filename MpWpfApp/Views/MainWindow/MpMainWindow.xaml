@@ -8,7 +8,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2f008"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:spinners="clr-namespace:xamlSpinnersWPF"
@@ -20,6 +20,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         Top="0"
+        Left="0"
         Visibility="Visible"
         Loaded="MainWindow_Loaded"
         DataContextChanged="MainWindow_DataContextChanged"
@@ -29,14 +30,13 @@
         WindowState="Normal"
         Height="{local:MpMeasurementsBinding ScreenHeight}"
         Width="{Binding MainWindowWidth}"
-        DataContext="{StaticResource MainWindowViewModel}">
-    <Window.Resources>
-    </Window.Resources>
-    <Canvas x:Name="MainWindowCanvas"  
+        d:DataContext="{d:DesignInstance local:MpMainWindowViewModel, IsDesignTimeCreatable=True}">
+    <Window.Resources />
+    <Canvas x:Name="MainWindowCanvas"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">
-        <!--<Image Source="{Binding Ss}" 
+        <!--<Image Source="{Binding Ss}"
                PreviewMouseUp="Image_PreviewMouseUp"
                Height="{local:MpMeasurementsBinding ScreenHeight}"
                Width="{Binding ScreenWidth}"
@@ -51,7 +51,7 @@
             </Image.Effect>
         </Image>-->
         <Grid x:Name="MainWindowGrid"
-              Canvas.Top="{Binding MainWindowTop}" 
+              Canvas.Top="{Binding MainWindowTop}"
               Canvas.Bottom="{Binding MainWindowBottom}"
               Canvas.Left="0"
               Width="{Binding MainWindowWidth}"
@@ -62,18 +62,18 @@
                 <RowDefinition Height="{Binding ClipTrayHeight}" />
             </Grid.RowDefinitions>
 
-            <!-- System Tray -->
+            <!--  System Tray  -->
             <local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />
 
-            <!-- Main Menu -->
+            <!--  Main Menu  -->
             <StackPanel Grid.Row="0"
                         Grid.Column="0"
                         Orientation="Horizontal"
-                        Background="DarkGreen" 
+                        Background="DarkGreen"
                         Visibility="{Binding AppVisibility}">
-                <TextBlock Text="{Binding LogText}"/>
+                <TextBlock Text="{Binding LogText}" />
             </StackPanel>
-            <!-- FilterMenu -->
+            <!--  FilterMenu  -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
                   Focusable="True"
@@ -113,26 +113,26 @@
                                VerticalAlignment="Center" />
                     </ToggleButton>
                 </StackPanel>
-                <!-- Sort Combobox -->
+                <!--  Sort Combobox  -->
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
                                       Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
 
-                <!-- Tag Tray -->
+                <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
-                                     Grid.Column="2" 
-                                      Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                     DataContext="{Binding TagTrayViewModel}"/>
+                                     Grid.Column="2"
+                                     Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     DataContext="{Binding TagTrayViewModel}" />
 
-                <!-- Search -->
+                <!--  Search  -->
                 <local:MpItemSearchView x:Name="SearchView"
                                         Grid.Column="3"
                                         DataContext="{Binding SearchBoxViewModel}" />
 
             </Grid>
 
-            <!--3rd row row for tray -->
+            <!--  3rd row row for tray  -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
                   Focusable="True"
@@ -141,7 +141,7 @@
                     <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <!-- Side bar AppState Buttons -->
+                <!--  Side bar AppState Buttons  -->
                 <local:MpAppModeButtonGridView Grid.Row="0"
                                                Grid.Column="0"
                                                Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"

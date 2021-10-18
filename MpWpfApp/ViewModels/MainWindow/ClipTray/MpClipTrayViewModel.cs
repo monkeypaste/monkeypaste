@@ -65,20 +65,7 @@ namespace MpWpfApp {
 
         public MpWpfQueryInfo QueryInfo { get; set; }
         #region View Models
-
-        //private ObservableCollection<MpClipTileViewModel> _clipTileViewModels = new ObservableCollection<MpClipTileViewModel>();
-        //public ObservableCollection<MpClipTileViewModel> Items {
-        //    get {                
-        //        return _clipTileViewModels;
-        //    }
-        //    set {
-        //        if (_clipTileViewModels != value) {
-        //            _clipTileViewModels = value;
-        //            OnPropertyChanged(nameof(Items));
-        //        }
-        //    }
-        //}
-
+        
         public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
         public List<MpClipTileViewModel> SelectedItems {
@@ -104,13 +91,13 @@ namespace MpWpfApp {
         public MpClipTileViewModel PrimaryItem {
             get {
                 if (SelectedItems.Count == 0) {
-                    return FirstItem;
+                    return HeadItem;
                 }
                 return SelectedItems[0];
             }
         }
 
-        public MpClipTileViewModel FirstItem {
+        public MpClipTileViewModel HeadItem {
             get {
                 if(Items.Count == 0) {
                     return null;
@@ -119,8 +106,14 @@ namespace MpWpfApp {
             }
         }
 
-        public List<MpClipTileViewModel> NewItems { get; set; } = new List<MpClipTileViewModel>();
-
+        public MpClipTileViewModel TailItem {
+            get {
+                if (Items.Count == 0) {
+                    return null;
+                }
+                return Items[Items.Count-1];
+            }
+        }
 
         public List<MpContentItemViewModel> SelectedContentItemViewModels {
             get {
@@ -365,7 +358,6 @@ namespace MpWpfApp {
         public event EventHandler OnUiRefreshRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
-        public event EventHandler<int> OnItemsChanged;
         #endregion
 
         #region Public Methods
@@ -387,21 +379,13 @@ namespace MpWpfApp {
         }
 
         public void InitQueryInfo() {
-            QueryInfo = new MpWpfQueryInfo();
-            QueryInfo.InfoChanged += _queryInfo_InfoChanged;
-            //_queryInfo_InfoChanged(this, new EventArgs());
-        }
-
-        public void RecycleItem(MpClipTileViewModel ctvm) {
-            RecycleItem(Items.IndexOf(ctvm));
-        }
-
-        public void RecycleItem(int itemIdx) {
-            //
-            if(itemIdx < 0 || itemIdx >= Items.Count) {
-                throw new Exception($"Cannot recycle out of bounds ({Items.Count}) index ({itemIdx})");
+            if(QueryInfo == null) {
+                QueryInfo = new MpWpfQueryInfo();
+                QueryInfo.InfoChanged += _queryInfo_InfoChanged;
+                //_queryInfo_InfoChanged(this, new EventArgs());
             }
         }
+
 
         private void _queryInfo_InfoChanged(object sender, EventArgs e) {
             MpConsole.WriteLine("Query info changed");
@@ -438,10 +422,9 @@ namespace MpWpfApp {
                 return;
             }
             foreach (var nci in _newModels) {
+                await Items[Items.Count - 1].InitializeAsync(nci);
                 Items.Move(Items.Count - 1, 0);
-                await Items[0].InitializeAsync(nci);
             }
-            NotifyItemsChanged(_newModels.Count);
             _newModels.Clear();
             MpTagTrayViewModel.Instance.RefreshAllCounts();
             ResetClipSelection();
@@ -463,13 +446,7 @@ namespace MpWpfApp {
         public void RequestUiRefresh() {
             OnUiRefreshRequest?.Invoke(this, null);
         }
-
-        public void NotifyItemsChanged(int count) {
-            OnItemsChanged?.Invoke(this, count);
-        }
-        #endregion
-
-       
+        #endregion      
 
         public void UpdateSortOrder(bool fromModel = false) {            
             if (fromModel) {
@@ -561,9 +538,9 @@ namespace MpWpfApp {
             }
             IsBusy = true;
 
-            _filterIds = await MpCopyItemProvider.Instance.QueryForIds(tagId, sortColumn, isDescending, manualSortOrderLookup);
+            _filterIds = await MpDataModelProvider.Instance.QueryForIds(tagId, sortColumn, isDescending, manualSortOrderLookup);
             
-            var page_cil = await MpCopyItemProvider.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
+            var page_cil = await MpDataModelProvider.Instance.GetPageAsync(tagId, start, count, sortColumn, isDescending, manualSortOrderLookup);
                                    
             //Items = new ObservableCollection<MpClipTileViewModel>(page_cil.Select(x => CreateClipTileViewModel(x)));
             BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
@@ -866,12 +843,12 @@ namespace MpWpfApp {
             }
 
             return d;
-            //awaited in MainWindowViewModel.HideWindow
+            //awaited in MpMainWindowViewModel.Instance.HideWindow
         }
 
         public void PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
             if (IsAnyPastingTemplate) {
-                MainWindowViewModel.IsMainWindowLocked = false;
+                MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
             }
 
             //called in the oncompleted of hide command in mwvm
@@ -1049,13 +1026,13 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                Task.Run(() => {
+                Task.Run(async () => {
                     var ctvm = Items.Where(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id)).FirstOrDefault();
                     int tileIdx = Items.IndexOf(ctvm);
                     var civm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ci.Id).FirstOrDefault();
                     int itemIdx = ctvm.ItemViewModels.IndexOf(civm);
                     civm.IsSelected = false;
-                    if (ctvm.ItemViewModels.Count == 1 && ctvm.IsSelected && SelectedItems.Count == 1) {
+                    if (ctvm.ItemViewModels.Count == 1) {
                         //when removing multiple items wait until the last one to reset selection, prefering next item
                         ctvm.IsSelected = false;
                         int newSelectedIdx = tileIdx + 1;
@@ -1087,10 +1064,10 @@ namespace MpWpfApp {
                             }
                         }
                     }
-                    ctvm.ItemViewModels.RemoveAt(itemIdx);
+                    ctvm.ItemViewModels.Remove(civm);
                     if (ctvm.ItemViewModels.Count == 0) {
-                        ctvm.OnPropertyChanged(nameof(ctvm.IsPlaceholder));
-                        Items.Move(Items.IndexOf(ctvm), Items.Count - 1);
+                        Items.Move(tileIdx, Items.Count - 1);
+                        await ctvm.InitializeAsync(null);
                     }
                 });
             }
@@ -1137,8 +1114,7 @@ namespace MpWpfApp {
                         if (ci.Id == 0) {
                             ci.WriteToDatabase();
                         }
-                        var nctvm = new MpClipTileViewModel(this, ci);
-                        NewItems.Add(nctvm);
+                        _newModels.Add(ci);
                         //AddNewTiles();
                     } else {
                         MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
@@ -1320,7 +1296,7 @@ namespace MpWpfApp {
 
             if (MpMainWindowViewModel.IsMainWindowOpen) {
                 //occurs during hotkey paste and set in ctvm.GetPastableRichText
-                MainWindowViewModel.HideWindowCommand.Execute(pasteDataObject);
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
             } else if (pasteDataObject != null) {
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
@@ -1362,7 +1338,7 @@ namespace MpWpfApp {
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
             IsPastingSelected = true;
-            MainWindowViewModel.HideWindowCommand.Execute(true);
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
             IsPastingSelected = false;
         }
 
@@ -1523,8 +1499,8 @@ namespace MpWpfApp {
                     }
                 }
             }
-            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
-            MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
         }
 
         private RelayCommand _assignHotkeyCommand;
@@ -1730,7 +1706,7 @@ namespace MpWpfApp {
                         var clonedCopyItem = (MpCopyItem)ivm.CopyItem.Clone();
                         clonedCopyItem.WriteToDatabase();
                         //var ctvm = new MpClipTileViewModel(clonedCopyItem);
-                        //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
+                        //MpMainWindowViewModel.Instance.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                         //this.Add(ctvm);
                         await RefreshTiles();
                         var ctvm = GetContentItemViewModelById(clonedCopyItem.Id);

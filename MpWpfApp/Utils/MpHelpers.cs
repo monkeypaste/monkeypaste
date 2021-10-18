@@ -175,7 +175,7 @@ namespace MpWpfApp {
             return matchRangeList;
         }
 
-        public TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+        public TextRange FindStringRangeFromPosition(TextPointer position, string matchStr,  bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {
                 return null;
             }
@@ -268,112 +268,157 @@ namespace MpWpfApp {
             //}
             return null;
         }
-        /* The idea is to find the offset of the first character (IndexOf) and 
-         * then to find the TextPointer at this index (but by counting only text characters).
-         * 
-         * Good solution, but there is a minor problem. GetTextRunLength does not consider \r and \n characters. 
-         * If you have those in searchRange.Text then the resulting TextRange will be ahead of the correct 
-         * position by the number of new line characters*/
 
-        public TextRange FindTextInRange(TextRange searchRange, string searchText) {
-            int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
-            if (offset < 0)
-                return null;  // Not found
-
-            var start = GetTextPositionAtOffset(searchRange.Start, offset);
-            TextRange result = new TextRange(start, GetTextPositionAtOffset(start, searchText.Length));
-
-            return result;
-        }
-
-        public TextPointer GetTextPositionAtOffset(TextPointer position, int characterCount) {
-            while (position != null) {
-                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
-                    int count = position.GetTextRunLength(LogicalDirection.Forward);
-                    if (characterCount <= count) {
-                        return position.GetPositionAtOffset(characterCount);
-                    }
-
-                    characterCount -= count;
-                }
-
-                TextPointer nextContextPosition = position.GetNextContextPosition(LogicalDirection.Forward);
-                if (nextContextPosition == null)
-                    return position;
-
-                position = nextContextPosition;
+        public async Task<List<TextRange>> FindStringRangesFromPositionAsync(TextPointer position, string matchStr, CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal, bool isCaseSensitive = false) {
+            if (string.IsNullOrEmpty(matchStr)) {
+                return null;
             }
-
-            return position;
-        }
-
-        //public TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
-        //    while (position != null) {
-        //        var dir = LogicalDirection.Forward;
-        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-        //            dir = LogicalDirection.Backward;
-        //        }
-        //        string textRun = isCaseSensitive ? position.GetTextInRun(dir) : position.GetTextInRun(dir).ToLower();
-
-        //        // Find the starting index of any substring that matches "str".
-        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
-        //        if (indexInRun >= 0) {
-        //            if (dir == LogicalDirection.Forward) {
-        //                return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
-        //            } else {
-        //                return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - str.Length));
-        //            }
-        //        }
-        //        position = position.GetNextContextPosition(dir);
-        //    }
-        //    // position will be null if "word" is not found.
-        //    return null;
-        //}
-
-        public TextRange FindStringRangeFromPosition2(TextPointer position, string str, bool isCaseSensitive = false)             {
-            for (;
-             position != null;
-             position = position.GetNextContextPosition(LogicalDirection.Forward)) {                
-                string textRun = string.Empty;
-                int indexInRun = -1;
-                if (isCaseSensitive) {
-                    textRun = position.GetTextInRun(LogicalDirection.Forward);
-                    indexInRun = textRun.IndexOf(str, StringComparison.CurrentCulture);
-                } else {
-                    textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
-                    indexInRun = textRun.IndexOf(str.ToLower(), StringComparison.CurrentCulture);
-                }
-                if (indexInRun >= 0) {
-                    position = position.GetPositionAtOffset(indexInRun);
-                    if (position != null) {
-                        TextPointer nextPointer = position.GetPositionAtOffset(str.Length);
-                        return new TextRange(position, nextPointer);
-                        //lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+            var orgPosition = position;
+            TextPointer nextDocPosition = null;
+            var matchRangeList = new List<TextRange>();
+            TextSelection rtbSelection = null;
+            var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
+            if (rtb != null) {
+                rtbSelection = rtb.Selection;
+            }
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                while (position != null && !ct.IsCancellationRequested) {
+                    var hlr = await FindStringRangeFromPositionAsync(position, matchStr, ct, dp, isCaseSensitive);
+                    if (hlr == null) {
+                        if (nextDocPosition != null) {
+                            position = nextDocPosition;
+                            nextDocPosition = null;
+                            continue;
+                        }
+                        break;
+                    } else {
+                        matchRangeList.Add(hlr);
+                        if (!hlr.End.IsInSameDocument(orgPosition)) {
+                            var phl = (Hyperlink)FindParentOfType(hlr.End.Parent, typeof(Hyperlink));
+                            if (phl == null) {
+                                phl = (MpTemplateHyperlink)FindParentOfType(hlr.End.Parent, typeof(MpTemplateHyperlink));
+                            }
+                            nextDocPosition = phl.ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
+                        }
+                        position = hlr.End;
                     }
                 }
+            },dp);
+            if (rtbSelection != null) {
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
-            return null;
+            return matchRangeList;
         }
 
-        public string PlainTextToRtf2(string input) {
-            //first take care of special RTF chars
-            StringBuilder backslashed = new StringBuilder(input);
-            backslashed.Replace(@"\", @"\\");
-            backslashed.Replace(@"{", @"\{");
-            backslashed.Replace(@"}", @"\}");
-
-            // then convert the string char by char
-            StringBuilder sb = new StringBuilder();
-            foreach (char character in backslashed.ToString()) {
-                if (character <= 0x7f) {
-                    sb.Append(character);
-                } else {
-                    sb.Append("\\u" + Convert.ToUInt32(character) + "?");
+        public async Task<TextRange> FindStringRangeFromPositionAsync(TextPointer position, string matchStr, CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal, bool isCaseSensitive = false) {
+            if (string.IsNullOrEmpty(matchStr)) {
+                return null;
+            }
+            int curIdx = 0;
+            //TextSelection rtbSelection = null;
+            //var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
+            //if (rtb != null) {
+            //    rtbSelection = rtb.Selection;
+            //}
+            TextPointer postOfUiElement = null;
+            TextPointer startPointer = null;
+            TextRange matchRange = null;
+            StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                while (matchRange == null && (position != null || postOfUiElement != null)) {
+                    if (ct.IsCancellationRequested) {
+                        break;
+                    }
+                    if (position == null) {
+                        position = postOfUiElement;
+                        postOfUiElement = null;
+                    }
+                    if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+                        if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
+                            var iuc = (InlineUIContainer)FindParentOfType(position.Parent, typeof(InlineUIContainer));
+                            var hl = (Hyperlink)iuc.Parent;
+                            var tb = (iuc.Child as Border).Child as TextBlock;
+                            postOfUiElement = hl.ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
+                            position = tb.ContentStart;
+                            continue;
+                        }
+                        position = position.GetNextContextPosition(LogicalDirection.Forward);
+                        continue;
+                    }
+                    var runStr = position.GetTextInRun(LogicalDirection.Forward);
+                    if (string.IsNullOrEmpty(runStr)) {
+                        position = position.GetNextContextPosition(LogicalDirection.Forward);
+                        continue;
+                    }
+                    //only concerned with current character of match string
+                    int runIdx = runStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
+                    if (runIdx == -1) {
+                        //if no match found reset search
+                        curIdx = 0;
+                        if (startPointer == null) {
+                            position = position.GetNextContextPosition(LogicalDirection.Forward);
+                        } else {
+                            //when no match somewhere after first character reset search to the position AFTER beginning of last partial match
+                            position = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                            startPointer = null;
+                        }
+                        continue;
+                    }
+                    if (curIdx == 0) {
+                        //beginning of range found at runIdx
+                        startPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+                    }
+                    if (curIdx == matchStr.Length - 1) {
+                        //each character has been matched
+                        var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+                        if (!startPointer.IsInSameDocument(endPointer)) {
+                            endPointer = ((Hyperlink)FindParentOfType(endPointer.Parent, typeof(Hyperlink))).ElementEnd;
+                        }
+                        //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
+                        if (isCaseSensitive) {
+                            while (endPointer != null && !new TextRange(startPointer, endPointer).Text.Contains(matchStr)) {
+                                if (ct.IsCancellationRequested) {
+                                    //trigger break out of parent loop
+                                    endPointer = null;
+                                    break;
+                                }
+                                endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                            }
+                        } else {
+                            while (endPointer != null && !new TextRange(startPointer, endPointer).Text.ToLower().Contains(matchStr.ToLower())) {
+                                if (ct.IsCancellationRequested) {
+                                    //trigger break out of parent loop
+                                    endPointer = null;
+                                    break;
+                                }
+                                endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                            }
+                        }
+                        if (endPointer == null) {
+                            break;
+                            //return null;
+                        }
+                        while (startPointer != null && new TextRange(startPointer, endPointer).Text.Length > matchStr.Length) {
+                            startPointer = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                        }
+                        if (startPointer == null) {
+                            break;
+                            //return null;
+                        }
+                        matchRange = new TextRange(startPointer, endPointer);
+                    } else {
+                        //prepare loop for next match character
+                        curIdx++;
+                        //iterate position one offset AFTER match offset
+                        position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+                    }
                 }
-            }
-            return sb.ToString();
+            },dp);
+            //if (rtbSelection != null) {
+            //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            //}
+            return matchRange;
         }
-
 
         public bool IsStringQuillText(string str) {
             if(string.IsNullOrEmpty(str)) {
@@ -764,27 +809,28 @@ namespace MpWpfApp {
         }
 
         public List<Key> GetModKeyDownList() {
-            var downModKeyList = new List<Key>();
-            if(Keyboard.IsKeyDown(Key.LeftCtrl)) {
-                downModKeyList.Add(Key.LeftCtrl);
-            }
-            if (Keyboard.IsKeyDown(Key.RightCtrl)) {
-                downModKeyList.Add(Key.LeftCtrl);
-            }
-            if (Keyboard.IsKeyDown(Key.LeftShift)) {
-                downModKeyList.Add(Key.LeftShift);
-            }
-            if (Keyboard.IsKeyDown(Key.RightShift)) {
-                downModKeyList.Add(Key.LeftShift);
-            }
-            if (Keyboard.IsKeyDown(Key.LeftAlt)) {
-                downModKeyList.Add(Key.LeftAlt);
-            }
-            if (Keyboard.IsKeyDown(Key.RightAlt)) {
-                downModKeyList.Add(Key.LeftAlt);
-            }
-
-            return downModKeyList;
+            return RunOnMainThread<List<Key>>(() => {
+                var downModKeyList = new List<Key>();
+                if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
+                    downModKeyList.Add(Key.LeftCtrl);
+                }
+                if (Keyboard.IsKeyDown(Key.RightCtrl)) {
+                    downModKeyList.Add(Key.LeftCtrl);
+                }
+                if (Keyboard.IsKeyDown(Key.LeftShift)) {
+                    downModKeyList.Add(Key.LeftShift);
+                }
+                if (Keyboard.IsKeyDown(Key.RightShift)) {
+                    downModKeyList.Add(Key.LeftShift);
+                }
+                if (Keyboard.IsKeyDown(Key.LeftAlt)) {
+                    downModKeyList.Add(Key.LeftAlt);
+                }
+                if (Keyboard.IsKeyDown(Key.RightAlt)) {
+                    downModKeyList.Add(Key.LeftAlt);
+                }
+                return downModKeyList;
+            });
         }
 
         public bool IsEscapeKeyDown() {
@@ -792,9 +838,9 @@ namespace MpWpfApp {
         }
 
         public bool IsMultiSelectKeyDown() {
-            var downModKeyList = GetModKeyDownList().Where(x => x == Key.LeftCtrl || x == Key.RightCtrl || x == Key.LeftShift || x == Key.RightShift).ToList();
-            return downModKeyList.Count > 0;
+            return GetModKeyDownList().Any(x => x == Key.LeftCtrl || x == Key.RightCtrl || x == Key.LeftShift || x == Key.RightShift);
         }
+
         public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f,precision);
         }

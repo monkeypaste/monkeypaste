@@ -23,11 +23,11 @@ namespace MpWpfApp {
 
         public Visibility AppModeColumnVisibility {
             get {
-                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                if(MpMainWindowViewModel.Instance == null || MpMainWindowViewModel.Instance.ClipTrayViewModel == null) {
                     return Visibility.Visible;
                 }
 
-                return MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
+                return MpMainWindowViewModel.Instance.ClipTrayViewModel.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -241,10 +241,10 @@ namespace MpWpfApp {
 
         private void UpdateAppendMode() {
             if (IsInAppendMode &&
-               MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count == 1 &&
-               MainWindowViewModel.ClipTrayViewModel.SelectedItems[0] != MainWindowViewModel.ClipTrayViewModel.VisibleItems[0]) {
-                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.Items.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedItems[0]);
-                MainWindowViewModel.ClipTrayViewModel.Items.Move(selectedIdx, 0);
+               MpMainWindowViewModel.Instance.ClipTrayViewModel.SelectedItems.Count == 1 &&
+               MpMainWindowViewModel.Instance.ClipTrayViewModel.SelectedItems[0] != MpMainWindowViewModel.Instance.ClipTrayViewModel.VisibleItems[0]) {
+                int selectedIdx = MpMainWindowViewModel.Instance.ClipTrayViewModel.Items.IndexOf(MpMainWindowViewModel.Instance.ClipTrayViewModel.SelectedItems[0]);
+                MpMainWindowViewModel.Instance.ClipTrayViewModel.Items.Move(selectedIdx, 0);
             }
         }
         #endregion
@@ -294,7 +294,7 @@ namespace MpWpfApp {
                 return false;
             }
             //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused && MainWindowViewModel.ClipTrayViewModel.SelectedItems.Count <= 1;
+            return !IsAppPaused && MpMainWindowViewModel.Instance.ClipTrayViewModel.SelectedItems.Count <= 1;
         }
         private void ToggleAppendMode() {
             IsInAppendMode = !IsInAppendMode;

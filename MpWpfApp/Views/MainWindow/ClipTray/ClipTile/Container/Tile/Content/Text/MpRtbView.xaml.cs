@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace MpWpfApp {
@@ -35,17 +37,28 @@ namespace MpWpfApp {
         public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
         public MpRtbView() {
-            if(rtbId < 0) {
-                rtbId = RTB_COUNT++;
-                InitializeComponent();
-                Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
-            }
+            rtbId = RTB_COUNT++;
+            InitializeComponent();
+            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
         }      
 
+        public void SizeContainerToContent() {
+            var rtbvm = DataContext as MpContentItemViewModel;
+            rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
+            var cilv = this.GetVisualAncestor<MpContentListView>();
+            cilv.UpdateAdorner();
+
+            var rtbl = cilv.GetVisualDescendents<RichTextBox>();
+            double totalHeight = rtbl.Sum(x => x.ActualHeight) + MpMeasurements.Instance.ClipTileEditToolbarHeight + MpMeasurements.Instance.ClipTileDetailHeight;
+
+            var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
+            ctcv.ExpandBehavior.Resize(totalHeight);
+
+            var sv = cilv.ContentListBox.GetScrollViewer();
+            sv.InvalidateScrollInfo();
+        }
+
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            if (rtbId == 0 || rtbId == 3) {
-                rtbId = rtbId;
-            }
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
                 if(rtbivm.IsPlaceholder) {
                     return;
@@ -57,14 +70,13 @@ namespace MpWpfApp {
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
                 }
-                CreateHyperlinks();
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    await CreateHyperlinksAsync();
+                });
             }
         }
 
         private void Rtb_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(rtbId == 0 || rtbId == 3) {
-                rtbId = rtbId;
-            }
             if (e.OldValue != null && e.OldValue is MpContentItemViewModel ocivm) {
                 ocivm.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
                 ocivm.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
@@ -77,6 +89,12 @@ namespace MpWpfApp {
                     ncivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                     ncivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
                     ncivm.OnSyncModels += Rtbivm_OnSyncModels;
+
+                    if(e.OldValue != null) {
+                        MpHelpers.Instance.RunOnMainThread(async () => {
+                            await CreateHyperlinksAsync();
+                        });
+                    }
                 }
             }
         }
@@ -90,8 +108,8 @@ namespace MpWpfApp {
             }
         }
 
-        private void Rtbivm_OnSyncModels(object sender, EventArgs e) {
-            SyncModels();
+        private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
+            await SyncModelsAsync();
         }
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -131,11 +149,7 @@ namespace MpWpfApp {
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
             if (rtbvm.IsEditingContent && e.Changes.Count > 0) {
-                
-                //rtbvm.HasViewChanged = true;
-                rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
-                var cilv = this.GetVisualAncestor<MpContentListView>();
-                cilv.UpdateAdorner();
+                SizeContainerToContent();
             }
         }
 
@@ -167,8 +181,7 @@ namespace MpWpfApp {
             if (e.Key == Key.Space && civm.IsEditingContent) {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     // TODO Update regex hyperlink matches (but ignore current ones??)
-                    //await ClearHyperlinks();
-                    //await CreateHyperlinks();
+                    await SyncModelsAsync();
                 });
             } 
         }
@@ -176,7 +189,7 @@ namespace MpWpfApp {
         #region Template/Hyperlinks
 
 
-        public void SyncModels() {
+        public async Task SyncModelsAsync() {
             var rtbvm = DataContext as MpContentItemViewModel;
 
             //clear any search highlighting when saving the document then restore after save
@@ -184,13 +197,13 @@ namespace MpWpfApp {
 
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
             //Rtb.UpdateLayout();
-            ClearHyperlinks();
+            await ClearHyperlinks();
 
             rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
 
-            rtbvm.CopyItem.WriteToDatabase();
+            await rtbvm.CopyItem.WriteToDatabaseAsync();
 
-            CreateHyperlinks();
+            await CreateHyperlinksAsync();
 
             //Rtb.UpdateLayout();
 
@@ -199,42 +212,24 @@ namespace MpWpfApp {
 
             //MpHelpers.Instance.RunOnMainThread(UpdateLayout);
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
-
-            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
-            if (scvml.Count > 0) {
-                rtbvm.ShortcutKeyString = scvml[0].KeyString;
-            }
         }
 
-        public async Task<List<Hyperlink>> GetAllHyperlinksFromDoc() {
-            var hlList = new List<Hyperlink>();
-            if (Rtb == null) {
-                return hlList;
-            }
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                for (TextPointer position = Rtb.Document.ContentStart;
-                    position != null && position.CompareTo(Rtb.Document.ContentEnd) <= 0;
-                    position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                    if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                        var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
-                        if (hl != null && !hlList.Contains(hl)) {
-                            hlList.Add(hl);
-                        }
+        public async Task ClearHyperlinks() {
+            var rtbvm = Rtb.DataContext as MpContentItemViewModel;
+            var tvm_ToRemove = new List<MpTemplateViewModel>();
+            if(rtbvm.TemplateCollection.Templates.Count != TemplateViews.Count) {
+                // means user deleted template in view
+                foreach(var tvm in rtbvm.TemplateCollection.Templates) {
+                    //if there are no views for a template then it all instances were deleted
+                    if(!TemplateViews.Any(x=>x.TemplateTextBlock.Text == tvm.TemplateDisplayValue)) {
+                        tvm_ToRemove.Add(tvm);
                     }
                 }
-                //foreach (var thl in TemplateLookUp) {
-                //    hlList.AddRange(thl.Value);
-                //}
-            });
-            return hlList;
-        }
-
-        public void ClearHyperlinks() {
-            // MpRtbTemplateCollectionClearTemplateViews(Rtb);
-            //var rtbSelection = Rtb?.Selection;
-            //var hlList = await GetAllHyperlinksFromDoc();
-            var rtbvm = Rtb.DataContext as MpContentItemViewModel;
-            MpConsole.WriteLine("Clearing Hyperlinks");
+                foreach(var tvm2r in tvm_ToRemove) {
+                    rtbvm.TemplateCollection.Templates.Remove(tvm2r);
+                }
+                await Task.WhenAll(tvm_ToRemove.Select(x => x.CopyItemTemplate.DeleteFromDatabaseAsync()));
+            }
             foreach (var hl in TemplateViews) {
                 hl.Clear();
             }
@@ -242,7 +237,6 @@ namespace MpWpfApp {
             if (rtbvm.TemplateCollection != null) {
                 rtbvm.TemplateCollection.Templates.Clear();
             }
-
             //var hll = new List<Hyperlink>();
             //foreach (var p in Rtb.Document.Blocks.OfType<Paragraph>()) {
             //    foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
@@ -259,65 +253,17 @@ namespace MpWpfApp {
             //}
         }
 
-        public async Task<List<MpCopyItemTemplate>> GetTemplatesFromDbAsync() {
-            var rtbvm = DataContext as MpContentItemViewModel;
-            var tl = new List<MpCopyItemTemplate>();
-            if (rtbvm.CopyItem == null) {
-                return tl;
-            }
-            var result = await MpDb.Instance.GetItemsAsync<MpCopyItemTemplate>();
-            return result.Where(x => x.CopyItemId == rtbvm.CopyItem.Id).ToList();
-        }
-
-        public List<MpCopyItemTemplate> GetTemplatesFromDb() {
-            var rtbvm = DataContext as MpContentItemViewModel;
-            var tl = new List<MpCopyItemTemplate>();
-            if (rtbvm.CopyItem == null) {
-                return tl;
-            }
-            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
-                                .Where(x => x.CopyItemId == rtbvm.CopyItem.Id)
-                                .ToList();
-        }
-
-        public string GetTemplateRegExMatchString() {
-            var outStr = string.Empty;
-            foreach (var t in GetTemplatesFromDb()) {
-                if (outStr.Contains(t.TemplateToken)) {
-                    continue;
-                }
-                outStr += t.TemplateToken + "|";
-            }
-            //if (!string.IsNullOrEmpty(outStr)) {
-            //    return outStr.Remove(outStr.Length - 1, 1);
-            //}
-            return outStr;
-        }
-
-        public async Task<string> GetTemplateRegExMatchStringAsync() {
-            var templates = await GetTemplatesFromDbAsync();
-            var outStr = string.Empty;
-            foreach (var t in templates) {
-                if (outStr.Contains(t.TemplateToken)) {
-                    continue;
-                }
-                outStr += t.TemplateToken + "|";
-            }
-            //if (!string.IsNullOrEmpty(outStr)) {
-            //    return outStr.Remove(outStr.Length - 1, 1);
-            //}
-            return outStr;
-        }
-
-        public void CreateHyperlinks() {
-            MpConsole.WriteLine("Creating Hyperlinks");
+        public async Task CreateHyperlinksAsync(CancellationTokenSource cts = null, DispatcherPriority dp = DispatcherPriority.Normal) {
             var rtbvm = Rtb.DataContext as MpContentItemViewModel;
             if (Rtb == null || rtbvm.CopyItem == null) {
                 return;
             }
+            if(cts == null) {
+                cts = new CancellationTokenSource();
+            }
             var rtbSelection = Rtb?.Selection;
-            string templateRegEx = GetTemplateRegExMatchString();
-            var templates = GetTemplatesFromDb();
+            var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);
+            string templateRegEx = string.Join("|", templateModels.Select(x => x.TemplateToken));
             string pt = rtbvm.CopyItemData.ToPlainText(); //Rtb.Document.ToPlainText();
             for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
                 var linkType = (MpSubTextTokenType)i;
@@ -340,13 +286,13 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
-                            var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
+                            var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, cts.Token, dp, true);
                             if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
                             }
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = templates.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
+                                var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
                                 var thl = MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                             } else {
                                 var matchRun = new Run(matchRange.Text);

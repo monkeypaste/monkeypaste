@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +20,22 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
     public partial class MpContentListView : UserControl {
+        private static int _ContentListViewCount = 0;
+        private int _clvIdx = -1;
+
         private MpContentItemSeperatorAdorner seperatorAdorner;
         public AdornerLayer SeperatorAdornerLayer;
 
         public MpContentListView() {
+            if(_clvIdx < 0) {
+                _clvIdx = _ContentListViewCount++;
+            }
             InitializeComponent();
         }
 
         public void UpdateAdorner() {
+            //NOTE DISABLED IN ADORNER RENDER
+
             if(seperatorAdorner == null) {
                 //selection changed is called before load so adorner is null
                 return;
@@ -81,6 +91,8 @@ namespace MpWpfApp {
                 octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
                 octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
                 octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
+                octvm.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
+                octvm.ItemViewModels.CollectionChanged -= ItemViewModels_CollectionChanged;
             }
             if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
                 if(!nctvm.IsPlaceholder) {
@@ -88,8 +100,21 @@ namespace MpWpfApp {
                     nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                     nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
                     nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
+                    nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
+                    nctvm.ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
                 }                
             } 
+        }
+
+        
+
+        private void ItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            var ctvm = DataContext as MpClipTileViewModel;
+            MpConsole.WriteLine($"Tile List ({_clvIdx}) collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
+
+            for (int i = 0; i < ContentListBox.Items.Count; i++) {
+                ContentListBox.GetListBoxItem(i).DataContext = ctvm.ItemViewModels[i];
+            }
         }
 
         private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -102,6 +127,11 @@ namespace MpWpfApp {
                     break;
             }
             
+        }
+
+        private void Octvm_OnListBoxRefresh(object sender, EventArgs e) {
+            UpdateLayout();
+            ContentListBox.Items.Refresh();
         }
 
         private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -129,7 +159,6 @@ namespace MpWpfApp {
         public void UpdateUi() {
             UpdateAdorner();
             this.UpdateLayout();
-            //ContentListBox.Items.Refresh();
         }
 
         private void ContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {

@@ -53,7 +53,7 @@ namespace MpWpfApp {
             if (e.ClickCount == 2) {
                 ttvm.RenameTagCommand.Execute(null);
             } else {
-                ttvm.SelectTagCommand.Execute(null);
+               // ttvm.SelectTagCommand.Execute(null);
             }
         }
 

@@ -7,14 +7,14 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpClipTileViewModelProvider : MpIItemsProvider<MpClipTileViewModel> {
-        public MpCopyItemProvider ModelProvider { get; set; }
+        public MpDataModelProvider ModelProvider { get; set; }
 
         private int _pageSize;
 
 
         public MpClipTileViewModelProvider(int pageSize) {
             _pageSize = pageSize;
-            ModelProvider = MpCopyItemProvider.Instance;
+            ModelProvider = MpDataModelProvider.Instance;
         }
 
         public void SetQueryInfo(MpQueryInfo info) {

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -413,22 +414,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand<object> _assignHotkeyCommand;
-        public ICommand AssignHotkeyCommand {
-            get {
-                if (_assignHotkeyCommand == null) {
-                    _assignHotkeyCommand = new RelayCommand<object>(AssignHotkey);
-                }
-                return _assignHotkeyCommand;
-            }
-        }
-        private void AssignHotkey(object args) {
-            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
-                this, 
-                "Select " + TagName, 
-                ShortcutKeyString, 
+        public IAsyncCommand<object> AssignHotkeyCommand => new AsyncCommand<object>(
+            async (args) => {
+                ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                this,
+                "Select " + TagName,
+                ShortcutKeyString,
                 SelectTagCommand, null);
-        }
+            });
 
         private RelayCommand<Brush> _changeColorCommand;
         public ICommand ChangeColorCommand {
@@ -472,7 +465,7 @@ namespace MpWpfApp {
         }
         private void RenameTag() {
             _originalTagName = TagName;
-            MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
             IsEditing = true;
         }
@@ -487,7 +480,7 @@ namespace MpWpfApp {
             }
         }
         private void SelectTag() {
-            MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
+            MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
             //((MpClipTileViewModelPagedSourceProvider)MpClipTrayViewModel.Instance.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
             //IsTextBoxFocused = true;

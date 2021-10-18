@@ -164,8 +164,6 @@ namespace MpWpfApp {
 
         #region Visibility 
 
-
-
         #endregion
 
         #region Layout
@@ -587,22 +585,6 @@ namespace MpWpfApp {
             });
         }
 
-        public void Initialize(MpCopyItem ci) {
-            if (ci.Source == null) {
-                ci.Source = MpDb.Instance.GetItem<MpSource>(ci.SourceId);
-            }
-            CopyItem = ci;
-
-            IsBusy = true;
-            IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
-
-            TemplateCollection = new MpTemplateCollectionViewModel(this);
-            TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
-
-            CycleDetailCommand.Execute(null);
-            IsBusy = false;
-        }
-
         public async Task InitializeAsync(MpCopyItem ci) {
             if (ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
@@ -778,6 +760,29 @@ namespace MpWpfApp {
 
 
         #region Db Events
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpShortcut sc) {
+                if(sc.CopyItemId == CopyItemId) {
+                    ShortcutKeyString = sc.KeyString;
+                }
+            }
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.CopyItemId == CopyItemId) {
+                    ShortcutKeyString = sc.KeyString;
+                }
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.CopyItemId == CopyItemId) {
+                    ShortcutKeyString = string.Empty;
+                }
+            }
+        }
         #endregion
 
         #endregion
@@ -958,22 +963,15 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
 
-        private RelayCommand _assignHotkeyToSubSelectedItemCommand;
-        public ICommand AssignHotkeyCommand {
-            get {
-                if (_assignHotkeyToSubSelectedItemCommand == null) {
-                    _assignHotkeyToSubSelectedItemCommand = new RelayCommand(AssignHotkeyToSubSelectedItem);
-                }
-                return _assignHotkeyToSubSelectedItemCommand;
-            }
-        }
-        private void AssignHotkeyToSubSelectedItem() {
-            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
-                this,
-                "Paste " + CopyItem.Title,
-                ShortcutKeyString,
-                 MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItem.Id);
-        }
+        public IAsyncCommand AssignHotkeyCommand => new AsyncCommand(
+            async () => {
+
+                ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                    this,
+                    "Paste " + CopyItem.Title,
+                    ShortcutKeyString,
+                     MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItem.Id);
+            });
 
         public ICommand RefreshDocumentCommand {
             get {

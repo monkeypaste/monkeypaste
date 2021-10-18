@@ -3,18 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpSearchBoxViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
-        <!-- Search Border -->
+        <!--  Search Border  -->
         <local:MpClipBorder x:Name="SearchTextBoxBorder"
                             DataContextChanged="SearchTextBoxBorder_DataContextChanged"
                             Grid.Column="0"
@@ -55,7 +56,7 @@
                          BorderThickness="0"
                          VerticalContentAlignment="Center"
                          Padding="0,0,0,0"
-                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"></TextBox>
+                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 <spinners:ucSpinnerApple x:Name="IsSearchingSpinner"
                                          Grid.Column="2"
                                          VerticalAlignment="Center"
@@ -96,7 +97,7 @@
                 </Button>
             </Grid>
         </local:MpClipBorder>
-        <!-- Search Navigation Border-->
+        <!--  Search Navigation Border  -->
         <local:MpClipBorder Grid.Column="1"
                             CornerRadius="10"
                             Visibility="{Binding SearchNavigationButtonPanelVisibility}"

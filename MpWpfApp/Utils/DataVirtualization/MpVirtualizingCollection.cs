@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// data bound to a suitable ItemsControl.
     /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public class MpVirtualizingCollection<T> : IList<T>, IList {
+    public class MpVirtualizingCollection<T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged {
         #region Constructors
 
         public MpVirtualizingCollection() : base() { }
@@ -534,10 +534,7 @@ namespace MpWpfApp {
 
         public void Load(IEnumerable<T> items) {
             throw new NotImplementedException();
-        }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
+        }        
 
         public IDisposable SuspendCount() {
             throw new NotImplementedException();
@@ -545,6 +542,65 @@ namespace MpWpfApp {
 
         public IDisposable SuspendNotifications() {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region INotifyCollectionChanged
+
+        /// <summary>
+        /// Occurs when the collection changes.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        /// <summary>
+        /// Raises the <see cref="E:CollectionChanged"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
+            NotifyCollectionChangedEventHandler h = CollectionChanged;
+            if (h != null)
+                h(this, e);
+        }
+
+        /// <summary>
+        /// Fires the collection reset event.
+        /// </summary>
+        protected void FireCollectionReset() {
+            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            OnCollectionChanged(e);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) {
+            PropertyChangedEventHandler h = PropertyChanged;
+            if (h != null)
+                h(this, e);
+        }
+
+        public virtual void OnPropertyChanged(string propertyName) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Fires the property changed event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        private void FirePropertyChanged(string propertyName) {
+            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
+            OnPropertyChanged(e);
         }
 
         #endregion

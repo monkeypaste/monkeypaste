@@ -7,18 +7,18 @@
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
              DataContext="{StaticResource ClipTrayViewModel}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel,IsDesignTimeCreatable=True}">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=True}">
     <Grid x:Name="ClipTrayGrid">
-        <AdornerDecorator>            
+        <AdornerDecorator>
             <local:MpMultiSelectListBox x:Name="ClipTray"
                                         DataContext="{Binding}"
                                         Visibility="{Binding ClipTrayVisibility}"
-                                        Width="{Binding MainWindowViewModel.ClipTrayWidth}"
-                                        Height="{Binding MainWindowViewModel.ClipTrayHeight}"
+                                        Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
                                         ItemsSource="{Binding Items}"
-                                        Loaded="ClipTray_Loaded" 
+                                        Loaded="ClipTray_Loaded"
                                         SelectionChanged="ClipTray_SelectionChanged"
                                         IsListBoxHorizontal="True"
                                         ScrollToSelectedItem="False"
@@ -30,9 +30,9 @@
                                         VerticalContentAlignment="Top"
                                         Background="Transparent"
                                         SelectionMode="Extended"
-                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.IsVirtualizing="False"
                                         VirtualizingPanel.ScrollUnit="Pixel"
-                                        VirtualizingPanel.VirtualizationMode="Recycling"         
+                                        VirtualizingPanel.VirtualizationMode="Recycling"
                                         VirtualizingStackPanel.CleanUpVirtualizedItem="ClipTray_CleanUpVirtualizedItem"
                                         ScrollViewer.ScrollChanged="ClipTray_ScrollChanged"
                                         ScrollViewer.CanContentScroll="False"
@@ -40,8 +40,8 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Behaviors>
-                    <local:MpDropBehavior x:Name="DropBehavior"/>    
-                </i:Interaction.Behaviors>                
+                    <local:MpDropBehavior x:Name="DropBehavior" />
+                </i:Interaction.Behaviors>
                 <local:MpMultiSelectListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
@@ -55,7 +55,7 @@
                         <Setter Property="HorizontalContentAlignment"
                                 Value="Left" />
                         <Setter Property="VerticalContentAlignment"
-                                Value="Top" />
+                                Value="Stretch" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -75,17 +75,22 @@
                     </Style>
                 </local:MpMultiSelectListBox.ItemContainerStyle>
                 <local:MpMultiSelectListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                    IsItemsHost="True"
-                                                    Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
+                    <ItemsPanelTemplate>
+                        <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                                
+                                    CanVerticallyScroll="False"
+                                    CanHorizontallyScroll="True"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Left"
+                                    IsItemsHost="True"
+                                    Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>
                     <DataTemplate>
-                        <local:MpClipTileContainerView Visibility="{Binding ItemVisibility}" 
+                        <local:MpClipTileContainerView Visibility="{Binding ItemVisibility}"
                                                        DataContext="{Binding}" />
-                            <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}" 
+                        <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
                                                   DataContext="{Binding}" />-->
                     </DataTemplate>
                 </local:MpMultiSelectListBox.ItemTemplate>

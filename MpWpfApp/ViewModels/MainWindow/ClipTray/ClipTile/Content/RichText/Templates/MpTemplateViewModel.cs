@@ -395,7 +395,7 @@ namespace MpWpfApp {
                     Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     if(!IsEditingTemplate) {
-                        Parent.Parent.RequestSyncModel();
+                        //Parent.Parent.RequestSyncModel();
                     }
                     break;
             }

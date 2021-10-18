@@ -33,12 +33,12 @@ namespace MonkeyPaste {
     }
 
 
-    public class MpCopyItemProvider : MpIItemsProvider<MpCopyItem> {
+    public class MpDataModelProvider : MpIItemsProvider<MpCopyItem> {
         #region Singleton Definition
-        private static readonly Lazy<MpCopyItemProvider> _Lazy = new Lazy<MpCopyItemProvider>(() => new MpCopyItemProvider());
-        public static MpCopyItemProvider Instance { get { return _Lazy.Value; } }
+        private static readonly Lazy<MpDataModelProvider> _Lazy = new Lazy<MpDataModelProvider>(() => new MpDataModelProvider());
+        public static MpDataModelProvider Instance { get { return _Lazy.Value; } }
         
-        private MpCopyItemProvider() {
+        private MpDataModelProvider() {
             //MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
             //MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
             //MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
@@ -218,6 +218,11 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task<List<MpShortcut>> GetAllShortcuts() {
+            string query = @"select * from MpShortcut";
+            var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
+            return result;
+        }
         #endregion
 
         public async Task<List<int>> QueryForIds(

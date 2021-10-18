@@ -39,15 +39,29 @@ namespace MpWpfApp {
             ctvm.IsHoveringOnTitleTextGrid = false;
         }
 
-        private void ClipTileTitleTextGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void ClipTileTitleTextGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
-            ctvm.IsEditingTitle = true;
-            e.Handled = true;
+            if(!ctvm.IsEditingTitle) {
+                ctvm.IsEditingTitle = true;
+                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+            }
+        }
+
+        private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+            var ctvm = DataContext as MpContentItemViewModel;
+            if(ctvm.IsEditingTitle) {
+                var tbr = new Rect(0, 0, ClipTileTitleTextBox.Width, ClipTileTitleTextBox.Height);
+                var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), ClipTileTitleTextBox);
+                if(!tbr.Contains(tb_mp)) {
+                    ctvm.IsEditingTitle = false;
+                }
+            }
         }
 
         private void ClipTileTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
             if (ClipTileTitleTextBox.Visibility == Visibility.Collapsed) {
+                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseClick -= ApplicationHook_MouseDown;
                 return;
             }
             if(ctvm != null) {

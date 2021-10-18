@@ -22,7 +22,6 @@
     </i:Interaction.Behaviors>
     <local:MpRtbView x:Name="EditorView"
                      BorderThickness="1"
-                     Focusable="True"
                      DataContext="{Binding}">
         <local:MpRtbView.BorderBrush>
             <DrawingBrush Viewport="0,0,7,7"

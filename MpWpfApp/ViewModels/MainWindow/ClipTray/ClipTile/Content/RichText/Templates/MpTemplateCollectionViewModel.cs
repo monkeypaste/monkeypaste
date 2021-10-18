@@ -207,6 +207,18 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Protected Methods
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                if(ci.Id == Parent.CopyItemId && Templates != null) {
+                    foreach(var cit in Templates) {
+                        await MpDb.Instance.DeleteItemAsync<MpCopyItemTemplate>(cit.CopyItemTemplate);
+                    }
+                }
+            }
+        }
+        #endregion
+
         #region Private Methods
 
         #region Selection Changed Handlers
