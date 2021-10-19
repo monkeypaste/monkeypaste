@@ -28,6 +28,7 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+
         #region Collections
 
         public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
@@ -41,11 +42,45 @@ namespace MpWpfApp {
 
         public static bool IsEmpty<T>(this IList<T> source) {
             return source.Count == 0;
+        }       
+        
+        //public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
+        //    var item = collection[oldIdx];
+        //    collection.RemoveAt(oldIdx);
+        //    collection.Insert(newIdx, item);
+        //}
+
+        public static ObservableCollection<TSource> Sort<TSource, TKey>(
+            this ObservableCollection<TSource> source,
+            Func<TSource, TKey> keySelector,
+            bool desc = false) where TSource : class {
+            if (source == null) {
+                return null;
+            }
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            for (int i = source.Count - 1; i >= 0; i--) {
+                for (int j = 1; j <= i; j++) {
+                    TSource o1 = source[j - 1];
+                    TSource o2 = source[j];
+                    int comparison = comparer.Compare(keySelector(o1), keySelector(o2));
+                    if (desc && comparison < 0) {
+                        source.Move(j, j - 1);
+                    } else if (!desc && comparison > 0) {
+                        source.Move(j - 1, j);
+                    }
+                }
+            }
+            return source;
         }
+
+        #endregion
+
+        #region Listbox/ListboxItem
 
         public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isListBoxHorizontal) {
             var points = new Point[2];
-            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) :lb.GetListBoxItemRect(index);
+            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) : lb.GetListBoxItemRect(index);
             if (!isListBoxHorizontal) {
                 itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
             }
@@ -77,30 +112,30 @@ namespace MpWpfApp {
             return points;
         }
 
-
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
             return lb.GetVisualDescendent<ScrollViewer>();
         }
 
         public static void UpdateExtendedSelection(this ListBox lb, int index) {
             /*
-            1    if the target item is not selected, select it
-            2    if Ctrl key is down, add target item to selection 
-            3    if Shift key is down
-            4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
-            5    else add item and all previous items
-            6    if the target item is selected de-select only if Ctrl key is down         
-            7    if neither ctrl nor shift are pressed clear any other selection
-            8    if the target item is selected
-            9    if Ctrl key is down, remove item from selection
-            10   if Shift key is down
-            11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
-            12   else remove any other item from selection
+                1    if the target item is not selected, select it
+                2    if Ctrl key is down, add target item to selection 
+                3    if Shift key is down
+                4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
+                5    else add item and all previous items
+                6    if the target item is selected de-select only if Ctrl key is down         
+                7    if neither ctrl nor shift are pressed clear any other selection
+                8    if the target item is selected
+                9    if Ctrl key is down, remove item from selection
+               10    if Shift key is down
+               11    if there is a previously selected item, clear selection and then add between target item and first previously selected item
+               12    else remove any other item from selection
             */
-            //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
-            //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
-            //    MpClipTrayViewModel.Instance.UpdateExtendedSelection(MpClipTrayViewModel.Instance.IndexOf(hctvm));
-            //}
+            if (lb.DataContext is MpContentItemViewModel civm) {
+                var ctr_lb = lb.GetVisualAncestor<ListBox>();
+                ctr_lb.UpdateExtendedSelection(civm.Parent.ItemIdx);
+            }
+
             bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
             bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
             var lbi = lb.GetListBoxItem(index);
@@ -180,36 +215,152 @@ namespace MpWpfApp {
                 }
             }
         }
-        
-        //public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
-        //    var item = collection[oldIdx];
-        //    collection.RemoveAt(oldIdx);
-        //    collection.Insert(newIdx, item);
-        //}
 
-        public static ObservableCollection<TSource> Sort<TSource, TKey>(
-            this ObservableCollection<TSource> source,
-            Func<TSource, TKey> keySelector,
-            bool desc = false) where TSource : class {
-            if (source == null) {
+        public static void UpdateExtendedSelection(this ListBoxItem lbi) {
+            int lbiIdx = lbi.GetListBoxItemIdx();
+            if(lbiIdx >= 0) {
+                lbi.GetParentListBox().UpdateExtendedSelection(lbiIdx);
+            }
+        }
+        public static bool IsListBoxItemVisible(this ListBox lb, int index) {
+            var lbi = lb.GetListBoxItem(index);
+            if (lbi != null && lbi.Visibility == Visibility.Visible) {
+                var lbir = lb.GetListBoxItemRect(index);
+                if (lbir.Left < lb.GetScrollViewer().HorizontalOffset) {
+                    return false;
+                }
+                if (lbir.Right > lb.GetListBoxRect().Right + lb.GetScrollViewer().HorizontalOffset) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
+            if (lb == null) {
                 return null;
             }
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
+            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+            //    return null;
+            //}
+            if (index < 0 || index >= lb.Items.Count) {
+                return null;
+            }
+            return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+        }
 
-            for (int i = source.Count - 1; i >= 0; i--) {
-                for (int j = 1; j <= i; j++) {
-                    TSource o1 = source[j - 1];
-                    TSource o2 = source[j];
-                    int comparison = comparer.Compare(keySelector(o1), keySelector(o2));
-                    if (desc && comparison < 0) {
-                        source.Move(j, j - 1);
-                    } else if (!desc && comparison > 0) {
-                        source.Move(j - 1, j);
+        public static ListBoxItem GetListBoxItem(this ListBox lb, object dataContext) {
+            if (lb == null) {
+                return null;
+            }
+            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+            //    return null;
+            //}
+
+            for (int i = 0; i < lb.Items.Count; i++) {
+                var lbi = lb.Items[i];
+                if (lbi == dataContext) {
+                    return lb.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+                }
+            }
+            return null;
+        }
+
+        public static int GetListBoxItemIdx(this ListBoxItem lbi) {
+            var lb = lbi.GetParentListBox();
+            return lb.ItemContainerGenerator.IndexFromContainer(lbi);
+        }
+
+        public static ListBox GetParentListBox(this ListBoxItem lbi) {
+            return lbi.GetVisualAncestor<ListBox>();
+        }
+
+        public static Rect GetListBoxItemRect(this ListBox lb, int index, bool ignoreScrollViewer = false) {
+            var lbi = lb.GetListBoxItem(index);
+            if (lbi == null || lbi.Visibility != Visibility.Visible) {
+                return new Rect();
+            }
+            Point origin = new Point();
+            if (ignoreScrollViewer && (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0)) {
+                origin = lbi.TranslatePoint(new Point(0, 0), lb.GetScrollViewer());
+            } else {
+                origin = lbi.TranslatePoint(new Point(0, 0), lb);
+            }
+            return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
+        }
+
+        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {
+            relativeTo = relativeTo == null ? lb : relativeTo;
+            var rl = new List<Rect>();
+            for (int i = 0; i < lb.Items.Count; i++) {
+                rl.Add(lb.GetListBoxItemRect(i));
+            }
+            return rl;
+        }
+
+        public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p) {
+            int idx = lb.GetItemIndexAtPoint(p);
+            return idx < 0 ? null : lb.GetListBoxItem(idx);
+        }
+
+        public static int GetItemIndexAtPoint(this ListBox lb, Point rp) {
+            var lbirl = lb.GetListBoxItemRects();
+            var lbir = lbirl.Where(x => x.Contains(rp)).FirstOrDefault();
+
+            int idx = lbirl.IndexOf(lbir);
+            if (idx < 0 && lb.Items.Count > 0) {
+                //point not over any item in listbox
+                //but this will still give either 0 or Count + 1 idx
+                Rect lbr = lb.GetListBoxRect();
+                if (lbr.Contains(rp)) {
+                    //point is still in listbox
+                    //get first and last lbi rect's
+                    var flbir = lb.GetListBoxItemRect(0);
+                    var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1);
+                    if (lb.GetOrientation() == Orientation.Horizontal) {
+                        if (rp.X >= 0 && rp.X <= flbir.Left) {
+                            return 0;
+                        }
+                        if (rp.X >= llbir.Right && rp.X <= lbr.Right) {
+                            return lb.Items.Count;
+                        }
+                    } else {
+                        if (rp.Y >= 0 && rp.Y <= flbir.Top) {
+                            return 0;
+                        }
+                        if (rp.Y >= llbir.Bottom && rp.Y <= lbr.Bottom) {
+                            return lb.Items.Count;
+                        }
                     }
                 }
             }
-            return source;
+            return idx;
         }
+
+        public static Orientation GetOrientation(this ListBox lb) {
+            var vsp = lb.GetVirtualItemsPanel();
+            if (vsp == null) {
+                return Orientation.Horizontal;
+            }
+            return vsp.Orientation;
+        }
+
+        public static VirtualizingStackPanel GetVirtualItemsPanel(this ListBox lb) {
+            DependencyObject dio = lb.ItemsPanel.LoadContent();
+            return dio?.GetVisualDescendent<VirtualizingStackPanel>();
+        }
+
+        public static Rect GetListBoxRect(this ListBox lb) {
+            if (lb == null) {
+                return new Rect();
+            }
+            return new Rect(new Point(0, 0), new Size(lb.ActualWidth, lb.ActualHeight));
+        }
+
+        #endregion
+
+        #region Visual Tree
 
         /// <summary>
         /// Gets the next ancestor element which is a drop target.
@@ -255,7 +406,7 @@ namespace MpWpfApp {
         public static T GetVisualAncestor<T>(this DependencyObject d)
             where T : class {
             var item = VisualTreeHelper.GetParent(d.FindVisualTreeRoot());
-            
+
             while (item != null) {
                 var itemAsT = item as T;
                 if (itemAsT != null) {
@@ -362,10 +513,6 @@ namespace MpWpfApp {
             yield break;
         }
 
-        #endregion
-
-        #region Visual Tree
-
         public static Rect RelativeBounds(this FrameworkElement fe, Visual rv = null) {
             if(fe == rv || rv == null) {
                 return fe.TransformToVisual(fe).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
@@ -377,135 +524,7 @@ namespace MpWpfApp {
                 return fe.TransformToDescendant(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
             }
             return fe.TransformToVisual(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
-        }
-
-        public static bool IsListBoxItemVisible(this ListBox lb, int index) {
-            var lbi = lb.GetListBoxItem(index);
-            if (lbi != null && lbi.Visibility == Visibility.Visible) {
-                var lbir = lb.GetListBoxItemRect(index);
-                if (lbir.Left < lb.GetScrollViewer().HorizontalOffset) {
-                    return false;
-                }
-                if (lbir.Right > lb.GetListBoxRect().Right + lb.GetScrollViewer().HorizontalOffset) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-
-        public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
-            if (lb == null) {
-                return null;
-            }
-            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-            //    return null;
-            //}
-            if (index < 0 || index >= lb.Items.Count) {
-                return null;
-            }
-            return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-        }
-
-        public static ListBoxItem GetListBoxItem(this ListBox lb, object dataContext) {
-            if (lb == null) {
-                return null;
-            }
-            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-            //    return null;
-            //}
-
-            for (int i = 0; i < lb.Items.Count; i++) {
-                var lbi = lb.Items[i];
-                if(lbi == dataContext) {
-                    return lb.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                }
-            }
-            return null;
-        }
-
-
-        public static Rect GetListBoxItemRect(this ListBox lb, int index, bool ignoreScrollViewer = false) {            
-            var lbi = lb.GetListBoxItem(index);
-            if (lbi == null || lbi.Visibility != Visibility.Visible) {
-                return new Rect();
-            }
-            Point origin = new Point(); 
-            if (ignoreScrollViewer && (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0)) {
-                origin = lbi.TranslatePoint(new Point(0, 0), lb.GetScrollViewer());
-            } else {
-                origin = lbi.TranslatePoint(new Point(0, 0), lb);
-            }
-            return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
-        }
-
-        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {
-            relativeTo = relativeTo == null ? lb : relativeTo;
-            var rl = new List<Rect>();
-            for(int i = 0;i < lb.Items.Count;i++) {
-                rl.Add(lb.GetListBoxItemRect(i)); 
-            }
-            return rl;
-        }
-
-        public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p) {
-            int idx = lb.GetItemIndexAtPoint(p);
-            return idx < 0 ? null : lb.GetListBoxItem(idx);
-        }
-
-        public static int GetItemIndexAtPoint(this ListBox lb, Point rp) {
-            var lbirl = lb.GetListBoxItemRects();
-            var lbir = lbirl.Where(x => x.Contains(rp)).FirstOrDefault();
-
-            int idx = lbirl.IndexOf(lbir);
-            if(idx < 0 && lb.Items.Count > 0) {
-                //point not over any item in listbox
-                //but this will still give either 0 or Count + 1 idx
-                Rect lbr = lb.GetListBoxRect();
-                if(lbr.Contains(rp)) {
-                    //point is still in listbox
-                    //get first and last lbi rect's
-                    var flbir = lb.GetListBoxItemRect(0); 
-                    var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1);
-                    if (lb.GetOrientation() == Orientation.Horizontal) {
-                        if(rp.X >= 0 && rp.X <= flbir.Left) {
-                            return 0;
-                        }                        
-                        if(rp.X >= llbir.Right && rp.X <= lbr.Right) {
-                            return lb.Items.Count;
-                        }
-                    } else {
-                        if (rp.Y >= 0 && rp.Y <= flbir.Top) {
-                            return 0;
-                        }
-                        if (rp.Y >= llbir.Bottom && rp.Y <= lbr.Bottom) {
-                            return lb.Items.Count;
-                        }
-                    }
-                }                
-            }
-            return idx;
-        }
-
-        public static Orientation GetOrientation(this ListBox lb) {
-            var vsp = lb.GetVirtualItemsPanel();
-            if(vsp == null) {
-                return Orientation.Horizontal;
-            }
-            return vsp.Orientation;
-        }
-
-        public static VirtualizingStackPanel GetVirtualItemsPanel(this ListBox lb) {
-            DependencyObject dio = lb.ItemsPanel.LoadContent();
-            return dio?.GetVisualDescendent<VirtualizingStackPanel>();
-        }
-
-        public static Rect GetListBoxRect(this ListBox lb) {
-            if (lb == null) {
-                return new Rect();
-            }
-            return new Rect(new Point(0, 0), new Size(lb.ActualWidth, lb.ActualHeight));
-        }
+        }        
 
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
             if(parent == null || child == null) {
@@ -611,6 +630,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Colors
+
         public static string ToHex(this Brush b) {
             if(b is SolidColorBrush scb) {
                 return scb.Color.ToHex();

@@ -633,6 +633,7 @@ using System.Speech.Synthesis;
                 } else {
                     SelectedItems.ForEach(x => x.IsSelected = false);
                 }
+                OnPropertyChanged(nameof(TileBorderBrush));
             }
         }
 
@@ -656,6 +657,14 @@ using System.Speech.Synthesis;
 
         public bool IsPlaceholder => ItemViewModels.Count == 0;
 
+        public int ItemIdx {
+            get {
+                if(Parent == null) {
+                    return 0;
+                }
+                return Parent.Items.IndexOf(this);
+            }
+        }
         #endregion
 
         #region Model

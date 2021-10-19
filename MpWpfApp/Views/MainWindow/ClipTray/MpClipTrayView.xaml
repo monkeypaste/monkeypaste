@@ -47,7 +47,7 @@
                                 Command="{Binding SelectAllCommand}" />
                 </local:MpMultiSelectListBox.InputBindings>
                 <local:MpMultiSelectListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
+                    <Style TargetType="{x:Type ListBoxItem}">                        
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected}" />
                         <Setter Property="FocusVisualStyle"
@@ -77,13 +77,12 @@
                 <local:MpMultiSelectListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                
                                     CanVerticallyScroll="False"
                                     CanHorizontallyScroll="True"
                                     VerticalAlignment="Stretch"
                                     HorizontalAlignment="Left"
                                     IsItemsHost="True"
-                                    Orientation="Horizontal" />
+                                    Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </local:MpMultiSelectListBox.ItemsPanel>
                 <local:MpMultiSelectListBox.ItemTemplate>

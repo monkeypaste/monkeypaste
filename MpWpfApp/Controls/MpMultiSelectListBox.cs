@@ -14,18 +14,31 @@ namespace MpWpfApp {
         }
 
         class MpMultiSelectListBoxItem : ListBoxItem {
-            //private bool _deferSelection = false;
+            private bool _deferSelection = false;
+            private bool _isDeferSelectionEnabled = true;
 
             protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-                //base.OnMouseLeftButtonDown(e);
-                SelectItem();
+                if(_isDeferSelectionEnabled) {
+                    OnDeferMouseLeftButtonDown(e);
+                } else {
+                    SelectItem();
+                }                
             }
 
             protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
-                base.OnMouseLeftButtonUp(e);
+                if (_isDeferSelectionEnabled) {
+                    OnDeferMouseLeftButtonDown(e);
+                } else {
+                    base.OnMouseLeftButtonUp(e);
+                }
             }
 
             protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) {
+                if(_isDeferSelectionEnabled) {
+                    base.OnMouseRightButtonDown(e);
+                    return;
+                } 
+
                 SelectItem();
                 if (DataContext is MpClipTileViewModel ctvm) {
                     if(ctvm.IsAnyEditingContent) {
@@ -47,15 +60,32 @@ namespace MpWpfApp {
                 ContextMenu.IsOpen = true;
             }
 
+            protected override void OnMouseLeave(MouseEventArgs e) {
+                if (_isDeferSelectionEnabled) {
+                    // abort deferred Down
+                    _deferSelection = false;
+                }
+                base.OnMouseLeave(e);
+            }
+
+            protected override void OnSelected(RoutedEventArgs e) {
+                if(_isDeferSelectionEnabled) {
+                    this.UpdateExtendedSelection();
+                } else {
+                    base.OnSelected(e);
+                }
+            }
+
             private void SelectItem() {
+                this.UpdateExtendedSelection();
+                return;
+
                 if (!IsSelected) {
                     IsSelected = true;
 
                     if (DataContext is MpClipTileViewModel ctvm) {
-                        ctvm.LastSelectedDateTime = DateTime.Now;
                         if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
                             ctvm.HeadItem.IsSelected = true;
-                            ctvm.HeadItem.LastSubSelectedDateTime = DateTime.Now;
                         }
                         if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
                             foreach (var octvm in ctvm.Parent.Items) {
@@ -65,22 +95,43 @@ namespace MpWpfApp {
                             }
                         }
                     } else if (DataContext is MpContentItemViewModel civm) {
-                        civm.LastSubSelectedDateTime = DateTime.Now;
                         if (civm.IsSelected && !civm.Parent.IsSelected) {
                             civm.Parent.IsSelected = true;
-                            civm.Parent.LastSelectedDateTime = DateTime.Now;
-
-                            if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                                foreach (var octvm in civm.Parent.Parent.Items) {
-                                    if (octvm != civm.Parent) {
-                                        octvm.ClearSelection();
-                                    }
+                        }
+                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                            foreach (var octvm in civm.Parent.Parent.Items) {
+                                if (octvm != civm.Parent) {
+                                    octvm.ClearSelection();
                                 }
                             }
-                        }
+                        } 
                     }
                 }
             }
+
+            private void OnDeferMouseLeftButtonDown(MouseButtonEventArgs e) {
+                if (e.ClickCount == 1 && IsSelected) {
+                    // the user may start a drag by clicking into selected items
+                    // delay destroying the selection to the Up event
+                    _deferSelection = true;
+                } else {
+                    base.OnMouseLeftButtonDown(e);
+                }
+            }
+
+            private void OnDeferMouseLeftButtonUp(MouseButtonEventArgs e) {
+                if (_deferSelection) {
+                    try {
+                        base.OnMouseLeftButtonDown(e);
+                    }
+                    finally {
+                        _deferSelection = false;
+                    }
+                }
+                base.OnMouseLeftButtonUp(e);
+            }
+
+            
         }
 
         public ScrollViewer ScrollViewer {
