@@ -69,17 +69,6 @@ namespace MpWpfApp {
             return nthl;
         }
 
-        public static Span ConvertToSpan(MpTemplateHyperlink thl) {
-            if (thl.DataContext != null && thl.DataContext is MpTemplateViewModel thlvm) {
-                //making Tag null lets unloaded event know not to remove this template instance
-                string tokenText = thlvm.TemplateDisplayValue;
-                thl.Tag = null;
-                thl.Inlines.Clear();
-                return new Span(new Run(tokenText), thl.ElementStart);
-            }
-            return null;
-        }
-
         public MpTemplateHyperlink() : base() {
             InitializeComponent();
         }
@@ -95,7 +84,7 @@ namespace MpWpfApp {
             rtbv.TemplateViews.Add(this);
 
             var thlvm = DataContext as MpTemplateViewModel;
-            MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
+            //MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
         }
 
         private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
@@ -104,9 +93,9 @@ namespace MpWpfApp {
                 rtbv.TemplateViews.Remove(this);
             }
 
-            var thlvm = DataContext as MpTemplateViewModel;
-            bool wasMovedToDiffTile = thlvm.HostClipTileViewModel.IsPlaceholder;
-            MpConsole.WriteLine("Ignoring unload");
+            //var thlvm = DataContext as MpTemplateViewModel;
+            //bool wasMovedToDiffTile = thlvm.HostClipTileViewModel.IsPlaceholder;
+            //MpConsole.WriteLine("Ignoring unload");
             //return;
             //if (Tag != null && !wasMovedToDiffTile) {
             //    MpConsole.WriteLine($"UNLOAD-DELETING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
@@ -160,7 +149,7 @@ namespace MpWpfApp {
 
         public void Clear() {
             var thlvm = DataContext as MpTemplateViewModel;
-            MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
+            //MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //flag Tag so unloaded doesn't delete
             Tag = null;
             string text = thlvm.TemplateDisplayValue;

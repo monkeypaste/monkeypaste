@@ -53,23 +53,24 @@
                 <Border Background="LightYellow"
                         BorderBrush="Yellow"
                         BorderThickness="1"
-                        CornerRadius="5" 
+                        CornerRadius="5"
                         Margin="10,5"
                         Padding="5"
                         Visibility="{Binding SelectedTemplate.IsValid, Converter={StaticResource BoolToVisibilityFlipConverter}}">
                     <DockPanel>
                         <Image Source="/Resources/Images/warning.png"
                                Stretch="Fill"
-                               DockPanel.Dock="Left"/>
-                        <TextBlock x:Name="TemplateNameValidationTextBlock" 
+                               DockPanel.Dock="Left" />
+                        <TextBlock x:Name="TemplateNameValidationTextBlock"
                                    DockPanel.Dock="Right"
-                                   Margin="5,0" Padding="5,0"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" 
-                           FontSize="14"
-                           FontStyle="Oblique"
-                           Foreground="Red"
-                           Text="{Binding SelectedTemplate.ValidationText}" />
+                                   Margin="5,0"
+                                   Padding="5,0"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   FontStyle="Oblique"
+                                   Foreground="Red"
+                                   Text="{Binding SelectedTemplate.ValidationText}" />
                     </DockPanel>
                 </Border>
             </StackPanel>

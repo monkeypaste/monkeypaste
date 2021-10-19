@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     /// <summary>
@@ -85,7 +87,8 @@ namespace MpWpfApp {
 
         #region ViewModel Events
 
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {            
+
             if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
                 octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
                 octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
@@ -95,14 +98,12 @@ namespace MpWpfApp {
                 octvm.ItemViewModels.CollectionChanged -= ItemViewModels_CollectionChanged;
             }
             if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-                if(!nctvm.IsPlaceholder) {
-                    nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
-                    nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
-                    nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
-                    nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
-                    nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
-                    nctvm.ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
-                }                
+                nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
+                nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
+                nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
+                nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
+                nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
+                nctvm.ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
             } 
         }
 
@@ -113,25 +114,31 @@ namespace MpWpfApp {
             MpConsole.WriteLine($"Tile List ({_clvIdx}) collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
 
             for (int i = 0; i < ContentListBox.Items.Count; i++) {
-                ContentListBox.GetListBoxItem(i).DataContext = ctvm.ItemViewModels[i];
+                var lbi = ContentListBox.GetListBoxItem(i);
+                if (lbi != null) {
+                    if (i < ctvm.ItemViewModels.Count) {
+                        lbi.DataContext = ctvm.ItemViewModels[i];
+                    }
+                }
             }
         }
 
         private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var rtbcvm = sender as MpClipTileViewModel;
-            switch(e.PropertyName) {
-                case nameof(rtbcvm.IsBusy):
-                    if(!rtbcvm.IsBusy) {
+            var ctvm = sender as MpClipTileViewModel;
+            switch (e.PropertyName) {
+                case nameof(ctvm.IsSelected):
+                    break;
+                case nameof(ctvm.IsBusy):
+                    if(!ctvm.IsBusy) {
                         UpdateLayout();
                     }
                     break;
-            }
-            
+            }            
         }
 
         private void Octvm_OnListBoxRefresh(object sender, EventArgs e) {
             UpdateLayout();
-            ContentListBox.Items.Refresh();
+            
         }
 
         private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -146,13 +153,25 @@ namespace MpWpfApp {
             ContentListBox?.ScrollIntoView(e);
         }
 
-
         #endregion
 
         public void Civm_OnScrollWheelRequest(object sender, int e) {
             var ctvm = DataContext as MpClipTileViewModel;
             if (ctvm.IsExpanded) {
-                ContentListBox.ScrollViewer.ScrollToVerticalOffset(ContentListBox.ScrollViewer.VerticalOffset + e);
+                var sv = ContentListBox.ScrollViewer as AnimatedScrollViewer;
+                //sv.IsHorizontal = false;
+
+                double yOffset = sv.VerticalOffset + e;
+                sv.ScrollToVerticalOffset(yOffset);
+                sv.TargetVerticalOffset = yOffset;
+                //var sv = ContentListBox.GetScrollViewer() as AnimatedScrollViewer;
+                //sv.V
+                //var grid = sv.Template.FindName("ScrollViewerControlTemplate1",sv) as Grid;
+
+                //var vsb = sv.Template.FindName("PART_VerticalScrollBar", grid) as ScrollBar;
+                //ScrollBar.ScrollToVerticalOffsetCommand.Execute(yOffset, vsb);
+
+                //ScrollBar.DeferScrollToVerticalOffsetCommand.Execute(yOffset, vsb);
             }
         }
 

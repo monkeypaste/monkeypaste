@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:spinners="clr-namespace:xamlSpinnersWPF"
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
@@ -82,13 +82,12 @@
                 <!--  Tile Detail Grid  -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
-                                            Margin="1"
                                             Height="{local:MpMeasurementsBinding ClipTileDetailHeight, Mode=OneWay}"
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
                 <local:MpContentListView x:Name="ContentListView"
-                                         DataContext="{Binding}" />
+                                         DataContext="{Binding}"/>
 
             </DockPanel>
             <!--  Overlays  -->

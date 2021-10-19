@@ -33,6 +33,15 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsCtrlDown { get; private set; } = false;
+
+        public bool IsAltDown { get; private set; } = false;
+
+        public bool IsShiftDown { get; private set; } = false;
+
+        public bool IsMultiSelectKeyDown => IsCtrlDown || IsAltDown || IsShiftDown;
+
         #endregion
 
         #endregion
@@ -100,106 +109,7 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
             return shortcutKeyString;
         }
-
-        private async Task AddAsync(object vm, string keys, ICommand command, object commandParameter) {
-            MpShortcutViewModel nscvm = null;
-            if (vm.GetType() == typeof(MpContentItemViewModel)) {
-                var ctvm = (MpContentItemViewModel)vm;
-                nscvm = new MpShortcutViewModel(
-                            this,
-                            new MpShortcut() {
-                                CopyItemId = ctvm.CopyItem.Id,
-                                TagId = 0,
-                                KeyString = keys,
-                                ShortcutName = "Paste " + ctvm.CopyItem.Title
-                            },
-                            command, commandParameter);
-            } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
-                var ttvm = (MpTagTileViewModel)vm;
-                nscvm = new MpShortcutViewModel(
-                            this,
-                            new MpShortcut() {
-                                CopyItemId = 0,
-                                TagId = ttvm.Tag.Id,
-                                KeyString = keys,
-                                ShortcutName = "Select " + ttvm.TagName
-                            },
-                            command, commandParameter);
-            } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
-                nscvm = (MpShortcutViewModel)vm;
-                nscvm.KeyString = keys;
-                nscvm.Command = command;
-                nscvm.CommandParameter = commandParameter;
-            }
-
-            if (nscvm != null) {
-                //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
-                List<MpShortcutViewModel> scvml = null;
-                if (vm.GetType() == typeof(MpShortcutViewModel)) {
-                    scvml = Shortcuts.Where(x => x.Command == nscvm.Command && x.CommandParameter == commandParameter).ToList();
-                } else {
-                    scvml = Shortcuts.Where(x => x.CopyItemId == nscvm.CopyItemId && x.TagId == nscvm.TagId && x.KeyString != nscvm.KeyString).ToList();
-                }
-                if (scvml != null && scvml.Count > 0) {
-                    var scvm = scvml[0];
-                    int scvmIdx = Shortcuts.IndexOf(scvm);
-                    Shortcuts[scvmIdx].Unregister();
-                    Shortcuts[scvmIdx].KeyString = nscvm.KeyString;
-                    nscvm = Shortcuts[scvmIdx];
-                } else {
-                    Shortcuts.Insert(Shortcuts.Count, nscvm);
-                }
-
-                await nscvm.RegisterAsync();
-
-                await nscvm.Shortcut.WriteToDatabaseAsync();
-            }
-        }
-
-        private async Task RemoveAsync(MpShortcutViewModel scvm) {
-            Shortcuts.Remove(scvm);
-            scvm.Unregister();
-            if (scvm.IsCustom()) {
-                await scvm.Shortcut.DeleteFromDatabaseAsync();
-                if (scvm.Shortcut.CopyItemId > 0) {
-                    var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(scvm.Shortcut.CopyItemId);
-                    if (ctvm != null) {
-                        ctvm.ShortcutKeyString = string.Empty;
-                    } else {
-                        foreach (var ctvm1 in MpClipTrayViewModel.Instance.Items) {
-                            foreach (var rtbvm in ctvm1.ItemViewModels) {
-                                if (rtbvm.CopyItem.Id == scvm.CopyItemId) {
-                                    rtbvm.ShortcutKeyString = string.Empty;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == scvm.Shortcut.TagId).ToList()) {
-                        ttvm.ShortcutKeyString = string.Empty;
-                    }
-                }
-            }
-        }
-
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            await Task.Run(async () => {
-                var scvmToRemoveTasks = new List<Task>();
-                if (e is MpCopyItem ci) {
-                    foreach (var scvmToRemove in Shortcuts.Where(x => x.CopyItemId == ci.Id).ToList()) {
-                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
-                    }
-
-                } else if (e is MpTag t) {
-                    foreach (var scvmToRemove in Shortcuts.Where(x => x.TagId == t.Id).ToList()) {
-                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
-                    }
-                }
-
-                await Task.WhenAll(scvmToRemoveTasks.ToArray());
-            });
-        }
-
+        
         public void UpdateInputGestures(ItemsControl cm) {
             foreach (var item in cm.Items) {
                 if (item is MenuItem mi) {
@@ -224,82 +134,95 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public MpShortcutViewModel GetShortcutViewModelById(int shortcutId) {
+            var scvml = Shortcuts.Where(x => x.ShortcutId == shortcutId).ToList();
+            if (scvml.Count > 0) {
+                return scvml[0];
+            }
+            return null;
+        }
+
         #endregion
 
-        #region Private Methods        
+        #region Protected Methods
+
+        #region Db Overrides
+
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            await Task.Run(async () => {
+                var scvmToRemoveTasks = new List<Task>();
+                if (e is MpCopyItem ci) {
+                    foreach (var scvmToRemove in Shortcuts.Where(x => x.CopyItemId == ci.Id).ToList()) {
+                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
+                    }
+
+                } else if (e is MpTag t) {
+                    foreach (var scvmToRemove in Shortcuts.Where(x => x.TagId == t.Id).ToList()) {
+                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
+                    }
+                }
+
+                await Task.WhenAll(scvmToRemoveTasks.ToArray());
+            });
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
         private async Task InitHotkeysAndMouseEvents() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 try {
                     GlobalHook = Hook.GlobalEvents();
                     ApplicationHook = Hook.AppEvents();
 
-                    #region Mouse
-                    GlobalHook.MouseMove += (s, e) => {
-                        if (!MpMainWindowViewModel.IsMainWindowOpen) {
-                            if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
-                           !Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                                if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                                    MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                                }
-                            }
-                        }
-                    };
 
-                    GlobalHook.MouseUp += (s, e) => {
-                        if (!MpMainWindowViewModel.IsMainWindowOpen) {
-                            if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
-                                if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
-                                    System.Windows.Forms.SendKeys.SendWait(" ^ c");
-                                }
-                            }
-                            if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
-                                if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
-                                    System.Windows.Forms.SendKeys.SendWait("^v");
-                                }
-                            }
-                        }
-                    };
+                    MpMainWindowViewModel.Instance.OnMainWindowShow += Mwvm_OnMainWindowShow;
+                    MpMainWindowViewModel.Instance.OnMainWindowHide += Mwvm_OnMainWindowHide;
 
-                    GlobalHook.MouseWheel += (s, e) => {
-                        if (!MpMainWindowViewModel.IsMainWindowOpen && !MpMainWindowViewModel.IsMainWindowOpening) {
-                            if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                                if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                                    MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                                }
-                            }
-                        }
-                    };
+                    //trigger global hooks since mainwindow init's hidden
+                    Mwvm_OnMainWindowHide(this, new EventArgs());
+
+                    #region Global
+
+
+                    //GlobalHook.OnCombination(new Dictionary<Combination, Action> {
+                    //{
+                    //    Combination.FromString("Control+V"), () => {
+                    //        try {
+                    //            string cbText = Clipboard.GetText();
+                    //            if(!string.IsNullOrEmpty(cbText)) {
+                    //                Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
+                    //                    foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
+                    //                        foreach(var rtbvm in ctvm.ItemViewModels) {
+                    //                            if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
+                    //                                rtbvm.CopyItem.PasteCount++;
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }),System.Windows.Threading.DispatcherPriority.Background);
+                    //            }
+                    //        } catch(Exception ex) {
+                    //            MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
+                    //        }
+                    //    }
+                    //}
+                    //});
+                    #endregion
+
+                    #region Local
+
+                    ApplicationHook.KeyPress += ApplicationHook_KeyPress;
+
+                    ApplicationHook.KeyDown += ApplicationHook_KeyDown;
+
+                    ApplicationHook.KeyUp += ApplicationHook_KeyUp;
 
                     #endregion
 
-                    #region Keyboard
-                    GlobalHook.OnCombination(new Dictionary<Combination, Action> {
-                        //{
-                        //    Combination.FromString("Control+V"), () => {
-                        //        try {
-                        //            string cbText = Clipboard.GetText();
-                        //            if(!string.IsNullOrEmpty(cbText)) {
-                        //                Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
-                        //                    foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
-                        //                        foreach(var rtbvm in ctvm.ItemViewModels) {
-                        //                            if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
-                        //                                rtbvm.CopyItem.PasteCount++;
-                        //                            }
-                        //                        }
-                        //                    }
-                        //                }),System.Windows.Threading.DispatcherPriority.Background);
-                        //            }
-                        //        } catch(Exception ex) {
-                        //            MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
-                        //        }
-
-                        //    }
-                        //}
-                    });
-
-                    ApplicationHook.KeyPress += (s, e) => {
-                        //AutoSearchOnKeyPress(e.KeyChar);
-                    };
                     #endregion
                 }
                 catch (Exception ex) {
@@ -308,40 +231,20 @@ namespace MpWpfApp {
             });
         }
 
-        private void AutoSearchOnKeyPress(char keyChar) {
-            var sbvm = MpSearchBoxViewModel.Instance;
+        private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
+            GlobalHook.MouseMove += GlobalHook_MouseMove;
+            GlobalHook.MouseUp += GlobalHook_MouseUp;
+            GlobalHook.MouseWheel += GlobalHook_MouseWheel;
+        }
 
-            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                return;
-            }
-            if (sbvm != null && sbvm.IsTextBoxFocused) {
-                return;
-            }
-            if (MpMainWindowViewModel.Instance.TagTrayViewModel != null && MpMainWindowViewModel.Instance.TagTrayViewModel.IsEditingTagName) {
-                return;
-            }
-            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
-                return;
-            }
-            if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
-                return;
-            }
-            if (!char.IsControl(keyChar)) {
-                foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {
-                }
-                if (!sbvm.IsTextBoxFocused) {
-                    if (sbvm.HasText) {
-                        sbvm.Text += keyChar.ToString();
-                    } else {
-                        sbvm.Text = keyChar.ToString();
-                    }
-                    sbvm.RequestSearchBoxFocus();
-                }
-            }
+        private void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
+            GlobalHook.MouseMove -= GlobalHook_MouseMove;
+            GlobalHook.MouseUp -= GlobalHook_MouseUp;
+            GlobalHook.MouseWheel -= GlobalHook_MouseWheel;
         }
 
         private async Task InitShortcuts() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
                 var scl = await MpDataModelProvider.Instance.GetAllShortcuts();
                 foreach (var sc in scl) {
@@ -478,16 +381,186 @@ namespace MpWpfApp {
             });
         }
 
-        public MpShortcutViewModel GetShortcutViewModelById(int shortcutId) {
-            var scvml = Shortcuts.Where(x => x.ShortcutId == shortcutId).ToList();
-            if(scvml.Count > 0) {
-                return scvml[0];
+        private void AutoSearchOnKeyPress(char keyChar) {
+            var sbvm = MpSearchBoxViewModel.Instance;
+
+            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
             }
-            return null;
+            if (sbvm != null && sbvm.IsTextBoxFocused) {
+                return;
+            }
+            if (MpMainWindowViewModel.Instance.TagTrayViewModel != null && MpMainWindowViewModel.Instance.TagTrayViewModel.IsEditingTagName) {
+                return;
+            }
+            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
+                return;
+            }
+            if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
+                return;
+            }
+            if (!char.IsControl(keyChar)) {
+                foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {
+                }
+                if (!sbvm.IsTextBoxFocused) {
+                    if (sbvm.HasText) {
+                        sbvm.Text += keyChar.ToString();
+                    } else {
+                        sbvm.Text = keyChar.ToString();
+                    }
+                    sbvm.RequestSearchBoxFocus();
+                }
+            }
         }
+
+        private async Task AddAsync(object vm, string keys, ICommand command, object commandParameter) {
+            MpShortcutViewModel nscvm = null;
+            if (vm.GetType() == typeof(MpContentItemViewModel)) {
+                var ctvm = (MpContentItemViewModel)vm;
+                nscvm = new MpShortcutViewModel(
+                            this,
+                            new MpShortcut() {
+                                CopyItemId = ctvm.CopyItem.Id,
+                                TagId = 0,
+                                KeyString = keys,
+                                ShortcutName = "Paste " + ctvm.CopyItem.Title
+                            },
+                            command, commandParameter);
+            } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
+                var ttvm = (MpTagTileViewModel)vm;
+                nscvm = new MpShortcutViewModel(
+                            this,
+                            new MpShortcut() {
+                                CopyItemId = 0,
+                                TagId = ttvm.Tag.Id,
+                                KeyString = keys,
+                                ShortcutName = "Select " + ttvm.TagName
+                            },
+                            command, commandParameter);
+            } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
+                nscvm = (MpShortcutViewModel)vm;
+                nscvm.KeyString = keys;
+                nscvm.Command = command;
+                nscvm.CommandParameter = commandParameter;
+            }
+
+            if (nscvm != null) {
+                //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
+                List<MpShortcutViewModel> scvml = null;
+                if (vm.GetType() == typeof(MpShortcutViewModel)) {
+                    scvml = Shortcuts.Where(x => x.Command == nscvm.Command && x.CommandParameter == commandParameter).ToList();
+                } else {
+                    scvml = Shortcuts.Where(x => x.CopyItemId == nscvm.CopyItemId && x.TagId == nscvm.TagId && x.KeyString != nscvm.KeyString).ToList();
+                }
+                if (scvml != null && scvml.Count > 0) {
+                    var scvm = scvml[0];
+                    int scvmIdx = Shortcuts.IndexOf(scvm);
+                    Shortcuts[scvmIdx].Unregister();
+                    Shortcuts[scvmIdx].KeyString = nscvm.KeyString;
+                    nscvm = Shortcuts[scvmIdx];
+                } else {
+                    Shortcuts.Insert(Shortcuts.Count, nscvm);
+                }
+
+                await nscvm.RegisterAsync();
+
+                await nscvm.Shortcut.WriteToDatabaseAsync();
+            }
+        }
+
+        private async Task RemoveAsync(MpShortcutViewModel scvm) {
+            Shortcuts.Remove(scvm);
+            scvm.Unregister();
+            if (scvm.IsCustom()) {
+                await scvm.Shortcut.DeleteFromDatabaseAsync();
+                if (scvm.Shortcut.CopyItemId > 0) {
+                    var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(scvm.Shortcut.CopyItemId);
+                    if (ctvm != null) {
+                        ctvm.ShortcutKeyString = string.Empty;
+                    } else {
+                        foreach (var ctvm1 in MpClipTrayViewModel.Instance.Items) {
+                            foreach (var rtbvm in ctvm1.ItemViewModels) {
+                                if (rtbvm.CopyItem.Id == scvm.CopyItemId) {
+                                    rtbvm.ShortcutKeyString = string.Empty;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == scvm.Shortcut.TagId).ToList()) {
+                        ttvm.ShortcutKeyString = string.Empty;
+                    }
+                }
+            }
+        }
+
+        #region Global Handlers
+
+        #region Global Mouse Handlers
+
+        private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if (!MpMainWindowViewModel.IsMainWindowOpen && !MpMainWindowViewModel.IsMainWindowOpening) {
+                if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                    }
+                }
+            }
+        }
+
+        private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
+               !Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                    }
+                }
+            }
+        }
+
+        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
+                        System.Windows.Forms.SendKeys.SendWait(" ^ c");
+                    }
+                }
+                if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
+                        System.Windows.Forms.SendKeys.SendWait("^v");
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Application Handlers
+
+
+        private void ApplicationHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
+            IsAltDown = e.Alt;
+            IsShiftDown = e.Shift;
+            IsCtrlDown = e.Control;
+        }
+
+        private void ApplicationHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
+            IsAltDown = e.Alt;
+            IsShiftDown = e.Shift;
+            IsCtrlDown = e.Control;
+        }
+
+        private void ApplicationHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
+            //AutoSearchOnKeyPress(e.KeyChar);
+        }
+
         #endregion
 
         #region Commands
         #endregion
     }
+
 }

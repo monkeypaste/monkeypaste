@@ -29,6 +29,8 @@ namespace MpWpfApp {
     public partial class MpRtbView : UserControl {
         private static int RTB_COUNT = 0;
 
+        private double _heightDiff = 0;
+
         private int rtbId = -1;
         public TextRange NewStartRange;
         public string NewOriginalText;
@@ -41,23 +43,6 @@ namespace MpWpfApp {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
         }      
-
-        public void SizeContainerToContent() {
-            var rtbvm = DataContext as MpContentItemViewModel;
-            rtbvm.OnPropertyChanged(nameof(rtbvm.CurrentSize));
-            var cilv = this.GetVisualAncestor<MpContentListView>();
-            cilv.UpdateAdorner();
-
-            var rtbl = cilv.GetVisualDescendents<RichTextBox>();
-            double totalHeight = rtbl.Sum(x => x.ActualHeight) + MpMeasurements.Instance.ClipTileEditToolbarHeight + MpMeasurements.Instance.ClipTileDetailHeight;
-
-            var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
-            ctcv.ExpandBehavior.Resize(totalHeight);
-
-            var sv = cilv.ContentListBox.GetScrollViewer();
-            sv.InvalidateScrollInfo();
-        }
-
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
                 if(rtbivm.IsPlaceholder) {
@@ -149,7 +134,7 @@ namespace MpWpfApp {
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
             if (rtbvm.IsEditingContent && e.Changes.Count > 0) {
-                SizeContainerToContent();
+                //SizeContainerToContent();
             }
         }
 
@@ -473,5 +458,15 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            if (civm != null && civm.Parent.IsExpanded) {
+                var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
+                if (ctcv != null && e.HeightChanged && !ctcv.ExpandBehavior.IsExpandingOrUnexpanding) {
+                    ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
+                }    
+            }         
+        }
     }
 }

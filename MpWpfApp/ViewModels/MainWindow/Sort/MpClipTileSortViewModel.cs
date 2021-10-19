@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
-using System.Threading.Tasks;
-using AsyncAwaitBestPractices.MVVM;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -108,11 +106,11 @@ namespace MpWpfApp {
                 PerformSelectedSortCommand.Execute(null);
             });
 
-        public IAsyncCommand PerformSelectedSortCommand => new AsyncCommand(
+        public ICommand PerformSelectedSortCommand => new AsyncRelayCommand(
                 async () => {
                     await MpClipTrayViewModel.Instance.RefreshTiles();
                 },
-                (args) => { 
+                () => { 
                     return !MpMainWindowViewModel.IsMainWindowLoading; 
                 });
           

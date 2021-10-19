@@ -29,7 +29,9 @@ namespace MpWpfApp {
 
             AnimatedScrollViewer scrollViewerHolder = base.GetTemplateChild("PART_AnimatedScrollViewer") as AnimatedScrollViewer;
             if (scrollViewerHolder != null) {
+                scrollViewerHolder.IsHorizontal = IsListBoxHorizontal;
                 AnimatedScrollViewer = scrollViewerHolder;
+                AnimatedScrollViewer.IsHorizontal = IsListBoxHorizontal;
             }
 
             this.SelectionChanged += new SelectionChangedEventHandler(AnimatedListBox_SelectionChanged);

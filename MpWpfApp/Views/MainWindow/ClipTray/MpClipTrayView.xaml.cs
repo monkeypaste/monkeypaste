@@ -58,10 +58,14 @@ namespace MpWpfApp {
             }
             //when items are 'added' the tail view thinks it has the new head view model
             //so set the tail view to the actual tail view model
-            //var olbi = ClipTray.GetListBoxItem(e.OldStartingIndex);
-            //olbi.DataContext = MpClipTrayViewModel.Instance.Items[e.OldStartingIndex];
+
             for (int i = 0; i < ClipTray.Items.Count; i++) {
-                ClipTray.GetListBoxItem(i).DataContext = MpClipTrayViewModel.Instance.Items[i];
+                var lbi = ClipTray.GetListBoxItem(i);
+                if (lbi != null) {
+                    if (i < MpClipTrayViewModel.Instance.Items.Count) {
+                        lbi.DataContext = MpClipTrayViewModel.Instance.Items[i];
+                    }
+                }
             }
         }
 
@@ -128,6 +132,10 @@ namespace MpWpfApp {
 
         private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {
             return;
+        }
+
+        private void ClipTray_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+
         }
     }
 }

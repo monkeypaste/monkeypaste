@@ -683,7 +683,7 @@ namespace MonkeyPaste {
             bool isNewDb = !File.Exists(dbPath);
 
             if(isNewDb) {
-                using (File.Create(dbPath)) ;
+                using (File.Create(dbPath));
             }
             CreateConnection();
 

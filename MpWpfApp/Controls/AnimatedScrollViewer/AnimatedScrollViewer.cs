@@ -21,6 +21,8 @@ namespace MpWpfApp
 
     public class AnimatedScrollViewer : ScrollViewer
     {
+        public bool IsHorizontal = true;
+
         #region PART items
         ScrollBar _aniVerticalScrollBar;
         ScrollBar _aniHorizontalScrollBar;
@@ -51,6 +53,7 @@ namespace MpWpfApp
             }
             _aniHorizontalScrollBar.ValueChanged += new RoutedPropertyChangedEventHandler<double>(HScrollBar_ValueChanged);
 
+            
             //this.PreviewMouseWheel += new MouseWheelEventHandler(CustomPreviewMouseWheel);
             this.PreviewMouseWheel += new MouseWheelEventHandler(CustomPreviewMouseWheelHorizontal);
             this.PreviewKeyDown += new KeyEventHandler(AnimatedScrollViewer_PreviewKeyDown);

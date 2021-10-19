@@ -136,8 +136,8 @@ namespace MpWpfApp {
                 ctr_lb.UpdateExtendedSelection(civm.Parent.ItemIdx);
             }
 
-            bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
-            bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
+            bool isCtrlDown = MpShortcutCollectionViewModel.Instance.IsCtrlDown;
+            bool isShiftDown = MpShortcutCollectionViewModel.Instance.IsShiftDown;
             var lbi = lb.GetListBoxItem(index);
             if (!lbi.IsSelected) {
                 ListBoxItem lastSelectedItem = null;

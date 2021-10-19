@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using MonkeyPaste;
+﻿using MonkeyPaste;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -64,7 +63,7 @@ namespace MpWpfApp {
             });
         }
 
-        private async void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
 
 

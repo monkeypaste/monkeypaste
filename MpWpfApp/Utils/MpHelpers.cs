@@ -808,39 +808,6 @@ namespace MpWpfApp {
             }
         }
 
-        public List<Key> GetModKeyDownList() {
-            return RunOnMainThread<List<Key>>(() => {
-                var downModKeyList = new List<Key>();
-                if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
-                    downModKeyList.Add(Key.LeftCtrl);
-                }
-                if (Keyboard.IsKeyDown(Key.RightCtrl)) {
-                    downModKeyList.Add(Key.LeftCtrl);
-                }
-                if (Keyboard.IsKeyDown(Key.LeftShift)) {
-                    downModKeyList.Add(Key.LeftShift);
-                }
-                if (Keyboard.IsKeyDown(Key.RightShift)) {
-                    downModKeyList.Add(Key.LeftShift);
-                }
-                if (Keyboard.IsKeyDown(Key.LeftAlt)) {
-                    downModKeyList.Add(Key.LeftAlt);
-                }
-                if (Keyboard.IsKeyDown(Key.RightAlt)) {
-                    downModKeyList.Add(Key.LeftAlt);
-                }
-                return downModKeyList;
-            });
-        }
-
-        public bool IsEscapeKeyDown() {
-            return Keyboard.IsKeyDown(Key.Escape);
-        }
-
-        public bool IsMultiSelectKeyDown() {
-            return GetModKeyDownList().Any(x => x == Key.LeftCtrl || x == Key.RightCtrl || x == Key.LeftShift || x == Key.RightShift);
-        }
-
         public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f,precision);
         }

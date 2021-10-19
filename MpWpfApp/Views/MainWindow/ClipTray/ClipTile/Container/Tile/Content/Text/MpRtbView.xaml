@@ -38,7 +38,8 @@
                  DataContextChanged="Rtb_DataContextChanged"
                  Unloaded="Rtb_Unloaded"
                  SelectionChanged="Rtb_SelectionChanged"
-                 TextChanged="Rtb_TextChanged">
+                 TextChanged="Rtb_TextChanged"
+                 SizeChanged="Rtb_SizeChanged">
         <RichTextBox.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                              Color="Blue" />

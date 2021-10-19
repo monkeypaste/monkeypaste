@@ -194,7 +194,7 @@ namespace MpWpfApp {
                             } else {
                                 dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
                             }
-                            dragModels[i].WriteToDatabase();
+                            await dragModels[i].WriteToDatabaseAsync();
                         }
                         foreach (var dragTile in dragTiles) {
                             //clean up tiles removed items and recycle if empty
@@ -207,8 +207,8 @@ namespace MpWpfApp {
                                 await dragTile.InitializeAsync(null);
                                 MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
-                                dragTile.UpdateSortOrder();
-                                dragTile.RequestListRefresh();
+                                await dragTile.UpdateSortOrderAsync();
+                                await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
                             }
                         }
                         await dropTile.InitializeAsync(dragModels[0]);
@@ -267,7 +267,7 @@ namespace MpWpfApp {
                             } else {
                                 dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
                             }
-                            dropModels[i].WriteToDatabase();
+                            await dropModels[i].WriteToDatabaseAsync();
                         }
                         //clean up all tiles with content dragged
                         //if tile has no items recycle it
@@ -282,8 +282,8 @@ namespace MpWpfApp {
                                 await dragTile.InitializeAsync(null);
                                 MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
                             } else {
-                                dragTile.UpdateSortOrder(); 
-                                dragTile.RequestListRefresh();
+                                await dragTile.UpdateSortOrderAsync();
+                                await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
                             }
                         }
                         await dropTile.InitializeAsync(dropModels[0]);
@@ -293,15 +293,12 @@ namespace MpWpfApp {
             });
         }
 
-
         private void Reset() {
             dropIdx = -1;
             dragTiles = null;
             lineAdorner.IsShowing = false;
             adornerLayer.Update();
             if(!isTrayDrop) {
-                var clv = AssociatedObject.GetVisualAncestor<MpContentListView>();
-                clv.UpdateAdorner();
                 (AssociatedObject.DataContext as MpClipTileViewModel).DropIdx = -1;
             }
             AssociatedObject.GetScrollViewer()?.ScrollToHome();

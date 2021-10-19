@@ -9,6 +9,9 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Reflection;
 using MonkeyPaste;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections;
 
 namespace MpWpfApp {    
     public abstract class MpViewModelBase<P> : INotifyPropertyChanged, IDisposable where P: class {
@@ -206,11 +209,38 @@ namespace MpWpfApp {
         //    remove { _propertyChanged_Old -= value; }
         //}
 
-        public virtual void OnPropertyChanged(string propertyName) {
+        public virtual void OnPropertyChanged(string propertyName) {            
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);
+            }
+
+            var prop = GetType().GetProperty(propertyName);
+
+            if (prop.GetCustomAttribute<MpAffectsChildAttribute>() != null) {
+                var childVmPropInfos = GetType()
+                                        .GetProperties()
+                                        .Where(x => x.GetCustomAttribute<MpChildViewModelAttribute>() != null);
+
+                foreach (var vmp in childVmPropInfos) {
+                    var cvma = vmp.GetCustomAttribute<MpChildViewModelAttribute>();
+                    if (cvma.IsCollection) {
+                        var items = (IEnumerable)vmp.GetValue(this);
+                        foreach (var item in items) {
+                            var onPropChangeMethod = cvma.ChildType.GetMethod(nameof(OnPropertyChanged));
+                            //var itemVm = Convert.ChangeType(item, cvma.ChildType);
+
+                            var depOnParentProps = item.GetType()
+                                                        .GetProperties()
+                                                        .Where(x => x.GetCustomAttribute<MpDependsOnParentAttribute>() != null);
+                            foreach (var depOnParentProp in depOnParentProps) {
+                                //((dynamic)item).OnPropertyChanged(depOnParentProp.Name);
+                                onPropChangeMethod.Invoke(item, new object[] { depOnParentProp.Name });
+                            }
+                        }
+                    }
+                }
             }
         }
 

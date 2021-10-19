@@ -79,6 +79,9 @@ namespace MpWpfApp {
         #region Mouse Events
 
         private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if(MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
             e.Handled = false;

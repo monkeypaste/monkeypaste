@@ -13,10 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using AsyncAwaitBestPractices.MVVM;
-using GalaSoft.MvvmLight.CommandWpf;
-using Gma.System.MouseKeyHook;
-using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.Toolkit.Mvvm.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -386,12 +383,12 @@ namespace MpWpfApp {
             }
         }
 
-        public IAsyncCommand ShowWindowCommand => new AsyncCommand(
+        public ICommand ShowWindowCommand => new AsyncRelayCommand(
             async () => {
                 IsMainWindowOpening = true;
                 await MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow,DispatcherPriority.Render);
             },
-            (args) => {
+            () => {
                 return (Application.Current.MainWindow == null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                    MpMainWindowViewModel.IsMainWindowLoading ||
@@ -440,7 +437,7 @@ namespace MpWpfApp {
             
         }
 
-        public IAsyncCommand<object> HideWindowCommand => new AsyncCommand<object>(
+        public ICommand HideWindowCommand => new AsyncRelayCommand<object>(
             async (args) => {
                 await MpHelpers.Instance.RunOnMainThreadAsync(async()=> { await HideWindow(args); });
             },

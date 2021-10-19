@@ -11,27 +11,25 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
-    <DockPanel x:Name="ContentListDockPanel" 
-                   Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                   Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}"
-                   HorizontalAlignment="Stretch"                   
-                   VerticalAlignment="Stretch">
+    <DockPanel x:Name="ContentListDockPanel"
+               Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch">
         <local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                        DockPanel.Dock="Top"
-                                        DataContext="{Binding PrimaryItem}" />
+                                    DockPanel.Dock="Top"
+                                    DataContext="{Binding PrimaryItem}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                             DockPanel.Dock="Bottom"
-                                             Visibility="{Binding IsAnyEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
-                                             DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                                         DockPanel.Dock="Bottom"
+                                         Visibility="{Binding IsAnyEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                              DockPanel.Dock="Bottom"
-                                              Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
-                                              DataContext="{Binding PrimaryItem.TemplateCollection}" />
-
+                                          DockPanel.Dock="Bottom"
+                                          Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
             <local:MpMultiSelectListBox x:Name="ContentListBox"
-                                        Loaded="ContentListBox_Loaded"         
-                                        SelectionChanged="ContentListBox_SelectionChanged"                                        
+                                        Loaded="ContentListBox_Loaded"
+                                        SelectionChanged="ContentListBox_SelectionChanged"
                                         VerticalAlignment="Stretch"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
@@ -44,50 +42,52 @@
                                         IsSynchronizedWithCurrentItem="False"
                                         ItemsSource="{Binding ItemViewModels}"
                                         Focusable="True"
-                                        IsEnabled="True"                                        
+                                        IsEnabled="True"
                                         VirtualizingPanel.IsVirtualizing="True"
                                         VirtualizingPanel.ScrollUnit="Pixel"
-                                        VirtualizingPanel.VirtualizationMode="Recycling"                                            
+                                        VirtualizingPanel.VirtualizationMode="Recycling"
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                         ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
                                         Padding="0">
-            <i:Interaction.Behaviors>
-                <local:MpDropBehavior x:Name="DropBehavior"/>
-            </i:Interaction.Behaviors>
-            <local:MpMultiSelectListBox.InputBindings>
-                <KeyBinding Gesture="Ctrl+A"
+                <i:Interaction.Behaviors>
+                    <local:MpDropBehavior x:Name="DropBehavior" />
+                </i:Interaction.Behaviors>
+                <local:MpMultiSelectListBox.InputBindings>
+                    <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
-            </local:MpMultiSelectListBox.InputBindings>
-            <local:MpMultiSelectListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True"
-                                            Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </local:MpMultiSelectListBox.ItemsPanel>
-            <local:MpMultiSelectListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected"
+                </local:MpMultiSelectListBox.InputBindings>
+                <local:MpMultiSelectListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True"
+                                                Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </local:MpMultiSelectListBox.ItemsPanel>
+                <local:MpMultiSelectListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected"
                                 Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                    <Setter Property="FocusVisualStyle"
+                        <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
-                    <Setter Property="HorizontalContentAlignment"
+                        <Setter Property="HorizontalContentAlignment"
                                 Value="Left" />
-                    <Setter Property="VerticalContentAlignment"
-                                Value="Top" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Stretch" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                     <StackPanel Orientation="Vertical">
                                         <ContentPresenter />
                                         <Border BorderThickness="0.75"
                                                 HorizontalAlignment="Stretch">
                                             <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                                                <DrawingBrush Viewport="0,0,8,8"
+                                                              ViewportUnits="Absolute"
+                                                              TileMode="Tile">
                                                     <DrawingBrush.Drawing>
                                                         <DrawingGroup>
-                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}" >
+                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
                                                                         <RectangleGeometry Rect="0,0,50,50" />
@@ -102,16 +102,16 @@
                                         </Border>
                                     </StackPanel>
                                 </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </local:MpMultiSelectListBox.ItemContainerStyle>
-            <local:MpMultiSelectListBox.ItemTemplate>
-                <DataTemplate>
-                        <local:MpContentItemView DataContext="{Binding}"/>                        
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </local:MpMultiSelectListBox.ItemContainerStyle>
+                <local:MpMultiSelectListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpContentItemView DataContext="{Binding}" />
                     </DataTemplate>
-            </local:MpMultiSelectListBox.ItemTemplate>
+                </local:MpMultiSelectListBox.ItemTemplate>
             </local:MpMultiSelectListBox>
         </AdornerDecorator>
-    </DockPanel>        
-</UserControl>  
+    </DockPanel>
+</UserControl>

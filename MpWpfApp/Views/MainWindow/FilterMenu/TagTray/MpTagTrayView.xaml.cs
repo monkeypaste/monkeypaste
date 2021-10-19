@@ -29,7 +29,7 @@ namespace MpWpfApp {
         }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (TagTray.ScrollViewer.ExtentWidth >= TagTray.MaxWidth) {
+            if (TagTray.GetScrollViewer().ExtentWidth >= TagTray.MaxWidth) {
                 TagTrayNavLeftButton.Visibility = Visibility.Visible;
                 TagTrayNavRightButton.Visibility = Visibility.Visible;
             } else {
@@ -43,11 +43,11 @@ namespace MpWpfApp {
         }
 
         private void TagTrayNavLeftButton_Click(object sender, RoutedEventArgs e) {
-            TagTray.ScrollViewer.ScrollToHorizontalOffset(TagTray.ScrollViewer.HorizontalOffset - 20);
+            TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset - 20);
         }
 
         private void TagTrayNavRightButton_Click(object sender, RoutedEventArgs e) {
-            TagTray.ScrollViewer.ScrollToHorizontalOffset(TagTray.ScrollViewer.HorizontalOffset + 20);
+            TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset + 20);
         }
 
         private void TagTrayContainerGrid_Loaded(object sender, RoutedEventArgs e) {

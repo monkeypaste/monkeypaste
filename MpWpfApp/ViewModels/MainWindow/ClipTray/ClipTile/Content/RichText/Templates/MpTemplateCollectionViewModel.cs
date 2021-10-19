@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using MonkeyPaste;
 using System;
 using System.Collections.Generic;

@@ -16,13 +16,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using AsyncAwaitBestPractices.MVVM;
+using Microsoft.Toolkit.Mvvm.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using GalaSoft.MvvmLight.CommandWpf;
-using GongSolutions.Wpf.DragDrop;
-using GongSolutions.Wpf.DragDrop.Utilities;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -739,7 +736,7 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(ctvm.IsSelected):
                     //if(ctvm.IsSelected && 
-                    //   !MpHelpers.Instance.IsMultiSelectKeyDown() &&
+                    //   !MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown &&
                     //   !IgnoreSelectionReset) {
                     //    //ignoreSelectionReset is set in refreshclips and drop behavior (probably others)
                     //    foreach(var octvm in SelectedItems) {
@@ -1247,11 +1244,11 @@ namespace MpWpfApp {
                 }
             });
 
-        private AsyncCommand<object> _hotkeyPasteCommand;
-        public IAsyncCommand<object> PerformHotkeyPasteCommand {
+        private AsyncRelayCommand<object> _hotkeyPasteCommand;
+        public ICommand PerformHotkeyPasteCommand {
             get {
                 if (_hotkeyPasteCommand == null) {
-                    _hotkeyPasteCommand = new AsyncCommand<object>(HotkeyPaste, CanHotkeyPaste);
+                    _hotkeyPasteCommand = new AsyncRelayCommand<object>(HotkeyPaste, CanHotkeyPaste);
                 }
                 return _hotkeyPasteCommand;
             }
@@ -1342,16 +1339,16 @@ namespace MpWpfApp {
             IsPastingSelected = false;
         }
 
-        private AsyncCommand _bringSelectedClipTilesToFrontCommand;
-        public IAsyncCommand BringSelectedClipTilesToFrontCommand {
+        private AsyncRelayCommand _bringSelectedClipTilesToFrontCommand;
+        public ICommand BringSelectedClipTilesToFrontCommand {
             get {
                 if (_bringSelectedClipTilesToFrontCommand == null) {
-                    _bringSelectedClipTilesToFrontCommand = new AsyncCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
+                    _bringSelectedClipTilesToFrontCommand = new AsyncRelayCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
                 }
                 return _bringSelectedClipTilesToFrontCommand;
             }
         }
-        private bool CanBringSelectedClipTilesToFront(object arg) {
+        private bool CanBringSelectedClipTilesToFront() {
             if (IsBusy ||
                 MpMainWindowViewModel.IsMainWindowLoading ||
                 VisibleItems.Count == 0 ||
@@ -1388,16 +1385,16 @@ namespace MpWpfApp {
             }
         }
 
-        private AsyncCommand _sendSelectedClipTilesToBackCommand;
-        public IAsyncCommand SendSelectedClipTilesToBackCommand {
+        private AsyncRelayCommand _sendSelectedClipTilesToBackCommand;
+        public ICommand SendSelectedClipTilesToBackCommand {
             get {
                 if (_sendSelectedClipTilesToBackCommand == null) {
-                    _sendSelectedClipTilesToBackCommand = new AsyncCommand(SendSelectedClipTilesToBack, CanSendSelectedClipTilesToBack);
+                    _sendSelectedClipTilesToBackCommand = new AsyncRelayCommand(SendSelectedClipTilesToBack, CanSendSelectedClipTilesToBack);
                 }
                 return _sendSelectedClipTilesToBackCommand;
             }
         }
-        private bool CanSendSelectedClipTilesToBack(object args) {
+        private bool CanSendSelectedClipTilesToBack() {
             if (IsBusy ||
                 MpMainWindowViewModel.IsMainWindowLoading ||
                 VisibleItems.Count == 0 ||
@@ -1434,7 +1431,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IAsyncCommand DeleteSelectedClipsCommand => new AsyncCommand(
+        public ICommand DeleteSelectedClipsCommand => new AsyncRelayCommand(
             async () => {
                 //int lastSelectedClipTileIdx = SelectedItems.Max(x => Items.IndexOf(x));
                 //foreach (var ct in SelectedItems) {
@@ -1454,7 +1451,7 @@ namespace MpWpfApp {
                 var deleteTasks = SelectedModels.Select(x => x.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks.ToArray());
             },
-            (args) => {
+            () => {
                 return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
                         SelectedModels.Count > 0 &&
                         !IsAnyEditingClipTile &&
@@ -1593,16 +1590,16 @@ namespace MpWpfApp {
 
 
 
-        private AsyncCommand _mergeSelectedClipsCommand;
-        public IAsyncCommand MergeSelectedClipsCommand {
+        private AsyncRelayCommand _mergeSelectedClipsCommand;
+        public ICommand MergeSelectedClipsCommand {
             get {
                 if (_mergeSelectedClipsCommand == null) {
-                    _mergeSelectedClipsCommand = new AsyncCommand(MergeSelectedClips, CanMergeSelectedClips);
+                    _mergeSelectedClipsCommand = new AsyncRelayCommand(MergeSelectedClips, CanMergeSelectedClips);
                 }
                 return _mergeSelectedClipsCommand;
             }
         }
-        private bool CanMergeSelectedClips(object args) {
+        private bool CanMergeSelectedClips() {
             //return true;
             if (SelectedItems.Count <= 1) {
                 return false;
@@ -1619,11 +1616,11 @@ namespace MpWpfApp {
             await Task.Delay(1);
         }
 
-        private AsyncCommand<string> _translateSelectedClipTextAsyncCommand;
-        public IAsyncCommand<string> TranslateSelectedClipTextAsyncCommand {
+        private AsyncRelayCommand<string> _translateSelectedClipTextAsyncCommand;
+        public ICommand TranslateSelectedClipTextAsyncCommand {
             get {
                 if (_translateSelectedClipTextAsyncCommand == null) {
-                    _translateSelectedClipTextAsyncCommand = new AsyncCommand<string>(TranslateSelectedClipTextAsync, CanTranslateSelectedClipText);
+                    _translateSelectedClipTextAsyncCommand = new AsyncRelayCommand<string>(TranslateSelectedClipTextAsync, CanTranslateSelectedClipText);
                 }
                 return _translateSelectedClipTextAsyncCommand;
             }
@@ -1656,16 +1653,16 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
-        private AsyncCommand _speakSelectedClipsCommand;
-        public IAsyncCommand SpeakSelectedClipsCommand {
+        private AsyncRelayCommand _speakSelectedClipsCommand;
+        public ICommand SpeakSelectedClipsCommand {
             get {
                 if (_speakSelectedClipsCommand == null) {
-                    _speakSelectedClipsCommand = new AsyncCommand(SpeakSelectedClipsAsync, CanSpeakSelectedClips);
+                    _speakSelectedClipsCommand = new AsyncRelayCommand(SpeakSelectedClipsAsync, CanSpeakSelectedClips);
                 }
                 return _speakSelectedClipsCommand;
             }
         }
-        private bool CanSpeakSelectedClips(object args) {
+        private bool CanSpeakSelectedClips() {
             return SelectedItems.All(x => x.IsTextItem);
         }
         private async Task SpeakSelectedClipsAsync() {
@@ -1697,7 +1694,7 @@ namespace MpWpfApp {
             }, DispatcherPriority.Background);
         }
 
-        public IAsyncCommand DuplicateSelectedClipsCommand => new AsyncCommand(
+        public ICommand DuplicateSelectedClipsCommand => new AsyncRelayCommand(
             async () => {
                 var tempSelectedClipTiles = SelectedItems;
                 ClearClipSelection();

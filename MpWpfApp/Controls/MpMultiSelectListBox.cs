@@ -15,7 +15,7 @@ namespace MpWpfApp {
 
         class MpMultiSelectListBoxItem : ListBoxItem {
             private bool _deferSelection = false;
-            private bool _isDeferSelectionEnabled = true;
+            private bool _isDeferSelectionEnabled = false;
 
             protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
                 if(_isDeferSelectionEnabled) {
@@ -74,11 +74,34 @@ namespace MpWpfApp {
                 } else {
                     base.OnSelected(e);
                 }
+                
+
+                if(_isDeferSelectionEnabled) {
+                    if (DataContext is MpClipTileViewModel ctvm) {
+                        ctvm.OnPropertyChanged(nameof(ctvm.IsSelected));
+                    }
+                    if (DataContext is MpContentItemViewModel civm) {
+                        civm.OnPropertyChanged(nameof(civm.IsSelected));
+                    }
+                }
+            }
+
+            protected override void OnUnselected(RoutedEventArgs e) {
+                base.OnUnselected(e);
+
+                if (_isDeferSelectionEnabled) {
+                    if (DataContext is MpClipTileViewModel ctvm) {
+                        ctvm.OnPropertyChanged(nameof(ctvm.IsSelected));
+                    }
+                    if (DataContext is MpContentItemViewModel civm) {
+                        civm.OnPropertyChanged(nameof(civm.IsSelected));
+                    }
+                }
             }
 
             private void SelectItem() {
-                this.UpdateExtendedSelection();
-                return;
+                //this.UpdateExtendedSelection();
+                //return;
 
                 if (!IsSelected) {
                     IsSelected = true;
@@ -87,7 +110,7 @@ namespace MpWpfApp {
                         if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
                             ctvm.HeadItem.IsSelected = true;
                         }
-                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
                             foreach (var octvm in ctvm.Parent.Items) {
                                 if (octvm != ctvm) {
                                     octvm.ClearSelection();
@@ -98,7 +121,7 @@ namespace MpWpfApp {
                         if (civm.IsSelected && !civm.Parent.IsSelected) {
                             civm.Parent.IsSelected = true;
                         }
-                        if (!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
                             foreach (var octvm in civm.Parent.Parent.Items) {
                                 if (octvm != civm.Parent) {
                                     octvm.ClearSelection();

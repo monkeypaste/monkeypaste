@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,8 +17,10 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
         private object _dc;
+        private double _defaultMainWindowTop = 0;
+        private double _initialExpandedMainWindowTop = 0;
 
-        private  Point _deltaSize = new Point();
+        public bool IsExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
@@ -37,21 +40,30 @@ namespace MpWpfApp {
             _dc = e.NewValue;
         }
 
-        public void Resize(double newContentHeight) {
+        public void Resize(double deltaHeight) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             if(!ctvm.IsExpanded) {
                 return;
             }
+            
             var mwvm = MpMainWindowViewModel.Instance;
-            newContentHeight = Math.Max(newContentHeight,MpMeasurements.Instance.ClipTileContentHeight);
-            double nchd = newContentHeight - ctvm.TileContentHeight;
 
-            mwvm.MainWindowTop -= nchd;
-            mwvm.ClipTrayHeight += nchd;
-            ctvm.TileBorderHeight += nchd;
-            ctvm.TileContentHeight += nchd;
+            mwvm.MainWindowTop -= deltaHeight;
+            mwvm.ClipTrayHeight += deltaHeight;
+            ctvm.TileBorderHeight += deltaHeight;
+            ctvm.TileContentHeight += deltaHeight;
 
-            _deltaSize.Y += nchd;
+            double boundAdjust = 0;
+            if(mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
+                boundAdjust = mwvm.MainWindowTop - MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
+            } else if(mwvm.MainWindowTop > _initialExpandedMainWindowTop) {
+                boundAdjust = mwvm.MainWindowTop - _initialExpandedMainWindowTop;
+            }
+
+            mwvm.MainWindowTop -= boundAdjust;
+            mwvm.ClipTrayHeight += boundAdjust;
+            ctvm.TileBorderHeight += boundAdjust;
+            ctvm.TileContentHeight += boundAdjust;
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.UpdateLayout();
@@ -77,11 +89,14 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
-            _deltaSize = new Point();
+            IsExpandingOrUnexpanding = true;
+
+            var _deltaSize = new Point();
 
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = MpMainWindowViewModel.Instance;
 
+            _defaultMainWindowTop = mwvm.MainWindowTop;
 
             //trigger app mode column to hide
             ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
@@ -96,24 +111,30 @@ namespace MpWpfApp {
             ctvm.IsSelected = true;
 
             //find max change in y so main window doesn't go past top of screen
-            double maxDeltaHeight = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
-            maxDeltaHeight = Math.Min(maxDeltaHeight, SystemParameters.PrimaryScreenHeight);
+            double maxDeltaHeight = SystemParameters.PrimaryScreenHeight - MpMeasurements.Instance.MainWindowMinHeight;
+            //add padding so user can click away from window
+            maxDeltaHeight -= MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
 
-            //calculate the diff of the tiles total content height and its current height without letting it get smaller
-            double deltaContentHeight = Math.Max(0,ctvm.TotalExpandedSize.Height - ctvm.ContainerSize.Height);
-            //adjust the difference for the toolbars shown after expansion
-            if (ctvm.IsAnyPastingTemplate) {
-                deltaContentHeight += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-            }
-            deltaContentHeight += MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            //only make tile larger otherwise leave standard height
+            if(ctvm.TotalExpandedContentSize.Height > ctvm.TileContentHeight) {
+                double actualHeightDiff = ctvm.TotalExpandedContentSize.Height - ctvm.TileContentHeight;
+
+                //adjust the difference for the toolbars shown after expansion
+                if (ctvm.IsAnyPastingTemplate) {
+                    _deltaSize.Y += MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
+                }
+                _deltaSize.Y += MpMeasurements.Instance.ClipTileEditToolbarHeight;
+
+                _deltaSize.Y = Math.Min(maxDeltaHeight, actualHeightDiff);
+            }            
 
             //make change in height so window doesn't get smaller but also doesn't extend past top of screen
             //_deltaSize.Height = Math.Min(maxDeltaHeight, deltaContentHeight);
             //sanity check so heights are the same after all that
-            _deltaSize.Y = Math.Max(MpMeasurements.Instance.MainWindowMinHeight, Math.Min(maxDeltaHeight, deltaContentHeight));
             _deltaSize.X =  mwvm.ClipTrayWidth - ctvm.TileBorderWidth - MpMeasurements.Instance.ClipTileExpandedMargin;
 
             mwvm.MainWindowTop -= _deltaSize.Y;
+            _initialExpandedMainWindowTop = mwvm.MainWindowTop;
 
             mwvm.ClipTrayHeight += _deltaSize.Y;
 
@@ -122,8 +143,6 @@ namespace MpWpfApp {
 
             ctvm.TileContentWidth += _deltaSize.X;
             ctvm.TileContentHeight += _deltaSize.Y;
-
-
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             if(clv != null) {
@@ -143,7 +162,7 @@ namespace MpWpfApp {
                     civ.EditorView.Rtb.Focus();
                     civ.EditorView.Rtb.CaretPosition = civ.EditorView.Rtb.Document.ContentStart;
 
-                    civ.EditorView.SizeContainerToContent();
+                    //civ.EditorView.SizeContainerToContent();
                 }
             }
 
@@ -151,18 +170,24 @@ namespace MpWpfApp {
                 var sv = clv.ContentListBox.GetScrollViewer();
                 sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-                sv.InvalidateScrollInfo();
+                //sv.InvalidateScrollInfo();
 
                 clv.UpdateAdorner();
+
+                //clv.ContentListBox.GetScrollViewer().PreviewMouseWheel += MpTileExpanderBehavior_MouseWheel;
             }
             //clv.ContentListBox.Items.Refresh();
 
             AssociatedObject.UpdateLayout();
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
-        }        
+
+            IsExpandingOrUnexpanding = false;
+        }
 
         public void Unexpand() {
+            IsExpandingOrUnexpanding = true;
+
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = MpMainWindowViewModel.Instance;
 
@@ -175,15 +200,19 @@ namespace MpWpfApp {
                 .Where(x => x != ctvm && !x.IsPlaceholder)
                 .ForEach(y => y.ItemVisibility = Visibility.Visible);
 
-            mwvm.MainWindowTop += _deltaSize.Y;
-            
-            mwvm.ClipTrayHeight -= _deltaSize.Y;
+            double temp = mwvm.MainWindowTop;
+            //this resets window top to standard 
+            MpMainWindowViewModel.Instance.SetupMainWindowRect();
+            double deltaHeight = _defaultMainWindowTop - temp;
 
-            ctvm.TileBorderWidth -= _deltaSize.X;
-            ctvm.TileBorderHeight -= _deltaSize.Y;
+            mwvm.MainWindowTop = _defaultMainWindowTop;
+            mwvm.ClipTrayHeight -= deltaHeight;
 
-            ctvm.TileContentWidth -= _deltaSize.X;
-            ctvm.TileContentHeight -= _deltaSize.Y;
+            ctvm.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
+            ctvm.TileBorderHeight -= deltaHeight;
+
+            ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
+            ctvm.TileContentHeight -= deltaHeight;
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             if(clv != null) {
@@ -209,16 +238,25 @@ namespace MpWpfApp {
                 });
 
                 clv.UpdateAdorner();
-            }
 
-            _deltaSize = new Point();
+                //clv.ContentListBox.GetScrollViewer().PreviewMouseWheel -= MpTileExpanderBehavior_MouseWheel;
+            }
             
+
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
+
+            IsExpandingOrUnexpanding = false;
         }
 
         private void ApplicationHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.Civm_OnScrollWheelRequest(this, -e.Delta);
+        }
+
+        private void MpTileExpanderBehavior_MouseWheel(object sender, MouseWheelEventArgs e) {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - (e.Delta / 10));
+            e.Handled = true;
         }
     }
 }

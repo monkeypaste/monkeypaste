@@ -10,8 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AsyncAwaitBestPractices.MVVM;
-using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Toolkit.Mvvm.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -162,6 +161,16 @@ namespace MpWpfApp {
         }
         #endregion
 
+        [MpDependsOnParent(1)]
+        public bool DependOnParentTest {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.Test > 5;
+            }
+        }
+
         #region Visibility 
 
         #endregion
@@ -176,6 +185,7 @@ namespace MpWpfApp {
                 return Parent.IsExpanded ? Double.NaN : UnexpandedSize.Height;
             }
         }
+
         public Size ExpandedSize {
             get {
                 if (Parent == null || CopyItem == null) {
@@ -589,6 +599,7 @@ namespace MpWpfApp {
             if (ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
+            
             CopyItem = ci;
 
             IsBusy = true;
@@ -809,13 +820,13 @@ namespace MpWpfApp {
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(DependOnParentTest):
+                    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
-                        if (!Parent.IsSelected) {
-                            Parent.IsSelected = true;
-                        }
-                        if(!MpHelpers.Instance.IsMultiSelectKeyDown() && 
+                        Parent.IsSelected = true;
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown && 
                             !Parent.IsDroppingOnTile) {
                             MpClipTrayViewModel.Instance.SelectedItems
                                 .Where(x => x != Parent)
@@ -911,11 +922,11 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
-        private AsyncCommand<string> _translateSubSelectedItemTextAsyncCommand;
-        public IAsyncCommand<string> TranslateSubSelectedItemTextAsyncCommand {
+        private AsyncRelayCommand<string> _translateSubSelectedItemTextAsyncCommand;
+        public ICommand TranslateSubSelectedItemTextAsyncCommand {
             get {
                 if (_translateSubSelectedItemTextAsyncCommand == null) {
-                    _translateSubSelectedItemTextAsyncCommand = new AsyncCommand<string>(TranslateSubSelectedItemTextAsync, CanTranslateSubSelectedItemText);
+                    _translateSubSelectedItemTextAsyncCommand = new AsyncRelayCommand<string>(TranslateSubSelectedItemTextAsync, CanTranslateSubSelectedItemText);
                 }
                 return _translateSubSelectedItemTextAsyncCommand;
             }
@@ -963,7 +974,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
 
-        public IAsyncCommand AssignHotkeyCommand => new AsyncCommand(
+        public ICommand AssignHotkeyCommand => new AsyncRelayCommand(
             async () => {
 
                 ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(

@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Toolkit.Mvvm.Input;
 using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
 using WindowsInput;

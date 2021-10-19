@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;

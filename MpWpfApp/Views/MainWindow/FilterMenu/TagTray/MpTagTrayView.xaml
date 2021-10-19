@@ -55,23 +55,22 @@
             <Image Source="/Resources/Images/back_black.png"
                    Stretch="Fill" />
         </RepeatButton>
-        <local:MpMultiSelectListBox x:Name="TagTray"
-                                    Grid.Column="2"
-                                    Focusable="False"
-                                    ScrollToSelectedItem="True"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    dd:DragDrop.IsDragSource="True"
-                                    dd:DragDrop.IsDropTarget="True"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    MaxWidth="{Binding MaxTagTrayWidth}"
-                                    SelectionMode="Single"
-                                    ScrollViewer.IsDeferredScrollingEnabled="False"
-                                    ScrollViewer.CanContentScroll="False"
-                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                    ItemsSource="{Binding TagTileViewModels}">
+        <ListBox x:Name="TagTray"
+                 Grid.Column="2"
+                 Focusable="False"
+                 Background="Transparent"
+                 BorderBrush="Transparent"
+                 dd:DragDrop.IsDragSource="True"
+                 dd:DragDrop.IsDropTarget="True"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 MaxWidth="{Binding MaxTagTrayWidth}"
+                 SelectionMode="Single"
+                 ScrollViewer.IsDeferredScrollingEnabled="False"
+                 ScrollViewer.CanContentScroll="False"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 ItemsSource="{Binding TagTileViewModels}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="IsSelected"
@@ -98,7 +97,7 @@
                     <!--  Tag Tile Border  -->
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </local:MpMultiSelectListBox>
+        </ListBox>
         <RepeatButton x:Name="TagTrayNavRightButton"
                       Click="TagTrayNavRightButton_Click"
                       Grid.Column="3"

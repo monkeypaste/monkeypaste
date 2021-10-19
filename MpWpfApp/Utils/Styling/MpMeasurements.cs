@@ -22,6 +22,13 @@ namespace MpWpfApp {
                 return ScreenHeight - TaskBarHeight;
             } 
         }
+
+        public double ClipTileExpandedMaxHeightPadding {
+            get {
+                return 80;
+            }
+        }
+
         #endregion
 
         #region General

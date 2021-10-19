@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Windows;

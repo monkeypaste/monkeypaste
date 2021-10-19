@@ -971,7 +971,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="AnimatedScrollBar" 
+        <Style x:Key="AnimatedScrollBar"
                TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled"
                     Value="false" />

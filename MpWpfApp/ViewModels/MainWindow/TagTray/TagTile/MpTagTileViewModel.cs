@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
-using System.Threading.Tasks;
-using AsyncAwaitBestPractices.MVVM;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -414,7 +412,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        public IAsyncCommand<object> AssignHotkeyCommand => new AsyncCommand<object>(
+        public ICommand AssignHotkeyCommand => new AsyncRelayCommand<object>(
             async (args) => {
                 ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                 this,
