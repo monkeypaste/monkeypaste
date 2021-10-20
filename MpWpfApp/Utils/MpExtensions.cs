@@ -643,10 +643,16 @@ namespace MpWpfApp {
         }
 
         public static Brush ToSolidColorBrush(this string hex) {
+            if (string.IsNullOrEmpty(hex)) {
+                return Brushes.Red;
+            }
             return (Brush)new SolidColorBrush(hex.ToWinMediaColor());
         }
 
         public static Color ToWinMediaColor(this string hex) {
+            if(string.IsNullOrEmpty(hex)) {
+                return Colors.Red;
+            }
             return (Color)ColorConverter.ConvertFromString(hex);
         }
 

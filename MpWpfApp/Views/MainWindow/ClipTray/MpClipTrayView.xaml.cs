@@ -45,11 +45,14 @@ namespace MpWpfApp {
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             ctrvm.Items.CollectionChanged += Items_CollectionChanged;
-            if (ClipTray.Items.Count > 0) {
-                ClipTray.GetListBoxItem(0).Focus();
-            }
+            
 
             Items_CollectionChanged(sender, null);
+
+            ClipTray?.Items.Refresh();
+            ClipTray?.ScrollViewer.ScrollToHorizontalOffset(75);
+
+            ClipTray?.ScrollViewer.InvalidateScrollInfo();
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -135,7 +138,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTray_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
-
+            e.Handled = true;
         }
     }
 }
