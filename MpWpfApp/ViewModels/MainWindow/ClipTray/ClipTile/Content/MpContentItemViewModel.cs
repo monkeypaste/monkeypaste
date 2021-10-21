@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Toolkit.Mvvm.Input;
 using MonkeyPaste;
+using PropertyChanged;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
@@ -45,6 +46,7 @@ namespace MpWpfApp {
 
 
         private MpTemplateCollectionViewModel _templateCollection;
+        [MpChildViewModel(typeof(MpTemplateCollectionViewModel), false)]
         public MpTemplateCollectionViewModel TemplateCollection {
             get {
                 return _templateCollection;
@@ -161,7 +163,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        [MpDependsOnParent(1)]
+        //[MpDependsOnParent("Test")]
         public bool DependOnParentTest {
             get {
                 if(Parent == null) {
@@ -584,16 +586,21 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
+        #region Constructors
 
         public MpContentItemViewModel() : base(null) { }
 
         public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
+            MpConsole.WriteLine(DependOnParentTest);
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await InitializeAsync(ci);
             });
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci) {
             if (ci.Source == null) {
@@ -821,6 +828,7 @@ namespace MpWpfApp {
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(DependOnParentTest):
+                    MpConsole.WriteLine("Level 1 Changed");
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {

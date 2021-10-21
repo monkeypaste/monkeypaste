@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         /// Fetches the total number of items available.
         /// </summary>
         /// <returns></returns>
-        int FetchCount();
+        int FetchCopyItemCount();
 
         /// <summary>
         /// Fetches a range of items.
@@ -27,7 +27,7 @@ namespace MonkeyPaste {
         /// <param name="startIndex">The start index.</param>
         /// <param name="count">The number of items to fetch.</param>
         /// <returns></returns>
-        IList<T> FetchRange(int startIndex, int count);
+        IList<T> FetchCopyItemRange(int startIndex, int count);
 
 
     }
@@ -344,7 +344,7 @@ namespace MonkeyPaste {
             _queryInfo = info;
         }
 
-        public int FetchCount() {
+        public int FetchCopyItemCount() {
             int count = 0;
             switch(_queryInfo.TagId) {
                 case MpTag.AllTagId:
@@ -361,44 +361,33 @@ namespace MonkeyPaste {
             return count;
         }
 
-        public async Task<int> FetchCountAsync() {
-            int count = 0;
-            switch (_queryInfo.TagId) {
-                case MpTag.AllTagId:
-                    count = await GetTotalCopyItemCountAsync();
-                    break;
-                case MpTag.RecentTagId:
-                    count = await GetRecentCopyItemCountAsync();
-                    break;
-                default:
-                    count = await GetTagItemCountAsync(_queryInfo.TagId);
-                    break;
-            }
-
+        public async Task<int> FetchCopyItemCountAsync() {
+            string totalCountQuery = GetFetchQuery(0, 0, true);
+            int count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
             return count;
         }
 
-        public IList<MpCopyItem> FetchRange(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+        public IList<MpCopyItem> FetchCopyItemRange(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             string query = GetFetchQuery(startIndex, count);
             var result = MpDb.Instance.Query<MpCopyItem>(query);
             return result;
         }
 
-        public async Task<IList<MpCopyItem>> FetchRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             string query = GetFetchQuery(startIndex, count);
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
             return result;
         }
 
-        public IList<MpCopyItem> FetchRange(int startIndex, int count) {
-            return FetchRange(startIndex, count, null);
+        public IList<MpCopyItem> FetchCopyItemRange(int startIndex, int count) {
+            return FetchCopyItemRange(startIndex, count, null);
         }
 
         #endregion
 
         #region Private Methods
 
-        private string GetFetchQuery(int startIndex,int count) {
+        private string GetFetchQuery(int startIndex,int count, bool queryForTotalCount = false) {
             int tagId = _queryInfo.TagId;
             string descStr = _queryInfo.IsDescending ? "DESC" : "ASC";
             string sortStr = Enum.GetName(typeof(MpContentSortType), _queryInfo.SortType);
@@ -412,24 +401,36 @@ namespace MonkeyPaste {
                 sortStr = "pk_MpCopyItemId";
             }
 
+            string selectToken = "*";
+            if (queryForTotalCount) {
+                startIndex = 0;
+                count = int.MaxValue;
+                selectToken = "count(pk_MpCopyItemId)";
+            }
+
+            if(tagId == MpTag.RecentTagId) {
+                startIndex = 0;
+                count = MpPreferences.Instance.MaxRecentClipItems;
+            }
+
             string query = string.Empty;
 
             switch (tagId) {
                 case MpTag.RecentTagId:
-                    query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+                    query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
                                             select pci.pk_MpCopyItemId from MpCopyItem aci
                                             inner join MpCopyItem pci  
                                             ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
                                             order by aci.{0} {1}) order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex);
+                                           sortStr, descStr, count, startIndex,selectToken);
                     break;
                 case MpTag.AllTagId:
-                    query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId = 0 
+                    query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 
                                             order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex);
+                                           sortStr, descStr, count, startIndex,selectToken);
                     break;
                 default:
-                    query = string.Format(@"select * from MpCopyItem where pk_MpCopyItemId in 
+                    query = string.Format(@"select {5} from MpCopyItem where pk_MpCopyItemId in 
                                             (select distinct
 	                                            case fk_ParentCopyItemId
 		                                            when 0
@@ -440,7 +441,7 @@ namespace MonkeyPaste {
 	                                            from MpCopyItem where pk_MpCopyItemId in 
                                                 (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={4}))
                                            order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex,tagId);
+                                           sortStr, descStr, count, startIndex,tagId,selectToken);
                     break;
             }
             return query;

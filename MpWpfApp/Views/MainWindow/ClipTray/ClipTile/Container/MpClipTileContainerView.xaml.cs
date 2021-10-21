@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileContainerView.xaml
     /// </summary>
-    public partial class MpClipTileContainerView : UserControl {
+    public partial class MpClipTileContainerView : MpUserControl<MpClipTileViewModel> {
         private static int tileCount = 0;
         public int _TileId = -1;
         public MpClipTileContainerView() {

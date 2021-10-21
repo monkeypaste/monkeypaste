@@ -13,7 +13,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 
 namespace MpWpfApp {
-    public class MpRunningApplicationManager : INotifyPropertyChanged {
+    public class MpRunningApplicationManager : MpViewModelBase<object> {
         private static readonly Lazy<MpRunningApplicationManager> _Lazy = new Lazy<MpRunningApplicationManager>(() => new MpRunningApplicationManager());
         public static MpRunningApplicationManager Instance { get { return _Lazy.Value; } }
 
@@ -33,6 +33,19 @@ namespace MpWpfApp {
 
 
         public string ActiveProcessPath { get; set; } = string.Empty;
+        #endregion
+
+        #region Constructors
+
+        private MpRunningApplicationManager() : base(null) {
+            foreach (KeyValuePair<IntPtr, string> window in MpOpenWindowGetter.GetOpenWindows()) {
+                //MonkeyPaste.MpConsole.WriteLine("Window Title: " + window.Value);
+                UpdateHandleStack(window.Key);
+            }
+            //MonkeyPaste.MpConsole.WriteLine("RunningApplicationManager Initialized w/ contents: ");
+            //MonkeyPaste.MpConsole.WriteLine(this.ToString());
+        }
+
         #endregion
 
         #region Public Methods
@@ -205,14 +218,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private MpRunningApplicationManager() {
-            foreach (KeyValuePair<IntPtr, string> window in MpOpenWindowGetter.GetOpenWindows()) {
-                //MonkeyPaste.MpConsole.WriteLine("Window Title: " + window.Value);
-                UpdateHandleStack(window.Key);
-            }
-            //MonkeyPaste.MpConsole.WriteLine("RunningApplicationManager Initialized w/ contents: ");
-            //MonkeyPaste.MpConsole.WriteLine(this.ToString());
-        }
 
         private string GetKnownProcessPath(IntPtr handle) {
             foreach (var kvp in CurrentProcessWindowHandleStackDictionary) {
@@ -239,36 +244,6 @@ namespace MpWpfApp {
 
         #region Commands
 
-        #endregion
-
-        #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual void OnPropertyChanged(string propertyName) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
-        }
-
-        [Conditional("DEBUG")]
-        [DebuggerStepThrough]
-        public void VerifyPropertyName(string propertyName) {
-            // Verify that the property name matches a real, 
-            // public, instance property on this object. 
-            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
-                string msg = "Invalid property name: " + propertyName;
-                if (this.ThrowOnInvalidPropertyName) {
-                    throw new Exception(msg);
-                } else {
-                    Debug.Fail(msg);
-                }
-            }
-        }
         #endregion
     }
 

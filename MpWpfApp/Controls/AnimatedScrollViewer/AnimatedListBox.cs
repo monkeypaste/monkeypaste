@@ -14,7 +14,6 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     [TemplatePart(Name = "PART_AnimatedScrollViewer", Type = typeof(AnimatedScrollViewer))]
-
     public class AnimatedListBox : ListBox {
         #region PART holders
         public AnimatedScrollViewer AnimatedScrollViewer;
@@ -29,9 +28,7 @@ namespace MpWpfApp {
 
             AnimatedScrollViewer scrollViewerHolder = base.GetTemplateChild("PART_AnimatedScrollViewer") as AnimatedScrollViewer;
             if (scrollViewerHolder != null) {
-                scrollViewerHolder.IsHorizontal = IsListBoxHorizontal;
                 AnimatedScrollViewer = scrollViewerHolder;
-                AnimatedScrollViewer.IsHorizontal = IsListBoxHorizontal;
             }
 
             this.SelectionChanged += new SelectionChangedEventHandler(AnimatedListBox_SelectionChanged);
@@ -57,19 +54,39 @@ namespace MpWpfApp {
             if (thisLB != null) {
                 if (thisLB.ScrollToSelectedItem) {
                     double scrollTo = 0;
-                    for (int i = 0; i < (thisLB.SelectedIndex + thisLB.SelectedIndexOffset); i++) {
-                        ListBoxItem tempItem = thisLB.ItemContainerGenerator.ContainerFromItem(thisLB.Items[i]) as ListBoxItem;
-
-                        if (tempItem != null) {
-                            scrollTo += IsListBoxHorizontal ? tempItem.ActualWidth : tempItem.ActualHeight;
+                    var lbr = thisLB.GetListBoxRect();
+                    Rect selectionRect = new Rect();
+                    if(thisLB.SelectedIndex >= 0) {
+                        if(thisLB.SelectedItems.Count > 1) {
+                            for (int i = 0; i < thisLB.SelectedItems.Count; i++) {
+                                var slbir = thisLB.GetListBoxItemRect(thisLB.Items.IndexOf(thisLB.SelectedItems[i]));
+                                selectionRect.Union(slbir);
+                            }
+                        } else {
+                            selectionRect = thisLB.GetListBoxItemRect(thisLB.SelectedIndex);
                         }
-                    }
+                        if(IsListBoxHorizontal) {
+                            //only auto scroll if item(s) are not fully visible and prefer leftist item
+                            if (selectionRect.Left < lbr.Left) {                                
+                                scrollTo = selectionRect.Left - lbr.Left;
+                            } else if(selectionRect.Right > lbr.Right) {
+                                scrollTo = selectionRect.Right - lbr.Right;
+                            }
+                        } else {
+                            if (selectionRect.Top < lbr.Top) {
+                                scrollTo = selectionRect.Top - lbr.Top;
+                            } else if (selectionRect.Bottom > lbr.Bottom) {
+                                scrollTo = selectionRect.Bottom - lbr.Bottom;
+                            }
+                        }
+                    } 
 
-                    if(IsListBoxHorizontal) {
+                    if (IsListBoxHorizontal) {
+                        MonkeyPaste.MpConsole.WriteLine("Tray Scrolling to: " + scrollTo);
                         AnimatedScrollViewer.TargetHorizontalOffset = scrollTo;
                     } else {
                         AnimatedScrollViewer.TargetVerticalOffset = scrollTo;
-                    }
+                    }                    
                 }
             }
         }

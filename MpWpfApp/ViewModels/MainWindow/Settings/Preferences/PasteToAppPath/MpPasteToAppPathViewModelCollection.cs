@@ -16,6 +16,7 @@ using MonkeyPaste;
 using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {
     public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, INotifyPropertyChanged {
@@ -324,15 +325,10 @@ namespace MpWpfApp {
         #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
-
         protected override event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged(string propertyName) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         [Conditional("DEBUG")]

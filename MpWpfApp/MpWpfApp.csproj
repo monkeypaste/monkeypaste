@@ -113,6 +113,17 @@
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
+    <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
+    <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
+    <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
+    <Compile Include="Attributes\Affects\MpAffectsChildAttribute.cs" />
+    <Compile Include="Attributes\Affects\MpAffectsParentAttribute.cs" />
+    <Compile Include="Attributes\DependsOn\Base\MpDependsOnBase.cs" />
+    <Compile Include="Attributes\DependsOn\MpDependsOnThisAttribute.cs" />
+    <Compile Include="Attributes\DependsOn\MpDependsOnSiblingAttribute.cs" />
+    <Compile Include="Attributes\MpChildViewModelAttribute.cs" />
+    <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
+    <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
     <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
@@ -134,6 +145,7 @@
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
+    <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
@@ -218,10 +230,6 @@
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
-    <Compile Include="ViewModels\Base\Attributes\MpAffectsChildAttribute.cs" />
-    <Compile Include="ViewModels\Base\Attributes\MpDependsOnChildAttribute.cs" />
-    <Compile Include="ViewModels\Base\Attributes\MpDependsOnParentAttribute.cs" />
-    <Compile Include="ViewModels\Base\Attributes\MpChildViewModelAttribute.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Meta\MpContentDescriptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
@@ -591,7 +599,6 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
-    <None Include="BrowserExtensions\Chrome\manifest.json" />
     <None Include="Properties\DefaultUiStrings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>DefaultUiStrings.Designer.cs</LastGenOutput>
@@ -843,15 +850,6 @@
     <Resource Include="Resources\Images\MpRichTextBox\listnumbers.png" />
     <Resource Include="Resources\Images\MpRichTextBox\normaltext.png" />
     <Resource Include="Resources\Images\MpRichTextBox\separator.png" />
-    <Content Include="BrowserExtensions\Chrome\options.html" />
-    <Content Include="BrowserExtensions\Chrome\options.js" />
-    <Content Include="BrowserExtensions\Chrome\popup.js" />
-    <Content Include="BrowserExtensions\Chrome\background.js" />
-    <Resource Include="BrowserExtensions\Chrome\images\get_started128.png" />
-    <Resource Include="BrowserExtensions\Chrome\images\get_started16.png" />
-    <Resource Include="BrowserExtensions\Chrome\images\get_started32.png" />
-    <Resource Include="BrowserExtensions\Chrome\images\get_started48.png" />
-    <Content Include="BrowserExtensions\Chrome\popup.html" />
     <Resource Include="Resources\Images\MpRichTextBox\templateadd.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templateremove.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templaterename.png" />

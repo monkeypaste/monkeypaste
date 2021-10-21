@@ -54,7 +54,6 @@ namespace MpWpfApp {
             sw.Start();
             await InitHotkeysAndMouseEvents();
             await InitShortcuts();
-            OnViewModelLoaded();
             sw.Stop();
             MpConsole.WriteLine($"Shortcut loading: {sw.ElapsedMilliseconds} ms");
         }        
@@ -377,7 +376,6 @@ namespace MpWpfApp {
                     await scvm.RegisterAsync();
                     Shortcuts.Add(scvm);
                 }
-                OnViewModelLoaded();
             });
         }
 

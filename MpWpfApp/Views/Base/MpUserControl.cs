@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpUserControl : UserControl {
-        
+        public MpUserControl() : base() { }
     }
     public class MpUserControl<T> : UserControl where T: class {
 

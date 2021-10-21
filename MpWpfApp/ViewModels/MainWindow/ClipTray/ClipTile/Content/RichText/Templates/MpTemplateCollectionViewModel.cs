@@ -16,8 +16,6 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
-        
-
         #region Properties
 
         #region View Models
@@ -30,6 +28,7 @@ namespace MpWpfApp {
             }
         }
 
+        [MpChildViewModel(typeof(MpTemplateViewModel),true)]
         public ObservableCollection<MpTemplateViewModel> Templates { get; set; } = new ObservableCollection<MpTemplateViewModel>();
 
         public MpTemplateViewModel SelectedTemplate => Templates.Where(x => x.IsSelected).FirstOrDefault();

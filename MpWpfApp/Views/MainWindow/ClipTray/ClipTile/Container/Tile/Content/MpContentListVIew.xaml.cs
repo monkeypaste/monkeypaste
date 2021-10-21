@@ -21,14 +21,14 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
-    public partial class MpContentListView : UserControl {
+    public partial class MpContentListView : MpUserControl<MpClipTileViewModel> {
         private static int _ContentListViewCount = 0;
         private int _clvIdx = -1;
 
         private MpContentItemSeperatorAdorner seperatorAdorner;
         public AdornerLayer SeperatorAdornerLayer;
 
-        public MpContentListView() {
+        public MpContentListView() : base() {
             if(_clvIdx < 0) {
                 _clvIdx = _ContentListViewCount++;
             }
@@ -84,11 +84,9 @@ namespace MpWpfApp {
                 
         #endregion
 
-
         #region ViewModel Events
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {            
-
             if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
                 octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
                 octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
@@ -107,20 +105,21 @@ namespace MpWpfApp {
             } 
         }
 
+        public void RefreshContext() {
+            for (int i = 0; i < ContentListBox.Items.Count; i++) {
+                var lbi = ContentListBox.GetListBoxItem(i);
+                if (lbi != null) {
+                    lbi.DataContext = BindingContext.ItemViewModels[i];
+                }
+            }
+        }
         
 
         private void ItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
-            MpConsole.WriteLine($"Tile List ({_clvIdx}) collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
+            //MpConsole.WriteLine($"Tile List ({_clvIdx}) collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
 
-            for (int i = 0; i < ContentListBox.Items.Count; i++) {
-                var lbi = ContentListBox.GetListBoxItem(i);
-                if (lbi != null) {
-                    if (i < ctvm.ItemViewModels.Count) {
-                        lbi.DataContext = ctvm.ItemViewModels[i];
-                    }
-                }
-            }
+            
         }
 
         private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

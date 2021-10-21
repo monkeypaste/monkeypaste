@@ -48,8 +48,18 @@ namespace MpWpfApp {
 
         private MpCopyItem _appendModeCopyItem = null;
 
+        private bool _isLoading = false;
+
+        private List<MpCopyItem> _prevPage = new List<MpCopyItem>();
+        private List<MpCopyItem> _nextPage = new List<MpCopyItem>();
         private int _pageCount = 0;
+        private int _totalItemsInQuery = 0;
+        private int _headIdxInTotal = 0;
+        private int _tailIdxInTotal = 0;
         private int _remainingItemsCount = 0;
+        private Dictionary<int, int> _manualSortOrderLookup = null;
+        private List<int> _selectedHeadContentIds = new List<int>();
+
         private List<int> _filterIds;
 
         private MpClipTileViewModelProvider _viewModelProvider; 
@@ -63,6 +73,7 @@ namespace MpWpfApp {
         public MpWpfQueryInfo QueryInfo { get; set; }
         #region View Models
         
+        [MpChildViewModel(typeof(MpClipTileViewModel),true)]
         public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
         public List<MpClipTileViewModel> SelectedItems {
@@ -228,6 +239,7 @@ namespace MpWpfApp {
 
         public bool IsAnyDropOnTile => Items.Any(x => x.IsDroppingOnTile);
 
+        [MpAffectsChild]
         public bool IsAnyTileExpanded => Items.Any(x => x.IsExpanded);
 
         public bool IsAnyEditing => Items.Any(x => x.IsAnyEditingContent);
@@ -360,18 +372,29 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpClipTrayViewModel() : base(null) {
-            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+            PropertyChanged += MpClipTrayViewModel_PropertyChanged;
+            MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+            MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
             _tileLockObject = new object();
-
 
             _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles * 2;
             _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);            
 
             //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
             for (int i = 0; i < _pageCount; i++) {
-                Items.Add(CreateClipTileViewModel(null));
+                Items.Insert(0,CreateClipTileViewModel(null));
+            }
+        }
+
+        private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedItems):
+                    if(_isLoading) {
+
+                    }
+                    _selectedHeadContentIds = SelectedItems.Select(x => x.HeadItem.CopyItemId).ToList();
+                    break;
             }
         }
 
@@ -379,7 +402,6 @@ namespace MpWpfApp {
             if(QueryInfo == null) {
                 QueryInfo = new MpWpfQueryInfo();
                 QueryInfo.InfoChanged += _queryInfo_InfoChanged;
-                //_queryInfo_InfoChanged(this, new EventArgs());
             }
         }
 
@@ -389,31 +411,136 @@ namespace MpWpfApp {
             _viewModelProvider.SetQueryInfo(QueryInfo);
 
             Task.Run(async () => {
-                await UpdateTiles();
+                await Requery();
             });
         }
 
-        public async Task UpdateTiles() {
+        public async Task Requery() {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
                 var sw = new Stopwatch();
                 sw.Start();
+                int itemsToRemove = Items.Count - _pageCount;
+                while(itemsToRemove > 0) {
+                    //item is addeds when drop partial composite (creating new tile) at end of page so remove extra
+                    Items.RemoveAt(0);
+                    itemsToRemove--;
+                }
+
                 ClearClipSelection();
+
+                _totalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
+                _headIdxInTotal = 0;
+                _tailIdxInTotal = _totalItemsInQuery < _pageCount ? _totalItemsInQuery : _pageCount;
+
                 var initTasks = new List<Task>();
-                var cil = await _viewModelProvider.ModelProvider.FetchRangeAsync(0, _pageCount);
+                var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(0, _pageCount);
                 for (int i = 0; i < cil.Count; i++) {
                     await Items[i].InitializeAsync(cil[i]);
                 }
-                for (int i = cil.Count; i < VisibleItems.Count; i++) {
+                for (int i = cil.Count; i < _pageCount; i++) {
                     await Items[i].InitializeAsync(null);
                 }
                 //await Task.WhenAll(initTasks);
 
                 ResetClipSelection();
 
+                MpMessenger.Instance.Send(MpMessageType.Requery);
+
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
             });
         }
+
+        public ICommand RecycleItemsCommand => new RelayCommand<object>(
+             (countToRecycle) => {
+                int fetchCount = Math.Abs((int)countToRecycle);
+                bool isLeft = ((int)countToRecycle) > 0;
+                if (isLeft) {
+                    if (_tailIdxInTotal >= _totalItemsInQuery - 1) {
+                        //no more items to fetch
+                        return;
+                    }
+                    _tailIdxInTotal += fetchCount;                    
+                     for (int i = 0; i < fetchCount; i++) {
+                        Items.Move(0, Items.Count - 1);
+                    }
+                    _headIdxInTotal = _tailIdxInTotal - _pageCount + 1;
+                } else {
+                    if (_headIdxInTotal <= 0) {
+                        //no more items to fetch
+                        return;
+                    }
+                    _headIdxInTotal -= fetchCount;
+                    for (int i = 0; i < fetchCount; i++) {
+                        Items.Move(Items.Count - 1, 0);
+                    }
+                     _tailIdxInTotal = _headIdxInTotal + _pageCount - 1;
+                 }
+            },
+            (countToRecycle) => {
+                return countToRecycle != null;
+            });
+
+        public ICommand LoadMoreClipsCommand => new AsyncRelayCommand<object>(
+            async (itemsToLoad) => {
+                int fetchCount = Math.Abs((int)itemsToLoad);
+                bool isLeft = ((int)itemsToLoad) > 0;
+                var loadTasks = new List<Task>();
+                var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_headIdxInTotal, _tailIdxInTotal);
+                for (int i = 0; i < cil.Count; i++) {
+                    loadTasks.Add(Items[i].InitializeAsync(cil[i]));
+                }
+                for (int i = cil.Count; i < VisibleItems.Count; i++) {
+                    loadTasks.Add(Items[i].InitializeAsync(null));
+                }
+                await Task.WhenAll(loadTasks.ToArray());
+            },
+            (itemsToLoad) => {
+                return itemsToLoad != null;
+            });
+
+        public ICommand LoadAndRecycleMoreClipsCommand => new AsyncRelayCommand<object>(
+            async (itemsToLoad) => {
+                int fetchCount = Math.Abs((int)itemsToLoad);
+                bool isLeft = ((int)itemsToLoad) > 0;
+                var loadAndMoveTasks = new List<Task>();
+                if (isLeft) {
+                    if (_tailIdxInTotal >= _totalItemsInQuery - 1) {
+                        //no more items to fetch
+                        return;
+                    }
+                    _tailIdxInTotal += fetchCount;
+                    var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_tailIdxInTotal, fetchCount);
+                    for (int i = 0; i < cil.Count; i++) {
+                        loadAndMoveTasks.Add(LoadAndMoveItem(0, _pageCount - 1, cil[i]));
+                        //await Items[0].InitializeAsync(cil[i]);
+                        //Items.Move(0, Items.Count - 1);
+                    }
+                } else {
+                    if (_headIdxInTotal <= 0) {
+                        //no more items to fetch
+                        return;
+                    }
+                    _headIdxInTotal -= fetchCount;
+                    var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_headIdxInTotal, fetchCount);
+                    for (int i = 0; i < cil.Count; i++) {
+
+                        loadAndMoveTasks.Add(LoadAndMoveItem(_pageCount - 1,0, cil[i]));
+                        //await Items[Items.Count - 1].InitializeAsync(cil[i]);
+                        //Items.Move(Items.Count - 1, 0);
+                    }
+                }
+                await Task.WhenAll(loadAndMoveTasks.ToArray());
+            },
+            (itemsToLoad) => {
+                return itemsToLoad != null;
+            });
+
+        private async Task LoadAndMoveItem(int oldIdx,int newIdx, MpCopyItem ci) {
+            await Items[oldIdx].InitializeAsync(ci);
+            Items.Move(oldIdx, newIdx);
+        }
+
         public async Task AddNewModels() {
             if (_newModels.Count == 0) {
                 return;
@@ -449,14 +576,27 @@ namespace MpWpfApp {
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
-                if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
-                    //ignore sorting for sudo tags
-                    return;
-                }
-                Task.Run((Func<Task>)(async()=>{
-                    bool isDesc = MpClipTileSortViewModel.Instance.IsSortDescending;
-                    int tagId = MpTagTrayViewModel.Instance.SelectedTagTile.Tag.Id;
+                Task.Run(async()=> {
+                    bool isManualSort = QueryInfo.SortType == MpContentSortType.Manual;
+
+                    if (isManualSort) {
+                        _manualSortOrderLookup = new Dictionary<int, int>();
+                        foreach (var ctvm in Items) {
+                            if (_manualSortOrderLookup.ContainsKey(ctvm.HeadItem.CopyItemId)) {
+                                continue;
+                            }
+                            _manualSortOrderLookup.Add(ctvm.HeadItem.CopyItemId, Items.IndexOf(ctvm));
+                        }
+                    }
+                    
+                    bool isDesc = QueryInfo.IsDescending;
+                    int tagId = QueryInfo.TagId;
                     var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
+
+                    if (tagId == MpTag.AllTagId || tagId == MpTag.RecentTagId) {
+                        //ignore sorting for sudo tags
+                        return;
+                    }
 
                     int count = isDesc ? citl.Count : 1; 
                     //loop through available tiles and reset tag's sort order, 
@@ -494,7 +634,7 @@ namespace MpWpfApp {
                             count++;
                         }
                     }
-                }));
+                });
                 
             }
         }
@@ -546,8 +686,6 @@ namespace MpWpfApp {
 
             //ResetClipSelection();
             IsBusy = false;
-
-            OnViewModelLoaded();
             sw.Stop();
             MpConsole.WriteLine($"Refresh clips took {sw.ElapsedMilliseconds} ms");
         }
@@ -648,7 +786,7 @@ namespace MpWpfApp {
             createItemSw.Start();
             var newCopyItem = MpCopyItemBuilder.CreateFromClipboard(ido);
 
-            MonkeyPaste.MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
+            MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format or app init
@@ -696,7 +834,7 @@ namespace MpWpfApp {
                     if (MpPreferences.Instance.NotificationDoCopySound) {
                         MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                     }
-                    if (IsTrialExpired) {
+                    if (MpPreferences.Instance.IsTrialExpired) {
                         MpStandardBalloonViewModel.ShowBalloon(
                             "Trial Expired",
                             "Please update your membership to use Monkey Paste",
@@ -707,7 +845,7 @@ namespace MpWpfApp {
                 }
             }
             totalAddSw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
+            MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
             _newModels.Add(newCopyItem);
         }
@@ -850,7 +988,7 @@ namespace MpWpfApp {
 
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null) {
-                MonkeyPaste.MpConsole.WriteLine("Pasting " + SelectedItems.Count + " items");
+                MpConsole.WriteLine("Pasting " + SelectedItems.Count + " items");
                 IntPtr pasteToWindowHandle = IntPtr.Zero;
                 if (_selectedPasteToAppPathViewModel != null) {
                     pasteToWindowHandle = MpRunningApplicationManager.Instance.SetActiveProcess(
@@ -897,7 +1035,7 @@ namespace MpWpfApp {
                     //Refresh();
                 }
             } else if (pasteDataObject == null) {
-                MonkeyPaste.MpConsole.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
+                MpConsole.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
             }
             _selectedPasteToAppPathViewModel = null;
             if (!fromHotKey) {
@@ -1072,7 +1210,7 @@ namespace MpWpfApp {
 
         #region Sync Events
 
-        private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+        private void MpDbObject_SyncDelete(object sender, MpDbSyncEventArgs e) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpCopyItem ci) {
                     var ctvmToRemove = GetContentItemViewModelById(ci.Id);
@@ -1090,12 +1228,12 @@ namespace MpWpfApp {
             }));
         }
 
-        private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+        private void MpDbObject_SyncUpdate(object sender, MpDbSyncEventArgs e) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
             }));
         }
 
-        private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
+        private void MpDbObject_SyncAdd(object sender, MpDbSyncEventArgs e) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
@@ -1114,7 +1252,7 @@ namespace MpWpfApp {
                         _newModels.Add(ci);
                         //AddNewTiles();
                     } else {
-                        MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
+                        MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
                         //dupCheck.CopyItem = ci;
                     }
                     ci.Source.App.EndSync();
@@ -1260,7 +1398,7 @@ namespace MpWpfApp {
             if (args == null) {
                 return;
             }
-            MonkeyPaste.MpConsole.WriteLine("HotKey pasting copyitemid: " + (int)args);
+            MpConsole.WriteLine("HotKey pasting copyitemid: " + (int)args);
             IsPastingHotKey = true;
             int copyItemId = (int)args;
             IDataObject pasteDataObject = null;
@@ -1317,7 +1455,7 @@ namespace MpWpfApp {
                 !IsAnyEditingClipTile &&
                 !IsAnyEditingClipTitle &&
                 !IsAnyPastingTemplate &&
-                !IsTrialExpired;
+                !MpPreferences.Instance.IsTrialExpired;
         }
         private void PasteSelectedClips(object args) {
             if (args != null && args.GetType() == typeof(int) && (int)args > 0) {
@@ -1782,10 +1920,6 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand LoadMoreClipsCommand => new RelayCommand(
-            () => {
-
-            });
 
         public ICommand MergeCommand {
             get {

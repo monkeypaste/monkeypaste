@@ -28,14 +28,12 @@ namespace MpWpfApp {
         }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
-                octvm.ViewModelLoaded -= Ctvm_ViewModelLoaded;
                 octvm.OnSearchRequest -= Ctvm_OnSearchRequest;
                 octvm.PropertyChanged -= Ctvm_PropertyChanged;
             }
             if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
                 if (!nctvm.IsPlaceholder) {
                     //ctvm.IsBusy = true;
-                    nctvm.ViewModelLoaded += Ctvm_ViewModelLoaded;
                     nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
                     nctvm.PropertyChanged += Ctvm_PropertyChanged;
 
@@ -83,11 +81,6 @@ namespace MpWpfApp {
         private void HideBusySpinner() {
             ClipTileBusyView.Visibility = Visibility.Hidden;
             ClipTileDockPanel.Visibility = Visibility.Visible;
-        }
-
-        private void Ctvm_ViewModelLoaded(object sender, EventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            ctvm.IsBusy = false;
         }
 
         public async Task<MpHighlightTextRangeViewModelCollection> Search(string hlt) {

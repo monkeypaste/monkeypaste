@@ -437,8 +437,6 @@ namespace MpWpfApp {
                         break;
                 }
             };
-
-            OnViewModelLoaded();
         }
 
         public void RequestSearchBoxFocus() {

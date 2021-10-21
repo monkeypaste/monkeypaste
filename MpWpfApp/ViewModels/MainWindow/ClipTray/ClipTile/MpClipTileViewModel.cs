@@ -43,7 +43,6 @@ using System.Speech.Synthesis;
 
         #region Properties
 
-
         #region Property Reflection Referencer
         public object this[string propertyName] {
             get {
@@ -475,7 +474,7 @@ using System.Speech.Synthesis;
 
         public Visibility TrialOverlayVisibility {
             get {
-                return IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
+                return MpPreferences.Instance.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -664,7 +663,15 @@ using System.Speech.Synthesis;
             }
         }
 
-        public bool IsPlaceholder => ItemViewModels.Count == 0;
+        [MpDependsOnParent("IsAnyTileExpanded")]
+        public bool IsPlaceholder {
+            get {
+                if(Parent == null || ItemViewModels.Count == 0) {
+                    return true;
+                }
+                return Parent.IsAnyTileExpanded && !IsExpanded;
+            }
+        }
 
         public int ItemIdx {
             get {
@@ -693,6 +700,15 @@ using System.Speech.Synthesis;
                 return PrimaryItem.CopyItemCreatedDateTime;
             }
         }
+
+        public int HeadId {
+            get {
+                if(HeadItem == null || HeadItem.CopyItem == null) {
+                    return MpHelpers.Instance.Rand.Next(int.MinValue,-1);
+                }
+                return HeadItem.CopyItemId;
+            }
+        }
         #endregion
 
         #endregion
@@ -710,7 +726,7 @@ using System.Speech.Synthesis;
 
         #endregion
 
-        #region Public Methods
+        #region Constructors
 
         public MpClipTileViewModel() : base(null) {
             IsBusy = true;
@@ -719,28 +735,23 @@ using System.Speech.Synthesis;
         public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            
-            MpHelpers.Instance.RunOnMainThread(async()=> {
+
+
+            MpHelpers.Instance.RunOnMainThread(async () => {
                 await InitializeAsync(ci);
             });
-           // Initialize(ci);
+            // Initialize(ci);
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            //throw new NotImplementedException();
-        }
+        #endregion
 
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci) {
-                var civm = ItemViewModels.Where(x => x.CopyItemId == ci.Id);
-                
-            }
-        }
+        #region Public Methods
+
         public async Task InitializeAsync(MpCopyItem headItem) {
             await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
                 IsBusy = true;
+                ItemViewModels.Clear();
                 if (headItem != null) {
-                    ItemViewModels.Clear();
 
                     var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                     ccil.Insert(0, headItem);
@@ -759,8 +770,6 @@ using System.Speech.Synthesis;
                     HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
                     RequestUiUpdate();
-
-                    OnViewModelLoaded();
                 }
                 IsBusy = false;
                 OnPropertyChanged(nameof(ItemViewModels));
@@ -803,11 +812,11 @@ using System.Speech.Synthesis;
         }
 
         public void RequestExpand() {
-            OnExpandRequest?.Invoke(this, null);
+            //OnExpandRequest?.Invoke(this, null);
         }
 
         public void RequestUnexpand() {
-            OnUnExpandRequest?.Invoke(this, null);
+            //OnUnExpandRequest?.Invoke(this, null);
         }
 
         #endregion
@@ -1102,6 +1111,25 @@ using System.Speech.Synthesis;
             ItemViewModels.ForEach(x => x.Dispose());
             ItemViewModels.Clear();
 
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Protected Methods
+
+        #region DB Overrides
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            //throw new NotImplementedException();
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                var civm = ItemViewModels.Where(x => x.CopyItemId == ci.Id);
+
+            }
         }
 
         #endregion
@@ -1468,7 +1496,7 @@ using System.Speech.Synthesis;
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate &&
-                !IsTrialExpired;
+                !MpPreferences.Instance.IsTrialExpired;
         }
         private void PasteSubSelectedClips(object ptapId) {
             if (ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
@@ -1793,6 +1821,13 @@ using System.Speech.Synthesis;
                     });
             }
         }
+
+        //public int CompareTo(object obj) {
+        //    if(obj == null || obj.GetType() != typeof(MpClipTileViewModel)) {
+        //        return 1;
+        //    }
+        //    return HeadId.CompareTo((obj as MpClipTileViewModel).HeadId);
+        //}
 
         #endregion
 

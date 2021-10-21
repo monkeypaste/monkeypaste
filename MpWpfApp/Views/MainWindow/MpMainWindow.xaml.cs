@@ -22,58 +22,44 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void MainWindow_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
-                      
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+            await LoadMainWindow();
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+        private async Task LoadMainWindow() {
             WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+
+            // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+
+            await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
+            var mwvm = DataContext as MpMainWindowViewModel;
+            Application.Current.Resources["MainWindowViewModel"] = mwvm;
+            mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
+            mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
+            //MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
+            await MpShortcutCollectionViewModel.Instance.Init();
+
+            // MpPasteToAppPathViewModelCollection.Instance.Init();
+            MpMainWindowViewModel.Instance.SetupMainWindowRect();
+
+            int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            MpStandardBalloonViewModel.ShowBalloon(
+                    "Monkey Paste",
+                    "Successfully loaded w/ " + totalItems + " items",
+                    Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
 
-                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-                
-                var mwvm = DataContext as MpMainWindowViewModel;
-                Application.Current.Resources["MainWindowViewModel"] = mwvm;
-                mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
-                mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
-                //MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
-                await MpShortcutCollectionViewModel.Instance.Init();
-
-                // MpPasteToAppPathViewModelCollection.Instance.Init();
-                int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            //MpMainWindowViewModel.IsMainWindowLoading = false;
 
 
-                MpStandardBalloonViewModel.ShowBalloon(
-                   "Monkey Paste",
-                   "Successfully loaded w/ " + totalItems + " items",
-                   Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-
-                //MpMainWindowViewModel.IsMainWindowLoading = false;
-                MpMainWindowViewModel.Instance.SetupMainWindowRect();
-
-                sw.Stop();
-                MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
-            });
-        }
-
-        private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext != null && DataContext is MpMainWindowViewModel mwvm) {
-
-
-                
-            }
-        }
-
-        private void Instance_ViewModelLoaded(object sender, EventArgs e) {
-            //MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
-            MpClipTrayViewModel.Instance.ViewModelLoaded -= Instance_ViewModelLoaded;
+            sw.Stop();
+            MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
         }
 
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {

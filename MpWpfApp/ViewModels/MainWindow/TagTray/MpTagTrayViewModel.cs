@@ -114,8 +114,6 @@ namespace MpWpfApp {
             }
 
             TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
-
-            OnViewModelLoaded();
         }
 
 
@@ -134,6 +132,8 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(ttvm.IsSelected):
                     if(ttvm.IsSelected) {
+                        MpMessenger.Instance.Send<bool>(true);
+
                         OnTagSelectionChanged?.Invoke(this, ttvm.TagId);
                     }
                     break;

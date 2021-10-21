@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTrayView.xaml
     /// </summary>
-    public partial class MpClipTrayView : UserControl {
+    public partial class MpClipTrayView : MpUserControl<MpClipTrayViewModel> {
         public VirtualizingStackPanel TrayItemsPanel;
 
         private int _remainingItems = int.MaxValue;
@@ -31,6 +31,8 @@ namespace MpWpfApp {
 
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
+
+            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveViewModelMessage);
 
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += ctrvm.AddItemFromClipboard;
@@ -45,23 +47,32 @@ namespace MpWpfApp {
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             ctrvm.Items.CollectionChanged += Items_CollectionChanged;
-            
+
+            var sv = ClipTray.GetScrollViewer();
+            sv.MouseWheel += Sv_MouseWheel;
 
             Items_CollectionChanged(sender, null);
-
-            ClipTray?.Items.Refresh();
-            ClipTray?.ScrollViewer.ScrollToHorizontalOffset(75);
-
-            ClipTray?.ScrollViewer.InvalidateScrollInfo();
         }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            if(e != null) {
-                MpConsole.WriteLine("Tray collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
-            }
-            //when items are 'added' the tail view thinks it has the new head view model
-            //so set the tail view to the actual tail view model
+        private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
+            //does nothing but without setting this up in load the tray will always load in the center of the list!!
+            return;
+        }
 
+        private void ReceiveViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.Requery:
+                    UpdateLayout();
+                    InvalidateArrange();
+                    ClipTray.InvalidateArrange();
+                    ClipTray.GetScrollViewer().ScrollToHorizontalOffset(double.MinValue);
+
+
+                    break;
+            }
+        }
+
+        public void RefreshContext() {
             for (int i = 0; i < ClipTray.Items.Count; i++) {
                 var lbi = ClipTray.GetListBoxItem(i);
                 if (lbi != null) {
@@ -70,6 +81,47 @@ namespace MpWpfApp {
                     }
                 }
             }
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if(e != null) {
+                MpConsole.WriteLine("Tray collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
+            }
+            //when items are 'added' the tail view thinks it has the new head view model
+            //so set the tail view to the actual tail view model
+            //MpConsole.WriteLine("");
+            //MpConsole.WriteLine("Before dc refresh");
+            //foreach (var ctvm in BindingContext.Items) {
+            //    if (ctvm.IsPlaceholder)
+            //        continue;
+            //    int vmIdx = BindingContext.Items.IndexOf(ctvm);
+            //    List<int> d = new List<int>();
+            //    for (int i = 0; i < ClipTray.Items.Count; i++) {
+            //        var lbi = ClipTray.GetListBoxItem(i);
+            //        if(lbi?.DataContext  == ctvm) {
+            //            d.Add(i);
+            //        }
+            //    }
+            //    MpConsole.WriteLine($"Item {ctvm.HeadItem?.CopyItemTitle} view count: {d.Count} views: {string.Join(",", d)}");
+            //}
+
+            RefreshContext();
+
+            //MpConsole.WriteLine("After dc refresh");
+            //foreach (var ctvm in BindingContext.Items) {
+            //    if (ctvm.IsPlaceholder)
+            //        continue;
+            //    int vmIdx = BindingContext.Items.IndexOf(ctvm);
+            //    List<int> d = new List<int>();
+            //    for (int i = 0; i < ClipTray.Items.Count; i++) {
+            //        var lbi = ClipTray.GetListBoxItem(i);
+            //        if (lbi?.DataContext == ctvm) {
+            //            d.Add(i);
+            //        }
+            //    }
+            //    MpConsole.WriteLine($"Item {ctvm.HeadItem?.CopyItemTitle} view count: {d.Count} views: {string.Join(",", d)}");
+            //}
+            //MpConsole.WriteLine("");
         }
 
 
@@ -103,11 +155,11 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            ClipTray?.GetScrollViewer().ScrollToHome();
+            //ClipTray?.GetScrollViewer().ScrollToHome();
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
-            ClipTray?.ScrollIntoView(e);
+            //ClipTray?.ScrollIntoView(e);
         }
 
         private void ClipTray_ScrollChanged(object sender, ScrollChangedEventArgs e) {
@@ -130,7 +182,7 @@ namespace MpWpfApp {
         #endregion
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            //TrayItemsPanel = sender as VirtualizingStackPanel;
+            TrayItemsPanel = sender as VirtualizingStackPanel;
         }
 
         private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {

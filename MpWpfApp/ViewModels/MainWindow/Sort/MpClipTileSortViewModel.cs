@@ -83,8 +83,6 @@ namespace MpWpfApp {
                         break;
                 }
             };
-
-            OnViewModelLoaded();
         }
 
         public void SetToManualSort() {

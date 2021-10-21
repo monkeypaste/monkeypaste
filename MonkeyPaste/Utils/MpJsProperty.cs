@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
-    public class MpJsProperty<T> : MpObservableObject, IDisposable  {
+    public class MpJsProperty<T> : MpViewModelBase, IDisposable  {
         private object _lastVal = null;
         private string _parentPropertyName;
         private Func<string, Task<string>> _evaluator;
@@ -29,7 +29,7 @@ namespace MonkeyPaste {
             UpdateTimer.Start();
         }
 
-        public async Task<T> GetValue<T>(params object[] args) where T:class {
+       public async Task<T> GetValue<T>(params object[] args) where T:class {
             _lastArgs = args;
             while (_evaluator == null) {
                 await Task.Delay(100);

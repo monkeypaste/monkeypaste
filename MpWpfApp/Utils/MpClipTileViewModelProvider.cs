@@ -21,26 +21,26 @@ namespace MpWpfApp {
             ModelProvider.SetQueryInfo(info);
         }
 
-        public int FetchCount() {
+        public int FetchCopyItemCount() {
             if(ModelProvider == null) {
                 return 0;
             }
-            return ModelProvider.FetchCount();
+            return ModelProvider.FetchCopyItemCount();
         }
 
         public async Task<int> FetchCountAsync() {
             if (ModelProvider == null) {
                 return 0;
             }
-            int count = await ModelProvider.FetchCountAsync();
+            int count = await ModelProvider.FetchCopyItemCountAsync();
             return count;
         }
 
-        public IList<MpClipTileViewModel> FetchRange(int startIndex, int count) {
+        public IList<MpClipTileViewModel> FetchCopyItemRange(int startIndex, int count) {
             if (ModelProvider == null) {
                 return new List<MpClipTileViewModel>();
             }
-            var ml = ModelProvider.FetchRange(startIndex, count);
+            var ml = ModelProvider.FetchCopyItemRange(startIndex, count);
             var vml = new List<MpClipTileViewModel>();
             foreach(var m in ml) {
                 vml.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(m));
@@ -53,7 +53,7 @@ namespace MpWpfApp {
             if (ModelProvider == null) {
                 return new List<MpClipTileViewModel>();
             }
-            var ml = await ModelProvider.FetchRangeAsync(startIndex, count);
+            var ml = await ModelProvider.FetchCopyItemRangeAsync(startIndex, count);
             var vml = new List<MpClipTileViewModel>();
             foreach (var m in ml) {
                 vml.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(m));

@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {
@@ -40,8 +39,6 @@ namespace MonkeyPaste {
         public string edText { get; set; }
         public string edTemplates { get; set; }
         public string edConsoleLog { get; set; }
-
-        public MpJsProperty<bool> IsEditorLoaded { get; set; }
 
         public double EditorHeight { get; set; } = _collapsedHeight;
 
@@ -114,10 +111,11 @@ namespace MonkeyPaste {
         public bool IsVisible { get; set; } = true;
         #endregion
 
-        #region Public Methods
-        public MpCopyItemViewModel() { }
+        #region Constructors
 
-        public MpCopyItemViewModel(MpCopyItem item) {
+        public MpCopyItemViewModel() : base(){ }
+
+        public MpCopyItemViewModel(MpCopyItem item) : base() {
             PropertyChanged += MpCopyItemViewModel_PropertyChanged;
             OnEditorLoaded += MpCopyItemViewModel_OnEditorLoaded;
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
@@ -129,6 +127,10 @@ namespace MonkeyPaste {
 
             //Initialize();
         }
+
+        #endregion
+        #region Public Methods
+
         #endregion
 
         #region Private Methods

@@ -23,22 +23,50 @@ namespace MpWpfApp {
         public bool IsExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
-            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
+            //AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            AssociatedObject.Unloaded += AssociatedObject_Unloaded;
         }
-        
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-           if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
-                octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
-                octvm.OnUnExpandRequest -= Ctvm_OnUnExpandRequest;
-                MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
-            }
-           if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-                nctvm.OnExpandRequest += Ctvm_OnExpandRequest;
-                nctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
-                MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
-            }
-            _dc = e.NewValue;
+
+        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
+            //AssociatedObject.DataContextChanged -= AssociatedObject_DataContextChanged;
+            AssociatedObject.BindingContext.PropertyChanged -= BindingContext_PropertyChanged;
+            AssociatedObject.Loaded -= AssociatedObject_Loaded;
+            AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+            MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
         }
+
+        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
+            AssociatedObject.BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+            MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+        }
+
+        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ctvm = sender as MpClipTileViewModel;
+            switch(e.PropertyName) {
+                case nameof(ctvm.IsExpanded):
+                    if(ctvm.IsExpanded) {
+                        Expand();
+                    } else {
+                        Unexpand();
+                    }
+                    break;
+            }
+        }
+
+        //private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        //   if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+        //        octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
+        //        octvm.OnUnExpandRequest -= Ctvm_OnUnExpandRequest;
+        //        MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
+        //    }
+        //   if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
+        //        nctvm.OnExpandRequest += Ctvm_OnExpandRequest;
+        //        nctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
+        //        MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+        //    } 
+        //    _dc = e.NewValue;
+        //}
 
         public void Resize(double deltaHeight) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
@@ -89,6 +117,8 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
+            //AssociatedObject.GetVisualAncestor<MpClipTrayView>().RefreshContext();
+
             IsExpandingOrUnexpanding = true;
 
             var _deltaSize = new Point();
@@ -104,9 +134,9 @@ namespace MpWpfApp {
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
             //collapse all other tiles
-            ctvm.Parent.Items
-                .Where(x => x != ctvm)
-                .ForEach(y => y.ItemVisibility = Visibility.Collapsed);
+            //ctvm.Parent.Items
+            //    .Where(x => x != ctvm)
+            //    .ForEach(y => y.OnPropertyChanged(nameof(y.IsPlaceholder)));
 
             ctvm.IsSelected = true;
 
@@ -148,6 +178,8 @@ namespace MpWpfApp {
             if(clv != null) {
                 clv.EditToolbarView.Visibility = Visibility.Visible;
                 clv.UpdateLayout();
+            } else {
+                Debugger.Break();
             }
 
             var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();

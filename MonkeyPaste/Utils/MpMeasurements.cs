@@ -4,7 +4,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpMeasurements : MpViewModelBase {
+    public class MpMeasurements  {
         private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
         public static MpMeasurements Instance { 
             get { 
