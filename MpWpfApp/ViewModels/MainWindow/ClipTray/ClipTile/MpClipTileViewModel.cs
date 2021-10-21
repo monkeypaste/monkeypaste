@@ -664,9 +664,10 @@ using System.Speech.Synthesis;
         }
 
         [MpDependsOnParent("IsAnyTileExpanded")]
+        [MpDependsOnChild("IsPlaceholder")]
         public bool IsPlaceholder {
             get {
-                if(Parent == null || ItemViewModels.Count == 0) {
+                if(Parent == null || ItemViewModels.Count == 0 || (ItemViewModels[0] != null && ItemViewModels[0].IsPlaceholder)) {
                     return true;
                 }
                 return Parent.IsAnyTileExpanded && !IsExpanded;
@@ -747,24 +748,75 @@ using System.Speech.Synthesis;
 
         #region Public Methods
 
+        public async Task PreInitializeAsync(int headItemId, CancellationToken ct) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                IsBusy = true;
+                if (headItemId <= 0) {
+                    int subItemsToRemove = ItemViewModels.Count - 1;
+                    while(subItemsToRemove > 0) {
+                        ItemViewModels.RemoveAt(1);
+                    }
+
+                    HeadItem.CopyItem = null;
+
+                    IsBusy = false;
+                }
+                OnPropertyChanged(nameof(ItemViewModels));
+                OnPropertyChanged(nameof(IsPlaceholder));
+
+                
+                while(true) {
+                    if(ct.IsCancellationRequested) {
+                        return;
+                    }
+                    if(!Parent.IsScrolling) {
+                        // TODO either query for model w/ id 
+                        // or get from a cache in the item provider, load content and
+                        // unset isbusy
+                        if(!Parent.CurPageLookup.ContainsKey(headItemId)) {
+                            MpConsole.WriteLine("Missing key: " + headItemId);
+                            return;
+                        }
+                        await InitializeAsync(Parent.CurPageLookup[headItemId]);
+                        return;
+                    }
+                    await Task.Delay(50);
+                }
+            });
+        }
+
         public async Task InitializeAsync(MpCopyItem headItem) {
             await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
+                if(!IsBusy) {
+                    ItemViewModels.Clear();
+                }
                 IsBusy = true;
-                ItemViewModels.Clear();
+                
                 if (headItem != null) {
 
                     var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
-                    ccil.Insert(0, headItem);
-
-                    //foreach(var ci in ccil.OrderBy(x=>x.CompositeSortOrderIdx)) {
-                    //    ItemViewModels.Add(new MpContentItemViewModel(this, ci));
+                    //int subItemsToAdd = ItemViewModels.Count + ccil.Count - 1;
+                    //while (subItemsToAdd > 0) {
+                    //    ccil.RemoveAt(1);
                     //}
                     var civml = new List<MpContentItemViewModel>();
+                    if(ItemViewModels.Count == 0) {
+                        ccil.Insert(0, headItem);
+
+                        
+
+                       
+                    } else {
+                        civml.Add(ItemViewModels[0]);
+                    }
                     foreach (var cci in ccil) {
                         civml.Add(new MpContentItemViewModel(this, cci));
                     }
-
                     ItemViewModels = new ObservableCollection<MpContentItemViewModel>(civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
+                    //foreach(var ci in ccil.OrderBy(x=>x.CompositeSortOrderIdx)) {
+                    //    ItemViewModels.Add(new MpContentItemViewModel(this, ci));
+                    //}v
+
 
 
                     HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
@@ -774,6 +826,7 @@ using System.Speech.Synthesis;
                 IsBusy = false;
                 OnPropertyChanged(nameof(ItemViewModels));
                 OnPropertyChanged(nameof(IsPlaceholder));
+                
             });
         }
 

@@ -14,6 +14,7 @@ namespace MpWpfApp {
 
         public MpClipTileViewModelProvider(int pageSize) {
             _pageSize = pageSize;
+            MpDataModelProvider.Instance.Init(pageSize);
             ModelProvider = MpDataModelProvider.Instance;
         }
 

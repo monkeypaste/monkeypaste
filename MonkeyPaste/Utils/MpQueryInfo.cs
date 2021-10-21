@@ -14,6 +14,8 @@ namespace MonkeyPaste {
 
         public virtual MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
 
+        public virtual int PageSize { get; set; }
+
         public void NotifyQueryChanged() {
             MpMessenger.Instance.Send<bool>(true);
         }

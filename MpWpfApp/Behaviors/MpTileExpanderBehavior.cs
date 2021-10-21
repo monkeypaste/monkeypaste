@@ -117,7 +117,8 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
-            //AssociatedObject.GetVisualAncestor<MpClipTrayView>().RefreshContext();
+            //need to do this so listboxitem matches w/ datacontext or it will expand to another tiles size
+            AssociatedObject.GetVisualAncestor<MpClipTrayView>().RefreshContext();
 
             IsExpandingOrUnexpanding = true;
 

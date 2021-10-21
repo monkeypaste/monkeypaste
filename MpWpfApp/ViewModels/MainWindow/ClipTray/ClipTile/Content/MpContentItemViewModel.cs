@@ -334,6 +334,7 @@ namespace MpWpfApp {
             }
         }
 
+        [MpAffectsParent]
         public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
@@ -591,7 +592,7 @@ namespace MpWpfApp {
         public MpContentItemViewModel() : base(null) { }
 
         public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
-            MpConsole.WriteLine(DependOnParentTest);
+            //MpConsole.WriteLine(DependOnParentTest);
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await InitializeAsync(ci);
@@ -869,6 +870,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsPlaceholder):
                     ItemVisibility = IsPlaceholder ? Visibility.Hidden : Visibility.Visible;
+                    //if(Parent !=null) {
+                    //    Parent.OnPropertyChanged(nameof(Parent.IsPlaceholder));
+                    //}
                     break;
                 case nameof(IsEditingTitle):
                     if(!IsEditingTitle) {

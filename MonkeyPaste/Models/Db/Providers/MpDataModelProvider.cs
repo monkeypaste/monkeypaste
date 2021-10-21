@@ -50,6 +50,10 @@ namespace MonkeyPaste {
             _queryInfo = new MpQueryInfo();
         }
 
+        public void Init(int pageSize) {
+            _queryInfo.PageSize = pageSize;
+        }
+
         #endregion
 
         #region Private Variables

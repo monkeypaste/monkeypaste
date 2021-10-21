@@ -96,8 +96,7 @@ namespace MpWpfApp {
                 var r_lbi_idx = lb.GetItemIndexAtPoint(new Point(lbr.Right, lbr.Height / 2));
                 MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {count-r_lbi_idx}  max remaining: {remainingItemCount}");
                 if (count - r_lbi_idx <= remainingItemCount) {
-                    //MpClipTrayViewModel.Instance.RecycleItemsCommand.Execute(1);
-                    //StartOrContinueLoadTimer();
+                    //MpClipTrayViewModel.Instance.RecycleItemsCommand.Execute(1);  StartOrContinueLoadTimer();
 
                     MpClipTrayViewModel.Instance.LoadAndRecycleMoreClipsCommand.Execute(1);
                 }
@@ -110,8 +109,7 @@ namespace MpWpfApp {
                 var l_lbi_idx = lb.GetItemIndexAtPoint(new Point(lbr.Left, lbr.Height / 2));
                 MpConsole.WriteLine($"Scrolling right, left most idx: {l_lbi_idx} with remaining: {l_lbi_idx}  max remaining: {remainingItemCount}");
                 if (l_lbi_idx - remainingItemCount <= 0) {
-                    //MpClipTrayViewModel.Instance.RecycleItemsCommand.Execute(-1);
-                    //StartOrContinueLoadTimer();
+                    //MpClipTrayViewModel.Instance.RecycleItemsCommand.Execute(-1); StartOrContinueLoadTimer();
                     MpClipTrayViewModel.Instance.LoadAndRecycleMoreClipsCommand.Execute(-1);
                 }
             }         

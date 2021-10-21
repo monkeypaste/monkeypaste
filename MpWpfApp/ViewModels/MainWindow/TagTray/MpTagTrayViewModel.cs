@@ -23,6 +23,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
+        private int _defaultTagId = MpTag.AllTagId;
         #endregion
 
         #region View Models
@@ -33,6 +34,8 @@ namespace MpWpfApp {
         public MpTagTileViewModel AllTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.AllTagId).FirstOrDefault();
 
         public MpTagTileViewModel RecentTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.RecentTagId).FirstOrDefault();
+
+        
         #endregion
 
         #region Properties
@@ -145,7 +148,8 @@ namespace MpWpfApp {
 
             UpdateSortOrder(true);
 
-            RecentTagViewModel.IsSelected = true;
+            //RecentTagViewModel.IsSelected = true;
+            TagTileViewModels.Where(x=>x.TagId == _defaultTagId).FirstOrDefault().IsSelected = true;
         }
 
         public void UpdateSortOrder(bool fromModel = false) {
@@ -250,9 +254,10 @@ namespace MpWpfApp {
         }
 
         public void ResetTagSelection() {
-            if(SelectedTagTile != RecentTagViewModel) {
+            if(SelectedTagTile.TagId != _defaultTagId) {
                 ClearTagSelection();
-                RecentTagViewModel.IsSelected = true;
+                //RecentTagViewModel.IsSelected = true;
+                TagTileViewModels.Where(x => x.TagId == _defaultTagId).FirstOrDefault().IsSelected = true;
             }            
         }
 

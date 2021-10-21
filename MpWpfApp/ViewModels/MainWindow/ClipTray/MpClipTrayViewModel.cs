@@ -21,6 +21,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
+using System.Collections.Concurrent;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpViewModelBase<object>  {
@@ -55,7 +56,12 @@ namespace MpWpfApp {
         private int _pageCount = 0;
         private int _totalItemsInQuery = 0;
         private int _headIdxInTotal = 0;
-        private int _tailIdxInTotal = 0;
+        private int _tailIdxInTotal {
+            get {
+                int idx = _headIdxInTotal + _pageCount - 1;
+                return idx < _totalItemsInQuery ? idx : _totalItemsInQuery - 1;
+            }
+        }
         private int _remainingItemsCount = 0;
         private Dictionary<int, int> _manualSortOrderLookup = null;
         private List<int> _selectedHeadContentIds = new List<int>();
@@ -196,6 +202,8 @@ namespace MpWpfApp {
         #region Layout
         public Point DropTopPoint { get; set; }
         public Point DropBottomPoint { get; set; }
+
+        public HorizontalAlignment ItemsPanelAlignment => IsAnyTileExpanded ? HorizontalAlignment.Center : HorizontalAlignment.Left;
         #endregion
 
         #region Selection 
@@ -378,7 +386,7 @@ namespace MpWpfApp {
             MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
             _tileLockObject = new object();
 
-            _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles * 2;
+            _pageCount = MpMeasurements.Instance.TotalVisibleClipTiles + 1;// * 2;
             _viewModelProvider = new MpClipTileViewModelProvider(_pageCount);            
 
             //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
@@ -430,7 +438,7 @@ namespace MpWpfApp {
 
                 _totalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
                 _headIdxInTotal = 0;
-                _tailIdxInTotal = _totalItemsInQuery < _pageCount ? _totalItemsInQuery : _pageCount;
+               // _tailIdxInTotal = _totalItemsInQuery < _pageCount ? _totalItemsInQuery : _pageCount - 1;
 
                 var initTasks = new List<Task>();
                 var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(0, _pageCount);
@@ -460,21 +468,21 @@ namespace MpWpfApp {
                         //no more items to fetch
                         return;
                     }
-                    _tailIdxInTotal += fetchCount;                    
+                    
                      for (int i = 0; i < fetchCount; i++) {
                         Items.Move(0, Items.Count - 1);
                     }
-                    _headIdxInTotal = _tailIdxInTotal - _pageCount + 1;
-                } else {
+                     _headIdxInTotal += fetchCount;
+                 } else {
                     if (_headIdxInTotal <= 0) {
                         //no more items to fetch
                         return;
                     }
-                    _headIdxInTotal -= fetchCount;
+                    
                     for (int i = 0; i < fetchCount; i++) {
                         Items.Move(Items.Count - 1, 0);
                     }
-                     _tailIdxInTotal = _headIdxInTotal + _pageCount - 1;
+                     _headIdxInTotal -= fetchCount;
                  }
             },
             (countToRecycle) => {
@@ -486,7 +494,7 @@ namespace MpWpfApp {
                 int fetchCount = Math.Abs((int)itemsToLoad);
                 bool isLeft = ((int)itemsToLoad) > 0;
                 var loadTasks = new List<Task>();
-                var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_headIdxInTotal, _tailIdxInTotal);
+                var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_headIdxInTotal, fetchCount);
                 for (int i = 0; i < cil.Count; i++) {
                     loadTasks.Add(Items[i].InitializeAsync(cil[i]));
                 }
@@ -498,21 +506,31 @@ namespace MpWpfApp {
             (itemsToLoad) => {
                 return itemsToLoad != null;
             });
+        CancellationTokenSource[] curCtsl;
+        public ConcurrentDictionary<int, MpCopyItem> CurPageLookup = new ConcurrentDictionary<int, MpCopyItem>();
 
         public ICommand LoadAndRecycleMoreClipsCommand => new AsyncRelayCommand<object>(
             async (itemsToLoad) => {
+
+                if(curCtsl != null) {
+                    curCtsl.ForEach(x => x.Dispose());
+                    curCtsl = null;
+                }
+
                 int fetchCount = Math.Abs((int)itemsToLoad);
                 bool isLeft = ((int)itemsToLoad) > 0;
-                var loadAndMoveTasks = new List<Task>();
+                var loadAndMoveTasks = new List<Task<CancellationTokenSource>>();
                 if (isLeft) {
                     if (_tailIdxInTotal >= _totalItemsInQuery - 1) {
                         //no more items to fetch
                         return;
                     }
-                    _tailIdxInTotal += fetchCount;
+                    _headIdxInTotal += fetchCount;
                     var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_tailIdxInTotal, fetchCount);
                     for (int i = 0; i < cil.Count; i++) {
-                        loadAndMoveTasks.Add(LoadAndMoveItem(0, _pageCount - 1, cil[i]));
+                        loadAndMoveTasks.Add(PreLoadAndMoveItem(0, _pageCount - 1, cil[i].Id));
+                        CurPageLookup.TryAdd(cil[i].Id, cil[i]);
+
                         //await Items[0].InitializeAsync(cil[i]);
                         //Items.Move(0, Items.Count - 1);
                     }
@@ -525,12 +543,14 @@ namespace MpWpfApp {
                     var cil = await _viewModelProvider.ModelProvider.FetchCopyItemRangeAsync(_headIdxInTotal, fetchCount);
                     for (int i = 0; i < cil.Count; i++) {
 
-                        loadAndMoveTasks.Add(LoadAndMoveItem(_pageCount - 1,0, cil[i]));
+                        loadAndMoveTasks.Add(PreLoadAndMoveItem(_pageCount - 1,0, cil[i].Id));
+
+                        CurPageLookup.TryAdd(cil[i].Id, cil[i]);
                         //await Items[Items.Count - 1].InitializeAsync(cil[i]);
                         //Items.Move(Items.Count - 1, 0);
                     }
                 }
-                await Task.WhenAll(loadAndMoveTasks.ToArray());
+                curCtsl = await Task.WhenAll(loadAndMoveTasks.ToArray());
             },
             (itemsToLoad) => {
                 return itemsToLoad != null;
@@ -539,6 +559,13 @@ namespace MpWpfApp {
         private async Task LoadAndMoveItem(int oldIdx,int newIdx, MpCopyItem ci) {
             await Items[oldIdx].InitializeAsync(ci);
             Items.Move(oldIdx, newIdx);
+        }
+
+        private async Task<CancellationTokenSource> PreLoadAndMoveItem(int oldIdx, int newIdx, int ciid) {
+            var cts = new CancellationTokenSource();
+            await Items[oldIdx].PreInitializeAsync(ciid,cts.Token);
+            Items.Move(oldIdx, newIdx);
+            return cts;
         }
 
         public async Task AddNewModels() {

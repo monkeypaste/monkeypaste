@@ -44,7 +44,7 @@ namespace MpWpfApp {
                         });
                     }
 
-                    ShowBusySpinner();
+                    //ShowBusySpinner();
                     //Task.Run(async () => {
                     //    await Task.Delay(500);
                     //    ctvm.IsBusy = false;
@@ -54,7 +54,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
-            HideBusySpinner();
+           // HideBusySpinner();
         }
 
         private void Ctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -74,13 +74,13 @@ namespace MpWpfApp {
         }
 
         private void ShowBusySpinner() {
-            ClipTileBusyView.Visibility = Visibility.Visible;
-            ClipTileDockPanel.Visibility = Visibility.Hidden;
+            //ClipTileBusyView.Visibility = Visibility.Visible;
+            //ClipTileDockPanel.Visibility = Visibility.Hidden;
         }
 
         private void HideBusySpinner() {
-            ClipTileBusyView.Visibility = Visibility.Hidden;
-            ClipTileDockPanel.Visibility = Visibility.Visible;
+           // ClipTileBusyView.Visibility = Visibility.Hidden;
+           // ClipTileDockPanel.Visibility = Visibility.Visible;
         }
 
         public async Task<MpHighlightTextRangeViewModelCollection> Search(string hlt) {

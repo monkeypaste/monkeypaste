@@ -86,7 +86,7 @@
                                                 CanVerticallyScroll="False"
                                                 CanHorizontallyScroll="True"
                                                 VerticalAlignment="Stretch"
-                                                HorizontalAlignment="Center"
+                                                HorizontalAlignment="{Binding ItemsPanelAlignment, Source={StaticResource ClipTrayViewModel}}"
                                                 IsItemsHost="True"
                                                 Orientation="Horizontal" />
                     </ItemsPanelTemplate>
