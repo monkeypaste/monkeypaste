@@ -37,11 +37,24 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
+            MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceiveClipTileMessage, AssociatedObject.DataContext);
+
             AssociatedObject.BindingContext.PropertyChanged += BindingContext_PropertyChanged;
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
 
+        private void ReceiveClipTileMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.Expand:
+                    Expand();
+                    break;
+                case MpMessageType.Unexpand:
+                    Unexpand();
+                    break;
+            }
+        }
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            return;
             var ctvm = sender as MpClipTileViewModel;
             switch(e.PropertyName) {
                 case nameof(ctvm.IsExpanded):
@@ -118,7 +131,7 @@ namespace MpWpfApp {
 
         private void Expand() {
             //need to do this so listboxitem matches w/ datacontext or it will expand to another tiles size
-            AssociatedObject.GetVisualAncestor<MpClipTrayView>().RefreshContext();
+            //AssociatedObject.GetVisualAncestor<MpClipTrayView>().RefreshContext();
 
             IsExpandingOrUnexpanding = true;
 
@@ -187,7 +200,6 @@ namespace MpWpfApp {
             foreach(var civ in civl) {
                 var civm = civ.DataContext as MpContentItemViewModel;
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
-                civm.OnPropertyChanged(nameof(civm.EditorCursor));
                 civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                 //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
                 civ.EditorView.Rtb.FitDocToRtb();
@@ -229,9 +241,9 @@ namespace MpWpfApp {
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
-            ctvm.Parent.Items
-                .Where(x => x != ctvm && !x.IsPlaceholder)
-                .ForEach(y => y.ItemVisibility = Visibility.Visible);
+            //ctvm.Parent.Items
+            //    .Where(x => x != ctvm && !x.IsPlaceholder)
+            //    .ForEach(y => y.ItemVisibility = Visibility.Visible);
 
             double temp = mwvm.MainWindowTop;
             //this resets window top to standard 
@@ -261,7 +273,6 @@ namespace MpWpfApp {
                     var civm = civ.DataContext as MpContentItemViewModel;
                     civm.ClearEditing();
                     civm.OnPropertyChanged(nameof(civm.EditorHeight));
-                    civm.OnPropertyChanged(nameof(civm.EditorCursor));
                     civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                     civ.EditorView.Rtb.FitDocToRtb();
                 }

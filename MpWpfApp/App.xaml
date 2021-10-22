@@ -1161,6 +1161,8 @@
         <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
         <local:MpDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
         <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
+        <local:MpBoolToCursorConverter x:Key="BoolToCursorConverter" />
+        <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
 
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
         <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />

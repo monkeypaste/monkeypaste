@@ -50,10 +50,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-
-        public event EventHandler<MpContentSortType> OnSortTypeChanged;
-        public event EventHandler<bool> OnIsDescendingChanged;
-
         #endregion
 
         #region Public Methods
@@ -61,56 +57,40 @@ namespace MpWpfApp {
             //must be set before property changed registered for loading order
             SelectedSortType = SortTypes[0];
 
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(SelectedSortType):
-                        if (SelectedSortType == null) {
-                            break;
-                        }
-                        if (SelectedSortType.SortType != MpContentSortType.Manual) {
-                            var manualSort = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();
-                            if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
-                                manualSort.IsVisible = false;
-                            } else {
-                                manualSort.IsVisible = true;
-                            }
-                            PerformSelectedSortCommand.Execute(null);
-                            OnSortTypeChanged?.Invoke(this, SelectedSortType.SortType);
-                        }
-                        break;
-                    case nameof(IsSortDescending):
-                        OnIsDescendingChanged?.Invoke(this, IsSortDescending);
-                        break;
-                }
-            };
+            PropertyChanged += MpClipTileSortViewModel_PropertyChanged;
         }
 
         public void SetToManualSort() {
             SelectedSortType = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();
             SelectedSortType.IsVisible = true;
-            //if (IsSortDescending) {
-            //    ToggleSortOrderCommand.Execute(null);
-            //}
         }
         #endregion
 
-        #region Private Methods        
+        #region Private Methods       
+        private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(SelectedSortType):
+                    if (SelectedSortType == null) {
+                        break;
+                    }
+                    if (SelectedSortType.SortType != MpContentSortType.Manual) {
+                        var manualSort = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();
+                        if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
+                            manualSort.IsVisible = false;
+                        } else {
+                            manualSort.IsVisible = true;
+                        }
+                        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                    }
+                    break;
+                case nameof(IsSortDescending):
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                    break;
+            }
+        }
         #endregion
 
         #region Commands
-        public ICommand ToggleSortOrderCommand => new RelayCommand(
-            () => {
-                IsSortDescending = !IsSortDescending;
-                PerformSelectedSortCommand.Execute(null);
-            });
-
-        public ICommand PerformSelectedSortCommand => new AsyncRelayCommand(
-                async () => {
-                    await MpClipTrayViewModel.Instance.RefreshTiles();
-                },
-                () => { 
-                    return !MpMainWindowViewModel.IsMainWindowLoading; 
-                });
           
         #endregion
     }

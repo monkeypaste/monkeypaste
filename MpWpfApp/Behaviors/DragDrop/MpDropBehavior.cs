@@ -172,8 +172,9 @@ namespace MpWpfApp {
                         if (dragTiles.Any(x => x == dropTile)) {
                             // special case where items are dragged from last item
                             // create a new tile at end of list
-                            MpClipTrayViewModel.Instance.Items.Add(MpClipTrayViewModel.Instance.CreateClipTileViewModel(null));
-                            dropTile = MpClipTrayViewModel.Instance.TailItem;
+
+                            dropTile = await MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
+                            MpClipTrayViewModel.Instance.Items.Add(dropTile);
                         }
                         foreach (var dragTile in dragTiles) {
                             //remove drag content from their tiles
@@ -204,8 +205,9 @@ namespace MpWpfApp {
                                     dropIdx--;
                                     MpConsole.WriteLine("Decrementing tray dropIdx: " + dropIdx);
                                 }
-                                await dragTile.InitializeAsync(null);
-                                MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
+                                //await dragTile.InitializeAsync(null);
+                                //MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
+                                MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
                             } else {
                                 await dragTile.UpdateSortOrderAsync();
                                 await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
@@ -279,8 +281,7 @@ namespace MpWpfApp {
                             if (dragTile.Count == 0) {
                                 //recycle empty tile
                                 int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                                await dragTile.InitializeAsync(null);
-                                MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
+                                MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
                             } else {
                                 await dragTile.UpdateSortOrderAsync();
                                 await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);

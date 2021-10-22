@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public virtual int PageSize { get; set; }
 
         public void NotifyQueryChanged() {
-            MpMessenger.Instance.Send<bool>(true);
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);            
         }
     }
 }

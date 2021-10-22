@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     /// <summary>
@@ -32,8 +33,6 @@ namespace MpWpfApp {
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var ctrvm = DataContext as MpClipTrayViewModel;
 
-            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveViewModelMessage);
-
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += ctrvm.AddItemFromClipboard;
             _remainingItems = ctrvm.Items.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
@@ -46,12 +45,37 @@ namespace MpWpfApp {
             ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
-            ctrvm.Items.CollectionChanged += Items_CollectionChanged;
+            ctrvm.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
+            var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+            sv.PreviewMouseDown += Sv_PreviewMouseDown;
 
-            var sv = ClipTray.GetScrollViewer();
-            sv.MouseWheel += Sv_MouseWheel;
 
-            Items_CollectionChanged(sender, null);
+            MpMessenger.Instance.Register<MpMessageType>(ctrvm, ReceivedMessage);
+        }
+
+        private void Ctrvm_OnScrollToXRequest(object sender, double e) {
+            var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+            //sv.ScrollToHorizontalOffset(e);
+            sv.TargetHorizontalOffset = e;
+        }
+
+        private void Sb_MouseUp(object sender, MouseButtonEventArgs e) {
+            //throw new NotImplementedException();
+        }
+
+        private void Sv_PreviewMouseMove(object sender, MouseEventArgs e) {
+            //throw new NotImplementedException();
+        }
+
+        private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            e.Handled = true;
+            var sv = sender as ScrollViewer;
+
+            double norm_x = e.GetPosition(sv).X / sv.ActualWidth;
+
+            int targetTileIdx = (int)Math.Floor(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);
+
+            MpClipTrayViewModel.Instance.LoadToIdxCommand.Execute(targetTileIdx);
         }
 
         private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
@@ -59,84 +83,49 @@ namespace MpWpfApp {
             return;
         }
 
-        private void ReceiveViewModelMessage(MpMessageType msg) {
-            switch(msg) {
+        private void ReceivedMessage(MpMessageType msg) {
+            switch (msg) {
                 case MpMessageType.Requery:
-                    UpdateLayout();
-                    InvalidateArrange();
-                    ClipTray.InvalidateArrange();
-                    ClipTray.GetScrollViewer().ScrollToHorizontalOffset(double.MinValue);
-
-
+                    //await RefreshContext();
+                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+                    if(sv != null) {
+                        double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
+                        double ttw = tw * BindingContext.TotalItemsInQuery;
+                        sv.HorizontalScrollBar.Maximum = ttw;
+                    }
+                    break;
+                case MpMessageType.Expand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Center;
+                    break;
+                case MpMessageType.Unexpand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Left;
                     break;
             }
         }
-
-        public void RefreshContext() {
-            for (int i = 0; i < ClipTray.Items.Count; i++) {
-                var lbi = ClipTray.GetListBoxItem(i);
-                if (lbi != null) {
-                    if (i < MpClipTrayViewModel.Instance.Items.Count) {
-                        lbi.DataContext = MpClipTrayViewModel.Instance.Items[i];
+        public async Task RefreshContext() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                for (int i = 0; i < ClipTray.Items.Count; i++) {
+                    var lbi = ClipTray.GetListBoxItem(i);
+                    if (lbi != null) {
+                        if (i < MpClipTrayViewModel.Instance.Items.Count) {
+                            lbi.DataContext = MpClipTrayViewModel.Instance.Items[i];
+                        }
                     }
                 }
-            }
-        }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            if(e != null) {
-                MpConsole.WriteLine("Tray collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
-            }
-            //when items are 'added' the tail view thinks it has the new head view model
-            //so set the tail view to the actual tail view model
-            //MpConsole.WriteLine("");
-            //MpConsole.WriteLine("Before dc refresh");
-            //foreach (var ctvm in BindingContext.Items) {
-            //    if (ctvm.IsPlaceholder)
-            //        continue;
-            //    int vmIdx = BindingContext.Items.IndexOf(ctvm);
-            //    List<int> d = new List<int>();
-            //    for (int i = 0; i < ClipTray.Items.Count; i++) {
-            //        var lbi = ClipTray.GetListBoxItem(i);
-            //        if(lbi?.DataContext  == ctvm) {
-            //            d.Add(i);
-            //        }
-            //    }
-            //    MpConsole.WriteLine($"Item {ctvm.HeadItem?.CopyItemTitle} view count: {d.Count} views: {string.Join(",", d)}");
-            //}
-
-            RefreshContext();
-
-            //MpConsole.WriteLine("After dc refresh");
-            //foreach (var ctvm in BindingContext.Items) {
-            //    if (ctvm.IsPlaceholder)
-            //        continue;
-            //    int vmIdx = BindingContext.Items.IndexOf(ctvm);
-            //    List<int> d = new List<int>();
-            //    for (int i = 0; i < ClipTray.Items.Count; i++) {
-            //        var lbi = ClipTray.GetListBoxItem(i);
-            //        if (lbi?.DataContext == ctvm) {
-            //            d.Add(i);
-            //        }
-            //    }
-            //    MpConsole.WriteLine($"Item {ctvm.HeadItem?.CopyItemTitle} view count: {d.Count} views: {string.Join(",", d)}");
-            //}
-            //MpConsole.WriteLine("");
+                //UpdateLayout();
+                //InvalidateArrange();
+                //ClipTray.InvalidateArrange();
+                //ClipTray.GetScrollViewer().ScrollToHorizontalOffset(double.MinValue);
+            });
         }
 
 
         #region Selection
-        private void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            //ctrvm.MergeClipsCommandVisibility = ctrvm.MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
-
-            MpTagTrayViewModel.Instance.UpdateTagAssociation();
-
-            //if (ctrvm.PrimaryItem != null) {
-            //    ctrvm.PrimaryItem.OnPropertyChanged(nameof(ctrvm.PrimaryItem.TileBorderBrush));
-            //}
-
+        private async void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             MpAppModeViewModel.Instance.RefreshState();
+
+            await MpTagTrayViewModel.Instance.UpdateTagAssociation();
         }
 
         #endregion
@@ -159,7 +148,7 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
-            //ClipTray?.ScrollIntoView(e);
+            ClipTray?.ScrollIntoView(e);
         }
 
         private void ClipTray_ScrollChanged(object sender, ScrollChangedEventArgs e) {

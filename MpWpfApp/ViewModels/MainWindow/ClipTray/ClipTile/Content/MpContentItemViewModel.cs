@@ -149,18 +149,6 @@ namespace MpWpfApp {
                 return MpMeasurements.Instance.SolidBorderRect;
             }
         }
-
-        public Cursor EditorCursor {
-            get {
-                if(Parent == null) {
-                    return Cursors.Arrow;
-                }
-                if(Parent.IsExpanded && IsSelected) {
-                    return Cursors.IBeam;
-                }
-                return Cursors.Arrow;
-            }
-        }
         #endregion
 
         //[MpDependsOnParent("Test")]
@@ -591,12 +579,9 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel() : base(null) { }
 
-        public MpContentItemViewModel(MpClipTileViewModel container, MpCopyItem ci) : base(container) {
+        public MpContentItemViewModel(MpClipTileViewModel container) : base(container) {
             //MpConsole.WriteLine(DependOnParentTest);
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                await InitializeAsync(ci);
-            });
         }
 
         #endregion
@@ -844,10 +829,6 @@ namespace MpWpfApp {
                             Parent.SelectedItems
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
-                        }
-
-                        if(Parent.IsExpanded) {
-                            OnPropertyChanged(nameof(EditorCursor));
                         }
                     }
                     if (ItemIdx > 0) {

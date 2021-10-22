@@ -93,7 +93,8 @@ namespace MpWpfApp {
                 octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
                 octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
                 octvm.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
-                octvm.ItemViewModels.CollectionChanged -= ItemViewModels_CollectionChanged;
+
+                MpMessenger.Instance.Unregister<MpMessageType>(octvm, ReceivedContentItemsChangedMessage);
             }
             if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
                 nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
@@ -101,25 +102,28 @@ namespace MpWpfApp {
                 nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
                 nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
                 nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
-                nctvm.ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
+
+                //MpMessenger.Instance.Register<MpMessageType>(nctvm, ReceivedContentItemsChangedMessage);
             } 
         }
 
-        public void RefreshContext() {
-            for (int i = 0; i < ContentListBox.Items.Count; i++) {
-                var lbi = ContentListBox.GetListBoxItem(i);
-                if (lbi != null) {
-                    lbi.DataContext = BindingContext.ItemViewModels[i];
+        public async Task RefreshContext() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                for (int i = 0; i < ContentListBox.Items.Count; i++) {
+                    var lbi = ContentListBox.GetListBoxItem(i);
+                    if (lbi != null) {
+                        lbi.DataContext = BindingContext.ItemViewModels[i];
+                    }
                 }
-            }
+            });
         }
-        
 
-        private void ItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            //MpConsole.WriteLine($"Tile List ({_clvIdx}) collection changed event: " + Enum.GetName(typeof(NotifyCollectionChangedAction), e.Action));
-
-            
+        private async void ReceivedContentItemsChangedMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemsInitialized:
+                    //await RefreshContext();
+                    break;
+            }
         }
 
         private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

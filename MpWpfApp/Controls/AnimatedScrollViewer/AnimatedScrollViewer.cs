@@ -24,6 +24,11 @@ namespace MpWpfApp {
         ScrollBar _aniVerticalScrollBar;
         ScrollBar _aniHorizontalScrollBar;
 
+        public ScrollBar HorizontalScrollBar {
+            get {
+                return _aniHorizontalScrollBar;
+            }
+        }
         #endregion
 
         static AnimatedScrollViewer() {

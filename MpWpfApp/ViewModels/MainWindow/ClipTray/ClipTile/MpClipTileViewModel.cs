@@ -667,7 +667,7 @@ using System.Speech.Synthesis;
         [MpDependsOnChild("IsPlaceholder")]
         public bool IsPlaceholder {
             get {
-                if(Parent == null || ItemViewModels.Count == 0 || (ItemViewModels[0] != null && ItemViewModels[0].IsPlaceholder)) {
+                if(Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
                 return Parent.IsAnyTileExpanded && !IsExpanded;
@@ -701,15 +701,7 @@ using System.Speech.Synthesis;
                 return PrimaryItem.CopyItemCreatedDateTime;
             }
         }
-
-        public int HeadId {
-            get {
-                if(HeadItem == null || HeadItem.CopyItem == null) {
-                    return MpHelpers.Instance.Rand.Next(int.MinValue,-1);
-                }
-                return HeadItem.CopyItemId;
-            }
-        }
+        
         #endregion
 
         #endregion
@@ -727,113 +719,61 @@ using System.Speech.Synthesis;
 
         #endregion
 
+        #region Static Builder
+
+
+        #endregion
+
         #region Constructors
 
         public MpClipTileViewModel() : base(null) {
             IsBusy = true;
         }
 
-        public MpClipTileViewModel(MpClipTrayViewModel parent, MpCopyItem ci) : base(parent) {
+        public MpClipTileViewModel(MpClipTrayViewModel parent) : base(parent) {
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-
-
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                await InitializeAsync(ci);
-            });
-            // Initialize(ci);
+            
         }
 
         #endregion
 
         #region Public Methods
 
-        public async Task PreInitializeAsync(int headItemId, CancellationToken ct) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                IsBusy = true;
-                if (headItemId <= 0) {
-                    int subItemsToRemove = ItemViewModels.Count - 1;
-                    while(subItemsToRemove > 0) {
-                        ItemViewModels.RemoveAt(1);
-                    }
+        public async Task InitializeAsync(MpCopyItem headItem) {
+            IsBusy = true;
 
-                    HeadItem.CopyItem = null;
+            ItemViewModels.Clear();
+            if (headItem != null) {
+                var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
+                ccil.Insert(0, headItem);
 
-                    IsBusy = false;
+                foreach(var ci in ccil.OrderBy(x => x.CompositeSortOrderIdx)) {
+                    var civm = await CreateContentItemViewModel(ci);
+                    ItemViewModels.Add(civm);
                 }
-                OnPropertyChanged(nameof(ItemViewModels));
-                OnPropertyChanged(nameof(IsPlaceholder));
 
-                
-                while(true) {
-                    if(ct.IsCancellationRequested) {
-                        return;
-                    }
-                    if(!Parent.IsScrolling) {
-                        // TODO either query for model w/ id 
-                        // or get from a cache in the item provider, load content and
-                        // unset isbusy
-                        if(!Parent.CurPageLookup.ContainsKey(headItemId)) {
-                            MpConsole.WriteLine("Missing key: " + headItemId);
-                            return;
-                        }
-                        await InitializeAsync(Parent.CurPageLookup[headItemId]);
-                        return;
-                    }
-                    await Task.Delay(50);
-                }
-            });
+                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+
+                RequestUiUpdate();
+            }
+            OnPropertyChanged(nameof(ItemViewModels));
+            OnPropertyChanged(nameof(IsPlaceholder));
+
+            MpMessenger.Instance.Send(MpMessageType.ItemsInitialized);
+
+            IsBusy = false;
         }
 
-        public async Task InitializeAsync(MpCopyItem headItem) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async() => {
-                if(!IsBusy) {
-                    ItemViewModels.Clear();
-                }
-                IsBusy = true;
-                
-                if (headItem != null) {
-
-                    var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
-                    //int subItemsToAdd = ItemViewModels.Count + ccil.Count - 1;
-                    //while (subItemsToAdd > 0) {
-                    //    ccil.RemoveAt(1);
-                    //}
-                    var civml = new List<MpContentItemViewModel>();
-                    if(ItemViewModels.Count == 0) {
-                        ccil.Insert(0, headItem);
-
-                        
-
-                       
-                    } else {
-                        civml.Add(ItemViewModels[0]);
-                    }
-                    foreach (var cci in ccil) {
-                        civml.Add(new MpContentItemViewModel(this, cci));
-                    }
-                    ItemViewModels = new ObservableCollection<MpContentItemViewModel>(civml.OrderBy(x => x.CompositeSortOrderIdx).ToList());
-                    //foreach(var ci in ccil.OrderBy(x=>x.CompositeSortOrderIdx)) {
-                    //    ItemViewModels.Add(new MpContentItemViewModel(this, ci));
-                    //}v
-
-
-
-                    HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
-                    RequestUiUpdate();
-                }
-                IsBusy = false;
-                OnPropertyChanged(nameof(ItemViewModels));
-                OnPropertyChanged(nameof(IsPlaceholder));
-                
-            });
+        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci) {
+            var civm = new MpContentItemViewModel(this);
+            await civm.InitializeAsync(ci);
+            return civm;
         }
 
         public async Task ClearContent() {
             await InitializeAsync(null);
         } 
-
 
         public void RefreshTile() {
             if(HeadItem == null) {
@@ -897,12 +837,11 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
+                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Expand, this);
                         RequestExpand();
                     } else {
+                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
                         RequestUnexpand();
-                    }
-                    if(SelectedItems.Count > 0) {
-                        SelectedItems.ForEach(x => x.OnPropertyChanged(nameof(x.EditorCursor)));
                     }
                     break;
                 case nameof(IsPlaceholder):
@@ -1111,8 +1050,8 @@ using System.Speech.Synthesis;
                 //var sb = new StringBuilder();
                 //sb.Append(string.Empty.ToRichText());
                 if (isPastingTemplate) {
-                    Application.Current.MainWindow.Cursor = Cursors.Wait;
-                    Application.Current.MainWindow.ForceCursor = true;
+                    //Application.Current.MainWindow.Cursor = Cursors.Wait;
+                   // Application.Current.MainWindow.ForceCursor = true;
                 }
                 var sw = new Stopwatch();
                 sw.Start();
@@ -1700,44 +1639,36 @@ using System.Speech.Synthesis;
             }
         }
 
-        private RelayCommand<MpTagTileViewModel> _linkTagToSubSelectedClipsCommand;
-        public ICommand LinkTagToSubSelectedClipsCommand {
-            get {
-                if (_linkTagToSubSelectedClipsCommand == null) {
-                    _linkTagToSubSelectedClipsCommand = new RelayCommand<MpTagTileViewModel>(LinkTagToSubSelectedClips, CanLinkTagToSubSelectedClips);
+        public ICommand LinkTagToSubSelectedClipsCommand => new AsyncRelayCommand<MpTagTileViewModel>(
+            async (tagToLink) => {
+                bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
+                foreach (var srtbvm in SelectedItems) {
+                    if (isUnlink) {
+                        tagToLink.RemoveClip(srtbvm);
+                    } else {
+                        tagToLink.AddClip(srtbvm);
+                    }
                 }
-                return _linkTagToSubSelectedClipsCommand;
-            }
-        }
-        private bool CanLinkTagToSubSelectedClips(MpTagTileViewModel tagToLink) {
-            //this checks the selected clips association with tagToLink
-            //and only returns if ALL selecteds clips are linked or unlinked 
-            if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
-                return false;
-            }
-            if (SelectedItems.Count == 1) {
-                return true;
-            }
-            bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0].CopyItem);
-            foreach (var srtbvm in SelectedItems) {
-                if (tagToLink.IsLinked(srtbvm) != isLastClipTileLinked) {
+                await MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
+                await MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
+            },
+            (tagToLink) => {
+                //this checks the selected clips association with tagToLink
+                //and only returns if ALL selecteds clips are linked or unlinked 
+                if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
                     return false;
                 }
-            }
-            return true;
-        }
-        private void LinkTagToSubSelectedClips(MpTagTileViewModel tagToLink) {
-            bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
-            foreach (var srtbvm in SelectedItems) {
-                if (isUnlink) {
-                    tagToLink.RemoveClip(srtbvm);
-                } else {
-                    tagToLink.AddClip(srtbvm);
+                if (SelectedItems.Count == 1) {
+                    return true;
                 }
-            }
-            MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
-            MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
-        }
+                bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0].CopyItem);
+                foreach (var srtbvm in SelectedItems) {
+                    if (tagToLink.IsLinked(srtbvm) != isLastClipTileLinked) {
+                        return false;
+                    }
+                }
+                return true;
+            });
 
         private RelayCommand _assignHotkeyCommand;
         public ICommand AssignHotkeyCommand {
@@ -1820,28 +1751,18 @@ using System.Speech.Synthesis;
 
             }, DispatcherPriority.Background);
         }
-
-        private RelayCommand _duplicateSubSelectedClipsCommand;
-        public ICommand DuplicateSubSelectedClipsCommand {
-            get {
-                if (_duplicateSubSelectedClipsCommand == null) {
-                    _duplicateSubSelectedClipsCommand = new RelayCommand(DuplicateSubSelectedClips);
+        public ICommand DuplicateSubSelectedClipsCommand => new AsyncRelayCommand(
+            async () => {
+                var tempSubSelectedRtbvml = SelectedItems;
+                ClearSelection();
+                foreach (var srtbvm in tempSubSelectedRtbvml) {
+                    var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
+                    clonedCopyItem.WriteToDatabase();
+                    var rtbvm = await CreateContentItemViewModel(clonedCopyItem);
+                    ItemViewModels.Add(rtbvm);
+                    rtbvm.IsSelected = true;
                 }
-                return _duplicateSubSelectedClipsCommand;
-            }
-        }
-        private void DuplicateSubSelectedClips() {
-            var tempSubSelectedRtbvml = SelectedItems;
-            ClearSelection();
-            foreach (var srtbvm in tempSubSelectedRtbvml) {
-                var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
-                clonedCopyItem.WriteToDatabase();
-                var rtbvm = new MpContentItemViewModel(this, clonedCopyItem);
-                //MpMainWindowViewModel.Instance.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
-                ItemViewModels.Add(rtbvm);
-                rtbvm.IsSelected = true;
-            }
-        }
+            });
         #endregion
 
         #region MpIContentCommands 

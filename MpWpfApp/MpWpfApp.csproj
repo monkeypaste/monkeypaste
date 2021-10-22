@@ -137,7 +137,7 @@
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="AttachedProperties\MpPagingListBox.cs" />
+    <Compile Include="AttachedProperties\MpLoadMoreItemsExtension.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
@@ -145,6 +145,8 @@
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
+    <Compile Include="Converters\MpBoolToCursorConverter.cs" />
+    <Compile Include="Converters\MpBoolToHAlignmentConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
@@ -176,7 +178,6 @@
     <Compile Include="Utils\Builders\MpIconBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
-    <Compile Include="Utils\MpClipTileViewModelProvider.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
@@ -302,6 +303,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml.cs">
       <DependentUpon>MpContentListVIew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml.cs">
+      <DependentUpon>MpTextHyperlink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpRtbView.xaml.cs">
       <DependentUpon>MpRtbView.xaml</DependentUpon>
@@ -442,6 +446,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

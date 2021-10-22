@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +30,32 @@ namespace MonkeyPaste {
         }
 
         public static IEnumerable<TSource> IntersectBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TKey> keys, Func<TSource, TKey> keySelector) => source.Join(keys, keySelector, id => id, (o, id) => o);
+        
+        public static void RemoveRange<TSource>(this IList<TSource> collection, int startIdx, int count) where TSource: class {
+            if(startIdx < 0 || startIdx >= collection.Count()) {
+                throw new IndexOutOfRangeException($"Start Idx: {startIdx} out of range {collection.Count()}");
+            }
+            if(startIdx + count >= collection.Count()) {
+                throw new IndexOutOfRangeException($"Idx at count: {startIdx + count} is out of range {collection.Count()}");
+            }
+            while(count > 0) {
+                collection.RemoveAt(startIdx);
+                count--;
+            }
+        }
+
+        public static void AddRange<TSource>(this IList<TSource> collection, int idx, IList<TSource> itemsToAdd) where TSource : class {
+            if (idx < 0 || idx >= collection.Count()) {
+                throw new IndexOutOfRangeException($"Idx: {idx} out of range {collection.Count()}");
+            }
+
+            itemsToAdd.Reverse();
+            foreach(var item in itemsToAdd) {
+                collection.Insert(idx, item);
+            }
+        }
         #endregion
+
         #region Strings
         public static bool ContainsByUserSensitivity(this string str, string ostr) {
             if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {

@@ -73,8 +73,7 @@ namespace MpWpfApp {
                     this.UpdateExtendedSelection();
                 } else {
                     base.OnSelected(e);
-                }
-                
+                }               
 
                 if(_isDeferSelectionEnabled) {
                     if (DataContext is MpClipTileViewModel ctvm) {

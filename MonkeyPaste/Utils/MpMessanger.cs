@@ -9,7 +9,10 @@ namespace MonkeyPaste {
     public enum MpMessageType {
         None,
         Requery,
-        QueryChanged
+        QueryChanged,
+        ItemsInitialized,
+        Expand,
+        Unexpand
     }
 
     public class MpMessenger {

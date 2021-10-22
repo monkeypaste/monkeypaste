@@ -294,7 +294,7 @@ namespace MpWpfApp {
                                 //}
                                 //MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
                                 hl.MouseEnter += (s3, e3) => {
-                                    if(rtbvm.Parent.IsExpanded) {
+                                    if(rtbvm.IsEditingContent) {
                                         hl.Cursor = Cursors.Hand;
                                         hl.IsEnabled = true;
                                     } else {
@@ -303,7 +303,7 @@ namespace MpWpfApp {
                                     }
                                 };
                                 hl.MouseLeave += (s3, e3) => {
-                                    if (rtbvm.Parent.IsExpanded) {
+                                    if (rtbvm.IsEditingContent) {
                                         hl.Cursor = Cursors.IBeam;
                                         hl.IsEnabled = false;
                                     } else {

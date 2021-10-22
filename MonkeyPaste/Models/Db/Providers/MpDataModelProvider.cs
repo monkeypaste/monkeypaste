@@ -46,27 +46,31 @@ namespace MonkeyPaste {
             //var sl = MpDb.Instance.GetItems<MpSource>();
             //_sourceLookup = new Dictionary<int, MpSource>();
             //sl.ForEach(x => _sourceLookup.Add(x.Id, x));
-
-            _queryInfo = new MpQueryInfo();
         }
 
-        public void Init(int pageSize) {
-            _queryInfo.PageSize = pageSize;
+        public void Init(MpQueryInfo queryInfo, int pageSize) {
+            QueryInfo = queryInfo;
+            QueryInfo.PageSize = pageSize;
         }
 
         #endregion
 
         #region Private Variables
-        private MpQueryInfo _queryInfo;
+
 
         //private Dictionary<int, MpSource> _sourceLookup;
         #endregion
 
         #region Properties
 
+        public MpQueryInfo QueryInfo { get; set; }
+
         #endregion
 
         #region Public Methods
+
+
+
         #region Select queries
 
         public async Task<int> GetTotalCopyItemCountAsync() {
@@ -345,12 +349,12 @@ namespace MonkeyPaste {
         }
 
         public void SetQueryInfo(MpQueryInfo info) {
-            _queryInfo = info;
+            QueryInfo = info;
         }
 
         public int FetchCopyItemCount() {
             int count = 0;
-            switch(_queryInfo.TagId) {
+            switch(QueryInfo.TagId) {
                 case MpTag.AllTagId:
                     count = GetTotalCopyItemCount();
                     break;
@@ -358,7 +362,7 @@ namespace MonkeyPaste {
                     count = GetRecentCopyItemCount();
                     break;
                 default:
-                    count = GetTagItemCount(_queryInfo.TagId);
+                    count = GetTagItemCount(QueryInfo.TagId);
                     break;
             }
 
@@ -392,10 +396,10 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private string GetFetchQuery(int startIndex,int count, bool queryForTotalCount = false) {
-            int tagId = _queryInfo.TagId;
-            string descStr = _queryInfo.IsDescending ? "DESC" : "ASC";
-            string sortStr = Enum.GetName(typeof(MpContentSortType), _queryInfo.SortType);
-            var st = _queryInfo.SortType;
+            int tagId = QueryInfo.TagId;
+            string descStr = QueryInfo.IsDescending ? "DESC" : "ASC";
+            string sortStr = Enum.GetName(typeof(MpContentSortType), QueryInfo.SortType);
+            var st = QueryInfo.SortType;
             if (st == MpContentSortType.Source ||
                 st == MpContentSortType.UsageScore ||
                 st == MpContentSortType.Manual) {
