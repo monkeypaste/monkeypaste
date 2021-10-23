@@ -118,7 +118,7 @@ namespace MpWpfApp {
             });
         }
 
-        private async void ReceivedContentItemsChangedMessage(MpMessageType msg) {
+        private void ReceivedContentItemsChangedMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemsInitialized:
                     //await RefreshContext();
@@ -140,8 +140,7 @@ namespace MpWpfApp {
         }
 
         private void Octvm_OnListBoxRefresh(object sender, EventArgs e) {
-            UpdateLayout();
-            
+            ContentListBox?.Items.Refresh();
         }
 
         private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
@@ -161,7 +160,7 @@ namespace MpWpfApp {
         public void Civm_OnScrollWheelRequest(object sender, int e) {
             var ctvm = DataContext as MpClipTileViewModel;
             if (ctvm.IsExpanded) {
-                var sv = ContentListBox.ScrollViewer as AnimatedScrollViewer;
+                var sv = ContentListBox.GetScrollViewer() as AnimatedScrollViewer;
                 //sv.IsHorizontal = false;
 
                 double yOffset = sv.VerticalOffset + e;
@@ -180,6 +179,9 @@ namespace MpWpfApp {
 
         public void UpdateUi() {
             UpdateAdorner();
+            if(ContentListBox.Items.Count > 1) {
+                ContentListBox.Items.Refresh();
+            }
             this.UpdateLayout();
         }
 
@@ -189,6 +191,43 @@ namespace MpWpfApp {
 
         private void ContentListBox_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             UpdateAdorner();
+        }
+
+        public async Task<FlowDocument> GetSeparatedCompositeFlowDocument(string separatorChar = "- ") {
+            if(!BindingContext.IsTextItem) {
+                return new FlowDocument();
+            }
+
+            int maxCols = int.MinValue;
+            var rtbl = this.GetVisualDescendents<RichTextBox>().ToList();
+            for (int i = 0; i < rtbl.Count; i++) {
+                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(rtbl[i].Document.ToPlainText()));
+            }
+
+            string separatorLine = string.Empty;
+            for (int i = 0; i < maxCols; i++) {
+                separatorLine += separatorChar;
+            }
+            var separatorDocument = separatorLine.ToRichText().ToFlowDocument();
+            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
+            for (int i = 0; i < rtbl.Count; i++) {
+                var rtb = rtbl[i];
+                if (i != 0) {
+                    MpHelpers.Instance.CombineFlowDocuments(
+                    separatorDocument,
+                    fullDocument,
+                    false);
+                }
+                MpHelpers.Instance.CombineFlowDocuments(
+                    (MpEventEnabledFlowDocument)rtb.Document,
+                    fullDocument,
+                    false);
+            }
+
+            var ps = fullDocument.GetDocumentSize();
+            fullDocument.PageWidth = ps.Width;
+            fullDocument.PageHeight = ps.Height;
+            return fullDocument;
         }
     }
 }

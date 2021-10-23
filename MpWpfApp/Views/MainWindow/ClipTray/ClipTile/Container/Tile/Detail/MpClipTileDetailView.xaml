@@ -49,6 +49,7 @@
                           Margin="0,-5,2,0"
                           HorizontalAlignment="Right"
                           IsChecked="{Binding Parent.IsExpanded}"
+                          Visibility="{Binding Parent.IsTextItem, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/edit.png" />
             </ToggleButton>

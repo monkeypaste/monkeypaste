@@ -330,6 +330,15 @@ namespace MonkeyPaste {
             }
         }
 
+        public int ThisDeviceSourceId {
+            get {
+                return _prefIo.Get(nameof(ThisDeviceSourceId), 0);
+            }
+            set {
+                _prefIo.Set(nameof(ThisDeviceSourceId), value);
+            }
+        }
+
         #region Encrytion
 
         public string SslPrivateKey {

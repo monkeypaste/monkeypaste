@@ -118,10 +118,10 @@ namespace MonkeyPaste {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpCopyItemTag ncit) {
                     if (ncit.Id == Tag.Id) {
-                        //if(true) { 
                         //occurs when copy item is linked to tag
-                        var nci = await MpCopyItem.GetCopyItemByIdAsync(ncit.CopyItemId);
-                        if (!Tag.CopyItems.Contains(nci)) {
+                        var tagCopyItemIds = await MpDataModelProvider.Instance.GetCopyItemIdsForTagAsync(Tag.Id);
+                        if (!tagCopyItemIds.Contains(ncit.CopyItemId)) {
+                            var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ncit.CopyItemId);
                             Tag.CopyItems.Add(nci);
 
                             OnPropertyChanged(nameof(CopyItemCount));

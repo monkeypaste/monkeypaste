@@ -77,52 +77,20 @@ namespace MonkeyPaste {
             }
         }
 
+        
         #region Statics
 
         [Ignore]
         public static int ThisAppSourceId { get; set; }
 
-        public static MpSource GetThisDeviceAppSource() {
-            var s = MpDb.Instance.GetItem<MpSource>(ThisAppSourceId);
-            if(s == null) {
-                var process = Process.GetCurrentProcess();
-                string appPath = process.MainModule.FileName;
-                string appName = MpPreferences.Instance.ApplicationName;
-                var iconStr = new MpImageConverter().Convert(MpHelpers.Instance.LoadBitmapResource(@"MonkeyPaste.Resources.Icons.monkey.png"), typeof(string)) as string;
-                var icon = MpIcon.Create(iconStr);
-                var app = MpApp.Create(appPath, appName, icon);
-                s = MpSource.Create(app, null);
-                ThisAppSourceId = s.Id;
-            }
-            return s;
-        }
-
-        public static async Task<List<MpSource>> GetAllSourcesAsync() {
-            var allSources = await MpDb.Instance.GetItemsAsync<MpSource>();
-            return allSources;
-        }
-
-        public static List<MpSource> GetAllSources() {
-            return MpDb.Instance.GetItems<MpSource>();
-        }
-
-        public static async Task<MpSource> GetSourceById(int appId,int urlId) {
-            var allSources = await GetAllSourcesAsync();
-            return allSources.Where(x => x.AppId == appId && x.UrlId == urlId).FirstOrDefault();
-        }
-
-        public static async Task<MpSource> GetSourceByGuid(string guid) {
-            var allSources = await GetAllSourcesAsync();
-            return allSources.Where(x => x.SourceGuid.ToString() == guid).FirstOrDefault();
-        }
-
-        public static MpSource Create(MpApp app, MpUrl url) {
+        public static async Task<MpSource> Create(MpApp app, MpUrl url) {
             if(app == null) {
                 throw new Exception("Source must have an app associated");
             }
             int urlId = url == null ? 0 : url.Id;
-            MpSource dupCheck = GetAllSources().Where(x => x.AppId == app.Id && x.UrlId == urlId).FirstOrDefault();
+            MpSource dupCheck = await MpDataModelProvider.Instance.GetSourceByMembers(app.Id, urlId);
             if(dupCheck != null) {
+                dupCheck = await MpDb.Instance.GetItemAsync<MpSource>(dupCheck.Id);
                 return dupCheck;
             }
             var source = new MpSource() {
@@ -133,7 +101,7 @@ namespace MonkeyPaste {
                 UrlId = urlId
             };
 
-            MpDb.Instance.AddItem<MpSource>(source);
+            await MpDb.Instance.AddItemAsync<MpSource>(source);
             return source;
         }
         #endregion

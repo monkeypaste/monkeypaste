@@ -19,7 +19,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public static MpUrl CreateFromHtmlData(string htmlDataStr) {
+        public static async Task<MpUrl> CreateFromHtmlData(string htmlDataStr) {
             string sourceTag = "SourceURL:";
             var htmlParts = htmlDataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -29,12 +29,14 @@ namespace MpWpfApp {
             }
 
             string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
-            string sourceUrlTitle = MonkeyPaste.MpHelpers.Instance.GetUrlTitle(sourceUrl);
+            string sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(sourceUrl);
 
-            return MpUrl.Create(sourceUrl, sourceUrlTitle);
+            var result = await MpUrl.Create(sourceUrl, sourceUrlTitle);
+            return result;
         }
 
-        public MpUrl Create(string url) {
+        public async Task<MpUrl> Create(string url) {
+            await Task.Delay(10);
             throw new NotImplementedException();
         }
         #endregion

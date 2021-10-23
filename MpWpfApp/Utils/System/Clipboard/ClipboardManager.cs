@@ -93,10 +93,8 @@ namespace MpWpfApp {
     public class MpClipboardListener : IDisposable {
 
         #region Private Varibles
-        //private System.Timers.Timer _timer;
         private bool _isStopped = false;
         private Dictionary<string, object> _lastCbo;
-        //private ManualResetEvent _resetEvent = new ManualResetEvent(true);
         private Thread _workThread;
         #endregion
 

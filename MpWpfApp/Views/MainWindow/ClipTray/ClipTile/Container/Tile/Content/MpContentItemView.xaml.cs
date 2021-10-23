@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpContentItemView.xaml
     /// </summary>
-    public partial class MpContentItemView : UserControl {
+    public partial class MpContentItemView : MpUserControl<MpContentItemViewModel> {
 
         public MpContentItemView() : base() {
             InitializeComponent();            
@@ -75,8 +75,8 @@ namespace MpWpfApp {
         private void Civm_OnScrollWheelRequest(object sender, int e) {
             var civm = DataContext as MpContentItemViewModel;
             if(civm.IsEditingContent) {
-                var cilv = this.GetVisualAncestor<MpContentListView>();
-                cilv.ContentListBox.ScrollViewer.ScrollToVerticalOffset(cilv.ContentListBox.ScrollViewer.VerticalOffset + e);
+                var sv = this.GetVisualAncestor<ScrollViewer>();
+                sv.ScrollToVerticalOffset(sv.VerticalOffset + e);
             }            
         }
 

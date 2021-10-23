@@ -34,7 +34,7 @@ namespace MpWpfApp {
             var ctrvm = DataContext as MpClipTrayViewModel;
 
             MpClipboardManager.Instance.Init();
-            MpClipboardManager.Instance.ClipboardChanged += ctrvm.AddItemFromClipboard;
+            MpClipboardManager.Instance.ClipboardChanged += ctrvm.OnClipboardChanged;
             _remainingItems = ctrvm.Items.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
 
             if (MpPreferences.Instance.IsInitialLoad) {
@@ -68,9 +68,20 @@ namespace MpWpfApp {
         }
 
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            e.Handled = true;
-            var sv = sender as ScrollViewer;
+            var sv = sender as AnimatedScrollViewer;
+            var hsb = sv.HorizontalScrollBar;
+            var htrack = hsb.Track;
+            var hthumb = htrack.Thumb;
 
+            var hsb_mp = e.GetPosition(hsb);
+            if(hsb_mp.Y < 0) {
+                return;
+            }
+            var hthumb_rect = hthumb.Bounds();
+            if(hthumb_rect.Contains(e.GetPosition(hthumb))) {
+                return;
+            }
+            e.Handled = true;
             double norm_x = e.GetPosition(sv).X / sv.ActualWidth;
 
             int targetTileIdx = (int)Math.Floor(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);

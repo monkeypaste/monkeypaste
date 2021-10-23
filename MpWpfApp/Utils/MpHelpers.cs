@@ -44,6 +44,9 @@ using WindowsInput;
 using Microsoft.Win32;
 using System.Net.Sockets;
 using MonkeyPaste;
+using Yolov5Net.Scorer.Models;
+using Yolov5Net.Scorer;
+
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -52,11 +55,14 @@ namespace MpWpfApp {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
-        //private YoloWrapper yoloWrapper = null;
+        private YoloScorer<YoloCocoP5Model> yoloWrapper = null;
+
         public void Init() {
+
             Rand = new Random((int)DateTime.Now.Ticks);
-           // SharedRtb = new RichTextBox();
+            // SharedRtb = new RichTextBox();
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
+            yoloWrapper = new YoloScorer<YoloCocoP5Model>();
             _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }
 
@@ -1492,10 +1498,26 @@ namespace MpWpfApp {
             return primaryIconColorList;
         }
 
+        public async Task<List<string>> CreatePrimaryColorListAsync(BitmapSource bmpSource, int palleteSize = 5, DispatcherPriority priority = DispatcherPriority.Normal) {
+            List<string> result = null;
+            
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                result = CreatePrimaryColorList(bmpSource, palleteSize);
+            }, priority);
+
+            return result;
+        }
+
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
             //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
             return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, new Size(scale,scale));
+        }
+
+        public async Task<BitmapSource> CreateBorderAsync(BitmapSource img, double scale, Color bgColor) {
+            var borderBmpSrc = await MpHelpers.Instance.TintBitmapSourceAsync(img, bgColor, true);
+            //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
+            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, new Size(scale, scale));
         }
 
         public BitmapSource CopyScreen() {
@@ -1766,37 +1788,47 @@ namespace MpWpfApp {
             return null;
         }
 
-        //public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
-        //    var detectedObjectList = new List<MpDetectedImageObject>();
-        //    await Dispatcher.CurrentDispatcher.InvokeAsync(
-        //        () => {
-        //            using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
-        //                var items = yoloWrapper.Detect(image);
-        //                foreach (var item in items) {
-        //                    if (item.Confidence >= confidence) {
-        //                        detectedObjectList.Add(new MpDetectedImageObject(
-        //                            0,
-        //                            0,
-        //                            item.Confidence,
-        //                            item.X,
-        //                            item.Y,
-        //                            item.Width,
-        //                            item.Height,
-        //                            item.Type));
-        //                    }
-        //                }
-        //                //items[0].Type -> "Person , Car, ..."
-        //                //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
-        //                //items[0].X -> bounding box
-        //                //items[0].Y -> bounding box
-        //                //items[0].Width -> bounding box
-        //                //items[0].Height -> bounding box
-        //                //return detectedObjectList;
-        //            }
-        //        }, DispatcherPriority.Background);
-        //    return detectedObjectList;
-        //}
-        
+        public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
+            var detectedObjectList = new List<MpDetectedImageObject>();
+            await Dispatcher.CurrentDispatcher.InvokeAsync(
+                () => {
+                    yoloWrapper = new YoloScorer<YoloCocoP5Model>("Assets/Weights/yolov5s.onnx");
+                    using (var bmp = MpHelpers.Instance.ConvertBitmapSourceToBitmap(MpHelpers.Instance.ConvertByteArrayToBitmapSource(image))) {
+                        List<YoloPrediction> predictions = yoloWrapper.Predict(bmp);
+                        using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
+                            foreach (var item in predictions) // iterate predictions to draw results
+                            {
+                                double score = Math.Round(item.Score, 2);
+
+                                if(score >= confidence) {
+                                    detectedObjectList.Add(new MpDetectedImageObject(
+                                                    0,
+                                                    0,
+                                                    item.Score,
+                                                    item.Rectangle.X,
+                                                    item.Rectangle.Y,
+                                                    item.Rectangle.Width,
+                                                    item.Rectangle.Height,
+                                                    item.Label.Name));
+
+                                    graphics.DrawRectangles(
+                                        new System.Drawing.Pen(item.Label.Color, 1),
+                                        new[] { item.Rectangle });
+
+                                    var (x, y) = (item.Rectangle.X - 3, item.Rectangle.Y - 23);
+
+                                    graphics.DrawString($"{item.Label.Name} ({score})",
+                                        new System.Drawing.Font("Arial", 16, System.Drawing.GraphicsUnit.Pixel), new System.Drawing.SolidBrush(item.Label.Color),
+                                        new System.Drawing.PointF(x, y));
+                                }
+                            }
+
+                        }
+                    }
+                }, DispatcherPriority.Background);
+            return detectedObjectList;
+        }
+
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
             BitmapSource formattedBmpSrc = null;
             if(bmpSrc.Width != bmpSrc.PixelWidth || bmpSrc.Height != bmpSrc.PixelHeight) {
@@ -1839,6 +1871,7 @@ namespace MpWpfApp {
             }, priority);
             return bmpSource;
         }
+
         public double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)e1.R + (long)e2.R) / 2;
@@ -1896,15 +1929,6 @@ namespace MpWpfApp {
 
         public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newScale) {
             return new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width,newScale.Height));
-            //using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
-            //    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
-            //        //The interpolation mode produces high quality images
-            //        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            //        g.DrawImage(ConvertBitmapSourceToBitmap(bmpSrc), 0, 0, (int)newSize.Width, (int)newSize.Height);
-            //        g.Dispose();
-            //        return ConvertBitmapToBitmapSource(result);
-            //    }
-            //}
         }
 
         public bool ByteArrayCompare(byte[] b1, byte[] b2) {

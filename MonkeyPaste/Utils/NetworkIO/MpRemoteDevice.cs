@@ -29,13 +29,6 @@ namespace MonkeyPaste {
         public CancellationTokenSource Cts { get; set; }
         public CancellationToken Ct { get; set; }
 
-        public static MpUserDevice GetUserDeviceByGuid(string deviceGuid) {
-            return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.UserDeviceGuid.ToString() == deviceGuid).FirstOrDefault();
-        }
-
-        public static MpUserDevice GetUserDeviceById(int udid) {
-            return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.Id == udid).FirstOrDefault();
-        }
 
         public MpRemoteDevice() {
             Cts = new CancellationTokenSource();

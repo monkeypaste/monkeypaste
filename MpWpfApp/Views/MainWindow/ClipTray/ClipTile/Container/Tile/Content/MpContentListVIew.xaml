@@ -91,7 +91,7 @@
                                                             <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
-                                                                        <RectangleGeometry Rect="0,0,50,50" />
+                                                                        <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect}" />
                                                                         <RectangleGeometry Rect="50,50,50,50" />
                                                                     </GeometryGroup>
                                                                 </GeometryDrawing.Geometry>

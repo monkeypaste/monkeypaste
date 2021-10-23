@@ -1131,6 +1131,7 @@
         <s:String x:Key="ShieldIcon">/Images/shield.png</s:String>
         <s:String x:Key="SignOutIcon">/Images/signout.png</s:String>
         <s:String x:Key="CopyIcon">/Images/copy.png</s:String>
+        <s:String x:Key="WarningIcon">/Images/warning.png</s:String>
 
         <s:String x:Key="Hide">Hide</s:String>
         <s:String x:Key="Collapse">Collapse</s:String>
@@ -1163,6 +1164,8 @@
         <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
         <local:MpBoolToCursorConverter x:Key="BoolToCursorConverter" />
         <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
+        <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
+        <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
 
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
         <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />

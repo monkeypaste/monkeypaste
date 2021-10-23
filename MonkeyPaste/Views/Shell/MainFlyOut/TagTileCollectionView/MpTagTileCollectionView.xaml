@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView
-    x:Class="MonkeyPaste.MpTagCollectionView"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MonkeyPaste"
-    x:DataType="local:MpTagTileCollectionViewModel">
+<ContentView x:Class="MonkeyPaste.MpTagCollectionView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MonkeyPaste"
+             x:DataType="local:MpTagTileCollectionViewModel">
     <CollectionView x:Name="TagCollectionView"
                     Margin="10"
                     SelectionMode="Single"
                     ItemsSource="{Binding TagViewModels}"
-                    SelectedItem="{Binding SelectedTagViewModel,Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedTagViewModel, Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectionChangedCommand}"
                     SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference TagCollectionView}}">
         <CollectionView.Header>

@@ -157,6 +157,11 @@ namespace MpWpfApp {
             public const int MAXIMIXED = 3;
         }
 
+
+        public const int WM_DRAWCLIPBOARD = 0x0308;
+        public const int WM_CHANGECBCHAIN = 0x030D;
+        public const int WM_PASTE = 0x0302;
+
         public const int WM_CLIPBOARDUPDATE = 0x031D;
         public const int EM_SETRECT = 0xB3;
         public const int HWND_BROADCAST = 0xffff;

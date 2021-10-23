@@ -1401,5 +1401,17 @@ namespace MpWpfApp.Properties {
                 this["SearchByDescription"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ThisDeviceSourceId {
+            get {
+                return ((int)(this["ThisDeviceSourceId"]));
+            }
+            set {
+                this["ThisDeviceSourceId"] = value;
+            }
+        }
     }
 }

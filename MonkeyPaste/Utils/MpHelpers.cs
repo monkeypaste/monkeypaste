@@ -900,6 +900,18 @@ namespace MonkeyPaste {
             }
         }
 
+        public async Task<string> GetUrlFaviconAsync(string url) {
+            try {
+                string urlDomain = GetUrlDomain(url);
+                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
+                var bytes = await ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                return new MpImageConverter().Convert(bytes, typeof(string)) as string;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
+                return string.Empty;
+            }
+        }
 
         private string[] _domainExtensions = new string[] {
             // TODO try to sort these by common use to make more efficient

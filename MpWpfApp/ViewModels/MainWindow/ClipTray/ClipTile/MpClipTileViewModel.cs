@@ -432,14 +432,14 @@ using System.Speech.Synthesis;
                 if (HeadItem == null || !Properties.Settings.Default.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
-                return (MpClipTrayViewModel.Instance.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
+                return (Parent.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
         public Visibility ToggleEditModeButtonVisibility {
             get {
                 return ((IsHovering || IsExpanded) &&
-                        MpClipTrayViewModel.Instance.SelectedItems.Count == 1) ?
+                        Parent.SelectedItems.Count == 1) ?
                         Visibility.Visible : Visibility.Hidden;
             }
         }
@@ -452,10 +452,10 @@ using System.Speech.Synthesis;
 
         public Visibility ClipTileTitleAppIconImageVisibility {
             get {
-                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
+                if (MpMainWindowViewModel.Instance == null || Parent == null || !IsSelected) {
                     return Visibility.Visible;
                 }
-                if (MpClipTrayViewModel.Instance.SelectedItems.Count > 1 &&
+                if (Parent.SelectedItems.Count > 1 &&
                    !IsHovering) {
                     return Visibility.Hidden;
                 }
@@ -481,17 +481,17 @@ using System.Speech.Synthesis;
         public Visibility SelectionOverlayGridVisibility {
             get {
                 return (IsSelected &&
-                       (MpClipTrayViewModel.Instance.SelectedItems.Count == 1 ||
-                        MpClipTrayViewModel.Instance.IsAnyTileExpanded)) ? Visibility.Collapsed : Visibility.Visible;
+                       (Parent.SelectedItems.Count == 1 ||
+                        Parent.IsAnyTileExpanded)) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
         public Visibility MultiSelectOrderMarkerVisibility {
             get {
-                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null) {
+                if (MpMainWindowViewModel.Instance == null || Parent == null) {
                     return Visibility.Hidden;
                 }
-                if (IsSelected && MpClipTrayViewModel.Instance.SelectedItems.Count > 1) {
+                if (IsSelected && Parent.SelectedItems.Count > 1) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -512,8 +512,8 @@ using System.Speech.Synthesis;
 
         public Brush TileBorderBrush {
             get {
-                if (MpClipTrayViewModel.Instance.PrimaryItem == this &&
-                    MpClipTrayViewModel.Instance.SelectedItems.Count > 1) {
+                if (Parent.PrimaryItem == this &&
+                    Parent.SelectedItems.Count > 1) {
                     return Brushes.Blue;
                 }
                 if (IsSelected) {
@@ -540,10 +540,10 @@ using System.Speech.Synthesis;
 
         public int SortOrderIdx {
             get {
-                if (MpClipTrayViewModel.Instance == null || ItemVisibility != Visibility.Visible) {
+                if (Parent == null || ItemVisibility != Visibility.Visible) {
                     return -1;
                 }
-                return MpClipTrayViewModel.Instance.VisibleItems.IndexOf(this);
+                return Parent.VisibleItems.IndexOf(this);
             }
         }
 
@@ -568,10 +568,10 @@ using System.Speech.Synthesis;
 
         public string MultiSelectedOrderIdxDisplayValue {
             get {
-                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null || !IsSelected) {
+                if (MpMainWindowViewModel.Instance == null || Parent == null || !IsSelected) {
                     return string.Empty;
                 }
-                int multiIdx = MpClipTrayViewModel.Instance.GetSelectionOrderIdxForItem(this);
+                int multiIdx = Parent.GetSelectionOrderIdxForItem(this);
                 if (multiIdx < 0) {
                     return string.Empty;
                 }
@@ -627,6 +627,8 @@ using System.Speech.Synthesis;
             }
         }
 
+        [MpAffectsChild]
+        [MpDependsOnChild("IsSelected")]
         public bool IsSelected {
             get {
                 return ItemViewModels.Any(x => x.IsSelected);
@@ -646,12 +648,13 @@ using System.Speech.Synthesis;
         }
 
         private bool _isHovering = false;
+        [MpDependsOnParent("IsScrolling")]
         public bool IsHovering {
             get {
                 return _isHovering;
             }
             set {
-                if (_isHovering != value) {// && (!MpClipTrayViewModel.Instance.IsAnyTileExpanded || IsExpanded)) {
+                if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -710,8 +713,6 @@ using System.Speech.Synthesis;
 
         public event EventHandler<string> OnSearchRequest;
 
-        public event EventHandler OnExpandRequest;
-        public event EventHandler OnUnExpandRequest;
         public event EventHandler OnListBoxRefresh;
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
@@ -732,8 +733,7 @@ using System.Speech.Synthesis;
 
         public MpClipTileViewModel(MpClipTrayViewModel parent) : base(parent) {
             _itemLockObject = new object();
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;            
         }
 
         #endregion
@@ -822,14 +822,14 @@ using System.Speech.Synthesis;
                 case nameof(IsSelected):
                     if(!IsSelected) {
                         if(IsFlipped) {
-                            MpClipTrayViewModel.Instance.FlipTileCommand.Execute(this);
+                            Parent.FlipTileCommand.Execute(this);
                         }
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     break;
                 case nameof(IsHovering):
                     if (IsHovering) {
-                        if (MpClipTrayViewModel.Instance.IsScrolling) {
+                        if (Parent.IsScrolling) {
                             IsHovering = false;
                             ClearSubHovering();
                         }
@@ -871,47 +871,14 @@ using System.Speech.Synthesis;
                 return;
             }
 
-            (MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand as RelayCommand).NotifyCanExecuteChanged();
-            (MpClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
-            (MpClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
-            (MpClipTrayViewModel.Instance.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
-            (MpClipTrayViewModel.Instance.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.PerformHotkeyPasteCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
         }
 
-        public MpEventEnabledFlowDocument GetSeparatedCompositeFlowDocument(string separatorChar = "- ") {
-            var ccil = MpCopyItem.GetCompositeChildren(HeadItem.CopyItem);
-            if (ccil.Count == 0) {
-                return HeadItem.CopyItem.ItemData.ToFlowDocument();
-            }
-            int maxCols = int.MinValue;
-            foreach (var cci in ccil) {
-                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(cci.ItemData.ToPlainText()));
-            }
-            string separatorLine = string.Empty;
-            for (int i = 0; i < maxCols; i++) {
-                separatorLine += separatorChar;
-            }
-            var separatorDocument = separatorLine.ToRichText().ToFlowDocument();
-            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
-            for (int i = 0; i < ccil.Count; i++) {
-                var cci = ccil[i];
-                if (i != 0) {
-                    MpHelpers.Instance.CombineFlowDocuments(
-                    separatorDocument,
-                    fullDocument,
-                    false);
-                }
-                MpHelpers.Instance.CombineFlowDocuments(
-                    cci.ItemData.ToFlowDocument(),
-                    fullDocument,
-                    false);
-            }
-
-            var ps = fullDocument.GetDocumentSize();
-            fullDocument.PageWidth = ps.Width;
-            fullDocument.PageHeight = ps.Height;
-            return fullDocument;
-        }
+        
 
         public async Task GatherAnalytics() {
             var analyticsTask = new List<Task>();
@@ -952,7 +919,7 @@ using System.Speech.Synthesis;
             //    FileListBox.Items.Refresh();
             //}
             sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + MpClipTrayViewModel.Instance.VisibleItems.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + Parent.VisibleItems.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
         public void ClearSelection() {
@@ -1016,7 +983,7 @@ using System.Speech.Synthesis;
             MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
 
             sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + MpClipTrayViewModel.Instance.VisibleItems.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + Parent.VisibleItems.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
 
             if (rtbSelection != null && SelectedItems.Count == 1) {
                 //ContentContainerViewModel.SubSelectedContentItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
@@ -1357,7 +1324,7 @@ using System.Speech.Synthesis;
         //}
         //private void SendClipToEmail() {
         //    MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
-        //    //MpClipTrayViewModel.Instance.ClearClipSelection();
+        //    //Parent.ClearClipSelection();
         //    //IsSelected = true;
         //    //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         //}
@@ -1375,7 +1342,7 @@ using System.Speech.Synthesis;
         //    }
         //}
         //private bool CanExcludeApplication() {
-        //    return MpClipTrayViewModel.Instance.SelectedItems.Count == 1;
+        //    return Parent.SelectedItems.Count == 1;
         //}
         //private void ExcludeApplication() {
         //    MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
@@ -1391,9 +1358,9 @@ using System.Speech.Synthesis;
         //    }
         //}
         //private void PasteClip(object args) {
-        //    MpClipTrayViewModel.Instance.ClearClipSelection();
+        //    Parent.ClearClipSelection();
         //    IsSelected = true;
-        //    MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(args);
+        //    Parent.PasteSelectedClipsCommand.Execute(args);
         //}
 
         //private RelayCommand _assignHotkeyCommand;
@@ -1410,7 +1377,7 @@ using System.Speech.Synthesis;
         //        this,
         //        "Paste " + CopyItemTitle,
         //        ShortcutKeyString,
-        //        MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItemId);
+        //        Parent.HotkeyPasteCommand, CopyItemId);
         //}
         #endregion
 
@@ -1428,7 +1395,7 @@ using System.Speech.Synthesis;
             if (MpMainWindowViewModel.IsMainWindowLoading) {
                 return false;
             }
-            return MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
+            return Parent.SelectedItems.Count == 1 &&
                    SelectedItems.Count <= 1;
         }
         private void EditTitle() {

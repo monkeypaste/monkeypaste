@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Timers;
 using System.Windows;
 using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace MpWpfApp {
     public class MpLastWindowWatcher {
@@ -35,9 +36,10 @@ namespace MpWpfApp {
             }
         }
 
-        public MpLastWindowWatcher(IntPtr appHandle) {
+        public MpLastWindowWatcher() {
+            HwndSource hwnd = (HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow);
             //Process.GetCurrentProcess().Invalidate();
-            ThisAppHandle = appHandle;
+            ThisAppHandle = hwnd.Handle;
             LastHandle = IntPtr.Zero;
             ThisAppPath = MpHelpers.Instance.GetProcessPath(ThisAppHandle);
             

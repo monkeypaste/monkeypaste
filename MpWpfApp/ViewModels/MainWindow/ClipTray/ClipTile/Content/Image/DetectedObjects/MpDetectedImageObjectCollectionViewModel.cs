@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectCollectionViewModel : MpObservableCollectionViewModel<MpDetectedImageObjectViewModel> {
+    public class MpDetectedImageObjectCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {
         #region Private Variables
         private bool _isEnabled = false;
         #endregion
@@ -67,9 +67,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpDetectedImageObjectCollectionViewModel() : base() {
+        public MpDetectedImageObjectCollectionViewModel() : base(null) {
         }
-        public MpDetectedImageObjectCollectionViewModel(MpCopyItem ci, bool isEnabled = false) : base() {
+        public MpDetectedImageObjectCollectionViewModel(MpContentItemViewModel parent, MpCopyItem ci, bool isEnabled = false) : base(parent) {
             _isEnabled = isEnabled;
             if(ci.ItemType != MpCopyItemType.Image) {
                 //not sure why this is getting called on non-images this shouldn't have to happen

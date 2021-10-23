@@ -28,7 +28,6 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
-
         #region Collections
 
         public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
@@ -78,43 +77,7 @@ namespace MpWpfApp {
 
         #region Listbox/ListboxItem
 
-        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isListBoxHorizontal) {
-            var points = new Point[2];
-            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) : lb.GetListBoxItemRect(index);
-            if (!isListBoxHorizontal) {
-                itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
-            }
-            if (isListBoxHorizontal) {
-                if (index < lb.Items.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.BottomLeft;
-                } else {
-                    points[0] = itemRect.TopRight;
-                    points[1] = itemRect.BottomRight;
-                }
-            } else {
-                if (index < lb.Items.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.TopRight;
-                } else {
-                    points[0] = itemRect.BottomLeft;
-                    points[1] = itemRect.BottomRight;
-                }
-            }
-            var sv = lb.GetScrollViewer();
-            if (sv != null &&
-                (sv.HorizontalOffset > 0 || sv.VerticalOffset > 0)) {
-                points[0].X += sv.Margin.Right;
-                //points[0].Y += ScrollViewer.VerticalOffset;
-                points[1].X += sv.Margin.Right;
-                //points[1].Y += ScrollViewer.VerticalOffset;
-            }
-            return points;
-        }
-
-        public static ScrollViewer GetScrollViewer(this ListBox lb) {
-            return lb.GetVisualDescendent<ScrollViewer>();
-        }
+        #region Extended Selection
 
         public static void UpdateExtendedSelection(this ListBox lb, int index) {
             /*
@@ -218,10 +181,51 @@ namespace MpWpfApp {
 
         public static void UpdateExtendedSelection(this ListBoxItem lbi) {
             int lbiIdx = lbi.GetListBoxItemIdx();
-            if(lbiIdx >= 0) {
+            if (lbiIdx >= 0) {
                 lbi.GetParentListBox().UpdateExtendedSelection(lbiIdx);
             }
         }
+
+        #endregion
+
+        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isListBoxHorizontal) {
+            var points = new Point[2];
+            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) : lb.GetListBoxItemRect(index);
+            if (!isListBoxHorizontal) {
+                itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
+            }
+            if (isListBoxHorizontal) {
+                if (index < lb.Items.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.BottomLeft;
+                } else {
+                    points[0] = itemRect.TopRight;
+                    points[1] = itemRect.BottomRight;
+                }
+            } else {
+                if (index < lb.Items.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.TopRight;
+                } else {
+                    points[0] = itemRect.BottomLeft;
+                    points[1] = itemRect.BottomRight;
+                }
+            }
+            var sv = lb.GetScrollViewer();
+            if (sv != null &&
+                (sv.HorizontalOffset > 0 || sv.VerticalOffset > 0)) {
+                points[0].X += sv.Margin.Right;
+                //points[0].Y += ScrollViewer.VerticalOffset;
+                points[1].X += sv.Margin.Right;
+                //points[1].Y += ScrollViewer.VerticalOffset;
+            }
+            return points;
+        }
+
+        public static ScrollViewer GetScrollViewer(this ListBox lb) {
+            return lb.GetVisualDescendent<ScrollViewer>();
+        }
+        
         public static bool IsListBoxItemVisible(this ListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi != null && lbi.Visibility == Visibility.Visible) {
@@ -513,7 +517,7 @@ namespace MpWpfApp {
             yield break;
         }
 
-        public static Rect RelativeBounds(this FrameworkElement fe, Visual rv = null) {
+        public static Rect Bounds(this FrameworkElement fe, Visual rv = null) {
             if(fe == rv || rv == null) {
                 return fe.TransformToVisual(fe).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
             }
@@ -714,6 +718,14 @@ namespace MpWpfApp {
                 stringCollection.Add(s);
             }
             return stringCollection;
+        }
+
+        public static string ToMultiLineString(this StringCollection sc) {
+            var sb = new StringBuilder();
+            foreach(var s in sc) {
+                sb.AppendLine(s);
+            }
+            return sb.ToString();
         }
 
         public static TextRange Clone(this TextSelection ts) {

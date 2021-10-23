@@ -26,10 +26,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for Mpxaml
     /// </summary>
-    public partial class MpRtbView : UserControl {
+    public partial class MpRtbView : MpUserControl<MpContentItemViewModel> {
         private static int RTB_COUNT = 0;
-
-        private double _heightDiff = 0;
 
         private int rtbId = -1;
         public TextRange NewStartRange;

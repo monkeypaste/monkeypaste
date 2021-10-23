@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpFileListItemView.xaml
     /// </summary>
-    public partial class MpFileListItemView : UserControl {
+    public partial class MpFileListItemView : MpUserControl<MpContentItemViewModel> {
         public MpFileListItemView() {
             InitializeComponent();
         }

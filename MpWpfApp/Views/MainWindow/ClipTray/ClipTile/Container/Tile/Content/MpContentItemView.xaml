@@ -1,29 +1,42 @@
-﻿<UserControl x:Class="MpWpfApp.MpContentItemView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:spinners="clr-namespace:xamlSpinnersWPF"
-             xmlns:local="clr-namespace:MpWpfApp"
-             mc:Ignorable="d"
-             d:DesignHeight="100"
-             d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}"
-             Loaded="ContentListItemView_Loaded"
-             DataContextChanged="ContentListItemView_DataContextChanged"
-             DataContext="{Binding}"
-             MouseEnter="ContentListItemView_MouseEnter"
-             MouseLeave="ContentListItemView_MouseLeave"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch">
+﻿<local:MpUserControl x:Class="MpWpfApp.MpContentItemView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:spinners="clr-namespace:xamlSpinnersWPF"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpContentItemViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="100"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=True}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch">
     <i:Interaction.Behaviors>
         <local:MpContentDragBehavior x:Name="DragBehavior" />
     </i:Interaction.Behaviors>
-    <local:MpRtbView x:Name="EditorView"
-                     BorderThickness="1"
-                     DataContext="{Binding}">
-        <local:MpRtbView.BorderBrush>
+    <Border BorderThickness="1"
+            Loaded="ContentListItemView_Loaded"
+            DataContextChanged="ContentListItemView_DataContextChanged"
+            MouseEnter="ContentListItemView_MouseEnter"
+            MouseLeave="ContentListItemView_MouseLeave">
+        <Border.Resources>
+            <DataTemplate x:Key="TextContent">
+                <local:MpRtbView DataContext="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="ImageContent">
+                <local:MpImageItemView DataContext="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="FileListContent">
+                <local:MpFileListItemView DataContext="{Binding}" />
+            </DataTemplate>
+            <local:MpContentViewSelector x:Key="ContentViewSelector"
+                                         TextContentTemplate="{StaticResource TextContent}"
+                                         FileContentTemplate="{StaticResource FileListContent}"
+                                         ImageContentTemplate="{StaticResource ImageContent}" />
+        </Border.Resources>
+        <Border.BorderBrush>
             <DrawingBrush Viewport="0,0,7,7"
                           ViewportUnits="Absolute"
                           TileMode="Tile">
@@ -40,8 +53,9 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-        </local:MpRtbView.BorderBrush>
-    </local:MpRtbView>
-    <!--<local:MpQuillEditorView x:Name="EditorView"
-                                         DataContext="{Binding}" />-->
-</UserControl>
+        </Border.BorderBrush>
+        <ContentControl x:Name="ContentView"
+                        Content="{Binding}"
+                        ContentTemplateSelector="{StaticResource ContentViewSelector}" />
+    </Border>
+</local:MpUserControl>

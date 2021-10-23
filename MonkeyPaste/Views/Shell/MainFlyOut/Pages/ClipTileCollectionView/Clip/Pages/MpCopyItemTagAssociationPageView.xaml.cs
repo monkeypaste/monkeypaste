@@ -27,7 +27,7 @@ namespace MonkeyPaste {
 
         private async void LoadCopyItem(int ciid) {
             try {
-                var ci = await MpCopyItem.GetCopyItemByIdAsync(ciid);
+                var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ciid);
                 BindingContext = new MpCopyItemTagAssociationPageViewModel(ci);
             }
             catch (Exception) {

@@ -7,13 +7,54 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpMultiSelectListBox : AnimatedListBox {
-        private static MpContentContextMenuView _contentContextMenu;
-
         protected override DependencyObject GetContainerForItemOverride() {
             return new MpMultiSelectListBoxItem();
         }
 
+        #region SelectionChangedCommandParameter dep prop
+
+        public static object GetSelectionChangedCommandParameter(DependencyObject obj) {
+            return (int)obj.GetValue(SelectionChangedCommandParameterProperty);
+        }
+        public static void SetSelectionChangedCommandParameter(DependencyObject obj, object value) {
+            obj.SetValue(SelectionChangedCommandParameterProperty, value);
+        }
+        public static readonly DependencyProperty SelectionChangedCommandParameterProperty =
+          DependencyProperty.RegisterAttached(
+            "SelectionChangedCommandParameter",
+            typeof(object),
+            typeof(MpMultiSelectListBox),
+            new FrameworkPropertyMetadata());
+
+        #endregion
+
+        #region SelectionChangedCommand dep prop
+
+        public static ICommand GetSelectionChangedCommand(DependencyObject obj) {
+            return (ICommand)obj.GetValue(SelectionChangedCommandProperty);
+        }
+        public static void SetSelectionChangedCommand(DependencyObject obj, ICommand value) {
+            obj.SetValue(SelectionChangedCommandProperty, value);
+        }
+        public static readonly DependencyProperty SelectionChangedCommandProperty =
+          DependencyProperty.RegisterAttached(
+            "SelectionChangedCommand",
+            typeof(ICommand),
+            typeof(MpMultiSelectListBox),
+            new FrameworkPropertyMetadata {
+                PropertyChangedCallback = (obj, e) => {
+                    if (e.NewValue == null) {
+                        return;
+                    }
+                }
+            });
+
+        #endregion
+
+        
+
         class MpMultiSelectListBoxItem : ListBoxItem {
+            private static MpContentContextMenuView _ContentContextMenu;
             private bool _deferSelection = false;
             private bool _isDeferSelectionEnabled = false;
 
@@ -52,10 +93,10 @@ namespace MpWpfApp {
                     }
                 }
 
-                if (_contentContextMenu == null) {
-                    _contentContextMenu = new MpContentContextMenuView();
+                if (_ContentContextMenu == null) {
+                    _ContentContextMenu = new MpContentContextMenuView();
                 }
-                ContextMenu = _contentContextMenu;
+                ContextMenu = _ContentContextMenu;
                 ContextMenu.PlacementTarget = this;
                 ContextMenu.IsOpen = true;
             }
@@ -154,14 +195,6 @@ namespace MpWpfApp {
             }
 
             
-        }
-
-        public ScrollViewer ScrollViewer {
-            get {
-                Border border = (Border)VisualTreeHelper.GetChild(this, 0);
-
-                return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-            }
         }
     }
 }

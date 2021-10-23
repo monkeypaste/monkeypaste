@@ -35,8 +35,6 @@ namespace MpWpfApp {
             }
         }
 
-
-        private bool _isBusy = false;
         public bool IsBusy { get; set; }
 
         private Visibility _itemVisibility = Visibility.Visible;

@@ -51,9 +51,10 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpIcon Icon { get; set; }
 
-        public static MpUrl Create(string urlPath,string urlTitle) {
-            var dupCheck = MpDb.Instance.GetItems<MpUrl>().Where(x => x.UrlPath == urlPath).FirstOrDefault();
+        public static async Task<MpUrl> Create(string urlPath,string urlTitle) {
+            var dupCheck = await MpDataModelProvider.Instance.GetUrlByPath(urlPath);
             if(dupCheck != null) {
+                dupCheck = await MpDb.Instance.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;
             }
             
@@ -67,31 +68,16 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
             } else {
-                var favIconImg64 = MpHelpers.Instance.GetUrlFavicon(domainStr);
-                newUrl.Icon = MpIcon.Create(favIconImg64);
+                var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
+                newUrl.Icon = await MpIcon.Create(favIconImg64);
                 newUrl.IconId = newUrl.Icon.Id;
             }
 
-            MpDb.Instance.AddItem<MpUrl>(newUrl);
+            await MpDb.Instance.AddItemAsync<MpUrl>(newUrl);
             
             return newUrl;
         }
         public MpUrl() { }
-
-        public static async Task<MpUrl> GetUrlByPath(string urlPath) {
-            var allUrls = await MpDb.Instance.GetItemsAsync<MpUrl>();
-            return allUrls.Where(x => x.UrlPath.ToLower() == urlPath.ToLower()).FirstOrDefault();
-        }
-
-        public static async Task<MpUrl> GetUrlById(int urlId) {
-            var allUrls = await MpDb.Instance.GetItemsAsync<MpUrl>();
-            var udbpl = allUrls.Where(x => x.Id == urlId).ToList();
-            if (udbpl.Count > 0) {
-                return udbpl[0];
-            }
-            return null;
-        }
-
 
         #region MpICopyItemSource Implementation
         [Ignore]

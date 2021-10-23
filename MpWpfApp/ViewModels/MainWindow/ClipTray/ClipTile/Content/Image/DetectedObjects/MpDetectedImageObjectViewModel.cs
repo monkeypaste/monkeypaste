@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectViewModel : MpViewModelBase {
+    public class MpDetectedImageObjectViewModel : MpViewModelBase<MpDetectedImageObjectCollectionViewModel> {
         #region Private Variables       
         private double _l = 0, _r = 0, _t = 0, _b = 0;
         //private double _xr = 1, _yr = 1;

@@ -246,18 +246,8 @@ namespace MpWpfApp {
 
         public bool IsAnyHovering => Items.Any(x => x.IsHovering);
 
-        private bool _isScrolling = false;
-        public bool IsScrolling {
-            get {
-                return _isScrolling;
-            }
-            set {
-                if (_isScrolling != value) {
-                    _isScrolling = value;
-                    OnPropertyChanged(nameof(IsScrolling));
-                }
-            }
-        }
+        [MpAffectsChild]
+        public bool IsScrolling { get; set; }
 
         public bool IsAnyEditingClipTitle {
             get {
@@ -631,13 +621,13 @@ namespace MpWpfApp {
             }
         }
 
-        private void AddTileThread(System.Windows.Forms.IDataObject ido) {
+        private async Task AddItemFromClipboard(Dictionary<string, string> cd) {
             var totalAddSw = new Stopwatch();
             totalAddSw.Start();
 
             var createItemSw = new Stopwatch();
             createItemSw.Start();
-            var newCopyItem = MpCopyItemBuilder.CreateFromClipboard(ido);
+            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd).ConfigureAwait(false);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -656,9 +646,10 @@ namespace MpWpfApp {
                 }              
 
                 if (_appendModeCopyItem != newCopyItem) {
+                    int compositeChildCount = await MpDataModelProvider.Instance.GetCompositeChildCountAsync(_appendModeCopyItem.Id);
                     newCopyItem.CompositeParentCopyItemId = _appendModeCopyItem.Id;
-                    newCopyItem.CompositeSortOrderIdx = MpCopyItem.GetCompositeChildren(_appendModeCopyItem).Count + 1;
-                    newCopyItem.WriteToDatabase();
+                    newCopyItem.CompositeSortOrderIdx = compositeChildCount + 1;
+                    await newCopyItem.WriteToDatabaseAsync();
 
                     if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
                         // TODO now composite item doesn't roll up children so the buffer needs to be created here
@@ -692,9 +683,7 @@ namespace MpWpfApp {
                             "Trial Expired",
                             "Please update your membership to use Monkey Paste",
                             Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                    }
-
-                    
+                    }                    
                 }
             }
             totalAddSw.Stop();
@@ -703,18 +692,9 @@ namespace MpWpfApp {
             _newModels.Add(newCopyItem);
         }
 
-        public void AddItemFromClipboard(object sender, System.Windows.Forms.IDataObject ido) {
-            //var workThread = new Thread(new ThreadStart(AddTileThread));
-            //workThread.SetApartmentState(ApartmentState.STA);
-            //workThread.IsBackground = true;
-            //workThread.Start(); 
-            //Task.Run(async () => {
-            //    await Task.Delay(500);
-            //    MpHelpers.Instance.RunOnMainThread(AddTileThread);
-            //});
-            AddTileThread(ido);
+        public async void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
+            await AddItemFromClipboard(cd);
         }
-
 
         public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci) {
             var nctvm = new MpClipTileViewModel(this);
@@ -835,7 +815,7 @@ namespace MpWpfApp {
             //awaited in MpMainWindowViewModel.Instance.HideWindow
         }
 
-        public void PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
+        public async Task PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
             if (IsAnyPastingTemplate) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
             }
@@ -875,15 +855,16 @@ namespace MpWpfApp {
                         var sctvm = SelectedItems[i];
                         //Items.Move(Items.IndexOf(sctvm), 0);
 
-                        var a = MpApp.GetAppByPath(MpHelpers.Instance.GetProcessPath(MpClipboardManager.Instance.LastWindowWatcher.LastHandle));
+                        var a = await MpDataModelProvider.Instance.GetAppByPath(MpHelpers.Instance.GetProcessPath(MpClipboardManager.Instance.LastWindowWatcher.LastHandle));
                         var aid = a == null ? 0 : a.Id;
                         foreach(var ivm in sctvm.ItemViewModels) {
-                            new MpPasteHistory() {
+                            var ud = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+                            await new MpPasteHistory() {
                                 AppId = aid,
                                 CopyItemId = ivm.CopyItem.Id,
-                                UserDeviceId = MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid).Id,
+                                UserDeviceId = ud.Id,
                                 PasteDateTime = DateTime.Now
-                            }.WriteToDatabase();
+                            }.WriteToDatabaseAsync();
                         }
                     }
                     //Refresh();
@@ -1289,7 +1270,7 @@ namespace MpWpfApp {
             } else if (pasteDataObject != null) {
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
-                PasteDataObject(pasteDataObject);
+                await PasteDataObject(pasteDataObject);
                 ResetClipSelection();
             }
         }

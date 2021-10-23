@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -149,6 +150,15 @@ namespace MpWpfApp {
                 return MpMeasurements.Instance.SolidBorderRect;
             }
         }
+
+        public Rect ItemSeparatorBrushRect {
+            get {
+                if(CopyItemType == MpCopyItemType.FileList) {
+                    return MpMeasurements.Instance.SolidBorderRect;
+                }
+                return MpMeasurements.Instance.DottedBorderRect;
+            }
+        }
         #endregion
 
         //[MpDependsOnParent("Test")]
@@ -267,9 +277,9 @@ namespace MpWpfApp {
 
         public DateTime LastSubSelectedDateTime { get; set; }
 
-        public bool IsSelected { 
-            get; 
-            set; }
+        [MpAffectsParent]
+        public bool IsSelected {  get; set; }
+
         public bool IsHovering { get; set; } = false;
         public bool IsContextMenuOpen { get; set; } = false;
 
@@ -592,7 +602,6 @@ namespace MpWpfApp {
             if (ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
-            
             CopyItem = ci;
 
             IsBusy = true;
@@ -847,7 +856,7 @@ namespace MpWpfApp {
                     RequestUiUpdate();
                     break;
                 case nameof(IsHovering):
-                    Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
+                    //Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     break;
                 case nameof(IsPlaceholder):
                     ItemVisibility = IsPlaceholder ? Visibility.Hidden : Visibility.Visible;

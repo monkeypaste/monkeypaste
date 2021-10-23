@@ -147,9 +147,9 @@ namespace MonkeyPaste {
             return cit;
         }
 
-        public string SerializeDbObject() {
-            var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
-            var tg = MpTag.GetTagById(TagId)?.TagGuid;
+        public string SerializeDbObject() { 
+            var cig = MpDb.Instance.GetItem<MpCopyItem>(CopyItemId)?.CopyItemGuid;
+            var tg = MpDb.Instance.GetItem<MpTag>(TagId)?.TagGuid;
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
@@ -163,8 +163,8 @@ namespace MonkeyPaste {
         }
 
         public Dictionary<string, string> DbDiff(object drOrModel) {
-            var cig = MpCopyItem.GetCopyItemById(CopyItemId)?.CopyItemGuid;
-            var tg = MpTag.GetTagById(TagId)?.TagGuid;
+            var cig = MpDb.Instance.GetItem<MpCopyItem>(CopyItemId)?.CopyItemGuid;
+            var tg = MpDb.Instance.GetItem<MpTag>(TagId)?.TagGuid;
             MpCopyItemTag other = null;
             if (drOrModel is MpCopyItemTag) {
                 other = drOrModel as MpCopyItemTag;

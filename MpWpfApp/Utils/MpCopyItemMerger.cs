@@ -101,7 +101,7 @@ namespace MpWpfApp {
                         } else {
                             fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                         }
-                        foreach (var cci in MpCopyItem.GetCompositeChildren(CopyItem)) {
+                        foreach (var cci in MpDataModelProvider.Instance.GetCompositeChildren(CopyItem.Id)) {
                             if (forceType == MpCopyItemType.Image) {
                                 fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                             } else {

@@ -17,9 +17,16 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpImageItemView.xaml
     /// </summary>
-    public partial class MpImageItemView : UserControl {
+    public partial class MpImageItemView : MpUserControl<MpContentItemViewModel> {
         public MpImageItemView() {
             InitializeComponent();
+        }
+
+        private void Viewbox_Loaded(object sender, RoutedEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                var test = await MpHelpers.Instance.DetectObjectsAsync(BindingContext.CopyItemData.ToBitmapSource().ToByteArray());
+                return;
+            });
         }
     }
 }

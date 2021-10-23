@@ -16,21 +16,17 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
-        private object _dc;
         private double _defaultMainWindowTop = 0;
         private double _initialExpandedMainWindowTop = 0;
 
         public bool IsExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
-            //AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
             AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.Unloaded += AssociatedObject_Unloaded;
         }
 
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
-            //AssociatedObject.DataContextChanged -= AssociatedObject_DataContextChanged;
-            AssociatedObject.BindingContext.PropertyChanged -= BindingContext_PropertyChanged;
             AssociatedObject.Loaded -= AssociatedObject_Loaded;
             AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
             MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
@@ -39,7 +35,6 @@ namespace MpWpfApp {
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
             MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceiveClipTileMessage, AssociatedObject.DataContext);
 
-            AssociatedObject.BindingContext.PropertyChanged += BindingContext_PropertyChanged;
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
 
@@ -53,33 +48,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            return;
-            var ctvm = sender as MpClipTileViewModel;
-            switch(e.PropertyName) {
-                case nameof(ctvm.IsExpanded):
-                    if(ctvm.IsExpanded) {
-                        Expand();
-                    } else {
-                        Unexpand();
-                    }
-                    break;
-            }
-        }
-
-        //private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-        //   if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
-        //        octvm.OnExpandRequest -= Ctvm_OnExpandRequest;
-        //        octvm.OnUnExpandRequest -= Ctvm_OnUnExpandRequest;
-        //        MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
-        //    }
-        //   if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-        //        nctvm.OnExpandRequest += Ctvm_OnExpandRequest;
-        //        nctvm.OnUnExpandRequest += Ctvm_OnUnExpandRequest;
-        //        MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
-        //    } 
-        //    _dc = e.NewValue;
-        //}
 
         public void Resize(double deltaHeight) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
@@ -201,13 +169,13 @@ namespace MpWpfApp {
                 var civm = civ.DataContext as MpContentItemViewModel;
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.IsEditingContent));
-                //civ.EditorView.Rtb.Width = ctvm.TileContentWidth;
-                civ.EditorView.Rtb.FitDocToRtb();
-                if(civm.IsSelected) {
-                    civ.EditorView.Rtb.Focus();
-                    civ.EditorView.Rtb.CaretPosition = civ.EditorView.Rtb.Document.ContentStart;
-
-                    //civ.EditorView.SizeContainerToContent();
+                if(ctvm.IsTextItem) {
+                    var rtbv = civ.ContentView.GetVisualDescendent<MpRtbView>();
+                    rtbv.Rtb.FitDocToRtb();
+                    if (civm.IsSelected) {
+                        rtbv.Focus();
+                        rtbv.Rtb.CaretPosition = rtbv.Rtb.Document.ContentStart;
+                    }
                 }
             }
 
@@ -274,12 +242,17 @@ namespace MpWpfApp {
                     civm.ClearEditing();
                     civm.OnPropertyChanged(nameof(civm.EditorHeight));
                     civm.OnPropertyChanged(nameof(civm.IsEditingContent));
-                    civ.EditorView.Rtb.FitDocToRtb();
+                    if(ctvm.IsTextItem) {
+                        var rtbv = civ.ContentView.Content as MpRtbView;
+                        rtbv.Rtb.FitDocToRtb();
+                    }                    
                 }
-
-                MpHelpers.Instance.RunOnMainThread(async () => {
-                    await Task.WhenAll(civl.Select(x => x.EditorView.SyncModelsAsync()).ToArray());
-                });
+                if (ctvm.IsTextItem) {
+                    MpHelpers.Instance.RunOnMainThread(async () => {
+                        await Task.WhenAll(civl.Select(x => (x.ContentView.Content as MpRtbView).SyncModelsAsync()).ToArray());
+                    });
+                }
+                
 
                 clv.UpdateAdorner();
 

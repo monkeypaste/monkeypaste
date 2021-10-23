@@ -91,7 +91,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-          
+        public ICommand ToggleSortOrderCommand => new RelayCommand(
+            () => {
+                IsSortDescending = !IsSortDescending;
+            });
         #endregion
     }
 }

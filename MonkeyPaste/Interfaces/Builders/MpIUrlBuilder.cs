@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIUrlBuilder {
-        MpUrl Create(string url);
+        Task<MpUrl> Create(string url);
     }
 }

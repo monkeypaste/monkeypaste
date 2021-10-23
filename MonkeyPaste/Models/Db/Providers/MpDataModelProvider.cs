@@ -3,10 +3,12 @@ using MonkeyPaste;
 using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
 
@@ -149,6 +151,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task<List<MpCopyItem>> GetCopyItemsForTagAsync(int tagId) {
+            string query = string.Format(@"select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)", tagId);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query,tagId);
+            return result;
+        }
+
         public List<int> GetCopyItemIdsForTag(int tagId) {
             string query = string.Format(@"select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}", tagId);
             var result = MpDb.Instance.QueryScalars<int>(query);
@@ -171,8 +179,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<List<MpCopyItem>> GetCompositeChildrenAsync(int ciid) {
-            string query = string.Format(
-                @"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
+            string query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
             return result;
         }
@@ -181,6 +188,12 @@ namespace MonkeyPaste {
             string query = string.Format(
                 @"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
             var result = MpDb.Instance.Query<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<int> GetCompositeChildCountAsync(int ciid) {
+            string query = string.Format(@"select count(*) from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
+            var result = await MpDb.Instance.QueryScalarAsync<int>(query);
             return result;
         }
 
@@ -231,35 +244,82 @@ namespace MonkeyPaste {
             var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
             return result;
         }
-        #endregion
 
-        public async Task<List<int>> QueryForIds(
-            int tagId,
-            MpContentSortType sortType,
-            bool isDescending,
-            Dictionary<int, int> manualSortOrderLookup = null) {
-
-            var citm = MpDb.Instance.GetTableMapping("MpCopyItem");
-            string sortColumn = citm.FindColumnWithPropertyName(Enum.GetName(typeof(MpContentSortType), sortType)).Name;
-            string isDescStr = isDescending ? "DESC" : "ASC";
-            string query = string.Empty;
-
-            switch (tagId) {
-                case MpTag.RecentTagId:
-                    int maxRecentCount = MpPreferences.Instance.MaxRecentClipItems;
-                    query = $"select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 order by CopyDateTime {isDescStr} limit {maxRecentCount}";
-                    break;
-                case MpTag.AllTagId:
-                    query = $"select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 order by {sortColumn} {isDescStr}";
-                    break;
-                default:
-                    
-                    break;
-            }
-
-            var result = await MpDb.Instance.QueryScalarsAsync<int>(query);
+        public async Task<List<MpCopyItem>> GetCopyItemsByData(string text) {
+            string query = $"select * from MpCopyItem where ItemData=?";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, text);
             return result;
         }
+
+        public async Task<MpIcon> GetIconByImageStr(string text64) {
+            string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64=?";
+            int iconImgId = await MpDb.Instance.QueryScalarAsync<int>(query, text64);
+            if(iconImgId <= 0) {
+                return null;
+            }
+            query = $"select * from MpIcon where fk_IconDbImageId=?";
+            var result = await MpDb.Instance.QueryAsync<MpIcon>(query, iconImgId);
+            if(result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpApp> GetAppByPath(string path) {
+            string query = $"select * from MpApp where SourcePath=?";
+            var result = await MpDb.Instance.QueryAsync<MpApp>(query, path);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public bool IsAppRejected(string path) {
+            string query = $"select * from MpApp where SourcePath=?";
+            var result = MpDb.Instance.Query<MpApp>(query, path);
+            if (result == null || result.Count == 0) {
+                return false;
+            }
+            return result[0].IsAppRejected;
+        }
+
+        public async Task<MpUrl> GetUrlByPath(string url) {
+            string query = $"select * from MpUrl where UrlPath=?";
+            var result = await MpDb.Instance.QueryAsync<MpUrl>(query, url);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpUserDevice> GetUserDeviceByGuid(string guid) {
+            string query = $"select * from MpUserDevice where MpUserDeviceGuid=?";
+            var result = await MpDb.Instance.QueryAsync<MpUserDevice>(query, guid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpSource> GetSourceByMembers(int appId,int urlId) {
+            string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=?";
+            var result = await MpDb.Instance.QueryAsync<MpSource>(query, appId,urlId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpSource> GetSourceByGuid(string guid) {
+            string query = $"select * from MpSource where MpSourceGuid=?";
+            var result = await MpDb.Instance.QueryAsync<MpSource>(query, guid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
 
         public async Task<List<MpCopyItem>> GetPageAsync(
             int tagId,

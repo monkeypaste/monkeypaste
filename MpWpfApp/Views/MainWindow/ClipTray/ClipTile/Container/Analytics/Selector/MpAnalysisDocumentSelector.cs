@@ -21,6 +21,12 @@ namespace MpWpfApp {
             set { _imageAnalysisTemplate = value; }
         }
 
+        private DataTemplate _fileAnalysisTemplate;
+        public DataTemplate FileAnalysisTemplate {
+            get { return _fileAnalysisTemplate; }
+            set { _fileAnalysisTemplate = value; }
+        }
+
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
@@ -33,11 +39,14 @@ namespace MpWpfApp {
                 // especially for other content types
                 return TextAnalysisTemplate;
             }
+
             switch (ci.ItemType) {
                 case MpCopyItemType.RichText:
                     return TextAnalysisTemplate;
                 case MpCopyItemType.Image:
                     return ImageAnalysisTemplate;
+                case MpCopyItemType.FileList:
+                    return FileAnalysisTemplate;
             }
 
             throw new Exception("Uknown Item Type");

@@ -60,10 +60,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
-        public static MpTag GetTagById(int tagId) {
-            var tl = MpDb.Instance.GetItems<MpTag>();
-            return tl.Where(x => x.Id == tagId).FirstOrDefault();
-        }
         #endregion
 
         public MpTag() {

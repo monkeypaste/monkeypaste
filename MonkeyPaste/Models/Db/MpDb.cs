@@ -708,13 +708,10 @@ namespace MonkeyPaste {
                 }
             }
 
-            InitTables();
-
-            await InitTablesAsync();
-
-
+            await InitTables();
+            
             if (isNewDb) {
-                InitDefaultData();
+                await InitDefaultData();
             }
 
 
@@ -724,25 +721,25 @@ namespace MonkeyPaste {
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
-        private void InitTables() {
-            _connection.CreateTable<MpApp>();
-            _connection.CreateTable<MpCopyItem>();
-            _connection.CreateTable<MpCopyItemTag>();
-            _connection.CreateTable<MpCopyItemTemplate>();
-            _connection.CreateTable<MpDbImage>();
-            _connection.CreateTable<MpDbLog>();
-            _connection.CreateTable<MpIcon>();
-            _connection.CreateTable<MpPasteHistory>();
-            _connection.CreateTable<MpPasteToAppPath>(); 
-            _connection.CreateTable<MpShortcut>();
-            _connection.CreateTable<MpSource>();
-            _connection.CreateTable<MpSyncHistory>();
-            _connection.CreateTable<MpTag>();
-            _connection.CreateTable<MpUrl>();
-            _connection.CreateTable<MpUserDevice>();
-        }
+        private async Task InitTables() {
+            await Task.Run(() => {
+                _connection.CreateTable<MpApp>();
+                _connection.CreateTable<MpCopyItem>();
+                _connection.CreateTable<MpCopyItemTag>();
+                _connection.CreateTable<MpCopyItemTemplate>();
+                _connection.CreateTable<MpDbImage>();
+                _connection.CreateTable<MpDbLog>();
+                _connection.CreateTable<MpIcon>();
+                _connection.CreateTable<MpPasteHistory>();
+                _connection.CreateTable<MpPasteToAppPath>();
+                _connection.CreateTable<MpShortcut>();
+                _connection.CreateTable<MpSource>();
+                _connection.CreateTable<MpSyncHistory>();
+                _connection.CreateTable<MpTag>();
+                _connection.CreateTable<MpUrl>();
+                _connection.CreateTable<MpUserDevice>();
+            });
 
-        private async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
@@ -760,37 +757,38 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
         }
 
-        private void InitDefaultData() {
-            if (string.IsNullOrEmpty(MpPreferences.Instance.ThisDeviceGuid)) {
-                MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
-            }
+        private async Task InitDefaultData() {
+            MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
 
-            //if (MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
-            //    new MpUserDevice(
-            //        MpPreferences.Instance.ThisDeviceGuid, 
-            //        MonkeyPaste.MpUserDeviceType.Windows).WriteToDatabase();
-            //}
-            if (MpUserDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid) == null) {
-                var thisDevice = new MpUserDevice() {
-                    UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
-                    PlatformType = MpPreferences.Instance.ThisDeviceType
-                };
-                AddItem<MpUserDevice>(thisDevice);
-            }
-            AddItem<MpTag>(new MpTag() {
+            var thisDevice = new MpUserDevice() {
+                UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
+                PlatformType = MpPreferences.Instance.ThisDeviceType
+            };
+            await AddItemAsync<MpUserDevice>(thisDevice);
+
+            var process = Process.GetCurrentProcess();
+            string appPath = process.MainModule.FileName;
+            string appName = MpPreferences.Instance.ApplicationName;
+            var iconStr = new MpImageConverter().Convert(MpHelpers.Instance.LoadBitmapResource(@"MonkeyPaste.Resources.Icons.monkey.png"), typeof(string)) as string;
+            var icon = await MpIcon.Create(iconStr);
+            var app = await MpApp.Create(appPath, appName, icon);
+            var source = await MpSource.Create(app, null);
+            MpPreferences.Instance.ThisDeviceSourceId = source.Id;
+
+            await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
                 HexColor = Color.Green.ToHex(),
                 TagSortIdx = 0
             }, "", true, true);
-            AddItem<MpTag>(new MpTag() {
+            await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 HexColor = Color.Blue.ToHex(),
                 TagSortIdx = 1
             }, "", true, true);
 
-            AddItem<MpTag>(new MpTag() {
+            await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
                 HexColor = Color.Yellow.ToHex(),
@@ -803,7 +801,7 @@ namespace MonkeyPaste {
                 HexColor = Color.Orange.ToHex(),
                 TagSortIdx = 3
             };
-            AddItem<MpTag>(helpTag, "", true, true);
+            await AddItemAsync<MpTag>(helpTag, "", true, true);
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
@@ -1005,6 +1003,7 @@ namespace MonkeyPaste {
                     
                     CREATE TABLE MpDetectedImageObject (
                       pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpDetectedImageObjectGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , Confidence real NOT NULL
                     , X real NOT NULL
@@ -1354,7 +1353,7 @@ namespace MonkeyPaste {
         public List<DataRow> Rows { get; set; } = new List<DataRow>();
     }
 
-    public class DataRow {
+    public class DataRow{
         private Dictionary<string, object> _columns = new Dictionary<string, object>();
 
         #region Property Reflection Referencer

@@ -73,43 +73,16 @@ namespace MonkeyPaste {
         }
 
         #endregion
-        public static MpApp GetAppByPath(string appPath, string deviceGuid = "") {
-            if (string.IsNullOrEmpty(deviceGuid)) {
-                deviceGuid = MpPreferences.Instance.ThisDeviceGuid;
-            }
-            var device = MpUserDevice.GetUserDeviceByGuid(deviceGuid);
-            if (device == null) {
-                return null;
-            }
-            return MpDb.Instance.GetItems<MpApp>().Where(x => x.AppPath.ToLower() == appPath.ToLower() && x.UserDeviceId == device.Id).FirstOrDefault();
-        }
 
-        public static async Task<MpApp> GetAppByIdAsync(int appId) {
-            var allApps = await MpDb.Instance.GetItemsAsync<MpApp>();
-            return allApps.Where(x => x.Id == appId).FirstOrDefault();
-        }
-
-        public static async Task<MpApp> GetAppByGuid(string appGuid) {
-            var allApps = await MpDb.Instance.GetItemsAsync<MpApp>();
-            return allApps.Where(x => x.Guid == appGuid).FirstOrDefault();
-        }
-
-        public static bool IsAppRejectedByPath(string appPath, string deviceGuid = "") {
-            var app = GetAppByPath(appPath, deviceGuid);
-            if (app == null) {
-                return false;
-            }
-            return app.IsAppRejected;
-        }
-
-        public static MpApp Create(string appPath, string appName, MpIcon icon) {
-            var dupApp = MpApp.GetAppByPath(appPath);
+        public static async Task<MpApp> Create(string appPath, string appName, MpIcon icon) {
+            var dupApp = await MpDataModelProvider.Instance.GetAppByPath(appPath);
             if (dupApp != null) {
+                dupApp = await MpDb.Instance.GetItemAsync<MpApp>(dupApp.Id);
                 return dupApp;
             }
             //if app doesn't exist create image,icon,app and source
 
-            var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+            var thisDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
             var newApp = new MpApp() {
                 AppGuid = System.Guid.NewGuid(),
@@ -121,34 +94,11 @@ namespace MonkeyPaste {
                 UserDevice = thisDevice
             };
 
-            MpDb.Instance.AddOrUpdate<MpApp>(newApp);
+            await MpDb.Instance.AddOrUpdateAsync<MpApp>(newApp);
 
             return newApp;
         }
 
-        public static async Task<MpApp> CreateAsync(string appPath, string appName, MpIcon icon) {
-            var dupApp = MpApp.GetAppByPath(appPath);
-            if (dupApp != null) {
-                return dupApp;
-            }
-            //if app doesn't exist create image,icon,app and source
-
-            var thisDevice = MpRemoteDevice.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
-
-            var newApp = new MpApp() {
-                AppGuid = System.Guid.NewGuid(),
-                AppPath = appPath,
-                AppName = appName,
-                IconId = icon.Id,
-                Icon = icon,
-                UserDeviceId = thisDevice.Id,
-                UserDevice = thisDevice
-            };
-
-            await MpDb.Instance.AddItemAsync<MpApp>(newApp);
-
-            return newApp;
-        }
         public MpApp() { }
 
         #region MpICopyItemSource Implementation

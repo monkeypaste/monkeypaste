@@ -87,45 +87,38 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AppViewModels));
         }
 
-        private RelayCommand _addExcludedAppCommand;
-        public ICommand AddExcludedAppCommand {
-            get {
-                if (_addExcludedAppCommand == null) {
-                    _addExcludedAppCommand = new RelayCommand(AddExcludedApp);
+        public ICommand AddExcludedAppCommand => new AsyncRelayCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Add excluded app : ");
+                OpenFileDialog openFileDialog = new OpenFileDialog() {
+                    Filter = "Applications|*.lnk;*.exe",
+                    Title = "Select an application to exclude",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                };
+                bool? openResult = openFileDialog.ShowDialog();
+                if (openResult != null && openResult.Value) {
+                    string appPath = openFileDialog.FileName;
+                    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                        appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                    }
+                    var neavm = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(appPath);
+                    if (neavm == null) {
+                        //if unknown app just add it with rejection flag
+                        var app = await MpApp.Create(appPath, string.Empty, null);
+                        neavm = new MpAppViewModel(MpAppCollectionViewModel.Instance, app);
+                        MpAppCollectionViewModel.Instance.Add(neavm);
+                    } else if (neavm.IsAppRejected) {
+                        //if app is already rejected set it to selected in grid
+                        MessageBox.Show(neavm.AppName + " is already being rejected");
+                        neavm.IsSelected = true;
+                    } else {
+                        //otherwise update rejection and prompt about current clips
+                        MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
+                    }
+                    MpAppCollectionViewModel.Instance.Refresh();
                 }
-                return _addExcludedAppCommand;
-            }
-        }
-        private void AddExcludedApp() {
-            MonkeyPaste.MpConsole.WriteLine("Add excluded app : ");
-            OpenFileDialog openFileDialog = new OpenFileDialog() {
-                Filter = "Applications|*.lnk;*.exe",
-                Title = "Select an application to exclude",                
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
-            bool? openResult = openFileDialog.ShowDialog();
-            if (openResult != null && openResult.Value) {
-                string appPath = openFileDialog.FileName;
-                if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                    appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
-                }
-                var neavm = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(appPath);
-                if (neavm == null) {
-                    //if unknown app just add it with rejection flag
-                    neavm = new MpAppViewModel(MpAppCollectionViewModel.Instance,MpApp.Create(appPath,string.Empty,null));
-                    MpAppCollectionViewModel.Instance.Add(neavm);
-                } else if (neavm.IsAppRejected) {
-                    //if app is already rejected set it to selected in grid
-                    MessageBox.Show(neavm.AppName + " is already being rejected");
-                    neavm.IsSelected = true;
-                } else {
-                    //otherwise update rejection and prompt about current clips
-                    MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
-                }
-                MpAppCollectionViewModel.Instance.Refresh();
-            }
-            //OnPropertyChanged(nameof(AppViewModels));
-        }
+                //OnPropertyChanged(nameof(AppViewModels));
+            });
         #endregion
     }
 }
