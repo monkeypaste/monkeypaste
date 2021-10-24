@@ -281,6 +281,8 @@ namespace MpWpfApp {
         public bool IsSelected {  get; set; }
 
         public bool IsHovering { get; set; } = false;
+
+        [MpAffectsParent]
         public bool IsContextMenuOpen { get; set; } = false;
 
         public bool IsEditingContent { 
@@ -336,7 +338,9 @@ namespace MpWpfApp {
         public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
+        [MpAffectsParent]
         public bool IsItemDragging { get; set; } = false;
+
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
         #endregion

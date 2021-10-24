@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     [AttributeUsage(AttributeTargets.Property)]
-    public class MpDependsOnSiblingAttribute : Attribute {
+    public class MpDependsOnSiblingAttribute : MpDependsOnBase {
         public MpDependsOnSiblingAttribute() { }
+
+        public MpDependsOnSiblingAttribute(params object[] args) : base(args) { }
     }
 }

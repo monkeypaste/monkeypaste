@@ -4,16 +4,16 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpMeasurements  {
-        private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
-        public static MpMeasurements Instance { 
+    public class MpXamMeasurements  {
+        private static readonly Lazy<MpXamMeasurements> _Lazy = new Lazy<MpXamMeasurements>(() => new MpXamMeasurements());
+        public static MpXamMeasurements Instance { 
             get { 
                 return _Lazy.Value; 
             } }
 
         public double MainWindowToScreenHeightRatio = 0.35;
 
-        private MpMeasurements() {
+        private MpXamMeasurements() {
             if (MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {                
                 return;
             }

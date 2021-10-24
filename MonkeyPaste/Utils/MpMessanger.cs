@@ -12,7 +12,11 @@ namespace MonkeyPaste {
         QueryChanged,
         ItemsInitialized,
         Expand,
-        Unexpand
+        Unexpand,
+        MainWindowOpening,
+        MainWindowOpened,
+        MainWindowHiding,
+        MainWindowHid
     }
 
     public class MpMessenger {

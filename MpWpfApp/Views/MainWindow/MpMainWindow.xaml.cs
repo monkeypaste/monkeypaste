@@ -79,16 +79,16 @@ namespace MpWpfApp {
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
             var mwvm = DataContext as MpMainWindowViewModel;
-            mwvm.HideWindowCommand.Execute(null);
+            if(mwvm.IsResizing) {
+                return;
+            }
+            //mwvm.HideWindowCommand.Execute(null);
         }
 
         private void MainWindowCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            var hitTest = VisualTreeHelper.HitTest(MainWindowCanvas, e.GetPosition(MainWindowCanvas));
-            if (hitTest != null && hitTest.VisualHit != null) {
-                if (hitTest.VisualHit == MainWindowCanvas) {
-                    var mwvm = DataContext as MpMainWindowViewModel;
-                    mwvm.HideWindowCommand.Execute(null);
-                }
+            if (Mouse.GetPosition(MainWindowGrid).Y < -10) {
+                var mwvm = DataContext as MpMainWindowViewModel;
+                //mwvm.HideWindowCommand.Execute(null);
             }
         }
 

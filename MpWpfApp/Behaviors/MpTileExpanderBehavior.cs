@@ -170,7 +170,7 @@ namespace MpWpfApp {
                 civm.OnPropertyChanged(nameof(civm.EditorHeight));
                 civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                 if(ctvm.IsTextItem) {
-                    var rtbv = civ.ContentView.GetVisualDescendent<MpRtbView>();
+                    var rtbv = civ.GetVisualDescendent<MpRtbView>();
                     rtbv.Rtb.FitDocToRtb();
                     if (civm.IsSelected) {
                         rtbv.Focus();
@@ -243,13 +243,13 @@ namespace MpWpfApp {
                     civm.OnPropertyChanged(nameof(civm.EditorHeight));
                     civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                     if(ctvm.IsTextItem) {
-                        var rtbv = civ.ContentView.Content as MpRtbView;
+                        var rtbv = civ.GetVisualDescendent<MpRtbView>();
                         rtbv.Rtb.FitDocToRtb();
                     }                    
                 }
                 if (ctvm.IsTextItem) {
                     MpHelpers.Instance.RunOnMainThread(async () => {
-                        await Task.WhenAll(civl.Select(x => (x.ContentView.Content as MpRtbView).SyncModelsAsync()).ToArray());
+                        await Task.WhenAll(civl.Select(x => x.GetVisualDescendent<MpRtbView>().SyncModelsAsync()).ToArray());
                     });
                 }
                 

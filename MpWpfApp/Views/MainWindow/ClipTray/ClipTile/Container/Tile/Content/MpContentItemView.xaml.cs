@@ -19,7 +19,6 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentItemView.xaml
     /// </summary>
     public partial class MpContentItemView : MpUserControl<MpContentItemViewModel> {
-
         public MpContentItemView() : base() {
             InitializeComponent();            
         }

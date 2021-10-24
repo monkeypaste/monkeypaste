@@ -42,7 +42,6 @@
                                         VirtualizingPanel.ScrollUnit="Pixel"
                                         VirtualizingPanel.VirtualizationMode="Standard"
                                         VirtualizingStackPanel.CleanUpVirtualizedItem="ClipTray_CleanUpVirtualizedItem"
-                                        ScrollViewer.ScrollChanged="ClipTray_ScrollChanged"
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"

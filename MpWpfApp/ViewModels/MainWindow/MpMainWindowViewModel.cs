@@ -137,6 +137,9 @@ namespace MpWpfApp {
                 return new ImageBrush(Ss);
             }
         }
+
+        public bool IsResizing { get; set; } = false;
+
         #endregion
 
         #region Layout
@@ -405,6 +408,8 @@ namespace MpWpfApp {
 
             SetupMainWindowRect();
 
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.MainWindowOpening);
+
             var mw = (MpMainWindow)Application.Current.MainWindow;
             mw.Show();
             mw.Activate();
@@ -446,12 +451,13 @@ namespace MpWpfApp {
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsShowingDialog &&
                       !_isExpanded &&
+                      !IsResizing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);
             });
 
         private async Task HideWindow(object args) {
-            if(IsMainWindowLocked) {
+            if(IsMainWindowLocked || IsResizing) {
                 return;
             }
             IDataObject pasteDataObject = null;

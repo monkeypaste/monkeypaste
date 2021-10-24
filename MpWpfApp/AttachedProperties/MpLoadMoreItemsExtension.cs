@@ -74,7 +74,7 @@ namespace MpWpfApp {
         }
 
         private static void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e) {
-            if(e.HorizontalChange == 0) {
+            if(e.HorizontalChange == 0 || MpMainWindowViewModel.IsMainWindowLoading || MpMainWindowViewModel.IsMainWindowOpen || MpMainWindowViewModel.IsMainWindowOpening) {
                 return;
             }
             var sv = sender as ScrollViewer;

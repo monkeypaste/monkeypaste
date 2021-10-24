@@ -97,15 +97,15 @@ namespace MonkeyPaste {
             if (iconBuilder != null) {
                 var iconBorderImage = new MpDbImage() {
                     DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.White.ToHex())
+                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.White.ToHex())
                 };
                 var iconBorderHighlightImage = new MpDbImage() {
                     DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Yellow.ToHex())
+                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Yellow.ToHex())
                 };
                 var iconBorderHighlightSelectedImage = new MpDbImage() {
                     DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Pink.ToHex())
+                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Pink.ToHex())
                 };
 
                 await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderImage);

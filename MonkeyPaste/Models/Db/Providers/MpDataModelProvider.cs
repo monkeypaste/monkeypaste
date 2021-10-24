@@ -408,10 +408,6 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public void SetQueryInfo(MpQueryInfo info) {
-            QueryInfo = info;
-        }
-
         public int FetchCopyItemCount() {
             int count = 0;
             switch(QueryInfo.TagId) {

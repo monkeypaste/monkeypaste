@@ -126,6 +126,7 @@
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
+    <Compile Include="Behaviors\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
     <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />

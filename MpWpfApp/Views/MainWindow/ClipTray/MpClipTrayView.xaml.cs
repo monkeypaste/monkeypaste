@@ -46,12 +46,23 @@ namespace MpWpfApp {
             ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             ctrvm.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
+
             var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
             sv.PreviewMouseDown += Sv_PreviewMouseDown;
 
+            MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
-            MpMessenger.Instance.Register<MpMessageType>(ctrvm, ReceivedMessage);
+            MpMessenger.Instance.Register<MpMessageType>(ctrvm, ReceivedClipTrayViewModelMessage);
         }
+
+        private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowOpening:
+                    ClipTray.GetScrollViewer().ScrollToHorizontalOffset(0);
+                    break;
+            }
+        }
+
 
         private void Ctrvm_OnScrollToXRequest(object sender, double e) {
             var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
@@ -94,7 +105,7 @@ namespace MpWpfApp {
             return;
         }
 
-        private void ReceivedMessage(MpMessageType msg) {
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.Requery:
                     //await RefreshContext();
@@ -103,6 +114,9 @@ namespace MpWpfApp {
                         double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
                         double ttw = tw * BindingContext.TotalItemsInQuery;
                         sv.HorizontalScrollBar.Maximum = ttw;
+                        sv.HorizontalScrollBar.Minimum = 0;
+                        sv.ScrollToLeftEnd();
+                        UpdateLayout();
                     }
                     break;
                 case MpMessageType.Expand:
@@ -155,30 +169,12 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            //ClipTray?.GetScrollViewer().ScrollToHome();
+            ClipTray?.GetScrollViewer().ScrollToLeftEnd();
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
             ClipTray?.ScrollIntoView(e);
         }
-
-        private void ClipTray_ScrollChanged(object sender, ScrollChangedEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-            double min_thresh = 18;
-            if(e.HorizontalChange > 0) {
-                //scrolling higher
-                var left_lbir = ClipTray.GetListBoxItemRect(0);
-                if(left_lbir.Right < min_thresh) {
-                    //left item off screen:
-                    //-move to end of list
-                    //-set datacontext to next item
-                    //ctrvm.RecycleLeftItem();
-                }
-            } else if(e.HorizontalChange < 0) {
-
-            }
-        }
-
         #endregion
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {

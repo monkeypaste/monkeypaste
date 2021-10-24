@@ -67,6 +67,7 @@ namespace MpWpfApp {
         [MpChildViewModel(typeof(MpClipTileViewModel),true)]
         public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
+        [MpAffectsChild]
         public List<MpClipTileViewModel> SelectedItems {
             get {
                 return Items.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
@@ -87,6 +88,7 @@ namespace MpWpfApp {
             }
         }
 
+        [MpAffectsChild]
         public MpClipTileViewModel PrimaryItem {
             get {
                 if (SelectedItems.Count == 0) {

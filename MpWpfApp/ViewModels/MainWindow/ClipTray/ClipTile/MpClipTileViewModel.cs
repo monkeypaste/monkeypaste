@@ -501,6 +501,7 @@ using System.Speech.Synthesis;
 
         #region Brush Properties        
 
+        
         public Rect TileBorderBrushRect {
             get {
                 if (IsAnyItemDragging || IsAnyContextMenuOpened) {
@@ -510,6 +511,7 @@ using System.Speech.Synthesis;
             }
         }
 
+        [MpDependsOnParent("PrimaryItem","SelectedItems")]
         public Brush TileBorderBrush {
             get {
                 if (Parent.PrimaryItem == this &&
@@ -586,10 +588,12 @@ using System.Speech.Synthesis;
 
         public IDataObject DragDataObject { get; set; }
 
-        public bool IsAnyItemDragging => ItemViewModels.All(x => x.IsItemDragging);
+        [MpDependsOnChild("IsItemDragging")]
+        public bool IsAnyItemDragging => ItemViewModels.Any(x => x.IsItemDragging);
 
         public bool IsDroppingOnTile => DropIdx >= 0;
 
+        [MpDependsOnChild("IsContextMenuOpen")]
         public bool IsAnyContextMenuOpened => ItemViewModels.Any(x => x.IsContextMenuOpen);
 
         public bool IsAnySelected => ItemViewModels.Any(x => x.IsSelected);
@@ -759,6 +763,7 @@ using System.Speech.Synthesis;
             }
             OnPropertyChanged(nameof(ItemViewModels));
             OnPropertyChanged(nameof(IsPlaceholder));
+            OnPropertyChanged(nameof(PrimaryItem));
 
             MpMessenger.Instance.Send(MpMessageType.ItemsInitialized);
 

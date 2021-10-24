@@ -103,7 +103,7 @@ namespace MpWpfApp {
                 nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
                 nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
 
-                //MpMessenger.Instance.Register<MpMessageType>(nctvm, ReceivedContentItemsChangedMessage);
+                MpMessenger.Instance.Register<MpMessageType>(nctvm,ReceivedContentItemsChangedMessage);
             } 
         }
 
@@ -118,10 +118,10 @@ namespace MpWpfApp {
             });
         }
 
-        private void ReceivedContentItemsChangedMessage(MpMessageType msg) {
+        private async void ReceivedContentItemsChangedMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemsInitialized:
-                    //await RefreshContext();
+                    await RefreshContext();
                     break;
             }
         }
