@@ -61,7 +61,7 @@ namespace MpWpfApp {
             adornerLayer.Update();
         }
 
-        public bool StartDrop(List<MpClipTileViewModel> dctvml, int overIdx) {
+        public bool StartDrop(List<MpClipTileViewModel> dctvml, int overIdx) {            
             if (!IsDragDataValid(dctvml, overIdx)) {
                 CancelDrop();
                 return false;
@@ -77,7 +77,6 @@ namespace MpWpfApp {
                 (AssociatedObject.DataContext as MpClipTileViewModel).DropIdx = dropIdx;
             }
 
-            AutoScrollByMouse();
             UpdateDropLineAdorner();
             
             return true;
@@ -302,48 +301,54 @@ namespace MpWpfApp {
             if(!isTrayDrop) {
                 (AssociatedObject.DataContext as MpClipTileViewModel).DropIdx = -1;
             }
-            AssociatedObject.GetScrollViewer()?.ScrollToHome();
+            //AssociatedObject.GetScrollViewer()?.ScrollToHome();
         }
 
         public void AutoScrollByMouse() {
-            return;
+            //return;
             //during drop autoscroll listbox to beginning or end of list
             //if more items are there depending on which half of the visible list
             //the mouse is in
-            var sv = AssociatedObject.GetScrollViewer();
-            
-            var mp = MpHelpers.Instance.GetMousePosition(AssociatedObject);
-            Rect listBoxRect = AssociatedObject.GetListBoxRect();
-            double minScrollDist = 20;
-            double autoScrollOffset = 15;
-            double exp = 1;
+            ListBox ctr_lb;
             if(isTrayDrop) {
-                MpConsole.WriteLine($"Tray AutoScroll sv width: {sv.ScrollableWidth} lb width: {AssociatedObject.Width}");
-                if(sv.ScrollableWidth <= AssociatedObject.Width) {
-
-                }
-                double leftDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, 0);
-                double rightDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, listBoxRect.Right);
-                if (leftDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(leftDiff, exp);
-                    sv.ScrollToHorizontalOffset(sv.HorizontalOffset - autoScrollOffset);
-                } else if (rightDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(rightDiff, exp);
-                    sv.ScrollToHorizontalOffset(sv.HorizontalOffset + autoScrollOffset);
-                }
+                ctr_lb = AssociatedObject;
             } else {
-                MpConsole.WriteLine($"Content AutoScroll sv height: {sv.ScrollableHeight} lb height: {AssociatedObject.Height}");
-                if (sv.ScrollableWidth <= AssociatedObject.Width) {
+                ctr_lb = AssociatedObject.GetVisualAncestor<MpClipTrayView>().ClipTray;
+            }
+            var ctr_sv = ctr_lb.GetScrollViewer() as AnimatedScrollViewer;
+            
+            var ctr_mp = Mouse.GetPosition(ctr_lb);
+            Rect ctr_rect = ctr_lb.GetListBoxRect();
+            double ctr_midX = ctr_rect.Left + (ctr_rect.Width / 2);
+            double minScrollDist = 30;
+            double maxAutoScrollOffset = 50;
+            double exp = 1.5;
 
-                }
-                double topDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, 0);
-                double bottomDiff = MpHelpers.Instance.DistanceBetweenValues(mp.Y, listBoxRect.Bottom);
+            //
+            double leftDiff = ctr_mp.X - ctr_rect.Left;
+            double rightDiff = ctr_rect.Right - ctr_mp.X;
+            if (leftDiff < minScrollDist) {
+                double autoScrollOffset = Math.Min(maxAutoScrollOffset, Math.Pow(ctr_midX - ctr_mp.X, exp));
+                ctr_sv.TargetHorizontalOffset = ctr_sv.HorizontalOffset - autoScrollOffset;
+            } else if (rightDiff < minScrollDist) {
+                double autoScrollOffset = Math.Min(maxAutoScrollOffset, Math.Pow(ctr_mp.X-ctr_midX, exp));
+                ctr_sv.TargetHorizontalOffset = ctr_sv.HorizontalOffset + autoScrollOffset;
+            }
+
+            if (!isTrayDrop) {
+                var content_rect = AssociatedObject.GetListBoxRect();
+                double content_midY = content_rect.Top + (content_rect.Height / 2);
+                var content_sv = AssociatedObject.GetScrollViewer() as AnimatedScrollViewer;
+                var content_mp = Mouse.GetPosition(AssociatedObject);
+
+                double topDiff = content_mp.Y - content_rect.Top;
+                double bottomDiff = content_rect.Bottom - content_mp.Y;
                 if (topDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(topDiff, exp);
-                    sv.ScrollToVerticalOffset(sv.VerticalOffset - autoScrollOffset);
+                    double autoScrollOffset = Math.Min(maxAutoScrollOffset, Math.Pow(content_midY - content_mp.Y, exp));
+                    content_sv.TargetVerticalOffset = content_sv.VerticalOffset - autoScrollOffset;
                 } else if (bottomDiff < minScrollDist) {
-                    autoScrollOffset += Math.Pow(bottomDiff, exp);
-                    sv.ScrollToVerticalOffset(sv.VerticalOffset + autoScrollOffset);
+                    double autoScrollOffset = Math.Min(maxAutoScrollOffset, Math.Pow(content_mp.Y-content_midY, exp));
+                    content_sv.TargetVerticalOffset = content_sv.VerticalOffset + maxAutoScrollOffset;
                 }
             }
             

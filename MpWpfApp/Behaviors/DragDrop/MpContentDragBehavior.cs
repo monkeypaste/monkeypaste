@@ -108,7 +108,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State Changes
-
+        int lastTrayDropIdx = 0;
         private void Drag(MouseEventArgs e) {
             var parent = Application.Current.MainWindow;
 
@@ -119,11 +119,11 @@ namespace MpWpfApp {
             ListBox ctrvlb = ClipTrayView.ClipTray;
             int ctvIdx = ClipTrayView.ClipTray.GetItemIndexAtPoint(e.GetPosition(ctrvlb));
             if (ctvIdx >= 0) {
-                //drag is over clip tray
+                //drag is within clip tray bounds
                 if (ctvIdx < ctrvlb.Items.Count) {
                     Rect dropTileRect = ctrvlb.GetListBoxItemRect(ctvIdx);
                     double dropTileMidX = dropTileRect.X + (dropTileRect.Width / 2);
-                    Point trayMp = e.GetPosition(ctrvlb);
+                    Point trayMp = e.GetPosition(ctrvlb.GetScrollViewer());
                     double mpXDistFromDropTileMidX = Math.Abs(dropTileMidX - trayMp.X);
                     if (mpXDistFromDropTileMidX <= dropTileRect.Width * 0.25) {
                         MpContentListView clv = ctrvlb.GetListBoxItem(ctvIdx).GetVisualDescendent<MpContentListView>();
@@ -157,8 +157,11 @@ namespace MpWpfApp {
             if (lastDropBehavior != dropBehavior && lastDropBehavior != null) {
                 lastDropBehavior.CancelDrop();
             }
-            if (dropBehavior != null && ctvIdx != dropBehavior.dropIdx) {
-                StartDrop(ctvIdx);
+            if (dropBehavior != null) {
+                if (ctvIdx != dropBehavior.dropIdx) {
+                    StartDrop(ctvIdx); 
+                }
+                dropBehavior.AutoScrollByMouse();
             }
         }
 

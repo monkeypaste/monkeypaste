@@ -26,7 +26,7 @@
             <ColumnDefinition Width="0.2*" />
             <ColumnDefinition Width="0.1*" />
             <ColumnDefinition Width="auto"
-                              MaxWidth="{Binding MaxTagTrayWidth}" />
+                              MaxWidth="{Binding TagTrayDefaultMaxWidth}" />
             <ColumnDefinition Width="0.1*" />
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
@@ -64,7 +64,7 @@
                  dd:DragDrop.IsDropTarget="True"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 MaxWidth="{Binding MaxTagTrayWidth}"
+                 MaxWidth="{Binding TagTrayDefaultMaxWidth}"
                  SelectionMode="Single"
                  ScrollViewer.IsDeferredScrollingEnabled="False"
                  ScrollViewer.CanContentScroll="False"

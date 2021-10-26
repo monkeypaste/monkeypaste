@@ -27,7 +27,7 @@
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
-        Height="{local:MpMeasurementsBinding ScreenHeight}"
+        Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance local:MpMainWindowViewModel, IsDesignTimeCreatable=True}">
     <Window.Resources />
@@ -51,7 +51,6 @@
         </Image>-->
         <Grid x:Name="MainWindowGrid"
               Canvas.Top="{Binding MainWindowTop}"
-              Canvas.Bottom="{Binding MainWindowBottom}"
               Canvas.Left="0"
               Width="{Binding MainWindowWidth}"
               Background="Green">

@@ -57,25 +57,21 @@ namespace MpWpfApp {
 
         #region Main Window
 
-        public double MainWindowMinHeight {
+        public double MainWindowDefaultHeight {
             get {
                 return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;
+            }
+        }
+
+        public double MainWindowMinHeight {
+            get {
+                return MainWindowDefaultHeight * 0.5;
             }
         }
 
         public double MainWindowMaxHeight {
             get {
                 return SystemParameters.WorkArea.Height;
-            }
-        }
-
-        public Rect MainWindowRect {
-            get {
-                return new Rect(
-                    0,
-                    SystemParameters.WorkArea.Height - MainWindowMinHeight,
-                    ScreenWidth,
-                    MainWindowMinHeight);
             }
         }
 
@@ -91,7 +87,7 @@ namespace MpWpfApp {
 
         public double TitleMenuHeight {
             get {
-                return MainWindowMinHeight / 20;
+                return MainWindowDefaultHeight / 20;
             }
         }
 
@@ -101,7 +97,7 @@ namespace MpWpfApp {
 
         public double FilterMenuHeight {
             get {
-                return MainWindowMinHeight / 8;
+                return MainWindowDefaultHeight / 8;
             }
         }
 
@@ -111,7 +107,7 @@ namespace MpWpfApp {
 
         public double AppStateButtonPanelWidth {
             get {
-                return MainWindowMinHeight / 7;
+                return MainWindowDefaultHeight / 7;
             }
         }
 
@@ -119,9 +115,9 @@ namespace MpWpfApp {
 
         #region Tag Tray
 
-        public double MaxTagTrayWidth {
+        public double TagTrayDefaultMaxWidth {
             get {
-                return MainWindowRect.Width * 0.333;
+                return ScreenWidth * 0.333;
             }
         }
 
@@ -141,12 +137,6 @@ namespace MpWpfApp {
             }
         }
 
-        public int TrayPageSize {
-            get {
-                return TotalVisibleClipTiles * 1;
-            }
-        }
-
         public double ClipTrayWidth {
             get {
                 return ScreenWidth - AppStateButtonPanelWidth;
@@ -155,7 +145,7 @@ namespace MpWpfApp {
 
         public double ClipTrayMinHeight {
             get {
-                return MainWindowRect.Height - TitleMenuHeight - FilterMenuHeight;
+                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight;
             }
         }
 

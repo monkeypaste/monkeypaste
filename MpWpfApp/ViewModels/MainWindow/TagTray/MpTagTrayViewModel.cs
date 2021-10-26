@@ -45,15 +45,15 @@ namespace MpWpfApp {
             }
         }
 
-        private double _maxTagTrayWidth = MpMeasurements.Instance.MaxTagTrayWidth;
-        public double MaxTagTrayWidth { 
+        private double _TagTrayDefaultMaxWidth = MpMeasurements.Instance.TagTrayDefaultMaxWidth;
+        public double TagTrayDefaultMaxWidth { 
             get {
-                return _maxTagTrayWidth;
+                return _TagTrayDefaultMaxWidth;
             }
             set {
-                if(_maxTagTrayWidth != value) {
-                    _maxTagTrayWidth = value;
-                    OnPropertyChanged(nameof(MaxTagTrayWidth));
+                if(_TagTrayDefaultMaxWidth != value) {
+                    _TagTrayDefaultMaxWidth = value;
+                    OnPropertyChanged(nameof(TagTrayDefaultMaxWidth));
                 }
             }
         }

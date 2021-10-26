@@ -1133,9 +1133,6 @@ namespace MpWpfApp {
                     ctvm.IsSelected = true;
                     ctvm.IsFlipping = true;
                 }
-            },
-            (tileToFlip) => {
-                return tileToFlip != null;
             });
 
         private RelayCommand<object> _searchWebCommand;
@@ -1220,62 +1217,55 @@ namespace MpWpfApp {
             });
 
         private AsyncRelayCommand<object> _hotkeyPasteCommand;
-        public ICommand PerformHotkeyPasteCommand {
-            get {
-                if (_hotkeyPasteCommand == null) {
-                    _hotkeyPasteCommand = new AsyncRelayCommand<object>(HotkeyPaste, CanHotkeyPaste);
+        public ICommand PerformHotkeyPasteCommand => new AsyncRelayCommand<object>(
+            async (args) => {
+                if (args == null) {
+                    return;
                 }
-                return _hotkeyPasteCommand;
-            }
-        }
-        private bool CanHotkeyPaste(object args) {
-            return !MpMainWindowViewModel.IsMainWindowOpen;
-        }
-        private async Task HotkeyPaste(object args) {
-            if (args == null) {
-                return;
-            }
-            MpConsole.WriteLine("HotKey pasting copyitemid: " + (int)args);
-            IsPastingHotKey = true;
-            int copyItemId = (int)args;
-            IDataObject pasteDataObject = null;
-            var pctvm = GetContentItemViewModelById(copyItemId);
-            if (pctvm != null) {
-                ClearClipSelection();
-                pctvm.IsSelected = true;
-                pctvm.Parent.SubSelectAll();
-                pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
-                ClearClipSelection();
-            } else {
-                //otherwise check if it is a composite within a tile
-                MpContentItemViewModel prtbvm = GetContentItemViewModelById(copyItemId) as MpContentItemViewModel;
-                //foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                //    prtbvm = ctvm.ContentContainerViewModel.GetRtbItemByCopyItemId(copyItemId);
-                //    if (prtbvm != null) {
-                //        break;
-                //    }
-                //}
-                if (prtbvm != null) {
+                MpConsole.WriteLine("HotKey pasting copyitemid: " + (int)args);
+                IsPastingHotKey = true;
+                int copyItemId = (int)args;
+                IDataObject pasteDataObject = null;
+                var pctvm = GetContentItemViewModelById(copyItemId);
+                if (pctvm != null) {
                     ClearClipSelection();
-                    prtbvm.Parent.IsSelected = true;
-                    prtbvm.Parent.ClearSelection();
-                    prtbvm.IsSelected = true;
+                    pctvm.IsSelected = true;
+                    pctvm.Parent.SubSelectAll();
                     pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
-                    prtbvm.Parent.ClearSelection();
                     ClearClipSelection();
+                } else {
+                    //otherwise check if it is a composite within a tile
+                    MpContentItemViewModel prtbvm = GetContentItemViewModelById(copyItemId) as MpContentItemViewModel;
+                    //foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
+                    //    prtbvm = ctvm.ContentContainerViewModel.GetRtbItemByCopyItemId(copyItemId);
+                    //    if (prtbvm != null) {
+                    //        break;
+                    //    }
+                    //}
+                    if (prtbvm != null) {
+                        ClearClipSelection();
+                        prtbvm.Parent.IsSelected = true;
+                        prtbvm.Parent.ClearSelection();
+                        prtbvm.IsSelected = true;
+                        pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
+                        prtbvm.Parent.ClearSelection();
+                        ClearClipSelection();
+                    }
                 }
-            }
 
-            if (MpMainWindowViewModel.IsMainWindowOpen) {
-                //occurs during hotkey paste and set in ctvm.GetPastableRichText
-                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
-            } else if (pasteDataObject != null) {
-                //In order to paste the app must hide first 
-                //this triggers hidewindow to paste selected items
-                await PasteDataObject(pasteDataObject);
-                ResetClipSelection();
-            }
-        }
+                if (MpMainWindowViewModel.IsMainWindowOpen) {
+                    //occurs during hotkey paste and set in ctvm.GetPastableRichText
+                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
+                } else if (pasteDataObject != null) {
+                    //In order to paste the app must hide first 
+                    //this triggers hidewindow to paste selected items
+                    await PasteDataObject(pasteDataObject);
+                    ResetClipSelection();
+                }
+            },
+            (args) => {
+                return !MpMainWindowViewModel.IsMainWindowOpen;
+            });
 
         private RelayCommand<object> _pasteSelectedClipsCommand;
         public ICommand PasteSelectedClipsCommand {
@@ -1314,97 +1304,81 @@ namespace MpWpfApp {
             IsPastingSelected = false;
         }
 
-        private AsyncRelayCommand _bringSelectedClipTilesToFrontCommand;
-        public ICommand BringSelectedClipTilesToFrontCommand {
-            get {
-                if (_bringSelectedClipTilesToFrontCommand == null) {
-                    _bringSelectedClipTilesToFrontCommand = new AsyncRelayCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
-                }
-                return _bringSelectedClipTilesToFrontCommand;
-            }
-        }
-        private bool CanBringSelectedClipTilesToFront() {
-            if (IsBusy ||
-                MpMainWindowViewModel.IsMainWindowLoading ||
-                VisibleItems.Count == 0 ||
-                SelectedItems.Count == 0) {
-                return false;
-            }
-            bool canBringForward = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                if (!SelectedItems.Contains(VisibleItems[i])) {
-                    canBringForward = true;
-                    break;
-                }
-            }
-            return canBringForward;
-        }
-        private async Task BringSelectedClipTilesToFront() {
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            var tempSelectedClipTiles = SelectedItems;
-                            ClearClipSelection();
+        public ICommand BringSelectedClipTilesToFrontCommand => new AsyncRelayCommand(
+            async() => {
+                try {
+                    IsBusy = true;
+                    await Dispatcher.CurrentDispatcher.BeginInvoke(
+                            DispatcherPriority.Normal,
+                            (Action)(() => {
+                                var tempSelectedClipTiles = SelectedItems;
+                                ClearClipSelection();
 
-                            foreach (var sctvm in tempSelectedClipTiles) {
+                                foreach (var sctvm in tempSelectedClipTiles) {
                                 //Items.Move(Items.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;
-                            }
-                            RequestScrollIntoView(SelectedItems[0]);
-                        }));
-            }
-            finally {
-                IsBusy = false;
-            }
-        }
-
-        private AsyncRelayCommand _sendSelectedClipTilesToBackCommand;
-        public ICommand SendSelectedClipTilesToBackCommand {
-            get {
-                if (_sendSelectedClipTilesToBackCommand == null) {
-                    _sendSelectedClipTilesToBackCommand = new AsyncRelayCommand(SendSelectedClipTilesToBack, CanSendSelectedClipTilesToBack);
+                                }
+                                RequestScrollIntoView(SelectedItems[0]);
+                            }));
                 }
-                return _sendSelectedClipTilesToBackCommand;
-            }
-        }
-        private bool CanSendSelectedClipTilesToBack() {
-            if (IsBusy ||
+                finally {
+                    IsBusy = false;
+                }
+            },
+            () => {
+                if (IsBusy ||
+                     MpMainWindowViewModel.IsMainWindowLoading ||
+                     VisibleItems.Count == 0 ||
+                     SelectedItems.Count == 0) {
+                            return false;
+                }
+                bool canBringForward = false;
+                for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                    if (!SelectedItems.Contains(VisibleItems[i])) {
+                        canBringForward = true;
+                        break;
+                    }
+                }
+                return canBringForward;
+            });
+
+        public ICommand SendSelectedClipTilesToBackCommand => new AsyncRelayCommand(
+            async () => {
+                try {
+                    IsBusy = true;
+                    await Dispatcher.CurrentDispatcher.BeginInvoke(
+                            DispatcherPriority.Normal,
+                            (Action)(() => {
+                                var tempSelectedClipTiles = SelectedItems;
+                                ClearClipSelection();
+
+                                foreach (var sctvm in tempSelectedClipTiles) {
+                                //Items.Move(Items.IndexOf(sctvm), Items.Count - 1);
+                                sctvm.IsSelected = true;
+                                }
+                                RequestScrollIntoView(SelectedItems[SelectedItems.Count - 1]);
+                            }));
+                }
+                finally {
+                    IsBusy = false;
+                }
+            },
+            () => {
+                if (IsBusy ||
                 MpMainWindowViewModel.IsMainWindowLoading ||
                 VisibleItems.Count == 0 ||
                 SelectedItems.Count == 0) {
-                return false;
-            }
-            bool canSendBack = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
-                    canSendBack = true;
-                    break;
+                    return false;
                 }
-            }
-            return canSendBack;
-        }
-        private async Task SendSelectedClipTilesToBack() {
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            var tempSelectedClipTiles = SelectedItems;
-                            ClearClipSelection();
-
-                            foreach (var sctvm in tempSelectedClipTiles) {
-                                //Items.Move(Items.IndexOf(sctvm), Items.Count - 1);
-                                sctvm.IsSelected = true;
-                            }
-                            RequestScrollIntoView(SelectedItems[SelectedItems.Count - 1]);
-                        }));
-            }
-            finally {
-                IsBusy = false;
-            }
-        }
+                bool canSendBack = false;
+                for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                    if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
+                        canSendBack = true;
+                        break;
+                    }
+                }
+                return canSendBack;
+            });
 
         public ICommand DeleteSelectedClipsCommand => new AsyncRelayCommand(
             async () => {
@@ -1557,109 +1531,81 @@ namespace MpWpfApp {
 
 
 
-        private AsyncRelayCommand _mergeSelectedClipsCommand;
-        public ICommand MergeSelectedClipsCommand {
-            get {
-                if (_mergeSelectedClipsCommand == null) {
-                    _mergeSelectedClipsCommand = new AsyncRelayCommand(MergeSelectedClips, CanMergeSelectedClips);
+        public ICommand MergeSelectedClipsCommand => new AsyncRelayCommand(
+            async () => {
+                await Task.Delay(1);
+            },
+            () => {
+                //return true;
+                if (SelectedItems.Count <= 1) {
+                    return false;
                 }
-                return _mergeSelectedClipsCommand;
-            }
-        }
-        private bool CanMergeSelectedClips() {
-            //return true;
-            if (SelectedItems.Count <= 1) {
-                return false;
-            }
-            bool areAllSameType = true;
-            foreach (var sctvm in SelectedItems) {
-                if (sctvm.IsTextItem) {
-                    areAllSameType = false;
-                }
-            }
-            return areAllSameType;
-        }
-        private async Task MergeSelectedClips() {
-            await Task.Delay(1);
-        }
-
-        private AsyncRelayCommand<string> _translateSelectedClipTextAsyncCommand;
-        public ICommand TranslateSelectedClipTextAsyncCommand {
-            get {
-                if (_translateSelectedClipTextAsyncCommand == null) {
-                    _translateSelectedClipTextAsyncCommand = new AsyncRelayCommand<string>(TranslateSelectedClipTextAsync, CanTranslateSelectedClipText);
-                }
-                return _translateSelectedClipTextAsyncCommand;
-            }
-        }
-        private bool CanTranslateSelectedClipText(object args) {
-            return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
-        }
-        private async Task TranslateSelectedClipTextAsync(string toLanguage) {
-            var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
-            if (!string.IsNullOrEmpty(translatedText)) {
-                SelectedItems[0].HeadItem.CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
-            }
-        }
-
-        private RelayCommand _createQrCodeFromSelectedClipsCommand;
-        public ICommand CreateQrCodeFromSelectedClipsCommand {
-            get {
-                if (_createQrCodeFromSelectedClipsCommand == null) {
-                    _createQrCodeFromSelectedClipsCommand = new RelayCommand(CreateQrCodeFromSelectedClips, CanCreateQrCodeFromSelectedClips);
-                }
-                return _createQrCodeFromSelectedClipsCommand;
-            }
-        }
-        private bool CanCreateQrCodeFromSelectedClips() {
-            return (GetSelectedClipsType() == MpCopyItemType.RichText) &&
-                    SelectedClipTilesMergedPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
-        }
-        private void CreateQrCodeFromSelectedClips() {
-            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(SelectedClipTilesMergedPlainText);
-            MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
-        }
-
-        private AsyncRelayCommand _speakSelectedClipsCommand;
-        public ICommand SpeakSelectedClipsCommand {
-            get {
-                if (_speakSelectedClipsCommand == null) {
-                    _speakSelectedClipsCommand = new AsyncRelayCommand(SpeakSelectedClipsAsync, CanSpeakSelectedClips);
-                }
-                return _speakSelectedClipsCommand;
-            }
-        }
-        private bool CanSpeakSelectedClips() {
-            return SelectedItems.All(x => x.IsTextItem);
-        }
-        private async Task SpeakSelectedClipsAsync() {
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                var speechSynthesizer = new SpeechSynthesizer();
-                speechSynthesizer.SetOutputToDefaultAudioDevice();
-                if (string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
-                    speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
-                } else {
-                    speechSynthesizer.SelectVoice(Properties.Settings.Default.SpeechSynthVoiceName);
-                }
-                speechSynthesizer.Rate = 0;
-                speechSynthesizer.SpeakCompleted += (s, e) => {
-                    speechSynthesizer.Dispose();
-                };
-                // Create a PromptBuilder object and append a text string.
-                PromptBuilder promptBuilder = new PromptBuilder();
-
+                bool areAllSameType = true;
                 foreach (var sctvm in SelectedItems) {
-                    foreach(var ivm in sctvm.ItemViewModels) {
-                        //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
-                        promptBuilder.AppendText(Environment.NewLine + ivm.CopyItem.ItemData.ToPlainText());
+                    if (sctvm.IsTextItem) {
+                        areAllSameType = false;
                     }
                 }
+                return areAllSameType;
+            });
 
-                // Speak the contents of the prompt asynchronously.
-                speechSynthesizer.SpeakAsync(promptBuilder);
+        public ICommand TranslateSelectedClipTextAsyncCommand => new AsyncRelayCommand<string>(
+            async (toLanguage) => {
+                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
+                if (!string.IsNullOrEmpty(translatedText)) {
+                    SelectedItems[0].HeadItem.CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
+                }
+            },
+            (args) => {
+                return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
+            });
 
-            }, DispatcherPriority.Background);
-        }
+        public ICommand CreateQrCodeFromSelectedClipsCommand => new AsyncRelayCommand(
+            async () => {
+                BitmapSource bmpSrc = null;
+                await Task.Run(() => {
+                    bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(SelectedClipTilesMergedPlainText);
+                });                
+                MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
+            },
+            () => {
+                return (GetSelectedClipsType() == MpCopyItemType.RichText) &&
+                    SelectedClipTilesMergedPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+            });
+
+        public ICommand SpeakSelectedClipsCommand => new AsyncRelayCommand(
+            async () => {
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                    var speechSynthesizer = new SpeechSynthesizer();
+                    speechSynthesizer.SetOutputToDefaultAudioDevice();
+                    if (string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
+                        speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
+                    } else {
+                        speechSynthesizer.SelectVoice(Properties.Settings.Default.SpeechSynthVoiceName);
+                    }
+                    speechSynthesizer.Rate = 0;
+                    speechSynthesizer.SpeakCompleted += (s, e) => {
+                        speechSynthesizer.Dispose();
+                    };
+                    // Create a PromptBuilder object and append a text string.
+                    PromptBuilder promptBuilder = new PromptBuilder();
+
+                    foreach (var sctvm in SelectedItems) {
+                        foreach (var ivm in sctvm.ItemViewModels) {
+                            //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
+                            promptBuilder.AppendText(Environment.NewLine + ivm.CopyItem.ItemData.ToPlainText());
+                        }
+                    }
+
+                    // Speak the contents of the prompt asynchronously.
+                    speechSynthesizer.SpeakAsync(promptBuilder);
+
+                }, DispatcherPriority.Background);
+            },
+            () => {
+                return SelectedItems.All(x => x.IsTextItem);
+            });
+
 
         public ICommand DuplicateSelectedClipsCommand => new AsyncRelayCommand(
             async () => {

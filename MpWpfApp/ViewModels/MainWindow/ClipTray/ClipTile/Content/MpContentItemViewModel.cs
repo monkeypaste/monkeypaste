@@ -834,7 +834,7 @@ namespace MpWpfApp {
                         LastSubSelectedDateTime = DateTime.Now;
                         Parent.IsSelected = true;
                         if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown && 
-                            !Parent.IsDroppingOnTile) {
+                            !Parent.IsDroppingOnTile && !Parent.AllowMultiSelect) {
                             MpClipTrayViewModel.Instance.SelectedItems
                                 .Where(x => x != Parent)
                                 .ForEach(y => y.IsSelected = false);

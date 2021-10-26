@@ -71,8 +71,10 @@ namespace MpWpfApp {
 
         private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (e.PropertyName == nameof(SystemParameters.WorkArea)) {
+                var mwvm = DataContext as MpMainWindowViewModel;
                 this.Dispatcher.Invoke(() => {
-                    //SetupMainWindowRect();
+                    mwvm.OnPropertyChanged(nameof(mwvm.MainWindowContainerRect));
+                    mwvm.SetupMainWindowRect();
                 });
             }
         }
@@ -82,13 +84,13 @@ namespace MpWpfApp {
             if(mwvm.IsResizing) {
                 return;
             }
-            //mwvm.HideWindowCommand.Execute(null);
+            mwvm.HideWindowCommand.Execute(null);
         }
 
         private void MainWindowCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (Mouse.GetPosition(MainWindowGrid).Y < -10) {
                 var mwvm = DataContext as MpMainWindowViewModel;
-                //mwvm.HideWindowCommand.Execute(null);
+                mwvm.HideWindowCommand.Execute(null);
             }
         }
 

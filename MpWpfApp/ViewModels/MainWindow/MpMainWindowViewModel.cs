@@ -166,6 +166,32 @@ namespace MpWpfApp {
         //    }
         //}
 
+        public Rect MainWindowContainerRect {
+            get {
+                return SystemParameters.WorkArea;
+            }
+        }
+
+        private Rect _mainWindowContentRect;
+        public Rect MainWindowContentRect {
+            get {
+                if(_mainWindowContentRect.IsEmpty) {
+                    _mainWindowContentRect = new Rect(
+                        MainWindowContainerRect.Left,
+                        MainWindowContainerRect.Bottom - MpMeasurements.Instance.MainWindowDefaultHeight,
+                        MainWindowContainerRect.Width,
+                        MpMeasurements.Instance.MainWindowDefaultHeight);
+                }
+                return _mainWindowContentRect;
+            }
+            set {
+                if(_mainWindowContentRect != value) {
+                    _mainWindowContentRect = value;
+                    OnPropertyChanged(nameof(MainWindowContentRect));
+                }
+            }
+        }
+
         public double MainWindowHeight { get; set; } = SystemParameters.WorkArea.Height;
 
         public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
@@ -311,11 +337,11 @@ namespace MpWpfApp {
             mw.Left = SystemParameters.WorkArea.Left;
             //mw.Height = MpMeasurements.Instance.MainWindowMinHeight;
 
-            _startMainWindowTop = SystemParameters.PrimaryScreenHeight;
+            _startMainWindowTop = SystemParameters.WorkArea.Bottom;
             if (SystemParameters.WorkArea.Top == 0) {
                 //if taskbar is at the bottom
                 mw.Width = SystemParameters.PrimaryScreenWidth;
-                _endMainWindowTop = SystemParameters.WorkArea.Height - MpMeasurements.Instance.MainWindowMinHeight;
+                _endMainWindowTop = SystemParameters.WorkArea.Height - MpMeasurements.Instance.MainWindowDefaultHeight;
             } else if (SystemParameters.WorkArea.Left != 0) {
                 //if taskbar is on the right
                 mw.Width = SystemParameters.WorkArea.Width;
@@ -437,9 +463,7 @@ namespace MpWpfApp {
                 }
             };
             
-            timer.Start();
-
-            
+            timer.Start();            
         }
 
         public ICommand HideWindowCommand => new AsyncRelayCommand<object>(

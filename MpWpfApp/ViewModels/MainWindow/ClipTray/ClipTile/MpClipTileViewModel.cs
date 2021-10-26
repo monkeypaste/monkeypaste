@@ -631,6 +631,8 @@ using System.Speech.Synthesis;
             }
         }
 
+        public bool AllowMultiSelect { get; set; } = false;
+
         [MpAffectsChild]
         [MpDependsOnChild("IsSelected")]
         public bool IsSelected {
@@ -640,9 +642,10 @@ using System.Speech.Synthesis;
             set {
                 if(value) {
                     if(!IsSelected) {
-                        if(HeadItem != null) {
-                            HeadItem.IsSelected = value;
-                        }
+                        //if(HeadItem != null) {
+                        //    HeadItem.IsSelected = value;
+                        //}
+                        SubSelectAll();
                     }
                 } else {
                     SelectedItems.ForEach(x => x.IsSelected = false);
@@ -876,11 +879,14 @@ using System.Speech.Synthesis;
                 return;
             }
 
-            (Parent.PerformHotkeyPasteCommand as RelayCommand).NotifyCanExecuteChanged();
-            (Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
-            (Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
-            (Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
-            (Parent.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            (Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
+            (Parent.PerformHotkeyPasteCommand as AsyncRelayCommand<object>).NotifyCanExecuteChanged();
+            (Parent.BringSelectedClipTilesToFrontCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
+            (Parent.SendSelectedClipTilesToBackCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
+            (Parent.SpeakSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
+            (Parent.MergeSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
+            (Parent.TranslateSelectedClipTextAsyncCommand as AsyncRelayCommand<string>).NotifyCanExecuteChanged();
+            (Parent.CreateQrCodeFromSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
         }
 
         
@@ -1185,7 +1191,6 @@ using System.Speech.Synthesis;
                         ivm.IsSelected = true;
                     }
                 }
-
             }
         }
 
@@ -1196,9 +1201,11 @@ using System.Speech.Synthesis;
         }
 
         public void SubSelectAll() {
+            AllowMultiSelect = true;
             foreach (var ivm in ItemViewModels) {
                 ivm.IsSelected = true;
             }
+            AllowMultiSelect = false;
         }
 
         public void DoCommandSelection() {

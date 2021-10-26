@@ -280,17 +280,13 @@ namespace MpWpfApp {
             return lbi.GetVisualAncestor<ListBox>();
         }
 
-        public static Rect GetListBoxItemRect(this ListBox lb, int index, bool ignoreScrollViewer = false) {
+        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            Point origin = new Point();
-            if (ignoreScrollViewer && (lb.GetScrollViewer().HorizontalOffset > 0 || lb.GetScrollViewer().VerticalOffset > 0)) {
-                origin = lbi.TranslatePoint(new Point(0, 0), lb.GetScrollViewer());
-            } else {
-                origin = lbi.TranslatePoint(new Point(0, 0), lb);
-            }
+            var sv = lb.GetScrollViewer();
+            Point origin = lbi.TranslatePoint(new Point(0, 0), sv);
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
         }
 
@@ -308,32 +304,36 @@ namespace MpWpfApp {
             return idx < 0 ? null : lb.GetListBoxItem(idx);
         }
 
-        public static int GetItemIndexAtPoint(this ListBox lb, Point rp) {
+        public static int GetItemIndexAtPoint(this ListBox lb, Point mp) {
+            Rect lbr = lb.GetListBoxRect();
+            var sv = lb.GetScrollViewer();
+            //mp.X += sv.HorizontalOffset;
+            //mp.Y += sv.VerticalOffset;
             var lbirl = lb.GetListBoxItemRects();
-            var lbir = lbirl.Where(x => x.Contains(rp)).FirstOrDefault();
+            var lbir = lbirl.Where(x => x.Contains(mp)).FirstOrDefault();
 
             int idx = lbirl.IndexOf(lbir);
             if (idx < 0 && lb.Items.Count > 0) {
                 //point not over any item in listbox
                 //but this will still give either 0 or Count + 1 idx
-                Rect lbr = lb.GetListBoxRect();
-                if (lbr.Contains(rp)) {
+                //Rect lbr = lb.GetListBoxRect();
+                if (lbr.Contains(mp)) {
                     //point is still in listbox
                     //get first and last lbi rect's
                     var flbir = lb.GetListBoxItemRect(0);
                     var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1);
                     if (lb.GetOrientation() == Orientation.Horizontal) {
-                        if (rp.X >= 0 && rp.X <= flbir.Left) {
+                        if (mp.X >= 0 && mp.X <= flbir.Left) {
                             return 0;
                         }
-                        if (rp.X >= llbir.Right && rp.X <= lbr.Right) {
+                        if (mp.X >= llbir.Right && mp.X <= lbr.Right) {
                             return lb.Items.Count;
                         }
                     } else {
-                        if (rp.Y >= 0 && rp.Y <= flbir.Top) {
+                        if (mp.Y >= 0 && mp.Y <= flbir.Top) {
                             return 0;
                         }
-                        if (rp.Y >= llbir.Bottom && rp.Y <= lbr.Bottom) {
+                        if (mp.Y >= llbir.Bottom && mp.Y <= lbr.Bottom) {
                             return lb.Items.Count;
                         }
                     }

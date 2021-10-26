@@ -1404,17 +1404,6 @@ namespace MpWpfApp {
                 return "MpHelpers.GetProcessMainWindowTitle Exception: "+ex.ToString();
             }
         }
-        
-        public Point GetMousePosition(Visual relativeTo = null) {
-            WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
-            WinApi.GetCursorPos(ref w32Mouse);
-            if (relativeTo == null || PresentationSource.FromVisual(relativeTo) == null) {
-                //return new Point((double)w32Mouse.X, (double)w32Mouse.Y);
-                return new Point((double)w32Mouse.X, (double)w32Mouse.Y);
-            }
-            //return Mouse.GetPosition((UIElement)relativeTo);
-            return relativeTo.PointFromScreen(new Point((double)w32Mouse.X, (double)w32Mouse.Y));
-        }
 
         public string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
@@ -1428,9 +1417,6 @@ namespace MpWpfApp {
             }
             return null;
         }
-
-
-        
 
         public bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
@@ -1539,17 +1525,6 @@ namespace MpWpfApp {
                 }
             }
         }       
-
-        public bool IsMouseOver(Visual target) {
-            if(target == null) {
-                return false;
-            }
-             
-            //Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
-            var bounds = target.TransformToAncestor((Visual)((FrameworkElement)target).Parent).TransformBounds(LayoutInformation.GetLayoutSlot((FrameworkElement)target));
-            Point mousePos = GetMousePosition(target);
-            return bounds.Contains(mousePos);
-        }
 
         public IList<T> GetRandomizedList<T>(IList<T> orderedList) where T : class {
             var preRandomList = new List<T>();

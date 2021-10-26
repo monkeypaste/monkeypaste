@@ -123,7 +123,7 @@ namespace MpWpfApp {
             ctvm.IsSelected = true;
 
             //find max change in y so main window doesn't go past top of screen
-            double maxDeltaHeight = SystemParameters.PrimaryScreenHeight - MpMeasurements.Instance.MainWindowMinHeight;
+            double maxDeltaHeight = SystemParameters.PrimaryScreenHeight - MpMeasurements.Instance.MainWindowDefaultHeight;
             //add padding so user can click away from window
             maxDeltaHeight -= MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
 

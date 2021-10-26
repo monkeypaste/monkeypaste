@@ -24,8 +24,6 @@ namespace MpWpfApp {
     public partial class MpClipTrayView : MpUserControl<MpClipTrayViewModel> {
         public VirtualizingStackPanel TrayItemsPanel;
 
-        private int _remainingItems = int.MaxValue;
-
         public MpClipTrayView() : base() {
             InitializeComponent();
         }
@@ -35,8 +33,7 @@ namespace MpWpfApp {
 
             MpClipboardManager.Instance.Init();
             MpClipboardManager.Instance.ClipboardChanged += ctrvm.OnClipboardChanged;
-            _remainingItems = ctrvm.Items.Count - MpMeasurements.Instance.TotalVisibleClipTiles;
-
+         
             if (MpPreferences.Instance.IsInitialLoad) {
                 ctrvm.InitIntroItems();
             }
@@ -149,6 +146,8 @@ namespace MpWpfApp {
         #region Selection
         private async void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             MpAppModeViewModel.Instance.RefreshState();
+
+            BindingContext.RefreshAllCommands();
 
             await MpTagTrayViewModel.Instance.UpdateTagAssociation();
         }

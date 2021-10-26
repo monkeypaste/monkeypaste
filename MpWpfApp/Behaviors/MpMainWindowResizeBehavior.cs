@@ -48,7 +48,10 @@ namespace MpWpfApp {
             Application.Current.MainWindow.Cursor = Cursors.Arrow;
         }
 
-        private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+        private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {            
+            if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
             _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
             MpMainWindowViewModel.Instance.IsResizing = true;
