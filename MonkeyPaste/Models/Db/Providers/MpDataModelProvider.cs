@@ -50,7 +50,7 @@ namespace MonkeyPaste {
             //sl.ForEach(x => _sourceLookup.Add(x.Id, x));
         }
 
-        public void Init(MpQueryInfo queryInfo, int pageSize) {
+        public void Init(MpIQueryInfo queryInfo, int pageSize) {
             QueryInfo = queryInfo;
             QueryInfo.PageSize = pageSize;
         }
@@ -65,7 +65,7 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        public MpQueryInfo QueryInfo { get; set; }
+        public MpIQueryInfo QueryInfo { get; set; }
 
         #endregion
 
@@ -512,36 +512,6 @@ namespace MonkeyPaste {
         }
 
         #region Db Event Handlers
-
-        //private void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-        //    if(e is MpSource s) {
-        //        if(!_sourceLookup.ContainsKey(s.Id)) {
-        //            _sourceLookup.Add(s.Id, s);
-        //        }
-        //    }
-        //}
-
-        //private void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-        //    if (e is MpApp a) {
-        //        var sa = _sourceLookup.Where(x => x.Value.AppId == a.Id).FirstOrDefault();
-        //        if (sa.Value != null) {
-        //            _sourceLookup[sa.Key].App = a;
-        //        }
-        //    } else if (e is MpUrl url) {
-        //        var sa = _sourceLookup.Where(x => x.Value.UrlId == url.Id).FirstOrDefault();
-        //        if (sa.Value != null) {
-        //            _sourceLookup[sa.Key].Url = url;
-        //        }
-        //    }
-        //}
-
-        //private void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-        //    if (e is MpSource s) {
-        //        if (_sourceLookup.ContainsKey(s.Id)) {
-        //            _sourceLookup.Remove(s.Id);
-        //        }
-        //    }
-        //}
 
         #endregion
 

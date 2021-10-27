@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTagTrayView.xaml
     /// </summary>
-    public partial class MpTagTrayView : UserControl {
+    public partial class MpTagTrayView : MpUserControl<MpTagTrayViewModel> {
         public MpTagTrayView() {
             InitializeComponent();
         }
@@ -50,8 +50,21 @@ namespace MpWpfApp {
             TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset + 20);
         }
 
-        private void TagTrayContainerGrid_Loaded(object sender, RoutedEventArgs e) {
+        private async void TagTrayContainerGrid_Loaded(object sender, RoutedEventArgs e) {
+            BindingContext.UpdateSortOrder(true);
 
+            BindingContext.TagTileViewModels.Where(x => x.TagId == BindingContext.DefaultTagId).FirstOrDefault().IsSelected = true;
+
+            await BindingContext.RefreshAllCounts();
+        }
+
+        private void TagTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(e.AddedItems == null || e.AddedItems.Count == 0) {
+                BindingContext.SelectTagCommand.Execute(null);
+                return;
+            }
+            var sttvm = e.AddedItems[0] as MpTagTileViewModel;
+            BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
     }
 }

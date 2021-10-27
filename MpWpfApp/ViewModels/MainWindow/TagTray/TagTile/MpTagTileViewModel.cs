@@ -22,6 +22,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
         public bool IsNew {
             get {
                 return Tag == null || Tag.Id <= 0;
@@ -211,6 +212,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
         public int TagId {
             get {
                 return Tag.Id;
@@ -292,6 +294,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
         public MpTagTileViewModel(MpTagTrayViewModel parent, MpTag tag) : base(parent) {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
@@ -418,24 +421,18 @@ namespace MpWpfApp {
                 this,
                 "Select " + TagName,
                 ShortcutKeyString,
-                SelectTagCommand, null);
+                Parent.SelectTagCommand, 
+                TagId);
             });
 
-        private RelayCommand<Brush> _changeColorCommand;
-        public ICommand ChangeColorCommand {
-            get {
-                if (_changeColorCommand == null) {
-                    _changeColorCommand = new RelayCommand<Brush>(ChangeColor);
+        public ICommand ChangeColorCommand => new RelayCommand<object>(
+            (args) => {
+                var newBrush = args as Brush;
+                if (newBrush != null) {
+                    TagColor = newBrush;
+                    Tag.WriteToDatabase();
                 }
-                return _changeColorCommand;
-            }
-        }
-        private void ChangeColor(Brush newBrush) {
-            if(newBrush != null) {
-                TagColor = newBrush;
-                Tag.WriteToDatabase();
-            }
-        }
+            });
 
         public ICommand CancelRenameTagCommand => new RelayCommand(
             () => {
@@ -449,40 +446,16 @@ namespace MpWpfApp {
                 Tag.WriteToDatabase();
             });
 
-        private RelayCommand _renameTagCommand;
-        public ICommand RenameTagCommand {
-            get {
-                if (_renameTagCommand == null) {
-                    _renameTagCommand = new RelayCommand(RenameTag, CanRenameTag);
-                }
-                return _renameTagCommand;
-            }
-        }
-        private bool CanRenameTag() {
-            return !IsTagReadOnly;
-        }
-        private void RenameTag() {
-            _originalTagName = TagName;
-            MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
-            IsSelected = true;
-            IsEditing = true;
-        }
-
-        private RelayCommand _selectTagCommand;
-        public ICommand SelectTagCommand {
-            get {
-                if (_selectTagCommand == null) {
-                    _selectTagCommand = new RelayCommand(SelectTag);
-                }
-                return _selectTagCommand;
-            }
-        }
-        private void SelectTag() {
-            MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
-            IsSelected = true;
-            //((MpClipTileViewModelPagedSourceProvider)MpClipTrayViewModel.Instance.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
-            //IsTextBoxFocused = true;
-        }
+        public ICommand RenameTagCommand => new RelayCommand(
+            () => {
+                _originalTagName = TagName;
+                MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
+                IsSelected = true;
+                IsEditing = true;
+            },
+            () => {
+                return !IsTagReadOnly;
+            });
         #endregion
     }
 }

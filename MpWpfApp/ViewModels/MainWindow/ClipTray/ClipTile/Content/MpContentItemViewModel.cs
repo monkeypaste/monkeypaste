@@ -280,6 +280,7 @@ namespace MpWpfApp {
         [MpAffectsParent]
         public bool IsSelected {  get; set; }
 
+        [MpAffectsParent]
         public bool IsHovering { get; set; } = false;
 
         [MpAffectsParent]
@@ -751,7 +752,7 @@ namespace MpWpfApp {
             TemplateCollection?.ClearAllEditing();
             if (IsPastingTemplate) {
                 IsPastingTemplate = false;
-                Parent.RequestUnexpand();
+                //Parent.RequestUnexpand();
             }
         }
 

@@ -19,9 +19,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileView.xaml
     /// </summary>
-    public partial class MpClipTileView : UserControl {
-        public List<TextBlock> Titles = new List<TextBlock>();
-
+    public partial class MpClipTileView : MpUserControl<MpClipTileViewModel> {
+        public List<Tuple<TextBlock,RichTextBox>> TitlesAndRtbs = new List<Tuple<TextBlock, RichTextBox>>();
 
         public MpClipTileView() {
             InitializeComponent();
@@ -32,29 +31,23 @@ namespace MpWpfApp {
                 octvm.PropertyChanged -= Ctvm_PropertyChanged;
             }
             if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-                if (!nctvm.IsPlaceholder) {
-                    //ctvm.IsBusy = true;
-                    nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
-                    nctvm.PropertyChanged += Ctvm_PropertyChanged;
 
-                    Titles.Clear();
-                    foreach (var civm in nctvm.ItemViewModels) {
-                        Titles.Add(new TextBlock() {
-                            Text = civm.CopyItemTitle
-                        });
-                    }
-
-                    //ShowBusySpinner();
-                    //Task.Run(async () => {
-                    //    await Task.Delay(500);
-                    //    ctvm.IsBusy = false;
-                    //});
-                }
+                nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
+                nctvm.PropertyChanged += Ctvm_PropertyChanged;
             }
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
-           // HideBusySpinner();
+            TitlesAndRtbs.Clear();
+            var rtbvl = this.GetVisualDescendents<MpRtbView>();
+
+            foreach (var rtbv in rtbvl) {
+                TitlesAndRtbs.Add(new Tuple<TextBlock,RichTextBox>(
+                    new TextBlock() {
+                        Text = rtbv.BindingContext.CopyItemTitle
+                    },
+                    rtbv.Rtb));
+            }
         }
 
         private void Ctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -83,22 +76,6 @@ namespace MpWpfApp {
            // ClipTileDockPanel.Visibility = Visibility.Visible;
         }
 
-        public async Task<MpHighlightTextRangeViewModelCollection> Search(string hlt) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            var hltrcvm = new MpHighlightTextRangeViewModelCollection();
-
-            var rtbl = this.GetVisualDescendents<RichTextBox>();
-            var tl = new List<Tuple<TextBlock, RichTextBox>>();
-            foreach (var rtb in rtbl) {
-                var rtbvm = rtb.DataContext as MpContentItemViewModel;
-                var tb = Titles.Where(x => x.Text == rtbvm.CopyItem.Title).FirstOrDefault();
-                tl.Add(new Tuple<TextBlock, RichTextBox>(tb, rtb));
-            }
-            await hltrcvm.PerformHighlightingAsync(hlt, tl);
-
-            return hltrcvm;
-        }
-
         #region Selection
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
@@ -122,8 +99,11 @@ namespace MpWpfApp {
         #endregion
 
 
-        private void Ctvm_OnSearchRequest(object sender, string e) {
-           
+        private async void Ctvm_OnSearchRequest(object sender, string e) {
+            if(BindingContext.IsPlaceholder) {
+                return;
+            }
+            var result = await BindingContext.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(e, TitlesAndRtbs);
         }
 
         private void ClipTileClipBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {

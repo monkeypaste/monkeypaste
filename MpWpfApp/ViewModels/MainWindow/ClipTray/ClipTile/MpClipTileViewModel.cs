@@ -65,7 +65,7 @@ using System.Speech.Synthesis;
         #endregion
 
         #region View Models
-        private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection();
+        private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection;
         public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
             get {
                 return _highlightTextRangeViewModelCollection;
@@ -113,6 +113,7 @@ using System.Speech.Synthesis;
             }
         }
 
+        [MpDependsOnChild("IsHovering")]
         public MpContentItemViewModel HoverItem {
             get {
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
@@ -122,15 +123,17 @@ using System.Speech.Synthesis;
             }
         }
 
+        [MpDependsOnChild("IsHovering")]
         public MpContentItemViewModel PrimaryItem {
             get {
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                if(SelectedItem != null) {
+
+                if (SelectedItem != null) {
                     return SelectedItem;
                 }
-                if(HoverItem != null) {
+                if (HoverItem != null) {
                     return HoverItem;
                 }
                 return HeadItem;
@@ -612,6 +615,7 @@ using System.Speech.Synthesis;
 
         public bool IsExpanding { get; set; }
 
+        [MpAffectsSibling]
         public bool IsExpanded { get; set; } = false;
 
         public DateTime LastSelectedDateTime { get; set; }
@@ -665,7 +669,8 @@ using System.Speech.Synthesis;
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
-                    //OnPropertyChanged(nameof(DetailTextColor));
+                    OnPropertyChanged(nameof(HoverItem));
+                    OnPropertyChanged(nameof(PrimaryItem));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
@@ -675,6 +680,7 @@ using System.Speech.Synthesis;
 
         [MpDependsOnParent("IsAnyTileExpanded")]
         [MpDependsOnChild("IsPlaceholder")]
+        [MpDependsOnSibling("IsExpanded")]
         public bool IsPlaceholder {
             get {
                 if(Parent == null || ItemViewModels.Count == 0) {
@@ -812,14 +818,6 @@ using System.Speech.Synthesis;
             OnSearchRequest?.Invoke(this, st);
         }
 
-        public void RequestExpand() {
-            //OnExpandRequest?.Invoke(this, null);
-        }
-
-        public void RequestUnexpand() {
-            //OnUnExpandRequest?.Invoke(this, null);
-        }
-
         #endregion
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
@@ -846,11 +844,10 @@ using System.Speech.Synthesis;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
                         MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Expand, this);
-                        RequestExpand();
                     } else {
                         MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
-                        RequestUnexpand();
                     }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     break;
                 case nameof(IsPlaceholder):
                     ItemVisibility = IsPlaceholder ? Visibility.Collapsed : Visibility.Visible;
@@ -889,8 +886,6 @@ using System.Speech.Synthesis;
             (Parent.CreateQrCodeFromSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
         }
 
-        
-
         public async Task GatherAnalytics() {
             var analyticsTask = new List<Task>();
             Task itemTask = null;
@@ -900,28 +895,6 @@ using System.Speech.Synthesis;
             }
             await Task.WhenAll(analyticsTask.ToArray());
         }
-
-        //public void FadeIn(double bt = 0, double ms = 1000) {
-        //    MpHelpers.Instance.AnimateVisibilityChange(
-        //        ClipBorder,
-        //        Visibility.Visible,
-        //        (s, e) => {
-        //            ItemVisibility = Visibility.Visible;
-        //        },
-        //        ms, bt);
-        //}
-
-        //public void FadeOut(Visibility outVisibility = Visibility.Collapsed, double bt = 0, double ms = 1000) {
-        //    MpHelpers.Instance.AnimateVisibilityChange(
-        //        ClipBorder,
-        //        outVisibility,
-        //        (s, e) => {
-        //            ItemVisibility = outVisibility;
-        //        },
-        //        ms, bt);
-        //}
-
-
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
@@ -933,10 +906,12 @@ using System.Speech.Synthesis;
             MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + Parent.VisibleItems.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
-        public void ClearSelection() {
+        public void ClearSelection(bool clearEditing = true) {
             IsSelected = false;
             LastSelectedDateTime = DateTime.MaxValue;
-            ClearEditing();
+            if(clearEditing) {
+                ClearEditing();
+            }
             foreach(var civm in ItemViewModels) {
                 civm.IsSelected = false;
             }
@@ -944,7 +919,7 @@ using System.Speech.Synthesis;
 
         public void ClearEditing() {
             if(IsExpanded) {
-                RequestUnexpand();
+                IsExpanded = false;
             }
             foreach(var ivm in ItemViewModels) {
                 ivm.ClearEditing();
@@ -1177,20 +1152,10 @@ using System.Speech.Synthesis;
             await Task.Delay(1);
         }
 
-        public void ResetSubSelection(List<MpContentItemViewModel> origSel = null) {
-            ClearSelection();
+        public void ResetSubSelection(bool clearEditing = true) {
+            ClearSelection(clearEditing);
             if (VisibleItems.Count > 0) {
-                if (origSel == null) {
-                    VisibleItems[0].IsSelected = true;
-                } else {
-                    foreach (var sivm in origSel) {
-                        var ivm = ItemViewModels.Where(x => x.CopyItem.Id == sivm.CopyItem.Id).FirstOrDefault();
-                        if (ivm == null) {
-                            continue;
-                        }
-                        ivm.IsSelected = true;
-                    }
-                }
+                VisibleItems[0].IsSelected = true;
             }
         }
 

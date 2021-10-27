@@ -28,14 +28,18 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
-            //AssociatedObject.BindingContext.IsHovering = false;
+            if (!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
 
             Application.Current.MainWindow.ForceCursor = true;
             Application.Current.MainWindow.Cursor = Cursors.Arrow;
         }
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
-            //AssociatedObject.BindingContext.IsHovering = true;
+            if (!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
 
             Application.Current.MainWindow.ForceCursor = true;
             Application.Current.MainWindow.Cursor = Cursors.SizeNS;
@@ -64,7 +68,6 @@ namespace MpWpfApp {
                 return;
             }
 
-
             Application.Current.MainWindow.ForceCursor = true;
             Application.Current.MainWindow.Cursor = Cursors.SizeNS;
             var mp = e.GetPosition(Application.Current.MainWindow);
@@ -86,10 +89,9 @@ namespace MpWpfApp {
             double boundAdjust = 0;
             if (mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
                 boundAdjust = mwvm.MainWindowTop - MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
+            } else if (mwvm.MainWindowTop > mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight) {
+                boundAdjust = mwvm.MainWindowTop - (mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight);
             }
-            //else if (mwvm.MainWindowTop > MpMeasurements.Instance.MainWindowDefaultHeight) {
-            //    boundAdjust = mwvm.MainWindowTop - _initialExpandedMainWindowTop;
-            //}
 
             mwvm.MainWindowTop -= boundAdjust;
             mwvm.ClipTrayHeight += boundAdjust;

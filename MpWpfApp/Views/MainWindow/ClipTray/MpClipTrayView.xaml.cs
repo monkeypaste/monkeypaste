@@ -55,7 +55,14 @@ namespace MpWpfApp {
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.MainWindowOpening:
-                    ClipTray.GetScrollViewer().ScrollToHorizontalOffset(0);
+                    if(BindingContext.SelectedItems.Count >= 1 && 
+                       BindingContext.SelectedItems[0].ItemIdx > 0) {
+                        return;
+                    }
+                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+                    sv.ScrollToHorizontalOffset(0);
+                    sv.TargetHorizontalOffset = 0;
+                    sv.ScrollToLeftEnd();
                     break;
             }
         }
@@ -76,6 +83,7 @@ namespace MpWpfApp {
         }
 
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            return;
             var sv = sender as AnimatedScrollViewer;
             var hsb = sv.HorizontalScrollBar;
             var htrack = hsb.Track;
@@ -89,12 +97,19 @@ namespace MpWpfApp {
             if(hthumb_rect.Contains(e.GetPosition(hthumb))) {
                 return;
             }
+            MpLoadMoreItemsExtension.IsScrollJumping = true;
+
             e.Handled = true;
             double norm_x = e.GetPosition(sv).X / sv.ActualWidth;
 
             int targetTileIdx = (int)Math.Floor(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);
+            int targetPageIdx = targetTileIdx / MpDataModelProvider.Instance.QueryInfo.PageSize;
 
-            MpClipTrayViewModel.Instance.LoadToIdxCommand.Execute(targetTileIdx);
+            MpClipTrayViewModel.Instance.JumpToPageIdxCommand.Execute(targetPageIdx);
+
+            double newOffsetX = e.GetPosition(sv).X;
+            sv.TargetHorizontalOffset = newOffsetX;
+            return;
         }
 
         private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
@@ -110,9 +125,14 @@ namespace MpWpfApp {
                     if(sv != null) {
                         double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
                         double ttw = tw * BindingContext.TotalItemsInQuery;
+
                         sv.HorizontalScrollBar.Maximum = ttw;
                         sv.HorizontalScrollBar.Minimum = 0;
+
+                        sv.ScrollToHorizontalOffset(0);
+                        sv.TargetHorizontalOffset = 0;
                         sv.ScrollToLeftEnd();
+
                         UpdateLayout();
                     }
                     break;
@@ -134,11 +154,6 @@ namespace MpWpfApp {
                         }
                     }
                 }
-
-                //UpdateLayout();
-                //InvalidateArrange();
-                //ClipTray.InvalidateArrange();
-                //ClipTray.GetScrollViewer().ScrollToHorizontalOffset(double.MinValue);
             });
         }
 

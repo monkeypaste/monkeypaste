@@ -139,7 +139,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpHighlightTextRangeViewModelCollection() : this(null) {}
+        public MpHighlightTextRangeViewModelCollection() : base(null) {}
 
         public MpHighlightTextRangeViewModelCollection(MpClipTileViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
@@ -508,7 +508,7 @@ namespace MpWpfApp {
         private void ClearHighlighting() {
             HideHighlightingCommand.Execute(null);
             HighlightRangeViewModels.Clear();
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIconHighlightBorderVisibility));
+            HostClipTileViewModel?.OnPropertyChanged(nameof(HostClipTileViewModel.AppIconHighlightBorderVisibility));
         }        
         #endregion
     }

@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
+using System.Reflection;
 
 namespace MpWpfApp {
     [TemplatePart(Name = "PART_AniVerticalScrollBar", Type = typeof(ScrollBar))]
@@ -55,8 +56,6 @@ namespace MpWpfApp {
             //this.PreviewMouseWheel += new MouseWheelEventHandler(CustomPreviewMouseWheel);
             this.PreviewMouseWheel += new MouseWheelEventHandler(CustomPreviewMouseWheelChanged);
             this.PreviewKeyDown += new KeyEventHandler(AnimatedScrollViewer_PreviewKeyDown);
-
-            
         }
 
         void AnimatedScrollViewer_PreviewKeyDown(object sender, KeyEventArgs e) {
@@ -253,9 +252,18 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteLine("Ignoring horizontal scroll");
                 return;
             }
-            if ((double)e.NewValue != thisScroller._aniHorizontalScrollBar.Value) {
-                thisScroller._aniHorizontalScrollBar.Value = (double)e.NewValue;
-            }
+            //if ((double)e.NewValue != thisScroller._aniHorizontalScrollBar.Value) {
+            //    thisScroller._aniHorizontalScrollBar.Value = (double)e.NewValue;
+
+            //    if (thisScroller._aniHorizontalScrollBar.Track != null &&
+            //      thisScroller._aniHorizontalScrollBar.Track.Thumb != null) {
+            //        var thumb = thisScroller._aniHorizontalScrollBar.Track.Thumb;
+
+            //        thumb.GetType().GetProperty("VisualOffset", BindingFlags.NonPublic | BindingFlags.Instance)
+            //            .SetValue(thumb, new Vector(thisScroller.TargetHorizontalOffset, 0));
+            //        thumb.UpdateLayout();
+            //    }
+            //}
 
             thisScroller.animateScroller(thisScroller);
         }
@@ -364,6 +372,8 @@ namespace MpWpfApp {
 
             animateHScrollKeyFramed.Completed += (s, e) => {
                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsScrolling = false;
+
+                
             };
 
             SplineDoubleKeyFrame HScrollKey1 = new SplineDoubleKeyFrame(thisScrollViewer.TargetHorizontalOffset, targetKeyTime, targetKeySpline);
@@ -379,5 +389,18 @@ namespace MpWpfApp {
             CommandBindingCollection testCollection = thisScrollViewer.CommandBindings;
         }
         #endregion
+    }
+
+    public class MpThumb : Thumb {
+        public double OffsetX {
+            get {
+                return VisualOffset.X;
+            }
+            set {
+                var vo = VisualOffset;
+                vo.X = value;
+                VisualOffset = vo;
+            }
+        }
     }
 }

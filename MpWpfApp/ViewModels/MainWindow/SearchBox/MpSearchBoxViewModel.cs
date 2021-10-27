@@ -469,8 +469,8 @@ namespace MpWpfApp {
             //IsSearching = true;
         }
 
-        public ICommand PerformSearchCommand => new RelayCommand(
-            () => {
+        public ICommand PerformSearchCommand => new AsyncRelayCommand(
+            async () => {
                 SearchText = Text;
                 if (!HasText) {
                     IsTextValid = true;
@@ -478,15 +478,17 @@ namespace MpWpfApp {
                 var ct = MpClipTrayViewModel.Instance;
                 //wait till all highlighting is complete then hide non-matching tiles at the same time
                 var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
-                bool showMatchNav = false;
-                foreach (var ctvm in ct.Items) {
-                    //var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
-                    //newVisibilityDictionary.Add(ctvm, newVisibility);
-                    ctvm.RequestSearch(SearchText);
-                    if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
-                        showMatchNav = true;
-                    }
-                }
+                bool showMatchNav = true;
+                ct.Items.ForEach(x => x.RequestSearch(SearchText));
+
+                //foreach (var ctvm in ct.Items) {
+                //    var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
+                //    newVisibilityDictionary.Add(ctvm, newVisibility);
+                //    ctvm.RequestSearch(SearchText);
+                //    if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
+                //        showMatchNav = true;
+                //    }
+                //}
                 if (ct.IsAnyTileExpanded) {
                     if (HasText) {
                         IsTextValid = ct.SelectedItems[0].HighlightTextRangeViewModelCollection.Count > 0;
@@ -504,7 +506,7 @@ namespace MpWpfApp {
                                 break;
                             }
                             if (skvp.Key is MpContentItemViewModel) {
-                                //(skvp.Key as MpContentItemViewModel).SubItemVisibility = skvp.Value;
+                                (skvp.Key as MpContentItemViewModel).ItemVisibility = skvp.Value;
                             }
                         }
 

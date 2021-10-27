@@ -59,6 +59,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        public static bool IsScrollJumping = false;
+
         private static void Lb_Loaded(object sender, RoutedEventArgs e) {
             var lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
@@ -74,7 +76,8 @@ namespace MpWpfApp {
         }
 
         private static void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e) {
-            if(e.HorizontalChange == 0 || MpMainWindowViewModel.IsMainWindowLoading) {
+            if(IsScrollJumping || e.HorizontalChange == 0 || MpMainWindowViewModel.IsMainWindowLoading) {
+                IsScrollJumping = false;
                 return;
             }
             var sv = sender as ScrollViewer;

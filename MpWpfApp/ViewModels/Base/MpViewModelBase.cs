@@ -22,7 +22,6 @@ namespace MpWpfApp {
         #region Properties
 
         private P _parent;
-        //public P Parent { get; set; }
         public P Parent {
             get {
                 return _parent;
@@ -79,8 +78,6 @@ namespace MpWpfApp {
             MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
             MpDb.Instance.SyncDelete -= Instance_SyncDelete;
         }
-
-        
 
         #endregion
 

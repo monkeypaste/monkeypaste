@@ -6,45 +6,22 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpWpfQueryInfo : MpQueryInfo {
-        public override bool IsDescending {
-            get {
-                return MpClipTileSortViewModel.Instance.IsSortDescending;
-            }
-        }
+    public class MpWpfQueryInfo : MpIQueryInfo {
+        public bool IsDescending { get; set; }
+        public MpContentSortType SortType { get; set; }
+        public int TagId { get; set; }
+        public string SearchText { get; set; }
+        public MpContentFilterType FilterFlags { get; set; }
+        public int PageSize { get; set; }
 
-        public override MpContentSortType SortType { 
-            get {
-                if(MpClipTileSortViewModel.Instance.SelectedSortType == null) {
-                    return MpContentSortType.None;
-                }
-                return MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
-            }        
-        }
+        public void NotifyQueryChanged() {
+            IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
+            SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
+            TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
+            SearchText = MpSearchBoxViewModel.Instance.Text;
+            FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
 
-        public override int TagId {
-            get {
-                if(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
-                    return MpTag.RecentTagId;
-                }
-                return MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            }
-        }
-
-        public override string SearchText {
-            get {
-                if(!MpSearchBoxViewModel.Instance.HasText) {
-                    return string.Empty;
-                }
-                return MpSearchBoxViewModel.Instance.Text;
-            }
-        }
-               
-
-        public override MpContentFilterType FilterFlags {
-            get {
-                return MpSearchBoxViewModel.Instance.FilterType;
-            }
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);
         }
     }
 }

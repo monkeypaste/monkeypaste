@@ -363,7 +363,8 @@ namespace MpWpfApp {
                                 } else if (sc.TagId > 0) {
                                     var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == sc.TagId).Single();
                                     ttvm.ShortcutKeyString = sc.KeyString;
-                                    shortcutCommand = ttvm.SelectTagCommand;
+                                    shortcutCommand = ttvm.Parent.SelectTagCommand;
+                                    commandParameter = ttvm.TagId;
                                 }
                             }
                             catch (Exception ex) {

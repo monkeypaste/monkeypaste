@@ -49,7 +49,7 @@ namespace MpWpfApp {
 
         private int _initialLoadCount = 0;
         private int _pageSize = 0;
-        private int _nextQueryOffset = 0;
+        private int _nextQueryOffsetIdx = 0;
 
         private Dictionary<int, int> _manualSortOrderLookup = null;
         private List<int> _selectedHeadContentIds = new List<int>();
@@ -60,7 +60,6 @@ namespace MpWpfApp {
         public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
         public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
 
-        public MpWpfQueryInfo QueryInfo { get; set; }
 
         #region View Models
         
@@ -378,15 +377,17 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
 
+            IsBusy = true;
             ClearClipSelection();
 
             TotalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
-            _nextQueryOffset = 0;
+            _nextQueryOffsetIdx = 0;
 
-            int itemCountDiff = Items.Count - _initialLoadCount;
+            int itemCountDiff = Items.Count - Math.Min(_initialLoadCount,TotalItemsInQuery);
             if (itemCountDiff > 0) {
                 while (itemCountDiff > 0) {
-                    //item is addeds when drop partial composite (creating new tile) at end of page so remove extra
+                    //extra item is added when dropping partial composite (creating new tile) at end of page so remove extra
+                    //items need to be removed when query total count is less than initialLoadCount
                     Items.RemoveAt(0);
                     itemCountDiff--;
                 }
@@ -398,13 +399,18 @@ namespace MpWpfApp {
                 }
             }
 
+
             var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
             for (int i = 0; i < cil.Count; i++) {
                 await Items[i].InitializeAsync(cil[i]);
-            }            
 
-            _nextQueryOffset = cil.Count;
+                var phctvm = await CreateClipTileViewModel(null);
+                Items.Add(phctvm);
+            }
 
+            _nextQueryOffsetIdx = cil.Count;
+
+            IsBusy = false;
             ResetClipSelection();
 
             MpMessenger.Instance.Send(MpMessageType.Requery);
@@ -414,35 +420,53 @@ namespace MpWpfApp {
         }
 
         public ICommand LoadMoreClipsCommand => new AsyncRelayCommand<object>(
-            async (itemsToLoad) => {
+            async (isLoadMore) => {
                 IsBusy = true;
-                bool isLeft = ((int)itemsToLoad) > 0;
-                if(isLeft) {
-                    var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffset, _pageSize);
+                bool isLeft = ((int)isLoadMore) >= 0;
+                if (isLeft) {
+                    IList<MpCopyItem> cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffsetIdx, _pageSize);
 
-                    _nextQueryOffset += cil.Count;
-                    MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffset}");
+                    int firstPlaceHolderIdx = Items.IndexOf(Items.Where(x => x.IsPlaceholder).FirstOrDefault());
+
                     for (int i = 0; i < cil.Count; i++) {
-                        var ctvm = await CreateClipTileViewModel(cil[i]);
-                        Items.Add(ctvm);
+                        //populate the placeholder created during last load more at this page offset
+                        await Items[i + firstPlaceHolderIdx].InitializeAsync(cil[i]);
+
+                        var phctvm = await CreateClipTileViewModel(null);
+                        Items.Add(phctvm);
                     }
+
+                    _nextQueryOffsetIdx += cil.Count;
+
+                    MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
                 }
                 IsBusy = false;
             },
             (itemsToLoad) => {
-                return itemsToLoad != null && !IsBusy && TotalItemsInQuery > _nextQueryOffset;
+                return itemsToLoad != null && !IsBusy && TotalItemsInQuery > _nextQueryOffsetIdx;
             });
 
-        public ICommand LoadToIdxCommand => new AsyncRelayCommand<int>(
+
+        public ICommand JumpToPageIdxCommand => new AsyncRelayCommand<int>(
             async (idx) => {
-                while(_nextQueryOffset < idx) {
-                    LoadMoreClipsCommand.Execute(1);
-                    while(IsBusy) {
-                        await Task.Delay(50);
+                IList<MpCopyItem> cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(idx, _initialLoadCount);
+
+                int firstPlaceHolderIdx = Items.IndexOf(Items.Where(x => x.IsPlaceholder).FirstOrDefault());
+
+                for (int i = 0; i < cil.Count; i++) {
+                    if (i + firstPlaceHolderIdx >= Items.Count - 1) {
+                        var phctvm2 = await CreateClipTileViewModel(null);
+                        Items.Add(phctvm2);
                     }
+                    await Items[i + firstPlaceHolderIdx].InitializeAsync(cil[i]);
+
+                    var phctvm = await CreateClipTileViewModel(null);
+                    Items.Add(phctvm);
                 }
-                double targetX = idx * MpMeasurements.Instance.ClipTileBorderMinSize;
-                RequestScrollToX(targetX);
+
+                _nextQueryOffsetIdx = idx + cil.Count - 1;
+
+                MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
             },
             (idx) => {
                 return idx >= 0 && idx < TotalItemsInQuery;
@@ -493,7 +517,7 @@ namespace MpWpfApp {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
                 Task.Run(async()=> {
-                    bool isManualSort = QueryInfo.SortType == MpContentSortType.Manual;
+                    bool isManualSort = MpDataModelProvider.Instance.QueryInfo.SortType == MpContentSortType.Manual;
 
                     if (isManualSort) {
                         _manualSortOrderLookup = new Dictionary<int, int>();
@@ -505,8 +529,8 @@ namespace MpWpfApp {
                         }
                     }
                     
-                    bool isDesc = QueryInfo.IsDescending;
-                    int tagId = QueryInfo.TagId;
+                    bool isDesc = MpDataModelProvider.Instance.QueryInfo.IsDescending;
+                    int tagId = MpDataModelProvider.Instance.QueryInfo.TagId;
                     var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
 
                     if (tagId == MpTag.AllTagId || tagId == MpTag.RecentTagId) {

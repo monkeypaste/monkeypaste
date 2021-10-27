@@ -23,7 +23,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private int _defaultTagId = MpTag.AllTagId;
         #endregion
 
         #region View Models
@@ -35,15 +34,21 @@ namespace MpWpfApp {
 
         public MpTagTileViewModel RecentTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.RecentTagId).FirstOrDefault();
 
-        
         #endregion
 
         #region Properties
+
+        #region State
+
         public bool IsEditingTagName {
             get {
                 return SelectedTagTile.IsEditing;
             }
         }
+
+        #endregion
+
+        #region Layout
 
         private double _TagTrayDefaultMaxWidth = MpMeasurements.Instance.TagTrayDefaultMaxWidth;
         public double TagTrayDefaultMaxWidth { 
@@ -57,6 +62,18 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        #endregion
+
+        #region Business Logic
+
+        public int DefaultTagId {
+            get {
+                return MpTag.AllTagId;
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -112,7 +129,7 @@ namespace MpWpfApp {
             }
             //create tiles for all the tags
             foreach (MpTag t in MpDb.Instance.GetItems<MpTag>()) {
-                this.Add(CreateTagTileViewModel(t));
+                TagTileViewModels.Add(CreateTagTileViewModel(t));
             }
 
             TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
@@ -125,28 +142,7 @@ namespace MpWpfApp {
 
         public MpTagTileViewModel CreateTagTileViewModel(MpTag tag) {
             var ttvm = new MpTagTileViewModel(this, tag);
-            ttvm.PropertyChanged += Ttvm_PropertyChanged;
             return ttvm;
-        }
-
-        private void Ttvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var ttvm = sender as MpTagTileViewModel;
-            switch(e.PropertyName) {
-                case nameof(ttvm.IsSelected):
-                    if(ttvm.IsSelected) {
-                        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
-                    }
-                    break;
-            }
-        }
-
-        public async void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            UpdateSortOrder(true);
-
-            //RecentTagViewModel.IsSelected = true;
-            TagTileViewModels.Where(x=>x.TagId == _defaultTagId).FirstOrDefault().IsSelected = true;
-
-            await RefreshAllCounts();
         }
 
         public void UpdateSortOrder(bool fromModel = false) {
@@ -160,25 +156,15 @@ namespace MpWpfApp {
         }
 
         public async Task RefreshAllCounts() {
-            //var acil = MpDb.Instance.GetItems<MpCopyItem>();
             var countTasks = new Dictionary<int, Task<int>>();
             foreach (var ttvm in TagTileViewModels) {
                 if (ttvm.IsAllTag) {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTotalCopyItemCountAsync());
-                    //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTotalCopyItemCountAsync();
                 } else if (ttvm.IsRecentTag) {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetRecentCopyItemCountAsync());
-                    //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetRecentCopyItemCountAsync();
                 } else {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTagItemCountAsync(ttvm.TagId));
-                    //ttvm.TagClipCount = await MpCopyItemProvider.Instance.GetTagItemCountAsync(ttvm.TagId);
                 }
-                //ttvm.TagClipCount = 0;
-                //foreach(var ci in acil) {
-                //    if(ttvm.IsLinked(ci)) { 
-                //        ttvm.TagClipCount++;
-                //    }
-                //}
             }
 
             await Task.WhenAll(countTasks.Values.ToArray());
@@ -190,50 +176,6 @@ namespace MpWpfApp {
                     ttvm.TagClipCount = count;
                 }
             }
-        }
-
-        public void Add(MpTagTileViewModel newTagTile) {
-            newTagTile.PropertyChanged += NewTagTile_PropertyChanged;
-            TagTileViewModels.Add(newTagTile);
-        }
-
-        private void NewTagTile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var ttvm = sender as MpTagTileViewModel;
-            MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                switch (e.PropertyName) {
-                    case nameof(ttvm.IsSelected):
-                        if (ttvm.IsSelected) {
-                            foreach (var t in TagTileViewModels) {
-                                if (t != ttvm) {
-                                    t.IsSelected = false;
-                                }
-                            }
-                            //if (!MainWindowViewModel.SearchBoxViewModel.HasText && 
-                            //    !MainWindowViewModel.IsMainWindowLocked &&
-                            //    !MpMainWindowViewModel.IsMainWindowLoading) {
-                            //    //this prevents filtered out tiles from being shown while searching and an item is 
-                            //    //added while main window is locked
-                            //    //MpClipTrayViewModel.Instance.FilterByAppIcon = null;
-                            //    MpClipTrayViewModel.Instance.IsFilteringByApp = false;
-                            //    MpClipTrayViewModel.Instance.RefreshTiles();
-                            //}
-                        } else if (SelectedTagTile == null && !MpMainWindowViewModel.IsMainWindowLoading) {
-                            //RecentTagViewModel.IsSelected = true;
-                        }
-                        break;
-                }
-            },System.Windows.Threading.DispatcherPriority.Normal);
-        }
-
-        public void Remove(MpTagTileViewModel tagTileToRemove) {
-            //when removing a tag auto-select the history tag
-            TagTileViewModels.Remove(tagTileToRemove);
-
-            if(!tagTileToRemove.Tag.IsSyncing) {
-                tagTileToRemove.Tag.DeleteFromDatabase();
-            }
-
-            ResetTagSelection();
         }
 
         public void ClearTagEditing() {
@@ -249,10 +191,9 @@ namespace MpWpfApp {
         }
 
         public void ResetTagSelection() {
-            if(SelectedTagTile.TagId != _defaultTagId) {
+            if(SelectedTagTile.TagId != DefaultTagId) {
                 ClearTagSelection();
-                //RecentTagViewModel.IsSelected = true;
-                TagTileViewModels.Where(x => x.TagId == _defaultTagId).FirstOrDefault().IsSelected = true;
+                TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
             }            
         }
 
@@ -306,7 +247,7 @@ namespace MpWpfApp {
                     var ttvmToRemove = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
                         ttvmToRemove.Tag.StartSync(e.SourceGuid);
-                        this.Remove(ttvmToRemove);
+                        DeleteTagCommand.Execute(t.Id);
                         ttvmToRemove.Tag.EndSync();
                     }
                 }
@@ -324,7 +265,7 @@ namespace MpWpfApp {
                     t.StartSync(e.SourceGuid);
                     var dupCheck = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (dupCheck == null) {
-                        this.Add(new MpTagTileViewModel(this,t));
+                        TagTileViewModels.Add(CreateTagTileViewModel(t));
                     } else {
                         MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
                         dupCheck.Tag = t;
@@ -339,44 +280,61 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _deleteTagCommand;
-        public ICommand DeleteTagCommand {
-            get {
-                if (_deleteTagCommand == null) {
-                    _deleteTagCommand = new RelayCommand(DeleteTag, CanDeleteTag);
-                }
-                return _deleteTagCommand;
-            }
-        }
-        private bool CanDeleteTag() {
-            //allow delete if any tag besides history tag is selected, delete method will ignore history\
-            if(SelectedTagTile == null) {
-                return false;
-            }
-            return !SelectedTagTile.IsTagReadOnly;
-        }
-        private void DeleteTag() {
-            this.Remove(SelectedTagTile);
-        }
 
-        private RelayCommand _createTagCommand;
-        public ICommand CreateTagCommand {
-            get {
-                if (_createTagCommand == null) {
-                    _createTagCommand = new RelayCommand(CreateTag);
+        public ICommand DeleteTagCommand => new RelayCommand<object>(
+            (tagId) => {
+                //when removing a tag auto-select the history tag
+
+                var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
+                TagTileViewModels.Remove(ttvm);
+
+                if (!ttvm.Tag.IsSyncing) {
+                    ttvm.Tag.DeleteFromDatabase();
                 }
-                return _createTagCommand;
-            }
-        }
-        private void CreateTag() {
-            //add tag to datastore so TagTile collection will automatically add the tile
-            MpTag newTag = new MpTag() {
-                TagName = "Untitled",
-                HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
-                TagSortIdx = TagTileViewModels.Count
-            };
-            this.Add(new MpTagTileViewModel(this,newTag));
-        }
+
+                ResetTagSelection();
+            },
+            (tagId) => {
+                //allow delete if any tag besides history tag is selected, delete method will ignore history
+                if (tagId == null) {
+                    return false;
+                }
+                var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
+                if(ttvm == null) {
+                    return false;
+                }
+                return !ttvm.IsTagReadOnly;
+            });
+
+        public ICommand CreateTagCommand => new RelayCommand(
+            () => {
+                //add tag to datastore so TagTile collection will automatically add the tile
+                MpTag newTag = new MpTag() {
+                    TagName = "Untitled",
+                    HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
+                    TagSortIdx = TagTileViewModels.Count
+                };
+                newTag.WriteToDatabase();
+                TagTileViewModels.Add(CreateTagTileViewModel(newTag));
+            });
+
+        public ICommand SelectTagCommand => new RelayCommand<object>(
+            (args) => {
+                int tagId;
+                if(args == null) {
+                    tagId = DefaultTagId;
+                } else if(args is MpTagTileViewModel ttvm) {
+                    tagId = ttvm.TagId;
+                } else {
+                    tagId = (int)args;
+                }
+
+                foreach(var ttvm in TagTileViewModels) {
+                    ttvm.IsSelected = ttvm.TagId == tagId;
+                }
+
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+            });
         #endregion
     }
 }

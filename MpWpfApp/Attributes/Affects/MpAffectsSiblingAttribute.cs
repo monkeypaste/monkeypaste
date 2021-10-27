@@ -37,14 +37,14 @@ namespace MpWpfApp {
                 IList childVms = null;
                 if (cvma.IsCollection) {
                     //child view model is an observable collection
-                    childVms = (IList)pcvmpi.GetValue(vm);
+                    childVms = (IList)pcvmpi.GetValue(pvmObj);
                     if (childVms.Count == 0) {
                         //empty list so continue to other children
                         continue;
                     }
                 } else {
                     //child is just a view mdoel
-                    var propValue = pcvmpi.GetValue(vm);
+                    var propValue = pcvmpi.GetValue(pvmObj);
                     if (propValue == null) {
                         continue;
                     }
