@@ -761,15 +761,16 @@ using System.Speech.Synthesis;
                 var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
 
-                foreach(var ci in ccil.OrderBy(x => x.CompositeSortOrderIdx)) {
-                    var civm = await CreateContentItemViewModel(ci);
+                for (int i = 0; i < ccil.Count; i++) {
+                    var civm = await CreateContentItemViewModel(ccil[i]);
                     ItemViewModels.Add(civm);
                 }
 
                 HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
                 RequestUiUpdate();
-            }
+            } 
+
             OnPropertyChanged(nameof(ItemViewModels));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(PrimaryItem));

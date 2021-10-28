@@ -231,4 +231,8 @@
       <DependentUpon>MpMainPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Db\Repositories\" />
+  </ItemGroup>
 </Project>

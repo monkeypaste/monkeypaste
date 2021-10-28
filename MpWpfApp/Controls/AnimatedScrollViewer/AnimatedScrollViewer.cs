@@ -252,18 +252,9 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteLine("Ignoring horizontal scroll");
                 return;
             }
-            //if ((double)e.NewValue != thisScroller._aniHorizontalScrollBar.Value) {
-            //    thisScroller._aniHorizontalScrollBar.Value = (double)e.NewValue;
-
-            //    if (thisScroller._aniHorizontalScrollBar.Track != null &&
-            //      thisScroller._aniHorizontalScrollBar.Track.Thumb != null) {
-            //        var thumb = thisScroller._aniHorizontalScrollBar.Track.Thumb;
-
-            //        thumb.GetType().GetProperty("VisualOffset", BindingFlags.NonPublic | BindingFlags.Instance)
-            //            .SetValue(thumb, new Vector(thisScroller.TargetHorizontalOffset, 0));
-            //        thumb.UpdateLayout();
-            //    }
-            //}
+            if ((double)e.NewValue != thisScroller._aniHorizontalScrollBar.Value) {
+                thisScroller._aniHorizontalScrollBar.Value = (double)e.NewValue;
+            }
 
             thisScroller.animateScroller(thisScroller);
         }

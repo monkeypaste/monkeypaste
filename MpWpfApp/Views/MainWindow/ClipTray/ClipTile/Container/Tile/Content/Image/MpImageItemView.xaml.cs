@@ -23,10 +23,10 @@ namespace MpWpfApp {
         }
 
         private void Viewbox_Loaded(object sender, RoutedEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                var test = await MpHelpers.Instance.DetectObjectsAsync(BindingContext.CopyItemData.ToBitmapSource().ToByteArray());
-                return;
-            });
+            //MpHelpers.Instance.RunOnMainThread(async () => {
+            //    var test = await MpHelpers.Instance.DetectObjectsAsync(BindingContext.CopyItemData.ToBitmapSource().ToByteArray());
+            //    return;
+            //});
         }
     }
 }

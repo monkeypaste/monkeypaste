@@ -8,23 +8,16 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpBase64StringToBitmapSourceConverter : IValueConverter {
+        private static ImageSourceConverter _isc = null;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string valueStr) { 
                 byte[] byteBuffer = System.Convert.FromBase64String(valueStr);
-
-                return (BitmapSource)new ImageSourceConverter().ConvertFrom(byteBuffer);
-                //using (MemoryStream memoryStream = new MemoryStream(byteBuffer)) {
-                //    memoryStream.Position = 0;
-
-                //    BitmapImage bitmapImage = new BitmapImage() {
-                //        StreamSource = memoryStream
-                //    };
-
-                //    memoryStream.Close();
-                //    byteBuffer = null;
-
-                //    return bitmapImage;
-                //}                    
+                if(_isc == null) {
+                    _isc = new ImageSourceConverter();
+                }
+                var bmpSrc = (BitmapSource)_isc.ConvertFrom(byteBuffer);
+                bmpSrc.Freeze();
+                return bmpSrc;     
             }
             return new Image();
         }

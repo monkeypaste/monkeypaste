@@ -18,7 +18,7 @@ namespace MpWpfApp {
             IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
             SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            SearchText = MpSearchBoxViewModel.Instance.Text;
+            SearchText = MpSearchBoxViewModel.Instance.SearchText;
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);

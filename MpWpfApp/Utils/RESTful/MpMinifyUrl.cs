@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpMinifyUrl : MpRestfulApi {
@@ -19,7 +20,7 @@ namespace MpWpfApp {
             if(result == null || result.Value == false) {
                 return string.Empty;
             }
-            string bitlyToken = Properties.Settings.Default.BitlyApiToken;
+            string bitlyToken = MpPreferences.Instance.BitlyApiToken;
             using (HttpClient client = new HttpClient()) {
                 using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-ssl.bitly.com/v4/shorten")) {
                     request.Content = new StringContent($"{{\"long_url\":\"{url}\"}}", Encoding.UTF8, "application/json");
@@ -53,21 +54,19 @@ namespace MpWpfApp {
         }
 
         protected override int GetCurCallCount() {
-            return Properties.Settings.Default.RestfulLinkMinificationCount;
+            return MpPreferences.Instance.RestfulLinkMinificationCount;
         }
 
         protected override int GetMaxCallCount() {
-            return Properties.Settings.Default.RestfulLinkMinificationMaxCount;
+            return MpPreferences.Instance.RestfulLinkMinificationMaxCount;
         }
 
         protected override void IncrementCallCount() {
-            Properties.Settings.Default.RestfulLinkMinificationCount++;
-            Properties.Settings.Default.Save();
+            MpPreferences.Instance.RestfulLinkMinificationCount++;
         }
 
         protected override void ClearCount() {
-            Properties.Settings.Default.RestfulLinkMinificationCount = 0;
-            Properties.Settings.Default.Save();
+            MpPreferences.Instance.RestfulLinkMinificationCount = 0;
         }
     }
 }

@@ -34,7 +34,7 @@
                       ToolTip="{Binding IsAppPausedTooltip}"
                       Padding="10"
                       IsChecked="{Binding IsAppPaused}">
-            <Image Source="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}, Source={StaticResource SystemTrayViewModel}}"
+            <Image Source="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToImageSourceConverter}, Source={StaticResource SystemTrayViewModel}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -50,7 +50,7 @@
                       IsEnabled="{Binding IsAutoCopyModeEnabled}"
                       IsChecked="{Binding IsAutoCopyMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageConverter}}"
+            <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -66,7 +66,7 @@
                       IsEnabled="{Binding IsRighClickPasteModeEnabled}"
                       IsChecked="{Binding IsRightClickPasteMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageConverter}}"
+            <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -82,7 +82,7 @@
                       ToolTip="{Binding IsAppendModeTooltip}"
                       IsEnabled="{Binding IsAppendModeEnabled}"
                       IsChecked="{Binding IsInAppendMode}">
-            <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageConverter}}"
+            <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -98,7 +98,7 @@
                       IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
                       IsChecked="{Binding IsInAutoAnalyzeMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageConverter}}"
+            <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>

@@ -391,5 +391,14 @@
     <Setting Name="ThisDeviceSourceId" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="RestfulOpenAiMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulOpenAiCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulOpenAiApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">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</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

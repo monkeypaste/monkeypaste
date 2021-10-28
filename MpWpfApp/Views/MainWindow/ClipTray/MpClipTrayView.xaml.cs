@@ -49,7 +49,7 @@ namespace MpWpfApp {
 
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
-            MpMessenger.Instance.Register<MpMessageType>(ctrvm, ReceivedClipTrayViewModelMessage);
+            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
@@ -67,6 +67,35 @@ namespace MpWpfApp {
             }
         }
 
+
+
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Requery:
+                    //await RefreshContext();
+                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+                    if (sv != null) {
+                        double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
+                        double ttw = tw * BindingContext.TotalItemsInQuery;
+
+                        sv.HorizontalScrollBar.Maximum = ttw;
+                        sv.HorizontalScrollBar.Minimum = 0;
+
+                        sv.ScrollToHorizontalOffset(0);
+                        sv.TargetHorizontalOffset = 0;
+                        sv.ScrollToLeftEnd();
+
+                        UpdateLayout();
+                    }
+                    break;
+                case MpMessageType.Expand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Center;
+                    break;
+                case MpMessageType.Unexpand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Left;
+                    break;
+            }
+        }
 
         private void Ctrvm_OnScrollToXRequest(object sender, double e) {
             var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
@@ -117,33 +146,6 @@ namespace MpWpfApp {
             return;
         }
 
-        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.Requery:
-                    //await RefreshContext();
-                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
-                    if(sv != null) {
-                        double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
-                        double ttw = tw * BindingContext.TotalItemsInQuery;
-
-                        sv.HorizontalScrollBar.Maximum = ttw;
-                        sv.HorizontalScrollBar.Minimum = 0;
-
-                        sv.ScrollToHorizontalOffset(0);
-                        sv.TargetHorizontalOffset = 0;
-                        sv.ScrollToLeftEnd();
-
-                        UpdateLayout();
-                    }
-                    break;
-                case MpMessageType.Expand:
-                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Center;
-                    break;
-                case MpMessageType.Unexpand:
-                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Left;
-                    break;
-            }
-        }
         public async Task RefreshContext() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 for (int i = 0; i < ClipTray.Items.Count; i++) {

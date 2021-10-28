@@ -70,6 +70,10 @@ namespace MpWpfApp {
         #region Public Methods
         public MpSwirlLayerViewModel() : base(null) {  }
 
+        public MpSwirlLayerViewModel(MpClipTileTitleSwirlViewModel parent) : base(parent) {
+            //for placeholder init
+        }
+
         public MpSwirlLayerViewModel(MpClipTileTitleSwirlViewModel parent, int layerId, Brush layerBrush, double layerOpacity) : base(parent)  {
             LayerId = layerId;
             LayerBrush = layerBrush;

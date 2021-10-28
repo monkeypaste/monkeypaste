@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpIconBuilder : MpIIconBuilder {
+    public class MpIconBuilder : MonkeyPaste.MpIIconBuilder {
         public async Task<string> CreateBorder(string iconBase64, double scale, string hexColor) {
             var iconBmpSrc = iconBase64.ToBitmapSource();
             var bmpSrc = await MpHelpers.Instance.CreateBorderAsync(iconBmpSrc, scale, MpHelpers.Instance.ConvertHexToColor(hexColor));

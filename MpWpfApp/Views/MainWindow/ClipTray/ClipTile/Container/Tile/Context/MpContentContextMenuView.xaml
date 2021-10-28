@@ -56,6 +56,12 @@
             </MenuItem.ItemContainerStyle>
         </MenuItem>
     </MenuItem>
+    <MenuItem x:Name="AnalyzeMenuItem"
+              Header="_Analyze"
+              Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
+        <MenuItem Header="Summarize"
+                  Command="{Binding SummarizeCommand, Source={StaticResource ClipTrayViewModel}}"/>
+    </MenuItem>
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
               Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">

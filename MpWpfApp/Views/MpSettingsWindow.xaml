@@ -12,7 +12,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
-        Title="Settings" Height="650" Width="800"
+        Title="Settings"
+        Height="650"
+        Width="800"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         Topmost="True"
@@ -20,9 +22,7 @@
     <Window.DataContext>
         <local:MpSettingsWindowViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        
-    </Window.Resources>
+    <Window.Resources />
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:CallMethodAction MethodName="SettingsWindow_Loaded"
@@ -31,11 +31,11 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.25*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.15*" />
         </Grid.RowDefinitions>
-        <!-- Header Panel -->
+        <!--  Header Panel  -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -44,7 +44,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <!-- Account Tab Button -->
+            <!--  Account Tab Button  -->
             <ToggleButton Grid.Column="0"
                           IsChecked="{Binding SettingsPanel1Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
@@ -60,7 +60,7 @@
                            Content="Account" />
                 </StackPanel>
             </ToggleButton>
-            <!-- Prefs Tab Button -->
+            <!--  Prefs Tab Button  -->
             <ToggleButton Grid.Column="1"
                           IsChecked="{Binding SettingsPanel2Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
@@ -76,7 +76,7 @@
                            Content="Preferences" />
                 </StackPanel>
             </ToggleButton>
-            <!-- Security Tab Button -->
+            <!--  Security Tab Button  -->
             <ToggleButton Grid.Column="2"
                           IsChecked="{Binding SettingsPanel3Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
@@ -86,13 +86,13 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/Images/shield.png"  />
+                           Source="/MpWpfApp;component/Resources/Images/shield.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Security" />
                 </StackPanel>
             </ToggleButton>
-            <!-- Shortcuts tab button -->
+            <!--  Shortcuts tab button  -->
             <ToggleButton Grid.Column="3"
                           IsChecked="{Binding SettingsPanel4Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
@@ -102,13 +102,13 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/Images/joystick.png"  />
+                           Source="/MpWpfApp;component/Resources/Images/joystick.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Shortcuts" />
                 </StackPanel>
             </ToggleButton>
-            <!-- Help tab Button -->
+            <!--  Help tab Button  -->
             <ToggleButton Grid.Column="4"
                           IsChecked="{Binding SettingsPanel5Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
@@ -125,14 +125,14 @@
                 </StackPanel>
             </ToggleButton>
         </Grid>
-        <!-- Account Panel -->
+        <!--  Account Panel  -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel1Visibility}">
             <Label Content="Settings 1" />
         </Grid>
-        <!-- Preferences -->
+        <!--  Preferences  -->
         <Grid Grid.Row="1"
-              Visibility="{Binding SettingsPanel2Visibility}">            
+              Visibility="{Binding SettingsPanel2Visibility}">
             <StackPanel Orientation="Vertical"
                         DataContext="{Binding PreferencesViewModel}">
                 <StackPanel Orientation="Horizontal">
@@ -148,8 +148,7 @@
                     <Label Content="Sound Notifications" />
                     <ComboBox DataContext="{Binding SoundPlayerGroupCollectionViewModel}"
                               ItemsSource="{Binding SoundGroupNames}"
-                              SelectedIndex="{Binding SelectedSoundGroupNameIdx}">
-                    </ComboBox>
+                              SelectedIndex="{Binding SelectedSoundGroupNameIdx}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Load On Login" />
@@ -226,7 +225,7 @@
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        Source="{Binding AppIcon}" />
-                                            </Button>                                            
+                                            </Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -246,7 +245,7 @@
                                             <TextBox IsReadOnly="{Binding IsReadOnly}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
-                                                     Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=LostFocus,NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                     Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                      VerticalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -258,18 +257,18 @@
                                             <TextBox IsReadOnly="{Binding IsReadOnly}"
                                                      Background="Transparent"
                                                      BorderThickness="0"
-                                                     Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=LostFocus,NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                     Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                      VerticalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                 <DataGridTemplateColumn Header="Admin?" 
+                                <DataGridTemplateColumn Header="Admin?"
                                                         Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"
-                                                        IsChecked="{Binding IsAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                                      IsChecked="{Binding IsAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -298,7 +297,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox SelectedIndex="{Binding SelectedWindowState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
-                                                <ComboBox.Items>                                        
+                                                <ComboBox.Items>
                                                     <ComboBoxItem Content="Hide" />
                                                     <ComboBoxItem Content="Normal" />
                                                     <ComboBoxItem Content="Minimized" />
@@ -339,7 +338,7 @@
                 </Grid>
             </StackPanel>
         </Grid>
-        <!-- Security -->
+        <!--  Security  -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel3Visibility}">
             <StackPanel Orientation="Vertical"
@@ -396,14 +395,13 @@
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               VerticalContentAlignment="Stretch"
-                                              IsChecked="{Binding IsAppRejected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    </CheckBox>
+                                              IsChecked="{Binding IsAppRejected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Button Width="200" 
+                <Button Width="200"
                         Command="{Binding AddExcludedAppCommand}">
                     <DockPanel>
                         <Image Source="/MpWpfApp;component/Resources/Images/add.png"
@@ -416,14 +414,14 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <!-- Shortcuts -->
+        <!--  Shortcuts  -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel4Visibility}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.1*" />
                 <RowDefinition Height="0.1*" />
                 <RowDefinition Height="0.3*" />
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0"
                         Visibility="Collapsed"
@@ -451,7 +449,7 @@
                 <Label Content="Only with Scrollwheel" />
                 <CheckBox IsChecked="{local:MpSettingBinding Path=DoShowMainWindowWithMouseEdgeAndScrollDelta}" />
             </StackPanel>
-            <DataGrid Grid.Row="3" 
+            <DataGrid Grid.Row="3"
                       x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
                       ItemsSource="{Binding ShortcutCollectionViewModel}"
@@ -479,9 +477,9 @@
                                         BorderThickness="0"
                                         ToolTip="Reassign"
                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ReassignShortcutCommand}">
-                                <Image Width="20"
-                                       Height="20"
-                                       Source="/MpWpfApp;component/Resources/Icons/Silk/icons/anchor.png" />
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="/MpWpfApp;component/Resources/Icons/Silk/icons/anchor.png" />
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -508,8 +506,7 @@
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png">
-                                        </Image>
+                                               Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -518,20 +515,20 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <!-- Help -->
+        <!--  Help  -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel5Visibility}">
             <Label Content="Settings 5" />
         </Grid>
-        <!-- Footer -->
-        <DockPanel Grid.Row="2" 
+        <!--  Footer  -->
+        <DockPanel Grid.Row="2"
                    HorizontalAlignment="Stretch">
             <Button DockPanel.Dock="Left"
                     Width="100"
                     Margin="10,20,10,10"
                     Command="{Binding ResetSettingsCommand}"
                     Content="Reset All" />
-            <StackPanel DockPanel.Dock="Right" 
+            <StackPanel DockPanel.Dock="Right"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
                 <Button Width="100"

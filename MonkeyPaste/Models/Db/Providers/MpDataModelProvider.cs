@@ -11,44 +11,12 @@ using Xamarin.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
-
-    /// <summary>
-    /// Represents a provider of collection details.
-    /// </summary>
-    /// <typeparam name="T">The type of items in the collection.</typeparam>
-    public interface MpIItemsProvider<T> {
-        /// <summary>
-        /// Fetches the total number of items available.
-        /// </summary>
-        /// <returns></returns>
-        int FetchCopyItemCount();
-
-        /// <summary>
-        /// Fetches a range of items.
-        /// </summary>
-        /// <param name="startIndex">The start index.</param>
-        /// <param name="count">The number of items to fetch.</param>
-        /// <returns></returns>
-        IList<T> FetchCopyItemRange(int startIndex, int count);
-
-
-    }
-
-
-    public class MpDataModelProvider : MpIItemsProvider<MpCopyItem> {
+    public class MpDataModelProvider {
         #region Singleton Definition
         private static readonly Lazy<MpDataModelProvider> _Lazy = new Lazy<MpDataModelProvider>(() => new MpDataModelProvider());
         public static MpDataModelProvider Instance { get { return _Lazy.Value; } }
         
-        private MpDataModelProvider() {
-            //MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
-            //MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
-            //MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
-
-            //var sl = MpDb.Instance.GetItems<MpSource>();
-            //_sourceLookup = new Dictionary<int, MpSource>();
-            //sl.ForEach(x => _sourceLookup.Add(x.Id, x));
-        }
+        private MpDataModelProvider() { }
 
         public void Init(MpIQueryInfo queryInfo, int pageSize) {
             QueryInfo = queryInfo;
@@ -58,9 +26,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Variables
-
-
-        //private Dictionary<int, MpSource> _sourceLookup;
         #endregion
 
         #region Properties
@@ -70,8 +35,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-
-
 
         #region Select queries
 
@@ -303,7 +266,7 @@ namespace MonkeyPaste {
 
         public async Task<MpSource> GetSourceByMembers(int appId,int urlId) {
             string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=?";
-            var result = await MpDb.Instance.QueryAsync<MpSource>(query, appId,urlId);
+            var result = await MpDb.Instance.QueryAsync<MpSource>(query,appId,urlId);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -318,7 +281,6 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-
         #endregion
 
         public async Task<List<MpCopyItem>> GetPageAsync(
@@ -439,7 +401,7 @@ namespace MonkeyPaste {
 
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             string query = GetFetchQuery(startIndex, count);
-            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            IList<MpCopyItem> result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
             return result;
         }
 
@@ -455,6 +417,7 @@ namespace MonkeyPaste {
             int tagId = QueryInfo.TagId;
             string descStr = QueryInfo.IsDescending ? "DESC" : "ASC";
             string sortStr = Enum.GetName(typeof(MpContentSortType), QueryInfo.SortType);
+            string searchStr = string.IsNullOrWhiteSpace(QueryInfo.SearchText) ? null : QueryInfo.SearchText;
             var st = QueryInfo.SortType;
             if (st == MpContentSortType.Source ||
                 st == MpContentSortType.UsageScore ||
@@ -477,7 +440,7 @@ namespace MonkeyPaste {
                 count = MpPreferences.Instance.MaxRecentClipItems;
             }
 
-            string query = string.Empty;
+            string query;
 
             switch (tagId) {
                 case MpTag.RecentTagId:
@@ -489,9 +452,23 @@ namespace MonkeyPaste {
                                            sortStr, descStr, count, startIndex,selectToken);
                     break;
                 case MpTag.AllTagId:
-                    query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 
+                    if(searchStr == null) {
+                        query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 
                                             order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex,selectToken);
+                                          sortStr, descStr, count, startIndex, selectToken);
+                    } else {
+                        query = string.Format(@"select {4} from MpCopyItem where pk_MpCopyItemId in 
+                                            (select distinct
+                                                case fk_ParentCopyItemId
+                                                    when 0
+                                                        then pk_MpCopyItemId
+                                                    ELSE
+                                                        fk_ParentCopyItemId
+                                                end
+                                                from MpCopyItem where ItemData like '%{5}%')
+                                            order by {0} {1} limit {2} offset {3}",
+                                            sortStr, descStr, count, startIndex, selectToken,searchStr);
+                    }                   
                     break;
                 default:
                     query = string.Format(@"select {5} from MpCopyItem where pk_MpCopyItemId in 

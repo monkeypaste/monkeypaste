@@ -1076,6 +1076,35 @@
         </Style>
         <!--  MacOS Scroll Bars End  -->
 
+        <!--  Semi-Transparent Button  -->
+        <Style x:Key="SemiTransparentButton"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                BorderThickness="0"
+                                BorderBrush="Black"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Opacity"
+                                        Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
         <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
         <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
@@ -1150,7 +1179,7 @@
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
         <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
-        <local:MpStringToImageConverter x:Key="StringToImageConverter" />
+        <local:MpStringToImageSourceConverter x:Key="StringToImageSourceConverter" />
         <local:MpStringToIconConverter x:Key="StringToIconConverter" />
         <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />

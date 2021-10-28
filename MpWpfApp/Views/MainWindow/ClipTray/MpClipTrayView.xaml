@@ -20,7 +20,7 @@
                                         DataContext="{Binding}"
                                         Visibility="{Binding ClipTrayVisibility}"
                                         Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
-                                        ItemsSource="{Binding Items}"
+                                        ItemsSource="{Binding Items, IsAsync=True}"
                                         ForceCursor="True"
                                         Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
                                         local:MpLoadMoreItemsExtension.RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"

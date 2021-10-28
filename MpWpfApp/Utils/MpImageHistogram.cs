@@ -19,8 +19,8 @@ namespace MpWpfApp {
             var countDictionary = new Dictionary<PixelColor, int>();
             var pixels = MpHelpers.Instance.GetPixels(bmpSource);
 
-            for (int x = 0; x < bmpSource.Width; x++) {
-                for (int y = 0; y < bmpSource.Height; y++) {
+            for (int x = 0; x < bmpSource.PixelWidth; x++) {
+                for (int y = 0; y < bmpSource.PixelHeight; y++) {
                     PixelColor currentColor = pixels[x, y];
                     if(currentColor.Alpha == 0) {
                         continue;

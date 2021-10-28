@@ -243,6 +243,7 @@ namespace MpWpfApp {
             }
             if(cts == null) {
                 cts = new CancellationTokenSource();
+                cts.CancelAfter(1000);
             }
             var rtbSelection = Rtb?.Selection;
             var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);

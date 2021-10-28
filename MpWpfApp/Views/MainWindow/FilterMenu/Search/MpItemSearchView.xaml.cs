@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpItemSearchView.xaml
     /// </summary>
-    public partial class MpItemSearchView : UserControl {
+    public partial class MpItemSearchView : MpUserControl<MpSearchBoxViewModel> {
         public MpItemSearchView() {
             InitializeComponent();
         }
@@ -128,6 +128,20 @@ namespace MpWpfApp {
             var sbvm = DataContext as MpSearchBoxViewModel;
             sbvm.ClearTextCommand.Execute(null);
             SearchBox.Focus();
+        }
+
+        private void SearchBox_KeyUp(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) {
+                BindingContext.PerformSearchCommand.Execute(null);
+            }
+        }
+
+        private void ClearTextBoxButton_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.IsOverClearTextButton = true;
+        }
+
+        private void ClearTextBoxButton_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.IsOverClearTextButton = false;
         }
     }
 }

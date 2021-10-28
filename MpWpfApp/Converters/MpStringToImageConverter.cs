@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpStringToImageConverter : IValueConverter {
+    public class MpStringToImageSourceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string) {
                 return @"/Resources" + value.ToString();

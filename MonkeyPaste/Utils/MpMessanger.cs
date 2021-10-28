@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpMessenger> _Lazy = new Lazy<MpMessenger>(() => new MpMessenger());
         public static MpMessenger Instance { get { return _Lazy.Value; } }
 
-        private readonly ConcurrentDictionary<MessengerKey, object> RecipientDictionary = new ConcurrentDictionary<MessengerKey, object>();
+        private readonly ConcurrentDictionary<MessengerKey, List<object>> RecipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
         public MpMessenger() { }
 
@@ -33,7 +34,11 @@ namespace MonkeyPaste {
 
         public void Register<T>(object recipient, Action<T> action, object context) {
             var key = new MessengerKey(recipient, typeof(T), context);
-            RecipientDictionary.TryAdd(key, action);
+            if(RecipientDictionary.ContainsKey(key)) {
+                RecipientDictionary[key].Add(action);
+            } else {
+                RecipientDictionary.TryAdd(key, new List<object> { action });
+            }            
         }
 
         public void Unregister<T>(object recipient, Action<T> action) {
@@ -41,9 +46,11 @@ namespace MonkeyPaste {
         }
 
         public void Unregister<T>(object recipient, Action<T> action, object context) {
-            object removeAction;
             var key = new MessengerKey(recipient, typeof(T), context);
-            RecipientDictionary.TryRemove(key, out removeAction);
+            //RecipientDictionary.TryRemove(key, out removeAction);
+            if (RecipientDictionary.ContainsKey(key)) {
+                RecipientDictionary[key].Remove(action);
+            }
         }
 
         public void UnregisterAll() {
@@ -55,19 +62,20 @@ namespace MonkeyPaste {
         }
 
         public void Send<T>(T message, object context) {
-            IEnumerable<KeyValuePair<MessengerKey, object>> result;
+            IEnumerable<KeyValuePair<MessengerKey, List<object>>> results;
 
             if (context == null) {
                 // Get all recipients where the context is null.
-                result = from r in RecipientDictionary where r.Key.Context == null select r;
+                results = from r in RecipientDictionary where r.Key.Context == null select r;
             } else {
                 // Get all recipients where the context is matching.
-                result = from r in RecipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
+                results = from r in RecipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
             }
 
-            foreach (var action in result.Select(x => x.Value).OfType<Action<T>>()) {
-                // Send the message to all recipients.
-                action(message);
+            foreach(var result in results) {
+                foreach(var action in result.Value) {
+                    (action as Action<T>).Invoke(message);
+                }
             }
         }
 

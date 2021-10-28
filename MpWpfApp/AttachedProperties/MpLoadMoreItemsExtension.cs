@@ -1,4 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 using System;
@@ -94,12 +95,12 @@ namespace MpWpfApp {
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
 
-            if(loadMoreCommand == null) {
+            if (loadMoreCommand == null) {
                 return;
             }
 
             var ctrvm = MpClipTrayViewModel.Instance;
-            if(ctrvm == null) {
+            if (ctrvm == null) {
                 MpConsole.WriteTraceLine("tray vm is null");
                 return;
             }
@@ -121,16 +122,16 @@ namespace MpWpfApp {
 
                 //get item over right edge's rect
                 var rlbir = lb.GetListBoxItemRect(r_lbi_idx);
-                if (rlbir.Right >= lbr.Right) {                    
+                if (rlbir.Right >= lbr.Right) {
                     //when last visible item's right edge is past the listboxes edge
                     int itemsRemaining = itemCountInListbox - r_lbi_idx;
                     MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
-                    
+
                     if (itemsRemaining <= thresholdRemainingItemCount) {
                         loadMoreCommand.Execute(1);
-                    }                 
+                    }
                 }
-                
+
             } else {
                 //scrolling up
                 //get item under point in middle of left edge of listbox
@@ -138,7 +139,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine($"Scrolling right, left most idx: {l_lbi_idx} with remaining: {l_lbi_idx}  max remaining: {thresholdRemainingItemCount}");
                 if (l_lbi_idx - thresholdRemainingItemCount <= 0) {
                 }
-            }         
+            }
         }
     }
 }

@@ -1413,5 +1413,38 @@ namespace MpWpfApp.Properties {
                 this["ThisDeviceSourceId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int RestfulOpenAiMaxCount {
+            get {
+                return ((int)(this["RestfulOpenAiMaxCount"]));
+            }
+            set {
+                this["RestfulOpenAiMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RestfulOpenAiCount {
+            get {
+                return ((int)(this["RestfulOpenAiCount"]));
+            }
+            set {
+                this["RestfulOpenAiCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("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")]
+        public string RestfulOpenAiApiKey {
+            get {
+                return ((string)(this["RestfulOpenAiApiKey"]));
+            }
+        }
     }
 }

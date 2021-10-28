@@ -595,7 +595,6 @@ namespace MpWpfApp {
         public MpContentItemViewModel() : base(null) { }
 
         public MpContentItemViewModel(MpClipTileViewModel container) : base(container) {
-            //MpConsole.WriteLine(DependOnParentTest);
             PropertyChanged += MpContentItemViewModel_PropertyChanged;
         }
 
@@ -604,7 +603,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci) {
-            if (ci.Source == null) {
+            if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
             CopyItem = ci;

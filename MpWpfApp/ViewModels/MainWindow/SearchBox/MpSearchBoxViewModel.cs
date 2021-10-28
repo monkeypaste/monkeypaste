@@ -250,6 +250,10 @@ namespace MpWpfApp {
             }
         }
 
+        #endregion
+
+        #region State
+
         private bool _isTextBoxFocused = false;
         public bool IsTextBoxFocused {
             get {
@@ -262,6 +266,8 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public bool IsOverClearTextButton { get; set; } = false;
 
         private bool _isSearchEnabled = true;
         public bool IsSearchEnabled {
@@ -300,7 +306,6 @@ namespace MpWpfApp {
                     _isSearching = value;
                     OnPropertyChanged(nameof(IsSearching));
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                    OnPropertyChanged(nameof(SearchSpinnerVisibility));
                 }
             }
         }
@@ -310,6 +315,7 @@ namespace MpWpfApp {
                 return Text.Length > 0 && Text != PlaceholderText;
             }
         }
+
         #endregion
 
         #region Appearance
@@ -348,21 +354,22 @@ namespace MpWpfApp {
                 return FontStyles.Italic;
             }
         }
+
+        public string ClearButtonImagePath {
+            get {
+                if(IsOverClearTextButton) {
+                    return @"/Images/close2.png";
+                } else {
+                    return @"/Images/close1.png";
+                }
+            }
+        }
         #endregion
 
         #region Visibility Proeprties
         public Visibility ClearTextButtonVisibility {
             get {
                 if (HasText && !IsSearching) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        public Visibility SearchSpinnerVisibility {
-            get {
-                if (IsSearching) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -387,24 +394,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-        public event EventHandler<string> OnSearchTextChanged;
-        public event EventHandler<MpContentFilterType> OnFilterFlagsChanged;
 
         public event EventHandler OnSearchTextBoxFocusRequest;
+
         #endregion
 
         #region Public Methods
         public MpSearchBoxViewModel() : base(null) {
             Text = PlaceholderText;
 
-            var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.SearchBoxTypingDelayInMilliseconds);
-            timer.Tick += (s, e) => {
-                PerformSearchCommand.Execute(null);
-                timer.Stop();
-            };
             PropertyChanged += (s, e7) => {
                 switch (e7.PropertyName) {
+                    case nameof(Text):
+                        Validate();
+                        OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                        break;
+                    case nameof(IsSearching):
+                        OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                        break;
                     case nameof(IsTextBoxFocused):
                         if(IsTextBoxFocused) {
                             if (!HasText) {
@@ -420,130 +427,75 @@ namespace MpWpfApp {
                         OnPropertyChanged(nameof(TextBoxFontStyle));
                         OnPropertyChanged(nameof(TextBoxTextBrush));
                         break;
-                    case nameof(Text):
-                        if(!HasText && !string.IsNullOrWhiteSpace(SearchText) && SearchText != PlaceholderText) {
-                            //when there WAS search text but user has deleted all text
-                            OnSearchTextChanged?.Invoke(this, Text);
-                        } else if(HasText) {
-                            OnSearchTextChanged?.Invoke(this, Text);
-                        }
-                        
-
-                        timer.Stop();
-                        timer.Start();
-                        break;
-                    case nameof(FilterType):
-                        OnFilterFlagsChanged?.Invoke(this, FilterType);
-                        break;
                 }
             };
+
+            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
         }
 
         public void RequestSearchBoxFocus() {
             OnSearchTextBoxFocusRequest?.Invoke(this, new EventArgs());
         }
 
+        public void ReceiveClipTrayViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.Requery:
+                    IsSearching = false;
+                    Validate();
+                    break;
+            }
+        }
         #endregion
 
         #region Private Methods
         
+        private bool Validate() {
+            if (!HasText) {
+                IsTextValid = true;
+            } else {
+                if(MpClipTrayViewModel.Instance.TotalItemsInQuery == 0) {
+                    IsTextValid = false;
+                }
+            }
+            return IsTextValid;
+        }
         #endregion
 
         #region Commands
-        private RelayCommand _clearTextCommand;
-        public ICommand ClearTextCommand {
-            get {
-                if (_clearTextCommand == null) {
-                    _clearTextCommand = new RelayCommand(ClearText, CanClearText);
-                }
-                return _clearTextCommand;
-            }
-        }
-        private bool CanClearText() {
-            return Text.Length > 0;
-        }
-        private void ClearText() {
-            Text = string.Empty;
-            SearchText = Text;
-            MpClipTrayViewModel.Instance.ResetClipSelection();
-            //IsSearching = true;
-        }
+        public ICommand ClearTextCommand => new RelayCommand(
+            () => {
+                Text = string.Empty;
+                SearchText = Text;
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+            },
+            () => {
+                return Text.Length > 0;
+            });
 
-        public ICommand PerformSearchCommand => new AsyncRelayCommand(
-            async () => {
+        public ICommand PerformSearchCommand => new RelayCommand(
+            () => {
                 SearchText = Text;
                 if (!HasText) {
                     IsTextValid = true;
-                }
-                var ct = MpClipTrayViewModel.Instance;
-                //wait till all highlighting is complete then hide non-matching tiles at the same time
-                var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
-                bool showMatchNav = true;
-                ct.Items.ForEach(x => x.RequestSearch(SearchText));
-
-                //foreach (var ctvm in ct.Items) {
-                //    var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
-                //    newVisibilityDictionary.Add(ctvm, newVisibility);
-                //    ctvm.RequestSearch(SearchText);
-                //    if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
-                //        showMatchNav = true;
-                //    }
-                //}
-                if (ct.IsAnyTileExpanded) {
-                    if (HasText) {
-                        IsTextValid = ct.SelectedItems[0].HighlightTextRangeViewModelCollection.Count > 0;
-                    } else {
-                        IsTextValid = true;
-                    }
                 } else {
-                    foreach (var kvp in newVisibilityDictionary) {
-                        foreach (var skvp in kvp.Value) {
-                            if (skvp.Key is MpClipTileViewModel) {
-                                (skvp.Key as MpClipTileViewModel).ItemVisibility = skvp.Value;
-                            }
-                            if (skvp.Key is MpClipTileViewModel && skvp.Value == Visibility.Collapsed) {
-                                //if tile is collapsed ignore children visibility
-                                break;
-                            }
-                            if (skvp.Key is MpContentItemViewModel) {
-                                (skvp.Key as MpContentItemViewModel).ItemVisibility = skvp.Value;
-                            }
-                        }
-
-                    }
+                    IsSearching = true;
                 }
-                SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             });
-        
-        private RelayCommand _nextMatchCommand;
-        public ICommand NextMatchCommand {
-            get {
-                if (_nextMatchCommand == null) {
-                    _nextMatchCommand = new RelayCommand(NextMatch);
-                }
-                return _nextMatchCommand;
-            }
-        }
-        private void NextMatch() {
-            foreach(var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
-                ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
-            }
-        }
 
-        private RelayCommand _prevMatchCommand;
-        public ICommand PrevMatchCommand {
-            get {
-                if (_prevMatchCommand == null) {
-                    _prevMatchCommand = new RelayCommand(PrevMatch);
+        public ICommand NextMatchCommand => new RelayCommand(
+            () => {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
+                    ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
                 }
-                return _prevMatchCommand;
-            }
-        }
-        private void PrevMatch() {
-            foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
-                ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
-            }
-        }
+            });
+
+        public ICommand PrevMatchCommand => new RelayCommand(
+            () => {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
+                    ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
+                }
+            });
         #endregion
     }
 }

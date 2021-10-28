@@ -109,7 +109,7 @@
                                   Command="{Binding ToggleMainWindowLockCommand}"
                                   CommandParameter="{StaticResource True}"
                                   Template="{StaticResource LockToggleButtonControlTemplate}">
-                        <Image Source="{Binding Source={StaticResource LockIcon}, Converter={StaticResource StringToImageConverter}}"
+                        <Image Source="{Binding Source={StaticResource LockIcon}, Converter={StaticResource StringToImageSourceConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </ToggleButton>

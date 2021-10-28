@@ -16,7 +16,6 @@ namespace MonkeyPaste {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
         
-
         #region Wpf Compatibility
 
         [Ignore]

@@ -403,9 +403,6 @@ namespace MpWpfApp {
             var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
             for (int i = 0; i < cil.Count; i++) {
                 await Items[i].InitializeAsync(cil[i]);
-
-                var phctvm = await CreateClipTileViewModel(null);
-                Items.Add(phctvm);
             }
 
             _nextQueryOffsetIdx = cil.Count;
@@ -413,30 +410,29 @@ namespace MpWpfApp {
             IsBusy = false;
             ResetClipSelection();
 
-            MpMessenger.Instance.Send(MpMessageType.Requery);
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Requery);
 
             sw.Stop();
             MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
         }
 
-        public ICommand LoadMoreClipsCommand => new AsyncRelayCommand<object>(
+        public IAsyncRelayCommand<object> LoadMoreClipsCommand => new AsyncRelayCommand<object>(
             async (isLoadMore) => {
                 IsBusy = true;
                 bool isLeft = ((int)isLoadMore) >= 0;
                 if (isLeft) {
                     IList<MpCopyItem> cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffsetIdx, _pageSize);
 
-                    int firstPlaceHolderIdx = Items.IndexOf(Items.Where(x => x.IsPlaceholder).FirstOrDefault());
-
                     for (int i = 0; i < cil.Count; i++) {
-                        //populate the placeholder created during last load more at this page offset
-                        await Items[i + firstPlaceHolderIdx].InitializeAsync(cil[i]);
-
-                        var phctvm = await CreateClipTileViewModel(null);
-                        Items.Add(phctvm);
+                        var ctvm = await CreateClipTileViewModel(cil[i]);
+                        Items.Add(ctvm);
+                        //Items.RemoveAt(0);
                     }
 
                     _nextQueryOffsetIdx += cil.Count;
+
+                    int itemsToRemove = Items.Count - _initialLoadCount;
+                    //Items.RemoveRange(0, itemsToRemove);
 
                     MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
                 }
@@ -653,7 +649,7 @@ namespace MpWpfApp {
 
             var createItemSw = new Stopwatch();
             createItemSw.Start();
-            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd).ConfigureAwait(false);
+            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -719,7 +715,9 @@ namespace MpWpfApp {
         }
 
         public async void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
-            await AddItemFromClipboard(cd);
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                await AddItemFromClipboard(cd);
+            });            
         }
 
         public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci) {
@@ -1553,8 +1551,6 @@ namespace MpWpfApp {
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
-
-
         public ICommand MergeSelectedClipsCommand => new AsyncRelayCommand(
             async () => {
                 await Task.Delay(1);
@@ -1582,6 +1578,18 @@ namespace MpWpfApp {
             },
             (args) => {
                 return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
+            });
+
+        public ICommand SummarizeCommand => new AsyncRelayCommand(
+            async () => {
+                var result = await MpOpenAi.Instance.Summarize(SelectedModels[0].ItemData.ToPlainText());
+                SelectedModels[0].ItemDescription = result;
+                await SelectedModels[0].WriteToDatabaseAsync();
+            },
+            () => {
+                return SelectedItems.Count == 1 &&
+                       SelectedItems[0].IsTextItem &&
+                       SelectedItems[0].Count == 1;
             });
 
         public ICommand CreateQrCodeFromSelectedClipsCommand => new AsyncRelayCommand(

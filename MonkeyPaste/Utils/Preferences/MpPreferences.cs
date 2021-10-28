@@ -40,7 +40,6 @@ namespace MonkeyPaste {
         public string SslCertSubject { get; set; } = "CN{ get; set; } =127.0.01";
         #endregion
 
-
         public MpUserDeviceType ThisDeviceType {
             get {
                 return _prefIo.GetDeviceType();
@@ -255,6 +254,12 @@ namespace MonkeyPaste {
         public string BitlyApiToken {
             get {
                 return @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
+            }
+        }
+
+        public string RestfulOpenAiApiKey {
+            get {
+                return @"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";
             }
         }
 
@@ -483,6 +488,24 @@ namespace MonkeyPaste {
             }
             set {
                 _prefIo.Set(nameof(RestfulBillingDate), value);
+            }
+        }
+
+        public int RestfulOpenAiCount {
+            get {
+                return _prefIo.Get(nameof(RestfulOpenAiCount), 0);
+            }
+            set {
+                _prefIo.Set(nameof(RestfulOpenAiCount), value);
+            }
+        }
+
+        public int RestfulOpenAiMaxCount {
+            get {
+                return _prefIo.Get(nameof(RestfulOpenAiMaxCount), 5);
+            }
+            set {
+                _prefIo.Set(nameof(RestfulOpenAiMaxCount), value);
             }
         }
         #endregion
