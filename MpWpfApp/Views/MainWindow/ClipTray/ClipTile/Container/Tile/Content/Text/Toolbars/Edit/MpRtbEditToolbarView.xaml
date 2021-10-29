@@ -13,6 +13,7 @@
         <RichTextBox x:Key="CurrentRtbTarget" />
     </UserControl.Resources>
     <Border x:Name="ClipTileEditorToolbar"
+            Unloaded="ClipTileEditorToolbar_Unloaded"
             Width="{Binding Parent.TileContentWidth}"
             Height="{local:MpMeasurementsBinding ClipTileEditToolbarHeight, Mode=OneWay}"
             Background="OldLace"

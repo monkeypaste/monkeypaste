@@ -11,14 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
 using static System.Net.Mime.MediaTypeNames;
+using MonkeyPaste;
+using System.Windows.Media.Animation;
+using System.Globalization;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileDetailView.xaml
     /// </summary>
-    public partial class MpClipTileDetailView : UserControl {
+    public partial class MpClipTileDetailView : MpUserControl<MpContentItemViewModel> {
         private Hyperlink h;
         public MpClipTileDetailView() {
             InitializeComponent();
@@ -26,19 +29,36 @@ namespace MpWpfApp {
 
         private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
-            civm.CycleDetailCommand.Execute(null);
+            civm.CycleDetailCommand.Execute(null);                       
 
-            if(Uri.IsWellFormedUriString(civm.DetailText, UriKind.Absolute)) {
+            if (civm.CurDetailType == MpCopyItemDetailType.AppInfo || 
+                civm.CurDetailType == MpCopyItemDetailType.UrlInfo) {
+                string linkText = civm.DetailText;
+                string linkPath = civm.DetailText;
+                string toolTip = string.Empty;
                 h = new Hyperlink();
-                h.Inlines.Add(civm.DetailText);
-                h.NavigateUri = new Uri(civm.DetailText);
+                if(civm.CurDetailType == MpCopyItemDetailType.AppInfo) {
+                    if(File.Exists(civm.DetailText)) {
+                        linkText = "Source Folder";
+                        linkPath = Path.GetDirectoryName(civm.DetailText);
+                    }
+                    toolTip = civm.CopyItem.Source.App.AppName;
+                } else {
+                    linkText = "Source Url";
+                    linkPath = civm.DetailText;
+                    toolTip = civm.CopyItem.Source.Url.UrlTitle;
+                }
+                h.Inlines.Add(linkText);
+                h.NavigateUri = new Uri(linkPath);
                 h.IsEnabled = true;
                 h.Click += H_Click;
                 ClipTileDetailTextBlock.Inlines.Clear();
                 ClipTileDetailTextBlock.Inlines.Add(h);
+                ClipTileDetailTextBlock.ToolTip = toolTip;
             } else {
                 ClipTileDetailTextBlock.Inlines.Clear();
                 ClipTileDetailTextBlock.Inlines.Add(new Run(civm.DetailText));
+                ClipTileDetailTextBlock.ToolTip = Enum.GetName(typeof(MpCopyItemDetailType),BindingContext.CurDetailType);
             }
         }
 

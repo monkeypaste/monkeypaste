@@ -1563,12 +1563,20 @@ namespace MpWpfApp {
                     if(x == _ContentColors.Count -1 && y == _ContentColors[0].Count - 1) {
                         var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/add2.png"));
                         b.Background = new ImageBrush(addBmpSrc);
-                        b.MouseLeftButtonUp += (s1, e1) => {
+                        MouseButtonEventHandler bMouseLeftButtonUp = (object o, MouseButtonEventArgs e3) => {
                             var result = MpHelpers.Instance.ShowColorDialog(GetRandomBrushColor());
-                            if(result != null) {
+                            if (result != null) {
                                 b.Tag = result;
                             }
                         };
+                        b.MouseLeftButtonUp += bMouseLeftButtonUp;
+
+                        RoutedEventHandler bUnload = null;
+                        bUnload = (object o, RoutedEventArgs e) =>{
+                            b.MouseLeftButtonUp -= bMouseLeftButtonUp;
+                            b.Unloaded -= bUnload;
+                        };
+                        b.Unloaded += bUnload;
                     } else {
                         b.Background = _ContentColors[x][y];
                         b.Tag = b.Background;
@@ -1579,23 +1587,45 @@ namespace MpWpfApp {
                     b.CornerRadius = new CornerRadius(2);
                     b.Width = b.Height = s;
 
-                    b.MouseEnter += (s1, e1) => {
+                    MouseEventHandler bMouseEnter = (object o, MouseEventArgs e3) => {
                         b.BorderBrush = Brushes.DimGray;
                     };
 
-                    b.GotFocus += (s1, e1) => {
-                        b.BorderBrush = Brushes.DimGray;
-                    };
-
-                    b.MouseLeave += (s1, e1) => {
+                    MouseEventHandler bMouseLeave = (object o, MouseEventArgs e3) => {
                         b.BorderBrush = Brushes.DarkGray;
                     };
+                    b.MouseEnter += bMouseEnter;
+
+                    RoutedEventHandler bGotFocus = (object o, RoutedEventArgs e3) => {
+                        b.BorderBrush = Brushes.DimGray;
+                    };
+                    b.GotFocus += bGotFocus;
+
+                    b.MouseLeave += bMouseLeave;
 
                     b.MouseLeftButtonUp += selectedEventHandler;
 
-                    cm.Closed += (s1, e) => {
+                    RoutedEventHandler bUnloaded = null;
+                    bUnloaded = (object o, RoutedEventArgs e3) => {
+                        b.MouseEnter -= bMouseEnter;
+                        b.MouseLeave -= bMouseLeave;
+                        b.GotFocus -= bGotFocus;
                         b.MouseLeftButtonUp -= selectedEventHandler;
+                        b.Unloaded -= bUnloaded;
                     };
+
+                    b.Unloaded += bUnloaded;
+
+                    RoutedEventHandler cmClosed = null;
+                    cmClosed = (object o, RoutedEventArgs e3) => {
+                        b.MouseEnter -= bMouseEnter;
+                        b.MouseLeave -= bMouseLeave;
+                        b.GotFocus -= bGotFocus;
+                        b.MouseLeftButtonUp -= selectedEventHandler;
+                        b.Unloaded -= bUnloaded;
+                        cm.Closed -= cmClosed;
+                    };
+                    cm.Closed += cmClosed;
 
                     cmic.Children.Add(b);
 
@@ -2752,7 +2782,6 @@ namespace MpWpfApp {
 
                 // on windows ' are not supported. For example: curl 'http://ublux.com' does not work and it needs to be replaced to curl "http://ublux.com"
                 List<string> parameters = new List<string>();
-
 
                 // separate parameters to escape quotes
                 try {

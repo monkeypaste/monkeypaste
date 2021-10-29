@@ -210,17 +210,11 @@ namespace MpWpfApp {
 
             var ctrvm = MpClipTrayViewModel.Instance;
 
-            //ctrvm.Items.ForEach(x => x.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize);
-            //ctrvm.Items.ForEach(x => x.TileBorderHeight -= deltaHeight);
-
-            //ctrvm.Items.ForEach(x => x.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth);
-            //ctrvm.Items.ForEach(x => x.TileContentHeight -= deltaHeight);
-
             ctvm.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
-            ctvm.TileBorderHeight -= deltaHeight;
+            ctvm.TileBorderHeight = MpMeasurements.Instance.ClipTileBorderMinSize;
 
             ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
-            ctvm.TileContentHeight -= deltaHeight;
+            ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileBorderMinSize;
 
             ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
 

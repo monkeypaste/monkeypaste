@@ -84,6 +84,14 @@ namespace MonkeyPaste {
 
             var thisDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
+            if(thisDevice == null) {
+                //not sure why this happens but duplicating MpDb.InitDefaultData...
+                thisDevice = new MpUserDevice() {
+                    UserDeviceGuid = System.Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
+                    PlatformType = MpPreferences.Instance.ThisDeviceType
+                };
+                await MpDb.Instance.AddOrUpdateAsync<MpUserDevice>(thisDevice);
+            }
             var newApp = new MpApp() {
                 AppGuid = System.Guid.NewGuid(),
                 AppPath = appPath,

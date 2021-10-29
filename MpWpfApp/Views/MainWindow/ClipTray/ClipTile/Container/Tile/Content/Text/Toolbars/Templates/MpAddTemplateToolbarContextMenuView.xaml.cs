@@ -57,9 +57,16 @@ namespace MpWpfApp {
             mil.Add(ami);
             foreach (MenuItem mi in mil) {
                 mi.Click += TemplateDropDownItem_Click;
+                mi.Unloaded += Mi_Unloaded;
             }
 
             AddButton.ContextMenu.ItemsSource = mil;
+        }
+
+        private void Mi_Unloaded(object sender, RoutedEventArgs e) {
+            var mi = sender as MenuItem;
+            mi.Click -= TemplateDropDownItem_Click;
+            mi.Unloaded -= Mi_Unloaded;
         }
 
         private void TemplateDropDownItem_Click(object sender, RoutedEventArgs e) {

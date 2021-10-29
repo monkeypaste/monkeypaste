@@ -29,7 +29,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, IDisposable {
         #region Private Variables
         private object _itemLockObject;
 
@@ -517,6 +517,10 @@ using System.Speech.Synthesis;
         [MpDependsOnParent("PrimaryItem","SelectedItems")]
         public Brush TileBorderBrush {
             get {
+                if(Parent.IsScrolling) {
+                    return Brushes.Transparent;
+                }
+
                 if (Parent.PrimaryItem == this &&
                     Parent.SelectedItems.Count > 1) {
                     return Brushes.Blue;
@@ -836,10 +840,10 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsHovering):
                     if (IsHovering) {
-                        if (Parent.IsScrolling) {
-                            IsHovering = false;
-                            ClearSubHovering();
-                        }
+                        //if (Parent.IsScrolling) {
+                        //    IsHovering = false;
+                        //    ClearSubHovering();
+                        //}
                     } 
                     break;
                 case nameof(IsExpanded):

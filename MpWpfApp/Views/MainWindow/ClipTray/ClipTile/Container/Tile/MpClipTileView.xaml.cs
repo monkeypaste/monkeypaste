@@ -112,6 +112,9 @@ namespace MpWpfApp {
             }
         }
 
-        
+        private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
+            BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;
+            BindingContext.PropertyChanged -= Ctvm_PropertyChanged;
+        }
     }
 }

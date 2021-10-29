@@ -51,21 +51,26 @@ namespace MonkeyPaste {
         }
 
         public async Task<int> GetRecentCopyItemCountAsync() {
-            string query = @"select count(*) from MpCopyItem 
-                                where pk_MpCopyItemId in
-	                                (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                inner join MpCopyItem pci 
-	                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                order by aci.CopyDateTime) limit ?)
-                                or fk_ParentCopyItemId in 
-	                                (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                inner join MpCopyItem pci 
-	                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                order by aci.CopyDateTime) limit ?)";
-            var result = await MpDb.Instance.QueryScalarAsync<int>(query, MpPreferences.Instance.MaxRecentClipItems, MpPreferences.Instance.MaxRecentClipItems);
-            return result;
+            //string query = @"select count(*) from MpCopyItem 
+            //                    where pk_MpCopyItemId in
+            //                     (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+            //                     select pci.pk_MpCopyItemId from MpCopyItem aci
+            //                     inner join MpCopyItem pci 
+            //                     ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+            //                     order by aci.CopyDateTime) limit ?)
+            //                    or fk_ParentCopyItemId in 
+            //                     (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+            //                     select pci.pk_MpCopyItemId from MpCopyItem aci
+            //                     inner join MpCopyItem pci 
+            //                     ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+            //                     order by aci.CopyDateTime) limit ?)";
+            //var result = await MpDb.Instance.QueryScalarAsync<int>(query, MpPreferences.Instance.MaxRecentClipItems, MpPreferences.Instance.MaxRecentClipItems);
+            var recentParents = await GetRecentItemsAsync();
+            int totalCount = recentParents.Count;
+            foreach(var rp in recentParents) {
+                totalCount += await GetCompositeChildCountAsync(rp.Id);
+            }
+            return totalCount;
         }
 
         public int GetRecentCopyItemCount() {
@@ -91,7 +96,7 @@ namespace MonkeyPaste {
                                 select pci.pk_MpCopyItemId from MpCopyItem aci
                                 inner join MpCopyItem pci 
                                 ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                order by aci.CopyDateTime) limit ?";
+                                order by aci.CopyDateTime desc) order by CopyDateTime desc limit ?";
             var result = MpDb.Instance.Query<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
 
             return result;
@@ -102,7 +107,7 @@ namespace MonkeyPaste {
                                 select pci.pk_MpCopyItemId from MpCopyItem aci
                                 inner join MpCopyItem pci 
                                 ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                order by aci.CopyDateTime) limit ?";
+                                order by aci.CopyDateTime desc) order by CopyDateTime desc limit ?";
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
 
             return result;
@@ -388,8 +393,15 @@ namespace MonkeyPaste {
         }
 
         public async Task<int> FetchCopyItemCountAsync() {
-            string totalCountQuery = GetFetchQuery(0, 0, true);
-            int count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
+            int count = 0;
+
+            if (QueryInfo.TagId == MpTag.RecentTagId) {
+                count = await GetRecentCopyItemCountAsync();
+            } else {
+                string totalCountQuery = GetFetchQuery(0, 0, true);
+                count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
+            }
+            
             return count;
         }
 

@@ -55,7 +55,7 @@ namespace MpWpfApp {
             await InitHotkeysAndMouseEvents();
             await InitShortcuts();
             sw.Stop();
-            MpConsole.WriteLine($"Shortcut loading: {sw.ElapsedMilliseconds} ms");
+            MpConsole.WriteLine($"Shortcut loading: {sw.ElapsedMilliseconds} ms");            
         }        
 
         public async Task<string> RegisterViewModelShortcutAsync(

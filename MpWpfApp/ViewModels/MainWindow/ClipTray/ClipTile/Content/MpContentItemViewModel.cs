@@ -257,6 +257,12 @@ namespace MpWpfApp {
 
         #region State
 
+        public MpCopyItemDetailType CurDetailType { 
+            get {
+                return (MpCopyItemDetailType)_detailIdx;
+            }
+        }
+
         public bool IsNewAndFirstLoad { get; set; } = false;
 
         private bool _isHoveringOnTitleTextGrid = false;
@@ -733,7 +739,7 @@ namespace MpWpfApp {
                     if (CopyItem.Source.App.UserDevice.Guid == MpPreferences.Instance.ThisDeviceGuid) {
                         info = CopyItem.Source.App.AppPath;
                     } else {
-                        info = " Platform | " + CopyItem.Source.App.AppPath;
+                        info = CopyItem.Source.App.AppPath;
                     }
 
                     break;

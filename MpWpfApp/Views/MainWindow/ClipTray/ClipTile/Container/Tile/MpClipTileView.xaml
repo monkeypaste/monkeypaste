@@ -21,6 +21,7 @@
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
                         Loaded="ClipTileClipBorder_Loaded"
+                        Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"

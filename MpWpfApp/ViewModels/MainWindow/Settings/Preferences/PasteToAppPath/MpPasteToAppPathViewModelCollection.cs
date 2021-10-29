@@ -182,21 +182,37 @@ namespace MpWpfApp {
                         var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
                         var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
                         bool isOverButton = false;
-                        btn.MouseEnter += (s, e2) => {
+                        MouseEventHandler mouseEnter = (object o, MouseEventArgs e) => {
                             btn.Content = eyeClosedImg;
                             isOverButton = true;
                         };
-                        btn.MouseLeave += (s, e2) => {
+                        btn.MouseEnter += mouseEnter;
+
+                        MouseEventHandler mouseLeave = (object o, MouseEventArgs e) => {
                             btn.Content = eyeOpenImg;
                             isOverButton = false;
                         };
-                        btn.Click += (s, e2) => {
+                        btn.MouseLeave += mouseLeave;
+
+                        RoutedEventHandler btnClick = (object o, RoutedEventArgs e) => {
                             ptamivm.IsHidden = true;
                             ptamip.Items.Remove(ptami);
                             if (ptamip.Items.Count == 0) {
                                 ptamir.Items.Remove(ptamip);
                             }
                         };
+                        btn.Click += btnClick;
+
+                        RoutedEventHandler btnUnload = null;
+                        
+                        btnUnload = (object o, RoutedEventArgs e) => {
+                            btn.MouseEnter -= mouseEnter;
+                            btn.MouseLeave -= mouseLeave;
+                            btn.Click -= btnClick;
+                            btn.Unloaded -= btnUnload;
+                        };
+
+                        btn.Unloaded += btnUnload;
 
                         var sp = new StackPanel() { Orientation = Orientation.Horizontal };
                         sp.Children.Add(l);
@@ -206,11 +222,21 @@ namespace MpWpfApp {
                         ptami.Icon = new Image() { Source = ptamivm.AppIcon };
                         //ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
                         //ptami.CommandParameter = ptamivm.Handle;
-                        ptami.Click += (s, e2) => {
+
+                        RoutedEventHandler ptamiClick = (object o, RoutedEventArgs e) => {
                             if (!isOverButton) {
                                 pasteCommand.Execute(ptamivm.Handle);
                             }
                         };
+                        ptami.Click += ptamiClick;
+
+                        RoutedEventHandler ptamiUnload = null;
+                        ptamiUnload = (object o, RoutedEventArgs e) => {
+                            ptami.Click -= ptamiClick;
+                            ptami.Unloaded -= ptamiUnload;
+                        };
+                        ptami.Unloaded += ptamiUnload;
+
                         ptamip.Items.Add(ptami);
                     }
                     ptamir.Items.Add(ptamip);
@@ -231,8 +257,15 @@ namespace MpWpfApp {
             var addNewMenuItem = new MenuItem();
             addNewMenuItem.Header = "Add Application...";
             addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
-            addNewMenuItem.Click += (s, e3) => {
+            RoutedEventHandler addNewMenuItemClick = (object o, RoutedEventArgs e) => {
                 MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
+            };
+            addNewMenuItem.Click += addNewMenuItemClick;
+
+            RoutedEventHandler addNewMenuItemUnload = null;
+            addNewMenuItemUnload = (object o, RoutedEventArgs e) => {
+                addNewMenuItem.Click -= addNewMenuItemClick;
+                addNewMenuItem.Unloaded -= addNewMenuItemUnload;
             };
             ptamir.Items.Add(addNewMenuItem);
 

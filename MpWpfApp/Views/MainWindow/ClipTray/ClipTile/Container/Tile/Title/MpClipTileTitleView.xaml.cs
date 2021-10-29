@@ -173,5 +173,9 @@ namespace MpWpfApp {
             //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
             MpClipTrayViewModel.Instance.IsFilteringByApp = true;
         }
+
+        private void Grid_Unloaded(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

@@ -339,6 +339,7 @@ namespace MpWpfApp {
 
         public MpClipTrayViewModel() : base(null) {
             PropertyChanged += MpClipTrayViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
             MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
@@ -352,6 +353,14 @@ namespace MpWpfApp {
             _initialLoadCount = _pageSize * 3;
 
             MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if(e.OldItems != null && e.OldItems.Count > 0) {
+                foreach(MpClipTileViewModel octvm in e.OldItems) {
+                    octvm.Dispose();
+                }
+            }
         }
 
         private async void ReceivedQueryInfoMessage(MpMessageType msg) {
@@ -369,6 +378,13 @@ namespace MpWpfApp {
 
                     }
                     _selectedHeadContentIds = SelectedItems.Select(x => x.HeadItem.CopyItemId).ToList();
+                    break;
+                case nameof(IsScrolling):
+                    var ctvm = Items.Where(x => x.IsHovering).FirstOrDefault();
+                    if (ctvm != null) {
+                        ctvm.OnPropertyChanged(nameof(ctvm.TileBorderBrush));
+                        //ctvm.ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.TileBorderBrush)));
+                    }
                     break;
             }
         }
@@ -401,7 +417,15 @@ namespace MpWpfApp {
 
 
             var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
-            for (int i = 0; i < cil.Count; i++) {
+            if (cil.Count >= Items.Count) {
+                //occurs when tags switched quickly
+                int itemsToAdd = cil.Count - Items.Count;
+                while(itemsToAdd > 0) {
+                    var ctvm = await CreateClipTileViewModel(null);
+                    Items.Add(ctvm);
+                }
+            }
+            for (int i = 0; i < cil.Count; i++) {                
                 await Items[i].InitializeAsync(cil[i]);
             }
 
@@ -426,14 +450,16 @@ namespace MpWpfApp {
                     for (int i = 0; i < cil.Count; i++) {
                         var ctvm = await CreateClipTileViewModel(cil[i]);
                         Items.Add(ctvm);
-                        //Items.RemoveAt(0);
                     }
 
                     _nextQueryOffsetIdx += cil.Count;
 
                     int itemsToRemove = Items.Count - _initialLoadCount;
-                    //Items.RemoveRange(0, itemsToRemove);
-
+                    Items.RemoveRange(0, itemsToRemove);
+                    if(itemsToRemove > 0) {
+                        //RequestUiRefresh();
+                    }
+                    await Task.Delay(100);
                     MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
                 }
                 IsBusy = false;

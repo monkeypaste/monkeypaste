@@ -74,7 +74,7 @@ namespace MpWpfApp {
             SeperatorAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
             SeperatorAdornerLayer.Add(seperatorAdorner);
             UpdateAdorner();
-
+            
             UpdateUi();
         }
 
@@ -228,6 +228,16 @@ namespace MpWpfApp {
             fullDocument.PageWidth = ps.Width;
             fullDocument.PageHeight = ps.Height;
             return fullDocument;
+        }
+
+        private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
+            BindingContext.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
+            BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
+            BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
+            BindingContext.PropertyChanged -= Rtbcvm_PropertyChanged;
+            BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
+
+            MpMessenger.Instance.Unregister<MpMessageType>(BindingContext, ReceivedContentItemsChangedMessage);
         }
     }
 }

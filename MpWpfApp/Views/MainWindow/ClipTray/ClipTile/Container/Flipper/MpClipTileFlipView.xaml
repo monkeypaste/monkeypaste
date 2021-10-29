@@ -58,6 +58,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Viewport3D IsVisibleChanged="Viewport3D_IsVisibleChanged"
+                Unloaded="Viewport3D_Unloaded"
                 Width="{local:MpMeasurementsBinding ClipTileMinSize}"
                 Height="{local:MpMeasurementsBinding ClipTileMinSize}">
         <Viewport3D.Camera>

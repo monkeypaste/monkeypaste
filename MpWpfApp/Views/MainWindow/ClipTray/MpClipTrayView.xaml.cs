@@ -73,6 +73,7 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.Requery:
                     //await RefreshContext();
+                    UpdateLayout();
                     var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
                     if (sv != null) {
                         double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
@@ -85,7 +86,6 @@ namespace MpWpfApp {
                         sv.TargetHorizontalOffset = 0;
                         sv.ScrollToLeftEnd();
 
-                        UpdateLayout();
                     }
                     break;
                 case MpMessageType.Expand:

@@ -234,5 +234,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Db\Repositories\" />
+    <Folder Include="Models\Json\" />
   </ItemGroup>
 </Project>

@@ -42,6 +42,9 @@ namespace MpWpfApp {
             if(artb == trtb) {
                 return;
             }
+            if(artb != null) {
+                artb.SelectionChanged -= CurrentRtb_SelectionChanged;
+            }
             AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
             DataContext = artb.DataContext as MpContentItemViewModel;
@@ -257,8 +260,13 @@ namespace MpWpfApp {
             // Select the clicked button
             clickedButton.IsChecked = true;
         }
+
         #endregion
 
-
+        private void ClipTileEditorToolbar_Unloaded(object sender, RoutedEventArgs e) {
+            if (artb != null) {
+                artb.SelectionChanged -= CurrentRtb_SelectionChanged;
+            }
+        }
     }
 }

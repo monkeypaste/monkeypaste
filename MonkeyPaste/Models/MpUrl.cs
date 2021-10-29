@@ -51,7 +51,7 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpIcon Icon { get; set; }
 
-        public static async Task<MpUrl> Create(string urlPath,string urlTitle) {
+        public static async Task<MpUrl> Create(string urlPath,string urlTitle, MpApp app) {
             var dupCheck = await MpDataModelProvider.Instance.GetUrlByPath(urlPath);
             if(dupCheck != null) {
                 dupCheck = await MpDb.Instance.GetItemAsync<MpUrl>(dupCheck.Id);
@@ -69,8 +69,15 @@ namespace MonkeyPaste {
                 return null;
             } else {
                 var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
-                newUrl.Icon = await MpIcon.Create(favIconImg64);
-                newUrl.IconId = newUrl.Icon.Id;
+                if(favIconImg64 == MpBase64Images.Instance.UnknownFavIcon) {
+                    //url has no favicon so use application's icon
+                    MpConsole.WriteLine($"Url: {urlPath} has no favicon, using app: {app.AppPath}");
+                    newUrl.Icon = app.Icon;
+                    newUrl.IconId = app.IconId;
+                } else {
+                    newUrl.Icon = await MpIcon.Create(favIconImg64);
+                    newUrl.IconId = newUrl.Icon.Id;
+                }                
             }
 
             await MpDb.Instance.AddItemAsync<MpUrl>(newUrl);

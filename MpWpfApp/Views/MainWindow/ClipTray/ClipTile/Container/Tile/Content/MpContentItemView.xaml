@@ -18,6 +18,7 @@
     </i:Interaction.Behaviors>
     <Border BorderThickness="1"
             Loaded="ContentListItemView_Loaded"
+            Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
             MouseEnter="ContentListItemView_MouseEnter"
             MouseLeave="ContentListItemView_MouseLeave">

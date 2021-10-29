@@ -96,6 +96,11 @@ namespace MpWpfApp {
             ((MpClipTileFlipView)source).Resources["ClipTileBack"] = (MpContentItemAnalyticsView)e.NewValue;
         }
 
+        private void Viewport3D_Unloaded(object sender, RoutedEventArgs e) {
+            frontToBack.Completed -= FrontToBack_Completed;
+            backToFront.Completed -= BackToFront_Completed;
+        }
+
         public MpContentItemAnalyticsView OwnerBack {
             set { SetValue(OwnerBackProperty, value); }
             get { return (MpContentItemAnalyticsView)GetValue(OwnerBackProperty); }

@@ -61,36 +61,45 @@ namespace MpWpfApp {
         #endregion
 
         public static bool IsScrollJumping = false;
+        private static double _accumHorizontalChange = 0;
+        private static ListBox lb;
 
         private static void Lb_Loaded(object sender, RoutedEventArgs e) {
-            var lb = sender as ListBox;
+            lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
-            sv.ScrollChanged += Sv_ScrollChanged;
+
+            Task.Run(async() => {
+                await Task.Delay(3000);
+                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += Sv_ScrollChanged;
+            });
+            
         }
+
 
         private static void Lb_Unloaded(object sender, RoutedEventArgs e) {
             var lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
-            sv.ScrollChanged -= Sv_ScrollChanged;
+
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= Sv_ScrollChanged;
             lb.Loaded -= Lb_Loaded;
             lb.Unloaded -= Lb_Unloaded;
         }
 
-        private static void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e) {
-            if(IsScrollJumping || e.HorizontalChange == 0 || MpMainWindowViewModel.IsMainWindowLoading) {
+        private static void Sv_ScrollChanged(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if(IsScrollJumping || /*e.HorizontalChange == 0 || */MpMainWindowViewModel.IsMainWindowLoading) {
                 IsScrollJumping = false;
                 return;
             }
-            var sv = sender as ScrollViewer;
-            if(sv == null) {
-                MpConsole.WriteTraceLine("Scrollviewer is null");
-                return;
-            }
-            var lb = sv.GetVisualAncestor<ListBox>();
-            if(lb == null) {
-                MpConsole.WriteTraceLine("Listbox is null");
-                return;
-            }
+            //var sv = sender as ScrollViewer;
+            //if(sv == null) {
+            //    MpConsole.WriteTraceLine("Scrollviewer is null");
+            //    return;
+            //}
+            //var lb = sv.GetVisualAncestor<ListBox>();
+            //if(lb == null) {
+            //    MpConsole.WriteTraceLine("Listbox is null");
+            //    return;
+            //}
 
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
@@ -104,34 +113,40 @@ namespace MpWpfApp {
                 MpConsole.WriteTraceLine("tray vm is null");
                 return;
             }
-            int itemCountInListbox = ctrvm.VisibleItems.Count;
+            int itemCountInListbox = ctrvm.Items.Count;
             if (itemCountInListbox <= thresholdRemainingItemCount) {
                 //list is shorter than remaining threshold so there will be no more to load
                 return;
             }
             var lbr = lb.GetListBoxRect();
 
-            if (e.HorizontalChange > 0) {
+            _accumHorizontalChange += Math.Abs(e.Delta);
+            if (_accumHorizontalChange >= 0) {
                 //scrolling down through list
 
                 //get item under point in middle of right edge of listbox
                 var r_lbi_idx = lb.GetItemIndexAtPoint(new Point(lbr.Right, lbr.Height / 2));
-                if (r_lbi_idx < 0 || r_lbi_idx >= itemCountInListbox) {
+                if (r_lbi_idx < 0 || r_lbi_idx > itemCountInListbox) {
                     return;
                 }
-
+                if (r_lbi_idx == itemCountInListbox) {
+                    r_lbi_idx--;
+                }
                 //get item over right edge's rect
                 var rlbir = lb.GetListBoxItemRect(r_lbi_idx);
-                if (rlbir.Right >= lbr.Right) {
+                if (rlbir.Right >= lbr.Right - MpMeasurements.Instance.ClipTileMargin) {
                     //when last visible item's right edge is past the listboxes edge
                     int itemsRemaining = itemCountInListbox - r_lbi_idx;
                     MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
                     if (itemsRemaining <= thresholdRemainingItemCount) {
+                        if(!ctrvm.IsBusy) {
+                        }
+
+                        _accumHorizontalChange = 0;
                         loadMoreCommand.Execute(1);
                     }
                 }
-
             } else {
                 //scrolling up
                 //get item under point in middle of left edge of listbox

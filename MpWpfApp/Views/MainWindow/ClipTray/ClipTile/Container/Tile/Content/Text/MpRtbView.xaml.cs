@@ -21,6 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace MpWpfApp {
     /// <summary>
@@ -82,13 +83,21 @@ namespace MpWpfApp {
             }
         }
 
-        private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
-            if (DataContext != null && DataContext is MpContentItemViewModel rtbvm) {
-                rtbvm.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-                rtbvm.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-                rtbvm.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
-                rtbvm.OnSyncModels -= Rtbivm_OnSyncModels;
+        private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
+            var civm = DataContext as MpContentItemViewModel;
+            if (civm != null && civm.Parent.IsExpanded) {
+                var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
+                if (ctcv != null && e.HeightChanged && !ctcv.ExpandBehavior.IsExpandingOrUnexpanding) {
+                    ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
+                }
             }
+        }
+
+        private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
+            BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
+            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
         }
 
         private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
@@ -292,8 +301,8 @@ namespace MpWpfApp {
                                 //    linkText = linkText;
                                 //}
                                 //MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
-                                hl.MouseEnter += (s3, e3) => {
-                                    if(rtbvm.IsEditingContent) {
+                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
+                                    if (rtbvm.IsEditingContent) {
                                         hl.Cursor = Cursors.Hand;
                                         hl.IsEnabled = true;
                                     } else {
@@ -301,7 +310,7 @@ namespace MpWpfApp {
                                         hl.IsEnabled = false;
                                     }
                                 };
-                                hl.MouseLeave += (s3, e3) => {
+                                MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
                                     if (rtbvm.IsEditingContent) {
                                         hl.Cursor = Cursors.IBeam;
                                         hl.IsEnabled = false;
@@ -310,19 +319,38 @@ namespace MpWpfApp {
                                         hl.IsEnabled = false;
                                     }
                                 };
-                                hl.MouseLeftButtonDown += (s4, e4) => {
+                                MouseButtonEventHandler hlMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
                                     if (hl.NavigateUri != null && rtbvm.Parent.IsSelected) {
                                         MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
+                                RoutedEventHandler hlUnload = null;
+                                hlUnload = (object o, RoutedEventArgs e) =>{
+                                    hl.MouseEnter -= hlMouseEnter;
+                                    hl.MouseLeave -= hlMouseLeave;
+                                    hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
+                                    hl.Unloaded -= hlUnload;
+                                };
+                                hl.MouseEnter += hlMouseEnter;
+                                hl.MouseLeave += hlMouseLeave;
+                                hl.MouseLeftButtonDown += hlMouseLeftButtonDown;
+                                hl.Unloaded += hlUnload;
 
                                 var convertToQrCodeMenuItem = new MenuItem();
                                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                                convertToQrCodeMenuItem.Click += (s5, e1) => {
-                                    var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
+                                RoutedEventHandler qrItemClick = (object o, RoutedEventArgs e) => {
+                                    var hyperLink = (Hyperlink)((MenuItem)o).Tag;
                                     var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
                                     MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
                                 };
+                                convertToQrCodeMenuItem.Click += qrItemClick;
+                                RoutedEventHandler qrUnload = null;
+                                qrUnload = (object o, RoutedEventArgs e) => {
+                                    convertToQrCodeMenuItem.Click -= qrItemClick;
+                                    convertToQrCodeMenuItem.Unloaded -= qrUnload;
+                                };
+                                convertToQrCodeMenuItem.Unloaded += qrUnload;
+
                                 convertToQrCodeMenuItem.Tag = hl;
                                 hl.ContextMenu = new ContextMenu();
                                 hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
@@ -359,16 +387,25 @@ namespace MpWpfApp {
                                         }
                                         MenuItem minifyUrl = new MenuItem();
                                         minifyUrl.Header = "Minify with bit.ly";
-                                        minifyUrl.Click += async (s1, e2) => {
-                                            Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
+                                        RoutedEventHandler minItemClick = async (object o, RoutedEventArgs e) => {
+                                            Hyperlink link = (Hyperlink)((MenuItem)o).Tag;
                                             string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
                                             if (!string.IsNullOrEmpty(minifiedLink)) {
                                                 matchRange.Text = minifiedLink;
-                                               // ClearHyperlinks();
-                                               // CreateHyperlinks();
+                                                // ClearHyperlinks();
+                                                // CreateHyperlinks();
                                             }
                                             //Clipboard.SetText(minifiedLink);
                                         };
+                                        minifyUrl.Click += minItemClick;
+
+                                        RoutedEventHandler minUnload = null;
+                                        minUnload = (object o, RoutedEventArgs e) => {
+                                            minifyUrl.Click -= minItemClick;
+                                            minifyUrl.Unloaded -= minUnload;
+                                        };
+                                        minifyUrl.Unloaded += minUnload;
+
                                         minifyUrl.Tag = hl;
                                         hl.ContextMenu.Items.Add(minifyUrl);
                                         break;
@@ -390,7 +427,7 @@ namespace MpWpfApp {
                                                 }
                                                 MenuItem subItem = new MenuItem();
                                                 subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                                subItem.Click += async (s2, e2) => {
+                                                RoutedEventHandler subItemClick = async (object o, RoutedEventArgs e) => {
                                                     Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
                                                     var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
                                                         MpHelpers.Instance.GetCurrencyValueFromString(linkText),
@@ -404,7 +441,13 @@ namespace MpWpfApp {
                                                     hl.Inlines.Clear();
                                                     hl.Inlines.Add(run);
                                                 };
-
+                                                subItem.Click += subItemClick;
+                                                RoutedEventHandler subUnload = null;
+                                                subUnload = (object o, RoutedEventArgs e) => {
+                                                    subItem.Click -= subItemClick;
+                                                    subItem.Unloaded -= subUnload;
+                                                };
+                                                subItem.Unloaded += subUnload;
                                                 convertCurrencyMenuItem.Items.Add(subItem);
                                             }
 
@@ -424,7 +467,7 @@ namespace MpWpfApp {
 
                                         MenuItem changeColorItem = new MenuItem();
                                         changeColorItem.Header = "Change Color";
-                                        changeColorItem.Click += (s, e) => {
+                                        RoutedEventHandler changeColorClick = (object o, RoutedEventArgs e) => {
                                             var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
                                             if (result != null) {
                                                 var run = new Run(result.ToString());
@@ -437,6 +480,14 @@ namespace MpWpfApp {
                                                 tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
                                             }
                                         };
+                                        changeColorItem.Click += changeColorClick;
+
+                                        RoutedEventHandler changeColorUnload = null;
+                                        changeColorUnload = (object o, RoutedEventArgs e) => {
+                                            changeColorItem.Click -= changeColorClick;
+                                            changeColorItem.Unloaded -= changeColorUnload;
+};
+                                        changeColorItem.Unloaded += changeColorUnload;
                                         hl.ContextMenu.Items.Add(changeColorItem);
 
                                         hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
@@ -457,15 +508,5 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
-        private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if (civm != null && civm.Parent.IsExpanded) {
-                var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
-                if (ctcv != null && e.HeightChanged && !ctcv.ExpandBehavior.IsExpandingOrUnexpanding) {
-                    ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
-                }    
-            }         
-        }
     }
 }

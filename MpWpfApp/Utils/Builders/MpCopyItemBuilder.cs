@@ -67,7 +67,7 @@ namespace MpWpfApp {
                     if (iData.ContainsKey(DataFormats.Html)) {
                         var htmlData = iData[DataFormats.Html];
                         try {
-                            url = await MpUrlBuilder.CreateFromHtmlData(htmlData);
+                            url = await MpUrlBuilder.CreateFromHtmlData(htmlData,app);
                         } catch(Exception ex) {
                             MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
                         }

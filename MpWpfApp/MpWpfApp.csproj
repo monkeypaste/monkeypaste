@@ -153,6 +153,7 @@
     <Compile Include="Converters\MpBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToImageConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
+    <Compile Include="Converters\MpNegatingConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
@@ -370,6 +372,9 @@
     </Compile>
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\MpMarqueeTextBlock.xaml.cs">
+      <DependentUpon>MpMarqueeTextBlock.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Spinners\ucSpinnerApple.xaml.cs">
       <DependentUpon>ucSpinnerApple.xaml</DependentUpon>
@@ -541,6 +546,10 @@
     </Compile>
     <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
     <Page Include="Views\MpSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\MpMarqueeTextBlock.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

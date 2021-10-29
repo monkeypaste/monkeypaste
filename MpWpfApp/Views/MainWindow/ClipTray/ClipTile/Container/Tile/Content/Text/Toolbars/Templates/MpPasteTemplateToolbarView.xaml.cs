@@ -38,5 +38,16 @@ namespace MpWpfApp {
         private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
             
         }
+
+        private void ClipTilePasteTemplateToolbar_Unloaded(object sender, RoutedEventArgs e) {
+            if(_activeRtb != null) {
+                var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
+                if(rtbvm != null) {
+                    foreach (var thlvm in rtbvm.TemplateCollection.Templates) {
+                        thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
+                    }
+                }
+            }
+        }
     }
 }

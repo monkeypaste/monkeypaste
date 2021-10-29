@@ -13,6 +13,7 @@
                      d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <DockPanel x:Name="ContentListDockPanel"
                DataContextChanged="UserControl_DataContextChanged"
+               Unloaded="ContentListDockPanel_Unloaded"
                Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch">
@@ -91,7 +92,7 @@
                                                             <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
-                                                                        <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect}" />
+                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}}" />
                                                                         <RectangleGeometry Rect="50,50,50,50" />
                                                                     </GeometryGroup>
                                                                 </GeometryDrawing.Geometry>

@@ -99,14 +99,6 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.Items.ForEach(x => x.TileContentHeight += boundAdjust);
 
             Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
-            //var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
-            //clv.UpdateLayout();
-
-            //var civl = AssociatedObject.GetVisualDescendents<MpContentContainerView>().ToList();
-            //foreach (var civ in civl) {
-            //    civ.UpdateLayout();
-            //}
-            //AssociatedObject.UpdateLayout();
         }
     }
 }
