@@ -32,9 +32,9 @@ namespace MpWpfApp {
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
 
-            AssociatedObject.MouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
 
-            AssociatedObject.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
+            AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_PreviewMouseLeftButtonUp;
 
             AssociatedObject.MouseMove += AssociatedObject_MouseMove;
 
@@ -84,10 +84,18 @@ namespace MpWpfApp {
             }
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
-            e.Handled = false;
+
+            if(MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 1 && isDragging) {
+                e.Handled = true;
+            } else {
+                e.Handled = false;
+            }            
         }
 
-        private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if(isDragging) {
+                e.Handled = true;
+            }
             AssociatedObject.ReleaseMouseCapture();
             EndDrop();
             ResetCursor();
@@ -179,6 +187,7 @@ namespace MpWpfApp {
             }
             AssociatedObject.ReleaseMouseCapture();
             isDragging = false;
+            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = false);
 
             InvalidateDrop();
         }

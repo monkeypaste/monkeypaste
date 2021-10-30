@@ -99,8 +99,8 @@ namespace MpWpfApp {
                 ctr_lb.UpdateExtendedSelection(civm.Parent.ItemIdx);
             }
 
-            bool isCtrlDown = MpShortcutCollectionViewModel.Instance.IsCtrlDown;
-            bool isShiftDown = MpShortcutCollectionViewModel.Instance.IsShiftDown;
+            bool isCtrlDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Control); //MpShortcutCollectionViewModel.Instance.IsCtrlDown;
+            bool isShiftDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift); //MpShortcutCollectionViewModel.Instance.IsShiftDown;
             var lbi = lb.GetListBoxItem(index);
             if (!lbi.IsSelected) {
                 ListBoxItem lastSelectedItem = null;
@@ -492,7 +492,7 @@ namespace MpWpfApp {
         }
 
         public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d) where T : DependencyObject {
-            return d.GetVisualDescendents<T>(null);
+            return d.GetVisualDescendents<T>(null).Distinct();
         }
 
         public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName)

@@ -51,8 +51,7 @@ namespace MpWpfApp {
             });
 
         #endregion
-
-        
+               
 
         class MpMultiSelectListBoxItem : ListBoxItem {
             private static MpContentContextMenuView _ContentContextMenu;
@@ -141,8 +140,8 @@ namespace MpWpfApp {
             }
 
             private void SelectItem() {
-                //this.UpdateExtendedSelection();
-                //return;
+                this.UpdateExtendedSelection();
+                return;
 
                 if (!IsSelected) {
                     IsSelected = true;

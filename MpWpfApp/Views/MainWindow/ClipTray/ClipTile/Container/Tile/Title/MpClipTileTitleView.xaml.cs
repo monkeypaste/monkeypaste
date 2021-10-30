@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileTitleView.xaml
     /// </summary>
-    public partial class MpClipTileTitleView : UserControl {
+    public partial class MpClipTileTitleView : MpUserControl<MpContentItemViewModel> {
         public MpClipTileTitleView() {
             InitializeComponent();
         }
@@ -45,6 +45,7 @@ namespace MpWpfApp {
                 ctvm.IsEditingTitle = true;
                 MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
             }
+            e.Handled = true;
         }
 
         private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -145,7 +146,7 @@ namespace MpWpfApp {
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
         }
 
-        private void ClipTileAppIconImageButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void ClipTileAppIconImageButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var ctvm = DataContext as MpContentItemViewModel;
             //ctvm.Parent.IsFlipped = true;
 
@@ -172,10 +173,16 @@ namespace MpWpfApp {
             //this triggers clip tray to swap out the app icons for the filtered app
             //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
             MpClipTrayViewModel.Instance.IsFilteringByApp = true;
+            e.Handled = true;
         }
 
         private void Grid_Unloaded(object sender, RoutedEventArgs e) {
 
+        }
+
+        private void FlipButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            MpClipTrayViewModel.Instance.FlipTileCommand.Execute(BindingContext.Parent);
+            e.Handled = true;
         }
     }
 }

@@ -211,10 +211,10 @@ namespace MpWpfApp {
             var ctrvm = MpClipTrayViewModel.Instance;
 
             ctvm.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
-            ctvm.TileBorderHeight = MpMeasurements.Instance.ClipTileBorderMinSize;
+            ctvm.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
 
             ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
-            ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileBorderMinSize;
+            ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
 
             ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
 
@@ -227,22 +227,20 @@ namespace MpWpfApp {
                 sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
-                var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-                foreach (var civ in civl) {
-                    var civm = civ.DataContext as MpContentItemViewModel;
+                for (int i = 0; i < clv.ContentListBox.Items.Count; i++) {
+                    var civ = clv.ContentListBox.GetListBoxItem(i).GetVisualDescendent<MpContentItemView>();
+                    MpHelpers.Instance.RunOnMainThread(async () => {
+                        await civ.GetVisualDescendent<MpRtbView>().SyncModelsAsync();
+                    });
+                    var civm = civ.BindingContext;
                     civm.ClearEditing();
                     civm.OnPropertyChanged(nameof(civm.EditorHeight));
                     civm.OnPropertyChanged(nameof(civm.IsEditingContent));
                     if(ctvm.IsTextItem) {
-                        var rtbv = civ.GetVisualDescendent<MpRtbView>();
+                        var rtbv = civ.GetVisualDescendent<MpRtbView>();                        
                         rtbv.Rtb.FitDocToRtb();
                     }                    
                 }
-                if (ctvm.IsTextItem) {
-                    MpHelpers.Instance.RunOnMainThread(async () => {
-                        await Task.WhenAll(civl.Select(x => x.GetVisualDescendent<MpRtbView>().SyncModelsAsync()).ToArray());
-                    });
-                }                
 
                 clv.UpdateAdorner();
             }

@@ -112,12 +112,21 @@ namespace MpWpfApp {
             //return Clipboard.GetDataObject();
         }
 
-        public void SetDataObjectWrapper(object iDataObject, bool copy = true, int retryTimes = 0, int retryDely = 0) {
-            if (iDataObject is IDataObject ido) {
-                //throw new Exception("Try converting to win forms version");
-                Clipboard.SetDataObject(iDataObject as IDataObject, copy);
-            } else if (iDataObject is System.Windows.Forms.IDataObject wf_ido) {
-                System.Windows.Forms.Clipboard.SetDataObject(wf_ido, copy, retryTimes, retryDely);
+        public void SetDataObjectWrapper(object iDataObject, bool copy = false, int retryTimes = 5, int retryDelay = 0) {
+            if(retryTimes == 0) {
+                MpConsole.WriteTraceLine("Could not open clipboard ignoring setting data object");
+                return;
+            }
+            try {
+                if (iDataObject is IDataObject ido) {
+                    //throw new Exception("Try converting to win forms version");
+                    Clipboard.SetDataObject(iDataObject as IDataObject, copy);
+                } else if (iDataObject is System.Windows.Forms.IDataObject wf_ido) {
+                    System.Windows.Forms.Clipboard.SetDataObject(wf_ido, copy, retryTimes--, retryDelay);
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                SetDataObjectWrapper(iDataObject, copy, retryTimes, retryDelay);
             }
         }
 
@@ -159,10 +168,12 @@ namespace MpWpfApp {
         }
 
         public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
+            //to prevent cb listener thread from thinking there's a new item
+            _lastCbo = ConvertManagedFormats(dataObject);
             //Mouse.OverrideCursor = Cursors.Wait;
             IgnoreClipboardChangeEvent = true;
             try {
-                if (Properties.Settings.Default.ResetClipboardAfterMonkeyPaste) {
+                if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
                     _lastDataObject = GetClipboardData();
                 }
 
@@ -171,7 +182,7 @@ namespace MpWpfApp {
                 WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
 
-                if (Properties.Settings.Default.ResetClipboardAfterMonkeyPaste) {
+                if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
                     //from https://stackoverflow.com/a/52438404/105028
                     var clipboardThread = new Thread(new ThreadStart(GetClipboard));
                     clipboardThread.SetApartmentState(ApartmentState.STA);
@@ -235,7 +246,9 @@ namespace MpWpfApp {
                 if (ido.GetDataPresent(af)) {
                     // TODO add checks for files and Images and convert: files to string seperated by NewLine, images to base 64
                     var data = ido.GetData(af, false);//MonkeyPaste.MpAsyncHelpers.RunSync<object>(() => dpv.GetDataAsync(af).AsTask());
-                    
+                    if(data == null) {
+                        data = ido.GetData(af, true);
+                    }
                     if(af == DataFormats.FileDrop) {
                         var sa = data as string[];
                         data = string.Join(Environment.NewLine, sa);

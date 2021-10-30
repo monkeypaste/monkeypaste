@@ -28,6 +28,7 @@
                     Height="16"
                     Margin="0"
                     HorizontalAlignment="Left"
+                    PreviewMouseLeftButtonDown="ClipTileHotkeyButton_PreviewMouseLeftButtonDown"
                     Command="{Binding AssignHotkeyCommand}"
                     Template="{StaticResource SearchButtonControlTemplate}"
                     ToolTip="{Binding HotkeyIconTooltip}"
@@ -49,6 +50,7 @@
                           Width="16"
                           Height="16"
                           HorizontalAlignment="Right"
+                          PreviewMouseLeftButtonDown="ClipTileToggleEditButton_PreviewMouseLeftButtonDown"
                           IsChecked="{Binding Parent.IsExpanded}"
                           Visibility="{Binding Parent.IsTextItem, Converter={StaticResource BoolToVisibilityConverter}}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">

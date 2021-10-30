@@ -290,6 +290,8 @@ namespace MpWpfApp {
                     }
                 }
                 Reset();
+                //this ensures there's no missing tiles at the end of list
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             });
         }
 

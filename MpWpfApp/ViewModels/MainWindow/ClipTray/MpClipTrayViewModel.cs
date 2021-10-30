@@ -198,6 +198,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsSelectionReset { get; set; } = false;
+
         public bool IgnoreSelectionReset { get; set; } = false;
 
         public int TagId { get; set; } = MpTag.RecentTagId;
@@ -455,7 +457,7 @@ namespace MpWpfApp {
                     _nextQueryOffsetIdx += cil.Count;
 
                     int itemsToRemove = Items.Count - _initialLoadCount;
-                    Items.RemoveRange(0, itemsToRemove);
+                    //Items.RemoveRange(0, itemsToRemove);
                     if(itemsToRemove > 0) {
                         //RequestUiRefresh();
                     }
@@ -640,6 +642,7 @@ namespace MpWpfApp {
         }
 
         public void ResetClipSelection(bool clearEditing = true) {
+            IsSelectionReset = true;
             MpHelpers.Instance.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
 
@@ -652,6 +655,7 @@ namespace MpWpfApp {
                 }
                 RequestScrollToHome();
             });
+            IsSelectionReset = false;
         }
 
         public void UnFlipAllTiles() {
@@ -740,7 +744,7 @@ namespace MpWpfApp {
             _newModels.Add(newCopyItem);
         }
 
-        public async void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
+        public void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await AddItemFromClipboard(cd);
             });            
@@ -903,7 +907,6 @@ namespace MpWpfApp {
                     //resort list so pasted items are in front and paste is tracked
                     for (int i = SelectedItems.Count - 1; i >= 0; i--) {
                         var sctvm = SelectedItems[i];
-                        //Items.Move(Items.IndexOf(sctvm), 0);
 
                         var a = await MpDataModelProvider.Instance.GetAppByPath(MpHelpers.Instance.GetProcessPath(MpClipboardManager.Instance.LastWindowWatcher.LastHandle));
                         var aid = a == null ? 0 : a.Id;
@@ -911,13 +914,13 @@ namespace MpWpfApp {
                             var ud = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
                             await new MpPasteHistory() {
                                 AppId = aid,
+                                PasteHistoryGuid = Guid.NewGuid(),
                                 CopyItemId = ivm.CopyItem.Id,
                                 UserDeviceId = ud.Id,
                                 PasteDateTime = DateTime.Now
                             }.WriteToDatabaseAsync();
                         }
                     }
-                    //Refresh();
                 }
             } else if (pasteDataObject == null) {
                 MpConsole.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
@@ -939,9 +942,6 @@ namespace MpWpfApp {
                         rtbvm.TemplateCollection.ResetAll();
                         rtbvm.TemplateRichText = string.Empty;
                         rtbvm.RequestUiReset();
-                        //rtbvm.Rtb.ScrollToHorizontalOffset(0);
-                        //rtbvm.Rtb.ScrollToVerticalOffset(0);
-                        //rtbvm.UpdateLayout();
                     }
                     sctvm.RequestUiUpdate();
                     sctvm.RequestScrollToHome();
@@ -1046,7 +1046,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                Task.Run(async () => {
+                MpHelpers.Instance.RunOnMainThread(async () => {
                     var ctvm = Items.Where(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id)).FirstOrDefault();
                     int tileIdx = Items.IndexOf(ctvm);
                     var civm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ci.Id).FirstOrDefault();

@@ -65,6 +65,7 @@ using System.Speech.Synthesis;
         #endregion
 
         #region View Models
+
         private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection;
         public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
             get {
@@ -515,6 +516,7 @@ using System.Speech.Synthesis;
         }
 
         [MpDependsOnParent("PrimaryItem","SelectedItems")]
+        [MpDependsOnSibling("IsSelected")]
         public Brush TileBorderBrush {
             get {
                 if(Parent.IsScrolling) {
@@ -571,6 +573,7 @@ using System.Speech.Synthesis;
         #endregion
 
         #region State Properties 
+
         public bool IsFlipping { get; set; } = false;
 
         public bool IsFlipped { get; set; } = false;
@@ -642,6 +645,7 @@ using System.Speech.Synthesis;
         public bool AllowMultiSelect { get; set; } = false;
 
         [MpAffectsChild]
+        [MpAffectsSibling]
         [MpDependsOnChild("IsSelected")]
         public bool IsSelected {
             get {
@@ -649,11 +653,14 @@ using System.Speech.Synthesis;
             }
             set {
                 if(value) {
-                    if(!IsSelected) {
-                        //if(HeadItem != null) {
-                        //    HeadItem.IsSelected = value;
-                        //}
-                        SubSelectAll();
+                    if(!IsSelected) {                  
+                        if(Parent.IsSelectionReset) {
+                            if (HeadItem != null) {
+                                HeadItem.IsSelected = value;
+                            }
+                        } else {
+                            SubSelectAll();
+                        }
                     }
                 } else {
                     SelectedItems.ForEach(x => x.IsSelected = false);
@@ -837,6 +844,7 @@ using System.Speech.Synthesis;
                         }
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
+                    OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(IsHovering):
                     if (IsHovering) {

@@ -38,7 +38,7 @@
                                         HorizontalContentAlignment="Center"
                                         Background="Transparent"
                                         SelectionMode="Extended"
-                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.IsVirtualizing="False"
                                         VirtualizingPanel.ScrollUnit="Pixel"
                                         VirtualizingPanel.VirtualizationMode="Standard"
                                         VirtualizingStackPanel.CleanUpVirtualizedItem="ClipTray_CleanUpVirtualizedItem"                                        
@@ -83,7 +83,7 @@
                 </local:MpMultiSelectListBox.ItemContainerStyle>
                 <local:MpMultiSelectListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                        <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                 CanVerticallyScroll="False"
                                                 CanHorizontallyScroll="True"
                                                 VerticalAlignment="Stretch"

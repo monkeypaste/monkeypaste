@@ -121,7 +121,7 @@ namespace MpWpfApp {
         private async void ReceivedContentItemsChangedMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemsInitialized:
-                    await RefreshContext();
+                   // await RefreshContext();
                     break;
             }
         }

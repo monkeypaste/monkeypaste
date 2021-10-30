@@ -120,8 +120,12 @@ namespace MpWpfApp {
             }
             var lbr = lb.GetListBoxRect();
 
-            _accumHorizontalChange += Math.Abs(e.Delta);
-            if (_accumHorizontalChange >= 0) {
+            if((_accumHorizontalChange > 0 && e.Delta < 0) ||
+               (_accumHorizontalChange < 0 && e.Delta > 0)) {
+                _accumHorizontalChange = 0;
+            }
+            _accumHorizontalChange += e.Delta;
+            if (_accumHorizontalChange < 0) {
                 //scrolling down through list
 
                 //get item under point in middle of right edge of listbox

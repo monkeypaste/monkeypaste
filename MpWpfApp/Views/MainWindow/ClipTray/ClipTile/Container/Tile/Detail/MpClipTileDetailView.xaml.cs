@@ -74,5 +74,14 @@ namespace MpWpfApp {
             MpHelpers.Instance.OpenUrl((sender as Hyperlink).NavigateUri.ToString());
         }
 
+        private void ClipTileToggleEditButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            ClipTileToggleEditButton.IsChecked = !ClipTileToggleEditButton.IsChecked;
+            e.Handled = true;
+        }
+
+        private void ClipTileHotkeyButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            BindingContext.AssignHotkeyCommand.Execute(null);
+            e.Handled = true;
+        }
     }
 }

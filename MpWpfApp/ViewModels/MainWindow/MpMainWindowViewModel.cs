@@ -476,6 +476,7 @@ namespace MpWpfApp {
                       !IsShowingDialog &&
                       !_isExpanded &&
                       !IsResizing &&
+                      !MpClipTrayViewModel.Instance.IsAnyTileItemDragging &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);
             });
@@ -513,7 +514,7 @@ namespace MpWpfApp {
                 var timer = new DispatcherTimer(DispatcherPriority.Render);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
 
-                timer.Tick += (s, e32) => {
+                timer.Tick += async (s, e32) => {
                     if (MainWindowTop < _startMainWindowTop) {
                         MainWindowTop -= dt;
                     } else {
@@ -523,7 +524,7 @@ namespace MpWpfApp {
                         //ClipTrayViewModel.ResetClipSelection();
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteDataObject != null) {
-                            ClipTrayViewModel.PasteDataObject(pasteDataObject);
+                            await ClipTrayViewModel.PasteDataObject(pasteDataObject);
                         }
 
                         IsMainWindowLocked = false;
@@ -539,7 +540,7 @@ namespace MpWpfApp {
                 };
                 timer.Start();
             } else if(pasteDataObject != null) {
-                ClipTrayViewModel.PasteDataObject(pasteDataObject,true);
+               await ClipTrayViewModel.PasteDataObject(pasteDataObject,true);
             }
         }
 

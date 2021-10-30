@@ -14,13 +14,13 @@ namespace MonkeyPaste {
         [Column("pk_MpPasteHistoryId")]
         public override int Id { get; set; }
 
-        [Column("SourceClientGuid")]
+        [Column("MpPasteHistoryGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public DateTime PasteDateTime { get; set; }
 
         [Ignore]
-        public Guid SourceClientGuid {
+        public Guid PasteHistoryGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;

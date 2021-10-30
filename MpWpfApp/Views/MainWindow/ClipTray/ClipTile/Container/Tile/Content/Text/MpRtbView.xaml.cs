@@ -189,11 +189,15 @@ namespace MpWpfApp {
 
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
             //Rtb.UpdateLayout();
+            string test = Rtb.Document.ToRichText();
+
             await ClearHyperlinks();
 
             rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
 
             await rtbvm.CopyItem.WriteToDatabaseAsync();
+
+            rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemData));
 
             await CreateHyperlinksAsync();
 
@@ -252,12 +256,12 @@ namespace MpWpfApp {
             }
             if(cts == null) {
                 cts = new CancellationTokenSource();
-                cts.CancelAfter(1000);
+                //cts.CancelAfter(1000);
             }
             var rtbSelection = Rtb?.Selection;
             var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);
             string templateRegEx = string.Join("|", templateModels.Select(x => x.TemplateToken));
-            string pt = rtbvm.CopyItemData.ToPlainText(); //Rtb.Document.ToPlainText();
+            string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
             for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
                 var linkType = (MpSubTextTokenType)i;
                 if (linkType == MpSubTextTokenType.StreetAddress) {
@@ -279,6 +283,9 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
+                            if (c.Value.Contains("pee")) {
+                                lastRangeEnd = lastRangeEnd;
+                            }
                             var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, cts.Token, dp, true);
                             if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
