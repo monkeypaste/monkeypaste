@@ -1089,6 +1089,8 @@ namespace MpWpfApp {
                         Items.Move(tileIdx, Items.Count - 1);
                         await ctvm.InitializeAsync(null);
                     }
+
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 });
             }
         }

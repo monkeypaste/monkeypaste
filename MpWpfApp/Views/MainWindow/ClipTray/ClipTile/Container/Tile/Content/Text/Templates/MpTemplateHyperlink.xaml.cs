@@ -140,9 +140,12 @@ namespace MpWpfApp {
 
         public void EditTemplate() {
             var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
+            var thlvm = DataContext as MpTemplateViewModel;
+            if(thlvm.Parent.Parent.IsPastingTemplate) {
+                return;
+            }
             var rtbv = rtb.FindParentOfType<MpRtbView>();
             rtbv.LastEditedHyperlink = this;
-            var thlvm = DataContext as MpTemplateViewModel;
 
             thlvm.EditTemplateCommand.Execute(null);
         }
@@ -152,7 +155,7 @@ namespace MpWpfApp {
             //MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //flag Tag so unloaded doesn't delete
             Tag = null;
-            string text = thlvm.TemplateDisplayValue;
+            string text = thlvm.Parent.Parent.IsPastingTemplate ? thlvm.CopyItemTemplate.TemplateToken:thlvm.TemplateDisplayValue;
             Inlines.Clear();
             new Span(new Run(text), ElementStart);
         }

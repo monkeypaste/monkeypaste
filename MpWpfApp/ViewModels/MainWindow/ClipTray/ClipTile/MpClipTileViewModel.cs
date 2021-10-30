@@ -991,7 +991,6 @@ using System.Speech.Synthesis;
 
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
-            await Task.Delay(1);
             if(IsTextItem) {
                 if (SelectedItems.Count == 0) {
                     SubSelectAll();
@@ -1003,33 +1002,20 @@ using System.Speech.Synthesis;
                     if (!MpMainWindowViewModel.IsMainWindowOpen) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
-                    RequestUiUpdate();
-                    //if(!Application.Current.MainWindow.IsActive) {
-                    //    bool result = Application.Current.MainWindow.Activate();
-                    //    Application.Current.MainWindow.IsManipulationEnabled = true;
-                    //    Application.Current.MainWindow.Focus();                        
-                    //}
+                   // RequestUiUpdate();
+                    await FillAllTemplates();
+                }
 
 
-                    //await ContentContainerViewModel.FillAllTemplates();
-                }
-                //var sb = new StringBuilder();
-                //sb.Append(string.Empty.ToRichText());
-                if (isPastingTemplate) {
-                    //Application.Current.MainWindow.Cursor = Cursors.Wait;
-                   // Application.Current.MainWindow.ForceCursor = true;
-                }
                 var sw = new Stopwatch();
                 sw.Start();
                 string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in SelectedItems) {
                     if (rtbvm.HasTemplates) {
-                        rtbvm.IsSelected = true;
-                        //(ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.SubSelectedRtbViewModel = rtbvm as MpContentItemViewModel;
-                        //(ContentContainerViewModel as MpRtbItemCollectionViewModel).PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
+                        rtbvm.TemplateCollection.PasteTemplateCommand.Execute(null);
                         string rtbvmrtf = rtbvm.TemplateRichText;
                         rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
-                        //rtbvm.TemplateRichText = string.Empty;
+                        rtbvm.TemplateRichText = string.Empty;
                         rtbvm.TemplateCollection.ResetAll();
                     } else {
                         rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
@@ -1046,6 +1032,39 @@ using System.Speech.Synthesis;
 
             return string.Empty;
             //both return to ClipTray.GetDataObjectFromSelectedClips
+        }
+
+
+        public async Task FillAllTemplates() {
+            bool hasExpanded = false;
+            foreach (var rtbvm in SelectedItems) {
+                if (rtbvm.HasTemplates) {
+                    rtbvm.IsSelected = true;
+                    rtbvm.IsPastingTemplate = true;
+                    if (!hasExpanded) {
+                        //tile will be shrunk in on completed of hide window
+                        IsExpanded = true;
+                        rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
+                        rtbvm.TemplateCollection.UpdateCommandsCanExecute();
+                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
+                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.HasMultipleTemplates));
+                        //if (!MpClipTrayViewModel.Instance.IsPastingHotKey) {
+                        //    PasteTemplateToolbarViewModel.IsBusy = true;
+                        //}
+                        hasExpanded = true;
+                    }
+                    rtbvm.TemplateCollection.Templates[0].IsSelected = true;
+
+                    await Task.Run(async() => {
+                        while (!rtbvm.TemplateCollection.IsAllTemplatesFilled) {
+                            await Task.Delay(100);
+                        }
+                    });
+
+                    rtbvm.TemplateCollection.ClearSelection();
+                }
+
+            }
         }
 
         public void DeleteTempFiles() {

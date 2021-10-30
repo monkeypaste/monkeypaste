@@ -62,6 +62,18 @@ namespace MpWpfApp {
                 if(_isDeferSelectionEnabled) {
                     OnDeferMouseLeftButtonDown(e);
                 } else {
+                    //if (DataContext is MpClipTileViewModel ctvm) {
+                    //    if (ctvm.IsAnyPastingTemplate) {
+                    //        e.Handled = false;
+                    //        return;
+                    //    }
+                    //}
+                    //if (DataContext is MpContentItemViewModel civm) {
+                    //    if (civm.Parent.IsAnyPastingTemplate) {
+                    //        e.Handled = false;
+                    //        return;
+                    //    }
+                    //}
                     SelectItem();
                 }                
             }
@@ -143,33 +155,33 @@ namespace MpWpfApp {
                 this.UpdateExtendedSelection();
                 return;
 
-                if (!IsSelected) {
-                    IsSelected = true;
+                //if (!IsSelected) {
+                //    IsSelected = true;
 
-                    if (DataContext is MpClipTileViewModel ctvm) {
-                        if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
-                            ctvm.HeadItem.IsSelected = true;
-                        }
-                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
-                            foreach (var octvm in ctvm.Parent.Items) {
-                                if (octvm != ctvm) {
-                                    octvm.ClearSelection();
-                                }
-                            }
-                        }
-                    } else if (DataContext is MpContentItemViewModel civm) {
-                        if (civm.IsSelected && !civm.Parent.IsSelected) {
-                            civm.Parent.IsSelected = true;
-                        }
-                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
-                            foreach (var octvm in civm.Parent.Parent.Items) {
-                                if (octvm != civm.Parent) {
-                                    octvm.ClearSelection();
-                                }
-                            }
-                        } 
-                    }
-                }
+                //    if (DataContext is MpClipTileViewModel ctvm) {
+                //        if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
+                //            ctvm.HeadItem.IsSelected = true;
+                //        }
+                //        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
+                //            foreach (var octvm in ctvm.Parent.Items) {
+                //                if (octvm != ctvm) {
+                //                    octvm.ClearSelection();
+                //                }
+                //            }
+                //        }
+                //    } else if (DataContext is MpContentItemViewModel civm) {
+                //        if (civm.IsSelected && !civm.Parent.IsSelected) {
+                //            civm.Parent.IsSelected = true;
+                //        }
+                //        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
+                //            foreach (var octvm in civm.Parent.Parent.Items) {
+                //                if (octvm != civm.Parent) {
+                //                    octvm.ClearSelection();
+                //                }
+                //            }
+                //        } 
+                //    }
+                //}
             }
 
             private void OnDeferMouseLeftButtonDown(MouseButtonEventArgs e) {

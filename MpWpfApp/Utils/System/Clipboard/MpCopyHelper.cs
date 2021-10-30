@@ -63,38 +63,6 @@ namespace MpWpfApp {
         //    }
         //}
 
-        //public async Task FillAllTemplates() {
-        //    bool hasExpanded = false;
-        //    foreach (var rtbvm in SubSelectedContentItems) {
-        //        if (rtbvm.HasTokens) {
-        //            rtbvm.IsSelected = true;
-        //            rtbvm.IsPastingTemplate = true;
-        //            if (!hasExpanded) {
-        //                //tile will be shrunk in on completed of hide window
-        //                MainWindowViewModel.ExpandClipTile(HostClipTileViewModel);
-        //                if (!MpClipTrayViewModel.Instance.IsPastingHotKey) {
-        //                    PasteTemplateToolbarViewModel.IsBusy = true;
-        //                }
-        //                hasExpanded = true;
-        //            }
-        //            PasteTemplateToolbarViewModel.SetSubItem(rtbvm);
-        //            await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-        //                while (!PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {
-        //                    System.Threading.Thread.Sleep(100);
-        //                }
-        //            }), DispatcherPriority.Background);
-
-        //            //await Task.Run(() => {
-        //            //    while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {
-        //            //        System.Threading.Thread.Sleep(100);
-        //            //    }
-        //            //    //TemplateRichText is set in PasteTemplateCommand
-        //            //});
-        //            rtbvm.TemplateHyperlinkCollectionViewModel.ClearSelection();
-        //        }
-
-        //    }
-        //}
 
 
 

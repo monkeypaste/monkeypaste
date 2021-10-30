@@ -39,11 +39,26 @@ namespace MpWpfApp {
 
         public string PasteButtonText => IsAllTemplatesFilled ? "PASTE" : "CONTINUE";
 
+        public int SelectedTemplateIdx {
+            get {
+                return Templates.IndexOf(Templates.Where(x => x.IsSelected).FirstOrDefault());
+            }
+            set {
+                if(value != SelectedTemplateIdx) {
+                    if(value >= 0 && value < Templates.Count) {
+                        ClearSelection();
+                        Templates[value].IsSelected = true;
+                    }
+
+                }
+            }
+        }
         #endregion
 
         #region State
-        public bool IsAllTemplatesFilled => Templates.Any(x => x.HasText);
+        public bool IsAllTemplatesFilled => Templates.All(x => x.WasVisited && x.HasText);
 
+        public bool IsAnyTemplateHasText => Templates.Any(x => x.HasText);
         //public int SelectedTemplateIdx {
         //    get {
         //        if(SelectedTemplate == null) {
@@ -60,6 +75,7 @@ namespace MpWpfApp {
         //}
 
         public bool IsAnyEditingTemplate => Templates.Any(x => x.IsEditingTemplate);
+
         #endregion
 
         #endregion
@@ -190,6 +206,13 @@ namespace MpWpfApp {
             return uniqueName + uniqueIdx;
         }
 
+        public void UpdateCommandsCanExecute() {
+            (ClearAllTemplatesCommand as RelayCommand).NotifyCanExecuteChanged();
+            (SelectNextTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+            (SelectPreviousTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+            (PasteTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+        }
+
         #region IDisposable
 
         public override void Dispose() {
@@ -244,77 +267,51 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        public ICommand ClearAllTemplatesCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        foreach(var thlvm in Templates) {
-                            thlvm.ClearTemplateCommand.Execute(null);
-                        }
-                    },
-                    () => {
-                        return Templates.Any(x=>x.HasText);
-                    });
-            }
-        }
+        public ICommand ClearAllTemplatesCommand => new RelayCommand(
+            () => {
+                foreach (var thlvm in Templates) {
+                    thlvm.ClearTemplateCommand.Execute(null);
+                }
+            },
+            () => {
+                return Templates.Any(x=>x.HasText);
+            });
 
-        public ICommand SelectNextTemplateCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        if(!SelectedTemplate.HasText) {
-                            SelectedTemplate.TemplateText = " ";
-                        }
-                        int nextIdx = Templates.IndexOf(SelectedTemplate) + 1;
-                        if (nextIdx >= Templates.Count) {
-                            nextIdx = 0;
-                        }
-                        Templates[nextIdx].IsSelected = true;
-                    },
-                    () => {
-                        return Parent != null && 
-                               HostClipTileViewModel.IsAnyPastingTemplate &&
-                               Templates.Count > 1;
-                    });
-            }
-        }
+        public ICommand SelectNextTemplateCommand => new RelayCommand(
+            () => {
+                if (!SelectedTemplate.HasText) {
+                    SelectedTemplate.TemplateText = " ";
+                }
+                int nextIdx = Templates.IndexOf(SelectedTemplate) + 1;
+                if (nextIdx >= Templates.Count) {
+                    nextIdx = 0;
+                }
+                Templates[nextIdx].IsSelected = true;
+            });
 
-        public ICommand SelectPreviousTemplateCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        if (!SelectedTemplate.HasText) {
-                            SelectedTemplate.TemplateText = " ";
-                        }
-                        int prevIdx = Templates.IndexOf(SelectedTemplate) - 1;
-                        if (prevIdx < Templates.Count) {
-                            prevIdx = Templates.Count - 1;
-                        }
-                        Templates[prevIdx].IsSelected = true;
-                    },
-                    () => {
-                        return Parent != null && 
-                               HostClipTileViewModel.IsAnyPastingTemplate &&
-                               Templates.Count > 1;
-                    });
-            }
-        }
+        public ICommand SelectPreviousTemplateCommand => new RelayCommand(
+            () => {
+                if (!SelectedTemplate.HasText) {
+                    SelectedTemplate.TemplateText = " ";
+                }
+                int prevIdx = Templates.IndexOf(SelectedTemplate) - 1;
+                if (prevIdx < Templates.Count) {
+                    prevIdx = Templates.Count - 1;
+                }
+                Templates[prevIdx].IsSelected = true;
+            });
 
-        public ICommand PasteTemplateCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        string rtf = Parent.CopyItem.ItemData;
-                        foreach (var thlvm in Templates) {
-                            rtf = rtf.Replace(thlvm.TemplateName, thlvm.TemplateText);
-                        }
-                        Parent.TemplateRichText = rtf;
-                    },
-                    () => {
-                        return IsAllTemplatesFilled;
-                    });
-            }
-        }
+        public ICommand PasteTemplateCommand => new RelayCommand(
+            () => {
+                string rtf = Parent.CopyItem.ItemData;
+                foreach (var thlvm in Templates) {
+                    rtf = rtf.Replace(thlvm.CopyItemTemplate.TemplateToken, thlvm.TemplateText);
+                }
+                Parent.TemplateRichText = rtf;
+            },
+            () => {
+                return IsAllTemplatesFilled;
+            });
 
         #endregion
 

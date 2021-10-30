@@ -1,12 +1,14 @@
-﻿<UserControl x:Class="MpWpfApp.MpPasteTemplateToolbarView"
+﻿<local:MpUserControl x:Class="MpWpfApp.MpPasteTemplateToolbarView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpTemplateCollectionViewModel"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:MpTemplateCollectionViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
     <Border x:Name="ClipTilePasteTemplateToolbar"
             Unloaded="ClipTilePasteTemplateToolbar_Unloaded"
@@ -35,8 +37,9 @@
                           VerticalContentAlignment="Center"
                           Background="Transparent"
                           FontSize="14"
-                          ItemsSource="{Binding Templates}">
-                    <!--  SelectedIndex="{Binding SelectedTemplateIdx, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">  -->
+                          PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
+                          ItemsSource="{Binding Templates}"
+                          SelectedIndex="{Binding SelectedTemplateIdx, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"> 
                     <ComboBox.ItemTemplate>
                         <ItemContainerTemplate>
                             <DockPanel>
@@ -53,12 +56,12 @@
                             </DockPanel>
                         </ItemContainerTemplate>
                     </ComboBox.ItemTemplate>
-                    <ComboBox.ItemContainerStyle>
+                    <!--<ComboBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ComboBoxItem}">
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
                         </Style>
-                    </ComboBox.ItemContainerStyle>
+                    </ComboBox.ItemContainerStyle>-->
                 </ComboBox>
             </local:MpClipBorder>
             <Button x:Name="ClearAllTemplatesButton"
@@ -67,11 +70,12 @@
                     Padding="0,0,0,0"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Top"
+                    PreviewMouseLeftButtonDown="ClearAllTemplatesButton_PreviewMouseLeftButtonDown"
                     Command="{Binding ClearAllTemplatesCommand}"
                     Content="CLEAR ALL"
                     FontSize="12"
                     TabIndex="0"
-                    Visibility="{Binding IsAllTemplatesFilled, Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                    Visibility="{Binding IsAnyTemplateHasText, Converter={StaticResource BoolToVisibilityFlipConverter}}" />
             <local:MpClipBorder Grid.Column="2"
                                 Margin="1"
                                 Padding="0"
@@ -123,6 +127,7 @@
                         Height="20"
                         Margin="0"
                         Padding="5"
+                        PreviewMouseLeftButtonDown="PreviousTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectPreviousTemplateCommand}"
                         TabIndex="2">
                     <Image Source="/Resources/Images/back_black.png" />
@@ -132,6 +137,7 @@
                         Height="20"
                         Margin="1"
                         Padding="5"
+                        PreviewMouseLeftButtonDown="NextTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectNextTemplateCommand}"
                         TabIndex="3">
                     <Image Source="/Resources/Images/forward_black.png" />
@@ -144,6 +150,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Top"
+                    PreviewMouseLeftButtonDown="PasteTemplateButton_PreviewMouseLeftButtonDown"
                     Command="{Binding PasteTemplateCommand}"
                     Content="{Binding PasteButtonText}"
                     FontSize="12"
@@ -151,4 +158,4 @@
                     Visibility="{Binding IsAllTemplatesFilled, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </Border>
-</UserControl>
+</local:MpUserControl>

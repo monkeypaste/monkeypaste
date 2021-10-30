@@ -310,6 +310,7 @@ namespace MpWpfApp {
                 return TemplateCollection.Templates.Any(x => x.IsEditingTemplate);
             }
         }
+
         public bool IsPastingTemplate { get; set; } = false;
 
         private bool _isEditingTitle = false;

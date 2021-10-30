@@ -149,6 +149,9 @@ namespace MpWpfApp {
             set {
                 //if (_isSelected != value)  
                     {
+                    if(_isSelected && value) {
+                        WasVisited = true;
+                    }
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
@@ -170,6 +173,19 @@ namespace MpWpfApp {
                 if (_isEditingTemplate != value) {
                     _isEditingTemplate = value;
                     OnPropertyChanged(nameof(IsEditingTemplate));
+                }
+            }
+        }
+
+        private bool _isPastingTemplate = false;
+        public bool IsPastingTemplate {
+            get {
+                return _isPastingTemplate;
+            }
+            set {
+                if (_isPastingTemplate != value) {
+                    _isPastingTemplate = value;
+                    OnPropertyChanged(nameof(IsPastingTemplate));
                 }
             }
         }
@@ -209,18 +225,6 @@ namespace MpWpfApp {
                 }
                 return CopyItemTemplate.TemplateToken;
             }
-            //set {
-            //    if(value == null) {
-            //        value = string.Empty;
-            //    }
-            //    string decodedValue = value.Replace(MpCopyItemTemplate.TEMPLATE_PREFIX, string.Empty)
-            //                               .Replace(MpCopyItemTemplate.TEMPLATE_SUFFIX, string.Empty);
-            //    if(Parent.Parent.IsPastingTemplate && TemplateText != decodedValue) {
-            //        TemplateText = decodedValue;
-            //    } else if(TemplateName != decodedValue) {
-            //        TemplateName = decodedValue;
-            //    }
-            //}
         }
 
         private string _templateText = string.Empty;
@@ -381,6 +385,7 @@ namespace MpWpfApp {
             IsSelected = false;            
             TemplateText = string.Empty;
             IsEditingTemplate = false;
+            WasVisited = false;
         }
 
         public override void Dispose() {
@@ -406,6 +411,7 @@ namespace MpWpfApp {
                         Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     }
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedTemplateIdx));
                     break;
                 case nameof(TemplateName):
                     Validate();
@@ -418,11 +424,9 @@ namespace MpWpfApp {
                 case nameof(IsEditingTemplate):
                     Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
-                    if(!IsEditingTemplate) {
-                        //Parent.Parent.RequestSyncModel();
-                    }
                     break;
             }
+            Parent.UpdateCommandsCanExecute();
         }
 
         #endregion

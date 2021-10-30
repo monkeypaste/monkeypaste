@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpEditTemplateToolbarView.xaml
     /// </summary>
-    public partial class MpEditTemplateToolbarView : UserControl {
+    public partial class MpEditTemplateToolbarView : MpUserControl<MpTemplateCollectionViewModel> {
         private RichTextBox _activeRtb;
 
         public MpEditTemplateToolbarView() {
