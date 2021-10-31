@@ -80,8 +80,6 @@ namespace MpWpfApp {
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
             var ctvm = DataContext as MpClipTileViewModel;
             ctvm.IsHovering = true;
-
-            ctvm.Test = 6;
         }
 
         private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {

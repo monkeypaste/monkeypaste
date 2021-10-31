@@ -173,7 +173,7 @@ namespace MpWpfApp {
             if (e.Key == Key.Space && civm.IsEditingContent) {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     // TODO Update regex hyperlink matches (but ignore current ones??)
-                    await SyncModelsAsync();
+                    //await SyncModelsAsync();
                 });
             } 
         }
@@ -283,9 +283,6 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
-                            if (c.Value.Contains("pee")) {
-                                lastRangeEnd = lastRangeEnd;
-                            }
                             var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, cts.Token, dp, true);
                             if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
@@ -513,6 +510,21 @@ namespace MpWpfApp {
             if(rtbSelection != null) {
                 Rtb.Selection.Select(rtbSelection.Start,rtbSelection.End);
             }
+
+            //CleanUpNonExistantTemplates();
+        }
+
+        private void CleanUpNonExistantTemplates() {
+            //this should only be called after CreateTemplates and not between ClearTemplates
+            var citl = MpDataModelProvider.Instance.GetTemplates(BindingContext.CopyItemId);
+            var ecitl = BindingContext.TemplateCollection.Templates.Where(x => x.InstanceCount > 0).Select(x=>x.CopyItemTemplate).ToList();
+
+            foreach(var ecit in ecitl) {
+                if(citl.Contains(ecit)) {
+                    citl.Remove(ecit);
+                }
+            }
+            citl.ForEach(x => x.DeleteFromDatabase());
         }
         #endregion
     }

@@ -174,9 +174,6 @@ using System.Speech.Synthesis;
 
         #endregion
 
-        [MpAffectsChild]
-        public int Test { get; set; } = 0;
-
         #region Appearance
         #endregion
 
@@ -541,8 +538,6 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Business Logic
-        public string TemplateRichText { get; set; }
-
         public bool IsLoading {
             get {
                 return HeadItem == null || HeadItem.CopyItem.Id == 0;
@@ -620,10 +615,19 @@ using System.Speech.Synthesis;
 
         public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPastingTemplate);
 
-        public bool IsExpanding { get; set; }
-
+        //private bool _isExpanded = false;
         [MpAffectsSibling]
         public bool IsExpanded { get; set; } = false;
+        //    get {
+        //        return _isExpanded;
+        //    }
+        //    set {
+        //        if(_isExpanded != value) {
+        //            _isExpanded = value;
+        //            OnPropertyChanged(nameof(IsExpanded));
+        //        }
+        //    }
+        //}
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -998,11 +1002,9 @@ using System.Speech.Synthesis;
                 bool isPastingTemplate = SelectedItems.Any(x => x.HasTemplates);
                 if (isPastingTemplate) {
                     SelectedItems.Where(x => x.HasTemplates).Select(y => y.IsPastingTemplate = true);
-                    TemplateRichText = string.Empty.ToRichText();
                     if (!MpMainWindowViewModel.IsMainWindowOpen) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
-                   // RequestUiUpdate();
                     await FillAllTemplates();
                 }
 
@@ -1012,20 +1014,17 @@ using System.Speech.Synthesis;
                 string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in SelectedItems) {
                     if (rtbvm.HasTemplates) {
-                        rtbvm.TemplateCollection.PasteTemplateCommand.Execute(null);
                         string rtbvmrtf = rtbvm.TemplateRichText;
                         rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
-                        rtbvm.TemplateRichText = string.Empty;
-                        rtbvm.TemplateCollection.ResetAll();
                     } else {
                         rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
                     }
                 }
                 sw.Stop();
                 MonkeyPaste.MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
-                if (isPastingTemplate) {
-                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                    Application.Current.MainWindow.ForceCursor = true;
+
+                if(IsExpanded) {
+                    IsExpanded = false;
                 }
                 return rtf;
             }
@@ -1048,15 +1047,12 @@ using System.Speech.Synthesis;
                         rtbvm.TemplateCollection.UpdateCommandsCanExecute();
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.HasMultipleTemplates));
-                        //if (!MpClipTrayViewModel.Instance.IsPastingHotKey) {
-                        //    PasteTemplateToolbarViewModel.IsBusy = true;
-                        //}
                         hasExpanded = true;
                     }
                     rtbvm.TemplateCollection.Templates[0].IsSelected = true;
-
+                    rtbvm.TemplateRichText = null;
                     await Task.Run(async() => {
-                        while (!rtbvm.TemplateCollection.IsAllTemplatesFilled) {
+                        while (string.IsNullOrEmpty(rtbvm.TemplateRichText)) {
                             await Task.Delay(100);
                         }
                     });

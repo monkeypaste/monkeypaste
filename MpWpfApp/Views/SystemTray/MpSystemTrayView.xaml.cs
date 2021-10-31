@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpSystemTrayVIew.xaml
     /// </summary>
-    public partial class MpSystemTrayView : UserControl {
+    public partial class MpSystemTrayView : MpUserControl<MpSystemTrayViewModel> {
         public MpSystemTrayView() {
 
             InitializeComponent();

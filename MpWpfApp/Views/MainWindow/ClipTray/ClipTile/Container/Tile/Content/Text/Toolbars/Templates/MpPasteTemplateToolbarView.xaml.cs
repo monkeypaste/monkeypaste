@@ -45,12 +45,9 @@ namespace MpWpfApp {
         }
 
         private void ClipTilePasteTemplateToolbar_Unloaded(object sender, RoutedEventArgs e) {
-            if(_activeRtb != null) {
-                var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
-                if(rtbvm != null) {
-                    foreach (var thlvm in rtbvm.TemplateCollection.Templates) {
-                        thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
-                    }
+            foreach (var civm in BindingContext.Parent.Parent.ItemViewModels) {
+                foreach (var thlvm in civm.TemplateCollection.Templates) {
+                    thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
                 }
             }
         }
@@ -76,8 +73,32 @@ namespace MpWpfApp {
         }
 
         private void SelectedTemplateComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            SelectedTemplateComboBox.RaiseEvent(e);
+            SelectedTemplateComboBox.IsDropDownOpen = true;
             e.Handled = true;
+        }
+
+        private void ClipTilePasteTemplateToolbar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
+            foreach(var civm in BindingContext.Parent.Parent.ItemViewModels) {
+                foreach (var thlvm in civm.TemplateCollection.Templates) {
+                    thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
+                }
+            }
+            
+            SelectedTemplateTextBox.Focus();
+        }
+
+        private void SelectedTemplateTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) {
+                if(BindingContext.IsAllTemplatesFilled) {
+                    BindingContext.PasteTemplateCommand.Execute(null);
+                } else {
+                    BindingContext.SelectNextTemplateCommand.Execute(null);
+                }
+                e.Handled = true;
+            }
         }
     }
 }

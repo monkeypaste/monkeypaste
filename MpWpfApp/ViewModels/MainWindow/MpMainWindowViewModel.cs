@@ -28,16 +28,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Statics
-        public static bool IsMainWindowLoading { get; set; } = true;
+        public static bool IsMainWindowLoading { get; set; } = false;
         public static bool IsMainWindowOpening { get; set; } = false;
+        public static bool IsMainWindowClosing { get; set; } = false;
 
         public static bool IsMainWindowOpen { get; private set; } = false;
-        //    get {
-        //        return Application.Current.MainWindow.DataContext != null && 
-        //            Application.Current.MainWindow.Visibility == Visibility.Visible &&
-        //            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
-        //    }
-        //}
 
 
         public static void SetLogText(string text, bool append = false) {
@@ -109,6 +104,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
         private bool _isMainWindowLocked = false;
         public bool IsMainWindowLocked {
             get {
@@ -284,14 +280,18 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
-            MpSystemTrayViewModel.Instance.Init();
-            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
             Initialize();
         }
 
-        private void Initialize() {
+        public void Initialize() {
+            if(IsMainWindowLoading) {
+                return;
+            }
 
             MpMainWindowViewModel.IsMainWindowLoading = true;
+
+            MpSystemTrayViewModel.Instance.Init();
+            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
                 IconBuilder = new MpIconBuilder()
@@ -305,7 +305,6 @@ namespace MpWpfApp {
 
             MpLanguageTranslator.Instance.Init();
 
-
             MpSearchBoxViewModel.Instance.Init();
             MpClipTrayViewModel.Instance.Init();
             MpClipTileSortViewModel.Instance.Init();
@@ -317,6 +316,12 @@ namespace MpWpfApp {
             Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
             Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
             Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
+
+
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+                await MpShortcutCollectionViewModel.Instance.Init();
+            });
         }
 
         public void ClearEdits() {
@@ -477,14 +482,17 @@ namespace MpWpfApp {
                       !_isExpanded &&
                       !IsResizing &&
                       !MpClipTrayViewModel.Instance.IsAnyTileItemDragging &&
+                      !IsMainWindowClosing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);
             });
 
         private async Task HideWindow(object args) {
-            if(IsMainWindowLocked || IsResizing) {
+            if(IsMainWindowLocked || IsResizing || IsMainWindowClosing) {
                 return;
             }
+            IsMainWindowClosing = true;
+
             IDataObject pasteDataObject = null;
             bool pasteSelected = false;
             if(args != null) {
@@ -494,20 +502,21 @@ namespace MpWpfApp {
                     pasteDataObject = (IDataObject)args;
                 }
             }
+            string test;
             bool wasMainWindowLocked = IsMainWindowLocked;
             if (pasteSelected) {
                 if(ClipTrayViewModel.IsAnyPastingTemplate) {
                     IsMainWindowLocked = true;
                 }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(false,true);
+                test = pasteDataObject.GetData(DataFormats.Text).ToString();
+                MpConsole.WriteLine("Cb Text: " + test);
             }
-
-            OnMainWindowHide?.Invoke(this, null);
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
             if(IsMainWindowOpen) {
-                double tt = Properties.Settings.Default.HideMainWindowAnimationMilliseconds;
+                double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
                 double fps = 30;
                 double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 
@@ -535,7 +544,9 @@ namespace MpWpfApp {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
                         IsMainWindowOpen = false;
-                        
+                        IsMainWindowClosing = false;
+
+                        OnMainWindowHide?.Invoke(this, null);
                     }
                 };
                 timer.Start();

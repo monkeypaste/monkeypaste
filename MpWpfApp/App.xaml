@@ -1104,20 +1104,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--  Semi-Transparent Button End  -->
 
+        <!--  Settings Tab Indexes  -->
         <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
         <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
         <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
         <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
         <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
+        <!--  Settings Tab Indexes End  -->
 
+        <!--  Command Parameter Primitives  -->
         <s:Int32 x:Key="Files">1</s:Int32>
         <s:Int32 x:Key="Csv">2</s:Int32>
         <s:Int32 x:Key="Zip">3</s:Int32>
 
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
+        <!--  Command Parameter Primitives End  -->
 
+        <!--  Icon/Image Source Paths  -->
         <s:String x:Key="NoEntryIcon">/Images/noentry.png</s:String>
         <s:String x:Key="RobotClawIcon">/Images/robotclaw.png</s:String>
         <s:String x:Key="BrainIcon">/Images/brain.png</s:String>
@@ -1161,9 +1167,9 @@
         <s:String x:Key="SignOutIcon">/Images/signout.png</s:String>
         <s:String x:Key="CopyIcon">/Images/copy.png</s:String>
         <s:String x:Key="WarningIcon">/Images/warning.png</s:String>
-
         <s:String x:Key="Hide">Hide</s:String>
         <s:String x:Key="Collapse">Collapse</s:String>
+        <!--  Icon/Image Source Paths End  -->
 
         <!--  Color Palletes  -->
         <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
@@ -1174,7 +1180,9 @@
         <SolidColorBrush x:Key="ClipTileDetectedObjectTextBoxBackgroundBrush"
                          Opacity="0.5"
                          Color="Black" />
+        <!--  Color Palletes End  -->
 
+        <!--  Converter Declarations  -->
         <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
@@ -1195,16 +1203,20 @@
         <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
         <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
         <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
-
-        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
-        <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
-        <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
-        <local:MpSystemTrayView x:Key="SystemTrayViewModel" />
-        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
-        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
-        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
         <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
         <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
         <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
+        <!--  Converter Declarations End  -->
+
+        <!--  Singleton View Model Declarations  -->
+        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
+        <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
+        <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
+        <local:MpSystemTrayViewModel x:Key="SystemTrayViewModel" />
+        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
+        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
+        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
+        <!--  Singleton View Model Declarations End  -->
+
     </Application.Resources>
 </Application>

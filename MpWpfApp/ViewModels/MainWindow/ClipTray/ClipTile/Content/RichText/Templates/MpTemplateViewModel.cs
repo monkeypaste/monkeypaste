@@ -332,16 +332,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        [MpDependsOnParent("Test")]
-        public bool DependOnGreatGrandParentTest {
-            get {
-                if (Parent == null || Parent.Parent == null || Parent.Parent.Parent == null) {
-                    return false;
-                }
-                return Parent.Parent.Parent.Test > 5;
-            }
-        }
-
         #endregion
 
         #region Events
@@ -355,8 +345,7 @@ namespace MpWpfApp {
         public MpTemplateViewModel() : base(null) { }
 
         public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
-            MpConsole.WriteLine(DependOnGreatGrandParentTest);
-            PropertyChanged += MpTemplateViewModel_PropertyChanged;
+             PropertyChanged += MpTemplateViewModel_PropertyChanged;
             CopyItemTemplate = cit;
         }
 
@@ -400,9 +389,6 @@ namespace MpWpfApp {
 
         private void MpTemplateViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(DependOnGreatGrandParentTest):
-                    MpConsole.WriteLine("Level 3 Changed");
-                    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         OnTemplateSelected?.Invoke(this, null);

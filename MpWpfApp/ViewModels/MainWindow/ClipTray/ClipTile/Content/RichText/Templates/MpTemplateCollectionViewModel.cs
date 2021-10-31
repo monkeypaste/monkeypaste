@@ -56,7 +56,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        public bool IsAllTemplatesFilled => Templates.All(x => x.WasVisited && x.HasText);
+        public bool IsAllTemplatesFilled => Templates.All(x => x.HasText);
 
         public bool IsAnyTemplateHasText => Templates.Any(x => x.HasText);
         //public int SelectedTemplateIdx {
@@ -91,7 +91,7 @@ namespace MpWpfApp {
         private void HostClipTileViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(HostClipTileViewModel.IsAnyPastingTemplate):
-                    ResetAll();
+                    //ResetAll();
                     break;
             }
         }
@@ -166,6 +166,7 @@ namespace MpWpfApp {
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
                     break;
             }
+            UpdateCommandsCanExecute();
         }
 
         public bool RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
@@ -279,9 +280,9 @@ namespace MpWpfApp {
 
         public ICommand SelectNextTemplateCommand => new RelayCommand(
             () => {
-                if (!SelectedTemplate.HasText) {
-                    SelectedTemplate.TemplateText = " ";
-                }
+                //if (!SelectedTemplate.HasText) {
+                //    SelectedTemplate.TemplateText = " ";
+                //}
                 int nextIdx = Templates.IndexOf(SelectedTemplate) + 1;
                 if (nextIdx >= Templates.Count) {
                     nextIdx = 0;
@@ -291,11 +292,11 @@ namespace MpWpfApp {
 
         public ICommand SelectPreviousTemplateCommand => new RelayCommand(
             () => {
-                if (!SelectedTemplate.HasText) {
-                    SelectedTemplate.TemplateText = " ";
-                }
+                //if (!SelectedTemplate.HasText) {
+                //    SelectedTemplate.TemplateText = " ";
+                //}
                 int prevIdx = Templates.IndexOf(SelectedTemplate) - 1;
-                if (prevIdx < Templates.Count) {
+                if (prevIdx < 0) {
                     prevIdx = Templates.Count - 1;
                 }
                 Templates[prevIdx].IsSelected = true;
@@ -304,10 +305,14 @@ namespace MpWpfApp {
         public ICommand PasteTemplateCommand => new RelayCommand(
             () => {
                 string rtf = Parent.CopyItem.ItemData;
+                MpConsole.WriteLine("Unmodified item rtf: ");
+                MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Templates) {
                     rtf = rtf.Replace(thlvm.CopyItemTemplate.TemplateToken, thlvm.TemplateText);
                 }
                 Parent.TemplateRichText = rtf;
+                MpConsole.WriteLine("Pastable rtf: ");
+                MpConsole.WriteLine(rtf);
             },
             () => {
                 return IsAllTemplatesFilled;

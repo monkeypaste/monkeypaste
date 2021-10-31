@@ -86,6 +86,9 @@ namespace MpWpfApp {
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            if(ctvm.IsAnyPastingTemplate) {
+                return;
+            }
             ctvm.IsExpanded = false;
         }
 
@@ -190,6 +193,7 @@ namespace MpWpfApp {
         }
 
         public void Unexpand() {
+            MpConsole.WriteLine("Unexpanding...");
             IsExpandingOrUnexpanding = true;
 
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;

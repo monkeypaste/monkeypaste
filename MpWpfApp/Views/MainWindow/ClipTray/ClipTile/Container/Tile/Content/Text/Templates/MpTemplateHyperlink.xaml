@@ -23,13 +23,14 @@
                       Header="Delete All" />
         </ContextMenu>
     </Hyperlink.ContextMenu>
-    <Border CornerRadius="0"
+    <Border CornerRadius="3"
             BorderThickness="1.5"
             Margin="0"
             Background="{Binding TemplateBackgroundBrush}"
             BorderBrush="{Binding TemplateBorderBrush}">
         <Border.RenderTransform>
-            <TranslateTransform X="0" Y="3"/>
+            <TranslateTransform X="0"
+                                Y="3" />
         </Border.RenderTransform>
         <TextBlock x:Name="TemplateTextBlock"
                    Text="{Binding TemplateDisplayValue}"

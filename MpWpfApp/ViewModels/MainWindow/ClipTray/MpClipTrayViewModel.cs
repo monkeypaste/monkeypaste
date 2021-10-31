@@ -786,15 +786,7 @@ namespace MpWpfApp {
             IDataObject d = new DataObject();
 
             //selection (if all subitems are dragging select host if no subitems are selected select all)
-            foreach (var sctvm in SelectedItems) {
-                //if (sctvm.SelectedItems.Count == sctvm.Count ||
-                //    sctvm.Count <= 1) {
-                //    sctvm.IsClipDragging = true;
-                //}
-                if (sctvm.SelectedItems.Count == 0) {
-                    sctvm.SubSelectAll();
-                }
-            }
+            SelectedItems.ForEach(x => x.DoCommandSelection());
 
             string rtf = string.Empty.ToRichText();
             if (isToExternalApp) {
@@ -935,9 +927,9 @@ namespace MpWpfApp {
                 //clean up pasted items state after paste
                 if (sctvm.HasTemplates) {
                     sctvm.ItemVisibility = Visibility.Visible;
-                    sctvm.TemplateRichText = string.Empty;
                     sctvm.ClearEditing();
                     foreach (var rtbvm in sctvm.ItemViewModels) {
+                        rtbvm.IsPastingTemplate = false;
                         rtbvm.ItemVisibility = Visibility.Visible;
                         rtbvm.TemplateCollection.ResetAll();
                         rtbvm.TemplateRichText = string.Empty;

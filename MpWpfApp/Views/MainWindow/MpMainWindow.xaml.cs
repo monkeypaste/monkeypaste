@@ -36,14 +36,13 @@ namespace MpWpfApp {
 
             // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
-            await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
             var mwvm = DataContext as MpMainWindowViewModel;
             Application.Current.Resources["MainWindowViewModel"] = mwvm;
+
+            
             mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
             mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
-            //MpClipTrayViewModel.Instance.ViewModelLoaded += Instance_ViewModelLoaded;
-            await MpShortcutCollectionViewModel.Instance.Init();
 
             // MpPasteToAppPathViewModelCollection.Instance.Init();
             MpMainWindowViewModel.Instance.SetupMainWindowRect();

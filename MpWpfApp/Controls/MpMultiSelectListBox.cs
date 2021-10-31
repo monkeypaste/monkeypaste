@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpMultiSelectListBox : AnimatedListBox {
         protected override DependencyObject GetContainerForItemOverride() {
-            return new MpMultiSelectListBoxItem();
+            return new ListBoxItem();
         }
 
         #region SelectionChangedCommandParameter dep prop
@@ -51,7 +51,7 @@ namespace MpWpfApp {
             });
 
         #endregion
-               
+
 
         class MpMultiSelectListBoxItem : ListBoxItem {
             private static MpContentContextMenuView _ContentContextMenu;
@@ -59,23 +59,11 @@ namespace MpWpfApp {
             private bool _isDeferSelectionEnabled = false;
 
             protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-                if(_isDeferSelectionEnabled) {
+                if (_isDeferSelectionEnabled) {
                     OnDeferMouseLeftButtonDown(e);
                 } else {
-                    //if (DataContext is MpClipTileViewModel ctvm) {
-                    //    if (ctvm.IsAnyPastingTemplate) {
-                    //        e.Handled = false;
-                    //        return;
-                    //    }
-                    //}
-                    //if (DataContext is MpContentItemViewModel civm) {
-                    //    if (civm.Parent.IsAnyPastingTemplate) {
-                    //        e.Handled = false;
-                    //        return;
-                    //    }
-                    //}
                     SelectItem();
-                }                
+                }
             }
 
             protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
@@ -87,19 +75,19 @@ namespace MpWpfApp {
             }
 
             protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) {
-                if(_isDeferSelectionEnabled) {
+                if (_isDeferSelectionEnabled) {
                     base.OnMouseRightButtonDown(e);
                     return;
-                } 
+                }
 
                 SelectItem();
                 if (DataContext is MpClipTileViewModel ctvm) {
-                    if(ctvm.IsAnyEditingContent) {
+                    if (ctvm.IsAnyEditingContent) {
                         base.OnMouseRightButtonDown(e);
                         return;
                     }
                 } else if (DataContext is MpContentItemViewModel civm) {
-                    if(civm.IsEditingContent) {
+                    if (civm.IsEditingContent) {
                         base.OnMouseRightButtonDown(e);
                         return;
                     }
@@ -122,13 +110,13 @@ namespace MpWpfApp {
             }
 
             protected override void OnSelected(RoutedEventArgs e) {
-                if(_isDeferSelectionEnabled) {
+                if (_isDeferSelectionEnabled) {
                     this.UpdateExtendedSelection();
                 } else {
                     base.OnSelected(e);
-                }               
+                }
 
-                if(_isDeferSelectionEnabled) {
+                if (_isDeferSelectionEnabled) {
                     if (DataContext is MpClipTileViewModel ctvm) {
                         ctvm.OnPropertyChanged(nameof(ctvm.IsSelected));
                     }
@@ -155,33 +143,33 @@ namespace MpWpfApp {
                 this.UpdateExtendedSelection();
                 return;
 
-                //if (!IsSelected) {
-                //    IsSelected = true;
+                if (!IsSelected) {
+                    IsSelected = true;
 
-                //    if (DataContext is MpClipTileViewModel ctvm) {
-                //        if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
-                //            ctvm.HeadItem.IsSelected = true;
-                //        }
-                //        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
-                //            foreach (var octvm in ctvm.Parent.Items) {
-                //                if (octvm != ctvm) {
-                //                    octvm.ClearSelection();
-                //                }
-                //            }
-                //        }
-                //    } else if (DataContext is MpContentItemViewModel civm) {
-                //        if (civm.IsSelected && !civm.Parent.IsSelected) {
-                //            civm.Parent.IsSelected = true;
-                //        }
-                //        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
-                //            foreach (var octvm in civm.Parent.Parent.Items) {
-                //                if (octvm != civm.Parent) {
-                //                    octvm.ClearSelection();
-                //                }
-                //            }
-                //        } 
-                //    }
-                //}
+                    if (DataContext is MpClipTileViewModel ctvm) {
+                        if (ctvm.SelectedItems.Count == 0 && ctvm.HeadItem != null) {
+                            ctvm.HeadItem.IsSelected = true;
+                        }
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
+                            foreach (var octvm in ctvm.Parent.Items) {
+                                if (octvm != ctvm) {
+                                    octvm.ClearSelection();
+                                }
+                            }
+                        }
+                    } else if (DataContext is MpContentItemViewModel civm) {
+                        if (civm.IsSelected && !civm.Parent.IsSelected) {
+                            civm.Parent.IsSelected = true;
+                        }
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
+                            foreach (var octvm in civm.Parent.Parent.Items) {
+                                if (octvm != civm.Parent) {
+                                    octvm.ClearSelection();
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             private void OnDeferMouseLeftButtonDown(MouseButtonEventArgs e) {
@@ -206,7 +194,7 @@ namespace MpWpfApp {
                 base.OnMouseLeftButtonUp(e);
             }
 
-            
+
         }
     }
 }

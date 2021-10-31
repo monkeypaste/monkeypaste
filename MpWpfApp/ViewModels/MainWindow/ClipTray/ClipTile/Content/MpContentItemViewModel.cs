@@ -161,16 +161,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        //[MpDependsOnParent("Test")]
-        public bool DependOnParentTest {
-            get {
-                if(Parent == null) {
-                    return false;
-                }
-                return Parent.Test > 5;
-            }
-        }
-
         #region Visibility 
 
         #endregion
@@ -297,7 +287,7 @@ namespace MpWpfApp {
                 if(Parent == null || !Parent.IsExpanded) {
                     return false;
                 }
-                return IsSelected;
+                return IsSelected && !IsPastingTemplate;
             }
         }
 
@@ -833,9 +823,6 @@ namespace MpWpfApp {
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(DependOnParentTest):
-                    MpConsole.WriteLine("Level 1 Changed");
-                    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
@@ -1002,7 +989,7 @@ namespace MpWpfApp {
                 return new RelayCommand(
                     () => {
                         RequestSyncModel();
-                        MessageBox.Show(TemplateCollection.ToString());
+                        //MessageBox.Show(TemplateCollection.ToString());
                     },
                     () => {
                         return true;// HasModelChanged

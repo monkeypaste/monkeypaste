@@ -101,8 +101,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        private MpSystemTrayViewModel() : base(null) {
-        }
+        public MpSystemTrayViewModel() : base(null) { }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
             _taskbarIcon = ((TaskbarIcon)sender);

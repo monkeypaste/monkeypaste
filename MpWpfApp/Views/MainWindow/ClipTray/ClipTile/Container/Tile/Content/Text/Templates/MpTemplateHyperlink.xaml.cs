@@ -134,7 +134,11 @@ namespace MpWpfApp {
                 thlvm.Parent.Parent.IsSelected = true;
             }
             if (thlvm.HostClipTileViewModel.IsExpanded) {
-                EditTemplate();
+                if(thlvm.Parent.Parent.IsPastingTemplate) {
+                    thlvm.IsSelected = true;
+                } else {
+                    EditTemplate();
+                }
             }            
         }
 

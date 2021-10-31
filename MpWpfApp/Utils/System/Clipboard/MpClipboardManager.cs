@@ -212,15 +212,15 @@ namespace MpWpfApp {
 
         private void CheckClipboard() {
             while (true) {
-                while (_isStopped) {
+                while (_isStopped || IgnoreClipboardChangeEvent) {
                     Thread.Sleep(100);
                 }
                 var cbo = ConvertManagedFormats(Clipboard.GetDataObject());
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
-                    if (IgnoreClipboardChangeEvent) {
-                        return;
-                    }
+                    //if (IgnoreClipboardChangeEvent) {
+                    //    return;
+                    //}
                     if (MpAppModeViewModel.Instance.IsAppPaused) {
                         MpConsole.WriteLine("App Paused, ignoring copy");
                     } else  {

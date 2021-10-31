@@ -68,9 +68,9 @@ namespace MpWpfApp {
             lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
 
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += Sv_ScrollChanged;
             Task.Run(async() => {
                 await Task.Delay(3000);
-                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += Sv_ScrollChanged;
             });
             
         }

@@ -85,11 +85,11 @@ namespace MpWpfApp {
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
 
-            if(MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 1 && isDragging) {
+            if (MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 1) {
                 e.Handled = true;
             } else {
                 e.Handled = false;
-            }            
+            }
         }
 
         private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
