@@ -356,27 +356,12 @@ namespace MpWpfApp {
 
         public string HotkeyIconSource {
             get {
-                if (string.IsNullOrEmpty(_unsetJoystickIcon64)) {
-                    _unsetJoystickIcon64 = new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png")).ToBase64String();
-                }
-                if (string.IsNullOrEmpty(_setJoyStickIcon64)) {
-                    _setJoyStickIcon64 = new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystickactive.png")).ToBase64String();
-                }
                 if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                    return _unsetJoystickIcon64;
+                    return MpBase64Images.Instance.JoystickUnset;
                 }
-                return _setJoyStickIcon64;
+                return MpBase64Images.Instance.JoystickActive;
             }
         }
-
-        //public BitmapSource HotkeyIconSource {
-        //    get {
-        //        if (string.IsNullOrEmpty(ShortcutKeyString)) {
-        //            return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png"));
-        //        }
-        //        return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystickactive.png"));
-        //    }
-        //}
 
         #endregion
 
@@ -822,12 +807,12 @@ namespace MpWpfApp {
             }
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
+            switch (e.PropertyName) { 
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
                         Parent.IsSelected = true;
-                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown && 
+                        if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown &&
                             !Parent.IsDroppingOnTile && !Parent.AllowMultiSelect) {
                             MpClipTrayViewModel.Instance.SelectedItems
                                 .Where(x => x != Parent)
@@ -843,6 +828,7 @@ namespace MpWpfApp {
                         var pcivm = Parent.ItemViewModels[ItemIdx - 1];
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
+                    Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     break;
                 case nameof(CopyItem):
                     if(CopyItem == null) {
@@ -852,15 +838,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CurrentSize));
                     UpdateDetails();
                     RequestUiUpdate();
-                    break;
-                case nameof(IsHovering):
-                    //Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
-                    break;
-                case nameof(IsPlaceholder):
-                    ItemVisibility = IsPlaceholder ? Visibility.Hidden : Visibility.Visible;
-                    //if(Parent !=null) {
-                    //    Parent.OnPropertyChanged(nameof(Parent.IsPlaceholder));
-                    //}
                     break;
                 case nameof(IsEditingTitle):
                     if(!IsEditingTitle) {

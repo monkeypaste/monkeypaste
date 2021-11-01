@@ -297,14 +297,14 @@ namespace MpWpfApp {
 
         public Brush TemplateBrush {
             get {
-                if (CopyItemTemplate == null) {
+                if (CopyItemTemplate == null || string.IsNullOrEmpty(CopyItemTemplate.HexColor)) {
                     return Brushes.Pink;
                 }
-                return new SolidColorBrush((Color)ColorConverter.ConvertFromString(CopyItemTemplate.HexColor));
+                return new SolidColorBrush(CopyItemTemplate.HexColor.ToWinMediaColor());
             }
             set {
                 if (CopyItemTemplate != null) {
-                    CopyItemTemplate.HexColor = value.ToString();                    
+                    CopyItemTemplate.HexColor = (value as SolidColorBrush).Color.ToHex();
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));

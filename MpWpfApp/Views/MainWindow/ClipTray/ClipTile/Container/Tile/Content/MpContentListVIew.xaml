@@ -29,44 +29,42 @@
                                           Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
-            <local:MpMultiSelectListBox x:Name="ContentListBox"
-                                        Loaded="ContentListBox_Loaded"
-                                        SelectionChanged="ContentListBox_SelectionChanged"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Stretch"
-                                        VerticalContentAlignment="Stretch"
-                                        BorderThickness="0"
-                                        BorderBrush="Pink"
-                                        SelectionMode="Extended"
-                                        ScrollToSelectedItem="False"
-                                        IsListBoxHorizontal="False"
-                                        IsSynchronizedWithCurrentItem="False"
-                                        ItemsSource="{Binding ItemViewModels}"
-                                        Focusable="True"
-                                        IsEnabled="True"
-                                        VirtualizingPanel.IsVirtualizing="True"
-                                        VirtualizingPanel.ScrollUnit="Pixel"
-                                        VirtualizingPanel.VirtualizationMode="Recycling"
-                                        ScrollViewer.CanContentScroll="False"
-                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                        ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
-                                        Padding="0">
+            <ListBox x:Name="ContentListBox"
+                     Loaded="ContentListBox_Loaded"
+                     SelectionChanged="ContentListBox_SelectionChanged"
+                     VerticalAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
+                     BorderThickness="0"
+                     BorderBrush="Pink"
+                     SelectionMode="Extended"
+                     IsSynchronizedWithCurrentItem="False"
+                     ItemsSource="{Binding ItemViewModels}"
+                     Focusable="True"
+                     IsEnabled="True"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     ScrollViewer.CanContentScroll="False"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
+                     Padding="0">
                 <i:Interaction.Behaviors>
                     <local:MpDropBehavior x:Name="DropBehavior" />
                 </i:Interaction.Behaviors>
-                <local:MpMultiSelectListBox.InputBindings>
+                <ListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
-                </local:MpMultiSelectListBox.InputBindings>
-                <local:MpMultiSelectListBox.ItemsPanel>
+                </ListBox.InputBindings>
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True"
                                                 Orientation="Vertical" />
                     </ItemsPanelTemplate>
-                </local:MpMultiSelectListBox.ItemsPanel>
-                <local:MpMultiSelectListBox.ItemContainerStyle>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
@@ -107,13 +105,13 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </local:MpMultiSelectListBox.ItemContainerStyle>
-                <local:MpMultiSelectListBox.ItemTemplate>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpContentItemView DataContext="{Binding}" />
                     </DataTemplate>
-                </local:MpMultiSelectListBox.ItemTemplate>
-            </local:MpMultiSelectListBox>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </AdornerDecorator>
     </DockPanel>
 </local:MpUserControl>

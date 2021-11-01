@@ -94,15 +94,57 @@ namespace MpWpfApp {
                11    if there is a previously selected item, clear selection and then add between target item and first previously selected item
                12    else remove any other item from selection
             */
-            if (lb.DataContext is MpContentItemViewModel civm) {
-                var ctr_lb = lb.GetVisualAncestor<ListBox>();
-                ctr_lb.UpdateExtendedSelection(civm.Parent.ItemIdx);
-            }
 
-            bool isCtrlDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Control); //MpShortcutCollectionViewModel.Instance.IsCtrlDown;
-            bool isShiftDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift); //MpShortcutCollectionViewModel.Instance.IsShiftDown;
+            bool isTray = lb.DataContext is MpClipTrayViewModel;
+
+            //if (lb.DataContext is MpContentItemViewModel civm) {
+            //    var ctr_lb = lb.GetVisualAncestor<ListBox>();
+            //    ctr_lb.UpdateExtendedSelection(civm.Parent.ItemIdx);
+            //}
+
+            bool isMouse_L_Down = Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed;
+            bool isMouse_R_Down = Mouse.PrimaryDevice.RightButton == MouseButtonState.Pressed;
+
+            bool isCtrlDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Control); 
+            bool isShiftDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift); 
+
             var lbi = lb.GetListBoxItem(index);
-            if (!lbi.IsSelected) {
+            if (lbi.IsSelected) {
+                if (isShiftDown) {
+                    //10   if Shift key is down
+                    if (lb.SelectedItems.Count > 0) {
+                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
+                        var firstSelectedItem = lb.GetListBoxItem(lb.Items.IndexOf(lb.SelectedItems[0]));
+                        int firstIdx = lb.Items.IndexOf(firstSelectedItem.DataContext);
+                        lb.SelectedItems.Clear();
+                        if (firstIdx < index) {
+                            for (int i = firstIdx; i <= index; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        } else {
+                            for (int i = index; i <= firstIdx; i++) {
+                                lb.GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        }
+                    }
+
+                } else if (isCtrlDown) {
+                    //9    if Ctrl key is down, remove item from selection
+                    lbi.IsSelected = false;
+                } else {
+                    //12   else remove any other item from selection
+                    if(!isMouse_L_Down) {
+                        lb.SelectedItems.Clear();
+                        lbi.IsSelected = true;
+
+                        lb.GetVisualAncestor<ListBox>().SelectedItems.Clear();
+                        lbi.GetVisualAncestor<ListBoxItem>().IsSelected = true;
+                    }
+                    
+                }
+            } else {
                 ListBoxItem lastSelectedItem = null;
                 if (lb.SelectedItems.Count > 0) {
                     // NOTE this maybe the wrong item
@@ -139,44 +181,13 @@ namespace MpWpfApp {
                     lbi.IsSelected = !lbi.IsSelected;
                 } else {
                     //7    if neither ctrl nor shift are pressed clear any other selection
-                    // MpClipTrayViewModel.Instance.ClearClipSelection(false);
-                    //HostClipTileViewModel.IsSelected = true;
-                    lb.SelectedItems.Clear();
-                    lbi.IsSelected = true;
-                }
-            } else if (lbi.IsSelected) {
-                if (isShiftDown) {
-                    //10   if Shift key is down
-                    if (lb.SelectedItems.Count > 0) {
-                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
-                        var firstSelectedItem = lb.GetListBoxItem(lb.Items.IndexOf(lb.SelectedItems[0]));
-                        int firstIdx = lb.Items.IndexOf(firstSelectedItem.DataContext);
+                    if(isMouse_L_Down) {
+                        lbi.IsSelected = true;
+                    } else {
                         lb.SelectedItems.Clear();
-                        if (firstIdx < index) {
-                            for (int i = firstIdx; i <= index; i++) {
-                                lb.GetListBoxItem(i).IsSelected = true;
-                            }
-                            return;
-                        } else {
-                            for (int i = index; i <= firstIdx; i++) {
-                                lb.GetListBoxItem(i).IsSelected = true;
-                            }
-                            return;
-                        }
                     }
-
-                } else if (isCtrlDown) {
-                    //9    if Ctrl key is down, remove item from selection
-                    lbi.IsSelected = false;
-                } else {
-                    //12   else remove any other item from selection
-
-                    //MpClipTrayViewModel.Instance.ClearClipSelection(false);
-                    //HostClipTileViewModel.IsSelected = true;
-                    lb.SelectedItems.Clear();
-                    lbi.IsSelected = true;
                 }
-            }
+            } 
         }
 
         public static void UpdateExtendedSelection(this ListBoxItem lbi) {
@@ -224,6 +235,15 @@ namespace MpWpfApp {
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
             return lb.GetVisualDescendent<ScrollViewer>();
+        }
+
+        public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
+            //var sbl = sv.GetVisualDescendents<ScrollBar>();
+            //return sbl.Where(x => x.Orientation == orientation).FirstOrDefault();
+            if(orientation == Orientation.Vertical) {
+                return sv.Template.FindName("PART_VerticalScrollBar", sv) as ScrollBar;
+            }
+            return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
         }
         
         public static bool IsListBoxItemVisible(this ListBox lb, int index) {
@@ -366,11 +386,6 @@ namespace MpWpfApp {
 
         #region Visual Tree
 
-        /// <summary>
-        /// Gets the next ancestor element which is a drop target.
-        /// </summary>
-        /// <param name="element">The start element.</param>
-        /// <returns>The first element which is a drop target.</returns>
         public static UIElement TryGetNextAncestorDropTargetElement(this UIElement element) {
             if (element == null) {
                 return null;
@@ -427,9 +442,6 @@ namespace MpWpfApp {
             return null;
         }
 
-        /// <summary>
-        /// find the visual ancestor item by type
-        /// </summary>
         public static DependencyObject GetVisualAncestor(this DependencyObject d, Type itemSearchType, ItemsControl itemsControl, Type itemContainerSearchType) {
             if (itemsControl == null) throw new ArgumentNullException(nameof(itemsControl));
             if (itemContainerSearchType == null) throw new ArgumentNullException(nameof(itemContainerSearchType));
@@ -456,9 +468,6 @@ namespace MpWpfApp {
             return null;
         }
 
-        /// <summary>
-        /// find the visual ancestor by type and go through the visual tree until the given itemsControl will be found
-        /// </summary>
         public static DependencyObject GetVisualAncestor(this DependencyObject d, Type itemSearchType, ItemsControl itemsControl) {
             if (itemsControl == null) throw new ArgumentNullException(nameof(itemsControl));
 
@@ -492,11 +501,10 @@ namespace MpWpfApp {
         }
 
         public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d) where T : DependencyObject {
-            return d.GetVisualDescendents<T>(null).Distinct();
+            return d.GetVisualDescendents<T>(null);
         }
 
-        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName)
-            where T : DependencyObject {
+        public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName) where T : DependencyObject {
             var childCount = VisualTreeHelper.GetChildrenCount(d);
 
             for (var n = 0; n < childCount; n++) {
@@ -560,8 +568,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static IEnumerable<DependencyObject> GetChildObjects(
-                                                    this DependencyObject parent) {
+        public static IEnumerable<DependencyObject> GetChildObjects(this DependencyObject parent) {
             if (parent == null) yield break;
 
 
@@ -580,31 +587,6 @@ namespace MpWpfApp {
             }
         }
 
-        //public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
-        //    if (dpo == null) {
-        //        return default;
-        //    }
-        //    if (dpo is T t) {
-        //        return t;
-        //    }
-        //    if (dpo is FrameworkContentElement fce) {
-        //        if(fce.Parent != null) {
-        //            return FindParentOfType<T>(fce.Parent);
-        //        } 
-        //        if(fce.TemplatedParent != null) {
-        //            return FindParentOfType<T>(fce.TemplatedParent);
-        //        }
-
-        //    } else if (dpo is FrameworkElement fe) {
-        //        if (fe.Parent != null) {
-        //            return FindParentOfType<T>(fe.Parent);
-        //        } 
-        //        if (fe.TemplatedParent != null) {
-        //            return FindParentOfType<T>(fe.TemplatedParent);
-        //        }
-        //    }
-        //    return null;
-        //}
         public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
             if (dpo == null) {
                 return default;

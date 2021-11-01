@@ -133,13 +133,9 @@
     <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListView.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="AttachedProperties\MpLoadMoreItemsExtension.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
-    <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -222,7 +218,6 @@
     <Compile Include="Utils\System\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\System\MpScreenInformation.cs" />
     <Compile Include="Utils\System\WinApi.cs" />
-    <Compile Include="Controls\MpMultiSelectListBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpStringToFlowDocumentConverter.cs" />
@@ -408,10 +403,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\MpListBoxScrollBarResourceDictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

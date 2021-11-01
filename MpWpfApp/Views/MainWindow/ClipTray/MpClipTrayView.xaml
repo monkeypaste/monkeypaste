@@ -14,46 +14,43 @@
                      d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=True}">
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>
-            <local:MpMultiSelectListBox x:Name="ClipTray"
-                                        RequestBringIntoView="ClipTray_RequestBringIntoView"
-                                        SelectionChanged="ClipTray_SelectionChanged"
-                                        DataContext="{Binding}"
-                                        Visibility="{Binding ClipTrayVisibility}"
-                                        Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
-                                        ItemsSource="{Binding Items, IsAsync=True}"
-                                        ForceCursor="True"
-                                        Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
-                                        local:MpLoadMoreItemsExtension.RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                        local:MpLoadMoreItemsExtension.RemainingItemsThresholdReachedCommand="{Binding LoadMoreClipsCommand}"
-                                        Loaded="ClipTray_Loaded"
-                                        IsListBoxHorizontal="True"
-                                        ScrollToSelectedItem="False"
-                                        IsSynchronizedWithCurrentItem="False"
-                                        Margin="0,0,0,0"
-                                        Focusable="True"
-                                        BorderThickness="0"
-                                        VerticalAlignment="Center"
-                                        VerticalContentAlignment="Top"
-                                        HorizontalAlignment="Left"
-                                        HorizontalContentAlignment="Center"
-                                        Background="Transparent"
-                                        SelectionMode="Extended"
-                                        VirtualizingPanel.IsVirtualizing="False"
-                                        VirtualizingPanel.ScrollUnit="Pixel"
-                                        VirtualizingPanel.VirtualizationMode="Standard"
-                                        VirtualizingStackPanel.CleanUpVirtualizedItem="ClipTray_CleanUpVirtualizedItem"                                        
-                                        ScrollViewer.CanContentScroll="False"
-                                        ScrollViewer.IsDeferredScrollingEnabled="True"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                        ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <ListBox x:Name="ClipTray"
+                     RequestBringIntoView="ClipTray_RequestBringIntoView"
+                     SelectionChanged="ClipTray_SelectionChanged"
+                     DataContext="{Binding}"
+                     Visibility="{Binding ClipTrayVisibility}"
+                     Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
+                     ItemsSource="{Binding Items}"
+                     ForceCursor="True"
+                     Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
+                     local:MpLoadMoreItemsExtension.RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
+                     local:MpLoadMoreItemsExtension.RemainingItemsThresholdReachedCommand="{Binding LoadMoreClipsCommand}"
+                     Loaded="ClipTray_Loaded"
+                     IsSynchronizedWithCurrentItem="False"
+                     Margin="0,0,0,0"
+                     Focusable="True"
+                     BorderThickness="0"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Top"
+                     HorizontalAlignment="Left"
+                     HorizontalContentAlignment="Center"
+                     Background="Transparent"
+                     SelectionMode="Single"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     ScrollViewer.CanContentScroll="False"
+                     ScrollViewer.IsDeferredScrollingEnabled="True"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Behaviors>
                     <local:MpDropBehavior x:Name="DropBehavior" />
                 </i:Interaction.Behaviors>
-                <local:MpMultiSelectListBox.InputBindings>
+                <ListBox.InputBindings>
                     <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
-                </local:MpMultiSelectListBox.InputBindings>
-                <local:MpMultiSelectListBox.ItemContainerStyle>
+                </ListBox.InputBindings>
+                <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected}" />
@@ -80,27 +77,27 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </local:MpMultiSelectListBox.ItemContainerStyle>
-                <local:MpMultiSelectListBox.ItemsPanel>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                CanVerticallyScroll="False"
-                                                CanHorizontallyScroll="True"
-                                                VerticalAlignment="Stretch"
-                                                HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
-                                                IsItemsHost="True"
-                                                Orientation="Horizontal" />
+                        <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                    CanVerticallyScroll="False"
+                                    CanHorizontallyScroll="True"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
+                                    IsItemsHost="True"
+                                    Orientation="Horizontal" />
                     </ItemsPanelTemplate>
-                </local:MpMultiSelectListBox.ItemsPanel>
-                <local:MpMultiSelectListBox.ItemTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                        DataContext="{Binding}" />
                         <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
                                                   DataContext="{Binding}" />-->
                     </DataTemplate>
-                </local:MpMultiSelectListBox.ItemTemplate>
-            </local:MpMultiSelectListBox>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </AdornerDecorator>
         <TextBlock x:Name="EmptyListTextBlock"
                    Text="This list has no items"

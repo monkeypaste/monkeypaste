@@ -158,7 +158,7 @@ using System.Speech.Synthesis;
 
         public List<MpContentItemViewModel> VisibleItems {
             get {
-                return ItemViewModels.Where(x => x.ItemVisibility == Visibility.Visible).ToList();
+                return ItemViewModels.Where(x => !x.IsPlaceholder).ToList();
             }
         }
 
@@ -546,7 +546,7 @@ using System.Speech.Synthesis;
 
         public int SortOrderIdx {
             get {
-                if (Parent == null || ItemVisibility != Visibility.Visible) {
+                if (Parent == null || IsPlaceholder) {
                     return -1;
                 }
                 return Parent.VisibleItems.IndexOf(this);
@@ -651,14 +651,14 @@ using System.Speech.Synthesis;
         [MpAffectsChild]
         [MpAffectsSibling]
         [MpDependsOnChild("IsSelected")]
-        public bool IsSelected {
+        public bool IsSelected { //get; set; }
             get {
                 return ItemViewModels.Any(x => x.IsSelected);
             }
             set {
-                if(value) {
-                    if(!IsSelected) {                  
-                        if(Parent.IsSelectionReset) {
+                if (value) {
+                    if (!IsSelected) {
+                        if (Parent.IsSelectionReset) {
                             if (HeadItem != null) {
                                 HeadItem.IsSelected = value;
                             }
@@ -846,6 +846,9 @@ using System.Speech.Synthesis;
                         if(IsFlipped) {
                             Parent.FlipTileCommand.Execute(this);
                         }
+                        //ClearSelection();
+                    } else {
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -865,9 +868,6 @@ using System.Speech.Synthesis;
                         MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
-                    break;
-                case nameof(IsPlaceholder):
-                    ItemVisibility = IsPlaceholder ? Visibility.Collapsed : Visibility.Visible;
                     break;
                 case nameof(IsFlipping):
                     if(IsFlipping) {

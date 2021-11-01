@@ -7,51 +7,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpMultiSelectListBox : AnimatedListBox {
+    public class MpMultiSelectListBox : ListBox {
         protected override DependencyObject GetContainerForItemOverride() {
             return new ListBoxItem();
         }
-
-        #region SelectionChangedCommandParameter dep prop
-
-        public static object GetSelectionChangedCommandParameter(DependencyObject obj) {
-            return (int)obj.GetValue(SelectionChangedCommandParameterProperty);
-        }
-        public static void SetSelectionChangedCommandParameter(DependencyObject obj, object value) {
-            obj.SetValue(SelectionChangedCommandParameterProperty, value);
-        }
-        public static readonly DependencyProperty SelectionChangedCommandParameterProperty =
-          DependencyProperty.RegisterAttached(
-            "SelectionChangedCommandParameter",
-            typeof(object),
-            typeof(MpMultiSelectListBox),
-            new FrameworkPropertyMetadata());
-
-        #endregion
-
-        #region SelectionChangedCommand dep prop
-
-        public static ICommand GetSelectionChangedCommand(DependencyObject obj) {
-            return (ICommand)obj.GetValue(SelectionChangedCommandProperty);
-        }
-        public static void SetSelectionChangedCommand(DependencyObject obj, ICommand value) {
-            obj.SetValue(SelectionChangedCommandProperty, value);
-        }
-        public static readonly DependencyProperty SelectionChangedCommandProperty =
-          DependencyProperty.RegisterAttached(
-            "SelectionChangedCommand",
-            typeof(ICommand),
-            typeof(MpMultiSelectListBox),
-            new FrameworkPropertyMetadata {
-                PropertyChangedCallback = (obj, e) => {
-                    if (e.NewValue == null) {
-                        return;
-                    }
-                }
-            });
-
-        #endregion
-
 
         class MpMultiSelectListBoxItem : ListBoxItem {
             private static MpContentContextMenuView _ContentContextMenu;

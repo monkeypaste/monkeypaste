@@ -118,18 +118,16 @@ namespace MpWpfApp {
         }
 
         public static void ShowBalloon(string title, string content, string bitmapSourcePath = "") {
-            MpHelpers.Instance.RunOnMainThread(() => {
-                if (string.IsNullOrEmpty(bitmapSourcePath)) {
-                    bitmapSourcePath = Properties.Settings.Default.AbsoluteResourcesPath + "/Images/monkey (2).png";
-                }
-                TaskbarIcon tbi = new TaskbarIcon();
-                var sbc = new MpStandardBalloonControl(title, content, bitmapSourcePath);
+            if (string.IsNullOrEmpty(bitmapSourcePath)) {
+                bitmapSourcePath = Properties.Settings.Default.AbsoluteResourcesPath + "/Images/monkey (2).png";
+            }
+            TaskbarIcon tbi = new TaskbarIcon();
+            var sbc = new MpStandardBalloonControl(title, content, bitmapSourcePath);
 
-                tbi.ShowCustomBalloon(
-                    sbc,
-                    System.Windows.Controls.Primitives.PopupAnimation.Slide,
-                    Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
-            },System.Windows.Threading.DispatcherPriority.Background);
+            tbi.ShowCustomBalloon(
+                sbc,
+                System.Windows.Controls.Primitives.PopupAnimation.Slide,
+                Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
         }
         #endregion
 

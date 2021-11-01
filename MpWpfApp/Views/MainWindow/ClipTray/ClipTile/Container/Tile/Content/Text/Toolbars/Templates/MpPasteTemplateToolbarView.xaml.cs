@@ -45,6 +45,9 @@ namespace MpWpfApp {
         }
 
         private void ClipTilePasteTemplateToolbar_Unloaded(object sender, RoutedEventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
             foreach (var civm in BindingContext.Parent.Parent.ItemViewModels) {
                 foreach (var thlvm in civm.TemplateCollection.Templates) {
                     thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;

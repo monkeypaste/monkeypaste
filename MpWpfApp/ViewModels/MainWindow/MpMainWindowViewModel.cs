@@ -319,8 +319,8 @@ namespace MpWpfApp {
 
 
             MpHelpers.Instance.RunOnMainThread(async () => {
-                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
                 await MpShortcutCollectionViewModel.Instance.Init();
+                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             });
         }
 

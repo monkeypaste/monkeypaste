@@ -36,7 +36,6 @@ namespace MpWpfApp {
 
             // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
-
             var mwvm = DataContext as MpMainWindowViewModel;
             Application.Current.Resources["MainWindowViewModel"] = mwvm;
 
@@ -48,14 +47,11 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
             int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            await Task.Delay(3000);
             MpStandardBalloonViewModel.ShowBalloon(
                     "Monkey Paste",
                     "Successfully loaded w/ " + totalItems + " items",
                     Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-
-
-            //MpMainWindowViewModel.IsMainWindowLoading = false;
-
 
             sw.Stop();
             MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");

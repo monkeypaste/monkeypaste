@@ -11,7 +11,7 @@ namespace MpWpfApp {
         }
 
         public override void WriteLine(string message) {
-            //Debugger.Break();
+            Debugger.Break();
         }
     }
 }

@@ -67,39 +67,23 @@ namespace MpWpfApp {
         private static void Lb_Loaded(object sender, RoutedEventArgs e) {
             lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
-
-            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += Sv_ScrollChanged;
-            Task.Run(async() => {
-                await Task.Delay(3000);
-            });
-            
+            sv.PreviewMouseWheel += Sv_ScrollChanged;
         }
 
 
         private static void Lb_Unloaded(object sender, RoutedEventArgs e) {
             var lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
-
-            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= Sv_ScrollChanged;
+            sv.PreviewMouseWheel -= Sv_ScrollChanged;
             lb.Loaded -= Lb_Loaded;
             lb.Unloaded -= Lb_Unloaded;
         }
 
-        private static void Sv_ScrollChanged(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if(IsScrollJumping || /*e.HorizontalChange == 0 || */MpMainWindowViewModel.IsMainWindowLoading) {
+        private static void Sv_ScrollChanged(object sender, MouseWheelEventArgs e) {
+            if (IsScrollJumping || MpClipTrayViewModel.Instance.IsAnyTileItemDragging || /*e.HorizontalChange == 0 || */MpMainWindowViewModel.IsMainWindowLoading) {
                 IsScrollJumping = false;
                 return;
             }
-            //var sv = sender as ScrollViewer;
-            //if(sv == null) {
-            //    MpConsole.WriteTraceLine("Scrollviewer is null");
-            //    return;
-            //}
-            //var lb = sv.GetVisualAncestor<ListBox>();
-            //if(lb == null) {
-            //    MpConsole.WriteTraceLine("Listbox is null");
-            //    return;
-            //}
 
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
@@ -140,8 +124,8 @@ namespace MpWpfApp {
                 var rlbir = lb.GetListBoxItemRect(r_lbi_idx);
                 if (rlbir.Right >= lbr.Right - MpMeasurements.Instance.ClipTileMargin) {
                     //when last visible item's right edge is past the listboxes edge
-                    int itemsRemaining = itemCountInListbox - r_lbi_idx;
-                    MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
+                    int itemsRemaining = itemCountInListbox - r_lbi_idx - 1;
+                    //MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
                     if (itemsRemaining <= thresholdRemainingItemCount) {
                         if(!ctrvm.IsBusy) {
@@ -155,8 +139,22 @@ namespace MpWpfApp {
                 //scrolling up
                 //get item under point in middle of left edge of listbox
                 var l_lbi_idx = lb.GetItemIndexAtPoint(new Point(lbr.Left, lbr.Height / 2));
-                MpConsole.WriteLine($"Scrolling right, left most idx: {l_lbi_idx} with remaining: {l_lbi_idx}  max remaining: {thresholdRemainingItemCount}");
-                if (l_lbi_idx - thresholdRemainingItemCount <= 0) {
+                if (l_lbi_idx < 0) {
+                    l_lbi_idx = 0;
+                }
+                var llbir = lb.GetListBoxItemRect(l_lbi_idx);
+                if (llbir.Left <= lbr.Left + MpMeasurements.Instance.ClipTileMargin) {
+                    //when last visible item's right edge is past the listboxes edge
+                    int itemsRemaining = l_lbi_idx;
+                    //MpConsole.WriteLine($"Scrolling left, right most idx: {l_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
+
+                    if (itemsRemaining <= thresholdRemainingItemCount) {
+                        if (!ctrvm.IsBusy) {
+                        }
+
+                        _accumHorizontalChange = 0;
+                        loadMoreCommand.Execute(-1);
+                    }
                 }
             }
         }

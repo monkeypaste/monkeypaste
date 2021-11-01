@@ -160,20 +160,9 @@ namespace MpWpfApp {
         public void Civm_OnScrollWheelRequest(object sender, int e) {
             var ctvm = DataContext as MpClipTileViewModel;
             if (ctvm.IsExpanded) {
-                var sv = ContentListBox.GetScrollViewer() as AnimatedScrollViewer;
-                //sv.IsHorizontal = false;
-
+                var sv = ContentListBox.GetScrollViewer();
                 double yOffset = sv.VerticalOffset + e;
                 sv.ScrollToVerticalOffset(yOffset);
-                sv.TargetVerticalOffset = yOffset;
-                //var sv = ContentListBox.GetScrollViewer() as AnimatedScrollViewer;
-                //sv.V
-                //var grid = sv.Template.FindName("ScrollViewerControlTemplate1",sv) as Grid;
-
-                //var vsb = sv.Template.FindName("PART_VerticalScrollBar", grid) as ScrollBar;
-                //ScrollBar.ScrollToVerticalOffsetCommand.Execute(yOffset, vsb);
-
-                //ScrollBar.DeferScrollToVerticalOffsetCommand.Execute(yOffset, vsb);
             }
         }
 

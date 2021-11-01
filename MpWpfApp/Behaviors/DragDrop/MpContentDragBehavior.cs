@@ -54,6 +54,48 @@ namespace MpWpfApp {
             InvalidateDrop();
         }
 
+        #region Mouse Events
+
+        private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+            mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
+
+            AssociatedObject.CaptureMouse();
+            //
+            if (AssociatedObject.DataContext is MpContentItemViewModel civm) {                
+                if (civm.IsSelected) {
+                } else {
+                    civm.IsSelected = true;
+                    civm.Parent.IsSelected = true;
+                }
+                //AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateExtendedSelection();
+            }
+            e.Handled = true;
+        }
+
+        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {            
+            AssociatedObject.ReleaseMouseCapture();
+            EndDrop();
+            ResetCursor();
+            //AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateExtendedSelection();
+            e.Handled = true;
+            
+        }
+
+        private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
+            Vector diff = e.GetPosition(Application.Current.MainWindow) - mouseStartPosition;
+            if (AssociatedObject.IsMouseCaptured &&
+                (diff.Length >= MINIMUM_DRAG_DISTANCE || isDragging)) {
+                isDragging = true;
+                MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = true);
+                Drag(e);
+            }
+        }
+
+        #endregion
+
         #region Key Up/Down Events
         private void AssociatedObject_KeyUp(object sender, KeyEventArgs e) {
             if(isDragging) {
@@ -74,45 +116,6 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
-
-        #region Mouse Events
-
-        private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if(MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                return;
-            }
-            mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
-            AssociatedObject.CaptureMouse();
-
-            if (MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 1) {
-                e.Handled = true;
-            } else {
-                e.Handled = false;
-            }
-        }
-
-        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if(isDragging) {
-                e.Handled = true;
-            }
-            AssociatedObject.ReleaseMouseCapture();
-            EndDrop();
-            ResetCursor();
-
-            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = false);
-        }
-
-        private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            Vector diff = e.GetPosition(Application.Current.MainWindow) - mouseStartPosition;
-            if (AssociatedObject.IsMouseCaptured && 
-                (diff.Length >= MINIMUM_DRAG_DISTANCE || isDragging)) {
-                isDragging = true;
-                MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = true);
-                Drag(e);
-            } 
-        }
-
         #endregion
 
         #region State Changes

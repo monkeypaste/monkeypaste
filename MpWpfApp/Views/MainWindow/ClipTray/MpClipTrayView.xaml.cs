@@ -44,8 +44,9 @@ namespace MpWpfApp {
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             ctrvm.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
 
-            var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+            var sv = ClipTray.GetScrollViewer();
             sv.PreviewMouseDown += Sv_PreviewMouseDown;
+            sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
 
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
@@ -59,9 +60,8 @@ namespace MpWpfApp {
                        BindingContext.SelectedItems[0].ItemIdx > 0) {
                         return;
                     }
-                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+                    var sv = ClipTray.GetScrollViewer();
                     sv.ScrollToHorizontalOffset(0);
-                    sv.TargetHorizontalOffset = 0;
                     sv.ScrollToLeftEnd();
                     break;
             }
@@ -74,18 +74,18 @@ namespace MpWpfApp {
                 case MpMessageType.Requery:
                     //await RefreshContext();
                     UpdateLayout();
-                    var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
+                    var sv = ClipTray.GetScrollViewer();
                     if (sv != null) {
                         double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
                         double ttw = tw * BindingContext.TotalItemsInQuery;
+                        var hsb = sv.GetScrollBar(Orientation.Horizontal);
 
-                        sv.HorizontalScrollBar.Maximum = ttw;
-                        sv.HorizontalScrollBar.Minimum = 0;
+                        hsb.Maximum = ttw;
+                        hsb.Minimum = 0;
+                        //hsb.UpdateLayout();
 
                         sv.ScrollToHorizontalOffset(0);
-                        sv.TargetHorizontalOffset = 0;
                         sv.ScrollToLeftEnd();
-
                     }
                     break;
                 case MpMessageType.Expand:
@@ -98,9 +98,8 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollToXRequest(object sender, double e) {
-            var sv = ClipTray.GetScrollViewer() as AnimatedScrollViewer;
-            //sv.ScrollToHorizontalOffset(e);
-            sv.TargetHorizontalOffset = e;
+            var sv = ClipTray.GetScrollViewer();
+            sv.ScrollToHorizontalOffset(e);
         }
 
         private void Sb_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -113,8 +112,8 @@ namespace MpWpfApp {
 
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             return;
-            var sv = sender as AnimatedScrollViewer;
-            var hsb = sv.HorizontalScrollBar;
+            var sv = sender as ScrollViewer;
+            var hsb = sv.GetScrollBar(Orientation.Horizontal);
             var htrack = hsb.Track;
             var hthumb = htrack.Thumb;
 
@@ -137,13 +136,14 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.JumpToPageIdxCommand.Execute(targetPageIdx);
 
             double newOffsetX = e.GetPosition(sv).X;
-            sv.TargetHorizontalOffset = newOffsetX;
+            sv.ScrollToHorizontalOffset(newOffsetX);
             return;
         }
 
-        private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
-            //does nothing but without setting this up in load the tray will always load in the center of the list!!
-            return;
+        private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            var sv = sender as ScrollViewer;
+
+            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta);
         }
 
         public async Task RefreshContext() {
