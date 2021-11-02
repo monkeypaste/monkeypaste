@@ -1,6 +1,6 @@
 ﻿
 using Gma.System.MouseKeyHook;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

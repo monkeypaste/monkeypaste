@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 using PropertyChanged;
 
@@ -814,11 +814,11 @@ namespace MpWpfApp {
                         Parent.IsSelected = true;
                         if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown &&
                             !Parent.IsDroppingOnTile && !Parent.AllowMultiSelect) {
-                            MpClipTrayViewModel.Instance.SelectedItems
+                            MpClipTrayViewModel.Instance.Items
                                 .Where(x => x != Parent)
                                 .ForEach(y => y.IsSelected = false);
 
-                            Parent.SelectedItems
+                            Parent.ItemViewModels
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
                         }
@@ -899,24 +899,17 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
-        private AsyncRelayCommand<string> _translateSubSelectedItemTextAsyncCommand;
-        public ICommand TranslateSubSelectedItemTextAsyncCommand {
-            get {
-                if (_translateSubSelectedItemTextAsyncCommand == null) {
-                    _translateSubSelectedItemTextAsyncCommand = new AsyncRelayCommand<string>(TranslateSubSelectedItemTextAsync, CanTranslateSubSelectedItemText);
+        public ICommand TranslateSubSelectedItemTextAsyncCommand => new RelayCommand<string>(
+            async (toLanguage) => {
+                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage, false);
+                if (!string.IsNullOrEmpty(translatedText)) {
+                    CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
                 }
-                return _translateSubSelectedItemTextAsyncCommand;
-            }
-        }
-        private bool CanTranslateSubSelectedItemText(object args) {
-            return CopyItem.ItemType == MpCopyItemType.RichText;
-        }
-        private async Task TranslateSubSelectedItemTextAsync(string toLanguage) {
-            var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage, false);
-            if (!string.IsNullOrEmpty(translatedText)) {
-                CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
-            }
-        }
+            },
+            (toLanguage) => {
+                return CopyItem.ItemType == MpCopyItemType.RichText;
+            });
+        
 
         private RelayCommand _excludeSubSelectedItemApplicationCommand;
         public ICommand ExcludeSubSelectedItemApplicationCommand {
@@ -951,7 +944,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
         }
 
-        public ICommand AssignHotkeyCommand => new AsyncRelayCommand(
+        public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
 
                 ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(

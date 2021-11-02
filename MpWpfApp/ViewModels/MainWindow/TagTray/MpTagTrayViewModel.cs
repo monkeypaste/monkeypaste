@@ -1,5 +1,5 @@
 ﻿using FFImageLoading.Helpers.Exif;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;

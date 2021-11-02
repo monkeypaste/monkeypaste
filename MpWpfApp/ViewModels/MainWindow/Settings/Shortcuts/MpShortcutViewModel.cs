@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
 using WindowsInput;
@@ -413,7 +413,7 @@ namespace MpWpfApp {
                     return;
                 }
                 await Shortcut.WriteToDatabaseAsync();
-                MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
+                //MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
         }

@@ -11,17 +11,20 @@ namespace MpWpfApp {
         public static T Instance { get { return _Lazy.Value; } }
         #endregion
 
-        public abstract void Init();
+        public abstract Task Init();
     }
 
-    public abstract class MpSingletonViewModel<T> : MpViewModelBase<object>
-        where T : new() {
+    public abstract class MpSingletonViewModel<T,P> : MpViewModelBase<P>
+        where T : new()
+        where P : class {
 
         #region Singleton Definition
         private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
         public static T Instance { get { return _Lazy.Value; } }
         #endregion
 
-        private MpSingletonViewModel() : base(null) { }
+        protected MpSingletonViewModel() : base(null) { }
+
+        public abstract Task Init();
     }
 }

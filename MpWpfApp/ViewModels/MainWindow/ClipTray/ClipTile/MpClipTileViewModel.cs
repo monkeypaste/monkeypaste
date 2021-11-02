@@ -23,7 +23,7 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using System.Windows.Threading;
-    using Microsoft.Toolkit.Mvvm.Input;
+    using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
     using Newtonsoft.Json;
     using MonkeyPaste;
@@ -893,14 +893,14 @@ using System.Speech.Synthesis;
                 return;
             }
 
-            (Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
-            (Parent.PerformHotkeyPasteCommand as AsyncRelayCommand<object>).NotifyCanExecuteChanged();
-            (Parent.BringSelectedClipTilesToFrontCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
-            (Parent.SendSelectedClipTilesToBackCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
-            (Parent.SpeakSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
-            (Parent.MergeSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
-            (Parent.TranslateSelectedClipTextAsyncCommand as AsyncRelayCommand<string>).NotifyCanExecuteChanged();
-            (Parent.CreateQrCodeFromSelectedClipsCommand as AsyncRelayCommand).NotifyCanExecuteChanged();
+            //(Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
+            //(Parent.PerformHotkeyPasteCommand as RelayCommand<object>).NotifyCanExecuteChanged();
+            //(Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.TranslateSelectedClipTextAsyncCommand as RelayCommand<string>).NotifyCanExecuteChanged();
+            //(Parent.CreateQrCodeFromSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
         }
 
         public async Task GatherAnalytics() {
@@ -1172,19 +1172,15 @@ using System.Speech.Synthesis;
        
 
         #region Public Methods       
-
-
-
-
         public async Task UserPreparingDynamicPaste() {
             await Task.Delay(1);
         }
 
         public void ResetSubSelection(bool clearEditing = true) {
             ClearSelection(clearEditing);
-            if (VisibleItems.Count > 0) {
-                VisibleItems[0].IsSelected = true;
-            }
+            Parent.IsSelectionReset = true;
+            IsSelected = true;
+            Parent.IsSelectionReset = false;
         }
 
         public void ClearSubHovering() {
@@ -1518,48 +1514,36 @@ using System.Speech.Synthesis;
             }
         }
 
-        private AsyncRelayCommand _sendSubSelectedClipTilesToBackCommand;
-        public ICommand SendSubSelectedClipTilesToBackCommand {
-            get {
-                if (_sendSubSelectedClipTilesToBackCommand == null) {
-                    _sendSubSelectedClipTilesToBackCommand = new AsyncRelayCommand(SendSubSelectedClipTilesToBack, CanSendSubSelectedClipTilesToBack);
-                }
-                return _sendSubSelectedClipTilesToBackCommand;
-            }
-        }
-        private bool CanSendSubSelectedClipTilesToBack() {
-            if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
-                return false;
-            }
-            bool canSendBack = false;
-            for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
-                    canSendBack = true;
-                    break;
-                }
-            }
-            return canSendBack;
-        }
-        private async Task SendSubSelectedClipTilesToBack() {
-            try {
-                IsBusy = true;
-                await Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        (Action)(() => {
-                            var tempSelectedClipTiles = SelectedItems;
-                            ClearSelection();
+        public ICommand SendSubSelectedClipTilesToBackCommand => new RelayCommand(
+            () => {
+                try {
+                    IsBusy = true;
+                    var tempSelectedClipTiles = SelectedItems;
+                    ClearSelection();
 
-                            foreach (var sctvm in tempSelectedClipTiles) {
-                                ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), ItemViewModels.Count - 1);
-                                sctvm.IsSelected = true;
-                            }
-                            RequestScrollIntoView(SelectedItems[SelectedItems.Count - 1]);
-                        }));
-            }
-            finally {
-                IsBusy = false;
-            }
-        }
+                    foreach (var sctvm in tempSelectedClipTiles) {
+                        ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), ItemViewModels.Count - 1);
+                        sctvm.IsSelected = true;
+                    }
+                    RequestScrollIntoView(SelectedItems[SelectedItems.Count - 1]);
+                }
+                finally {
+                    IsBusy = false;
+                }
+            },
+            () => {
+                if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
+                    return false;
+                }
+                bool canSendBack = false;
+                for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
+                    if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
+                        canSendBack = true;
+                        break;
+                    }
+                }
+                return canSendBack;
+            });
 
 
         private RelayCommand<object> _searchWebCommand;
@@ -1611,7 +1595,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public ICommand LinkTagToSubSelectedClipsCommand => new AsyncRelayCommand<MpTagTileViewModel>(
+        public ICommand LinkTagToSubSelectedClipsCommand => new RelayCommand<MpTagTileViewModel>(
             async (tagToLink) => {
                 bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
                 foreach (var srtbvm in SelectedItems) {
@@ -1680,50 +1664,43 @@ using System.Speech.Synthesis;
             }
         }
 
-        private AsyncRelayCommand _speakSubSelectedClipsAsyncCommand;
-        public ICommand SpeakSubSelectedClipsAsyncCommand {
-            get {
-                if (_speakSubSelectedClipsAsyncCommand == null) {
-                    _speakSubSelectedClipsAsyncCommand = new AsyncRelayCommand(SpeakSubSelectedClipsAsync, CanSpeakSubSelectedClipsAsync);
-                }
-                return _speakSubSelectedClipsAsyncCommand;
-            }
-        }
-        private bool CanSpeakSubSelectedClipsAsync() {
-            return IsTextItem;
-        }
-        private async Task SpeakSubSelectedClipsAsync() {
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                var speechSynthesizer = new SpeechSynthesizer();
-                speechSynthesizer.SetOutputToDefaultAudioDevice();
-                string voiceName = speechSynthesizer.GetInstalledVoices()[3].VoiceInfo.Name;
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
-                    var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(Properties.Settings.Default.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
-                    if (voice != null) {
-                        voiceName = voice.VoiceInfo.Name;
+        public ICommand SpeakSubSelectedClipsAsyncCommand => new RelayCommand(
+            async () => {
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                    var speechSynthesizer = new SpeechSynthesizer();
+                    speechSynthesizer.SetOutputToDefaultAudioDevice();
+                    string voiceName = speechSynthesizer.GetInstalledVoices()[3].VoiceInfo.Name;
+                    if (!string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
+                        var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(Properties.Settings.Default.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
+                        if (voice != null) {
+                            voiceName = voice.VoiceInfo.Name;
+                        }
                     }
-                }
-                speechSynthesizer.SelectVoice(voiceName);
+                    speechSynthesizer.SelectVoice(voiceName);
 
-                speechSynthesizer.Rate = 0;
+                    speechSynthesizer.Rate = 0;
 
-                speechSynthesizer.SpeakCompleted += (s, e) => {
-                    speechSynthesizer.Dispose();
-                };
-                // Create a PromptBuilder object and append a text string.
-                PromptBuilder promptBuilder = new PromptBuilder();
+                    speechSynthesizer.SpeakCompleted += (s, e) => {
+                        speechSynthesizer.Dispose();
+                    };
+                    // Create a PromptBuilder object and append a text string.
+                    PromptBuilder promptBuilder = new PromptBuilder();
 
-                foreach (var sctvm in SelectedItems) {
-                    //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
-                    promptBuilder.AppendText(Environment.NewLine + sctvm.CopyItem.ItemData.ToPlainText());
-                }
+                    foreach (var sctvm in SelectedItems) {
+                        //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
+                        promptBuilder.AppendText(Environment.NewLine + sctvm.CopyItem.ItemData.ToPlainText());
+                    }
 
-                // Speak the contents of the prompt asynchronously.
-                speechSynthesizer.SpeakAsync(promptBuilder);
+                    // Speak the contents of the prompt asynchronously.
+                    speechSynthesizer.SpeakAsync(promptBuilder);
 
-            }, DispatcherPriority.Background);
-        }
-        public ICommand DuplicateSubSelectedClipsCommand => new AsyncRelayCommand(
+                }, DispatcherPriority.Background);
+            },
+            () => {
+                return IsTextItem;
+            });
+
+        public ICommand DuplicateSubSelectedClipsCommand => new RelayCommand(
             async () => {
                 var tempSubSelectedRtbvml = SelectedItems;
                 ClearSelection();

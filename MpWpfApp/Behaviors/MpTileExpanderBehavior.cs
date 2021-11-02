@@ -18,12 +18,16 @@ namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
         private double _originalMainWindowTop = 0;
         private double _initialExpandedMainWindowTop = 0;
+        private Point _lastMousePosition;
+        private FrameworkElement _mainWindowTitlePanel;
 
         public bool IsExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
             AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.Unloaded += AssociatedObject_Unloaded;
+
+            _mainWindowTitlePanel = (Application.Current.MainWindow as MpMainWindow).TitleMenu;
         }
 
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
@@ -38,13 +42,81 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
         }
 
+        #region Manual Resize Event Handlers
+
+        private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
+            if (!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+        }
+
+        private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
+            if (!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+        }
+
+        private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            _mainWindowTitlePanel.ReleaseMouseCapture();
+            MpMainWindowViewModel.Instance.IsResizing = false;
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+        }
+
+        private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            if (!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+            _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
+            _mainWindowTitlePanel.CaptureMouse();
+            MpMainWindowViewModel.Instance.IsResizing = true;
+            e.Handled = true;
+        }
+
+        private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
+            if (!_mainWindowTitlePanel.IsMouseCaptured) {
+                e.Handled = false;
+                return;
+            }
+
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+            var mp = e.GetPosition(Application.Current.MainWindow);
+            double deltaY = mp.Y - _lastMousePosition.Y;
+            _lastMousePosition = mp;
+
+            Resize(-deltaY);
+            e.Handled = true;
+        }
+
+        #endregion
+
         private void ReceiveClipTileMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.Expand:
                     Expand();
+
+                    _mainWindowTitlePanel.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
+                    _mainWindowTitlePanel.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
+                    _mainWindowTitlePanel.PreviewMouseMove += AssociatedObject_MouseMove;
+                    _mainWindowTitlePanel.MouseEnter += AssociatedObject_MouseEnter;
+                    _mainWindowTitlePanel.MouseLeave += AssociatedObject_MouseLeave;                    
                     break;
                 case MpMessageType.Unexpand:
                     Unexpand();
+
+
+                    _mainWindowTitlePanel.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+                    _mainWindowTitlePanel.MouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+                    _mainWindowTitlePanel.PreviewMouseMove -= AssociatedObject_MouseMove;
+                    _mainWindowTitlePanel.MouseEnter -= AssociatedObject_MouseEnter;
+                    _mainWindowTitlePanel.MouseLeave -= AssociatedObject_MouseLeave;
                     break;
             }
         }
@@ -74,14 +146,7 @@ namespace MpWpfApp {
             ctvm.TileBorderHeight += boundAdjust;
             ctvm.TileContentHeight += boundAdjust;
 
-            var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
-            clv.UpdateLayout();
-
-            var civl = AssociatedObject.GetVisualDescendents<MpContentItemView>().ToList();
-            foreach (var civ in civl) {
-                civ.UpdateLayout();
-            }
-            AssociatedObject.UpdateLayout();
+            Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -210,7 +275,7 @@ namespace MpWpfApp {
             double deltaHeight = _originalMainWindowTop - temp;
 
             mwvm.MainWindowTop = _originalMainWindowTop;
-            mwvm.ClipTrayHeight -= deltaHeight;
+            mwvm.ClipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
 
             var ctrvm = MpClipTrayViewModel.Instance;
 
@@ -249,7 +314,8 @@ namespace MpWpfApp {
                 clv.UpdateAdorner();
             }
 
-            //AssociatedObject.GetVisualAncestor<MpClipTrayView>().ClipTray.Items.Refresh();
+            AssociatedObject.UpdateLayout();
+            AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateLayout();
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
 

@@ -13,7 +13,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using MonkeyPaste;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MpWpfApp {
     // + Account
@@ -267,7 +267,7 @@ namespace MpWpfApp {
 
         }
 
-        public ICommand ReassignShortcutCommand => new AsyncRelayCommand(
+        public ICommand ReassignShortcutCommand => new RelayCommand(
             async () => {
                 var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
@@ -279,7 +279,7 @@ namespace MpWpfApp {
                 );
             });
 
-        public ICommand DeleteShortcutCommand => new AsyncRelayCommand(
+        public ICommand DeleteShortcutCommand => new RelayCommand(
             async () => {
                 MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
                 var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
@@ -287,7 +287,7 @@ namespace MpWpfApp {
                 await MpDb.Instance.DeleteItemAsync<MpShortcut>(scvm.Shortcut);
             });
 
-        public ICommand ResetShortcutCommand => new AsyncRelayCommand(
+        public ICommand ResetShortcutCommand => new RelayCommand(
             async () => {
                 MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
                 var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];

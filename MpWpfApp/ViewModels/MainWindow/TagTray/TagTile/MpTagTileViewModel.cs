@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -415,7 +415,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        public ICommand AssignHotkeyCommand => new AsyncRelayCommand<object>(
+        public ICommand AssignHotkeyCommand => new RelayCommand<object>(
             async (args) => {
                 ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                 this,

@@ -1,5 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 using System;

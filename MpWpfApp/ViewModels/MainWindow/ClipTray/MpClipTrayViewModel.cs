@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -16,12 +17,12 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Toolkit.Mvvm.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
 using System.Collections.Concurrent;
+
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpViewModelBase<object>  {
@@ -349,7 +350,7 @@ namespace MpWpfApp {
             RemainingItemsCountThreshold = 0;// _pageSize;
             MpDataModelProvider.Instance.Init(new MpWpfQueryInfo(), _pageSize);
 
-            BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
+            //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
             _initialLoadCount = _pageSize * 3;
 
             MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
@@ -430,7 +431,7 @@ namespace MpWpfApp {
             IsBusy = false;
             ResetClipSelection();
 
-            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Requery);
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.RequeryCompleted);
 
             sw.Stop();
             MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
@@ -480,7 +481,7 @@ namespace MpWpfApp {
             });
 
 
-        public ICommand JumpToPageIdxCommand => new AsyncRelayCommand<int>(
+        public ICommand JumpToPageIdxCommand => new RelayCommand<int>(
             async (idx) => {
                 IList<MpCopyItem> cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(idx, _initialLoadCount);
 
@@ -1239,8 +1240,8 @@ namespace MpWpfApp {
                 }
             });
 
-        private AsyncRelayCommand<object> _hotkeyPasteCommand;
-        public ICommand PerformHotkeyPasteCommand => new AsyncRelayCommand<object>(
+        private RelayCommand<object> _hotkeyPasteCommand;
+        public ICommand PerformHotkeyPasteCommand => new RelayCommand<object>(
             async (args) => {
                 if (args == null) {
                     return;
@@ -1327,7 +1328,7 @@ namespace MpWpfApp {
             IsPastingSelected = false;
         }
 
-        public ICommand BringSelectedClipTilesToFrontCommand => new AsyncRelayCommand(
+        public ICommand BringSelectedClipTilesToFrontCommand => new RelayCommand(
             async() => {
                 try {
                     IsBusy = true;
@@ -1365,7 +1366,7 @@ namespace MpWpfApp {
                 return canBringForward;
             });
 
-        public ICommand SendSelectedClipTilesToBackCommand => new AsyncRelayCommand(
+        public ICommand SendSelectedClipTilesToBackCommand => new RelayCommand(
             async () => {
                 try {
                     IsBusy = true;
@@ -1403,7 +1404,7 @@ namespace MpWpfApp {
                 return canSendBack;
             });
 
-        public ICommand DeleteSelectedClipsCommand => new AsyncRelayCommand(
+        public ICommand DeleteSelectedClipsCommand => new RelayCommand(
             async () => {
                 //int lastSelectedClipTileIdx = SelectedItems.Max(x => Items.IndexOf(x));
                 //foreach (var ct in SelectedItems) {
@@ -1431,7 +1432,7 @@ namespace MpWpfApp {
                         !IsAnyPastingTemplate;
             });
 
-        public ICommand LinkTagToCopyItemCommand => new AsyncRelayCommand<MpTagTileViewModel>(
+        public ICommand LinkTagToCopyItemCommand => new RelayCommand<MpTagTileViewModel>(
             async (tagToLink) => {
                 bool isUnlink = tagToLink.IsLinked(SelectedItems[0]);
                 foreach (var selectedClipTile in SelectedItems) {
@@ -1552,7 +1553,7 @@ namespace MpWpfApp {
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
-        public ICommand MergeSelectedClipsCommand => new AsyncRelayCommand(
+        public ICommand MergeSelectedClipsCommand => new RelayCommand(
             async () => {
                 await Task.Delay(1);
             },
@@ -1570,7 +1571,7 @@ namespace MpWpfApp {
                 return areAllSameType;
             });
 
-        public ICommand TranslateSelectedClipTextAsyncCommand => new AsyncRelayCommand<string>(
+        public ICommand TranslateSelectedClipTextAsyncCommand => new RelayCommand<string>(
             async (toLanguage) => {
                 var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
                 if (!string.IsNullOrEmpty(translatedText)) {
@@ -1581,7 +1582,7 @@ namespace MpWpfApp {
                 return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
             });
 
-        public ICommand SummarizeCommand => new AsyncRelayCommand(
+        public ICommand SummarizeCommand => new RelayCommand(
             async () => {
                 var result = await MpOpenAi.Instance.Summarize(SelectedModels[0].ItemData.ToPlainText());
                 SelectedModels[0].ItemDescription = result;
@@ -1593,7 +1594,7 @@ namespace MpWpfApp {
                        SelectedItems[0].Count == 1;
             });
 
-        public ICommand CreateQrCodeFromSelectedClipsCommand => new AsyncRelayCommand(
+        public ICommand CreateQrCodeFromSelectedClipsCommand => new RelayCommand(
             async () => {
                 BitmapSource bmpSrc = null;
                 await Task.Run(() => {
@@ -1606,7 +1607,7 @@ namespace MpWpfApp {
                     SelectedClipTilesMergedPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
             });
 
-        public ICommand SpeakSelectedClipsCommand => new AsyncRelayCommand(
+        public ICommand SpeakSelectedClipsCommand => new RelayCommand(
             async () => {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var speechSynthesizer = new SpeechSynthesizer();
@@ -1640,7 +1641,7 @@ namespace MpWpfApp {
             });
 
 
-        public ICommand DuplicateSelectedClipsCommand => new AsyncRelayCommand(
+        public ICommand DuplicateSelectedClipsCommand => new RelayCommand(
             async () => {
                 foreach (var sctvm in SelectedItems) {
                     foreach (var ivm in sctvm.SelectedItems) {

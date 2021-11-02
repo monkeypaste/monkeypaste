@@ -9,7 +9,7 @@ namespace MonkeyPaste {
     // from https://stackoverflow.com/a/68272972/105028
     public enum MpMessageType {
         None,
-        Requery,
+        RequeryCompleted,
         QueryChanged,
         ItemsInitialized,
         Expand,

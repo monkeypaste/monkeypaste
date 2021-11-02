@@ -69,9 +69,6 @@
                         Grid.Column="0"
                         Orientation="Horizontal"
                         Background="DarkGreen">
-                <i:Interaction.Behaviors>
-                    <local:MpMainWindowResizeBehavior />
-                </i:Interaction.Behaviors>
                 <TextBlock Text="{Binding LogText}" />
             </StackPanel>
             <!--  FilterMenu  -->

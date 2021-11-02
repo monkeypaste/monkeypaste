@@ -59,7 +59,7 @@
                         <Setter Property="HorizontalContentAlignment"
                                 Value="Left" />
                         <Setter Property="VerticalContentAlignment"
-                                Value="Stretch" />
+                                Value="Top" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -83,7 +83,7 @@
                         <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                     CanVerticallyScroll="False"
                                     CanHorizontallyScroll="True"
-                                    VerticalAlignment="Stretch"
+                                    VerticalAlignment="Top"
                                     HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
                                     IsItemsHost="True"
                                     Orientation="Horizontal" />

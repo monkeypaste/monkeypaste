@@ -13,7 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using Microsoft.Toolkit.Mvvm.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -417,7 +417,7 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand ShowWindowCommand => new AsyncRelayCommand(
+        public ICommand ShowWindowCommand => new RelayCommand(
             async () => {
                 IsMainWindowOpening = true;
                 await MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow,DispatcherPriority.Render);
@@ -471,7 +471,7 @@ namespace MpWpfApp {
             timer.Start();            
         }
 
-        public ICommand HideWindowCommand => new AsyncRelayCommand<object>(
+        public ICommand HideWindowCommand => new RelayCommand<object>(
             async (args) => {
                 await MpHelpers.Instance.RunOnMainThreadAsync(async()=> { await HideWindow(args); });
             },

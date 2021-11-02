@@ -71,7 +71,7 @@ namespace MpWpfApp {
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Requery:
+                case MpMessageType.RequeryCompleted:
                     //await RefreshContext();
                     UpdateLayout();
                     var sv = ClipTray.GetScrollViewer();

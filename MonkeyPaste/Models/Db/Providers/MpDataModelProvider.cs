@@ -431,6 +431,7 @@ namespace MonkeyPaste {
             string sortStr = Enum.GetName(typeof(MpContentSortType), QueryInfo.SortType);
             string searchStr = string.IsNullOrWhiteSpace(QueryInfo.SearchText) ? null : QueryInfo.SearchText;
             var st = QueryInfo.SortType;
+
             if (st == MpContentSortType.Source ||
                 st == MpContentSortType.UsageScore ||
                 st == MpContentSortType.Manual) {

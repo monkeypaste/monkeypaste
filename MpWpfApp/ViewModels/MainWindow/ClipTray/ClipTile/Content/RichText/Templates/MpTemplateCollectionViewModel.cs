@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 using System;
 using System.Collections.Generic;
@@ -208,10 +208,10 @@ namespace MpWpfApp {
         }
 
         public void UpdateCommandsCanExecute() {
-            (ClearAllTemplatesCommand as RelayCommand).NotifyCanExecuteChanged();
-            (SelectNextTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
-            (SelectPreviousTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
-            (PasteTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(ClearAllTemplatesCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(SelectNextTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(SelectPreviousTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(PasteTemplateCommand as RelayCommand).NotifyCanExecuteChanged();
         }
 
         #region IDisposable

@@ -31,16 +31,32 @@ namespace MpWpfApp {
 
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
-
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
-
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_PreviewMouseLeftButtonUp;
-
             AssociatedObject.MouseMove += AssociatedObject_MouseMove;
-
             AssociatedObject.KeyDown += AssociatedObject_KeyDown;
-
             AssociatedObject.KeyUp += AssociatedObject_KeyUp;
+
+           // MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceiveClipTileMessage, AssociatedObject.DataContext);
+        }
+
+        private void ReceiveClipTileMessage(MpMessageType msg) {
+            switch (msg) {
+                //case MpMessageType.Expand:
+                //    AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_PreviewMouseLeftButtonDown;
+                //    AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_PreviewMouseLeftButtonUp;
+                //    AssociatedObject.MouseMove -= AssociatedObject_MouseMove;
+                //    AssociatedObject.KeyDown -= AssociatedObject_KeyDown;
+                //    AssociatedObject.KeyUp -= AssociatedObject_KeyUp;
+                //    break;
+                //case MpMessageType.Unexpand:
+                //    AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+                //    AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_PreviewMouseLeftButtonUp;
+                //    AssociatedObject.MouseMove += AssociatedObject_MouseMove;
+                //    AssociatedObject.KeyDown += AssociatedObject_KeyDown;
+                //    AssociatedObject.KeyUp += AssociatedObject_KeyUp;
+                //    break;
+            }
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
@@ -68,20 +84,21 @@ namespace MpWpfApp {
                 if (civm.IsSelected) {
                 } else {
                     civm.IsSelected = true;
-                    civm.Parent.IsSelected = true;
                 }
-                //AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateExtendedSelection();
             }
             e.Handled = true;
         }
 
-        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {            
+        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
             AssociatedObject.ReleaseMouseCapture();
             EndDrop();
             ResetCursor();
-            //AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateExtendedSelection();
+
+
             e.Handled = true;
-            
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {

@@ -152,7 +152,6 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Top"
-                    local:MpRelayCommandExtensions.NotifyCommandParameterChanges="True"
                     Command="{Binding PasteTemplateCommand}"
                     Content="{Binding PasteButtonText}"
                     FontSize="12"

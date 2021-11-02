@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -439,7 +439,7 @@ namespace MpWpfApp {
 
         public void ReceiveClipTrayViewModelMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.Requery:
+                case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     Validate();
                     break;

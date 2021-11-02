@@ -237,28 +237,36 @@ namespace MpWpfApp {
             }
         }
 
-        private Dictionary<string, string> ConvertManagedFormats(IDataObject ido) {
+        private Dictionary<string, string> ConvertManagedFormats(IDataObject ido, int retryCount = 5) {
             var cbDict = new Dictionary<string, string>();
+            if(retryCount == 0) {
+                MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
+                return cbDict;
+            }
             if (ido == null) {
                 return cbDict;
             }
-            foreach (var af in _managedDataFormats) {
-                if (ido.GetDataPresent(af)) {
-                    // TODO add checks for files and Images and convert: files to string seperated by NewLine, images to base 64
-                    var data = ido.GetData(af, false);//MonkeyPaste.MpAsyncHelpers.RunSync<object>(() => dpv.GetDataAsync(af).AsTask());
-                    if(data == null) {
-                        data = ido.GetData(af, true);
+            try {
+                foreach (var af in _managedDataFormats) {
+                    if (ido.GetDataPresent(af)) {
+                        var data = ido.GetData(af, false);
+                        if (data == null) {
+                            data = ido.GetData(af, true);
+                        }
+                        if (af == DataFormats.FileDrop) {
+                            var sa = data as string[];
+                            data = string.Join(Environment.NewLine, sa);
+                        } else if (af == DataFormats.Bitmap && data is BitmapSource bmpSrc) {
+                            data = bmpSrc.ToBase64String();
+                        }
+                        cbDict.Add(af, data.ToString());
                     }
-                    if(af == DataFormats.FileDrop) {
-                        var sa = data as string[];
-                        data = string.Join(Environment.NewLine, sa);
-                    } else if(af == DataFormats.Bitmap && data is BitmapSource bmpSrc) {
-                        data = bmpSrc.ToBase64String();
-                    }
-                    cbDict.Add(af, data.ToString());
                 }
+                return cbDict;
+            } catch(Exception ex) {
+                MpConsole.WriteLine($"Error accessing clipboard {retryCount} attempts remaining", ex);
+                return ConvertManagedFormats(ido, retryCount--);
             }
-            return cbDict;
         }
 
         private bool HasChanged(Dictionary<string, string> nco) {

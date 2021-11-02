@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -87,7 +87,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AppViewModels));
         }
 
-        public ICommand AddExcludedAppCommand => new AsyncRelayCommand(
+        public ICommand AddExcludedAppCommand => new RelayCommand(
             async () => {
                 MonkeyPaste.MpConsole.WriteLine("Add excluded app : ");
                 OpenFileDialog openFileDialog = new OpenFileDialog() {
