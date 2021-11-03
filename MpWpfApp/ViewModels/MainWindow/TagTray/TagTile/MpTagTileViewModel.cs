@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -332,41 +333,59 @@ namespace MpWpfApp {
             }
         }        
 
-        public void AddClip(MpContentItemViewModel rtbvm) {
-            Tag.LinkWithCopyItem(rtbvm.CopyItem);
+        public async Task AddContentItem(MpContentItemViewModel rtbvm) {
+            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(TagId,rtbvm.CopyItemId);
+            if(dupCheck != null) {
+                MpConsole.WriteLine($"Tag {TagName} already contains a link with CopyItem {rtbvm.CopyItemTitle}, ignoring");
+                return;
+            }
+            var ncit = new MpCopyItemTag() {
+                TagId = TagId,
+                CopyItemId = rtbvm.CopyItemId,
+                CopyItemTagGuid = Guid.NewGuid()
+            };
+            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
         }
 
-        public void RemoveClip(MpContentItemViewModel rtbvm) {
-            Tag.UnlinkWithCopyItem(rtbvm.CopyItem);
+        public async Task RemoveContentItem(MpContentItemViewModel rtbvm) {
+            var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(rtbvm.CopyItemId, TagId);
+            if(cit == null) {
+                MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem {rtbvm.CopyItemTitle} so cannot remove");
+                return;
+            }
+            await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
         }
 
-        public bool IsLinked(MpCopyItem ci) {
+        public async Task<bool> IsLinked(MpCopyItem ci) {
             if (ci == null || ci.Id == 0 || Tag == null ||  Tag.Id == 0) {
                 return false;
             }
+            bool isLinked;
+
             if (IsAllTag) {
-                return true;
+                isLinked = true;
+            } else if (IsRecentTag) {
+                isLinked = await MpDataModelProvider.Instance.IsCopyItemInRecentTag(ci.Id);
+            } else {
+                isLinked = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
             }
-            if (IsRecentTag) {
-                return MpDb.Instance.GetItems<MpCopyItem>()
-                             .OrderByDescending(x => x.CopyDateTime)
-                             .Take(MpPreferences.Instance.MaxRecentClipItems)
-                             .Any(y => y.Id == ci.Id);
-            }
-            return Tag.IsLinkedWithCopyItem(ci);
+
+            return isLinked;
         }
 
-        public bool IsLinked(MpClipTileViewModel ctvm) {
+        public async Task<bool> IsLinked(MpClipTileViewModel ctvm) {
             foreach(var civm in ctvm.ItemViewModels) {
-                if(IsLinked(civm)) {
+                bool isLinked = await IsLinked(civm);
+                if(isLinked) {
                     return true;
                 }
             }
             return false;
         }
 
-        public bool IsLinked(MpContentItemViewModel rtbvm) {
-            return IsLinked(rtbvm.CopyItem);
+        public async Task<bool> IsLinked(MpContentItemViewModel rtbvm) {
+            var result = await IsLinked(rtbvm.CopyItem);
+            return result;
         }
         #endregion
 

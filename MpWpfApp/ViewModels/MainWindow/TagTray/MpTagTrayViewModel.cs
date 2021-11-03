@@ -163,7 +163,7 @@ namespace MpWpfApp {
                 } else if (ttvm.IsRecentTag) {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetRecentCopyItemCountAsync());
                 } else {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTagItemCountAsync(ttvm.TagId));
+                    countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetCopyItemCountForTagAsync(ttvm.TagId));
                 }
             }
 

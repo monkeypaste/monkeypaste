@@ -189,7 +189,8 @@ namespace MpWpfApp {
             }
 
             var sttvm = MpMainWindowViewModel.Instance.TagTrayViewModel.SelectedTagTile;
-            if (!sttvm.IsLinked(HostClipTileViewModel)) {
+            bool isLinked = await sttvm.IsLinked(HostClipTileViewModel);
+            if (!isLinked) {
                 //MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + HostClipTileViewModel.CopyItemTitle + " is not linked with current tag");
                 HighlightTaskCount--;
                 return new Dictionary<object, Visibility> { { HostClipTileViewModel, Visibility.Collapsed } };

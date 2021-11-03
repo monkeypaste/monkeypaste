@@ -12,7 +12,7 @@ using SQLiteNetExtensions.Extensions;
 using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
-    public abstract class MpDbModelBase : INotifyPropertyChanged, IComparer {
+    public abstract class MpDbModelBase : IComparer {
         public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }
         
@@ -223,8 +223,7 @@ namespace MonkeyPaste {
             return dbo;
         }
 
-        #region PropertyChanged 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region ICompare 
 
         public int Compare(object x, object y) {
             if (x == null || x is not MpDbModelBase) {

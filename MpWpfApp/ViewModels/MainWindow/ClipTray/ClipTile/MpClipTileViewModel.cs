@@ -164,11 +164,10 @@ using System.Speech.Synthesis;
 
         public List<string> FileList {
             get {
-                var fl = new List<string>();
                 DoCommandSelection();
                 var ivml = SelectedItems;
                 var cil = ivml.Select(x => x.CopyItem).ToList();
-                return MpCopyItemMerger.Instance.MergeFilePaths(cil).ToList();
+                return MpAsyncHelpers.RunSync<string[]>(()=>MpCopyItemMerger.Instance.MergeFilePaths(cil)).ToList();
             }
         }
 
@@ -1595,36 +1594,37 @@ using System.Speech.Synthesis;
             }
         }
 
-        public ICommand LinkTagToSubSelectedClipsCommand => new RelayCommand<MpTagTileViewModel>(
-            async (tagToLink) => {
-                bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
-                foreach (var srtbvm in SelectedItems) {
-                    if (isUnlink) {
-                        tagToLink.RemoveClip(srtbvm);
-                    } else {
-                        tagToLink.AddClip(srtbvm);
-                    }
-                }
-                await MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
-                await MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
-            },
-            (tagToLink) => {
-                //this checks the selected clips association with tagToLink
-                //and only returns if ALL selecteds clips are linked or unlinked 
-                if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
-                    return false;
-                }
-                if (SelectedItems.Count == 1) {
-                    return true;
-                }
-                bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0].CopyItem);
-                foreach (var srtbvm in SelectedItems) {
-                    if (tagToLink.IsLinked(srtbvm) != isLastClipTileLinked) {
-                        return false;
-                    }
-                }
-                return true;
-            });
+        //public ICommand LinkTagToSubSelectedClipsCommand => new RelayCommand<MpTagTileViewModel>(
+        //    async (tagToLink) => {
+        //        bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
+        //        foreach (var srtbvm in SelectedItems) {
+        //            if (isUnlink) {
+        //                tagToLink.RemoveClip(srtbvm);
+        //            } else {
+        //                tagToLink.AddClip(srtbvm);
+        //            }
+        //        }
+        //        await MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
+        //        await MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
+        //    },
+        //    async (tagToLink) => {
+        //        //this checks the selected clips association with tagToLink
+        //        //and only returns if ALL selecteds clips are linked or unlinked 
+        //        if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
+        //            return false;
+        //        }
+        //        if (SelectedItems.Count == 1) {
+        //            return true;
+        //        }
+        //        bool isLastClipTileLinked = await tagToLink.IsLinked(SelectedItems[0].CopyItem);
+        //        foreach (var srtbvm in SelectedItems) {
+        //            bool isLinked = await tagToLink.IsLinked(srtbvm);
+        //            if (isLinked != isLastClipTileLinked) {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+        //    });
 
         private RelayCommand _assignHotkeyCommand;
         public ICommand AssignHotkeyCommand {

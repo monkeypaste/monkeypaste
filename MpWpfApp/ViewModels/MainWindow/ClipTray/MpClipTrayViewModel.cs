@@ -135,55 +135,14 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpContextMenuItemViewModel> _translateLanguageMenuItems = null;
-        public ObservableCollection<MpContextMenuItemViewModel> TranslateLanguageMenuItems {
-            get {
-                if (_translateLanguageMenuItems == null) {
-                    _translateLanguageMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
-                    foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
-                        _translateLanguageMenuItems.Add(new MpContextMenuItemViewModel(languageName, TranslateSelectedClipTextAsyncCommand, languageName, false));
-                    }
-                }
-                return _translateLanguageMenuItems;
-            }
-        }
+        #region Context Menu Item View Models
 
-        public List<MpContextMenuItemViewModel> TagMenuItems {
-            get {
-                var tmil = new List<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpContextMenuItemViewModel> TranslateLanguageMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
 
-                foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
-                    if (tagTile.IsSudoTag) {
-                        continue;
-                    }
-                    int isCheckedCount = 0;
-                    foreach (var sm in SelectedModels) {
-                        if(tagTile.IsLinked(sm)) {
-                            isCheckedCount++;
-                        }
-                    }
-                    bool? isChecked;
-                    if (isCheckedCount == SelectedModels.Count) {
-                        isChecked = true;
-                    } else if (isCheckedCount > 0) {
-                        isChecked = null;
-                    } else {
-                        isChecked = false;
-                    }
-                    tmil.Add(
-                        new MpContextMenuItemViewModel(
-                            tagTile.TagName,
-                            MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
-                            tagTile,
-                            isChecked,
-                            string.Empty,
-                            null,
-                            tagTile.ShortcutKeyString,
-                            tagTile.TagColor));
-                }
-                return tmil;
-            }
-        }
+        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
+
+        #endregion
+
         #endregion
 
         #region Layout
@@ -524,6 +483,43 @@ namespace MpWpfApp {
             }
         }
 
+        public async Task<ObservableCollection<MpContextMenuItemViewModel>> GetTagMenuItemsForSelectedItems() {
+            var tmil = new ObservableCollection<MpContextMenuItemViewModel>();
+
+            foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                if (tagTile.IsSudoTag) {
+                    continue;
+                }
+                int isCheckedCount = 0;
+                foreach (var sm in SelectedModels) {
+                    bool isLinked = await tagTile.IsLinked(sm);
+                    if (isLinked) {
+                        isCheckedCount++;
+                    }
+                }
+                bool? isChecked;
+                if (isCheckedCount == SelectedModels.Count) {
+                    isChecked = true;
+                } else if (isCheckedCount > 0) {
+                    isChecked = null;
+                } else {
+                    isChecked = false;
+                }
+                tmil.Add(
+                    new MpContextMenuItemViewModel(
+                        tagTile.TagName,
+                        MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                        tagTile,
+                        isChecked,
+                        string.Empty,
+                        null,
+                        tagTile.ShortcutKeyString,
+                        tagTile.TagColor));
+            }
+            return tmil;
+        }
+
+
         #region View Invokers
         public void RequestScrollToX(double xoffset) {
             OnScrollToXRequest?.Invoke(this, xoffset);
@@ -565,7 +561,7 @@ namespace MpWpfApp {
                     
                     bool isDesc = MpDataModelProvider.Instance.QueryInfo.IsDescending;
                     int tagId = MpDataModelProvider.Instance.QueryInfo.TagId;
-                    var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(tagId);
+                    var citl = await MpDataModelProvider.Instance.GetCopyItemTagsForTagAsync(tagId);
 
                     if (tagId == MpTag.AllTagId || tagId == MpTag.RecentTagId) {
                         //ignore sorting for sudo tags
@@ -1434,13 +1430,13 @@ namespace MpWpfApp {
 
         public ICommand LinkTagToCopyItemCommand => new RelayCommand<MpTagTileViewModel>(
             async (tagToLink) => {
-                bool isUnlink = tagToLink.IsLinked(SelectedItems[0]);
+                bool isUnlink = await tagToLink.IsLinked(SelectedItems[0]);
                 foreach (var selectedClipTile in SelectedItems) {
                     foreach (var ivm in selectedClipTile.ItemViewModels) {
                         if (isUnlink) {
-                            tagToLink.RemoveClip(ivm);
+                            await tagToLink.RemoveContentItem(ivm);
                         } else {
-                            tagToLink.AddClip(ivm);
+                            await tagToLink.AddContentItem(ivm);
                         }
                     }
                 }
@@ -1453,16 +1449,17 @@ namespace MpWpfApp {
                 if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
                     return false;
                 }
-                if (SelectedItems.Count == 1) {
-                    return true;
-                }
-                bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0]);
-                foreach (var selectedClipTile in SelectedItems) {
-                    if (tagToLink.IsLinked(selectedClipTile) != isLastClipTileLinked) {
-                        return false;
-                    }
-                }
                 return true;
+                //if (SelectedItems.Count == 1) {
+                //    return true;
+                //}
+                //bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0]);
+                //foreach (var selectedClipTile in SelectedItems) {
+                //    if (tagToLink.IsLinked(selectedClipTile) != isLastClipTileLinked) {
+                //        return false;
+                //    }
+                //}
+                //return true;
             });
 
         private RelayCommand _assignHotkeyCommand;

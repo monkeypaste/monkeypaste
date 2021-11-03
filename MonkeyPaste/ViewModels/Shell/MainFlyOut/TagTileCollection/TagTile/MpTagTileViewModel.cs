@@ -77,7 +77,7 @@ namespace MonkeyPaste {
         private async Task Initialize() {
             //Tag.CopyItemList = await MpCopyItem.GetAllCopyItemsByTagId(Tag.Id);
             //Tag.Color = await MpColor.GetColorByIdAsync(Tag.ColorId);
-
+            await Task.Delay(10);
             ContextMenuViewModel = new MpContextMenuViewModel();
             ContextMenuViewModel.Items.Add(new MpContextMenuItemViewModel() {
                 Title = "Rename",
@@ -100,6 +100,19 @@ namespace MonkeyPaste {
             OnViewModelLoaded();
         }
 
+        private async Task UpdateSortOrder(bool fromModel = false) {
+            if(fromModel) {
+                var citl = await MpDataModelProvider.Instance.GetCopyItemTagsForTagAsync(Tag.Id);
+                citl = citl.OrderBy(x => x.CopyItemSortIdx).ToList();
+                for (int i = 0; i < citl.Count; i++) {
+                    citl[i].CopyItemSortIdx = i;
+                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(citl[i]);
+                }
+            } else {
+                // TODO add logic to update copy items by order in collection
+            }
+        }
+
         #region Event Handlers
         private void MpTagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             Device.InvokeOnMainThreadAsync(async () => {
@@ -117,19 +130,24 @@ namespace MonkeyPaste {
         private void Db_OnItemAdded(object sender, MpDbModelBase e) {
             Device.InvokeOnMainThreadAsync(async () => {
                 if (e is MpCopyItemTag ncit) {
-                    if (ncit.Id == Tag.Id) {
+                    if (ncit.TagId == Tag.Id) {
                         //occurs when copy item is linked to tag
-                        var tagCopyItemIds = await MpDataModelProvider.Instance.GetCopyItemIdsForTagAsync(Tag.Id);
-                        if (!tagCopyItemIds.Contains(ncit.CopyItemId)) {
+                        if(ncit.CopyItemSortIdx < 0) {
+                            ncit.CopyItemSortIdx = Tag.CopyItems.Count;
+                            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
+                        } else {
                             var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ncit.CopyItemId);
-                            Tag.CopyItems.Add(nci);
-
-                            OnPropertyChanged(nameof(CopyItemCount));
+                            if(!Tag.CopyItems.Contains(nci)) {
+                                Tag.CopyItems.Add(nci);
+                            }
+                            await UpdateSortOrder(true);
                         }
+
+                        OnPropertyChanged(nameof(CopyItemCount));
                     }
                 } else if (e is MpCopyItem nci) {
                     //occurs for new/synced copy items
-                    bool isLinked = await Tag.IsLinkedWithCopyItemAsync(nci);
+                    bool isLinked = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, nci.Id);
                     if (!isLinked) {
                         isLinked = Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId;
                     } 
@@ -148,12 +166,16 @@ namespace MonkeyPaste {
                     if (t.Id == Tag.Id) {
                         Tag = t;
                     }
-                } 
+                } else if (e is MpCopyItemTag dcit) {
+                    if (dcit.TagId == Tag.Id) {
+                        await UpdateSortOrder(true);
+                    }
+                }
             });
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
-            Device.BeginInvokeOnMainThread(() => {
+            Device.BeginInvokeOnMainThread(async () => {
                 if (e is MpCopyItemTag dcit) {
                     if (dcit.TagId == Tag.Id) {
                         //when CopyItem unlinked
@@ -162,12 +184,14 @@ namespace MonkeyPaste {
                             Tag.CopyItems.Remove(ci);
                             OnPropertyChanged(nameof(CopyItemCount));
                         }
+                        await UpdateSortOrder(true);
                     }
                 } else if (e is MpCopyItem dci) {
                     //when copy item deleted
                     if (Tag.CopyItems.Any(x => x.Id == dci.Id)) {
                         Tag.CopyItems.Remove(dci);
                         OnPropertyChanged(nameof(CopyItemCount));
+                        await UpdateSortOrder(true);
                     }
                 }
             });

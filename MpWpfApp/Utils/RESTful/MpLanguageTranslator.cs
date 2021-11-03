@@ -18,9 +18,11 @@ namespace MpWpfApp {
         // This sample uses the Cognitive Services subscription key for all services. To learn more about
         // authentication options, see: https://docs.microsoft.com/azure/cognitive-services/authentication.
         private string COGNITIVE_SERVICES_KEY = Properties.Settings.Default.AzureCognitiveServicesKey;
+
         // Endpoints for Translator Text and Bing Spell Check
         public static readonly string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
         const string BING_SPELL_CHECK_API_ENDPOINT = "https://westus.api.cognitive.microsoft.com/bing/v7.0/spellcheck/";
+
         // An array of language codes
         private string[] languageCodes;
 
@@ -28,13 +30,13 @@ namespace MpWpfApp {
         private SortedDictionary<string, string> languageCodesAndTitles =
             new SortedDictionary<string, string>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
 
-        private bool isConnected = false;
+        public bool IsLoaded { get; set; } = false;
 
         private string NoConnectionItemHeader = "Cannot connect to lanugage server";
 
         public List<string> LanguageList { get; private set; } = new List<string>();
-        public void Init() { }
-        public MpLanguageTranslator() : base("Language Translation") {
+        
+        public async Task Init() {
             try {
                 if (!MpHelpers.Instance.IsConnectedToInternet()) {
                     Console.WriteLine("Client offline. Language Translation is inactive");
@@ -50,20 +52,19 @@ namespace MpWpfApp {
                     System.Windows.Application.Current.Shutdown();
                 } else {
                     // Get languages for drop-downs
-                    GetLanguagesForTranslate();
-                    if(isConnected) {
-                        // Populate drop-downs with values from GetLanguagesForTranslate
-                        foreach (string menuItem in languageCodesAndTitles.Keys) {
-                            LanguageList.Add(menuItem);
-                        }
+                    await GetLanguagesForTranslate();
+                    // Populate drop-downs with values from GetLanguagesForTranslate
+                    foreach (string menuItem in languageCodesAndTitles.Keys) {
+                        LanguageList.Add(menuItem);
                     }
                 }
             }
             catch (Exception ex) {
                 Console.WriteLine("Error trying to connect to internet: " + ex.ToString());
             }
-
         }
+
+        public MpLanguageTranslator() : base("Language Translation") { }
 
         // Global exception handler to display error message and exit
         private static void HandleExceptions(object sender, UnhandledExceptionEventArgs args) {
@@ -74,7 +75,7 @@ namespace MpWpfApp {
 
         // ***** DETECT LANGUAGE OF TEXT TO BE TRANSLATED
         public string DetectLanguage(string text) {
-            if (!isConnected) {
+            if (!IsLoaded) {
                 MpConsole.WriteTraceLine("Is not connected, ignoring translation");
                 return string.Empty;
             }
@@ -172,11 +173,11 @@ namespace MpWpfApp {
         }
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
-        private void GetLanguagesForTranslate(int retryCount = 5) {
+        private async Task GetLanguagesForTranslate(int retryCount = 5) {
             if(retryCount <= 0) {
                 LanguageList.Clear();
                 LanguageList.Add(NoConnectionItemHeader);
-                isConnected = false;
+                IsLoaded = true;
                 return;
             }
             //if (!MpHelpers.Instance.IsConnectedToNetwork()) {
@@ -191,7 +192,7 @@ namespace MpWpfApp {
             WebResponse response = null;
             // Read and parse the JSON response
             try {
-                response = WebRequest.GetResponse();
+                response = await WebRequest.GetResponseAsync();
                 using (var reader = new StreamReader(response.GetResponseStream(), UnicodeEncoding.UTF8)) {
                     var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(reader.ReadToEnd());
                     var languages = result["translation"];
@@ -205,16 +206,17 @@ namespace MpWpfApp {
             catch (Exception ex) {
                 if (MpHelpers.Instance.IsConnectedToNetwork()) {
                     Console.WriteLine($"Problem connecting to language server, re-attempt #{6-retryCount} to connect..");
-                    GetLanguagesForTranslate(retryCount--);
+                    await GetLanguagesForTranslate(retryCount--);
+                    return;
                 } else {
                     Console.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
                 }
             }
-            isConnected = true;
+            IsLoaded = true;
         }
 
         public async Task<string> TranslateAsync(string textToTranslate, string toLanguage, bool doSpellCheck) {
-            if(!isConnected) {
+            if(!IsLoaded) {
                 MpConsole.WriteTraceLine("Is not connected, ignoring translation");
                 return string.Empty;
             }

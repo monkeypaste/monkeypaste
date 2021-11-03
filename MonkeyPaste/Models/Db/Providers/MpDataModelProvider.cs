@@ -44,72 +44,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public int GetTotalCopyItemCount() {
-            string query = "select count(pk_MpCopyItemId) from MpCopyItem";
-            var result = MpDb.Instance.QueryScalar<int>(query);
-            return result;
-        }
-
         public async Task<int> GetRecentCopyItemCountAsync() {
-            //string query = @"select count(*) from MpCopyItem 
-            //                    where pk_MpCopyItemId in
-            //                     (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-            //                     select pci.pk_MpCopyItemId from MpCopyItem aci
-            //                     inner join MpCopyItem pci 
-            //                     ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-            //                     order by aci.CopyDateTime) limit ?)
-            //                    or fk_ParentCopyItemId in 
-            //                     (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-            //                     select pci.pk_MpCopyItemId from MpCopyItem aci
-            //                     inner join MpCopyItem pci 
-            //                     ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-            //                     order by aci.CopyDateTime) limit ?)";
-            //var result = await MpDb.Instance.QueryScalarAsync<int>(query, MpPreferences.Instance.MaxRecentClipItems, MpPreferences.Instance.MaxRecentClipItems);
-            var recentParents = await GetRecentItemsAsync();
-            int totalCount = recentParents.Count;
-            foreach(var rp in recentParents) {
-                totalCount += await GetCompositeChildCountAsync(rp.Id);
-            }
-            return totalCount;
-        }
-
-        public int GetRecentCopyItemCount() {
-            string query = @"select count(*) from MpCopyItem 
-                                where pk_MpCopyItemId in
-	                                (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                inner join MpCopyItem pci 
-	                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                order by aci.CopyDateTime) limit ?)
-                                or fk_ParentCopyItemId in 
-	                                (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                inner join MpCopyItem pci 
-	                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                order by aci.CopyDateTime) limit ?)";
-            var result = MpDb.Instance.QueryScalar<int>(query, MpPreferences.Instance.MaxRecentClipItems, MpPreferences.Instance.MaxRecentClipItems);
-            return result;
-        }
-
-        public List<MpCopyItem> GetRecentItems() {
-            string query = @"select * from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-                                select pci.pk_MpCopyItemId from MpCopyItem aci
-                                inner join MpCopyItem pci 
-                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                order by aci.CopyDateTime desc) order by CopyDateTime desc limit ?";
-            var result = MpDb.Instance.Query<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
-
-            return result;
-        }
-
-        public async Task<List<MpCopyItem>> GetRecentItemsAsync() {
-            string query = @"select * from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-                                select pci.pk_MpCopyItemId from MpCopyItem aci
-                                inner join MpCopyItem pci 
-                                ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                order by aci.CopyDateTime desc) order by CopyDateTime desc limit ?";
-            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, MpPreferences.Instance.MaxRecentClipItems);
-
+            string query = GetFetchQuery(0, 0, true, MpTag.RecentTagId, true);
+            var result = await MpDb.Instance.QueryScalarAsync<int>(query);
             return result;
         }
 
@@ -119,43 +56,43 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<List<MpCopyItem>> GetCopyItemsForTagAsync(int tagId) {
-            string query = string.Format(@"select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)", tagId);
-            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query,tagId);
-            return result;
-        }
-
-        public List<int> GetCopyItemIdsForTag(int tagId) {
-            string query = string.Format(@"select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}", tagId);
-            var result = MpDb.Instance.QueryScalars<int>(query);
-            return result;
-        }
-
-
-        public async Task<int> GetTagItemCountAsync(int tagId) {
+        public async Task<int> GetCopyItemCountForTagAsync(int tagId) {
             string query = string.Format(@"select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId in 
                                            (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0})", tagId);
             var result = await MpDb.Instance.QueryScalarAsync<int>(query);
             return result;
         }
 
-        public int GetTagItemCount(int tagId) {
-            string query = string.Format(@"select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId in 
-                                           (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0})", tagId);
-            var result = MpDb.Instance.QueryScalar<int>(query);
+        public async Task<List<MpCopyItem>> GetCopyItemsForTagAsync(int tagId) {
+            string query = string.Format(@"select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0})", tagId);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<MpCopyItemTag> GetCopyItemTagForTagAsync(int ciid, int tagId) {
+            string query = string.Format(@"select * from MpCopyItemTag where fk_MpCopyItemId={0} and fk_MpTagId={1}", ciid, tagId);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(query);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<List<MpCopyItemTag>> GetCopyItemTagsForTagAsync(int tagId) {
+            string query = string.Format(@"select * from MpCopyItemTag where fk_MpTagId={0}", tagId);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(query);
+            return result;
+        }
+
+        public async Task<List<MpCopyItemTag>> GetCopyItemTagsForCopyItemAsync(int ciid) {
+            string query = string.Format(@"select * from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
+            var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(query);
             return result;
         }
 
         public async Task<List<MpCopyItem>> GetCompositeChildrenAsync(int ciid) {
             string query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
-            return result;
-        }
-
-        public List<MpCopyItem> GetCompositeChildren(int ciid) {
-            string query = string.Format(
-                @"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
-            var result = MpDb.Instance.Query<MpCopyItem>(query);
             return result;
         }
 
@@ -166,44 +103,20 @@ namespace MonkeyPaste {
         }
 
         public async Task<List<MpCopyItemTemplate>> GetTemplatesAsync(int ciid) {
-            string query = string.Format(
-                @"select * from MpCopyItemTemplate where fk_MpCopyItemId={0}", ciid);
+            string query = string.Format(@"select * from MpCopyItemTemplate where fk_MpCopyItemId={0}", ciid);
             var result = await MpDb.Instance.QueryAsync<MpCopyItemTemplate>(query);
             return result;
         }
 
-        public List<MpCopyItemTemplate> GetTemplates(int ciid) {
-            string query = string.Format(
-                @"select * from MpCopyItemTemplate where fk_MpCopyItemId={0}", ciid);
-            var result = MpDb.Instance.Query<MpCopyItemTemplate>(query);
-            return result;
-        }
-
         public async Task<List<MpShortcut>> GetCopyItemShortcutsAsync(int ciid) {
-            string query = string.Format(
-                @"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
+            string query = string.Format(@"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
             var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
-            return result;
-        }
-
-        public List<MpShortcut> GetCopyItemShortcuts(int ciid) {
-            string query = string.Format(
-                @"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
-            var result = MpDb.Instance.Query<MpShortcut>(query);
             return result;
         }
 
         public async Task<List<MpShortcut>> GetTagShortcutsAsync(int tid) {
-            string query = string.Format(
-                @"select * from MpShortcut where fk_MpTagId={0}", tid);
+            string query = string.Format(@"select * from MpShortcut where fk_MpTagId={0}", tid);
             var result = await MpDb.Instance.QueryAsync<MpShortcut>(query);
-            return result;
-        }
-
-        public List<MpShortcut> GetTagShortcuts(int tid) {
-            string query = string.Format(
-                @"select * from MpShortcut where fk_MpTagId={0}", tid);
-            var result = MpDb.Instance.Query<MpShortcut>(query);
             return result;
         }
 
@@ -214,7 +127,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<List<MpCopyItem>> GetCopyItemsByData(string text) {
-            string query = $"select * from MpCopyItem where ItemData=?";
+            string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, text);
             return result;
         }
@@ -242,13 +155,16 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<bool> IsAppRejectedAsync(string path) {
+            string query = $"select count(*) from MpApp where SourcePath=? and IsRejected=1";
+            var result = await MpDb.Instance.QueryScalarAsync<int>(query, path);
+            return result > 0;
+        }
+
         public bool IsAppRejected(string path) {
-            string query = $"select * from MpApp where SourcePath=?";
-            var result = MpDb.Instance.Query<MpApp>(query, path);
-            if (result == null || result.Count == 0) {
-                return false;
-            }
-            return result[0].IsAppRejected;
+            string query = $"select count(*) from MpApp where SourcePath=? and IsRejected=1";
+            var result = MpDb.Instance.QueryScalar<int>(query, path);
+            return result > 0;
         }
 
         public async Task<MpUrl> GetUrlByPath(string url) {
@@ -285,6 +201,36 @@ namespace MonkeyPaste {
                 return null;
             }
             return result[0];
+        }
+
+        public async Task<MpAnalyticItem> GetAnalyticItemByEndpoint(string endPoint) {
+            string query = $"select * from MpAnalyticItem where EndPoint=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItem>(query, endPoint);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpAnalyticItemParameter> GetAnalyticItemParameterByKey(int analyticItemId, string key) {
+            string query = $"select * from MpAnalyticItemParameter where Key=? and fk_MpAnalyticItemId=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemParameter>(query, key,analyticItemId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<bool> IsCopyItemInRecentTag(int copyItemId) {
+            string query = GetFetchQuery(0, 0, true, MpTag.RecentTagId, true, copyItemId);
+            var result = await MpDb.Instance.QueryScalarAsync<int>(query);
+            return result > 0;
+        }
+
+        public async Task<bool> IsTagLinkedWithCopyItem(int tagId,int copyItemId) {
+            string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
+            var result = await MpDb.Instance.QueryScalarAsync<int>(query, tagId, copyItemId);
+            return result > 0;
         }
         #endregion
 
@@ -375,40 +321,10 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public int FetchCopyItemCount() {
-            int count = 0;
-            switch(QueryInfo.TagId) {
-                case MpTag.AllTagId:
-                    count = GetTotalCopyItemCount();
-                    break;
-                case MpTag.RecentTagId:
-                    count = GetRecentCopyItemCount();
-                    break;
-                default:
-                    count = GetTagItemCount(QueryInfo.TagId);
-                    break;
-            }
-
-            return count;
-        }
-
         public async Task<int> FetchCopyItemCountAsync() {
-            int count = 0;
-
-            if (QueryInfo.TagId == MpTag.RecentTagId) {
-                count = await GetRecentCopyItemCountAsync();
-            } else {
-                string totalCountQuery = GetFetchQuery(0, 0, true);
-                count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
-            }
-            
+            string totalCountQuery = GetFetchQuery(0, 0, true, -1, true);
+            int count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
             return count;
-        }
-
-        public IList<MpCopyItem> FetchCopyItemRange(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
-            string query = GetFetchQuery(startIndex, count);
-            var result = MpDb.Instance.Query<MpCopyItem>(query);
-            return result;
         }
 
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
@@ -417,19 +333,16 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public IList<MpCopyItem> FetchCopyItemRange(int startIndex, int count) {
-            return FetchCopyItemRange(startIndex, count, null);
-        }
-
         #endregion
 
         #region Private Methods
 
-        private string GetFetchQuery(int startIndex,int count, bool queryForTotalCount = false) {
-            int tagId = QueryInfo.TagId;
+        private string GetFetchQuery(int startIndex,int count, bool queryForTotalCount = false, int forceTagId = -1, bool ignoreSearchStr = false, int forceCheckCopyItemId = -1) {
+            int tagId = forceTagId > 0 ? forceTagId : QueryInfo.TagId;
             string descStr = QueryInfo.IsDescending ? "DESC" : "ASC";
             string sortStr = Enum.GetName(typeof(MpContentSortType), QueryInfo.SortType);
             string searchStr = string.IsNullOrWhiteSpace(QueryInfo.SearchText) ? null : QueryInfo.SearchText;
+            searchStr = ignoreSearchStr ? null : searchStr;
             var st = QueryInfo.SortType;
 
             if (st == MpContentSortType.Source ||
@@ -439,6 +352,13 @@ namespace MonkeyPaste {
                     MpConsole.WriteLine("Ignoring unimplemented sort type: " + sortStr + " and sorting by id...");
                 }
                 sortStr = "pk_MpCopyItemId";
+            }
+
+
+            string checkCopyItemToken = string.Empty;
+            if (forceCheckCopyItemId > 0) {
+                checkCopyItemToken = $" and pk_MpCopyItemId={forceCheckCopyItemId}";
+                queryForTotalCount = true;
             }
 
             string selectToken = "*";
@@ -453,16 +373,33 @@ namespace MonkeyPaste {
                 count = MpPreferences.Instance.MaxRecentClipItems;
             }
 
+
             string query;
 
             switch (tagId) {
                 case MpTag.RecentTagId:
-                    query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+                    if(queryForTotalCount) {
+                        query = string.Format(@"select count(*) from MpCopyItem 
+                                                    where (pk_MpCopyItemId in
+	                                                    (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+	                                                    select pci.pk_MpCopyItemId from MpCopyItem aci
+	                                                    inner join MpCopyItem pci 
+	                                                    ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+	                                                    order by aci.CopyDateTime) limit {0})
+                                                    or fk_ParentCopyItemId in 
+	                                                    (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
+	                                                    select pci.pk_MpCopyItemId from MpCopyItem aci
+	                                                    inner join MpCopyItem pci 
+	                                                    ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
+	                                                    order by aci.CopyDateTime) limit {0})){1}", count,checkCopyItemToken);
+                    } else {
+                        query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
                                             select pci.pk_MpCopyItemId from MpCopyItem aci
                                             inner join MpCopyItem pci  
                                             ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
                                             order by aci.{0} {1}) order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex,selectToken);
+                                           sortStr, descStr, count, startIndex, selectToken);
+                    }
                     break;
                 case MpTag.AllTagId:
                     if(searchStr == null) {

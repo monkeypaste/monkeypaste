@@ -58,7 +58,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            IsAssociated = await Tag.IsLinkedWithCopyItemAsync(CopyItem);
+            IsAssociated = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, CopyItem.Id);
         }
         #endregion
 
@@ -66,9 +66,18 @@ namespace MonkeyPaste {
         public ICommand ToggleAssociationCommand => new Command(
             async () => {
                 if(IsAssociated) {
-                    await Tag.UnlinkWithCopyItemAsync(CopyItem);
+                    var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(CopyItem.Id, Tag.Id);
+                    //triggers tagtileviewmodel to update other item's sort order
+                    await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
                 } else {
-                    await Tag.LinkWithCopyItemAsync(CopyItem);
+                    var ncit = new MpCopyItemTag() {
+                        CopyItemId = CopyItem.Id,
+                        TagId = Tag.Id,
+                        CopyItemTagGuid = Guid.NewGuid()
+                    };
+                    //triggers TagTileViewModel to update sort order with new item
+                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
+                    Tag.CopyItems.Add(CopyItem);
                 }
                 await UpdateAssocation();
             },

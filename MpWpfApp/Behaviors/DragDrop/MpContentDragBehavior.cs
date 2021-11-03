@@ -15,6 +15,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpContentDragBehavior : Behavior<FrameworkElement> {
         private const double MINIMUM_DRAG_DISTANCE = 10;
+        private static MpContentContextMenuView _ContentContextMenu;
 
         private bool isDropValid = false;
         private bool isDragging = false;
@@ -32,6 +33,7 @@ namespace MpWpfApp {
         protected override void OnAttached() {            
             AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseRightButtonDown += AssociatedObject_PreviewMouseRightButtonDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_PreviewMouseLeftButtonUp;
             AssociatedObject.MouseMove += AssociatedObject_MouseMove;
             AssociatedObject.KeyDown += AssociatedObject_KeyDown;
@@ -89,6 +91,27 @@ namespace MpWpfApp {
             e.Handled = true;
         }
 
+
+        private void AssociatedObject_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+            if (_ContentContextMenu == null) {
+                _ContentContextMenu = new MpContentContextMenuView();
+            }
+            if (AssociatedObject.DataContext is MpContentItemViewModel civm) {
+                if (civm.IsSelected) {
+                } else {
+                    civm.IsSelected = true;
+                }
+            }
+            e.Handled = true;
+
+            AssociatedObject.ContextMenu = _ContentContextMenu;
+            AssociatedObject.ContextMenu.PlacementTarget = AssociatedObject;
+            AssociatedObject.ContextMenu.IsOpen = true;
+        }
+
         private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                 return;
@@ -136,7 +159,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State Changes
-        int lastTrayDropIdx = 0;
         private void Drag(MouseEventArgs e) {
             var parent = Application.Current.MainWindow;
 

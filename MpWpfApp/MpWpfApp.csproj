@@ -180,6 +180,12 @@
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpCurrency.cs" />
+    <Compile Include="Utils\RESTful\MpCountry.cs" />
+    <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpAnalyticItemCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItem\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItem\Parameters\MpAnalyticItemParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
     <Compile Include="Utils\MpWpfDbInfo.cs" />
@@ -230,7 +236,7 @@
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Meta\MpContentDescriptionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItem\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />

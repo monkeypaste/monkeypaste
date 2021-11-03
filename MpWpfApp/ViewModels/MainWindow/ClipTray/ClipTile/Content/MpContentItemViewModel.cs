@@ -585,12 +585,13 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci) {
+            IsBusy = true;
+
             if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
             CopyItem = ci;
 
-            IsBusy = true;
             IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
@@ -598,6 +599,7 @@ namespace MpWpfApp {
 
             CycleDetailCommand.Execute(null);
             RequestUiUpdate();
+
             IsBusy = false;
         }
 
@@ -788,23 +790,25 @@ namespace MpWpfApp {
 
         #region Private Methods
         private void UpdateDetails() {
-            _detailIdx = 1;
-            switch (CopyItem.ItemType) {
-                case MpCopyItemType.Image:
-                    var bmp = CopyItem.ItemData.ToBitmapSource();
-                    itemSize = new Size(bmp.Width, bmp.Height);
-                    break;
-                case MpCopyItemType.FileList:
-                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
-                    fc = fl.Count;
-                    ds = MpHelpers.Instance.FileListSize(fl.ToArray());
-                    break;
-                case MpCopyItemType.RichText:
-                    lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
-                    cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-                    break;
-            }
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                _detailIdx = 1;
+                switch (CopyItem.ItemType) {
+                    case MpCopyItemType.Image:
+                        var bmp = CopyItem.ItemData.ToBitmapSource();
+                        itemSize = new Size(bmp.Width, bmp.Height);
+                        break;
+                    case MpCopyItemType.FileList:
+                        var fl = await MpCopyItemMerger.Instance.GetFileList(CopyItem);
+                        fc = fl.Count;
+                        ds = MpHelpers.Instance.FileListSize(fl.ToArray());
+                        break;
+                    case MpCopyItemType.RichText:
+                        lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
+                        cc = CopyItem.ItemData.ToPlainText().Length;
+                        itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                        break;
+                }
+            });
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) { 

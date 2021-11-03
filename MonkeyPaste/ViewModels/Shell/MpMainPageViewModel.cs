@@ -15,8 +15,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public MpMainPageViewModel() {
-            Task.Run(() => {
-                MpDb.Instance.Init(MpMainPage.NativeWrapper.GetDbInfo());
+            Task.Run(async() => {
+                await MpDb.Instance.Init(MpMainPage.NativeWrapper.GetDbInfo());
 
                 MpTempFileManager.Instance.Init();
                 //MpSocketClient.StartClient("192.168.43.209");
@@ -33,14 +33,15 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
-        public ICommand SyncCommand => new Command<object>(async (args) => {
+        public ICommand SyncCommand => new Command<object>(
+            async (args) => {
+                await Task.Delay(10);
 
-
-            MpDbLogTracker.PrintDbLog();
-            //var ms = Application.Current.MainPage as MpMainShell;
-            //var curDbBytes = MpDb.Instance.GetDbFileBytes();
-            //ms.StorageService.CreateFile(@"mp_clone", curDbBytes, @".db");
-        });
+                MpDbLogTracker.PrintDbLog();
+                //var ms = Application.Current.MainPage as MpMainShell;
+                //var curDbBytes = MpDb.Instance.GetDbFileBytes();
+                //ms.StorageService.CreateFile(@"mp_clone", curDbBytes, @".db");
+            });
 
         public static bool SendFilesByFTP(
             string password, 

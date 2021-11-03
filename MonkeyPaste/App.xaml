@@ -68,7 +68,7 @@
                              Glyph="&#xf015;"
                              Size="22"
                              Color="Transparent" />
-            
+
             <FontImageSource x:Key="HomeIcon"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf015;"
@@ -234,7 +234,7 @@
                              Glyph="&#xf044;"
                              Size="22"
                              Color="Black" />
-            
+
             <FontImageSource x:Key="EditIcon_Disabled"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf044;"

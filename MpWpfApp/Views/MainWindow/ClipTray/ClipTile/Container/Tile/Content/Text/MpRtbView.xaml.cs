@@ -514,9 +514,9 @@ namespace MpWpfApp {
             //CleanUpNonExistantTemplates();
         }
 
-        private void CleanUpNonExistantTemplates() {
+        private async Task CleanUpNonExistantTemplates() {
             //this should only be called after CreateTemplates and not between ClearTemplates
-            var citl = MpDataModelProvider.Instance.GetTemplates(BindingContext.CopyItemId);
+            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(BindingContext.CopyItemId);
             var ecitl = BindingContext.TemplateCollection.Templates.Where(x => x.InstanceCount > 0).Select(x=>x.CopyItemTemplate).ToList();
 
             foreach(var ecit in ecitl) {

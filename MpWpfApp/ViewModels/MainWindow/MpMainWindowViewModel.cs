@@ -303,8 +303,6 @@ namespace MpWpfApp {
 
             MpThemeColors.Instance.Init();
 
-            MpLanguageTranslator.Instance.Init();
-
             MpSearchBoxViewModel.Instance.Init();
             MpClipTrayViewModel.Instance.Init();
             MpClipTileSortViewModel.Instance.Init();

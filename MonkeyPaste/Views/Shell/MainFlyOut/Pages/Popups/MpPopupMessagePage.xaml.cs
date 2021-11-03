@@ -26,10 +26,10 @@ namespace MonkeyPaste {
                 await PopupNavigation.Instance.PushAsync(this);
             });
         }
-        protected override void OnAppearing() {
+        protected override async void OnAppearing() {
             base.OnAppearing();
 
-            HidePopup();
+            await HidePopup();
         }
 
         private async Task HidePopup() {

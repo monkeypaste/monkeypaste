@@ -12,7 +12,6 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        private P _parent;
         public P Parent { get; set; }
         //public P Parent {
         //    get {
@@ -26,8 +25,6 @@ namespace MonkeyPaste {
         //    }
         //}
 
-
-        private bool _isBusy = false;
 
         public bool IsBusy { get; set; }
 

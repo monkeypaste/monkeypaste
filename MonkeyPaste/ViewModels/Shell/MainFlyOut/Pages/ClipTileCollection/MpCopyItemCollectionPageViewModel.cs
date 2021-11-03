@@ -14,8 +14,6 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpCopyItemTileCollectionPageViewModel : MpViewModelBase {
         #region Private Variables        
-        private int _itemsAdded = 0;
-        private int _currentStartIndex = 0;
         private int _pageSize = 20;
         #endregion
 
@@ -232,22 +230,24 @@ namespace MonkeyPaste {
             }
         });
 
-        public ICommand DeleteCopyItemCommand => new Command<object>(async (args) => {
-            if(args == null || args is not MpCopyItemViewModel civm) {
-                return;
-            }
-            CopyItemViewModels.Remove(civm);
+        public ICommand DeleteCopyItemCommand => new Command<object>(
+            async (args) => {
+                if(args == null || args is not MpCopyItemViewModel civm) {
+                    return;
+                }
+                CopyItemViewModels.Remove(civm);
             
-            await MpDb.Instance.DeleteItemAsync(civm.CopyItem);
-            await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(civm.CopyItem.Id);
-        });
+                await MpDb.Instance.DeleteItemAsync(civm.CopyItem);
+            });
 
-        public ICommand LoadMoreCopyItemsCommand => new Command(async () => {
-            //_currentStartIndex += _pageSize;
-            //_itemsAdded = 0;
-            //var collection = await MpCopyItem.GetPage(TagId, _currentStartIndex, _pageSize);
-            //collection.CollectionChanged += Collection_CollectionChanged;
-        });
+        public ICommand LoadMoreCopyItemsCommand => new Command(
+            async () => {
+                await Task.Delay(10);
+                //_currentStartIndex += _pageSize;
+                //_itemsAdded = 0;
+                //var collection = await MpCopyItem.GetPage(TagId, _currentStartIndex, _pageSize);
+                //collection.CollectionChanged += Collection_CollectionChanged;
+            });
 
         public ICommand SelectionChangedCommand => new Command<object>((args) => {
             if (args != null && args is MpCopyItemViewModel ttvm) {

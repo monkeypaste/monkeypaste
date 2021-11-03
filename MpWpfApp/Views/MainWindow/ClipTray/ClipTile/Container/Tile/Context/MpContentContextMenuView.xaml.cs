@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,15 +49,35 @@ namespace MpWpfApp {
                 );
         }
 
-        private void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+        private async void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            await PrepareContextMenu();
+        }
+
+        private async Task PrepareContextMenu() {
             MpApp app = null;
             if (MpClipTrayViewModel.Instance.SelectedModels.Count == 1) {
                 app = MpClipTrayViewModel.Instance.SelectedModels[0].Source.App;
             }
 
-            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.TagMenuItems));
+            if(!MpLanguageTranslator.Instance.IsLoaded) {
+                await MpLanguageTranslator.Instance.Init();
 
-            
+                MpClipTrayViewModel.Instance.TranslateLanguageMenuItems.Clear();
+                foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
+                    var ltmivm = new MpContextMenuItemViewModel(
+                        languageName, 
+                        MpClipTrayViewModel.Instance.TranslateSelectedClipTextAsyncCommand, 
+                        languageName, 
+                        false);
+
+                    MpClipTrayViewModel.Instance.TranslateLanguageMenuItems.Add(ltmivm);
+                }
+
+                MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.TranslateLanguageMenuItems));
+            }
+
+            MpClipTrayViewModel.Instance.TagMenuItems = await MpClipTrayViewModel.Instance.GetTagMenuItemsForSelectedItems();
+
             Tag = DataContext;
             MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 

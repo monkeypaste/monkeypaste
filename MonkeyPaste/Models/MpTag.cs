@@ -62,99 +62,98 @@ namespace MonkeyPaste {
         #region Statics
         #endregion
 
-        public MpTag() {
-        }
+        public MpTag() { }
 
 
-        public async Task<bool> IsLinkedWithCopyItemAsync(MpCopyItem clip) {
-            if(clip == null) {
-                return false;
-            }
-            var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(Id);
-            return citl.Any(x => x.CopyItemId == clip.Id);
-        }
+        //public async Task<bool> IsLinkedWithCopyItemAsync(MpCopyItem clip) {
+        //    if(clip == null) {
+        //        return false;
+        //    }
+        //    var citl = await MpCopyItemTag.GetAllCopyItemsForTagIdAsync(Id);
+        //    return citl.Any(x => x.CopyItemId == clip.Id);
+        //}
 
-        public bool IsLinkedWithCopyItem(MpCopyItem clip) {
-            if (clip == null) {
-                return false;
-            }
-            return MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id && x.CopyItemId == clip.Id).FirstOrDefault() != null;
-        }
+        //public bool IsLinkedWithCopyItem(MpCopyItem clip) {
+        //    if (clip == null) {
+        //        return false;
+        //    }
+        //    return MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id && x.CopyItemId == clip.Id).FirstOrDefault() != null;
+        //}
 
-        public async Task<bool> LinkWithCopyItemAsync(MpCopyItem clip) {
-            if(clip == null) {
-                return false;
-            }
-            //returns FALSE if CopyItem is already linked to maintain correct counts
-            bool isLinked = await IsLinkedWithCopyItemAsync(clip);
-            if (isLinked) {
-                return false;
-            }
+        //public async Task<bool> LinkWithCopyItemAsync(MpCopyItem clip) {
+        //    if(clip == null) {
+        //        return false;
+        //    }
+        //    //returns FALSE if CopyItem is already linked to maintain correct counts
+        //    bool isLinked = await IsLinkedWithCopyItemAsync(clip);
+        //    if (isLinked) {
+        //        return false;
+        //    }
 
-            await MpDb.Instance.AddItemAsync<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id });
+        //    await MpDb.Instance.AddItemAsync<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id });
 
-            //CopyItemList.Add(clip);
-            Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
-            return true;
-        }
+        //    //CopyItemList.Add(clip);
+        //    Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
+        //    return true;
+        //}
 
-        public bool LinkWithCopyItem(MpCopyItem clip) {
-            if (clip == null) {
-                return false;
-            }
-            //returns FALSE if CopyItem is already linked to maintain correct counts
-            bool isLinked = IsLinkedWithCopyItem(clip);
-            if (isLinked) {
-                return false;
-            }
+        //public bool LinkWithCopyItem(MpCopyItem clip) {
+        //    if (clip == null) {
+        //        return false;
+        //    }
+        //    //returns FALSE if CopyItem is already linked to maintain correct counts
+        //    bool isLinked = IsLinkedWithCopyItem(clip);
+        //    if (isLinked) {
+        //        return false;
+        //    }
 
-            int sortOrderIdx = 1;
-            var lastcit = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id).OrderByDescending(y => y.CopyItemSortIdx).FirstOrDefault();
-            if(lastcit != null) {
-                sortOrderIdx = lastcit.CopyItemSortIdx + 1;
-            }
-            MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id,CopyItemSortIdx = sortOrderIdx});
+        //    int sortOrderIdx = 1;
+        //    var lastcit = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == Id).OrderByDescending(y => y.CopyItemSortIdx).FirstOrDefault();
+        //    if(lastcit != null) {
+        //        sortOrderIdx = lastcit.CopyItemSortIdx + 1;
+        //    }
+        //    MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = clip.Id, TagId = Id,CopyItemSortIdx = sortOrderIdx});
 
-            //CopyItemList.Add(clip);
-            Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
-            return true;
-        }
+        //    //CopyItemList.Add(clip);
+        //    Console.WriteLine("Tag link created between tag " + Id + " with CopyItem " + clip.Id);
+        //    return true;
+        //}
 
-        public async Task UnlinkWithCopyItemAsync(MpCopyItem clip) {
-            if(clip == null) {
-                return;
-            }
-            bool isLinked = await IsLinkedWithCopyItemAsync(clip);
-            if (!isLinked) {
-                return;
-            }
-            var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
-            await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(result[0]);
+        //public async Task UnlinkWithCopyItemAsync(MpCopyItem clip) {
+        //    if(clip == null) {
+        //        return;
+        //    }
+        //    bool isLinked = await IsLinkedWithCopyItemAsync(clip);
+        //    if (!isLinked) {
+        //        return;
+        //    }
+        //    var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
+        //    await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(result[0]);
 
-            //var clipToRemove = CopyItemList.Where(x => x.Id == clip.Id).FirstOrDefault();
-            //if(clipToRemove != null) {
-            //    CopyItemList.Remove(clipToRemove);
-            //}
-            Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
-        }
+        //    //var clipToRemove = CopyItemList.Where(x => x.Id == clip.Id).FirstOrDefault();
+        //    //if(clipToRemove != null) {
+        //    //    CopyItemList.Remove(clipToRemove);
+        //    //}
+        //    Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
+        //}
 
-        public void UnlinkWithCopyItem(MpCopyItem clip) {
-            if (clip == null) {
-                return;
-            }
-            bool isLinked = IsLinkedWithCopyItem(clip);
-            if (!isLinked) {
-                return;
-            }
-            var result = MpDb.Instance.Query<MpCopyItemTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
-            MpDb.Instance.DeleteItem<MpCopyItemTag>(result[0]);
+        //public void UnlinkWithCopyItem(MpCopyItem clip) {
+        //    if (clip == null) {
+        //        return;
+        //    }
+        //    bool isLinked = IsLinkedWithCopyItem(clip);
+        //    if (!isLinked) {
+        //        return;
+        //    }
+        //    var result = MpDb.Instance.Query<MpCopyItemTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
+        //    MpDb.Instance.DeleteItem<MpCopyItemTag>(result[0]);
 
-            //var clipToRemove = CopyItemList.Where(x => x.Id == clip.Id).FirstOrDefault();
-            //if(clipToRemove != null) {
-            //    CopyItemList.Remove(clipToRemove);
-            //}
-            Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
-        }
+        //    //var clipToRemove = CopyItemList.Where(x => x.Id == clip.Id).FirstOrDefault();
+        //    //if(clipToRemove != null) {
+        //    //    CopyItemList.Remove(clipToRemove);
+        //    //}
+        //    Console.WriteLine("Tag link removed between tag " + Id + " with CopyItem " + clip.Id + " ignoring...");
+        //}
 
         //public async Task DeleteFromDatabaseAsync() {
         //await MpDb.Instance.ExecuteWriteAsync<MpTag>(

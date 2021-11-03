@@ -275,7 +275,6 @@ namespace MonkeyPaste {
         public ICommand DeleteCopyItemCommand => new Command(
             async () => {
                 await MpDb.Instance.DeleteItemAsync<MpCopyItem>(CopyItem);
-                await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(CopyItem.Id);
             });
 
         public ICommand ShowTagAssociationsCommand => new Command(() => {
