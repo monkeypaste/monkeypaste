@@ -442,7 +442,8 @@ namespace MonkeyPaste {
             return File.ReadAllBytes(dbPath);
         }
 
-        #region Wpf backwards compatability
+        #region Wpf compatability
+
         private string GetTableName(string query) {
             string tableName = "UnknownTableName";
 
@@ -641,29 +642,9 @@ namespace MonkeyPaste {
                                SQLiteOpenFlags.SharedCache |
                                SQLiteOpenFlags.FullMutex
                     );
-            //if (string.IsNullOrEmpty(_dbInfo.GetDbPassword())) {
-            //    connStr = new SQLiteConnectionString(
-            //        databasePath: _dbInfo.GetDbFilePath(),
-            //        storeDateTimeAsTicks: false,
-            //        openFlags: SQLiteOpenFlags.ReadWrite |
-            //                   SQLiteOpenFlags.Create |
-            //                   SQLiteOpenFlags.SharedCache |
-            //                   SQLiteOpenFlags.FullMutex
-            //        );
-            //} else {
-            //    connStr = new SQLiteConnectionString(
-            //        databasePath: _dbInfo.GetDbPassword(),
-            //        storeDateTimeAsTicks: false,
-            //        key: MpPreferences.Instance.DbPassword,
-            //        openFlags: SQLiteOpenFlags.ReadWrite |
-            //                   SQLiteOpenFlags.Create |
-            //                   SQLiteOpenFlags.SharedCache |
-            //                   SQLiteOpenFlags.FullMutex
-            //        );
-            //}
+
             if (_connection == null) {
                 try {
-                    //SQLitePCL.Batteries.Init();
                     _connection = new SQLiteConnection(connStr) { Trace = true };
                 }catch(Exception ex) {
                     Console.WriteLine(ex);
@@ -1043,8 +1024,7 @@ namespace MonkeyPaste {
                     , Title text NOT NULL 
                     , Description text
                     , ApiKey text 
-                    , EndPoint text
-                    );   
+                    , EndPoint text);   
 
                     CREATE TABLE MpAnalyticItemParameter (
                       pk_MpAnalyticItemParameterId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -1053,7 +1033,23 @@ namespace MonkeyPaste {
                     , Key text NOT NULL 
                     , ValueCsv text
                     , SortOrderIdx integer not null default 0,
-                    , IsRequired integer not null default 0);                                           
+                    , IsRequired integer not null default 0,
+                    , IsRequestParameter integer not null default 0,
+                    , IsHeaderParameter integer default 0); 
+
+                    CREATE TABLE MpAnalyticItemActivity (
+                      pk_MpAnalyticItemActivityId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemActivityGuid text not null
+                    , Name text
+                    , Description text
+                    , ContentType text
+                    , Method text);
+
+                    CREATE TABLE MpAnalyticItemActivityParameter (
+                      pk_MpAnalyticItemActivityParameterId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemActivityParameterGuid text not null
+                    , fk_MpAnalyticItemActivityId integer not null
+                    , fk_MpAnalyticItemParameterId integer not null);
             ";
         }
         #endregion

@@ -82,12 +82,22 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpAnalyticItem> Create(string endPoint, string apiKey, MpInputFormatType format, string title, string description, MpIcon icon) {
+        public static async Task<MpAnalyticItem> Create(
+            string endPoint, 
+            string apiKey, 
+            MpInputFormatType format, 
+            string title, 
+            string description) {
             var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
                 dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(dupItem.Id);
                 return dupItem;
             }
+
+            var domainStr = MpHelpers.Instance.GetUrlDomain(endPoint);
+            var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
+
+            var icon = await MpIcon.Create(favIconImg64);
 
             var newAnalyticItem = new MpAnalyticItem() {
                 AnalyticItemGuid = System.Guid.NewGuid(),

@@ -28,6 +28,12 @@ namespace MonkeyPaste {
 
         [Column("IsRequired")]
         public int IsRequired { get; set; } = 0;
+
+        [Column("IsHeaderParameter")]
+        public int IsHeader { get; set; } = 0;
+
+        [Column("IsRequestParameter")]
+        public int IsRequest { get; set; } = 0;
         #endregion
 
         #region Fk Models
@@ -53,6 +59,37 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
+        public bool IsRequestParameter {
+            get {
+                return IsRequest == 1;
+            }
+            set {
+                if (IsRequestParameter != value) {
+                    IsRequest = value ? 1 : 0;
+                }
+            }
+        }
+
+        [Ignore]
+        public bool IsResponseParameter {
+            get {
+                return !IsRequestParameter;
+            }
+        }
+
+        [Ignore]
+        public bool IsHeaderParameter {
+            get {
+                return IsHeader == 1;
+            }
+            set {
+                if (IsHeaderParameter != value) {
+                    IsHeader = value ? 1 : 0;
+                }
+            }
+        }
+
+        [Ignore]
         public Guid AnalyticItemParameterGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
@@ -67,7 +104,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpAnalyticItemParameter> Create(string key, string value, int sortOrderIdx, bool isRequired, MpAnalyticItem parentItem) {
+        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string key, string value, bool isRequired, bool isHeader, bool isRequest, int sortOrderIdx) {
             if(parentItem == null) {
                 throw new Exception("Parameter must be associated with an item");
             }
@@ -90,7 +127,9 @@ namespace MonkeyPaste {
                 ValueCsv = value,
                 AnalyticItemId = parentItem.Id,
                 SortOrderIdx = sortOrderIdx,
-                IsParameterRequired = isRequired
+                IsParameterRequired = isRequired,
+                IsHeaderParameter = isHeader,
+                IsRequestParameter = isRequest
             };
 
             await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(newAnalyticItemParameter);

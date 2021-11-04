@@ -666,8 +666,6 @@ namespace MpWpfApp {
         }
 
         public void RequestScrollWheelChange(int delta) {
-            //var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-            //sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
             OnScrollWheelRequest?.Invoke(this, delta);
         }
 

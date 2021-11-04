@@ -17,7 +17,7 @@ namespace MpWpfApp {
 
         // This sample uses the Cognitive Services subscription key for all services. To learn more about
         // authentication options, see: https://docs.microsoft.com/azure/cognitive-services/authentication.
-        private string COGNITIVE_SERVICES_KEY = Properties.Settings.Default.AzureCognitiveServicesKey;
+        private string COGNITIVE_SERVICES_KEY = MpPreferences.Instance.AzureCognitiveServicesKey;
 
         // Endpoints for Translator Text and Bing Spell Check
         public static readonly string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
@@ -180,10 +180,7 @@ namespace MpWpfApp {
                 IsLoaded = true;
                 return;
             }
-            //if (!MpHelpers.Instance.IsConnectedToNetwork()) {
-            //    Console.WriteLine("Client offline. Language Translation is inactive");
-            //    return;
-            //}
+
             // Send a request to get supported language codes
             string uri = String.Format(TEXT_TRANSLATION_API_ENDPOINT, "languages") + "&scope=translation";
             WebRequest WebRequest = WebRequest.Create(uri);
