@@ -11,7 +11,7 @@
              d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <local:MpClipTileView x:Key="ClipTileFront" />
-        <local:MpContentItemAnalyticsView x:Key="ClipTileBack" />
+        <local:MpAnalyticItemCollectionView x:Key="ClipTileBack" />
         <Storyboard x:Key="FrontToBack">
             <DoubleAnimation Storyboard.TargetName="front"
                              Storyboard.TargetProperty="Angle"
@@ -92,7 +92,7 @@
                 <Viewport2DVisual3D.Material>
                     <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
                 </Viewport2DVisual3D.Material>
-                <ContentControl DataContext="{Binding PrimaryItem}"
+                <ContentControl DataContext="{Binding PrimaryItem.AnalyticItemCollectionViewModel}"
                                 Content="{StaticResource ClipTileBack}" />
             </Viewport2DVisual3D>
             <!--  Content View (Front)  -->

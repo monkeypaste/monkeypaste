@@ -8,14 +8,20 @@ namespace MpWpfApp {
     public class MpBoolToCursorConverter : IValueConverter {
         public object Convert(object value, Type targetType,
                               object parameter, CultureInfo culture) {
+            Cursor cursor;
             if(value == null || parameter == null) {
-                return Cursors.Arrow;
+                cursor = Cursors.Arrow;
             }
             var cl = parameter.ToString().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if((bool)value) {
-                return GetCursorFromString(cl[0]);
+                cursor = GetCursorFromString(cl[0]);
+            } else {
+                cursor = GetCursorFromString(cl[1]);
             }
-            return GetCursorFromString(cl[1]);
+            Application.Current.MainWindow.ForceCursor = true;
+            Application.Current.MainWindow.Cursor = cursor;
+            Mouse.OverrideCursor = cursor;
+            return cursor;
         }
 
         private Cursor GetCursorFromString(string text) {

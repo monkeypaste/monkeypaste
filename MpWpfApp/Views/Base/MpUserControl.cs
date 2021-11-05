@@ -9,8 +9,12 @@ using System.Windows.Controls;
 namespace MpWpfApp {
     public class MpUserControl : UserControl {
         public MpUserControl() : base() { }
+
+        public static readonly DependencyProperty ResourcesProperty =
+            DependencyProperty.Register("Resources", typeof(ResourceDictionary), typeof(MpUserControl), new PropertyMetadata(null));
+
     }
-    public class MpUserControl<T> : UserControl where T: class {
+    public class MpUserControl<T> : MpUserControl where T: class {
 
         public T BindingContext {
             get {
@@ -28,7 +32,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty BindingContextProperty =
             DependencyProperty.Register("BindingContext", typeof(T), typeof(MpUserControl<T>), new PropertyMetadata(null));
 
-
+        
         public MpUserControl() : base() { }
 
     }

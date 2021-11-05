@@ -141,9 +141,15 @@ namespace MpWpfApp {
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            if(BindingContext.IsAnyTileFlipped || BindingContext.IsAnyTileExpanded) {
+                return;
+            }
+
             var sv = sender as ScrollViewer;
 
             sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta);
+            
+            //wheel event is passed to the loadMoreExtentsion which marks handled=true if there's a wheel delta
         }
 
         public async Task RefreshContext() {

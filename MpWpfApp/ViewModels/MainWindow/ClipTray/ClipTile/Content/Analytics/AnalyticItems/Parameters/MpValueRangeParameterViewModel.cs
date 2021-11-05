@@ -1,0 +1,53 @@
+﻿using System;
+
+namespace MpWpfApp {
+    public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModel {
+        #region Properties
+
+        public double Min {
+            get {
+                if (Parameter == null) {
+                    return 0;
+                }
+                var valueParts = Parameter.ValueCsv.Split(new string[] { "," }, System.StringSplitOptions.RemoveEmptyEntries);
+                return Convert.ToDouble(valueParts[0]);
+            }
+        }
+
+        public double Max {
+            get {
+                if (Parameter == null) {
+                    return 0;
+                }
+                var valueParts = Parameter.ValueCsv.Split(new string[] { "," }, System.StringSplitOptions.RemoveEmptyEntries);
+                return Convert.ToDouble(valueParts[valueParts.Length-1]);
+            }
+        }
+
+        public double Value {
+            get {
+                if(Parameter == null) {
+                    return 0;
+                }
+                if(!string.IsNullOrWhiteSpace(Parameter.InputValue)) {
+                    return Convert.ToDouble(Parameter.InputValue);
+                }
+                return Convert.ToDouble(Parameter.DefaultValue);
+            }
+            set {
+                if(Parameter != null && Parameter.InputValue.ToString() != value.ToString()) {
+                    Parameter.InputValue = value.ToString();
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public MpSliderParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+
+        #endregion
+    }
+}

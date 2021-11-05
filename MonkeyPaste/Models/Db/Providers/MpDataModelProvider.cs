@@ -156,13 +156,13 @@ namespace MonkeyPaste {
         }
 
         public async Task<bool> IsAppRejectedAsync(string path) {
-            string query = $"select count(*) from MpApp where SourcePath=? and IsRejected=1";
+            string query = $"select count(*) from MpApp where SourcePath=? and IsAppRejected=1";
             var result = await MpDb.Instance.QueryScalarAsync<int>(query, path);
             return result > 0;
         }
 
         public bool IsAppRejected(string path) {
-            string query = $"select count(*) from MpApp where SourcePath=? and IsRejected=1";
+            string query = $"select count(*) from MpApp where SourcePath=? and IsAppRejected=1";
             var result = MpDb.Instance.QueryScalar<int>(query, path);
             return result > 0;
         }

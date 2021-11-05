@@ -1032,6 +1032,9 @@ namespace MonkeyPaste {
                     , fk_MpAnalyticItemId integer not null
                     , Key text NOT NULL 
                     , ValueCsv text
+                    , DefaultValue text                    
+                    , InputValue text
+                    , ParameterTypeId integer not null default 0
                     , SortOrderIdx integer not null default 0,
                     , IsRequired integer not null default 0,
                     , IsRequestParameter integer not null default 0,

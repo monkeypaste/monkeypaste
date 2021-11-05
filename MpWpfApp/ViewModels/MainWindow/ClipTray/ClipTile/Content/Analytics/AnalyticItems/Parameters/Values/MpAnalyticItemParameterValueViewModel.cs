@@ -41,6 +41,8 @@ namespace MpWpfApp {
         public async Task InitializeAsync(int idx,string value) {
             IsBusy = true;
 
+            await Task.Delay(1);
+
             ValueIdx = idx;
             Value = value;
 

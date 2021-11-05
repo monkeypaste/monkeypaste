@@ -39,7 +39,7 @@
                      BorderBrush="Pink"
                      SelectionMode="Extended"
                      IsSynchronizedWithCurrentItem="False"
-                     ItemsSource="{Binding ItemViewModels}"
+                     ItemsSource="{Binding ItemViewModels, IsAsync=True}"
                      Focusable="True"
                      IsEnabled="True"
                      VirtualizingPanel.IsVirtualizing="True"
@@ -86,10 +86,10 @@
                                                               TileMode="Tile">
                                                     <DrawingBrush.Drawing>
                                                         <DrawingGroup>
-                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}}">
+                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='#FFFFFFFF'}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
-                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='50,0,50,50'}" />
                                                                         <RectangleGeometry Rect="50,50,50,50" />
                                                                     </GeometryGroup>
                                                                 </GeometryDrawing.Geometry>

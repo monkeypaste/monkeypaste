@@ -1,20 +1,20 @@
 ﻿<local:MpUserControl x:Class="MpWpfApp.MpClipTileContainerView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:MpWpfApp"
-             x:TypeArguments="local:MpClipTileViewModel"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpClipTileViewModel"
+                     mc:Ignorable="d"
+                     d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
     <i:Interaction.Behaviors>
         <local:MpTileExpanderBehavior x:Name="ExpandBehavior" />
     </i:Interaction.Behaviors>
     <Grid>
-        <local:MpContentItemAnalyticsView x:Name="ContentItemAnalyticsView"
-                                          DataContext="{Binding PrimaryItem}"
-                                          Visibility="{Binding Parent.BackVisibility}" />
+        <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
+                                            DataContext="{Binding PrimaryItem.AnalyticItemCollectionViewModel}"
+                                            Visibility="{Binding Parent.Parent.BackVisibility}" />
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
         <local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"

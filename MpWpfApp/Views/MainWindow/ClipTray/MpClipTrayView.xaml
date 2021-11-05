@@ -12,6 +12,10 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=True}">
+    <local:MpUserControl.Resources>
+        <local:MpAnalyticItemCollectionView x:Key="AnalyticItemCollectionView"/>
+        <local:MpClipTileFlipView x:Key="ClipTileFlipView"/>
+    </local:MpUserControl.Resources>
     <Grid x:Name="ClipTrayGrid">
         <AdornerDecorator>
             <ListBox x:Name="ClipTray"

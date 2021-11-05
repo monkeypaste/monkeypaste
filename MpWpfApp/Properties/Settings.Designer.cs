@@ -1446,5 +1446,14 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["RestfulOpenAiApiKey"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("e3d9b46346be488293df636abb7b8f9d")]
+        public string AzureBingSearchApiKey {
+            get {
+                return ((string)(this["AzureBingSearchApiKey"]));
+            }
+        }
     }
 }

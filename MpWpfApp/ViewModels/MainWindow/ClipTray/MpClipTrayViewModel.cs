@@ -174,6 +174,8 @@ namespace MpWpfApp {
 
         public bool IsAnyDropOnTile => Items.Any(x => x.IsDroppingOnTile);
 
+        public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
+
         [MpAffectsChild]
         public bool IsAnyTileExpanded => Items.Any(x => x.IsExpanded);
 
@@ -1141,7 +1143,9 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand FlipTileCommand => new RelayCommand<object>(
-            (tileToFlip) => {
+            async (tileToFlip) => {
+                IsBusy = true;
+
                 var ctvm = tileToFlip as MpClipTileViewModel;
                 if(ctvm.IsFlipped) {
                     ClearClipSelection();
@@ -1151,8 +1155,11 @@ namespace MpWpfApp {
                     UnFlipAllTiles();
                     ClearClipSelection();
                     ctvm.IsSelected = true;
+                    await ctvm.PrimaryItem.AnalyticItemCollectionViewModel.Init();
                     ctvm.IsFlipping = true;
                 }
+
+                IsBusy = false;
             });
 
         private RelayCommand<object> _searchWebCommand;
@@ -1570,7 +1577,7 @@ namespace MpWpfApp {
 
         public ICommand TranslateSelectedClipTextAsyncCommand => new RelayCommand<string>(
             async (toLanguage) => {
-                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, false);
+                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage,"", false);
                 if (!string.IsNullOrEmpty(translatedText)) {
                     SelectedItems[0].HeadItem.CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
                 }

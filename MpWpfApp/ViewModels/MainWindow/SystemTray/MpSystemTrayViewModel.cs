@@ -81,9 +81,9 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 if(MpAppModeViewModel.Instance.IsAppPaused) {
-                    return @"/Images/play.png";
+                    return Application.Current.Resources["PlayIcon"] as string;
                 }
-                return @"/Images/pause.png";
+                return Application.Current.Resources["PauseIcon"] as string;
             }
         }
 

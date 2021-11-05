@@ -1,19 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel> {
+    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel> {
         #region Private Variables
 
         #endregion
 
         #region Properties
-
-        #region View Models
-
-        public ObservableCollection<MpAnalyticItemParameterValueViewModel> Values { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
-        #endregion
 
         #region State
 
@@ -21,10 +15,21 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; } = false;
 
+        public bool IsExpanded { get; set; } = false;
+
         #endregion
 
         #region Model
                 
+        public string Key {
+            get {
+                if(Parameter == null) {
+                    return string.Empty;
+                }
+                return Parameter.Key;
+            }
+        }
+
 
         public MpAnalyticItemParameter Parameter { get; set; }
 
@@ -44,19 +49,12 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpAnalyticItemParameter aip) {
+        public virtual async Task InitializeAsync(MpAnalyticItemParameter aip) {
             IsBusy = true;
 
+            await Task.Delay(1);
+
             Parameter = aip;
-
-            Values.Clear();
-            var valueParts = Parameter.ValueCsv.Split(new string[] { "," }, System.StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < valueParts.Length; i++) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(i, valueParts[i]);
-                Values.Add(naipvvm);
-            }
-
-            OnPropertyChanged(nameof(Values));
 
             IsBusy = false;
         }

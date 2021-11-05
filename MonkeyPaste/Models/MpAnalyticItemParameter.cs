@@ -4,6 +4,16 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    public enum MpAnalyticParameterType {
+        None = 0,
+        Text,
+        ComboBox,
+        CheckBox,
+        Slider,//below are only runtime types
+        Execute,
+        Result
+    }
+
     public class MpAnalyticItemParameter : MpDbModelBase {
         #region Columns
         [Column("pk_MpAnalyticItemParameterId")]
@@ -22,6 +32,15 @@ namespace MonkeyPaste {
 
         [Column("ValueCsv")]
         public string ValueCsv { get; set; } = string.Empty;
+
+        [Column("DefaultValue")]
+        public string DefaultValue { get; set; } = string.Empty;
+
+        [Column("InputValue")]
+        public string InputValue { get; set; } = string.Empty;
+
+        [Column("ParameterTypeId")]
+        public int ParameterTypeId { get; set; } = 0;
 
         [Column("SortOrderIdx")]
         public int SortOrderIdx { get; set; } = 0;
@@ -45,6 +64,18 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        [Ignore]
+        public MpAnalyticParameterType ParameterType {
+            get {
+                return (MpAnalyticParameterType)ParameterTypeId;
+            }
+            set {
+                if (ParameterTypeId != (int)value) {
+                    ParameterTypeId = (int)value;
+                }
+            }
+        }
 
         [Ignore]
         public bool IsParameterRequired {
@@ -102,6 +133,12 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public bool IsRuntimeParameter {
+            get {
+                return (int)ParameterType > (int)MpAnalyticParameterType.Slider;
+            }
+        }
         #endregion
 
         public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string key, string value, bool isRequired, bool isHeader, bool isRequest, int sortOrderIdx) {

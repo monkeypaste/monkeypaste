@@ -13,7 +13,7 @@ namespace MpWpfApp {
                     return new Image();
                 }
                 var icon = new Image();
-                icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + value.ToString()));
+                icon.Source = (BitmapSource)new BitmapImage(new Uri(value.ToString()));
                 return icon;
             }
             return new Image();

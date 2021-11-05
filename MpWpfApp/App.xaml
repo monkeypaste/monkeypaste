@@ -1009,55 +1009,66 @@
 
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
+
+        <s:String x:Key="Hide">Hide</s:String>
+        <s:String x:Key="Collapse">Collapse</s:String>
         <!--  Command Parameter Primitives End  -->
 
         <!--  Icon/Image Source Paths  -->
-        <s:String x:Key="NoEntryIcon">/Images/noentry.png</s:String>
-        <s:String x:Key="RobotClawIcon">/Images/robotclaw.png</s:String>
-        <s:String x:Key="BrainIcon">/Images/brain.png</s:String>
-        <s:String x:Key="LeftClickIcon">/Images/leftclick.png</s:String>
-        <s:String x:Key="RightClickIcon">/Images/rightclick.png</s:String>
-        <s:String x:Key="AppendIcon">/Images/append.png</s:String>
-        <s:String x:Key="HelpIcon">/Images/help.png</s:String>
-        <s:String x:Key="PlayIcon">/Images/play.png</s:String>
-        <s:String x:Key="PauseIcon">/Images/pause.png</s:String>
-        <s:String x:Key="CogIcon">/Images/cog.png</s:String>
-        <s:String x:Key="LockIcon">/Images/lock.png</s:String>
-        <s:String x:Key="PasteIcon">/Images/paste.png</s:String>
-        <s:String x:Key="DeleteIcon">/Images/Delete.png</s:String>
-        <s:String x:Key="EditIcon">/Images/edit.png</s:String>
-        <s:String x:Key="EditContentIcon">/Images/caret.png</s:String>
-        <s:String x:Key="ToolsIcon">/Images/tools.png</s:String>
-        <s:String x:Key="RenameIcon">/Images/rename.png</s:String>
-        <s:String x:Key="DuplicateIcon">/Images/duplicate.png</s:String>
-        <s:String x:Key="MergeIcon">/Images/merge.png</s:String>
-        <s:String x:Key="EmailIcon">/Images/email.png</s:String>
-        <s:String x:Key="QrIcon">/Images/qr.png</s:String>
-        <s:String x:Key="SpeakIcon">/Images/speak.png</s:String>
-        <s:String x:Key="SearchIcon">/Images/web.png</s:String>
-        <s:String x:Key="GoogleIcon">/Images/googleIcon.png</s:String>
-        <s:String x:Key="BingIcon">/Images/bingIcon.png</s:String>
-        <s:String x:Key="DuckIcon">/Images/duckduckgoIcon.png</s:String>
-        <s:String x:Key="YandexIcon">/Images/yandexIcon.png</s:String>
-        <s:String x:Key="SelectionIcon">/Images/selection.png</s:String>
-        <s:String x:Key="BringToFrontIcon">/Images/bringToFront.png</s:String>
-        <s:String x:Key="SendToBackIcon">/Images/sendToBack.png</s:String>
-        <s:String x:Key="SelectAllIcon">/Images/selectall.png</s:String>
-        <s:String x:Key="InvertSelectionIcon">/Images/invertSelection.png</s:String>
-        <s:String x:Key="HotkeyIcon">/Images/joystick.png</s:String>
-        <s:String x:Key="HotkeyActiveIcon">/Images/joystickactive.png</s:String>
-        <s:String x:Key="PasteToAppIcon">/Images/bullseye.png</s:String>
-        <s:String x:Key="PinToCollectionIcon">/Images/tag.png</s:String>
-        <s:String x:Key="TranslateIcon">/Images/translate.png</s:String>
-        <s:String x:Key="UserIcon">/Images/user.png</s:String>
-        <s:String x:Key="SlidersIcon">/Images/sliders.png</s:String>
-        <s:String x:Key="ShieldIcon">/Images/shield.png</s:String>
-        <s:String x:Key="SignOutIcon">/Images/signout.png</s:String>
-        <s:String x:Key="CopyIcon">/Images/copy.png</s:String>
-        <s:String x:Key="WarningIcon">/Images/warning.png</s:String>
-        <s:String x:Key="Hide">Hide</s:String>
-        <s:String x:Key="Collapse">Collapse</s:String>
+        <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
+        <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
+        <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
+        <s:String x:Key="LeftClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/leftclick.png</s:String>
+        <s:String x:Key="RightClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rightclick.png</s:String>
+        <s:String x:Key="AppendIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/append.png</s:String>
+        <s:String x:Key="HelpIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/help.png</s:String>
+        <s:String x:Key="PlayIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/play.png</s:String>
+        <s:String x:Key="PauseIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pause.png</s:String>
+        <s:String x:Key="CogIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/cog.png</s:String>
+        <s:String x:Key="LockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/lock.png</s:String>
+        <s:String x:Key="PasteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/paste.png</s:String>
+        <s:String x:Key="DeleteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/Delete.png</s:String>
+        <s:String x:Key="EditIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/edit.png</s:String>
+        <s:String x:Key="EditContentIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
+        <s:String x:Key="ToolsIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tools.png</s:String>
+        <s:String x:Key="RenameIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rename.png</s:String>
+        <s:String x:Key="DuplicateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duplicate.png</s:String>
+        <s:String x:Key="MergeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/merge.png</s:String>
+        <s:String x:Key="EmailIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/email.png</s:String>
+        <s:String x:Key="QrIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/qr.png</s:String>
+        <s:String x:Key="SpeakIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/speak.png</s:String>
+        <s:String x:Key="SearchIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/web.png</s:String>
+        <s:String x:Key="GoogleIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/googleIcon.png</s:String>
+        <s:String x:Key="BingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bingIcon.png</s:String>
+        <s:String x:Key="DuckIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duckduckgoIcon.png</s:String>
+        <s:String x:Key="YandexIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/yandexIcon.png</s:String>
+        <s:String x:Key="SelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selection.png</s:String>
+        <s:String x:Key="BringToFrontIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bringToFront.png</s:String>
+        <s:String x:Key="SendToBackIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sendToBack.png</s:String>
+        <s:String x:Key="SelectAllIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selectall.png</s:String>
+        <s:String x:Key="InvertSelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/invertSelection.png</s:String>
+        <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick.png</s:String>
+        <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive.png</s:String>
+        <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
+        <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
+        <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
+        <s:String x:Key="UserIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/user.png</s:String>
+        <s:String x:Key="SlidersIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sliders.png</s:String>
+        <s:String x:Key="ShieldIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/shield.png</s:String>
+        <s:String x:Key="SignOutIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/signout.png</s:String>
+        <s:String x:Key="CopyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/copy.png</s:String>
+        <s:String x:Key="WarningIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/warning.png</s:String>
         <!--  Icon/Image Source Paths End  -->
+
+        <!--  Font Awesome  -->
+
+        <FontFamily x:Key="FontAwesomeSolid">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Solid.otf#Font Awesome 5 Free Solid</FontFamily>
+        <FontFamily x:Key="FontAwesomeRegular">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Regular.otf#Font Awesome 5 Free Regular</FontFamily>
+        <FontFamily x:Key="FontAwesomeBrands">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Brands.otf#Font Awesome 5 Brands Regular</FontFamily>
+
+        <s:String x:Key="TranslateIcon_FAS">f1ab</s:String>
+
+        <!--  Font Awesome End  -->
 
         <!--  Color Palletes  -->
         <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
@@ -1104,6 +1115,7 @@
         <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
         <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
         <local:MpAppModeViewModel x:Key="AppModeViewModel" />
+        <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
         <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>

@@ -32,6 +32,7 @@ namespace MpWpfApp {
 
         #region View Models
 
+
         private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
         public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
             get {
@@ -41,6 +42,19 @@ namespace MpWpfApp {
                 if (_clipTileTitleSwirlViewModel != value) {
                     _clipTileTitleSwirlViewModel = value;
                     OnPropertyChanged(nameof(TitleSwirlViewModel));
+                }
+            }
+        }
+
+        private MpAnalyticItemCollectionViewModel _analyticItemCollectionViewModel = null;
+        public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel {
+            get {
+                return _analyticItemCollectionViewModel;
+            }
+            set {
+                if (_analyticItemCollectionViewModel != value) {
+                    _analyticItemCollectionViewModel = value;
+                    OnPropertyChanged(nameof(AnalyticItemCollectionViewModel));
                 }
             }
         }
@@ -596,6 +610,7 @@ namespace MpWpfApp {
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+            AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
             RequestUiUpdate();
@@ -903,7 +918,7 @@ namespace MpWpfApp {
 
         public ICommand TranslateSubSelectedItemTextAsyncCommand => new RelayCommand<string>(
             async (toLanguage) => {
-                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage, false);
+                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage,"", false);
                 if (!string.IsNullOrEmpty(translatedText)) {
                     CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
                 }

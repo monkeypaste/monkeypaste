@@ -80,11 +80,14 @@ namespace MpWpfApp {
         }
 
         private static void Sv_ScrollChanged(object sender, MouseWheelEventArgs e) {
-            if (IsScrollJumping || MpClipTrayViewModel.Instance.IsAnyTileItemDragging || /*e.HorizontalChange == 0 || */MpMainWindowViewModel.IsMainWindowLoading) {
+            if (IsScrollJumping || 
+                MpClipTrayViewModel.Instance.SelectedItems.Any(x=>x.IsFlipped) ||
+                MpClipTrayViewModel.Instance.IsAnyTileItemDragging || /*e.HorizontalChange == 0 || */
+                MpMainWindowViewModel.IsMainWindowLoading) {
                 IsScrollJumping = false;
                 return;
             }
-
+            e.Handled = true;
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
 
