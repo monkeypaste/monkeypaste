@@ -1144,10 +1144,9 @@ namespace MpWpfApp {
 
         public ICommand FlipTileCommand => new RelayCommand<object>(
             async (tileToFlip) => {
-                IsBusy = true;
-
                 var ctvm = tileToFlip as MpClipTileViewModel;
-                if(ctvm.IsFlipped) {
+                ctvm.IsBusy = true;
+                if (ctvm.IsFlipped) {
                     ClearClipSelection();
                     ctvm.IsSelected = true;
                     ctvm.IsFlipping = true;
@@ -1159,7 +1158,7 @@ namespace MpWpfApp {
                     ctvm.IsFlipping = true;
                 }
 
-                IsBusy = false;
+                ctvm.IsBusy = false;
             });
 
         private RelayCommand<object> _searchWebCommand;

@@ -4,7 +4,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:spinners="clr-namespace:xamlSpinnersWPF"
+                     
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
@@ -20,6 +20,7 @@
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
+                        Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
                         Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"

@@ -11,19 +11,25 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemParameterValueViewModel> Values { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
 
-        public MpAnalyticItemParameterValueViewModel SelectedValue {
-            get {
-                if(SelectedValueIdx >= 0 && SelectedValueIdx < Values.Count) {
-                    return Values[SelectedValueIdx];
-                }
-                return null;
-            }
-        }
+        public MpAnalyticItemParameterValueViewModel SelectedValue { get; set; }
         #endregion
+
+
 
         #region State
 
-        public int SelectedValueIdx { get; set; } = 0;
+        #endregion
+
+        #region Model
+
+        public override bool IsValid {
+            get {
+                if(!IsRequired) {
+                    return true;
+                }
+                return SelectedValue != null;
+            }
+        }
 
         #endregion
 
@@ -40,6 +46,8 @@ namespace MpWpfApp {
         public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
             IsBusy = true;
 
+            await Task.Delay(3);
+
             Parameter = aip;
 
             Values.Clear();
@@ -49,13 +57,10 @@ namespace MpWpfApp {
                 Values.Add(naipvvm);
             }
 
-            if(!string.IsNullOrEmpty(Parameter.DefaultValue)) {
+            if (!string.IsNullOrEmpty(Parameter.DefaultValue)) {
                 var defValVm = Values.Where(x => x.Value == Parameter.DefaultValue).FirstOrDefault();
-                if(defValVm != null) {
-                    int defValIdx = Values.IndexOf(defValVm);
-                    if(defValIdx >= 0) {
-                        SelectedValueIdx = defValIdx;
-                    }
+                if (defValVm != null) {
+                    SelectedValue = defValVm;
                 }
             }
 

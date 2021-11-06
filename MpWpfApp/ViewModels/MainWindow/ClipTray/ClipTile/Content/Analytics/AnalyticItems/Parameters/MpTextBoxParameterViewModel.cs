@@ -1,6 +1,18 @@
 ﻿namespace MpWpfApp {
-    public class MpTextInputParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpTextBoxParameterViewModel : MpAnalyticItemParameterViewModel {
         #region Properties
+
+        #region State
+                
+        public override bool IsValid {
+            get {
+                if(!IsRequired) {
+                    return true;
+                }
+                return !string.IsNullOrEmpty(InputValue);
+            }
+        }
+        #endregion
 
         public string InputValue {
             get {
@@ -25,7 +37,8 @@
 
         #region Constructors
 
-        public MpTextInputParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+        public MpTextBoxParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+
 
         #endregion
     }

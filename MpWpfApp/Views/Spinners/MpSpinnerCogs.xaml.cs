@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace xamlSpinnersWPF
+namespace MpWpfApp
 {
 	/// <summary>
-	/// Interaction logic for ucSpinnerPiston.xaml
+	/// Interaction logic for MpSpinnerCogs.xaml
 	/// </summary>
-	public partial class ucSpinnerPiston : UserControl
+	public partial class MpSpinnerCogs : UserControl
 	{
-		public ucSpinnerPiston()
+		public MpSpinnerCogs()
 		{
 			this.InitializeComponent();
 		}

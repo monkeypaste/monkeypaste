@@ -8,37 +8,25 @@ namespace MpWpfApp {
     public class MpBoolToCursorConverter : IValueConverter {
         public object Convert(object value, Type targetType,
                               object parameter, CultureInfo culture) {
-            Cursor cursor;
-            if(value == null || parameter == null) {
-                cursor = Cursors.Arrow;
-            }
-            var cl = parameter.ToString().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            if((bool)value) {
-                cursor = GetCursorFromString(cl[0]);
+            MpCursorType ct;
+
+            if (value == null || parameter == null) {
+                ct = MpCursorType.Default;
             } else {
-                cursor = GetCursorFromString(cl[1]);
+                var cl = parameter.ToString().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                if ((bool)value) {
+                    ct = MpMouseViewModel.Instance.GetCursorFromString(cl[0]);
+                } else {
+                    ct = MpMouseViewModel.Instance.GetCursorFromString(cl[1]);
+                }
             }
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = cursor;
-            Mouse.OverrideCursor = cursor;
-            return cursor;
+            
+            MpMouseViewModel.Instance.CurrentCursor = ct;
+
+            return MpMouseViewModel.Instance.GetCurrentCursor();
         }
 
-        private Cursor GetCursorFromString(string text) {
-            if(text.ToLower() == "wait") {
-                return Cursors.Wait;
-            }
-            if (text.ToLower() == "arrow") {
-                return Cursors.Arrow;
-            }
-            if (text.ToLower() == "ibeam") {
-                return Cursors.IBeam;
-            }
-            if (text.ToLower() == "hand") {
-                return Cursors.Hand;
-            }
-            return Cursors.Arrow;
-        }
+        
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             return null;
         }

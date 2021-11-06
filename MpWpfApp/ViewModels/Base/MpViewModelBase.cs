@@ -15,6 +15,41 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {    
+    public abstract class MpViewModelBase<P,C> : MpViewModelBase<P> 
+        where P: class
+        where C: class {
+        
+        public ObservableCollection<C> Children { get; private set; } = new ObservableCollection<C>();
+
+        public MpViewModelBase(P p) : base(p) { }
+
+        public void UpdateChildren(MpChildViewModelAttribute cvma, PropertyInfo cpi) {
+            if (cvma.IsCollection) {
+                //child view model is an observable collection
+                Children = (ObservableCollection<C>)cpi.GetValue(this);
+            } else {
+                //child is just a view mdoel
+                //var propValue = vmpi.GetValue(vm);
+                //if (propValue == null) {
+                //    continue;
+                //}
+                //childVms = new List<object> { propValue };
+            }
+        }
+
+        public override void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            base.OnPropertyChanged(propertyName);
+
+            MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                //check if property has affects child attribute
+                var childPropAttribute = GetType().GetProperty(propertyName).GetCustomAttribute<MpChildViewModelAttribute>();
+                if(childPropAttribute != null) {
+                    UpdateChildren(childPropAttribute, GetType().GetProperty(propertyName));
+                }
+            }, System.Windows.Threading.DispatcherPriority.Normal);
+        }
+    }
+
     public abstract class MpViewModelBase<P> : INotifyPropertyChanged, IDisposable where P: class {
         #region Private Variables
         #endregion
@@ -133,7 +168,7 @@ namespace MpWpfApp {
         //    }
         //}
 
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
             MpHelpers.Instance.RunOnMainThreadAsync(() => {

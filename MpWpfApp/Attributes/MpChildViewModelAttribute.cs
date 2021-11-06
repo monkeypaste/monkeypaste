@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,5 +20,6 @@ namespace MpWpfApp {
         public virtual bool IsCollection => _isCollection;
 
         public virtual Type ChildType => _childType;
+
     }
 }

@@ -21,15 +21,16 @@ namespace MpWpfApp {
 
         #region View Models
 
+        [MpChildViewModel(typeof(MpAnalyticItemParameterViewModel),true)]
         public ObservableCollection<MpAnalyticItemParameterViewModel> Parameters { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
 
-        public MpAnalyticItemParameterViewModel SelectedParameter => Parameters.Where(x => x.IsSelected).FirstOrDefault();
+        public MpAnalyticItemParameterViewModel SelectedParameter => Parameters.FirstOrDefault(x => x.IsSelected);
 
         #endregion
 
         #region Appearance
 
-        public string ItemIconSourcePath { get; set; }
+        public string ItemIconSourcePath { get; protected set; }
 
         public Brush ItemBackgroundBrush {
             get {
@@ -49,13 +50,18 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; } = false;
 
-        public string UnformattedResponse { get; set; } = string.Empty;
+        protected string UnformattedResponse { get; set; } = string.Empty;
 
         public HttpStatusCode ResponseCode { get; set; }
 
         #endregion
 
         #region Model
+
+
+        public int RuntimeId { get; set; } = 0;
+
+        public bool HasChildren { get; set; } = false;
 
         public string Title {
             get {
@@ -118,8 +124,8 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task LoadChildren() {
-            if (AnalyticItem == null) {
+        public virtual async Task LoadChildren() {
+            if (AnalyticItem == null || !HasChildren) {
                 return;
             }
             IsBusy = true;
@@ -138,7 +144,8 @@ namespace MpWpfApp {
                     AnalyticItem = this.AnalyticItem,
                     ParameterType = MpAnalyticParameterType.Execute,
                     Key = "Execute",
-                    ValueCsv = null
+                    ValueCsv = null,
+                    SortOrderIdx = Parameters.Count
                 };
                 var eaipvm = await CreateParameterViewModel(eaip);
                 Parameters.Add(eaipvm);
@@ -152,7 +159,8 @@ namespace MpWpfApp {
                     AnalyticItem = this.AnalyticItem,
                     ParameterType = MpAnalyticParameterType.Result,
                     Key = "Result",
-                    ValueCsv = string.Empty
+                    ValueCsv = string.Empty,
+                    SortOrderIdx = Parameters.Count
                 };
                 var raipvm = await CreateParameterViewModel(raip);
                 Parameters.Add(raipvm);
@@ -171,7 +179,7 @@ namespace MpWpfApp {
                     naipvm = new MpComboBoxParameterViewModel(this);
                     break;
                 case MpAnalyticParameterType.Text:
-                    naipvm = new MpTextInputParameterViewModel(this);
+                    naipvm = new MpTextBoxParameterViewModel(this);
                     break;
                 case MpAnalyticParameterType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
@@ -191,16 +199,24 @@ namespace MpWpfApp {
             return naipvm;
         }
 
-        protected virtual async Task ExecuteAnalysis() {
-            await Task.Delay(1);
-            MpConsole.WriteLine("Base execute, no implementation");
-        }
         #endregion
 
         #region Private Methods
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(HasChildren):
+                    if(HasChildren) {
+                        Parameters.Add(null);
+                    }
+                    break;
+                case nameof(IsExpanded):
+                    if(IsExpanded) {
+                        MpHelpers.Instance.RunOnMainThread(async () => {
+                            await LoadChildren();
+                        });
+                    }
+                    break;
             }
         }
         #endregion
@@ -210,7 +226,17 @@ namespace MpWpfApp {
         public ICommand ExecuteAnalysisCommand => new RelayCommand(
             async () => {
                 await ExecuteAnalysis();
-            });
+            },
+            CanExecuteAnalysis);
+
+        protected virtual async Task ExecuteAnalysis() {
+            await Task.Delay(1);
+            MpConsole.WriteLine("Base execute, no implementation");
+        }
+
+        protected virtual bool CanExecuteAnalysis() {
+            return Parameters.All(x => x.IsValid);
+        }
         #endregion
     }
 }

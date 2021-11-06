@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {
+    public class MpAnalyticItemCollectionViewModel : MpViewModelBase<MpContentItemViewModel> { //MpSingletonViewModel<MpAnalyticItemCollectionViewModel,object> {
 
         #region Properties
 
@@ -15,7 +15,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemViewModel> Items { get; private set; } = new ObservableCollection<MpAnalyticItemViewModel>();
 
-        public MpAnalyticItemViewModel SelectedItem => Items.Where(x => x.IsSelected).FirstOrDefault();
+        public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
 
         //public MpClipTileViewModel HostClipTileViewModel { get; set; }
 
@@ -31,17 +31,25 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpAnalyticItemCollectionViewModel() : base(null) { }
+        public async Task Init() {
+            await InitDefaultItems();
 
-        public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {        }
+            if(Items.Count > 0) {
+                Items[0].IsSelected = true;
+            }
+        }
+
+        public MpAnalyticItemCollectionViewModel() : base(null) {
+           // PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+        }
+
+        public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
+            PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+        }
 
         #endregion
 
         #region Public Methods
-
-        public async Task Init() {
-            await InitDefaultItems();
-        }
 
         public async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
             //var naivm = new MpAnalyticItemViewModel(this);
@@ -63,11 +71,23 @@ namespace MpWpfApp {
             await translateVm.Initialize();
             Items.Add(translateVm);
 
+            var openAiVm = new MpOpenAiViewModel(this, 2);
+            await openAiVm.Initialize();
+            Items.Add(openAiVm);
+
             OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
         }
 
+        private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                //case nameof(HostClipTileViewModel):
+                //    HostClipTileViewModel.DoCommandSelection();
+                //    break;
+                
+            }
+        }
         #endregion
     }
 }

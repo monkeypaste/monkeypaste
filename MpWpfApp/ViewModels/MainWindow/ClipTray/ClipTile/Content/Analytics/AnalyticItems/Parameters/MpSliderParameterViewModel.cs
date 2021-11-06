@@ -24,6 +24,8 @@ namespace MpWpfApp {
             }
         }
 
+        public double TickFrequency => Max - Min >= 1.0 ? 1.0 : 0.01;
+
         public double Value {
             get {
                 if(Parameter == null) {
@@ -41,6 +43,9 @@ namespace MpWpfApp {
                 }
             }
         }
+
+
+        public override bool IsValid => true;
 
         #endregion
 

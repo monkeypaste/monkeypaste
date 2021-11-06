@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpAnalyticItemParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel> {
@@ -56,6 +57,7 @@ namespace MpWpfApp {
             switch (e.PropertyName) {
 
             }
+            (Parent.Parent.ExecuteAnalysisCommand as RelayCommand).RaiseCanExecuteChanged();
         }
         #endregion
     }

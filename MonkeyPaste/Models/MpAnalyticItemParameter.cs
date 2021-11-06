@@ -33,6 +33,8 @@ namespace MonkeyPaste {
         [Column("ValueCsv")]
         public string ValueCsv { get; set; } = string.Empty;
 
+        public string Description { get; set; } = string.Empty;
+
         [Column("DefaultValue")]
         public string DefaultValue { get; set; } = string.Empty;
 

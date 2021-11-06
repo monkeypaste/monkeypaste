@@ -8,23 +8,27 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance local:MpAnalyticItemViewModel, IsDesignTimeCreatable=True}">
+                     d:DataContext="{d:DesignInstance local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
     <Border Margin="5"
-            BorderThickness="1"
+            BorderThickness="0"
             BorderBrush="Black"
             CornerRadius="3"
             Background="{Binding ItemBackgroundBrush}"
             MouseEnter="Border_MouseEnter"
             MouseLeave="Border_MouseLeave">
-        <StackPanel Orientation="Horizontal">
-            <Image Source="{Binding ItemIconSourcePath}"
+        <DockPanel>
+            <Image DockPanel.Dock="Left" 
+                   Source="{Binding ItemIconSourcePath}"
                    Margin="5,0,5,0"
                    Height="25"
                    Width="25" />
+            <local:MpSpinnerApple DockPanel.Dock="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,5,0"
+                                  Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
             <TextBlock x:Name="AnalyticItemTextBlock"
-                       Margin="8,0,0,0"
+                       Margin="8,0,10,0"
                        Padding="3"
-                       MinWidth="170"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontSize="16"
@@ -44,6 +48,6 @@
                     </Hyperlink>
                 </TextBlock.Inlines>
             </TextBlock>
-        </StackPanel>
+        </DockPanel>
     </Border>
 </local:MpUserControl>

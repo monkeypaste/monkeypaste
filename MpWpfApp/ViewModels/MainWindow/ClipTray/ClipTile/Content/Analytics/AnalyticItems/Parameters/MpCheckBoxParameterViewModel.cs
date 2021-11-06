@@ -24,11 +24,13 @@
             }
         }
 
+        public override bool IsValid => true;
         #endregion
 
         #region Constructors
 
         public MpCheckBoxParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+
 
         #endregion
     }

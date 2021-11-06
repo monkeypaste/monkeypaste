@@ -11,7 +11,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-        xmlns:spinners="clr-namespace:xamlSpinnersWPF"
+        
         xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
@@ -169,7 +169,7 @@
                            Content="Processing" />
                     <Viewbox Grid.Row="1"
                              Margin="20">
-                        <spinners:ucSpinnerCogs />
+                        <local:MpSpinnerCogs />
                     </Viewbox>
                 </Grid>
             </Grid>

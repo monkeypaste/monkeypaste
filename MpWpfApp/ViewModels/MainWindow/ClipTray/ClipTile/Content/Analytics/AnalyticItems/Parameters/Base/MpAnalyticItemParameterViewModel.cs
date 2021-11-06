@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -9,6 +10,15 @@ namespace MpWpfApp {
 
         #region Properties
 
+        #region Appearance
+
+        public Brush ParameterBorderBrush {
+            get {
+                return IsValid ? Brushes.Transparent : Brushes.Red;
+            }
+        }
+        #endregion
+
         #region State
 
         public bool IsHovering { get; set; } = false;
@@ -17,10 +27,28 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; } = false;
 
+        public abstract bool IsValid { get; }
+
+        public string ParameterTooltipText {
+            get {
+                if(!IsValid) {
+                    return $"{Parameter.Key} is required";
+                }
+                return string.Empty;
+            }
+        }
         #endregion
 
         #region Model
-                
+        
+        public bool IsRequired {
+            get {
+                if (Parameter == null) {
+                    return false;
+                }
+                return Parameter.IsParameterRequired;
+           }
+        }
         public string Key {
             get {
                 if(Parameter == null) {

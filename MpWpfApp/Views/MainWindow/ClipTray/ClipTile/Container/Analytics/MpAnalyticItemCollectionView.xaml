@@ -28,21 +28,18 @@
                   Width="{Binding HostClipTileViewModel.TileBorderWidth}"
                   Height="{Binding HostClipTileViewModel.TileBorderHeight}"
     </Grid>-->
-    <local:MpClipBorder Margin="1"               
+    <local:MpClipBorder Margin="1"
                         BorderThickness="{Binding Parent.Parent.TileBorderThickness}"
                         BorderBrush="{Binding Parent.Parent.TileBorderBrush}"
                         Height="{Binding Parent.Parent.TileBorderHeight}"
                         CornerRadius="10">
         <Grid>
             <TreeView Name="AnalyticTreeView"
-                  TreeViewItem.Expanded="AnalyticTreeView_Expanded"
-                  TreeViewItem.Collapsed="AnalyticTreeView_Collapsed"
-                  Loaded="AnalyticTreeView_Loaded"
-                  ItemsSource="{Binding Items}"
-                  Background="Orange">
+                      Loaded="AnalyticTreeView_Loaded"
+                      ItemsSource="{Binding Items}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                          ItemsSource="{Binding Parameters}">
+                                              ItemsSource="{Binding Parameters}">
                         <local:MpAnalyticItemView />
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemParameterViewModel}">
@@ -52,16 +49,16 @@
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                                Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded"
-                            Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="FontWeight"
-                            Value="Normal" />
+                                Value="Normal" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected"
-                                 Value="True">
+                                     Value="True">
                                 <Setter Property="FontWeight"
-                                    Value="Bold" />
+                                        Value="Bold" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>

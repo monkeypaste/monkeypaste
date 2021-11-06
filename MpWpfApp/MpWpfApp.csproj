@@ -180,14 +180,16 @@
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpCurrency.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpOpenAiRequest.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\OpenAi\MpOpenAiViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpExecuteParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpResultParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextInputParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpValueRangeParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Translator\MpTranslatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpMouseViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
@@ -392,23 +395,23 @@
     <Compile Include="Views\Reusable\MpMarqueeTextBlock.xaml.cs">
       <DependentUpon>MpMarqueeTextBlock.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucSpinnerApple.xaml.cs">
-      <DependentUpon>ucSpinnerApple.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpSpinnerApple.xaml.cs">
+      <DependentUpon>MpSpinnerApple.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucSpinnerCogs.xaml.cs">
-      <DependentUpon>ucSpinnerCogs.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpSpinnerCogs.xaml.cs">
+      <DependentUpon>MpSpinnerCogs.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucSpinnerDotCircle.xaml.cs">
-      <DependentUpon>ucSpinnerDotCircle.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpSpinnerDotCircle.xaml.cs">
+      <DependentUpon>MpSpinnerDotCircle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucSpinnerPiston.xaml.cs">
-      <DependentUpon>ucSpinnerPiston.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpSpinnerPiston.xaml.cs">
+      <DependentUpon>MpSpinnerPiston.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucSpinnerSwirl.xaml.cs">
-      <DependentUpon>ucSpinnerSwirl.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpSpinnerSwirl.xaml.cs">
+      <DependentUpon>MpSpinnerSwirl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\ucTail.xaml.cs">
-      <DependentUpon>ucTail.xaml</DependentUpon>
+    <Compile Include="Views\Spinners\MpTail.xaml.cs">
+      <DependentUpon>MpTail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SwirlTest.xaml.cs">
       <DependentUpon>SwirlTest.xaml</DependentUpon>
@@ -573,27 +576,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Spinners\ucSpinnerApple.xaml">
+    <Page Include="Views\Spinners\MpSpinnerApple.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\ucSpinnerCogs.xaml">
+    <Page Include="Views\Spinners\MpSpinnerCogs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\ucSpinnerDotCircle.xaml">
+    <Page Include="Views\Spinners\MpSpinnerDotCircle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\ucSpinnerPiston.xaml">
+    <Page Include="Views\Spinners\MpSpinnerPiston.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\ucSpinnerSwirl.xaml">
+    <Page Include="Views\Spinners\MpSpinnerSwirl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\ucTail.xaml">
+    <Page Include="Views\Spinners\MpTail.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

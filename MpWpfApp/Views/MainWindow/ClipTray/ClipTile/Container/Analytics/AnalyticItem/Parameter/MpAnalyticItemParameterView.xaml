@@ -9,7 +9,8 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <local:MpUserControl.Resources>
-        <DataTemplate x:Key="ComboBoxParameter">
+        <DataTemplate x:Key="ComboBoxParameter"
+                      DataType="local:MpComboBoxParameterViewModel">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />
@@ -19,20 +20,34 @@
                            Margin="0,0,7,0"
                            HorizontalAlignment="Left"
                            Text="{Binding Key}" />
-                <ComboBox Grid.Column="1"
-                          ItemsSource="{Binding Values}"
-                          SelectedIndex="{Binding SelectedValueIdx}"
-                          HorizontalAlignment="Right"
-                          Width="Auto">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Value}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                <Border Grid.Column="1"
+                        BorderThickness="2"
+                        CornerRadius="2"
+                        Padding="1"
+                        ToolTipService.InitialShowDelay="2"
+                        ToolTip="{Binding ParameterTooltipText}"
+                        BorderBrush="{Binding ParameterBorderBrush}">
+                    <ComboBox ItemsSource="{Binding Values}"
+                              SelectedItem="{Binding SelectedValue}"
+                              HorizontalAlignment="Right"
+                              MinWidth="80">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Value}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected, Mode=TwoWay}" />
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                </Border>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="TextBoxParameter">
+        <DataTemplate x:Key="TextBoxParameter"
+                      DataType="local:MpTextBoxParameterViewModel">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*" />
@@ -46,51 +61,47 @@
                          Text="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="CheckBoxParameter">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.7*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           Margin="0,0,7,0"
+        <DataTemplate x:Key="CheckBoxParameter"
+                      DataType="local:MpCheckBoxParameterViewModel">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,0,7,0"
                            HorizontalAlignment="Left"
                            Text="{Binding Key}" />
-                <CheckBox Grid.Column="1"
-                          IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
-            </Grid>
+                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+            </StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="SliderParameter">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*" />
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.25*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           Text="{Binding Key}"
-                           TextAlignment="Left" />
-                <Slider Grid.Column="1"
-                        Minimum="{Binding Min}"
+        <DataTemplate x:Key="SliderParameter"
+                      DataType="local:MpSliderParameterViewModel">
+            <DockPanel MinWidth="200">
+                <StackPanel Orientation="Vertical"
+                            MaxWidth="80"
+                            DockPanel.Dock="Left">
+                    <TextBlock Text="{Binding Key}"
+                               TextWrapping="Wrap" />
+                    <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, StringFormat=N2}" />
+                </StackPanel>
+                <Slider Minimum="{Binding Min}"
                         Maximum="{Binding Max}"
+                        Margin="0,15,0,0" Width="120"
+                        DockPanel.Dock="Right"
                         Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
-                        TickPlacement="BottomRight"
-                        IsSnapToTickEnabled="True" />
-                <TextBox Grid.Column="2"
-                         Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
-            </Grid>
+                        TickPlacement="None"
+                        TickFrequency="{Binding TickFrequency}"
+                        IsSnapToTickEnabled="False" />
+            </DockPanel>
         </DataTemplate>
-        <DataTemplate x:Key="ExecuteParameter">
-            <Grid>
-                <Button Width="50"
-                        HorizontalAlignment="Right"
-                        Content="Execute"
-                        Command="{Binding Parent.ExecuteAnalysisCommand}" />
-            </Grid>
+        <DataTemplate x:Key="ExecuteParameter"
+                      DataType="local:MpExecuteParameterViewModel">
+            <Button HorizontalAlignment="Right"
+                    MinWidth="50"
+                    Content="Execute"
+                    Command="{Binding Parent.ExecuteAnalysisCommand}" />
         </DataTemplate>
-        <DataTemplate x:Key="ResultParameter">
+        <DataTemplate x:Key="ResultParameter"
+                      DataType="local:MpResultParameterViewModel">
             <Grid>
-                <TextBlock MaxWidth="150" TextWrapping="Wrap"
+                <TextBlock MaxWidth="150"
+                           TextWrapping="Wrap"
                            Text="{Binding ResultValue}" />
             </Grid>
         </DataTemplate>
