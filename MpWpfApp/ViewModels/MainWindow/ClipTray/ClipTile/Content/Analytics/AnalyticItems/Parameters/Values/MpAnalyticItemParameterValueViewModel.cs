@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
+using System;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
@@ -21,8 +23,62 @@ namespace MpWpfApp {
 
         public int ValueIdx { get; set; } = 0;
 
-        public string Value { get; set; }
+        public string Value {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.Parameter.UserValue;
+            }
+            set {
+                if (Parent != null && Parent.Parameter.UserValue != value) {
+                    Parent.Parameter.UserValue = value;
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
+        }
 
+        public double DoubleValue {
+            get {
+                if (string.IsNullOrWhiteSpace(Value)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToDouble(Value);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    return 0;
+                }
+            }
+        }
+
+        public int IntValue {
+            get {
+                if (string.IsNullOrWhiteSpace(Value)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToInt32(Value);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    return 0;
+                }
+            }
+        }
+
+        public bool BoolValue {
+            get {
+                if (string.IsNullOrWhiteSpace(Value)) {
+                    return false;
+                }
+                if (Value != "0" && Value != "1") {
+                    throw new Exception("Cannot convert value " + Value + " to boolean");
+                }
+                return Value == "1";
+            }
+        }
         #endregion
 
         #endregion
@@ -39,7 +95,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int idx,string value) {
+        public async Task InitializeAsync(int idx, string value) {
             IsBusy = true;
 
             await Task.Delay(1);
@@ -48,6 +104,10 @@ namespace MpWpfApp {
             Value = value;
 
             IsBusy = false;
+        }
+
+        public override string ToString() {
+            return Value;
         }
         #endregion
 

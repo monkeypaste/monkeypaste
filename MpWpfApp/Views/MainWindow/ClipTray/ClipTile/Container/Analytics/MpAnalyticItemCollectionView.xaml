@@ -34,7 +34,20 @@
                         Height="{Binding Parent.Parent.TileBorderHeight}"
                         CornerRadius="10">
         <Grid>
+            <Grid.Resources>
+                <AlternationConverter x:Key="BackgroundConverter">
+                    <SolidColorBrush>CornflowerBlue</SolidColorBrush>
+                    <SolidColorBrush>LightBlue</SolidColorBrush>
+                </AlternationConverter>
+
+                <AlternationConverter x:Key="AlternateForegroundConverter">
+                    <SolidColorBrush>White</SolidColorBrush>
+                    <SolidColorBrush>Black</SolidColorBrush>
+                    <!--<SolidColorBrush>Navy</SolidColorBrush>-->
+                </AlternationConverter>
+            </Grid.Resources>
             <TreeView Name="AnalyticTreeView"
+                      AlternationCount="2"
                       Loaded="AnalyticTreeView_Loaded"
                       ItemsSource="{Binding Items}">
                 <TreeView.Resources>
@@ -48,6 +61,15 @@
                 </TreeView.Resources>
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
+                        <Setter Property="Background"
+                                Value="{Binding RelativeSource={RelativeSource Self}, 
+                                            Path=(TreeView.AlternationIndex), 
+                                            Converter={StaticResource BackgroundConverter}}" />
+
+                        <Setter Property="Foreground"
+                                Value="{Binding RelativeSource={RelativeSource Self}, 
+                                            Path=(TreeView.AlternationIndex), 
+                                            Converter={StaticResource AlternateForegroundConverter}}" />
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded"

@@ -58,30 +58,24 @@ namespace MpWpfApp {
 
         private P _parent;
         public P Parent {
-            get {
-                return _parent;
-            }
+            get => _parent;
+            private set => SetProperty(ref _parent, value);
+        }
+
+        private bool _isBusy = false;
+
+        public bool IsBusy {
+            get => _isBusy;
             set {
-                if (_parent != value) {
-                    _parent = value;
-                    OnPropertyChanged(nameof(Parent));
-                }
+                SetProperty(ref _isBusy, value);
+                MpMouseViewModel.Instance.NotifyAppBusy(_isBusy,this);
             }
         }
 
-        public bool IsBusy { get; set; }
-
         private Visibility _itemVisibility = Visibility.Visible;
         public Visibility ItemVisibility {
-            get {
-                return _itemVisibility;
-            }
-            set {
-                if(_itemVisibility != value) {
-                    _itemVisibility = value;
-                    OnPropertyChanged(nameof(ItemVisibility));
-                }
-            }
+            get => _itemVisibility;
+            set => SetProperty(ref _itemVisibility, value);
         }
         #endregion
 
@@ -147,7 +141,7 @@ namespace MpWpfApp {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool ThrowOnInvalidPropertyName { get; private set; } = false;
+        private bool ThrowOnInvalidPropertyName => false;
 
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string name = "") {
             if (!EqualityComparer<T>.Default.Equals(field, value)) {

@@ -4,7 +4,6 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTrayViewModel"
                      DataContext="{StaticResource ClipTrayViewModel}"
@@ -21,12 +20,15 @@
             <ListBox x:Name="ClipTray"
                      RequestBringIntoView="ClipTray_RequestBringIntoView"
                      SelectionChanged="ClipTray_SelectionChanged"
-                     DataContext="{Binding}"
-                     Visibility="{Binding ClipTrayVisibility}"
+                     Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}"
                      Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
                      ItemsSource="{Binding Items}"
                      ForceCursor="True"
                      Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
+                     local:MpFrictionScrollExtension.IsEnabled="True"
+                     local:MpFrictionScrollExtension.IsHorizontal="True"
+                     local:MpFrictionScrollExtension.WheelDampening="0.08"
+                     local:MpFrictionScrollExtension.Friction="0.85"
                      local:MpLoadMoreItemsExtension.RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
                      local:MpLoadMoreItemsExtension.RemainingItemsThresholdReachedCommand="{Binding LoadMoreClipsCommand}"
                      Loaded="ClipTray_Loaded"
@@ -38,7 +40,6 @@
                      VerticalContentAlignment="Top"
                      HorizontalAlignment="Left"
                      HorizontalContentAlignment="Center"
-                     Background="Transparent"
                      SelectionMode="Single"
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"
@@ -47,6 +48,17 @@
                      ScrollViewer.IsDeferredScrollingEnabled="True"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListBox.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="0,1">
+                        <GradientStop Offset="0" 
+                                      Color="Transparent" />
+                        <GradientStop Offset="0.50"
+                                      Color="{Binding ClipTrayBackgroundBrush, Converter={StaticResource BrushToColorConverter}}" />
+                        <GradientStop Offset="1"
+                                      Color="Transparent" />
+                    </LinearGradientBrush>
+                </ListBox.Background>
                 <i:Interaction.Behaviors>
                     <local:MpDropBehavior x:Name="DropBehavior" />
                 </i:Interaction.Behaviors>
@@ -85,8 +97,6 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                    CanVerticallyScroll="False"
-                                    CanHorizontallyScroll="True"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
                                     IsItemsHost="True"
@@ -96,7 +106,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                                       DataContext="{Binding}" />
+                                                       DataContext="{Binding ., IsAsync=True}" />
                         <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
                                                   DataContext="{Binding}" />-->
                     </DataTemplate>
@@ -106,7 +116,7 @@
         <TextBlock x:Name="EmptyListTextBlock"
                    Text="This list has no items"
                    Focusable="True"
-                   Visibility="Collapsed"
+                   Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Margin="0,0,0,15"

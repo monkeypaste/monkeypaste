@@ -87,7 +87,7 @@ namespace MpWpfApp {
                 IsScrollJumping = false;
                 return;
             }
-            e.Handled = true;
+            //e.Handled = true;
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
 

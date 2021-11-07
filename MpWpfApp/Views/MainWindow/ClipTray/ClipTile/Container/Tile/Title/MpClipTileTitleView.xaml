@@ -5,7 +5,6 @@
                      xmlns:PresentationOptions="https://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpContentItemViewModel"
                      mc:Ignorable="d"

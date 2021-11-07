@@ -60,8 +60,7 @@ namespace MpWpfApp {
         #region Properties
         public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
         public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
-
-
+        
         #region View Models
         
         [MpChildViewModel(typeof(MpClipTileViewModel),true)]
@@ -148,6 +147,19 @@ namespace MpWpfApp {
         #region Layout
         #endregion
 
+        #region Appearance
+
+        public Brush ClipTrayBackgroundBrush {
+            get {
+                if (MpTagTrayViewModel.Instance.SelectedTagTile == null) {
+                    return Brushes.Transparent;
+                }
+                return MpTagTrayViewModel.Instance.SelectedTagTile.TagBrush;
+            }
+        }
+
+        #endregion
+
         #region Business Logic
 
         public int RemainingItemsCountThreshold { get; private set; }
@@ -157,6 +169,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsTrayEmpty => Items.Count == 0;// || Items.All(x => x.IsPlaceholder);
 
         public bool IsSelectionReset { get; set; } = false;
 
@@ -249,42 +263,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
-
-        public Visibility EmptyListMessageVisibility {
-            get {
-                if (VisibleItems.Count == 0) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        private Visibility _clipTrayVisibility = Visibility.Visible;
-        public Visibility ClipTrayVisibility {
-            get {
-                return _clipTrayVisibility;
-            }
-            set {
-                if (_clipTrayVisibility != value) {
-                    _clipTrayVisibility = value;
-                    OnPropertyChanged(nameof(ClipTrayVisibility));
-                }
-            }
-        }
-
-        private Visibility _mergeClipsCommandVisibility = Visibility.Collapsed;
-        public Visibility MergeClipsCommandVisibility {
-            get {
-                return _mergeClipsCommandVisibility;
-            }
-            set {
-                if (_mergeClipsCommandVisibility != value) {
-                    _mergeClipsCommandVisibility = value;
-                    OnPropertyChanged(nameof(MergeClipsCommandVisibility));
-                }
-            }
-        }
-
+        
         #endregion
 
         #endregion
@@ -318,6 +297,7 @@ namespace MpWpfApp {
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(IsTrayEmpty));
             return;
             if(e.OldItems != null && e.OldItems.Count > 0 && !IsAnyTileItemDragging) {
                 foreach(MpClipTileViewModel octvm in e.OldItems) {
@@ -516,7 +496,7 @@ namespace MpWpfApp {
                         string.Empty,
                         null,
                         tagTile.ShortcutKeyString,
-                        tagTile.TagColor));
+                        tagTile.TagBrush));
             }
             return tmil;
         }

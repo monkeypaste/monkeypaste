@@ -133,7 +133,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Visual
+        #region Appearance
         public Brush TagBorderBackgroundBrush {
             get {
                 if (IsSelected) {
@@ -149,7 +149,7 @@ namespace MpWpfApp {
         public Brush TagBorderBrush {
             get {
                 if (IsAssociated) {
-                    return TagColor;
+                    return TagBrush;
                 }
                 return Brushes.Transparent;
             }
@@ -169,7 +169,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
+                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -256,7 +256,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush TagColor {
+        public Brush TagBrush {
             get {
                 if(Tag == null) {
                     return Brushes.Red;
@@ -267,11 +267,13 @@ namespace MpWpfApp {
                 if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
                     Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
                     Tag.WriteToDatabase();
-                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagBrush));
                     OnPropertyChanged(nameof(TagCountTextColor));
                 }
             }
         }
+
+        //public Color TagColor => ((SolidColorBrush)TagBrush).Color;
 
         private MpTag _tag;
         public MpTag Tag {
@@ -281,7 +283,7 @@ namespace MpWpfApp {
             set {
                 if (_tag != value) {
                     _tag = value;
-                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagBrush));
                     OnPropertyChanged(nameof(TagName));
                     OnPropertyChanged(nameof(TagId));
                     OnPropertyChanged(nameof(Tag));
@@ -329,6 +331,7 @@ namespace MpWpfApp {
                     //        await MpClipTrayViewModel.Instance.RefreshTiles(); 
                     //    });
                     //}
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
             }
         }        
@@ -448,7 +451,7 @@ namespace MpWpfApp {
             (args) => {
                 var newBrush = args as Brush;
                 if (newBrush != null) {
-                    TagColor = newBrush;
+                    TagBrush = newBrush;
                     Tag.WriteToDatabase();
                 }
             });

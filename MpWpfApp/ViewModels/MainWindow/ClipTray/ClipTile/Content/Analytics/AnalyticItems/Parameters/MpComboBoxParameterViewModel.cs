@@ -11,10 +11,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemParameterValueViewModel> Values { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
 
-        public MpAnalyticItemParameterValueViewModel SelectedValue { get; set; }
         #endregion
-
-
 
         #region State
 
@@ -30,7 +27,7 @@ namespace MpWpfApp {
                 return SelectedValue != null;
             }
         }
-
+        
         #endregion
 
         #endregion

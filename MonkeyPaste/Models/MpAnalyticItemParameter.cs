@@ -9,7 +9,8 @@ namespace MonkeyPaste {
         Text,
         ComboBox,
         CheckBox,
-        Slider,//below are only runtime types
+        Slider,
+        RuntimeMinOffset,//below are only runtime types
         Execute,
         Result
     }
@@ -61,8 +62,7 @@ namespace MonkeyPaste {
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpAnalyticItem AnalyticItem { get; set; }
-
-
+        
         #endregion
 
         #region Properties
@@ -136,11 +136,13 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsRuntimeParameter {
-            get {
-                return (int)ParameterType > (int)MpAnalyticParameterType.Slider;
-            }
-        }
+        public bool IsRuntimeParameter => (int)ParameterType >= (int)MpAnalyticParameterType.RuntimeMinOffset;
+
+        [Ignore]
+        public Enum ParamEnumId { get; private set; }
+
+        [Ignore]
+        public string UserValue { get; set; }
         #endregion
 
         public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string key, string value, bool isRequired, bool isHeader, bool isRequest, int sortOrderIdx) {
@@ -176,6 +178,10 @@ namespace MonkeyPaste {
             return newAnalyticItemParameter;
         }
 
-        public MpAnalyticItemParameter() { }
+        public MpAnalyticItemParameter() : base() { }
+
+        public MpAnalyticItemParameter(Enum enumId) : this() {
+            ParamEnumId = enumId;
+        }
     }
 }

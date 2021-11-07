@@ -27,7 +27,7 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {
+        private void ClipTileDetailTextBlock_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.CycleDetailCommand.Execute(null);                       
 
@@ -62,7 +62,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void ClipTileDetailTextBlock_MouseLeave(object sender, MouseEventArgs e) {
+        private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             if(h != null) {
                 h.Click -= H_Click;

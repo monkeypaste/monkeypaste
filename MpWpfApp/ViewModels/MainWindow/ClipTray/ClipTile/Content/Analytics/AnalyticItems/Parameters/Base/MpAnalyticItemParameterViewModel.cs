@@ -3,20 +3,46 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel> {
+    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel>{
         #region Private Variables
 
         #endregion
 
         #region Properties
 
+        #region View Models
+
+        public virtual MpAnalyticItemParameterValueViewModel SelectedValue { get; set; } = new MpAnalyticItemParameterValueViewModel();
+
+        #endregion
+
         #region Appearance
 
         public Brush ParameterBorderBrush {
             get {
-                return IsValid ? Brushes.Transparent : Brushes.Red;
+                if (IsValid) {
+                    return Brushes.Transparent;
+                }
+                if (Parent.WasExecuteClicked) {
+                    return Brushes.Red;
+                }
+                return Brushes.Transparent;
             }
         }
+
+
+        public string ParameterTooltipText {
+            get {
+                if (!IsValid) {
+                    return $"{Parameter.Key} is required";
+                }
+                if (Parameter != null && !string.IsNullOrEmpty(Parameter.Description)) {
+                    return Parameter.Description;
+                }
+                return null;
+            }
+        }
+
         #endregion
 
         #region State
@@ -29,14 +55,6 @@ namespace MpWpfApp {
 
         public abstract bool IsValid { get; }
 
-        public string ParameterTooltipText {
-            get {
-                if(!IsValid) {
-                    return $"{Parameter.Key} is required";
-                }
-                return string.Empty;
-            }
-        }
         #endregion
 
         #region Model
@@ -58,8 +76,22 @@ namespace MpWpfApp {
             }
         }
 
-
-        public MpAnalyticItemParameter Parameter { get; set; }
+        public virtual string UserValue {
+            get {
+                if (Parameter == null) {
+                    return null;
+                }
+                return Parameter.UserValue;
+            }
+            set {
+                if (Parameter.UserValue != value) {
+                    Parameter.UserValue = value;
+                    OnPropertyChanged(nameof(UserValue));
+                }
+            }
+        }
+        
+        public MpAnalyticItemParameter Parameter { get; protected set; }
 
         #endregion
 

@@ -33,6 +33,8 @@
             }
         }
 
+        public override MpAnalyticItemParameterValueViewModel SelectedValue => new MpAnalyticItemParameterValueViewModel() { Value = InputValue };
+
         #endregion
 
         #region Constructors

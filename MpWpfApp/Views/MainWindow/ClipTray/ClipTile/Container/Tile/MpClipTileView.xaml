@@ -90,8 +90,11 @@
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
-                <local:MpContentListView x:Name="ContentListView"
-                                         DataContext="{Binding}" />
+                <Grid>
+                    <local:MpContentListView x:Name="ContentListView"
+                                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}"/>
+                    <local:MpSpinnerSwirl Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}"/>
+                </Grid>
 
             </DockPanel>
             <!--  Overlays  -->

@@ -44,6 +44,7 @@ namespace MpWpfApp {
             }
         }
 
+        public override MpAnalyticItemParameterValueViewModel SelectedValue => new MpAnalyticItemParameterValueViewModel() { Value = this.Value.ToString() };
 
         public override bool IsValid => true;
 

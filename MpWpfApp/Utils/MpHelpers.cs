@@ -717,15 +717,11 @@ namespace MpWpfApp {
         public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {            
             Application.Current.Dispatcher.Invoke(action, priority);
         }
-
+        
         public DispatcherOperation RunOnMainThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
             return Application.Current.Dispatcher.InvokeAsync(action, priority);
         }
-
-        public TResult RunOnMainThread<TResult>(Func<TResult> action, DispatcherPriority priority = DispatcherPriority.Normal) where TResult : class {
-            return Application.Current.Dispatcher.Invoke<TResult>(action, priority);
-        }
-
+        
         public DispatcherOperation<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, DispatcherPriority priority = DispatcherPriority.Normal) where TResult : class {
             return Application.Current.Dispatcher.InvokeAsync<TResult>(action, priority);
         }

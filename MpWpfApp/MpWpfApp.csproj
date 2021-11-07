@@ -107,6 +107,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpFrictionScrollExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />

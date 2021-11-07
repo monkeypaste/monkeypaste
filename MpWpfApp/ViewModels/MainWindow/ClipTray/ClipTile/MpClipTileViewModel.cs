@@ -759,6 +759,7 @@ using System.Speech.Synthesis;
         }
 
         public MpClipTileViewModel(MpClipTrayViewModel parent) : base(parent) {
+            IsBusy = true;
             _itemLockObject = new object();
             PropertyChanged += MpClipTileViewModel_PropertyChanged;            
         }

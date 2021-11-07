@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -234,7 +235,20 @@ namespace MpWpfApp {
         }
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
-            return lb.GetVisualDescendent<ScrollViewer>();
+            ScrollViewer sv = lb.GetVisualDescendent<ScrollViewer>();
+            //if (sv == null) {
+            //    int timeOut = 10000;
+            //    int t = 0;
+            //    while (t <= timeOut) {
+            //        sv = lb.GetVisualDescendent<ScrollViewer>();
+            //        if (sv != null) {
+            //            break;
+            //        }
+            //        Thread.Sleep(100);
+            //        t += 100;
+            //    }
+            //}
+            return sv;
         }
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {

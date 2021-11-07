@@ -23,26 +23,21 @@ namespace MpWpfApp {
 
         [MpChildViewModel(typeof(MpAnalyticItemParameterViewModel),true)]
         public ObservableCollection<MpAnalyticItemParameterViewModel> Parameters { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
-
+        
         public MpAnalyticItemParameterViewModel SelectedParameter => Parameters.FirstOrDefault(x => x.IsSelected);
-
+        
         #endregion
 
         #region Appearance
 
         public string ItemIconSourcePath { get; protected set; }
 
-        public Brush ItemBackgroundBrush {
-            get {
-                if (IsHovering && !IsSelected) {
-                    return Brushes.Yellow;
-                }
-                return Brushes.White;
-            }
-        }
+        public Brush ItemBackgroundBrush => IsHovering ? Brushes.Yellow : Brushes.Transparent;
         #endregion
 
         #region State
+
+        public bool WasExecuteClicked { get; set; } = false;
 
         public bool IsHovering { get; set; } = false;
 
@@ -114,7 +109,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async virtual Task Initialize() { await Task.Delay(1); }
+        public virtual async Task Initialize() { await Task.Delay(1); }
 
         public async Task InitializeAsync(MpAnalyticItem ai) {
             IsBusy = true;
@@ -136,8 +131,8 @@ namespace MpWpfApp {
                 Parameters.Add(naipvm);
             }
 
-            if (!Parameters.Any(x => x.Parameter.ParameterType == MpAnalyticParameterType.Execute)) {
-                var eaip = new MpAnalyticItemParameter() {
+            if (Parameters.All(x => x.Parameter.ParameterType != MpAnalyticParameterType.Execute)) {
+                MpAnalyticItemParameter eaip = new MpAnalyticItemParameter() {
                     Id = Parameters.Count + 1,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
                     AnalyticItemId = AnalyticItemId,
@@ -147,11 +142,11 @@ namespace MpWpfApp {
                     ValueCsv = null,
                     SortOrderIdx = Parameters.Count
                 };
-                var eaipvm = await CreateParameterViewModel(eaip);
+                MpAnalyticItemParameterViewModel eaipvm = await CreateParameterViewModel(eaip);
                 Parameters.Add(eaipvm);
             }
 
-            if (!Parameters.Any(x => x.Parameter.ParameterType == MpAnalyticParameterType.Result)) {
+            if (Parameters.All(x => x.Parameter.ParameterType != MpAnalyticParameterType.Result)) {
                 var raip = new MpAnalyticItemParameter() {
                     Id = Parameters.Count + 1,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
@@ -193,12 +188,22 @@ namespace MpWpfApp {
                 case MpAnalyticParameterType.Result:
                     naipvm = new MpResultParameterViewModel(this);
                     break;
+                default:
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticParameterType), aip.ParameterType));
             }
 
             await naipvm.InitializeAsync(aip);
+
             return naipvm;
         }
 
+        public MpAnalyticItemParameterViewModel GetParam(Enum paramId) {
+            return Parameters.FirstOrDefault(x => x.Parameter.ParamEnumId.Equals(paramId));
+        }
+
+        public List<MpAnalyticItemParameterViewModel> GetParams(Enum paramId) {
+            return Parameters.Where(x => x.Parameter.ParamEnumId.Equals(paramId)).ToList();
+        }
         #endregion
 
         #region Private Methods

@@ -82,7 +82,8 @@
                 </StackPanel>
                 <Slider Minimum="{Binding Min}"
                         Maximum="{Binding Max}"
-                        Margin="0,15,0,0" Width="120"
+                        Margin="0,15,0,0"
+                        Width="120"
                         DockPanel.Dock="Right"
                         Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                         TickPlacement="None"
@@ -92,18 +93,22 @@
         </DataTemplate>
         <DataTemplate x:Key="ExecuteParameter"
                       DataType="local:MpExecuteParameterViewModel">
-            <Button HorizontalAlignment="Right"
-                    MinWidth="50"
-                    Content="Execute"
-                    Command="{Binding Parent.ExecuteAnalysisCommand}" />
+            <StackPanel>
+                <Button HorizontalAlignment="Right"
+                        MinWidth="50"
+                        Click="ExecuteButton_OnClick"
+                        Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                        Content="Execute"
+                        Command="{Binding Parent.ExecuteAnalysisCommand}" />
+                <local:MpSpinnerApple Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="ResultParameter"
                       DataType="local:MpResultParameterViewModel">
-            <Grid>
-                <TextBlock MaxWidth="150"
-                           TextWrapping="Wrap"
-                           Text="{Binding ResultValue}" />
-            </Grid>
+            <TextBlock MaxWidth="150"
+                       Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibilityConverter}}"
+                       TextWrapping="Wrap"
+                       Text="{Binding SelectedValue.Value}" />
         </DataTemplate>
         <local:MpParameterViewSelector x:Key="ParameterViewSelector"
                                        ComboBoxTemplate="{StaticResource ComboBoxParameter}"

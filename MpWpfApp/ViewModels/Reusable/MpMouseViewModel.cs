@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,20 +22,22 @@ namespace MpWpfApp {
     public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel,object> {
         #region Private Variables
 
-        private Cursor _defaultCursor = Cursors.Arrow;
-        private Cursor _moveCursor = Cursors.Hand;
-        private Cursor _copyCursor = Cursors.Cross;
-        private Cursor _invalidCursor = Cursors.No;
-        private Cursor _waitingCursor = Cursors.Wait;
-        private Cursor _inputCursor = Cursors.IBeam;
+        private readonly Cursor _defaultCursor = Cursors.Arrow;
+        private readonly Cursor _moveCursor = Cursors.Hand;
+        private readonly Cursor _copyCursor = Cursors.Cross;
+        private readonly Cursor _invalidCursor = Cursors.No;
+        private readonly Cursor _waitingCursor = Cursors.Wait;
+        private readonly Cursor _inputCursor = Cursors.IBeam;
 
+        private List<object> _busyObjects = new List<object>();
+        
         #endregion
 
         #region Properties
 
         #region State
 
-        public bool IsAppBusy { get; set; } = false;
+        public bool IsAppBusy => _busyObjects.Count > 0;
 
         public MpCursorType CurrentCursor { get; set; } = MpCursorType.Default;
 
@@ -101,6 +105,20 @@ namespace MpWpfApp {
             return cursor;
         }
 
+        public void NotifyAppBusy(bool isAppBusy, object notifier) {
+            //this keeps track of notifiers busy status in a list
+            //so is busy is not negated when something else is still busy
+            if (isAppBusy) {
+                if (!_busyObjects.Contains((notifier))) {
+                    _busyObjects.Add(notifier);
+                }
+            } else {
+                if (_busyObjects.Contains((notifier))) {
+                    _busyObjects.Remove(notifier);
+                }
+            }
+            OnPropertyChanged(nameof(IsAppBusy));
+        }
         #endregion
 
         #region Private Methods

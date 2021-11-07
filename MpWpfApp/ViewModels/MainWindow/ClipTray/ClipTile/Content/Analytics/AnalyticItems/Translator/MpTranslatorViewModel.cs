@@ -11,6 +11,14 @@ using Windows.Globalization;
 using Xamarin.Forms.Internals;
 
 namespace MpWpfApp {
+
+    public enum MpTranslatorParamType {
+        None = 0,
+        FromLang,
+        ToLang,
+        Execute,
+        Result
+    }
     public class MpTranslatorViewModel : MpAnalyticItemViewModel {
 
         #region Properties
@@ -72,7 +80,7 @@ namespace MpWpfApp {
             }
 
             var aipl = new List<MpAnalyticItemParameter>() {
-                new MpAnalyticItemParameter() {
+                new MpAnalyticItemParameter(MpTranslatorParamType.FromLang) {
                     Id = RuntimeId,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
                     AnalyticItemId = RuntimeId,
@@ -83,7 +91,7 @@ namespace MpWpfApp {
                     IsParameterRequired = true,
                     SortOrderIdx = 0
                 },
-                new MpAnalyticItemParameter() {
+                new MpAnalyticItemParameter(MpTranslatorParamType.ToLang) {
                     Id = RuntimeId + 1,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
                     AnalyticItemId = RuntimeId,
@@ -106,22 +114,18 @@ namespace MpWpfApp {
         protected override async Task ExecuteAnalysis() {
             IsBusy = true;
 
-            MpComboBoxParameterViewModel fromLangParam = (MpComboBoxParameterViewModel)Parameters.Where(x => x.Key == "From Language").FirstOrDefault();
-            string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(fromLangParam.SelectedValue.Value);
-
-            MpComboBoxParameterViewModel toLangParam = (MpComboBoxParameterViewModel)Parameters.Where(x => x.Key == "To Language").FirstOrDefault();
-            string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(toLangParam.SelectedValue.Value);
+            string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(GetParam(MpTranslatorParamType.FromLang).SelectedValue.Value);
+            string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(GetParam(MpTranslatorParamType.ToLang).SelectedValue.Value);
 
             //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();
             
-            var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
+            string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
                 Parent.Parent.CopyItemData.ToPlainText(),
                 toCode,
                 fromCode, 
                 false);
 
-            MpResultParameterViewModel resultParam = (MpResultParameterViewModel)Parameters.Where(x => x.Parameter.ParameterType == MpAnalyticParameterType.Result).FirstOrDefault();
-            resultParam.ResultValue = translatedText;
+            GetParam(MpTranslatorParamType.Result).SelectedValue.Value = translatedText;
 
             IsBusy = false;
         }

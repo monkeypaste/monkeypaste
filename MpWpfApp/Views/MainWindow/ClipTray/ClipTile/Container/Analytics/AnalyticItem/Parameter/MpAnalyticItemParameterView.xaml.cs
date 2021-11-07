@@ -21,5 +21,11 @@ namespace MpWpfApp {
         public MpAnalyticItemParameterView() {
             InitializeComponent();
         }
+        private void ExecuteButton_OnClick(object sender, RoutedEventArgs e) {
+            if (BindingContext == null || BindingContext.Parent == null) {
+                return;
+            }
+            BindingContext.Parent.WasExecuteClicked = true;
+        }
     }
 }

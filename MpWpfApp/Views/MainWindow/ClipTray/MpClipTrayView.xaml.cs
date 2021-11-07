@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     /// <summary>
@@ -44,13 +45,26 @@ namespace MpWpfApp {
             ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             ctrvm.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
 
-            var sv = ClipTray.GetScrollViewer();
-            sv.PreviewMouseDown += Sv_PreviewMouseDown;
-            sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
-
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
             MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+
+            var sv = ClipTray.GetScrollViewer();
+            sv.PreviewMouseDown += Sv_PreviewMouseDown;
+            //sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
+
+            //MpHelpers.Instance.RunOnMainThread(async () => {
+            //    ScrollViewer sv = null;
+            //    while (sv == null) {
+            //        sv = ClipTray.GetScrollViewer();
+            //        await Task.Delay(100);
+            //    }
+
+            //    sv.PreviewMouseDown += Sv_PreviewMouseDown;
+            //    sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
+            //},DispatcherPriority.Background);
+
+            
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
@@ -140,17 +154,17 @@ namespace MpWpfApp {
             return;
         }
 
-        private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(BindingContext.IsAnyTileFlipped || BindingContext.IsAnyTileExpanded) {
-                return;
-            }
+        //private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+        //    if(BindingContext.IsAnyTileFlipped || BindingContext.IsAnyTileExpanded) {
+        //        return;
+        //    }
 
-            var sv = sender as ScrollViewer;
+        //    var sv = sender as ScrollViewer;
 
-            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta);
+        //    sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta);
             
-            //wheel event is passed to the loadMoreExtentsion which marks handled=true if there's a wheel delta
-        }
+        //    //wheel event is passed to the loadMoreExtentsion which marks handled=true if there's a wheel delta
+        //}
 
         public async Task RefreshContext() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
