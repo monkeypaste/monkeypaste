@@ -96,7 +96,6 @@
             <StackPanel>
                 <Button HorizontalAlignment="Right"
                         MinWidth="50"
-                        Click="ExecuteButton_OnClick"
                         Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                         Content="Execute"
                         Command="{Binding Parent.ExecuteAnalysisCommand}" />

@@ -23,20 +23,7 @@ namespace MpWpfApp {
 
         public int ValueIdx { get; set; } = 0;
 
-        public string Value {
-            get {
-                if (Parent == null) {
-                    return null;
-                }
-                return Parent.Parameter.UserValue;
-            }
-            set {
-                if (Parent != null && Parent.Parameter.UserValue != value) {
-                    Parent.Parameter.UserValue = value;
-                    OnPropertyChanged(nameof(Value));
-                }
-            }
-        }
+        public string Value { get; set; }
 
         public double DoubleValue {
             get {

@@ -568,6 +568,7 @@ using System.Speech.Synthesis;
 
         #region State Properties 
 
+        public bool IsAnyBusy => IsBusy || ItemViewModels.Any(x => x.IsBusy);
         public bool IsFlipping { get; set; } = false;
 
         public bool IsFlipped { get; set; } = false;
@@ -838,8 +839,8 @@ using System.Speech.Synthesis;
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
-                case nameof(IsBusy):                    
-                    
+                case nameof(IsBusy):
+                    OnPropertyChanged(nameof(IsAnyBusy));
                     break;
                 case nameof(IsSelected):
                     if(!IsSelected) {

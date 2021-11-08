@@ -24,7 +24,7 @@ namespace MpWpfApp {
                 if(!IsRequired) {
                     return true;
                 }
-                return SelectedValue != null;
+                return SelectedValue != null && !string.IsNullOrEmpty(SelectedValue.Value);
             }
         }
         

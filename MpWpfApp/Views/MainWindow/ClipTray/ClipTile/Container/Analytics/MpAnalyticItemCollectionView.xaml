@@ -31,6 +31,7 @@
     <local:MpClipBorder Margin="1"
                         BorderThickness="{Binding Parent.Parent.TileBorderThickness}"
                         BorderBrush="{Binding Parent.Parent.TileBorderBrush}"
+                        Width="{local:MpMeasurementsBinding ClipTileMinSize}"
                         Height="{Binding Parent.Parent.TileBorderHeight}"
                         CornerRadius="10">
         <Grid>
@@ -48,8 +49,7 @@
             </Grid.Resources>
             <TreeView Name="AnalyticTreeView"
                       AlternationCount="2"
-                      Loaded="AnalyticTreeView_Loaded"
-                      ItemsSource="{Binding Items}">
+                      ItemsSource="{Binding Items, IsAsync=True}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
                                               ItemsSource="{Binding Parameters}">

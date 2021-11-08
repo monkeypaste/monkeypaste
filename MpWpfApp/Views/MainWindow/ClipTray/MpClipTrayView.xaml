@@ -16,13 +16,24 @@
         <local:MpClipTileFlipView x:Key="ClipTileFlipView"/>
     </local:MpUserControl.Resources>
     <Grid x:Name="ClipTrayGrid">
-        <AdornerDecorator>
-            <ListBox x:Name="ClipTray"
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" Opacity="0.0"
+                                 EndPoint="0,1">
+                <GradientStop Offset="0"
+                              Color="LightGray" />
+                <GradientStop Offset=".1"
+                                      Color="Transparent" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}">
+            <AdornerDecorator>
+                <ListBox x:Name="ClipTray"
                      RequestBringIntoView="ClipTray_RequestBringIntoView"
                      SelectionChanged="ClipTray_SelectionChanged"
                      Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}"
                      Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
                      ItemsSource="{Binding Items}"
+                     Background="Transparent"
                      ForceCursor="True"
                      Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
                      local:MpFrictionScrollExtension.IsEnabled="True"
@@ -48,72 +59,73 @@
                      ScrollViewer.IsDeferredScrollingEnabled="True"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                <ListBox.Background>
+                    <!--<ListBox.Background>
                     <LinearGradientBrush StartPoint="0,0"
                                          EndPoint="0,1">
                         <GradientStop Offset="0" 
                                       Color="Transparent" />
-                        <GradientStop Offset="0.50"
-                                      Color="{Binding ClipTrayBackgroundBrush, Converter={StaticResource BrushToColorConverter}}" />
-                        <GradientStop Offset="1"
+                        <GradientStop Offset=".65"
                                       Color="Transparent" />
+                        <GradientStop Offset="0"
+                                      Color="{Binding ClipTrayBackgroundBrush, Converter={StaticResource BrushToColorConverter}, ConverterParameter=1}" />
+                        
                     </LinearGradientBrush>
-                </ListBox.Background>
-                <i:Interaction.Behaviors>
-                    <local:MpDropBehavior x:Name="DropBehavior" />
-                </i:Interaction.Behaviors>
-                <ListBox.InputBindings>
-                    <KeyBinding Gesture="Ctrl+A"
+                </ListBox.Background>-->
+                    <i:Interaction.Behaviors>
+                        <local:MpDropBehavior x:Name="DropBehavior" />
+                    </i:Interaction.Behaviors>
+                    <ListBox.InputBindings>
+                        <KeyBinding Gesture="Ctrl+A"
                                 Command="{Binding SelectAllCommand}" />
-                </ListBox.InputBindings>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="IsSelected"
+                    </ListBox.InputBindings>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="IsSelected"
                                 Value="{Binding IsSelected}" />
-                        <Setter Property="FocusVisualStyle"
+                            <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
-                        <Setter Property="HorizontalContentAlignment"
+                            <Setter Property="HorizontalContentAlignment"
                                 Value="Left" />
-                        <Setter Property="VerticalContentAlignment"
+                            <Setter Property="VerticalContentAlignment"
                                 Value="Top" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <ContentPresenter />
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected"
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <ContentPresenter />
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected"
                                                  Value="True">
-                                            <Setter Property="BorderBrush"
+                                                <Setter Property="BorderBrush"
                                                     Value="Transparent" />
-                                            <Setter Property="Background"
+                                                <Setter Property="Background"
                                                     Value="Transparent" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
                                     IsItemsHost="True"
                                     Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                        DataContext="{Binding ., IsAsync=True}" />
-                        <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
+                            <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
                                                   DataContext="{Binding}" />-->
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </AdornerDecorator>
-        <TextBlock x:Name="EmptyListTextBlock"
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </AdornerDecorator>
+            <TextBlock x:Name="EmptyListTextBlock"
                    Text="This list has no items"
                    Focusable="True"
                    Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -123,5 +135,10 @@
                    Foreground="LightGray"
                    FontStyle="Oblique"
                    FontSize="34" />
+        </Grid>
+        <Viewbox Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}">
+            <local:MpSpinnerCogs HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
+        </Viewbox>
     </Grid>
 </local:MpUserControl>

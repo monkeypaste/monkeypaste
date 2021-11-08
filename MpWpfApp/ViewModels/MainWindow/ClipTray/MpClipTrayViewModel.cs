@@ -309,6 +309,7 @@ namespace MpWpfApp {
         private async void ReceivedQueryInfoMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.QueryChanged:
+                    IsBusy = true;
                     await Requery();
                     break;
             }

@@ -17,7 +17,7 @@
                              Storyboard.TargetProperty="Angle"
                              From="0"
                              To="180"
-                             Duration="0:0:1">
+                             Duration="0:0:0.75">
                 <DoubleAnimation.EasingFunction>
                     <ElasticEase Springiness="0.5"
                                  Oscillations="0" />

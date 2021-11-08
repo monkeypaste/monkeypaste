@@ -96,10 +96,13 @@ namespace MpWpfApp {
 
                         hsb.Maximum = ttw;
                         hsb.Minimum = 0;
-                        //hsb.UpdateLayout();
+                        hsb.UpdateLayout();
 
                         sv.ScrollToHorizontalOffset(0);
                         sv.ScrollToLeftEnd();
+                        sv.ScrollToHome();
+                        sv.UpdateLayout();
+                        UpdateLayout();
                     }
                     break;
                 case MpMessageType.Expand:

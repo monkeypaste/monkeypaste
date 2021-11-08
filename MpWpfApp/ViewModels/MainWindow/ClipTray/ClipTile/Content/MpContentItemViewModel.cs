@@ -17,9 +17,6 @@ using PropertyChanged;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
-        private static string _unsetJoystickIcon64 = "";
-        private static string _setJoyStickIcon64 = "";
-
         #region Private Variables
         Size itemSize;
         int fc = 0, lc = 0, cc = 0;
@@ -859,6 +856,11 @@ namespace MpWpfApp {
                 case nameof(IsEditingTitle):
                     if(!IsEditingTitle) {
                         CopyItem.WriteToDatabase();
+                    }
+                    break;
+                case nameof(IsBusy):
+                    if(Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
             }

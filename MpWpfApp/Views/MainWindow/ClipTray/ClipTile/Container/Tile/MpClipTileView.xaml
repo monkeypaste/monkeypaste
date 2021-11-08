@@ -15,7 +15,7 @@
         <local:MpContentDragBehavior x:Name="DragBehavior" />
     </i:Interaction.Behaviors>-->
     <local:MpClipBorder x:Name="ClipTileClipBorder"
-                        DataContext="{Binding}"
+                        DataContext="{Binding ., IsAsync=True}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin}"
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
@@ -76,7 +76,6 @@
                                 </local:MpClipBorder.Effect>-->
         <Grid x:Name="ClipTileBorderGrid">
             <DockPanel x:Name="ClipTileDockPanel"
-                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                        Background="White">
                 <!--  Tile Title Canvas  -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
@@ -90,18 +89,14 @@
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
-                <Grid>
-                    <local:MpContentListView x:Name="ContentListView"
-                                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}"/>
-                    <local:MpSpinnerSwirl Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}"/>
-                </Grid>
+                <local:MpContentListView x:Name="ContentListView"/>
 
             </DockPanel>
             <!--  Overlays  -->
             <!--  Loading Spinner  -->
             <local:MpClipTileLoadingOverlayView x:Name="ClipTileBusyView"
                                                 Background="#FF3D3D3D"
-                                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                Visibility="{Binding IsAnyBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
             <!--  Trial Expired  -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>

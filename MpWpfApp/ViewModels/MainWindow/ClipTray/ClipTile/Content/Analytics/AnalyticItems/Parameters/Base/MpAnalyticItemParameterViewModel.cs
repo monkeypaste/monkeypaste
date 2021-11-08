@@ -23,10 +23,7 @@ namespace MpWpfApp {
                 if (IsValid) {
                     return Brushes.Transparent;
                 }
-                if (Parent.WasExecuteClicked) {
-                    return Brushes.Red;
-                }
-                return Brushes.Transparent;
+                return Brushes.Red;
             }
         }
 

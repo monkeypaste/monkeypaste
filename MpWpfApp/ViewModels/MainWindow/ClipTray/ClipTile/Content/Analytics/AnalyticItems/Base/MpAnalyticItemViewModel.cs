@@ -37,7 +37,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool WasExecuteClicked { get; set; } = false;
 
         public bool IsHovering { get; set; } = false;
 
