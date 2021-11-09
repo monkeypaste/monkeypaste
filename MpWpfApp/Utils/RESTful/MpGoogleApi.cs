@@ -16,7 +16,7 @@ namespace MpWpfApp {
         #endregion
 
 
-        public override async Task Init() {
+        public async Task Init() {
             // Create the service.
             var service = new DiscoveryService(new BaseClientService.Initializer {
                 ApplicationName = "Discovery Sample",

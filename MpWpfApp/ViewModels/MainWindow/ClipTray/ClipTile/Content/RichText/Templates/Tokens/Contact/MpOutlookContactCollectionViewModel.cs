@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         #region Constructor
 
-        public override async Task Init() {
+        public async Task Init() {
             await Task.Run(() => {
                 IsBusy = true;
 

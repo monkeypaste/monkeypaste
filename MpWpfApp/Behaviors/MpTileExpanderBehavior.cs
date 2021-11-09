@@ -49,8 +49,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
@@ -58,15 +57,14 @@ namespace MpWpfApp {
                 return;
             }
 
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.SizeNS;
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             _mainWindowTitlePanel.ReleaseMouseCapture();
             MpMainWindowViewModel.Instance.IsResizing = false;
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
@@ -85,8 +83,8 @@ namespace MpWpfApp {
                 return;
             }
 
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.SizeNS;
+
             var mp = e.GetPosition(Application.Current.MainWindow);
             double deltaY = mp.Y - _lastMousePosition.Y;
             _lastMousePosition = mp;

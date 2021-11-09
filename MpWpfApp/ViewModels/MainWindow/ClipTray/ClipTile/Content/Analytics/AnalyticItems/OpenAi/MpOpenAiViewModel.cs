@@ -170,7 +170,7 @@ namespace MpWpfApp {
 
 
             MpOpenAiRequest jsonReq = new MpOpenAiRequest() {
-                Prompt = Regex.Escape(Parent.Parent.CopyItemData.ToPlainText()),
+                Prompt = Regex.Escape(Parent.HostClipTileViewModel.PrimaryItem.CopyItemData.ToPlainText()),
                 Temperature = GetParam(MpOpenAiParamType.Temperature).SelectedValue.DoubleValue,
                 MaxTokens = GetParam(MpOpenAiParamType.MaxTokens).SelectedValue.IntValue,
                 TopP = GetParam(MpOpenAiParamType.TopP).SelectedValue.DoubleValue,

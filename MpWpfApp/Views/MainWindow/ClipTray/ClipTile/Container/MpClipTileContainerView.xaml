@@ -12,13 +12,13 @@
         <local:MpTileExpanderBehavior x:Name="ExpandBehavior" />
     </i:Interaction.Behaviors>
     <Grid>
-        <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
+        <!--<local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
                                             DataContext="{Binding PrimaryItem.AnalyticItemCollectionViewModel}"
-                                            Visibility="{Binding Parent.Parent.BackVisibility}" />
+                                            Visibility="{Binding Parent.Parent.BackVisibility}" />-->
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
-        <local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
+        <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
-                                  Visibility="{Binding IsFlipping, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                  Visibility="{Binding IsFlipping, Converter={StaticResource BoolToVisibilityConverter}}" />-->
     </Grid>
 </local:MpUserControl>

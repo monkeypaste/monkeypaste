@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemCollectionViewModel : MpViewModelBase<MpContentItemViewModel> { //MpSingletonViewModel<MpAnalyticItemCollectionViewModel,object> {
+    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel,object> { //MpViewModelBase<MpContentItemViewModel> { 
 
         #region Properties
 
@@ -17,13 +17,28 @@ namespace MpWpfApp {
 
         public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
 
-        //public MpClipTileViewModel HostClipTileViewModel { get; set; }
+        public MpClipTileViewModel HostClipTileViewModel { get; set; }
 
+        #endregion
+
+        #region Layout
+
+        public double UnexpandedHeight { get; set; } = 10;
+
+        public double ExpandedHeight { get; set; } = MpMeasurements.Instance.AnalyzerMenuHeight;
+
+        public double ToolbarHeight {
+            get {
+                return IsExpanded ? ExpandedHeight : UnexpandedHeight;
+            }
+        }
         #endregion
 
         #region State
 
         public bool IsLoaded => Items.Count > 0;
+
+        public bool IsExpanded { get; set; } = false;
 
         #endregion
 
@@ -32,6 +47,8 @@ namespace MpWpfApp {
         #region Constructors
 
         public async Task Init() {
+            PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+
             await InitDefaultItems();
 
             if(Items.Count > 0) {
@@ -39,13 +56,13 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemCollectionViewModel() : base(null) {
-           // PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-        }
+        //public MpAnalyticItemCollectionViewModel() : base(null) {
+        //   // PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+        //}
 
-        public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
-            PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-        }
+        //public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
+        //    PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+        //}
 
         #endregion
 

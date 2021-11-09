@@ -264,29 +264,23 @@ namespace MpWpfApp {
         #region Cursor Updates
 
         private void UpdateCursor() {
-            Cursor currentCursor = DefaultCursor;
+            MpCursorType currentCursor = MpCursorType.Default;
 
             if (!isDragging) {
-                currentCursor = DefaultCursor;
+                currentCursor = MpCursorType.Default;
             } else if(!isDropValid) {
-                currentCursor = InvalidCursor;
+                currentCursor = MpCursorType.Invalid;
             } else if(isDragCopy) {
-                currentCursor = CopyCursor;
+                currentCursor = MpCursorType.Copy;
             } else if(isDragging) {
-                currentCursor = MoveCursor;
+                currentCursor = MpCursorType.Move;
             }
 
-            SetCursor(currentCursor);
-        }
-
-        private void SetCursor(Cursor c) {
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = c;
+            MpMouseViewModel.Instance.CurrentCursor = currentCursor;
         }
 
         private void ResetCursor() {
-            Application.Current.MainWindow.ForceCursor = true;
-            Application.Current.MainWindow.Cursor = DefaultCursor;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         #endregion

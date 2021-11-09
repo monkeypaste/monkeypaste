@@ -11,7 +11,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-        
         xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
@@ -30,7 +29,6 @@
         Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance local:MpMainWindowViewModel, IsDesignTimeCreatable=True}">
-    <Window.Resources />
     <Canvas x:Name="MainWindowCanvas"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
@@ -55,8 +53,9 @@
               Width="{Binding MainWindowWidth}"
               Background="Green">
             <Grid.RowDefinitions>
-                <RowDefinition Height="{Binding TitleMenuHeight}" />
-                <RowDefinition Height="{Binding FilterMenuHeight}" />
+                <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
+                <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
+                <RowDefinition Height="{Binding ToolbarHeight, Source={StaticResource AnalyticItemCollectionViewModel}}" />
                 <RowDefinition Height="{Binding ClipTrayHeight}" />
             </Grid.RowDefinitions>
 
@@ -130,8 +129,14 @@
 
             </Grid>
 
-            <!--  3rd row row for tray  -->
-            <Grid Grid.Row="2"
+            <!--  Analytic Menu  -->
+            <local:MpAnalyzerToolbarTreeView x:Name="AnalyzerToolbar"
+                                             
+                                             DataContext="{StaticResource AnalyticItemCollectionViewModel}"
+                                             Grid.Row="2" />
+
+            <!--  4th row row for tray  -->
+            <Grid Grid.Row="3"
                   Grid.Column="0"
                   Focusable="True"
                   Background="{local:MpThemeColorsBinding Clip_Tray_Background_Color}">
@@ -173,8 +178,6 @@
                     </Viewbox>
                 </Grid>
             </Grid>
-
-
         </Grid>
     </Canvas>
 </Window>

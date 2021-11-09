@@ -607,7 +607,7 @@ namespace MpWpfApp {
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
-            AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
+            //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
             RequestUiUpdate();

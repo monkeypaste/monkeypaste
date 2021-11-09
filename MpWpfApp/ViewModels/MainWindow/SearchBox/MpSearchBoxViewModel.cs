@@ -18,10 +18,10 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSearchBoxViewModel : MpViewModelBase<object> {
+    public class MpSearchBoxViewModel : MpSingletonViewModel<MpSearchBoxViewModel,object> {
         #region Singleton Definition
-        private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
-        public static MpSearchBoxViewModel Instance { get { return _Lazy.Value; } }
+        //private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
+        //public static MpSearchBoxViewModel Instance { get { return _Lazy.Value; } }
 
         public void Init() { }
         #endregion
@@ -400,7 +400,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSearchBoxViewModel() : base(null) {
+        public MpSearchBoxViewModel() : base() {
             Text = PlaceholderText;
 
             PropertyChanged += (s, e7) => {

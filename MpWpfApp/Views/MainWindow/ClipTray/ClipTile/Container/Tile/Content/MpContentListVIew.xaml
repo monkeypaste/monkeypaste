@@ -28,7 +28,6 @@
                                           Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
-
             <ListBox x:Name="ContentListBox"
                      Loaded="ContentListBox_Loaded"
                      SelectionChanged="ContentListBox_SelectionChanged"

@@ -288,6 +288,9 @@
     <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpMouseViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
+    <Compile Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml.cs">
+      <DependentUpon>MpAnalyzerToolbarTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
     </Compile>
@@ -427,6 +430,10 @@
     <Page Include="Styles\MpListBoxScrollBarResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml">
       <SubType>Designer</SubType>

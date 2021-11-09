@@ -10,8 +10,8 @@ namespace MpWpfApp {
     public class MpUserControl : UserControl {
         public MpUserControl() : base() { }
 
-        public static readonly DependencyProperty ResourcesProperty =
-            DependencyProperty.Register("Resources", typeof(ResourceDictionary), typeof(MpUserControl), new PropertyMetadata(null));
+        //public static readonly DependencyProperty ResourcesProperty =
+        //    DependencyProperty.Register("Resources", typeof(ResourceDictionary), typeof(MpUserControl), new PropertyMetadata(null));
 
     }
     public class MpUserControl<T> : MpUserControl where T: class {

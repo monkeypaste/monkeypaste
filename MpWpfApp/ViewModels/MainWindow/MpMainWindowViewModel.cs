@@ -232,17 +232,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double TitleMenuHeight {
-            get {
-                return MpMeasurements.Instance.TitleMenuHeight;
-            }
-        }
-
-        public double FilterMenuHeight {
-            get {
-                return MpMeasurements.Instance.FilterMenuHeight;
-            }
-        }
         #endregion
 
         #region Visibility
@@ -319,6 +308,7 @@ namespace MpWpfApp {
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await MpShortcutCollectionViewModel.Instance.Init();
                 await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+                await MpAnalyticItemCollectionViewModel.Instance.Init();
             });
         }
 

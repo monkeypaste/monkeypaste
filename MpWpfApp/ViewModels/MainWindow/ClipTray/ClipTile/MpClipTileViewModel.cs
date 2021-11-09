@@ -533,7 +533,11 @@ using System.Speech.Synthesis;
             }
         }
 
-       
+        public Brush TestBgBrush {
+            get {
+                return IsAnyBusy ? Brushes.HotPink : Brushes.LightBlue;
+            }
+        }
         #endregion
 
         #region Business Logic
@@ -568,7 +572,8 @@ using System.Speech.Synthesis;
 
         #region State Properties 
 
-        public bool IsAnyBusy => IsBusy || ItemViewModels.Any(x => x.IsBusy);
+        public bool IsAnyBusy => ItemViewModels.Any(x => x.IsBusy);
+
         public bool IsFlipping { get; set; } = false;
 
         public bool IsFlipped { get; set; } = false;

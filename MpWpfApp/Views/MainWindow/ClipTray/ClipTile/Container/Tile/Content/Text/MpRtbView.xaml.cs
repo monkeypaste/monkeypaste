@@ -183,13 +183,13 @@ namespace MpWpfApp {
 
         public async Task SyncModelsAsync() {
             var rtbvm = DataContext as MpContentItemViewModel;
-
+            rtbvm.IsBusy = true;
             //clear any search highlighting when saving the document then restore after save
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
 
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
             //Rtb.UpdateLayout();
-            string test = Rtb.Document.ToRichText();
+            //string test = Rtb.Document.ToRichText();
 
             await ClearHyperlinks();
 
@@ -250,7 +250,9 @@ namespace MpWpfApp {
         }
 
         public async Task CreateHyperlinksAsync(CancellationTokenSource cts = null, DispatcherPriority dp = DispatcherPriority.Normal) {
-            var rtbvm = Rtb.DataContext as MpContentItemViewModel;
+            var rtbvm = BindingContext;
+            rtbvm.IsBusy = true;
+
             if (Rtb == null || rtbvm.CopyItem == null) {
                 return;
             }
@@ -511,6 +513,7 @@ namespace MpWpfApp {
                 Rtb.Selection.Select(rtbSelection.Start,rtbSelection.End);
             }
 
+            BindingContext.IsBusy = false;
             //CleanUpNonExistantTemplates();
         }
 

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Windows;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMeasurements {
-        private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
-        public static MpMeasurements Instance { get { return _Lazy.Value; } }
+    public class MpMeasurements : MpSingleton<MpMeasurements> {
+        public readonly double PHI = 1.618033988749894;
 
-        public MpMeasurements() { }
+        public MpMeasurements() {
+            MpConsole.WriteLine($"Old screen height: {SystemParameters.PrimaryScreenHeight * 0.35} New Height: {MainWindowDefaultHeight}");
+        }
 
         public void Measure() { }
 
@@ -39,7 +41,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
+        //public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
 
 
         public Rect DottedBorderRect {
@@ -55,11 +57,17 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Drop Canvas
+
+
+
+        #endregion
+
         #region Main Window
 
         public double MainWindowDefaultHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;
+                return SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
             }
         }
 
@@ -77,13 +85,8 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Drop Canvas
+        #region Main Menu Rows
 
-
-
-        #endregion
-
-        #region Title Menu
 
         public double TitleMenuHeight {
             get {
@@ -91,15 +94,28 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion
-
-        #region Filter Menu
 
         public double FilterMenuHeight {
             get {
                 return MainWindowDefaultHeight / 8;
             }
         }
+
+        public double AnalyzerMenuHeight {
+            get {
+                return MainWindowDefaultHeight / 12;
+            }
+        }
+
+        public double ClipTrayMinHeight {
+            get {
+                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight - AnalyzerMenuHeight;
+            }
+        }
+
+        #endregion
+
+        #region Analytic Menu
 
         #endregion
 
@@ -143,11 +159,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTrayMinHeight {
-            get {
-                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight;
-            }
-        }
+        
 
         #region Clip Tile
 

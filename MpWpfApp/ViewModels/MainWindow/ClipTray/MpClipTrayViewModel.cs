@@ -170,6 +170,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsRequery { get; private set; } = false;
+
         public bool IsTrayEmpty => Items.Count == 0;// || Items.All(x => x.IsPlaceholder);
 
         public bool IsSelectionReset { get; set; } = false;
@@ -309,7 +311,9 @@ namespace MpWpfApp {
         private async void ReceivedQueryInfoMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.QueryChanged:
-                    IsBusy = true;
+                    IsRequery = true;
+                    await Task.Delay(300);
+
                     await Requery();
                     break;
             }
@@ -377,6 +381,8 @@ namespace MpWpfApp {
 
             sw.Stop();
             MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+            
+            IsRequery = false;
         }
 
         public ICommand LoadMoreClipsCommand => new RelayCommand<object>(

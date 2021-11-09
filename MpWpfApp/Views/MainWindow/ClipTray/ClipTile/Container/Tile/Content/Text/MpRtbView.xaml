@@ -16,7 +16,6 @@
                  Height="{Binding EditorHeight}"
                  MinWidth="100"
                  Padding="5,0,5,0"
-                 ForceCursor="True"
                  Cursor="{Binding IsEditingContent, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='ibeam,arrow'}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"

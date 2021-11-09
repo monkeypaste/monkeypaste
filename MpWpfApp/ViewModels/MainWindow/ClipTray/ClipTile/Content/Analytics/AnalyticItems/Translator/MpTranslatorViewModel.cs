@@ -68,7 +68,7 @@ namespace MpWpfApp {
             if (!MpLanguageTranslator.Instance.IsLoaded) {
                 await MpLanguageTranslator.Instance.Init();
 
-                string defaultFromLangCode = await MpLanguageTranslator.Instance.DetectLanguage(Parent.Parent.CopyItemData.ToPlainText());
+                string defaultFromLangCode = await MpLanguageTranslator.Instance.DetectLanguage(Parent.HostClipTileViewModel.PrimaryItem.CopyItemData.ToPlainText());
                 if (string.IsNullOrWhiteSpace(defaultFromLangCode)) {
                     defaultFromLangCode = "en";
                 }
@@ -120,7 +120,7 @@ namespace MpWpfApp {
             //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();
             
             string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
-                Parent.Parent.CopyItemData.ToPlainText(),
+                Parent.HostClipTileViewModel.PrimaryItem.CopyItemData.ToPlainText(),
                 toCode,
                 fromCode, 
                 false);

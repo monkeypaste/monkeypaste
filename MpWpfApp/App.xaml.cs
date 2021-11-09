@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
             MonkeyPaste.MpConsole.WriteLine(e);
-            Debugger.Break();
+            //Debugger.Break();
         }
 
         //from https://stackoverflow.com/questions/12769264/openclipboard-failed-when-copy-pasting-data-from-wpf-datagrid
