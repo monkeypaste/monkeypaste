@@ -25,7 +25,7 @@ namespace MpWpfApp {
 
         public double UnexpandedHeight { get; set; } = 10;
 
-        public double ExpandedHeight { get; set; } = MpMeasurements.Instance.AnalyzerMenuHeight;
+        public double ExpandedHeight { get; set; } = 33;//MpMeasurements.Instance.AnalyzerMenuHeight;
 
         public double ToolbarHeight {
             get {

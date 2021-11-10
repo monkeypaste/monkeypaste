@@ -8,14 +8,17 @@
              xmlns:local="clr-namespace:MpWpfApp"
              Loaded="TagTile_ContextMenu_Loaded"
              Opened="TagTile_ContextMenu_Opened"
+             Closed="TagTile_ContextMenu_Closed"
              d:DataContext="{d:DesignInstance local:MpTagTileViewModel, IsDesignTimeCreatable=False}">
     <MenuItem Header="Rename"
               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding PlacementTarget.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+              Command="{Binding PlacementTarget.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+              CommandParameter="{Binding TagId}" />
     <MenuItem Header="Assign Hotkey"
               Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
               InputGestureText="{Binding PlacementTarget.ShortcutKeyString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-              Command="{Binding PlacementTarget.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+              Command="{Binding PlacementTarget.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+              CommandParameter="{Binding TagId}" />
     <Separator />
     <MenuItem x:Name="ClipTileColorContextMenuItem"
               Style="{StaticResource ColorPalleteMenuItemStyle}" />

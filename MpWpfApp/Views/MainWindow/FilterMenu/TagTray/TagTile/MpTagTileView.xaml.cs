@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTagTileView.xaml
     /// </summary>
-    public partial class MpTagTileView : UserControl {
+    public partial class MpTagTileView : MpUserControl<MpTagTileViewModel> {
         public MpTagTileView() {
             InitializeComponent();
         }
@@ -80,12 +80,67 @@ namespace MpWpfApp {
             }
         }
 
-        private void ContextMenu_Loaded(object sender, RoutedEventArgs e) {
+        private void TagTileBorder_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            var ttb = sender as MpClipBorder;
+            var ttvm = DataContext as MpTagTileViewModel;
+            ttb.ContextMenu.IsOpen = true;
+            e.Handled = true;
+        }
+
+        private void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
+            var ttvm = DataContext as MpTagTileViewModel;
+            var cm = (ContextMenu)sender;
+            cm.DataContext = ttvm;
+            foreach (var i in cm.Items) {
+                if (i == null || i is Separator) {
+                    continue;
+                }
+                MenuItem mi = i as MenuItem;
+                if (mi.Name == "ClipTileColorContextMenuItem") {
+                    MpHelpers.Instance.SetColorChooserMenuItem(
+                        cm,
+                        mi,
+                        (s, e1) => {
+                            ttvm.ChangeColorCommand.Execute((Brush)((Border)s).Tag);
+                        }
+                    );
+                    continue;
+                }
+                if ((mi.Header.ToString() == "Rename" || mi.Header.ToString() == "Delete") && ttvm.IsTagReadOnly) {
+                    mi.IsEnabled = false;
+                }
+            }
             
         }
 
-        private void ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            
+        private void TagTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            if (BindingContext == null) {
+                return;
+            }
+            var ttvm = BindingContext as MpTagTileViewModel;
+            ttvm.IsContextMenuOpened = true;
+
+            var cm = sender as ContextMenu;
+            cm.Tag = ttvm;
+            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
+        }
+
+        private void TagTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            if (BindingContext == null) {
+                return;
+            }
+            var ttvm = BindingContext as MpTagTileViewModel;
+            ttvm.IsContextMenuOpened = false;
+        }
+
+        private void RenameMenuItem_Click(object sender, RoutedEventArgs e) {
+            var ttvm = DataContext as MpTagTileViewModel;
+            ttvm.RenameTagCommand.Execute(null);
+        }
+
+        private void DeleteMenuItem_Clicked(object sender, RoutedEventArgs e) {
+            var ttvm = DataContext as MpTagTileViewModel;
+            ttvm.Parent.DeleteTagCommand.Execute(ttvm.TagId);
         }
     }
 }

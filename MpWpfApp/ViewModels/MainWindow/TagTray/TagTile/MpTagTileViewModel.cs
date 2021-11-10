@@ -75,8 +75,6 @@ namespace MpWpfApp {
                     _isEditing = value;
 
                     OnPropertyChanged(nameof(IsEditing));
-                    OnPropertyChanged(nameof(TextBlockVisibility));
-                    OnPropertyChanged(nameof(TextBoxVisibility));
                 }
             }
         }
@@ -111,26 +109,11 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public bool IsContextMenuOpened { get; set; } = false;
         #endregion
 
         #region Visibility
-        public Visibility TextBoxVisibility {
-            get {
-                if(IsEditing) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        public Visibility TextBlockVisibility {
-            get {
-                if (IsEditing) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
-            }
-        }
         #endregion
 
         #region Appearance
@@ -148,6 +131,9 @@ namespace MpWpfApp {
 
         public Brush TagBorderBrush {
             get {
+                if(IsContextMenuOpened) {
+                    return Brushes.Red;
+                }
                 if (IsAssociated) {
                     return TagBrush;
                 }
