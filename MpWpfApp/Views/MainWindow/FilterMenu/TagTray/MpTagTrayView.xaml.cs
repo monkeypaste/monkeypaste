@@ -50,14 +50,6 @@ namespace MpWpfApp {
             TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset + 20);
         }
 
-        private async void TagTrayContainerGrid_Loaded(object sender, RoutedEventArgs e) {
-            BindingContext.UpdateSortOrder(true);
-
-            BindingContext.TagTileViewModels.Where(x => x.TagId == BindingContext.DefaultTagId).FirstOrDefault().IsSelected = true;
-
-            await BindingContext.RefreshAllCounts();
-        }
-
         private void TagTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if(e.AddedItems == null || e.AddedItems.Count == 0) {
                 BindingContext.SelectTagCommand.Execute(null);

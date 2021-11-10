@@ -10,7 +10,7 @@
              Loaded="ClipTile_ContextMenu_Loaded"
              Opened="ClipTile_ContextMenu_Opened"
              Closed="ClipTile_ContextMenu_Closed"
-             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
     <MenuItem Header="_Copy"
               Tag="27"
               Icon="{Binding Source={StaticResource CopyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -60,7 +60,7 @@
               Header="_Analyze"
               Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
         <MenuItem Header="Summarize"
-                  Command="{Binding SummarizeCommand, Source={StaticResource ClipTrayViewModel}}"/>
+                  Command="{Binding SummarizeCommand, Source={StaticResource ClipTrayViewModel}}" />
     </MenuItem>
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
@@ -137,8 +137,8 @@
                   Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                   Command="{Binding InvertSelectionCommand, Source={StaticResource ClipTrayViewModel}}" />
     </MenuItem>
-    <MenuItem DataContext="{StaticResource ClipTrayViewModel}" 
-              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=True}"
+    <MenuItem DataContext="{StaticResource ClipTrayViewModel}"
+              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=False}"
               Header="_Hotkey"
               Tag="14"
               Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"

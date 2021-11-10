@@ -8,79 +8,82 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <local:MpUserControl.Resources>
-        <DataTemplate x:Key="ComboBoxParameter"
+    <ContentControl Content="{Binding}"
+                    Margin="0,5"
+                    ContentTemplateSelector="{StaticResource ParameterViewSelector}">
+        <ContentControl.Resources>
+            <DataTemplate x:Key="ComboBoxParameter"
                       DataType="local:MpComboBoxParameterViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="0.5*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
                            Margin="0,0,7,0"
                            HorizontalAlignment="Left"
                            Text="{Binding Key}" />
-                <Border Grid.Column="1"
+                    <Border Grid.Column="1"
                         BorderThickness="2"
                         CornerRadius="2"
                         Padding="1"
                         ToolTipService.InitialShowDelay="2"
                         ToolTip="{Binding ParameterTooltipText}"
                         BorderBrush="{Binding ParameterBorderBrush}">
-                    <ComboBox ItemsSource="{Binding Values}"
+                        <ComboBox ItemsSource="{Binding Values}"
                               SelectedItem="{Binding SelectedValue}"
                               HorizontalAlignment="Right"
                               MinWidth="80">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Value}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerStyle>
-                            <Style TargetType="ComboBoxItem">
-                                <Setter Property="IsSelected"
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Value}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="IsSelected"
                                         Value="{Binding IsSelected, Mode=TwoWay}" />
-                            </Style>
-                        </ComboBox.ItemContainerStyle>
-                    </ComboBox>
-                </Border>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="TextBoxParameter"
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                    </Border>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="TextBoxParameter"
                       DataType="local:MpTextBoxParameterViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.7*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*" />
+                        <ColumnDefinition Width="0.7*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
                            Margin="0,0,7,0"
                            HorizontalAlignment="Left"
                            Text="{Binding Key}" />
-                <TextBox Grid.Column="1"
+                    <TextBox Grid.Column="1"
                          Text="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="CheckBoxParameter"
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="CheckBoxParameter"
                       DataType="local:MpCheckBoxParameterViewModel">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="0,0,7,0"
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="0,0,7,0"
                            HorizontalAlignment="Left"
                            Text="{Binding Key}" />
-                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="SliderParameter"
+                    <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="SliderParameter"
                       DataType="local:MpSliderParameterViewModel">
-            <DockPanel MinWidth="200">
-                <StackPanel Orientation="Vertical"
+                <DockPanel MinWidth="200">
+                    <StackPanel Orientation="Vertical"
                             MaxWidth="80"
                             DockPanel.Dock="Left">
-                    <TextBlock Text="{Binding Key}"
+                        <TextBlock Text="{Binding Key}"
                                TextWrapping="Wrap" />
-                    <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, StringFormat=N2}" />
-                </StackPanel>
-                <Slider Minimum="{Binding Min}"
+                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, StringFormat=N2}" />
+                    </StackPanel>
+                    <Slider Minimum="{Binding Min}"
                         Maximum="{Binding Max}"
                         Margin="0,15,0,0"
                         Width="120"
@@ -89,35 +92,33 @@
                         TickPlacement="None"
                         TickFrequency="{Binding TickFrequency}"
                         IsSnapToTickEnabled="False" />
-            </DockPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ExecuteParameter"
+                </DockPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="ExecuteParameter"
                       DataType="local:MpExecuteParameterViewModel">
-            <StackPanel>
-                <Button HorizontalAlignment="Right"
+                <StackPanel>
+                    <Button HorizontalAlignment="Right"
                         MinWidth="50"
                         Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                         Content="Execute"
                         Command="{Binding Parent.ExecuteAnalysisCommand}" />
-                <local:MpSpinnerApple Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="ResultParameter"
+                    <local:MpSpinnerApple Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="ResultParameter"
                       DataType="local:MpResultParameterViewModel">
-            <TextBlock MaxWidth="150"
+                <TextBlock MaxWidth="150"
                        Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibilityConverter}}"
                        TextWrapping="Wrap"
                        Text="{Binding SelectedValue.Value}" />
-        </DataTemplate>
-        <local:MpParameterViewSelector x:Key="ParameterViewSelector"
+            </DataTemplate>
+            <local:MpParameterViewSelector x:Key="ParameterViewSelector"
                                        ComboBoxTemplate="{StaticResource ComboBoxParameter}"
                                        TextBoxTemplate="{StaticResource TextBoxParameter}"
                                        CheckBoxTemplate="{StaticResource CheckBoxParameter}"
                                        SliderTemplate="{StaticResource SliderParameter}"
                                        ExecuteTemplate="{StaticResource ExecuteParameter}"
                                        ResultTemplate="{StaticResource ResultParameter}" />
-    </local:MpUserControl.Resources>
-    <ContentControl Content="{Binding}"
-                    Margin="0,5"
-                    ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
+        </ContentControl.Resources>
+    </ContentControl>
 </local:MpUserControl>

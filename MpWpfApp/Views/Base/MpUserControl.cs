@@ -15,22 +15,32 @@ namespace MpWpfApp {
 
     }
     public class MpUserControl<T> : MpUserControl where T: class {
-
         public T BindingContext {
             get {
+                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
+                    return null;
+                }
+                    
                 if (DataContext == null) {
                     return null;
                 }
                 return (T)GetValue(DataContextProperty);
             }
             set {
+                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
+                    return;
+                }
                 if (BindingContext != value) {
                     SetValue(DataContextProperty, value);
                 }
             }
         }
         public static readonly DependencyProperty BindingContextProperty =
-            DependencyProperty.Register("BindingContext", typeof(T), typeof(MpUserControl<T>), new PropertyMetadata(null));
+            DependencyProperty.Register(
+                "BindingContext", 
+                typeof(T), 
+                typeof(MpUserControl<T>), 
+                new FrameworkPropertyMetadata(null));
 
         
         public MpUserControl() : base() { }

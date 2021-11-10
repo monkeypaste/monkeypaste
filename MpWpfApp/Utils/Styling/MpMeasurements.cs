@@ -41,7 +41,7 @@ namespace MpWpfApp {
             }
         }
 
-        //public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
+        public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
 
 
         public Rect DottedBorderRect {
@@ -67,7 +67,7 @@ namespace MpWpfApp {
 
         public double MainWindowDefaultHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
+                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;// SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
             }
         }
 
@@ -87,7 +87,6 @@ namespace MpWpfApp {
 
         #region Main Menu Rows
 
-
         public double TitleMenuHeight {
             get {
                 return MainWindowDefaultHeight / 20;
@@ -101,15 +100,15 @@ namespace MpWpfApp {
             }
         }
 
-        public double AnalyzerMenuHeight {
+        public double SearchDetailRowHeight {
             get {
-                return MainWindowDefaultHeight / 12;
+                return MainWindowDefaultHeight / 10;
             }
         }
 
         public double ClipTrayMinHeight {
             get {
-                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight - AnalyzerMenuHeight;
+                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight;
             }
         }
 

@@ -7,15 +7,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using MonkeyPaste;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpClipTileSortViewModel : MpViewModelBase<object> {
-        #region Singleton Definition
-        private static readonly Lazy<MpClipTileSortViewModel> _Lazy = new Lazy<MpClipTileSortViewModel>(() => new MpClipTileSortViewModel());
-        public static MpClipTileSortViewModel Instance { get { return _Lazy.Value; } }
-
-        public void Init() { }
-        #endregion
+    public class MpClipTileSortViewModel : MpSingletonViewModel<MpClipTileSortViewModel,object> {
 
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
@@ -52,13 +47,22 @@ namespace MpWpfApp {
         #region Events
         #endregion
 
-        #region Public Methods
-        public MpClipTileSortViewModel() : base(null) {
-            //must be set before property changed registered for loading order
-            SelectedSortType = SortTypes[0];
+        #region Constructors
 
-            PropertyChanged += MpClipTileSortViewModel_PropertyChanged;
+        public async Task Init() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+
+                //must be set before property changed registered for loading order
+                SelectedSortType = SortTypes[0];
+
+                PropertyChanged += MpClipTileSortViewModel_PropertyChanged;
+            });
         }
+
+        #endregion
+
+        #region Public Methods
+        public MpClipTileSortViewModel() : base() { }
 
         public void SetToManualSort() {
             SelectedSortType = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();

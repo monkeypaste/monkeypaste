@@ -28,7 +28,7 @@
         WindowState="Normal"
         Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
-        d:DataContext="{d:DesignInstance local:MpMainWindowViewModel, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance local:MpMainWindowViewModel, IsDesignTimeCreatable=False}">
     <Canvas x:Name="MainWindowCanvas"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
@@ -55,12 +55,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
                 <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
-                <RowDefinition Height="{Binding ToolbarHeight, Source={StaticResource AnalyticItemCollectionViewModel}}" />
+                <!--<RowDefinition Height="{Binding ToolbarHeight, Source={StaticResource AnalyticItemCollectionViewModel}}" />-->
                 <RowDefinition Height="{Binding ClipTrayHeight}" />
             </Grid.RowDefinitions>
 
             <!--  System Tray  -->
-            <local:MpSystemTrayView DataContext="{Binding SystemTrayViewModel}" />
+            <local:MpSystemTrayView DataContext="{StaticResource SystemTrayViewModel}" />
 
             <!--  Main Menu  -->
             <StackPanel x:Name="TitleMenu"
@@ -83,6 +83,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="0">
+                    <!--  Settings Button  -->
                     <Button x:Name="SettingsWindowButton"
                             Width="35"
                             Height="35"
@@ -95,6 +96,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </Button>
+                    <!--  Lock Button  -->
                     <ToggleButton x:Name="ToggleMainWindowLockButton"
                                   Width="35"
                                   Height="35"
@@ -113,30 +115,30 @@
                 <!--  Sort Combobox  -->
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
-                                      Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                      Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded, Source={StaticResource MainWindowViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
 
                 <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
-                                     Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                     DataContext="{Binding TagTrayViewModel}" />
+                                     Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded, Source={StaticResource MainWindowViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     DataContext="{Binding TagTrayViewModel, IsAsync=True}" />
 
                 <!--  Search  -->
-                <local:MpItemSearchView x:Name="SearchView"
+                <local:MpSearchBoxView x:Name="SearchView"
                                         Grid.Column="3"
                                         DataContext="{Binding SearchBoxViewModel}" />
 
             </Grid>
 
             <!--  Analytic Menu  -->
-            <local:MpAnalyzerToolbarTreeView x:Name="AnalyzerToolbar"
-                                             
+            <!--<local:MpAnalyzerToolbarTreeView x:Name="AnalyzerToolbar"
+                                             Visibility="Collapsed"
                                              DataContext="{StaticResource AnalyticItemCollectionViewModel}"
-                                             Grid.Row="2" />
+                                             Grid.Row="2" />-->
 
-            <!--  4th row row for tray  -->
-            <Grid Grid.Row="3"
+            <!--  3rd row row for tray  -->
+            <Grid Grid.Row="2"
                   Grid.Column="0"
                   Focusable="True"
                   Background="{local:MpThemeColorsBinding Clip_Tray_Background_Color}">
@@ -145,15 +147,22 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!--  Side bar AppState Buttons  -->
-                <local:MpAppModeButtonGridView Grid.Row="0"
-                                               Grid.Column="0"
+                <local:MpAppModeButtonGridView Grid.Column="0"
                                                Visibility="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />
-
-                <local:MpClipTrayView x:Name="ClipTrayView"
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="{Binding SearchBoxViewModel.SearchDetailHeight}"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <local:MpSearchDetailView x:Name="SearchDetailView"
+                                              Grid.Row="0"
+                                              Visibility="{Binding Parent.HasText, Converter={StaticResource BoolToVisibilityConverter}}"
+                                              DataContext="{Binding SearchBoxViewModel.SearchDetailViewModel}"/>
+                    <local:MpClipTrayView x:Name="ClipTrayView"
                                       DataContext="{Binding ClipTrayViewModel}"
-                                      Grid.Row="0"
-                                      Grid.Column="1" />
+                                      Grid.Row="1" />
+                </Grid>
                 <Grid Background="DarkGray"
                       Opacity="0.3"
                       HorizontalAlignment="Stretch"

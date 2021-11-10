@@ -298,6 +298,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
+        public MpTagTileViewModel() : base(null) { }
+
         public MpTagTileViewModel(MpTagTrayViewModel parent, MpTag tag) : base(parent) {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
@@ -307,7 +309,7 @@ namespace MpWpfApp {
 
             Tag = tag;
         }
-
+                
         private  void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEditing):
@@ -471,7 +473,7 @@ namespace MpWpfApp {
         public ICommand RenameTagCommand => new RelayCommand(
             () => {
                 _originalTagName = TagName;
-                MpMainWindowViewModel.Instance.TagTrayViewModel.ClearTagSelection();
+                MpTagTrayViewModel.Instance.ClearTagSelection();
                 IsSelected = true;
                 IsEditing = true;
             },

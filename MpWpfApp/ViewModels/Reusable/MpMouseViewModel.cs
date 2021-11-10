@@ -138,8 +138,8 @@ namespace MpWpfApp {
                 Mouse.OverrideCursor = cursor;
                 Mouse.PrimaryDevice.OverrideCursor = cursor;
 
-                // Application.Current.MainWindow.ForceCursor = true;
-                // Application.Current.MainWindow.Cursor = cursor;
+                Application.Current.MainWindow.ForceCursor = true;
+                Application.Current.MainWindow.Cursor = cursor;
             });
         }
         #endregion

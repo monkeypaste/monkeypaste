@@ -3,13 +3,13 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     mc:Ignorable="d"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpTemplateCollectionViewModel"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     d:DataContext="{d:DesignInstance local:MpTemplateCollectionViewModel, IsDesignTimeCreatable=True}"
+                     d:DataContext="{d:DesignInstance local:MpTemplateCollectionViewModel, IsDesignTimeCreatable=False}"
                      d:DesignHeight="50"
-                     d:DesignWidth="700"
-                     mc:Ignorable="d">
+                     d:DesignWidth="700">
     <Border x:Name="ClipTileEditTemplateToolbar"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
             Height="40"

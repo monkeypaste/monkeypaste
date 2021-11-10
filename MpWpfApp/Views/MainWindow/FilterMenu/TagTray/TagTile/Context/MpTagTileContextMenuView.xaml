@@ -1,0 +1,27 @@
+﻿<ContextMenu x:Name="TagTile_ContextMenu"
+             x:Class="MpWpfApp.MpTagTileContextMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:MpWpfApp"
+             Loaded="TagTile_ContextMenu_Loaded"
+             Opened="TagTile_ContextMenu_Opened"
+             d:DataContext="{d:DesignInstance local:MpTagTileViewModel, IsDesignTimeCreatable=False}">
+    <MenuItem Header="Rename"
+              Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+              Command="{Binding PlacementTarget.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+    <MenuItem Header="Assign Hotkey"
+              Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+              InputGestureText="{Binding PlacementTarget.ShortcutKeyString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+              Command="{Binding PlacementTarget.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+    <Separator />
+    <MenuItem x:Name="ClipTileColorContextMenuItem"
+              Style="{StaticResource ColorPalleteMenuItemStyle}" />
+    <Separator />
+    <MenuItem Header="Delete"
+              Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+              Command="{Binding DeleteTagCommand, Source={StaticResource TagTrayViewModel}}"
+              CommandParameter="{Binding TagId}" />
+</ContextMenu>

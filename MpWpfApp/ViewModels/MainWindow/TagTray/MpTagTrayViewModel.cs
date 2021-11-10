@@ -12,21 +12,15 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
+using System.Windows.Forms;
 
 namespace MpWpfApp {
-    public class MpTagTrayViewModel : MpViewModelBase<object> {
-        #region Singleton Definition
-        private static readonly Lazy<MpTagTrayViewModel> _Lazy = new Lazy<MpTagTrayViewModel>(() => new MpTagTrayViewModel());
-        public static MpTagTrayViewModel Instance { get { return _Lazy.Value; } }
-
-        public void Init() { }
-        #endregion
-
+    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel,object> {
         #region Private Variables
         #endregion
 
         #region View Models
-        public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
+        public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; }
 
         public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
 
@@ -80,60 +74,37 @@ namespace MpWpfApp {
         #region Events
         #endregion
 
+        #region Constructors
+
+        public async Task Init() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+                MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+                MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+
+                TagTileViewModels = new ObservableCollection<MpTagTileViewModel>();
+
+                List<MpTag> allTags = await MpDb.Instance.GetItemsAsync<MpTag>();
+                //create tiles for all the tags
+                foreach (MpTag t in allTags) {
+                    TagTileViewModels.Add(CreateTagTileViewModel(t));
+                }
+
+                OnPropertyChanged(nameof(TagTileViewModels));
+
+                TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+
+                UpdateSortOrder(true);
+
+                TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
+
+                await RefreshAllCounts();
+            });
+        }
+        #endregion
         #region Public Methods
 
-        public MpTagTrayViewModel() : base(null) {
-            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
-
-            var allTags = MpDb.Instance.GetItems<MpTag>();
-            if(allTags.Count == 0) {
-                //occurs on first load
-                var t = new MpTag() {
-                    TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
-                    TagName = "Recent",
-                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Green),
-                    TagSortIdx = 0
-                };
-                t.WriteToDatabase("", true, true);
-                //allTags.Add(t);
-
-                t = new MpTag() {
-                    TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
-                    TagName = "All",
-                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Blue),
-                    TagSortIdx = 1
-                };
-                t.WriteToDatabase("", true, true);
-                //allTags.Add(t);
-
-                t = new MpTag() {
-                    TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
-                    TagName = "Favorites",
-                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Yellow),
-                    TagSortIdx = 2
-                };
-                t.WriteToDatabase("", true, true);
-                //allTags.Add(t);
-
-                t = new MpTag() {
-                    TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
-                    TagName = "Help",
-                    HexColor = MpHelpers.Instance.ConvertColorToHex(Colors.Orange),
-                    TagSortIdx = 3
-                };
-                t.WriteToDatabase("", true, true);
-
-                //allTags.Add(t);
-            }
-            //create tiles for all the tags
-            foreach (MpTag t in MpDb.Instance.GetItems<MpTag>()) {
-                TagTileViewModels.Add(CreateTagTileViewModel(t));
-            }
-
-            TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
-        }
+        public MpTagTrayViewModel() : base() { }
 
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {

@@ -8,12 +8,11 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpTagTrayViewModel"
                      mc:Ignorable="d"
-                     DataContext="{StaticResource TagTrayViewModel}"
+                     d:DataContext="{d:DesignInstance local:MpTagTrayViewModel, IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <Grid x:Name="TagTrayContainerGrid"
           DataContextChanged="TagTray_DataContextChanged"
-          Loaded="TagTrayContainerGrid_Loaded"
           PreviewMouseDown="TagTrayContainerGrid_PreviewMouseDown"
           Focusable="False"
           HorizontalAlignment="Center">

@@ -65,6 +65,9 @@ namespace MpWpfApp {
 
         private void Mi_Unloaded(object sender, RoutedEventArgs e) {
             var mi = sender as MenuItem;
+            if(mi == null) {
+                return;
+            }
             mi.Click -= TemplateDropDownItem_Click;
             mi.Unloaded -= Mi_Unloaded;
         }

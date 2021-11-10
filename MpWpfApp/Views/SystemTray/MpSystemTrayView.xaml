@@ -12,15 +12,11 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance local:MpSystemTrayViewModel}">
     <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
+                    MouseEnter="SystemTrayTaskbarIcon_MouseEnter"
+                    TrayLeftMouseUp="SystemTrayTaskbarIcon_TrayLeftMouseUp"
                     IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
                     Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}}"
                     ToolTipText="{Binding SystemTrayIconToolTipText, Source={StaticResource SystemTrayViewModel}}">
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Loaded">
-                <i:CallMethodAction MethodName="SystemTrayTaskbarIcon_Loaded"
-                                    TargetObject="{Binding}" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Settings"
@@ -29,7 +25,7 @@
                           CommandParameter="{StaticResource SettingsTabAccount}" />
                 <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
                           Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}, Source={StaticResource SystemTrayViewModel}}"
-                          Command="{Binding AppModeViewModel.ToggleIsAppPausedCommand, Source={StaticResource MainWindowViewModel}}" />
+                          Command="{Binding ToggleIsAppPausedCommand, Source={StaticResource AppModeViewModel}}" />
                 <MenuItem Header="Help"
                           Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                           Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"

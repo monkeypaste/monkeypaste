@@ -10,10 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase<object> {
-        private static readonly Lazy<MpSoundPlayerGroupCollectionViewModel> _Lazy = new Lazy<MpSoundPlayerGroupCollectionViewModel>(() => new MpSoundPlayerGroupCollectionViewModel());
-        public static MpSoundPlayerGroupCollectionViewModel Instance { get { return _Lazy.Value; } }
-
+    public class MpSoundPlayerGroupCollectionViewModel : MpSingletonViewModel<MpSoundPlayerGroupCollectionViewModel,object> {
         #region Properties
 
         #region View Models
@@ -68,10 +65,17 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
+        #region Constructors
         public async Task Init() {
+            PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
+
             await SetSoundGroupIdx(MpPreferences.Instance.NotificationSoundGroupIdx);
         }
+
+        public MpSoundPlayerGroupCollectionViewModel() : base() { }
+        #endregion
+
+        #region Public Methods
 
         public async Task SetSoundGroupIdx(int soundGroupIdx) {
             await Task.Run(() => {
@@ -94,9 +98,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private MpSoundPlayerGroupCollectionViewModel() : base(null) {
-            PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
-        }
 
         private async void MpSoundPlayerGroupCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {

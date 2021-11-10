@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpItemSearchView.xaml
+    /// Interaction logic for MpSearchBoxView.xaml
     /// </summary>
-    public partial class MpItemSearchView : MpUserControl<MpSearchBoxViewModel> {
-        public MpItemSearchView() {
+    public partial class MpSearchBoxView : MpUserControl<MpSearchBoxViewModel> {
+        public MpSearchBoxView() {
             InitializeComponent();
         }
 
@@ -142,6 +142,14 @@ namespace MpWpfApp {
 
         private void ClearTextBoxButton_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsOverClearTextButton = false;
+        }
+
+        private void SearchBox_MouseEnter(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+        }
+
+        private void SearchBox_MouseLeave(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
     }
 }

@@ -895,7 +895,7 @@ using System.Speech.Synthesis;
         }
 
         public void RefreshAsyncCommands() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
 
@@ -1399,7 +1399,7 @@ using System.Speech.Synthesis;
             }
         }
         private bool CanEditTitle() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return false;
             }
             return Parent.SelectedItems.Count == 1 &&
@@ -1505,7 +1505,7 @@ using System.Speech.Synthesis;
                         }
                     },
                     () => {
-                        if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
+                        if (IsBusy || MpMainWindowViewModel.Instance.IsMainWindowLoading || VisibleItems.Count == 0) {
                             return false;
                         }
                         bool canBringForward = false;
@@ -1538,7 +1538,7 @@ using System.Speech.Synthesis;
                 }
             },
             () => {
-                if (IsBusy || MpMainWindowViewModel.IsMainWindowLoading || VisibleItems.Count == 0) {
+                if (IsBusy || MpMainWindowViewModel.Instance.IsMainWindowLoading || VisibleItems.Count == 0) {
                     return false;
                 }
                 bool canSendBack = false;
@@ -1611,8 +1611,8 @@ using System.Speech.Synthesis;
         //                tagToLink.AddClip(srtbvm);
         //            }
         //        }
-        //        await MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
-        //        await MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
+        //        await MpTagTrayViewModel.Instance.RefreshAllCounts();
+        //        await MpTagTrayViewModel.Instance.UpdateTagAssociation();
         //    },
         //    async (tagToLink) => {
         //        //this checks the selected clips association with tagToLink

@@ -73,17 +73,21 @@ namespace MpWpfApp {
 
         private static void Lb_Unloaded(object sender, RoutedEventArgs e) {
             var lb = sender as ListBox;
-            var sv = lb.GetScrollViewer();
-            sv.PreviewMouseWheel -= Sv_ScrollChanged;
-            lb.Loaded -= Lb_Loaded;
-            lb.Unloaded -= Lb_Unloaded;
+            if(lb != null) {
+                var sv = lb.GetScrollViewer();
+                if(sv != null) {
+                    sv.PreviewMouseWheel -= Sv_ScrollChanged;
+                }
+                lb.Loaded -= Lb_Loaded;
+                lb.Unloaded -= Lb_Unloaded;
+            }
         }
 
         private static void Sv_ScrollChanged(object sender, MouseWheelEventArgs e) {
             if (IsScrollJumping || 
                 MpClipTrayViewModel.Instance.SelectedItems.Any(x=>x.IsFlipped) ||
                 MpClipTrayViewModel.Instance.IsAnyTileItemDragging || /*e.HorizontalChange == 0 || */
-                MpMainWindowViewModel.IsMainWindowLoading) {
+                MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 IsScrollJumping = false;
                 return;
             }

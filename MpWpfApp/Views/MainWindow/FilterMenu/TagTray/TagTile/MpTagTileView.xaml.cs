@@ -81,33 +81,11 @@ namespace MpWpfApp {
         }
 
         private void ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            var cm = (ContextMenu)sender;
-            cm.DataContext = ttvm;
-            MenuItem cmi = null;
-            foreach (var mi in cm.Items) {
-                if (mi == null || mi is Separator) {
-                    continue;
-                }
-                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
-                    cmi = (MenuItem)mi;
-                    break;
-                }
-            }
-            MpHelpers.Instance.SetColorChooserMenuItem(
-                    cm,
-                    cmi,
-                    (s, e1) => {
-                        ttvm.ChangeColorCommand.Execute((Brush)((Border)s).Tag);
-                    }
-                );
+            
         }
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            var cm = sender as ContextMenu;
-            cm.Tag = ttvm;
-            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
+            
         }
     }
 }

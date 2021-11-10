@@ -22,13 +22,9 @@ namespace MpWpfApp {
         private static readonly Lazy<MpMainWindowViewModel> _Lazy = new Lazy<MpMainWindowViewModel>(() => new MpMainWindowViewModel());
         public static MpMainWindowViewModel Instance { get { return _Lazy.Value; } }
 
-        public void Init() {
-
-        }
         #endregion
 
         #region Statics
-        public static bool IsMainWindowLoading { get; set; } = false;
         public static bool IsMainWindowOpening { get; set; } = false;
         public static bool IsMainWindowClosing { get; set; } = false;
 
@@ -65,45 +61,24 @@ namespace MpWpfApp {
         #region Properties       
 
         #region View Models
-        public MpSystemTrayViewModel SystemTrayViewModel {
-            get {
-                return MpSystemTrayViewModel.Instance;
-            }
-        }
 
-        public MpClipTrayViewModel ClipTrayViewModel {
-            get {
-                return MpClipTrayViewModel.Instance;
-            }
-        }
+        public MpSystemTrayViewModel SystemTrayViewModel => MpSystemTrayViewModel.Instance;
 
-        public MpTagTrayViewModel TagTrayViewModel {
-            get {
-                return MpTagTrayViewModel.Instance;
-            }
-        }
+        public MpClipTrayViewModel ClipTrayViewModel => MpClipTrayViewModel.Instance;
 
-        public MpClipTileSortViewModel ClipTileSortViewModel {
-            get {
-                return MpClipTileSortViewModel.Instance;
-            }
-        }
+        public MpTagTrayViewModel TagTrayViewModel => MpTagTrayViewModel.Instance;
 
-        public MpSearchBoxViewModel SearchBoxViewModel {
-            get {
-                return MpSearchBoxViewModel.Instance;
-            }
-        }
+        public MpClipTileSortViewModel ClipTileSortViewModel => MpClipTileSortViewModel.Instance;
 
-        public MpAppModeViewModel AppModeViewModel {
-            get {
-                return MpAppModeViewModel.Instance;
-            }            
-        }
+        public MpSearchBoxViewModel SearchBoxViewModel => MpSearchBoxViewModel.Instance;
+
+        public MpAppModeViewModel AppModeViewModel => MpAppModeViewModel.Instance;
 
         #endregion
 
         #region State
+
+        public bool IsMainWindowLoading { get; set; } = true;
 
         private bool _isMainWindowLocked = false;
         public bool IsMainWindowLocked {
@@ -141,7 +116,7 @@ namespace MpWpfApp {
         #region Layout
         public double AppModeButtonGridWidth {
             get {
-                if(IsMainWindowLoading || ClipTrayViewModel == null || !ClipTrayViewModel.IsAnyTileExpanded) {
+                if(IsMainWindowLoading || MpClipTrayViewModel.Instance == null || !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                     return MpMeasurements.Instance.AppStateButtonPanelWidth;
                 }
                 return 0;
@@ -268,19 +243,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods        
-        public MpMainWindowViewModel() : base(null) {
-            Initialize();
-        }
+        public MpMainWindowViewModel() : base(null) {  }
 
-        public void Initialize() {
-            if(IsMainWindowLoading) {
-                return;
-            }
-
-            MpMainWindowViewModel.IsMainWindowLoading = true;
+        public async Task Init() {
+            MpConsole.WriteLine("MainWindow Init");
 
             MpSystemTrayViewModel.Instance.Init();
-            Application.Current.Resources["SystemTrayViewModel"] = SystemTrayViewModel;
+            Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
                 IconBuilder = new MpIconBuilder()
@@ -290,37 +259,47 @@ namespace MpWpfApp {
 
             //MpPluginManager.Instance.Init();
 
-            MpThemeColors.Instance.Init();
+            await MpMouseViewModel.Instance.Init();
 
-            MpSearchBoxViewModel.Instance.Init();
-            MpClipTrayViewModel.Instance.Init();
-            MpClipTileSortViewModel.Instance.Init();
-            MpAppModeViewModel.Instance.Init();
-            MpTagTrayViewModel.Instance.Init();
+            await MpSearchBoxViewModel.Instance.Init();
+            Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
 
-            Application.Current.Resources["ClipTrayViewModel"] = ClipTrayViewModel;
-            Application.Current.Resources["TagTrayViewModel"] = TagTrayViewModel;
-            Application.Current.Resources["ClipTileSortViewModel"] = ClipTileSortViewModel;
-            Application.Current.Resources["SearchBoxViewModel"] = SearchBoxViewModel;
-            Application.Current.Resources["AppModeViewModel"] = AppModeViewModel;
+            await MpClipTrayViewModel.Instance.Init();
+            Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
 
+            await MpClipTileSortViewModel.Instance.Init();
+            Application.Current.Resources["ClipTileSortViewModel"] = MpClipTileSortViewModel.Instance;
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                await MpShortcutCollectionViewModel.Instance.Init();
-                await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-                await MpAnalyticItemCollectionViewModel.Instance.Init();
-            });
+            await MpTagTrayViewModel.Instance.Init();
+            Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
+            //OnPropertyChanged(nameof(TagTrayViewModel));
+
+            await MpShortcutCollectionViewModel.Instance.Init();
+            Application.Current.Resources["ShortcutCollectionViewModel"] = MpShortcutCollectionViewModel.Instance;
+
+            await MpAppModeViewModel.Instance.Init();
+            Application.Current.Resources["AppModeViewModel"] = MpAppModeViewModel.Instance;
+
+            await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+            Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
+
+            await MpAnalyticItemCollectionViewModel.Instance.Init();
+            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
+
+            MpMainWindowViewModel.Instance.SetupMainWindowRect();
+
+            IsMainWindowLoading = false;
         }
 
         public void ClearEdits() {
-            TagTrayViewModel.ClearTagEditing();
-            ClipTrayViewModel.ClearClipEditing();
+            MpTagTrayViewModel.Instance.ClearTagEditing();
+            MpClipTrayViewModel.Instance.ClearClipEditing();
         }
 
         public void ResetTraySelection() {
-            if (!SearchBoxViewModel.HasText) {
+            if (!MpSearchBoxViewModel.Instance.HasText) {
                 //TagTrayViewModel.ResetTagSelection();
-                ClipTrayViewModel.ResetClipSelection();
+                MpClipTrayViewModel.Instance.ResetClipSelection();
             }
         }
 
@@ -413,7 +392,7 @@ namespace MpWpfApp {
             () => {
                 return (Application.Current.MainWindow == null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                   MpMainWindowViewModel.IsMainWindowLoading ||
+                   MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                    !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
@@ -448,7 +427,7 @@ namespace MpWpfApp {
                 } else {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
-                    MpMainWindowViewModel.IsMainWindowLoading = false;
+                    MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
                     IsMainWindowOpening = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
@@ -493,10 +472,10 @@ namespace MpWpfApp {
             string test;
             bool wasMainWindowLocked = IsMainWindowLocked;
             if (pasteSelected) {
-                if(ClipTrayViewModel.IsAnyPastingTemplate) {
+                if(MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {
                     IsMainWindowLocked = true;
                 }
-                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(false,true);
+                pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false,true);
                 test = pasteDataObject.GetData(DataFormats.Text).ToString();
                 MpConsole.WriteLine("Cb Text: " + test);
             }
@@ -518,10 +497,10 @@ namespace MpWpfApp {
                         MainWindowTop = _startMainWindowTop;
                         timer.Stop();
 
-                        //ClipTrayViewModel.ResetClipSelection();
+                        //MpClipTrayViewModel.Instance.ResetClipSelection();
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteDataObject != null) {
-                            await ClipTrayViewModel.PasteDataObject(pasteDataObject);
+                            await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
                         }
 
                         IsMainWindowLocked = false;
@@ -529,7 +508,7 @@ namespace MpWpfApp {
                             ShowWindowCommand.Execute(null);
                             IsMainWindowLocked = true;
                         } else {
-                            SearchBoxViewModel.IsTextBoxFocused = false;
+                            MpSearchBoxViewModel.Instance.IsTextBoxFocused = false;
                         }
                         IsMainWindowOpen = false;
                         IsMainWindowClosing = false;
@@ -539,7 +518,7 @@ namespace MpWpfApp {
                 };
                 timer.Start();
             } else if(pasteDataObject != null) {
-               await ClipTrayViewModel.PasteDataObject(pasteDataObject,true);
+               await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject,true);
             }
         }
 

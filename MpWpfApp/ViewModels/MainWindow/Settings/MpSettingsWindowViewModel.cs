@@ -168,21 +168,7 @@ namespace MpWpfApp {
             }
         }
         #endregion        
-
-        private int _selectedShortcutIndex;
-        public int SelectedShortcutIndex {
-            get {
-                return _selectedShortcutIndex;
-            }
-            set {
-                if (_selectedShortcutIndex != value) {
-                    _selectedShortcutIndex = value;
-                    OnPropertyChanged(nameof(SelectedShortcutIndex));
-                }
-            }
-        }
-
-        
+                
         #endregion
 
         #region Static Methods
@@ -267,34 +253,7 @@ namespace MpWpfApp {
 
         }
 
-        public ICommand ReassignShortcutCommand => new RelayCommand(
-            async () => {
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    scvm,
-                    scvm.ShortcutDisplayName,
-                    scvm.KeyString,
-                    scvm.Command,
-                    scvm.CommandParameter
-                );
-            });
 
-        public ICommand DeleteShortcutCommand => new RelayCommand(
-            async () => {
-                MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-                //await MpShortcutCollectionViewModel.Instance.RemoveAsync(scvm);
-                await MpDb.Instance.DeleteItemAsync<MpShortcut>(scvm.Shortcut);
-            });
-
-        public ICommand ResetShortcutCommand => new RelayCommand(
-            async () => {
-                MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-                scvm.KeyString = scvm.Shortcut.DefaultKeyString;
-                await scvm.RegisterAsync();
-                await scvm.Shortcut.WriteToDatabaseAsync();
-            });
 
         private RelayCommand<int> _clickSettingsPanelCommand;
         public ICommand ClickSettingsPanelCommand {

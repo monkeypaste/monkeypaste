@@ -4,13 +4,12 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
+                     d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
     <!--<i:Interaction.Behaviors>
         <local:MpContentDragBehavior x:Name="DragBehavior" />
     </i:Interaction.Behaviors>-->
@@ -20,7 +19,6 @@
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
-                        Cursor="{Binding IsBusy, Converter={StaticResource BoolToCursorConverter}, ConverterParameter='wait,arrow'}"
                         Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
@@ -89,7 +87,7 @@
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
-                <local:MpContentListView x:Name="ContentListView"/>
+                <local:MpContentListView x:Name="ContentListView" />
 
             </DockPanel>
             <!--  Overlays  -->

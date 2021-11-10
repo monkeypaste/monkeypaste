@@ -390,7 +390,7 @@ namespace MpWpfApp {
                     var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
                     
                     if (IsSequence()) {
-                        if(MpMainWindowViewModel.IsMainWindowLoading) {
+                        if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                             //only register sequences at startup
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
@@ -489,8 +489,8 @@ namespace MpWpfApp {
                MpClipTrayViewModel.Instance.IsAnyPastingTemplate ||
                MpClipTrayViewModel.Instance.IsAnyEditingClipTile ||
                MpClipTrayViewModel.Instance.IsAnyEditingClipTitle ||
-               MpMainWindowViewModel.Instance.TagTrayViewModel.IsEditingTagName ||
-               MpMainWindowViewModel.Instance.SearchBoxViewModel.IsTextBoxFocused) {
+               MpTagTrayViewModel.Instance.IsEditingTagName ||
+               MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
                 return false;
             }
             //otherwise check basic type routing for validity

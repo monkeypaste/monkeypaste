@@ -19,17 +19,16 @@ using MonkeyPaste;
 namespace MpWpfApp {
 
     public class MpSearchBoxViewModel : MpSingletonViewModel<MpSearchBoxViewModel,object> {
-        #region Singleton Definition
-        //private static readonly Lazy<MpSearchBoxViewModel> _Lazy = new Lazy<MpSearchBoxViewModel>(() => new MpSearchBoxViewModel());
-        //public static MpSearchBoxViewModel Instance { get { return _Lazy.Value; } }
-
-        public void Init() { }
-        #endregion
-
         #region Private Variables
         #endregion
 
         #region Properties     
+
+        #region View Models
+
+        public MpSearchDetailViewModel SearchDetailViewModel { get; set; } = new MpSearchDetailViewModel();
+
+        #endregion
 
         #region SearchBy Property Settings
         private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;
@@ -209,6 +208,18 @@ namespace MpWpfApp {
             }
         }
 
+        #endregion
+
+        #region Layout
+
+        public double SearchDetailHeight {
+            get {
+                if(!HasText) {
+                    return 0;
+                }
+                return MpMeasurements.Instance.SearchDetailRowHeight + (SearchDetailViewModel.CriteriaItems.Count * MpMeasurements.Instance.SearchDetailRowHeight);
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -399,39 +410,22 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
-        public MpSearchBoxViewModel() : base() {
-            Text = PlaceholderText;
+        #region Constructors
 
-            PropertyChanged += (s, e7) => {
-                switch (e7.PropertyName) {
-                    case nameof(Text):
-                        Validate();
-                        OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                        break;
-                    case nameof(IsSearching):
-                        OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                        break;
-                    case nameof(IsTextBoxFocused):
-                        if(IsTextBoxFocused) {
-                            if (!HasText) {
-                                Text = string.Empty;
-                            }
+        public async Task Init() {
+            await Task.Run(() => {
+                Text = PlaceholderText;
 
-                            MpClipTrayViewModel.Instance.ResetClipSelection(false);                            
-                        } else {
-                            if(!HasText) {
-                                Text = PlaceholderText;
-                            }
-                        }
-                        OnPropertyChanged(nameof(TextBoxFontStyle));
-                        OnPropertyChanged(nameof(TextBoxTextBrush));
-                        break;
-                }
-            };
+                PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
 
-            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
+                MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
+            });
         }
+
+        public MpSearchBoxViewModel() : base() { }
+        #endregion
+        #region Public Methods
+
 
         public void RequestSearchBoxFocus() {
             OnSearchTextBoxFocusRequest?.Invoke(this, new EventArgs());
@@ -448,7 +442,36 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        
+
+        private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(Text):
+                    Validate();
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    break;
+                case nameof(IsSearching):
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    break;
+                case nameof(IsTextBoxFocused):
+                    if (IsTextBoxFocused) {
+                        if (!HasText) {
+                            Text = string.Empty;
+                        }
+
+                        if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                            MpClipTrayViewModel.Instance.ResetClipSelection(false);
+                        }
+                    } else {
+                        if (!HasText) {
+                            Text = PlaceholderText;
+                        }
+                    }
+                    OnPropertyChanged(nameof(TextBoxFontStyle));
+                    OnPropertyChanged(nameof(TextBoxTextBrush));
+                    break;
+            }
+        }
+
         private bool Validate() {
             if (!HasText) {
                 IsTextValid = true;

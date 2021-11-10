@@ -83,5 +83,13 @@ namespace MpWpfApp {
             BindingContext.AssignHotkeyCommand.Execute(null);
             e.Handled = true;
         }
+
+        private void ClipTileToggleEditButton_MouseEnter(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Move;
+        }
+
+        private void ClipTileToggleEditButton_MouseLeave(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
     }
 }

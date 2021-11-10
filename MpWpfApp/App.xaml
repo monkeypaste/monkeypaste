@@ -1149,6 +1149,8 @@
         <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
         <local:MpAppModeViewModel x:Key="AppModeViewModel" />
         <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
+        <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
+        <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
         <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>

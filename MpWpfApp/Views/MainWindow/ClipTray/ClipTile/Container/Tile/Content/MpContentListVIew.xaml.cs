@@ -220,6 +220,9 @@ namespace MpWpfApp {
         }
 
         private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
             BindingContext.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
             BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
             BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;

@@ -155,8 +155,7 @@ namespace MpWpfApp {
         #endregion
 
         public MpThemeType CurrentThemeType { get; private set; }
-
-        
+                
 
         public void Init() {
             InitDefaultThemes();

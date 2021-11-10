@@ -603,7 +603,7 @@ namespace MpWpfApp {
             }
             CopyItem = ci;
 
-            IsNewAndFirstLoad = !MpMainWindowViewModel.IsMainWindowLoading;
+            IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
@@ -996,7 +996,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanEditSubTitle() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return false;
             }
             return MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&

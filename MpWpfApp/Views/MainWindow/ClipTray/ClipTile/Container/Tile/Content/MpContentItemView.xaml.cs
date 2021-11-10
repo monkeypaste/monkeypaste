@@ -84,8 +84,10 @@ namespace MpWpfApp {
         #endregion
 
         private void Border_Unloaded(object sender, RoutedEventArgs e) {
-            BindingContext.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
-            BindingContext.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
+            if(BindingContext != null) {
+                BindingContext.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
+                BindingContext.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
+            }
         }
     }
 }

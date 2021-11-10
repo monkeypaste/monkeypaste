@@ -97,7 +97,7 @@ namespace MpWpfApp {
             get {
                 var vdict = new Dictionary<object, Visibility>();
                 if (HighlightRangeViewModels.Count == 0) {
-                    if(MpMainWindowViewModel.Instance.SearchBoxViewModel.HasText) {
+                    if(MpSearchBoxViewModel.Instance.HasText) {
                         vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
                     } else {
                         vdict.Add(HostClipTileViewModel, Visibility.Visible);
@@ -149,7 +149,7 @@ namespace MpWpfApp {
                         ApplyHighlightingCommand.Execute(null);
                         break;
                     case nameof(HighlightTaskCount):
-                        MpMainWindowViewModel.Instance.SearchBoxViewModel.IsSearching = HighlightTaskCount > 0;
+                        MpSearchBoxViewModel.Instance.IsSearching = HighlightTaskCount > 0;
                         if (HighlightTaskCount < 0) {
                             HighlightTaskCount = 0;
                         }
@@ -178,7 +178,7 @@ namespace MpWpfApp {
 
             ClearHighlightingCommand.Execute(null);
 
-            if (MpMainWindowViewModel.IsMainWindowLoading || HostClipTileViewModel.IsLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading || HostClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
                 return VisibilityDictionary;
             }
@@ -188,7 +188,7 @@ namespace MpWpfApp {
                 return new Dictionary<object, Visibility> { { HostClipTileViewModel, Visibility.Collapsed } };
             }
 
-            var sttvm = MpMainWindowViewModel.Instance.TagTrayViewModel.SelectedTagTile;
+            var sttvm = MpTagTrayViewModel.Instance.SelectedTagTile;
             bool isLinked = await sttvm.IsLinked(HostClipTileViewModel);
             if (!isLinked) {
                 //MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + HostClipTileViewModel.CopyItemTitle + " is not linked with current tag");

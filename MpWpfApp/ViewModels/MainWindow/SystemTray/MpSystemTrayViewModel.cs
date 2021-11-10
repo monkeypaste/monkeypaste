@@ -31,7 +31,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private TaskbarIcon _taskbarIcon = null;
+        //private TaskbarIcon _taskbarIcon = null;
         #endregion
 
         #region Properties
@@ -103,85 +103,41 @@ namespace MpWpfApp {
         #region Public Methods
         public MpSystemTrayViewModel() : base(null) { }
 
-        public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
-            _taskbarIcon = ((TaskbarIcon)sender);
-            _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
-                MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-            };
-            _taskbarIcon.MouseEnter += (s, e3) => {
-                OnPropertyChanged(nameof(AppStatus));
-                OnPropertyChanged(nameof(AccountStatus));
-                OnPropertyChanged(nameof(TotalItemCount));
-                OnPropertyChanged(nameof(DbSizeInMbs));
-            };
-            //ShowStandardBalloon("Monkey Paste", "Successfully loaded", BalloonIcon.Info);
-            //ShowStandardBalloon("Test title", "Test balloon text", BalloonIcon.Info);
-        }
-
-        //public void ShowStandardBalloon(string title, string text, BalloonIcon icon) {
-        //    MpBalloonControl balloon = new MpBalloonControl();
-        //    balloon.BalloonTitle = title;
-        //    balloon.BalloonText = text;
-        //    _taskbarIcon.ShowCustomBalloon(balloon, PopupAnimation.Slide, Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
-        //}
         #endregion
 
         #region Commands
-        private RelayCommand _exitApplicationCommand;
-        public ICommand ExitApplicationCommand {
-            get {
-                if (_exitApplicationCommand == null) {
-                    _exitApplicationCommand = new RelayCommand(ExitApplication);
+        public ICommand ExitApplicationCommand => new RelayCommand(
+            () => {
+
+                MpMainWindowViewModel.Instance.Dispose();
+                Application.Current.Shutdown();
+            });
+
+        public ICommand ShowLogDialogCommand => new RelayCommand(
+            () => {
+                //var result = MessageBox.Show(MonkeyPaste.MpSyncManager.Instance.StatusLog, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
+            });
+
+        public ICommand ShowSettingsWindowCommand => new RelayCommand<object>(
+            (args) => {
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                int tabIdx = 0;
+                if (args is int) {
+                    tabIdx = (int)args;
+                } else if (args is MpClipTileViewModel) {
+                    args = (args as MpClipTileViewModel).PrimaryItem.CopyItem.Source.App;
+                    tabIdx = 1;
+                } else if (args is MpContentItemViewModel) {
+                    args = (args as MpContentItemViewModel).CopyItem.Source.App;
+                    tabIdx = 1;
                 }
-                return _exitApplicationCommand;
-            }
-        }
-        private void ExitApplication() {
-            MpMainWindowViewModel.Instance.Dispose();
-            Application.Current.Shutdown();
-        }
 
-        private RelayCommand _showLogDialogCommand;
-        public ICommand ShowLogDialogCommand {
-            get {
-                if(_showLogDialogCommand == null) {
-                    _showLogDialogCommand = new RelayCommand(ShowLogDialog);
-                }
-                return _showLogDialogCommand;
-            }
-        }
-        private void ShowLogDialog() {
-           // var result = MessageBox.Show(MonkeyPaste.MpSyncManager.Instance.StatusLog, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+                SettingsWindowViewModel = new MpSettingsWindowViewModel();
+                SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
 
-        private RelayCommand<object> _showSettingsWindowCommand;
-        public ICommand ShowSettingsWindowCommand {
-            get {
-                if (_showSettingsWindowCommand == null) {
-                    _showSettingsWindowCommand = new RelayCommand<object>(ShowSettingsWindow);
-                }
-                return _showSettingsWindowCommand;
-            }
-        }
-        private void ShowSettingsWindow(object args) {
-            MpMainWindowViewModel.Instance.IsShowingDialog = true;
-            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-            int tabIdx = 0;
-            if(args is int) {
-                tabIdx = (int)args;
-            } else if (args is MpClipTileViewModel) {
-                args = (args as MpClipTileViewModel).PrimaryItem.CopyItem.Source.App;
-                tabIdx = 1;
-            } else if (args is MpContentItemViewModel) {
-                args = (args as MpContentItemViewModel).CopyItem.Source.App;
-                tabIdx = 1;
-            }
-
-            SettingsWindowViewModel = new MpSettingsWindowViewModel();
-            SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
-
-            MpMainWindowViewModel.Instance.IsShowingDialog = false;
-        }
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+            });
         #endregion
     }
 }

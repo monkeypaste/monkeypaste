@@ -7,7 +7,7 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
-                     d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=True}">
+                     d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <local:MpTileExpanderBehavior x:Name="ExpandBehavior" />
     </i:Interaction.Behaviors>

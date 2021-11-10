@@ -1,0 +1,77 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpShortcutCollectionDataGridView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpShortcutCollectionViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance local:MpShortcutCollectionViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <DataGrid x:Name="ShortcutDatagrid"
+                  ItemsSource="{Binding Shortcuts}"
+                  HorizontalAlignment="Center"
+                  SelectedIndex="{Binding SelectedShortcutIndex, Mode=TwoWay}"
+                  SelectionMode="Single"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  Margin="15"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Type"
+                                    Width="85"
+                                    Binding="{Binding ShortcutTypeName}" />
+                <DataGridTextColumn Header="Action"
+                                    Width="200"
+                                    Binding="{Binding ShortcutDisplayName}" />
+                <DataGridTextColumn Header="Shortcut"
+                                    Width="150"
+                                    Binding="{Binding KeyString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Background="White"
+                                    BorderThickness="0"
+                                    ToolTip="Reassign"
+                                    Command="{Binding Parent.ReassignShortcutCommand}">
+                                <Image Width="20"
+                                       Height="20"
+                                       Source="/MpWpfApp;component/Resources/Icons/Silk/icons/anchor.png" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button Background="White"
+                                        BorderThickness="0"
+                                        ToolTip="Delete"
+                                        Template="{StaticResource SearchButtonControlTemplate}"
+                                        Visibility="{Binding DeleteButtonVisibility}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteShortcutCommand}">
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="/MpWpfApp;component/Resources/Images/delete.png" />
+                                </Button>
+                                <Button Background="White"
+                                        BorderThickness="0"
+                                        ToolTip="Reset"
+                                        Template="{StaticResource SearchButtonControlTemplate}"
+                                        Visibility="{Binding ResetButtonVisibility}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png" />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</local:MpUserControl>

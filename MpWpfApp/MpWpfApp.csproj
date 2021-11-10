@@ -260,7 +260,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchElementViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\Detail\MpSearchDetailViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />
@@ -372,11 +373,20 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\Search\MpItemSearchView.xaml.cs">
-      <DependentUpon>MpItemSearchView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\Detail\MpSearchDetailView.xaml.cs">
+      <DependentUpon>MpSearchDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\MpSearchBoxView.xaml.cs">
+      <DependentUpon>MpSearchBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaItem\MpSearchCriteriaItemView.xaml.cs">
+      <DependentUpon>MpSearchCriteriaItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml.cs">
       <DependentUpon>MpItemSortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml.cs">
+      <DependentUpon>MpTagTileContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml.cs">
       <DependentUpon>MpTagTileView.xaml</DependentUpon>
@@ -396,8 +406,8 @@
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\MpMarqueeTextBlock.xaml.cs">
-      <DependentUpon>MpMarqueeTextBlock.xaml</DependentUpon>
+    <Compile Include="Views\Settings\Shortcuts\MpShortcutCollectionDataGridView.xaml.cs">
+      <DependentUpon>MpShortcutCollectionDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Spinners\MpSpinnerApple.xaml.cs">
       <DependentUpon>MpSpinnerApple.xaml</DependentUpon>
@@ -539,13 +549,25 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\Search\MpItemSearchView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\Search\Detail\MpSearchDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\Search\MpSearchBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaItem\MpSearchCriteriaItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml">
       <SubType>Designer</SubType>
@@ -580,7 +602,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\MpMarqueeTextBlock.xaml">
+    <Page Include="Views\Settings\Shortcuts\MpShortcutCollectionDataGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2211,7 +2233,11 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
-    <Folder Include="Views\Settings\" />
+    <Folder Include="Views\Reusable\" />
+    <Folder Include="Views\Settings\Account\" />
+    <Folder Include="Views\Settings\Help\" />
+    <Folder Include="Views\Settings\Preferences\" />
+    <Folder Include="Views\Settings\Security\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

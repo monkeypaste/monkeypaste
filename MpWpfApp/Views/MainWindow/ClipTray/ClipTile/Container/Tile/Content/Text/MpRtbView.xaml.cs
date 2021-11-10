@@ -90,10 +90,32 @@ namespace MpWpfApp {
                 if (ctcv != null && e.HeightChanged && !ctcv.ExpandBehavior.IsExpandingOrUnexpanding) {
                     ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
                 }
+
+                if(BindingContext.IsSelected) {
+                    Rtb.Focus();
+                }
             }
         }
 
+        private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
+            if (BindingContext.Parent.IsExpanded) {
+                if (BindingContext.IsSelected) {
+                    MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    return;
+                }
+            }
+
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
+        private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
             BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
             BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;

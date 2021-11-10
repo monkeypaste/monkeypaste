@@ -25,16 +25,7 @@ using System.Collections.Concurrent;
 
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpViewModelBase<object>  {
-        #region Singleton Definition
-        private static readonly Lazy<MpClipTrayViewModel> _Lazy = new Lazy<MpClipTrayViewModel>(() => new MpClipTrayViewModel());
-        public static MpClipTrayViewModel Instance { get { return _Lazy.Value; } }
-
-        public void Init() {
-            
-        }
-        #endregion
-
+    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel,object>  {
         #region Private Variables      
         private object _tileLockObject = null;
 
@@ -278,25 +269,33 @@ namespace MpWpfApp {
         public event EventHandler OnScrollToHomeRequest;
         #endregion
 
-        #region Public Methods
+        #region Constructors
 
-        public MpClipTrayViewModel() : base(null) {
-            PropertyChanged += MpClipTrayViewModel_PropertyChanged;
-            Items.CollectionChanged += Items_CollectionChanged;
-            MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-            MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
-            _tileLockObject = new object();
+        public async Task Init() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                PropertyChanged += MpClipTrayViewModel_PropertyChanged;
+                Items.CollectionChanged += Items_CollectionChanged;
+                MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+                MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+                MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+                _tileLockObject = new object();
 
-            _pageSize = (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
-            RemainingItemsCountThreshold = 0;// _pageSize;
-            MpDataModelProvider.Instance.Init(new MpWpfQueryInfo(), _pageSize);
+                _pageSize = (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
+                RemainingItemsCountThreshold = 0;// _pageSize;
+                MpDataModelProvider.Instance.Init(new MpWpfQueryInfo(), _pageSize);
 
-            //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
-            _initialLoadCount = _pageSize * 3;
+                //BindingOperations.EnableCollectionSynchronization(Items, _tileLockObject);
+                _initialLoadCount = _pageSize * 3;
 
-            MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
+                MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
+            });
         }
+
+        public MpClipTrayViewModel() : base() { }
+
+        #endregion
+
+        #region Public Methods
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
@@ -1007,6 +1006,9 @@ namespace MpWpfApp {
             if (e is MpCopyItem ci) {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     var ctvm = Items.Where(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id)).FirstOrDefault();
+                    if(ctvm == null) {
+                        return;
+                    }
                     int tileIdx = Items.IndexOf(ctvm);
                     var civm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ci.Id).FirstOrDefault();
                     int itemIdx = ctvm.ItemViewModels.IndexOf(civm);
@@ -1340,7 +1342,7 @@ namespace MpWpfApp {
             },
             () => {
                 if (IsBusy ||
-                     MpMainWindowViewModel.IsMainWindowLoading ||
+                     MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                      VisibleItems.Count == 0 ||
                      SelectedItems.Count == 0) {
                             return false;
@@ -1378,7 +1380,7 @@ namespace MpWpfApp {
             },
             () => {
                 if (IsBusy ||
-                MpMainWindowViewModel.IsMainWindowLoading ||
+                MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                 VisibleItems.Count == 0 ||
                 SelectedItems.Count == 0) {
                     return false;
@@ -1433,8 +1435,8 @@ namespace MpWpfApp {
                         }
                     }
                 }
-                await MpMainWindowViewModel.Instance.TagTrayViewModel.RefreshAllCounts();
-                await MpMainWindowViewModel.Instance.TagTrayViewModel.UpdateTagAssociation();
+                await MpTagTrayViewModel.Instance.RefreshAllCounts();
+                await MpTagTrayViewModel.Instance.UpdateTagAssociation();
             },
             (tagToLink) => {
                 //this checks the selected clips association with tagToLink
@@ -1503,7 +1505,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanEditSelectedTitle() {
-            if (MpMainWindowViewModel.IsMainWindowLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return false;
             }
             return SelectedItems.Count == 1 &&
@@ -1518,7 +1520,7 @@ namespace MpWpfApp {
                 SelectedItems[0].IsExpanded = true;
             },
             () => {
-                if (MpMainWindowViewModel.IsMainWindowLoading) {
+                if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return false;
                 }
                 return SelectedItems.Count == 1 && SelectedItems[0].SelectedItems.Count == 1;

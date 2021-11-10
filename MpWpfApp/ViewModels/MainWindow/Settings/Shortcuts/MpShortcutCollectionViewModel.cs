@@ -10,6 +10,7 @@ using MonkeyPaste;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpViewModelBase<object> {
@@ -42,6 +43,7 @@ namespace MpWpfApp {
 
         public bool IsMultiSelectKeyDown => IsCtrlDown || IsAltDown || IsShiftDown;
 
+        public int SelectedShortcutIndex { get; set; }
         #endregion
 
         #endregion
@@ -186,7 +188,6 @@ namespace MpWpfApp {
                     Mwvm_OnMainWindowHide(this, new EventArgs());
 
                     #region Global
-
 
                     //GlobalHook.OnCombination(new Dictionary<Combination, Action> {
                     //{
@@ -389,7 +390,7 @@ namespace MpWpfApp {
             if (sbvm != null && sbvm.IsTextBoxFocused) {
                 return;
             }
-            if (MpMainWindowViewModel.Instance.TagTrayViewModel != null && MpMainWindowViewModel.Instance.TagTrayViewModel.IsEditingTagName) {
+            if (MpTagTrayViewModel.Instance != null && MpTagTrayViewModel.Instance.IsEditingTagName) {
                 return;
             }
             if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
@@ -559,6 +560,36 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand ReassignShortcutCommand => new RelayCommand(
+            async () => {
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                    scvm,
+                    scvm.ShortcutDisplayName,
+                    scvm.KeyString,
+                    scvm.Command,
+                    scvm.CommandParameter
+                );
+            });
+
+
+        public ICommand DeleteShortcutCommand => new RelayCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                //await MpShortcutCollectionViewModel.Instance.RemoveAsync(scvm);
+                await MpDb.Instance.DeleteItemAsync<MpShortcut>(scvm.Shortcut);
+            });
+
+        public ICommand ResetShortcutCommand => new RelayCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                scvm.KeyString = scvm.Shortcut.DefaultKeyString;
+                await scvm.RegisterAsync();
+                await scvm.Shortcut.WriteToDatabaseAsync();
+            });
         #endregion
     }
 

@@ -31,8 +31,10 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
-            AssociatedObject.Loaded -= AssociatedObject_Loaded;
-            AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+            if(AssociatedObject != null) {
+                AssociatedObject.Loaded -= AssociatedObject_Loaded;
+                AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+            }
             MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
         }
 

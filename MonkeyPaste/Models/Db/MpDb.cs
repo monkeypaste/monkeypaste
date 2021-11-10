@@ -786,8 +786,6 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpTag>(helpTag, "", true, true);
 
-
-
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
