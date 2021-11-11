@@ -221,6 +221,12 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<List<MpAnalyticItemParameterValue>> GetAnalyticItemParameterValuesByParamId(int paramId) {
+            string query = $"select * from MpAnalyticItemParameterValue where fk_MpAnalyticItemParameterId=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemParameterValue>(query, paramId);
+            return result;
+        }
+
         public async Task<bool> IsCopyItemInRecentTag(int copyItemId) {
             string query = GetFetchQuery(0, 0, true, MpTag.RecentTagId, true, copyItemId);
             var result = await MpDb.Instance.QueryScalarAsync<int>(query);

@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [Column("fk_MpInputFormatTypeId")]
+        [Column("InputFormatTypeId")]
         public int InputFormatTypeId { get; set; } = 0;
 
         [Column("Title")]

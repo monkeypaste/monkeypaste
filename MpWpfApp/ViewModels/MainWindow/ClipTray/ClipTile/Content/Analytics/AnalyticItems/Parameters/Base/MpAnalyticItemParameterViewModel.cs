@@ -1,8 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using MonkeyPaste;
+using SQLite;
+using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
+
     public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel>{
         #region Private Variables
 
@@ -12,7 +18,25 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public virtual MpAnalyticItemParameterValueViewModel SelectedValue { get; set; } = new MpAnalyticItemParameterValueViewModel();
+        public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
+
+        public virtual MpAnalyticItemParameterValueViewModel CurrentValueViewModel {
+            get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
+            set {
+                if (value != CurrentValueViewModel) {
+                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                    if (value != null) {
+                        value.IsSelected = true;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Business Logic
+
+        public Enum ParamEnumId { get; private set; }
 
         #endregion
 
@@ -31,7 +55,7 @@ namespace MpWpfApp {
         public string ParameterTooltipText {
             get {
                 if (!IsValid) {
-                    return $"{Parameter.Key} is required";
+                    return $"{Parameter.Label} is required";
                 }
                 if (Parameter != null && !string.IsNullOrEmpty(Parameter.Description)) {
                     return Parameter.Description;
@@ -52,10 +76,11 @@ namespace MpWpfApp {
 
         public abstract bool IsValid { get; }
 
+        public virtual string UserValue { get; set; }
         #endregion
 
         #region Model
-        
+
         public bool IsRequired {
             get {
                 if (Parameter == null) {
@@ -64,30 +89,28 @@ namespace MpWpfApp {
                 return Parameter.IsParameterRequired;
            }
         }
-        public string Key {
+
+        public string Label {
             get {
-                if(Parameter == null) {
+                if (Parameter == null) {
                     return string.Empty;
                 }
-                return Parameter.Key;
+                if(string.IsNullOrEmpty(Parameter.Label)) {
+                    return Parameter.Label;
+                }
+                return Parameter.Label;
             }
         }
 
-        public virtual string UserValue {
+        public string FormatInfo {
             get {
                 if (Parameter == null) {
-                    return null;
+                    return string.Empty;
                 }
-                return Parameter.UserValue;
-            }
-            set {
-                if (Parameter.UserValue != value) {
-                    Parameter.UserValue = value;
-                    OnPropertyChanged(nameof(UserValue));
-                }
+                return Parameter.FormatInfo;
             }
         }
-        
+
         public MpAnalyticItemParameter Parameter { get; protected set; }
 
         #endregion
@@ -109,18 +132,34 @@ namespace MpWpfApp {
         public virtual async Task InitializeAsync(MpAnalyticItemParameter aip) {
             IsBusy = true;
 
-            await Task.Delay(1);
-
             Parameter = aip;
+
+            ValueViewModels.Clear();
+
+            foreach (var valueSeed in Parameter.ValueSeeds) {
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
+                ValueViewModels.Add(naipvvm);
+            }
+
+            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
+            if (defVal != null) {
+                defVal.IsSelected = true;
+            } else if (ValueViewModels.Count > 0) {
+                ValueViewModels[0].IsSelected = true;
+            }
+
+            OnPropertyChanged(nameof(ValueViewModels));
 
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, string value) {
+        public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
             var naipvvm = new MpAnalyticItemParameterValueViewModel(this);
-            await naipvvm.InitializeAsync(idx, value);
+            naipvvm.PropertyChanged += Naipvvm_PropertyChanged;
+            await naipvvm.InitializeAsync(idx, valueSeed);
             return naipvvm;
         }
+       
         #endregion
 
         #region Private Methods
@@ -128,6 +167,15 @@ namespace MpWpfApp {
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
 
+            }
+        }
+
+        private void Naipvvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var aipvvm = sender as MpAnalyticItemParameterValueViewModel;
+            switch(e.PropertyName) {
+                case nameof(aipvvm.IsSelected):
+                    OnPropertyChanged(nameof(CurrentValueViewModel));
+                    break;
             }
         }
         #endregion

@@ -1,20 +1,19 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpAnalyticParameterType {
         None = 0,
+        Button,
         Text,
         ComboBox,
         CheckBox,
         Slider,
-        RuntimeMinOffset,//below are only runtime types
-        Execute,
-        Result
+        RuntimeMinOffset,//below are only runtime types        
     }
-
     public class MpAnalyticItemParameter : MpDbModelBase {
         #region Columns
         [Column("pk_MpAnalyticItemParameterId")]
@@ -28,41 +27,34 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemId")]
         public int AnalyticItemId { get; set; }
 
-        [Column("Key")]
-        public string Key { get; set; } = string.Empty;
-
-        [Column("ValueCsv")]
-        public string ValueCsv { get; set; } = string.Empty;
+        [Column("Label")]
+        public string Label { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
-
-        [Column("DefaultValue")]
-        public string DefaultValue { get; set; } = string.Empty;
-
-        [Column("InputValue")]
-        public string InputValue { get; set; } = string.Empty;
 
         [Column("ParameterTypeId")]
         public int ParameterTypeId { get; set; } = 0;
 
         [Column("SortOrderIdx")]
-        public int SortOrderIdx { get; set; } = 0;
+        public int SortOrderIdx { get; set; } = -1;
 
         [Column("IsRequired")]
         public int IsRequired { get; set; } = 0;
 
-        [Column("IsHeaderParameter")]
-        public int IsHeader { get; set; } = 0;
+        [Column("IsReadOnly")]
+        public int ReadOnly { get; set; } = 0;
 
-        [Column("IsRequestParameter")]
-        public int IsRequest { get; set; } = 0;
+        [Column("FormatInfo")]
+        public string FormatInfo { get; set; } = string.Empty;
         #endregion
 
         #region Fk Models
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpAnalyticItem AnalyticItem { get; set; }
-        
+
+        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeDelete)]
+        public List<MpAnalyticItemParameterValue> ValueSeeds { get; set; } = new List<MpAnalyticItemParameterValue>();
         #endregion
 
         #region Properties
@@ -92,32 +84,13 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsRequestParameter {
+        public bool IsReadOnly {
             get {
-                return IsRequest == 1;
+                return ReadOnly == 1;
             }
             set {
-                if (IsRequestParameter != value) {
-                    IsRequest = value ? 1 : 0;
-                }
-            }
-        }
-
-        [Ignore]
-        public bool IsResponseParameter {
-            get {
-                return !IsRequestParameter;
-            }
-        }
-
-        [Ignore]
-        public bool IsHeaderParameter {
-            get {
-                return IsHeader == 1;
-            }
-            set {
-                if (IsHeaderParameter != value) {
-                    IsHeader = value ? 1 : 0;
+                if (IsReadOnly != value) {
+                    ReadOnly = value ? 1 : 0;
                 }
             }
         }
@@ -136,41 +109,45 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsRuntimeParameter => (int)ParameterType >= (int)MpAnalyticParameterType.RuntimeMinOffset;
+        public Enum ParameterEnumId { get; set; }
 
         [Ignore]
-        public Enum ParamEnumId { get; private set; }
+        public bool IsRuntimeParameter => IsExecute || IsResult;
+
 
         [Ignore]
-        public string UserValue { get; set; }
+        public bool IsExecute { get; set; } = false;
+
+        [Ignore]
+        public bool IsResult { get; set; } = false;
         #endregion
 
-        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string key, string value, bool isRequired, bool isHeader, bool isRequest, int sortOrderIdx) {
+        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string label, bool isRequired, bool isReadOnly = false, int sortOrderIdx = -1, string formatInfo = "") {
             if(parentItem == null) {
                 throw new Exception("Parameter must be associated with an item");
             }
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemParameterByKey(parentItem.Id,key);
+            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemParameterByKey(parentItem.Id,label);
             if (dupItem != null) {
+                MpConsole.WriteLine($"Updating parameter {label} for {parentItem.Title}");
+
                 dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItemParameter>(dupItem.Id);
-                if(dupItem.ValueCsv != value || dupItem.SortOrderIdx != sortOrderIdx || dupItem.IsParameterRequired != isRequired) {
-                    MpConsole.WriteLine($"Updating parameter {key} for {parentItem.Title}");
-                    dupItem.ValueCsv = value;
-                    dupItem.SortOrderIdx = sortOrderIdx;
-                    dupItem.IsParameterRequired = isRequired;
-                    await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(dupItem);
-                }
+                dupItem.IsParameterRequired = isRequired;
+                dupItem.Label = label;
+                dupItem.SortOrderIdx = sortOrderIdx;
+                dupItem.FormatInfo = formatInfo;
+                dupItem.IsReadOnly = isReadOnly;
+                await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(dupItem);
                 return dupItem;
             }
 
             var newAnalyticItemParameter = new MpAnalyticItemParameter() {
                 AnalyticItemParameterGuid = System.Guid.NewGuid(),
-                Key = key,
-                ValueCsv = value,
                 AnalyticItemId = parentItem.Id,
+                Label = label,
                 SortOrderIdx = sortOrderIdx,
                 IsParameterRequired = isRequired,
-                IsHeaderParameter = isHeader,
-                IsRequestParameter = isRequest
+                FormatInfo = formatInfo,
+                IsReadOnly = isReadOnly
             };
 
             await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(newAnalyticItemParameter);
@@ -180,8 +157,8 @@ namespace MonkeyPaste {
 
         public MpAnalyticItemParameter() : base() { }
 
-        public MpAnalyticItemParameter(Enum enumId) : this() {
-            ParamEnumId = enumId;
-        }
+        //public MpAnalyticItemParameter(Enum enumId) : this() {
+        //    ParameterEnumId = enumId;
+        //}
     }
 }

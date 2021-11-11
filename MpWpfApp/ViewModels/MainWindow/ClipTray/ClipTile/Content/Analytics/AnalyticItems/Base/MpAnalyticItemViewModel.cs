@@ -22,10 +22,13 @@ namespace MpWpfApp {
         #region View Models
 
         [MpChildViewModel(typeof(MpAnalyticItemParameterViewModel),true)]
-        public ObservableCollection<MpAnalyticItemParameterViewModel> Parameters { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
+        public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
         
-        public MpAnalyticItemParameterViewModel SelectedParameter => Parameters.FirstOrDefault(x => x.IsSelected);
+        public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
         
+        public MpResultParameterViewModel ResultViewModel => ParameterViewModels.FirstOrDefault(x=>x.Parameter.IsResult) as MpResultParameterViewModel;
+
+        public MpExecuteParameterViewModel ExecuteViewModel => ParameterViewModels.FirstOrDefault(x => x.Parameter.IsExecute) as MpExecuteParameterViewModel;
         #endregion
 
         #region Appearance
@@ -51,10 +54,9 @@ namespace MpWpfApp {
 
         #region Model
 
-
         public int RuntimeId { get; set; } = 0;
 
-        public bool HasChildren { get; set; } = false;
+        //public bool HasChildren { get; set; } = false;
 
         public string Title {
             get {
@@ -109,57 +111,55 @@ namespace MpWpfApp {
 
         public virtual async Task Initialize() { await Task.Delay(1); }
 
-        public async Task InitializeAsync(MpAnalyticItem ai) {
+        public async Task InitializeDefaultsAsync(MpAnalyticItem ai) {
             IsBusy = true;
-            await Task.Delay(1);
             AnalyticItem = ai;
+
+
+            MpAnalyticItemParameter eaip = new MpAnalyticItemParameter() {
+                ParameterType = MpAnalyticParameterType.Button,
+                Label = "Execute",
+                IsExecute = true
+            };
+            MpAnalyticItemParameterViewModel eaipvm = await CreateParameterViewModel(eaip);
+            ParameterViewModels.Add(eaipvm);
+
+            MpAnalyticItemParameter raip = new MpAnalyticItemParameter() {
+                ParameterType = MpAnalyticParameterType.Text,
+                Label = "",
+                IsReadOnly = true,
+                IsResult = true,
+                ValueSeeds = new List<MpAnalyticItemParameterValue>() {
+                    new MpAnalyticItemParameterValue() {
+                        IsDefault = true,
+                        ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText
+                    }
+                }
+            };
+            MpAnalyticItemParameterViewModel raipvm = await CreateParameterViewModel(raip);
+            ParameterViewModels.Add(raipvm);
 
             IsBusy = false;
         }
 
         public virtual async Task LoadChildren() {
-            if (AnalyticItem == null || !HasChildren) {
+            if (AnalyticItem == null) {
                 return;
             }
             IsBusy = true;
 
-            Parameters = new ObservableCollection<MpAnalyticItemParameterViewModel>();
-            foreach (var aip in AnalyticItem.Parameters.OrderBy(x => x.SortOrderIdx)) {
+            foreach (var aip in AnalyticItem.Parameters.OrderByDescending(x => x.SortOrderIdx)) {
                 var naipvm = await CreateParameterViewModel(aip);
-                Parameters.Add(naipvm);
+                ParameterViewModels.Insert(0,naipvm);
             }
 
-            if (Parameters.All(x => x.Parameter.ParameterType != MpAnalyticParameterType.Execute)) {
-                MpAnalyticItemParameter eaip = new MpAnalyticItemParameter() {
-                    Id = Parameters.Count + 1,
-                    AnalyticItemParameterGuid = Guid.NewGuid(),
-                    AnalyticItemId = AnalyticItemId,
-                    AnalyticItem = this.AnalyticItem,
-                    ParameterType = MpAnalyticParameterType.Execute,
-                    Key = "Execute",
-                    ValueCsv = null,
-                    SortOrderIdx = Parameters.Count
-                };
-                MpAnalyticItemParameterViewModel eaipvm = await CreateParameterViewModel(eaip);
-                Parameters.Add(eaipvm);
-            }
+            //int exIdx = ParameterViewModels.IndexOf(GetExecuteParam());
+            //ParameterViewModels.Move(exIdx, ParameterViewModels.Count - 2);
 
-            if (Parameters.All(x => x.Parameter.ParameterType != MpAnalyticParameterType.Result)) {
-                var raip = new MpAnalyticItemParameter() {
-                    Id = Parameters.Count + 1,
-                    AnalyticItemParameterGuid = Guid.NewGuid(),
-                    AnalyticItemId = AnalyticItemId,
-                    AnalyticItem = this.AnalyticItem,
-                    ParameterType = MpAnalyticParameterType.Result,
-                    Key = "Result",
-                    ValueCsv = string.Empty,
-                    SortOrderIdx = Parameters.Count
-                };
-                var raipvm = await CreateParameterViewModel(raip);
-                Parameters.Add(raipvm);
-            }
+            //int rIdx = ParameterViewModels.IndexOf(GetResultParam());
+            //ParameterViewModels.Move(exIdx, ParameterViewModels.Count - 1);
 
-            OnPropertyChanged(nameof(Parameters));
+            OnPropertyChanged(nameof(ParameterViewModels));
 
             IsBusy = false;
         }
@@ -172,7 +172,11 @@ namespace MpWpfApp {
                     naipvm = new MpComboBoxParameterViewModel(this);
                     break;
                 case MpAnalyticParameterType.Text:
-                    naipvm = new MpTextBoxParameterViewModel(this);
+                    if (aip.IsResult) {
+                        naipvm = new MpResultParameterViewModel(this);
+                    } else {
+                        naipvm = new MpTextBoxParameterViewModel(this);
+                    }                    
                     break;
                 case MpAnalyticParameterType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
@@ -180,14 +184,16 @@ namespace MpWpfApp {
                 case MpAnalyticParameterType.Slider:
                     naipvm = new MpSliderParameterViewModel(this);
                     break;
-                case MpAnalyticParameterType.Execute:
-                    naipvm = new MpExecuteParameterViewModel(this);
-                    break;
-                case MpAnalyticParameterType.Result:
-                    naipvm = new MpResultParameterViewModel(this);
+                case MpAnalyticParameterType.Button:
+                    if (aip.IsExecute) {
+                        naipvm = new MpExecuteParameterViewModel(this);
+                    } else {
+                        throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticParameterType), aip.ParameterType));
+                    }
                     break;
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticParameterType), aip.ParameterType));
+                    break;
             }
 
             await naipvm.InitializeAsync(aip);
@@ -196,11 +202,11 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemParameterViewModel GetParam(Enum paramId) {
-            return Parameters.FirstOrDefault(x => x.Parameter.ParamEnumId.Equals(paramId));
+            return ParameterViewModels.FirstOrDefault(x => x.Parameter.ParameterEnumId.Equals(paramId));
         }
 
         public List<MpAnalyticItemParameterViewModel> GetParams(Enum paramId) {
-            return Parameters.Where(x => x.Parameter.ParamEnumId.Equals(paramId)).ToList();
+            return ParameterViewModels.Where(x => x.Parameter.ParameterEnumId.Equals(paramId)).ToList();
         }
         #endregion
 
@@ -208,11 +214,6 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(HasChildren):
-                    if(HasChildren) {
-                        Parameters.Add(null);
-                    }
-                    break;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
                         MpHelpers.Instance.RunOnMainThread(async () => {
@@ -238,7 +239,7 @@ namespace MpWpfApp {
         }
 
         protected virtual bool CanExecuteAnalysis() {
-            return Parameters.All(x => x.IsValid);
+            return ParameterViewModels.All(x => x.IsValid);
         }
         #endregion
     }

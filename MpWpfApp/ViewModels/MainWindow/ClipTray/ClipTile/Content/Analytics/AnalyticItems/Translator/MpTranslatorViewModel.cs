@@ -14,10 +14,10 @@ namespace MpWpfApp {
 
     public enum MpTranslatorParamType {
         None = 0,
-        FromLang,
-        ToLang,
         Execute,
-        Result
+        Result,
+        FromLang,
+        ToLang
     }
     public class MpTranslatorViewModel : MpAnalyticItemViewModel {
 
@@ -38,7 +38,6 @@ namespace MpWpfApp {
 
         public MpTranslatorViewModel(MpAnalyticItemCollectionViewModel parent, int aiid) : base(parent) {
             PropertyChanged += MpTranslatorViewModel_PropertyChanged;
-            HasChildren = true;
             RuntimeId = aiid;
         }
 
@@ -59,7 +58,7 @@ namespace MpWpfApp {
                 InputFormatType = MpInputFormatType.Text                
             };
 
-            await InitializeAsync(translateModel);
+            await InitializeDefaultsAsync(translateModel);
         }
 
         public override async Task LoadChildren() {
@@ -68,7 +67,7 @@ namespace MpWpfApp {
             if (!MpLanguageTranslator.Instance.IsLoaded) {
                 await MpLanguageTranslator.Instance.Init();
 
-                string defaultFromLangCode = await MpLanguageTranslator.Instance.DetectLanguage(Parent.HostClipTileViewModel.PrimaryItem.CopyItemData.ToPlainText());
+                string defaultFromLangCode = await MpLanguageTranslator.Instance.DetectLanguage(Parent.Parent.CopyItemData.ToPlainText());
                 if (string.IsNullOrWhiteSpace(defaultFromLangCode)) {
                     defaultFromLangCode = "en";
                 }
@@ -79,27 +78,39 @@ namespace MpWpfApp {
                 }
             }
 
+            List<MpAnalyticItemParameterValue> laipvl = new List<MpAnalyticItemParameterValue>();
+            foreach(var lcat in MpLanguageTranslator.Instance.LanguageCodesAndTitles) {
+                var laipv = new MpAnalyticItemParameterValue() {
+                    IsDefault = MpLanguageTranslator.Instance.LanguageCodesAndTitles.IndexOf(lcat) == defFromLangIdx,
+                    Label = lcat.Value.LanguageName,
+                    Value = lcat.Value.ToString(),
+                    ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText
+                };
+                laipvl.Add(laipv);
+            }
+
             var aipl = new List<MpAnalyticItemParameter>() {
-                new MpAnalyticItemParameter(MpTranslatorParamType.FromLang) {
+                new MpAnalyticItemParameter() {
                     Id = RuntimeId,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
                     AnalyticItemId = RuntimeId,
                     ParameterType = MpAnalyticParameterType.ComboBox,
-                    Key = "From Language",
-                    ValueCsv = string.Join(",", MpLanguageTranslator.Instance.LanguageList),
-                    DefaultValue = defFromLangIdx >= 0 ? MpLanguageTranslator.Instance.LanguageList[defFromLangIdx]:null,
+                    Label = "From Language",
+                    ValueSeeds = laipvl,
                     IsParameterRequired = true,
-                    SortOrderIdx = 0
+                    SortOrderIdx = 0,
+                    ParameterEnumId = MpTranslatorParamType.FromLang
                 },
-                new MpAnalyticItemParameter(MpTranslatorParamType.ToLang) {
+                new MpAnalyticItemParameter() {
                     Id = RuntimeId + 1,
                     AnalyticItemParameterGuid = Guid.NewGuid(),
                     AnalyticItemId = RuntimeId,
                     ParameterType = MpAnalyticParameterType.ComboBox,
-                    Key = "To Language",
-                    ValueCsv = string.Join(",", MpLanguageTranslator.Instance.LanguageList),
+                    Label = "To Language",
+                    ValueSeeds = laipvl,
                     IsParameterRequired = true,
-                    SortOrderIdx = 1
+                    SortOrderIdx = 1,
+                    ParameterEnumId = MpTranslatorParamType.ToLang
                 }
             };
             AnalyticItem.Parameters = aipl;
@@ -113,20 +124,23 @@ namespace MpWpfApp {
 
         protected override async Task ExecuteAnalysis() {
             IsBusy = true;
+            int fromNameIdxEnd = GetParam(MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.IndexOf(" ");
+            string fromName = GetParam(MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.Substring(0,fromNameIdxEnd);
+            string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(fromName);
 
-            string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(GetParam(MpTranslatorParamType.FromLang).SelectedValue.Value);
-            string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(GetParam(MpTranslatorParamType.ToLang).SelectedValue.Value);
+            int toNameIdxEnd = GetParam(MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.IndexOf(" ");
+            string toName = GetParam(MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.Substring(0,toNameIdxEnd);
+            string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(toName);
 
             //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();
             
             string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
-                Parent.HostClipTileViewModel.PrimaryItem.CopyItemData.ToPlainText(),
+                Parent.Parent.CopyItemData.ToPlainText(),
                 toCode,
                 fromCode, 
                 false);
 
-            GetParam(MpTranslatorParamType.Result).SelectedValue.Value = translatedText;
-
+            ResultViewModel.Result = translatedText;
             IsBusy = false;
         }
         #endregion

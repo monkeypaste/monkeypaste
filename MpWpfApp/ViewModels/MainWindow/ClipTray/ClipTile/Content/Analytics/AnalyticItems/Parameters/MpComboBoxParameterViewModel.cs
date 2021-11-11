@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste;
@@ -9,12 +10,28 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public ObservableCollection<MpAnalyticItemParameterValueViewModel> Values { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
+        //public ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
 
         #endregion
 
         #region State
 
+        //public int SelectedIdx {
+        //    //this is needed because default value isn't auto selected
+        //    get {
+        //        if (CurrentValueViewModel == null) {
+        //            return 0;
+        //        }
+        //        return ValueViewModels.IndexOf(CurrentValueViewModel);
+        //    }
+        //    set {
+        //        if (value >= 0 && value < ValueViewModels.Count && SelectedIdx != value) {
+        //            ValueViewModels.ForEach(x => x.IsSelected = false);
+        //            ValueViewModels[value].IsSelected = true;
+        //            OnPropertyChanged(nameof(SelectedIdx));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Model
@@ -24,7 +41,7 @@ namespace MpWpfApp {
                 if(!IsRequired) {
                     return true;
                 }
-                return SelectedValue != null && !string.IsNullOrEmpty(SelectedValue.Value);
+                return CurrentValueViewModel != null && !string.IsNullOrEmpty(CurrentValueViewModel.Value);
             }
         }
         
@@ -33,6 +50,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+
+        public MpComboBoxParameterViewModel() : base () { }
 
         public MpComboBoxParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
 
@@ -43,25 +62,23 @@ namespace MpWpfApp {
         public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
             IsBusy = true;
 
-            await Task.Delay(3);
-
             Parameter = aip;
 
-            Values.Clear();
-            var valueParts = Parameter.ValueCsv.Split(new string[] { "," }, System.StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < valueParts.Length; i++) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(i, valueParts[i]);
-                Values.Add(naipvvm);
+            ValueViewModels.Clear();
+
+            foreach(var valueSeed in Parameter.ValueSeeds) {
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
+                ValueViewModels.Add(naipvvm);
             }
 
-            if (!string.IsNullOrEmpty(Parameter.DefaultValue)) {
-                var defValVm = Values.Where(x => x.Value == Parameter.DefaultValue).FirstOrDefault();
-                if (defValVm != null) {
-                    SelectedValue = defValVm;
-                }
+            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
+            if (defVal != null) {
+                defVal.IsSelected = true;
+            } else if(ValueViewModels.Count > 0) {
+                ValueViewModels[0].IsSelected = true;
             }
 
-            OnPropertyChanged(nameof(Values));
+            OnPropertyChanged(nameof(ValueViewModels));
 
             IsBusy = false;
         }

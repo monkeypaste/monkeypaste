@@ -1018,7 +1018,7 @@ namespace MonkeyPaste {
                       pk_MpAnalyticItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAnalyticItemGuid text not null
                     , fk_MpIconId integer                    
-                    , fk_MpInputFormatTypeId integer NOT NULL default 0
+                    , InputFormatTypeId integer NOT NULL default 0
                     , Title text NOT NULL 
                     , Description text
                     , ApiKey text 
@@ -1028,29 +1028,23 @@ namespace MonkeyPaste {
                       pk_MpAnalyticItemParameterId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAnalyticItemParameterGuid text not null
                     , fk_MpAnalyticItemId integer not null
-                    , Key text NOT NULL 
-                    , ValueCsv text
-                    , DefaultValue text                    
-                    , InputValue text
                     , ParameterTypeId integer not null default 0
-                    , SortOrderIdx integer not null default 0,
-                    , IsRequired integer not null default 0,
-                    , IsRequestParameter integer not null default 0,
-                    , IsHeaderParameter integer default 0); 
+                    , Label text
+                    , SortOrderIdx integer,
+                    , IsRequired integer not null default 0
+                    , IsReadOnly integer not null default 0
+                    , FormatInfo text); 
 
-                    CREATE TABLE MpAnalyticItemActivity (
-                      pk_MpAnalyticItemActivityId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemActivityGuid text not null
-                    , Name text
-                    , Description text
-                    , ContentType text
-                    , Method text);
-
-                    CREATE TABLE MpAnalyticItemActivityParameter (
-                      pk_MpAnalyticItemActivityParameterId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemActivityParameterGuid text not null
-                    , fk_MpAnalyticItemActivityId integer not null
-                    , fk_MpAnalyticItemParameterId integer not null);
+                    CREATE TABLE MpAnalyticItemParameterValue (
+                      pk_MpAnalyticItemParameterValueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemParameterValueGuid text not null
+                    , fk_MpAnalyticItemParameterId integer not null
+                    , ParameterValueTypeId integer not null default 0
+                    , Value text
+                    , Label text
+                    , IsDefault integer not null default 0   
+                    , IsMinimum integer not null default 0
+                    , IsMaximum integer not null default 0); 
             ";
         }
         #endregion

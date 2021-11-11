@@ -8,6 +8,9 @@ using System.Windows.Controls;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+    public class MpSliderValueViewSelector : DataTemplateSelector {
+
+    }
     public class MpParameterViewSelector : DataTemplateSelector {
         private DataTemplate _comboBoxTemplate;
         public DataTemplate ComboBoxTemplate {
@@ -61,15 +64,21 @@ namespace MpWpfApp {
                 case MpAnalyticParameterType.ComboBox:
                     return ComboBoxTemplate;
                 case MpAnalyticParameterType.Text:
+                    if(aipvm.Parameter.IsResult) {
+                        return ResultTemplate;
+                    }
                     return TextBoxTemplate;
                 case MpAnalyticParameterType.CheckBox:
                     return CheckBoxTemplate;
                 case MpAnalyticParameterType.Slider:
                     return SliderTemplate;
-                case MpAnalyticParameterType.Execute:
-                    return ExecuteTemplate;
-                case MpAnalyticParameterType.Result:
-                    return ResultTemplate;
+                case MpAnalyticParameterType.Button:
+                    if(aipvm.Parameter.IsExecute) {
+                        return ExecuteTemplate;
+                    }
+                    throw new Exception("Unsupportted parameter type");
+                default:
+                    throw new Exception("Unsupportted parameter type");
             }
 
             throw new Exception("Uknown Item Type");

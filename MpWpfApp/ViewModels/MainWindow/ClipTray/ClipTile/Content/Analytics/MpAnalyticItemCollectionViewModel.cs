@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel,object> { //MpViewModelBase<MpContentItemViewModel> { 
-
+    public class MpAnalyticItemCollectionViewModel : MpViewModelBase<MpContentItemViewModel> { //MpSingletonViewModel<MpAnalyticItemCollectionViewModel,object> { //
         #region Properties
 
         #region View Models
@@ -17,7 +16,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
 
-        public MpClipTileViewModel HostClipTileViewModel { get; set; }
+        //public MpClipTileViewModel HostClipTileViewModel { get; set; }
 
         #endregion
 
@@ -46,34 +45,21 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public async Task Init() {
+        public MpAnalyticItemCollectionViewModel() : base(null) { }
+
+        public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-
-            await InitDefaultItems();
-
-            if(Items.Count > 0) {
-                Items[0].IsSelected = true;
-            }
         }
-
-        //public MpAnalyticItemCollectionViewModel() : base(null) {
-        //   // PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-        //}
-
-        //public MpAnalyticItemCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
-        //    PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-        //}
 
         #endregion
 
         #region Public Methods
+        public async Task Init() {
+            await InitDefaultItems();
 
-        public async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
-            //var naivm = new MpAnalyticItemViewModel(this);
-            //await naivm.InitializeAsync(ai);
-            //return naivm;
-            await Task.Delay(5);
-            return null;
+            if (Items.Count > 0) {
+                Items[0].IsSelected = true;
+            }
         }
         #endregion
 

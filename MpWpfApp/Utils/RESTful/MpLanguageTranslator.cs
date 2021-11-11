@@ -16,6 +16,10 @@ namespace MpWpfApp {
     public class MpTranslatorLanguage {        
         public string LanguageName { get; set; }
         public string NativeName { get; set; }
+
+        public override string ToString() {
+            return string.Format(@"{0} {1}", LanguageName, NativeName);
+        }
     }
 
     public class MpLanguageTranslator : MpRestfulApi {

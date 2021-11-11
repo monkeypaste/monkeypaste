@@ -52,7 +52,7 @@
                       ItemsSource="{Binding Items, IsAsync=True}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                              ItemsSource="{Binding Parameters}">
+                                              ItemsSource="{Binding ParameterViewModels}">
                         <local:MpAnalyticItemView />
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemParameterViewModel}">
@@ -74,6 +74,10 @@
                                 Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded"
                                 Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="HorizontalContentAlignment"
+                                    Value="Left" />
+                        <Setter Property="VerticalContentAlignment"
+                                    Value="Top" />
                         <Setter Property="FontWeight"
                                 Value="Normal" />
                         <Style.Triggers>

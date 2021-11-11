@@ -154,6 +154,7 @@
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
+    <Compile Include="Converters\MpStringToAnalyticNumberConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
@@ -298,7 +299,7 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\MpAnalyticItemParameterView.xaml.cs">
       <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\Selector\MpParameterViewSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\Selectors\MpParameterViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>

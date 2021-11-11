@@ -17,7 +17,7 @@
             MouseEnter="Border_MouseEnter"
             MouseLeave="Border_MouseLeave">
         <DockPanel>
-            <Image DockPanel.Dock="Left" 
+            <Image DockPanel.Dock="Left"
                    Source="{Binding ItemIconSourcePath}"
                    Margin="5,0,5,0"
                    Height="25"

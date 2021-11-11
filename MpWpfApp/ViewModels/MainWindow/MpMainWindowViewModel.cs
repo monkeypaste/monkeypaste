@@ -283,8 +283,8 @@ namespace MpWpfApp {
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
-            await MpAnalyticItemCollectionViewModel.Instance.Init();
-            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
+            //await MpAnalyticItemCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
 
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 

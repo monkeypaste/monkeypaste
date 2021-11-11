@@ -17,13 +17,62 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; } = false;
 
+        public int ValueIdx { get; set; } = 0;
+
         #endregion
 
         #region Model
 
-        public int ValueIdx { get; set; } = 0;
+        public bool IsDefault {
+            get {
+                if(AnalyticItemParameterValue == null) {
+                    return false;
+                }
+                return AnalyticItemParameterValue.IsDefault;
+            }
+        }
 
-        public string Value { get; set; }
+        public bool IsMaximum {
+            get {
+                if (AnalyticItemParameterValue == null) {
+                    return false;
+                }
+                return AnalyticItemParameterValue.IsMaximum;
+            }
+        }
+
+        public bool IsMinimum {
+            get {
+                if (AnalyticItemParameterValue == null) {
+                    return false;
+                }
+                return AnalyticItemParameterValue.IsMinimum;
+            }
+        }
+
+        public MpAnalyticItemParameterValueUnitType ValueUnitType {
+            get {
+                if (AnalyticItemParameterValue == null) {
+                    return MpAnalyticItemParameterValueUnitType.None;
+                }
+                return AnalyticItemParameterValue.ParameterValueType;
+            }
+        }
+
+        public string Value {
+            get {
+                if(AnalyticItemParameterValue == null) {
+                    return null;
+                }
+                return AnalyticItemParameterValue.Value;
+            }
+            set {
+                if(Value != value) {
+                    AnalyticItemParameterValue.Value = value;
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
+        }
 
         public double DoubleValue {
             get {
@@ -38,6 +87,13 @@ namespace MpWpfApp {
                     return 0;
                 }
             }
+            set {
+                if (DoubleValue != value) {
+                    Value = value.ToString();
+                    OnPropertyChanged(nameof(DoubleValue));
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
         }
 
         public int IntValue {
@@ -46,11 +102,18 @@ namespace MpWpfApp {
                     return 0;
                 }
                 try {
-                    return Convert.ToInt32(Value);
+                    return Convert.ToInt32(DoubleValue);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine(ex);
                     return 0;
+                }
+            }
+            set {
+                if (IntValue != value) {
+                    Value = value.ToString();
+                    OnPropertyChanged(nameof(IntValue));
+                    OnPropertyChanged(nameof(Value));
                 }
             }
         }
@@ -65,7 +128,16 @@ namespace MpWpfApp {
                 }
                 return Value == "1";
             }
+            set {
+                if(BoolValue != value) {
+                    Value = value ? "1" : "0";
+                    OnPropertyChanged(nameof(BoolValue));
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
         }
+
+        public MpAnalyticItemParameterValue AnalyticItemParameterValue { get; set; }
         #endregion
 
         #endregion
@@ -82,13 +154,13 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int idx, string value) {
+        public async Task InitializeAsync(int idx, MpAnalyticItemParameterValue valueSeed) {
             IsBusy = true;
 
             await Task.Delay(1);
 
             ValueIdx = idx;
-            Value = value;
+            AnalyticItemParameterValue = valueSeed;
 
             IsBusy = false;
         }
@@ -96,6 +168,50 @@ namespace MpWpfApp {
         public override string ToString() {
             return Value;
         }
+
+        #region Equals Override
+
+        public bool Equals(MpAnalyticItemParameterValueViewModel other) {
+            if (other == null)
+                return false;
+
+            if (this.Value == other.Value)
+                return true;
+            else
+                return false;
+        }
+
+        public override bool Equals(Object obj) {
+            if (obj == null)
+                return false;
+
+            MpAnalyticItemParameterValueViewModel personObj = obj as MpAnalyticItemParameterValueViewModel;
+            if (personObj == null)
+                return false;
+            else
+                return Equals(personObj);
+        }
+
+        public override int GetHashCode() {
+            return this.Value.GetHashCode();
+        }
+
+        public static bool operator ==(MpAnalyticItemParameterValueViewModel person1, MpAnalyticItemParameterValueViewModel person2) {
+            if (((object)person1) == null || ((object)person2) == null)
+                return Object.Equals(person1, person2);
+
+            return person1.Equals(person2);
+        }
+
+        public static bool operator !=(MpAnalyticItemParameterValueViewModel person1, MpAnalyticItemParameterValueViewModel person2) {
+            if (((object)person1) == null || ((object)person2) == null)
+                return !Object.Equals(person1, person2);
+
+            return !(person1.Equals(person2));
+        }
+
+        #endregion
+
         #endregion
 
         #region Private Methods
