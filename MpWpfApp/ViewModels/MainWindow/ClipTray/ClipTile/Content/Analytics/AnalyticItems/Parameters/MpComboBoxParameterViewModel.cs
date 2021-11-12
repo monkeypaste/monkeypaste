@@ -15,23 +15,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
-        //public int SelectedIdx {
-        //    //this is needed because default value isn't auto selected
-        //    get {
-        //        if (CurrentValueViewModel == null) {
-        //            return 0;
-        //        }
-        //        return ValueViewModels.IndexOf(CurrentValueViewModel);
-        //    }
-        //    set {
-        //        if (value >= 0 && value < ValueViewModels.Count && SelectedIdx != value) {
-        //            ValueViewModels.ForEach(x => x.IsSelected = false);
-        //            ValueViewModels[value].IsSelected = true;
-        //            OnPropertyChanged(nameof(SelectedIdx));
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Model

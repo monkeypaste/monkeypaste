@@ -57,6 +57,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Strings
+        public static List<int> IndexListOfAll(this string str, string compareStr) {
+            return MpHelpers.Instance.IndexListOfAll(str, compareStr);
+        }
+
         public static bool ContainsByUserSensitivity(this string str, string ostr) {
             if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {
                 return false;

@@ -35,6 +35,8 @@ namespace MonkeyPaste {
         [Column("ParameterTypeId")]
         public int ParameterTypeId { get; set; } = 0;
 
+        public int EnumId { get; set; } = 0;
+
         [Column("SortOrderIdx")]
         public int SortOrderIdx { get; set; } = -1;
 
@@ -109,9 +111,6 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public Enum ParameterEnumId { get; set; }
-
-        [Ignore]
         public bool IsRuntimeParameter => IsExecute || IsResult;
 
 
@@ -120,9 +119,12 @@ namespace MonkeyPaste {
 
         [Ignore]
         public bool IsResult { get; set; } = false;
+
+        [Ignore]
+        public bool IsPreset { get; set; } = false;
         #endregion
 
-        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string label, bool isRequired, bool isReadOnly = false, int sortOrderIdx = -1, string formatInfo = "") {
+        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string label, int enumId, bool isRequired, bool isReadOnly = false, int sortOrderIdx = -1, string formatInfo = "") {
             if(parentItem == null) {
                 throw new Exception("Parameter must be associated with an item");
             }
@@ -136,6 +138,7 @@ namespace MonkeyPaste {
                 dupItem.SortOrderIdx = sortOrderIdx;
                 dupItem.FormatInfo = formatInfo;
                 dupItem.IsReadOnly = isReadOnly;
+                dupItem.EnumId = enumId;
                 await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(dupItem);
                 return dupItem;
             }
@@ -144,6 +147,7 @@ namespace MonkeyPaste {
                 AnalyticItemParameterGuid = System.Guid.NewGuid(),
                 AnalyticItemId = parentItem.Id,
                 Label = label,
+                EnumId = enumId,
                 SortOrderIdx = sortOrderIdx,
                 IsParameterRequired = isRequired,
                 FormatInfo = formatInfo,
@@ -156,9 +160,5 @@ namespace MonkeyPaste {
         }
 
         public MpAnalyticItemParameter() : base() { }
-
-        //public MpAnalyticItemParameter(Enum enumId) : this() {
-        //    ParameterEnumId = enumId;
-        //}
     }
 }

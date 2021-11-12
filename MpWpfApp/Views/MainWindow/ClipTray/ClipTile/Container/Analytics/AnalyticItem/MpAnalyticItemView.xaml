@@ -18,7 +18,7 @@
             MouseLeave="Border_MouseLeave">
         <DockPanel>
             <Image DockPanel.Dock="Left"
-                   Source="{Binding ItemIconSourcePath}"
+                   Source="{Binding ItemIconBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                    Margin="5,0,5,0"
                    Height="25"
                    Width="25" />
@@ -26,6 +26,44 @@
                                   VerticalAlignment="Center"
                                   Margin="0,0,5,0"
                                   Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <StackPanel DockPanel.Dock="Right"
+                        Orientation="Horizontal">
+                <Button x:Name="AddPresetButton"
+                        Height="30"
+                        Width="30"
+                        VerticalAlignment="Center"
+                        BorderThickness="0"
+                        ToolTip="Add Preset"
+                        Visibility="{Binding HasAnyChanged, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Command="{Binding AddPresetCommand}"
+                        ToolTipService.InitialShowDelay="100"
+                        Template="{StaticResource SearchButtonControlTemplate}"
+                        Background="Transparent">
+                    <Image Stretch="Fill"
+                           Source="/MpWpfApp;component/Resources/Images/add2.png" />
+                </Button>
+                <Button x:Name="PresetOptionsButton"
+                        Height="30"
+                        Width="30"
+                        VerticalAlignment="Center"
+                        BorderThickness="0"
+                        ToolTip="Options"
+                        Click="PresetOptionsButton_Click"
+                        Visibility="{Binding HasPresets, Converter={StaticResource BoolToVisibilityConverter}}"
+                        ToolTipService.InitialShowDelay="100"
+                        Template="{StaticResource SearchButtonControlTemplate}"
+                        Background="Transparent">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Option1"/>
+                            <MenuItem Header="Option2"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    <Image Stretch="Fill"
+                           Source="/MpWpfApp;component/Resources/Images/ellipses.png" />
+                </Button>
+            </StackPanel>
+
             <TextBlock x:Name="AnalyticItemTextBlock"
                        Margin="8,0,10,0"
                        Padding="3"

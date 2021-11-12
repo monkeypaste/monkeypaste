@@ -212,6 +212,33 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<MpAnalyticItem> GetAnalyticItemByTitle(string title) {
+            string query = $"select * from MpAnalyticItem where Title=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItem>(query, title);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpAnalyticItemPreset> GetAnalyticItemPresetByLabel(int aiid, string label) {
+            string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=? and Label=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query, aiid,label);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public async Task<MpAnalyticItemPresetParameterValue> GetAnalyticItemPresetValue(int presetid, int paramEnumId) {
+            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParameterEnumId=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetid, paramEnumId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public async Task<MpAnalyticItemParameter> GetAnalyticItemParameterByKey(int analyticItemId, string key) {
             string query = $"select * from MpAnalyticItemParameter where Key=? and fk_MpAnalyticItemId=?";
             var result = await MpDb.Instance.QueryAsync<MpAnalyticItemParameter>(query, key,analyticItemId);

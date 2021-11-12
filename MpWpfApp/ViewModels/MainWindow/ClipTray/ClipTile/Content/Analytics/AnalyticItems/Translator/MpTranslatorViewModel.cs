@@ -46,19 +46,19 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override async Task Initialize() {
-            ItemIconSourcePath = Application.Current.Resources["TranslateIcon"] as string;
+            MpAnalyticItem tai = await MpDataModelProvider.Instance.GetAnalyticItemByTitle("Language Translator");
+            if(tai == null) {
+                tai = await MpAnalyticItem.Create(
+                        "https://api.cognitive.microsofttranslator.com/{0}",
+                        MpPreferences.Instance.AzureCognitiveServicesKey,
+                        MpInputFormatType.Text,
+                        "Language Translator",
+                        "Azure Cognitive-Services Language Translator");
+            } else {
+                tai = MpDb.Instance.GetItem<MpAnalyticItem>(tai.Id);
+            }            
 
-            var translateModel = new MpAnalyticItem() {
-                Id = RuntimeId,
-                AnalyticItemGuid = Guid.NewGuid(),
-                EndPoint = "https://api.cognitive.microsofttranslator.com/{0}",
-                ApiKey = MpPreferences.Instance.AzureCognitiveServicesKey,
-                Title = "Language Translator",
-                Description = "Azure Cognitive-Services Language Translator",
-                InputFormatType = MpInputFormatType.Text                
-            };
-
-            await InitializeDefaultsAsync(translateModel);
+            await InitializeDefaultsAsync(tai);
         }
 
         public override async Task LoadChildren() {
@@ -91,26 +91,20 @@ namespace MpWpfApp {
 
             var aipl = new List<MpAnalyticItemParameter>() {
                 new MpAnalyticItemParameter() {
-                    Id = RuntimeId,
-                    AnalyticItemParameterGuid = Guid.NewGuid(),
-                    AnalyticItemId = RuntimeId,
                     ParameterType = MpAnalyticParameterType.ComboBox,
                     Label = "From Language",
                     ValueSeeds = laipvl,
                     IsParameterRequired = true,
-                    SortOrderIdx = 0,
-                    ParameterEnumId = MpTranslatorParamType.FromLang
+                    EnumId = (int)MpTranslatorParamType.FromLang,
+                    SortOrderIdx = 0
                 },
                 new MpAnalyticItemParameter() {
-                    Id = RuntimeId + 1,
-                    AnalyticItemParameterGuid = Guid.NewGuid(),
-                    AnalyticItemId = RuntimeId,
                     ParameterType = MpAnalyticParameterType.ComboBox,
                     Label = "To Language",
                     ValueSeeds = laipvl,
                     IsParameterRequired = true,
-                    SortOrderIdx = 1,
-                    ParameterEnumId = MpTranslatorParamType.ToLang
+                    EnumId = (int)MpTranslatorParamType.ToLang,
+                    SortOrderIdx = 1
                 }
             };
             AnalyticItem.Parameters = aipl;
@@ -124,12 +118,13 @@ namespace MpWpfApp {
 
         protected override async Task ExecuteAnalysis() {
             IsBusy = true;
-            int fromNameIdxEnd = GetParam(MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.IndexOf(" ");
-            string fromName = GetParam(MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.Substring(0,fromNameIdxEnd);
+
+            int fromNameIdxEnd = GetParam((int)MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.IndexOf(" ");
+            string fromName = GetParam((int)MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.Substring(0,fromNameIdxEnd);
             string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(fromName);
 
-            int toNameIdxEnd = GetParam(MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.IndexOf(" ");
-            string toName = GetParam(MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.Substring(0,toNameIdxEnd);
+            int toNameIdxEnd = GetParam((int)MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.IndexOf(" ");
+            string toName = GetParam((int)MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.Substring(0,toNameIdxEnd);
             string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(toName);
 
             //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();

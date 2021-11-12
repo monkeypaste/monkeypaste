@@ -187,6 +187,7 @@
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\OpenAi\MpOpenAiViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpExecuteParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpResultParameterViewModel.cs" />
@@ -2211,6 +2212,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Assets\test.jpg" />
+    <Resource Include="Resources\Images\ellipses.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

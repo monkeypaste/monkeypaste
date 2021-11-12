@@ -52,19 +52,19 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override async Task Initialize() {
-            ItemIconSourcePath = Application.Current.Resources["BrainIcon"] as string;
+            MpAnalyticItem oaai = await MpDataModelProvider.Instance.GetAnalyticItemByTitle("Open Ai");
+            if (oaai == null) {
+                oaai = await MpAnalyticItem.Create(
+                        "https://api.openai.com/v1/",
+                        MpPreferences.Instance.RestfulOpenAiApiKey,
+                        MpInputFormatType.Text,
+                        "Open Ai",
+                        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.");
+            } else {
+                oaai = MpDb.Instance.GetItem<MpAnalyticItem>(oaai.Id);
+            }
 
-            var openAiModel = new MpAnalyticItem() {
-                Id = RuntimeId,
-                AnalyticItemGuid = Guid.NewGuid(),
-                EndPoint = "https://api.openai.com/v1/",
-                ApiKey = MpPreferences.Instance.RestfulOpenAiApiKey,
-                Title = "Open Ai",
-                Description = "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
-                InputFormatType = MpInputFormatType.Text                
-            };
-
-            await InitializeDefaultsAsync(openAiModel);
+            await InitializeDefaultsAsync(oaai);
         }
 
         public override async Task LoadChildren() {
@@ -76,7 +76,7 @@ namespace MpWpfApp {
                     Label = "Engine",
                     IsParameterRequired = true,
                     SortOrderIdx = 0,
-                    ParameterEnumId = MpOpenAiParamType.Engine,
+                    EnumId = (int)MpOpenAiParamType.Engine,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             IsDefault = true,
@@ -106,7 +106,7 @@ namespace MpWpfApp {
                     Label = "End Point",
                     IsParameterRequired = true,
                     SortOrderIdx = 1,
-                    ParameterEnumId = MpOpenAiParamType.EndPoint,
+                    EnumId = (int)MpOpenAiParamType.EndPoint,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
@@ -142,7 +142,7 @@ namespace MpWpfApp {
                     IsParameterRequired = true,
                     SortOrderIdx = 2,
                     Description = "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
-                    ParameterEnumId = MpOpenAiParamType.Temperature,
+                    EnumId = (int)MpOpenAiParamType.Temperature,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
@@ -166,7 +166,7 @@ namespace MpWpfApp {
                     Label = "Max Tokens",
                     IsParameterRequired = true,
                     SortOrderIdx = 3,
-                    ParameterEnumId = MpOpenAiParamType.MaxTokens,
+                    EnumId = (int)MpOpenAiParamType.MaxTokens,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.Integer,
@@ -190,7 +190,7 @@ namespace MpWpfApp {
                     Label = "Top P",
                     IsParameterRequired = true,
                     SortOrderIdx = 4,
-                    ParameterEnumId = MpOpenAiParamType.TopP,
+                    EnumId = (int)MpOpenAiParamType.TopP,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
@@ -210,7 +210,7 @@ namespace MpWpfApp {
                     Label = "Frequency Penalty",
                     IsParameterRequired = true,
                     SortOrderIdx = 5,
-                    ParameterEnumId = MpOpenAiParamType.FreqPen,
+                    EnumId = (int)MpOpenAiParamType.FreqPen,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
@@ -230,7 +230,7 @@ namespace MpWpfApp {
                     Label = "Presence Penalty",
                     IsParameterRequired = true,
                     SortOrderIdx = 6,
-                    ParameterEnumId = MpOpenAiParamType.PresPen,
+                    EnumId = (int)MpOpenAiParamType.PresPen,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
@@ -260,17 +260,17 @@ namespace MpWpfApp {
 
             string endpoint = string.Format(
                 @"https://api.openai.com/v1/engines/{0}/{1}",
-                GetParam(MpOpenAiParamType.Engine).CurrentValueViewModel.Value.ToLower(),
-                GetParam(MpOpenAiParamType.EndPoint).CurrentValueViewModel.Value.ToLower());
+                GetParam((int)MpOpenAiParamType.Engine).CurrentValueViewModel.Value.ToLower(),
+                GetParam((int)MpOpenAiParamType.EndPoint).CurrentValueViewModel.Value.ToLower());
 
 
             MpOpenAiRequest jsonReq = new MpOpenAiRequest() {
                 Prompt = Regex.Escape(Parent.Parent.CopyItemData.ToPlainText()),
-                Temperature = GetParam(MpOpenAiParamType.Temperature).CurrentValueViewModel.DoubleValue,
-                MaxTokens = GetParam(MpOpenAiParamType.MaxTokens).CurrentValueViewModel.IntValue,
-                TopP = GetParam(MpOpenAiParamType.TopP).CurrentValueViewModel.DoubleValue,
-                FrequencyPenalty = GetParam(MpOpenAiParamType.FreqPen).CurrentValueViewModel.DoubleValue,
-                PresencePenalty = GetParam(MpOpenAiParamType.PresPen).CurrentValueViewModel.DoubleValue
+                Temperature = GetParam((int)MpOpenAiParamType.Temperature).CurrentValueViewModel.DoubleValue,
+                MaxTokens = GetParam((int)MpOpenAiParamType.MaxTokens).CurrentValueViewModel.IntValue,
+                TopP = GetParam((int)MpOpenAiParamType.TopP).CurrentValueViewModel.DoubleValue,
+                FrequencyPenalty = GetParam((int)MpOpenAiParamType.FreqPen).CurrentValueViewModel.DoubleValue,
+                PresencePenalty = GetParam((int)MpOpenAiParamType.PresPen).CurrentValueViewModel.DoubleValue
             };
 
             string jsonRespStr = await MpOpenAi.Instance.Request(

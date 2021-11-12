@@ -29,5 +29,9 @@ namespace MpWpfApp {
         private void Border_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = false;
         }
+
+        private void PresetOptionsButton_Click(object sender, RoutedEventArgs e) {
+            PresetOptionsButton.ContextMenu.IsOpen = true;
+        }
     }
 }

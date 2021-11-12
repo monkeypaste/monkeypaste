@@ -37,14 +37,13 @@
         <Grid>
             <Grid.Resources>
                 <AlternationConverter x:Key="BackgroundConverter">
-                    <SolidColorBrush>CornflowerBlue</SolidColorBrush>
-                    <SolidColorBrush>LightBlue</SolidColorBrush>
+                    <SolidColorBrush>White</SolidColorBrush>
+                    <SolidColorBrush>White</SolidColorBrush>
                 </AlternationConverter>
 
                 <AlternationConverter x:Key="AlternateForegroundConverter">
-                    <SolidColorBrush>White</SolidColorBrush>
                     <SolidColorBrush>Black</SolidColorBrush>
-                    <!--<SolidColorBrush>Navy</SolidColorBrush>-->
+                    <SolidColorBrush>Black</SolidColorBrush>
                 </AlternationConverter>
             </Grid.Resources>
             <TreeView Name="AnalyticTreeView"
@@ -62,22 +61,18 @@
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="Background"
-                                Value="{Binding RelativeSource={RelativeSource Self}, 
-                                            Path=(TreeView.AlternationIndex), 
-                                            Converter={StaticResource BackgroundConverter}}" />
+                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(TreeView.AlternationIndex), Converter={StaticResource BackgroundConverter}}" />
 
                         <Setter Property="Foreground"
-                                Value="{Binding RelativeSource={RelativeSource Self}, 
-                                            Path=(TreeView.AlternationIndex), 
-                                            Converter={StaticResource AlternateForegroundConverter}}" />
+                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(TreeView.AlternationIndex), Converter={StaticResource AlternateForegroundConverter}}" />
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded"
                                 Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
+                                Value="Left" />
                         <Setter Property="VerticalContentAlignment"
-                                    Value="Top" />
+                                Value="Top" />
                         <Setter Property="FontWeight"
                                 Value="Normal" />
                         <Style.Triggers>

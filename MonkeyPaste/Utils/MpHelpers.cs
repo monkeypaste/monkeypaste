@@ -47,6 +47,22 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         #region Documents
+        public List<int> IndexListOfAll(string text, string matchStr) {
+            var idxList = new List<int>();
+            int curIdx = text.IndexOf(matchStr);
+            int offset = 0;
+            while (curIdx >= 0 && curIdx < text.Length) {
+                idxList.Add(curIdx + offset);
+                if (curIdx + matchStr.Length + 1 >= text.Length) {
+                    break;
+                }
+                text = text.Substring(curIdx + matchStr.Length);
+                offset = curIdx + 1;
+                curIdx = text.IndexOf(matchStr);
+            }
+            return idxList;
+        }
+
         public bool IsStringQuillText(string str) {
             if (string.IsNullOrEmpty(str)) {
                 return false;
@@ -864,15 +880,32 @@ namespace MonkeyPaste {
             //returns protocol prefixed domain url text
             try {
                 url = GetFullyFormattedUrl(url);
+                string host = new Uri(url).Host;
+                var subDomainIdxList = host.IndexListOfAll(".");
+                for (int i = subDomainIdxList.Count-1; i > 0; i--) {
+                    string subStr = host.Substring(subDomainIdxList[i]);
+                    if (_domainExtensions.Contains(subStr)) {
+                        return host.Substring(subDomainIdxList[i - 1]+1);
+                    }
+                }
+                return host;
+
                 int domainStartIdx = url.IndexOf(@"//") + 2;
                 if (url.Length <= domainStartIdx) {
                     return string.Empty;
                 }
                 if (!url.Substring(domainStartIdx).Contains(@"/")) {
+                    if (subDomainIdxList.Count > 1) {
+                        return url.Substring(domainStartIdx).Substring(subDomainIdxList[subDomainIdxList.Count - 1]);
+                    }
                     return url.Substring(domainStartIdx);
                 }
                 int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
-                return url.Substring(domainStartIdx).Substring(0, domainEndIdx);
+                int preIdx = 0;
+                if (subDomainIdxList.Count > 1) {
+                    preIdx = subDomainIdxList[subDomainIdxList.Count - 1];
+                }
+                return url.Substring(domainStartIdx).Substring(preIdx, domainEndIdx - preIdx);
             }
             catch (Exception ex) {
                 MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);

@@ -233,7 +233,7 @@ namespace MonkeyPaste {
                 if(cit.CopyItemId == 0 && cit.TagId == 0) {
                     return;
                 }
-            } 
+            }
             await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
@@ -283,6 +283,7 @@ namespace MonkeyPaste {
             }
 
             await _connectionAsync.UpdateWithChildrenAsync(item);
+
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
@@ -705,6 +706,8 @@ namespace MonkeyPaste {
             await Task.Run(() => {
                 _connection.CreateTable<MpAnalyticItem>();
                 _connection.CreateTable<MpAnalyticItemParameter>();
+                _connection.CreateTable<MpAnalyticItemPreset>();
+                _connection.CreateTable<MpAnalyticItemPresetParameterValue>();
                 _connection.CreateTable<MpApp>();
                 _connection.CreateTable<MpCopyItem>();
                 _connection.CreateTable<MpCopyItemTag>();
@@ -724,6 +727,8 @@ namespace MonkeyPaste {
 
             await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemParameter>();
+            await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
+            await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
@@ -1018,7 +1023,7 @@ namespace MonkeyPaste {
                       pk_MpAnalyticItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAnalyticItemGuid text not null
                     , fk_MpIconId integer                    
-                    , InputFormatTypeId integer NOT NULL default 0
+                    , fk_MpInputFormatTypeId integer NOT NULL default 0
                     , Title text NOT NULL 
                     , Description text
                     , ApiKey text 
@@ -1030,7 +1035,8 @@ namespace MonkeyPaste {
                     , fk_MpAnalyticItemId integer not null
                     , ParameterTypeId integer not null default 0
                     , Label text
-                    , SortOrderIdx integer,
+                    , EnumId integer default 0
+                    , SortOrderIdx integer
                     , IsRequired integer not null default 0
                     , IsReadOnly integer not null default 0
                     , FormatInfo text); 
@@ -1045,6 +1051,25 @@ namespace MonkeyPaste {
                     , IsDefault integer not null default 0   
                     , IsMinimum integer not null default 0
                     , IsMaximum integer not null default 0); 
+                    
+                    CREATE TABLE MpAnalyticItemPreset (
+                      pk_MpAnalyticItemParameterPresetId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemParameterPresetGuid text not null
+                    , fk_MpAnalyticItemId integer not null
+                    , fk_MpIconId integer              
+                    , Label text
+                    , Description text
+                    , SortOrderIdx integer
+                    , IsReadOnly integer not null default 0                    
+                    , IsQuickAction integer not null default 0); 
+
+                    CREATE TABLE MpAnalyticItemPresetParameterValue (
+                      pk_MpAnalyticItemPresetParameterValueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemPresetParameterValueGuid text not null
+                    , fk_MpAnalyticItemPresetId integer not null
+                    , ParameterEnumId integer
+                    , Value text
+                    , DefaultValue text); 
             ";
         }
         #endregion

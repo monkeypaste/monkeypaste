@@ -11,7 +11,7 @@ namespace MpWpfApp {
 
     public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel>{
         #region Private Variables
-
+        
         #endregion
 
         #region Properties
@@ -67,6 +67,23 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        private bool _isInit = false;
+        public bool IsInit {
+            get {
+                if (Parent != null && Parent.IsInit) {
+                    return true;
+                }
+                return _isInit;
+            }
+            set {
+                if (_isInit != value) {
+                    _isInit = value;
+                    OnPropertyChanged(nameof(IsInit));
+                }
+            }
+        }
+
+        public bool HasChanged { get; set; } = false;
 
         public bool IsHovering { get; set; } = false;
 
@@ -112,6 +129,7 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemParameter Parameter { get; protected set; }
+        
 
         #endregion
 
@@ -130,6 +148,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         public virtual async Task InitializeAsync(MpAnalyticItemParameter aip) {
+            IsInit = true;
             IsBusy = true;
 
             Parameter = aip;
@@ -151,33 +170,40 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ValueViewModels));
 
             IsBusy = false;
+            IsInit = false;
         }
 
         public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
             var naipvvm = new MpAnalyticItemParameterValueViewModel(this);
-            naipvvm.PropertyChanged += Naipvvm_PropertyChanged;
+            naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
             await naipvvm.InitializeAsync(idx, valueSeed);
             return naipvvm;
         }
-       
+
         #endregion
 
         #region Private Methods
 
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-
+            switch(e.PropertyName) {
+                case nameof(HasChanged):
+                    Parent.OnPropertyChanged(nameof(Parent.HasAnyChanged));
+                    break;
             }
         }
 
-        private void Naipvvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var aipvvm = sender as MpAnalyticItemParameterValueViewModel;
             switch(e.PropertyName) {
                 case nameof(aipvvm.IsSelected):
                     OnPropertyChanged(nameof(CurrentValueViewModel));
+                    if(!IsInit) {
+                        HasChanged = true;
+                    }
                     break;
             }
         }
+
         #endregion
     }
 }

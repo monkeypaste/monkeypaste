@@ -68,24 +68,6 @@ namespace MpWpfApp {
             }
         }
 
-        //public double Value {
-        //    get {
-        //        if(Parameter == null) {
-        //            return 0;
-        //        }
-        //        if(!string.IsNullOrWhiteSpace(Parameter.InputValue)) {
-        //            return Convert.ToDouble(Parameter.InputValue);
-        //        }
-        //        return Convert.ToDouble(Parameter.DefaultValue);
-        //    }
-        //    set {
-        //        if(Parameter != null && Parameter.InputValue.ToString() != value.ToString()) {
-        //            Parameter.InputValue = value.ToString();
-        //            OnPropertyChanged(nameof(Value));
-        //        }
-        //    }
-        //}
-
         #endregion
         
 

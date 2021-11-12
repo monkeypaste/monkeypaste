@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [Column("InputFormatTypeId")]
+        [Column("fk_MpInputFormatTypeId")]
         public int InputFormatTypeId { get; set; } = 0;
 
         [Column("Title")]
@@ -51,6 +51,8 @@ namespace MonkeyPaste {
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpAnalyticItemParameter> Parameters { get; set; } = new List<MpAnalyticItemParameter>();
 
+        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeDelete)]
+        public List<MpAnalyticItemPreset> Presets { get; set; } = new List<MpAnalyticItemPreset>();
         #endregion
 
         #region Properties
@@ -96,7 +98,7 @@ namespace MonkeyPaste {
 
             var domainStr = MpHelpers.Instance.GetUrlDomain(endPoint);
             var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
-
+            
             var icon = await MpIcon.Create(favIconImg64);
 
             var newAnalyticItem = new MpAnalyticItem() {
