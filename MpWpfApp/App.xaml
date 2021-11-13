@@ -1045,7 +1045,9 @@
         <s:Int32 x:Key="Files">1</s:Int32>
         <s:Int32 x:Key="Csv">2</s:Int32>
         <s:Int32 x:Key="Zip">3</s:Int32>
-
+        <s:Int32 x:Key="Up">-1</s:Int32>
+        <s:Int32 x:Key="Down">1</s:Int32>
+        
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
 
@@ -1097,6 +1099,8 @@
         <s:String x:Key="SignOutIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/signout.png</s:String>
         <s:String x:Key="CopyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/copy.png</s:String>
         <s:String x:Key="WarningIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/warning.png</s:String>
+        <s:String x:Key="SaveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/save.png</s:String>
+        <s:String x:Key="ResetIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/reset.png</s:String>
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->
@@ -1144,6 +1148,7 @@
         <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
         <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
         <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
+        <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->
@@ -1157,6 +1162,7 @@
         <!--<local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />-->
         <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
         <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
+        <local:MpQuickActionAnalyzerCollectionViewModel x:Key="QuickActionAnalyzerCollectionViewModel"/>
         <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>

@@ -955,6 +955,7 @@ namespace MonkeyPaste {
                     , MpShortcutGuid text not null
                     , fk_MpCopyItemId INTEGER DEFAULT 0
                     , fk_MpTagId INTEGER DEFAULT 0
+                    , fk_MpAnalyticItemPresetId INTEGER DEFAULT 0
                     , ShortcutName text NOT NULL                    
                     , KeyString text NULL       
                     , DefaultKeyString text NULL
@@ -1023,7 +1024,7 @@ namespace MonkeyPaste {
                       pk_MpAnalyticItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAnalyticItemGuid text not null
                     , fk_MpIconId integer                    
-                    , fk_MpInputFormatTypeId integer NOT NULL default 0
+                    , InputFormatTypeId integer NOT NULL default 0
                     , Title text NOT NULL 
                     , Description text
                     , ApiKey text 
@@ -1037,6 +1038,7 @@ namespace MonkeyPaste {
                     , Label text
                     , EnumId integer default 0
                     , SortOrderIdx integer
+                    , Description text
                     , IsRequired integer not null default 0
                     , IsReadOnly integer not null default 0
                     , FormatInfo text); 
@@ -1053,8 +1055,8 @@ namespace MonkeyPaste {
                     , IsMaximum integer not null default 0); 
                     
                     CREATE TABLE MpAnalyticItemPreset (
-                      pk_MpAnalyticItemParameterPresetId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemParameterPresetGuid text not null
+                      pk_MpAnalyticItemPresetId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAnalyticItemPresetGuid text not null
                     , fk_MpAnalyticItemId integer not null
                     , fk_MpIconId integer              
                     , Label text

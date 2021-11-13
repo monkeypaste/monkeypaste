@@ -32,4 +32,31 @@ namespace MpWpfApp {
                 typeof(MpBindingProxy), 
                 new UIPropertyMetadata(null));
     }
+
+    //public class MpBindingProxy<T> : Freezable where T: class{
+    //    #region Overrides of Freezable
+
+    //    protected override Freezable CreateInstanceCore() {
+    //        return new MpBindingProxy();
+    //    }
+
+    //    #endregion
+
+    //    public T Data {
+    //        get {
+    //            return (T)GetValue(DataProperty);
+    //        }
+    //        set {
+    //            SetValue(DataProperty, value);
+    //        }
+    //    }
+
+    //    // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
+    //    public static readonly DependencyProperty DataProperty =
+    //        DependencyProperty.Register(
+    //            "Data",
+    //            typeof(T),
+    //            typeof(MpBindingProxy<T>),
+    //            new UIPropertyMetadata(null));
+    //}
 }

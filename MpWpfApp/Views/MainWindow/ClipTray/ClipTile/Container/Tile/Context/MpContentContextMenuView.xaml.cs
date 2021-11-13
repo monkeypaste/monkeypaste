@@ -47,6 +47,10 @@ namespace MpWpfApp {
                         MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
                     }
                 );
+
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                await MpQuickActionAnalyzerCollectionViewModel.Instance.Init();
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private async void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -81,8 +85,20 @@ namespace MpWpfApp {
             Tag = DataContext;
             MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 
+            Separator quickActionSep = null;
+            var miToRemove = new List<MenuItem>();
             foreach (var mi in Items) {
+                if(quickActionSep != null) {
+                    //this will only happen at the end of menu, remove so not readded
+                    miToRemove.Add(mi as MenuItem);
+                    continue;
+                }
                 if (mi == null || mi is Separator) {
+                    if(mi is Separator smi) {
+                        if(smi.Name == "QuickActionSeparator") {
+                            quickActionSep = smi;
+                        }
+                    }
                     continue;
                 }
                 if ((mi as MenuItem).Name == @"ToolsMenuItem") {
@@ -103,8 +119,35 @@ namespace MpWpfApp {
                     }
                 }
             }
+            int removeCount = miToRemove.Count;
+            while(removeCount > 0) {
+                this.Items.RemoveAt(this.Items.Count - 1);
+                removeCount--;
+            }
 
             MpShortcutCollectionViewModel.Instance.UpdateInputGestures(this);
+
+            if(quickActionSep != null) {
+                var quickActions = MpQuickActionAnalyzerCollectionViewModel.Instance.GetQuickActionAnalyzerMenuItems();
+                if(quickActions != null && quickActions.Count > 0) {
+                    quickActionSep.Visibility = Visibility.Visible;
+                    foreach (var qami in quickActions) {
+                        var mi = new MenuItem() {
+                            DataContext = qami
+                        };
+                        mi.ItemContainerStyle = this.Resources["DefaultItemStyle"] as Style;
+                        this.Items.Add(mi);
+                        mi.UpdateLayout();
+                        this.UpdateLayout();
+                        mi.UpdateDefaultStyle();
+                        mi.Height = 25;
+                        mi.Width = 300;
+                    }
+                } else {
+                    quickActionSep.Visibility = Visibility.Collapsed;
+                }
+            }
+            
         }
 
         private void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {

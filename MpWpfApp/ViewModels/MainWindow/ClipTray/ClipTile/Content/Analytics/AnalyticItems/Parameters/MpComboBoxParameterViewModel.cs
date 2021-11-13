@@ -9,12 +9,11 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        //public ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
-
+        public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
         #endregion
 
         #region State
+        public override bool HasChanged => CurrentValueViewModel != DefaultValueViewModel;
         #endregion
 
         #region Model
@@ -60,10 +59,20 @@ namespace MpWpfApp {
             } else if(ValueViewModels.Count > 0) {
                 ValueViewModels[0].IsSelected = true;
             }
+            DefaultValueViewModel = CurrentValueViewModel;
 
             OnPropertyChanged(nameof(ValueViewModels));
 
             IsBusy = false;
+        }
+
+        public override void SetValue(string newValue) {
+            var valueVm = ValueViewModels.FirstOrDefault(x => x.Value == newValue);
+            if(valueVm == null) {
+                throw new Exception($"Param {Label} does not have a '{newValue}' value");
+            }
+            ValueViewModels.ForEach(x => x.IsSelected = false);
+            valueVm.IsSelected = true;
         }
 
         #endregion

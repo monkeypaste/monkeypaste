@@ -163,7 +163,13 @@ namespace MpWpfApp {
                     case nameof(IconSource):
                         if (!string.IsNullOrEmpty(IconSource)) {
                             var icon = new Image();
-                            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+                            if (File.Exists(IconSource)) {
+                                icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+                                
+                            } else {
+                                icon.Source = IconSource.ToBitmapSource();
+                                icon.Height = icon.Width = 20;
+                            }
                             Icon = icon;
                         }
                         break;

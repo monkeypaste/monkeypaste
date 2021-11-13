@@ -20,6 +20,10 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; } = 0;
 
+        [Column("fk_MpAnalyticItemPresetId")]
+        [ForeignKey(typeof(MpAnalyticItemPreset))]
+        public int AnalyticItemPresetId { get; set; } = 0;
+
         [Column("fk_MpTagId")]
         [ForeignKey(typeof(MpTag))]
         public int TagId { get; set; } = 0;
@@ -41,6 +45,9 @@ namespace MonkeyPaste {
         [ManyToOne]
         public MpTag Tag { get; set; }
         #endregion
+
+        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpAnalyticItemPreset Preset { get; set; }
 
         #region Properties
 

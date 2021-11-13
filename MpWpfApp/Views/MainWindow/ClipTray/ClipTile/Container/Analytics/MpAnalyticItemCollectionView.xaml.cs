@@ -22,6 +22,5 @@ namespace MpWpfApp {
         public MpAnalyticItemCollectionView() {
             InitializeComponent();
         }
-
     }
 }

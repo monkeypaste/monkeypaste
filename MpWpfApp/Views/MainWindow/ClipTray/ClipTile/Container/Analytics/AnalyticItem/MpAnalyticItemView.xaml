@@ -26,7 +26,64 @@
                                   VerticalAlignment="Center"
                                   Margin="0,0,5,0"
                                   Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <StackPanel DockPanel.Dock="Right"
+            <Button x:Name="PresetOptionsButton"
+                    DockPanel.Dock="Right"
+                    Height="30"
+                    Padding="5"
+                    VerticalAlignment="Center"
+                    BorderThickness="0"
+                    ToolTip="Options"
+                    Click="PresetOptionsButton_Click"
+                    ToolTipService.InitialShowDelay="100"
+                    Template="{StaticResource SearchButtonControlTemplate}"
+                    Background="Transparent">
+                <Button.Resources>
+                    <local:MpBindingProxy x:Key="AnalyticItemProxy" 
+                                          Data="{Binding}"/>
+                </Button.Resources>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Save Preset"
+                                  Icon="{Binding Source={StaticResource SaveIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                  Command="{Binding Data.CreateNewPresetCommand, Source={StaticResource AnalyticItemProxy}}" />
+                        <MenuItem Header="Apply Preset"
+                                  Visibility="{Binding Data.HasPresets, Source={StaticResource AnalyticItemProxy}, Converter={StaticResource BoolToVisibilityConverter}}"
+                                  ItemsSource="{Binding Data.PresetViewModels, Source={StaticResource AnalyticItemProxy}}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Setter Property="Header"
+                                            Value="{Binding Label}" />
+                                    <Setter Property="Icon">
+                                        <Setter.Value>
+                                            <Image Source="{Binding PresetIcon, Converter={StaticResource Base64StringToBitmapSourceConverter}}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="ToolTip"
+                                            Value="{Binding Description}" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Parent.SelectPresetCommand}" />
+                                    <Setter Property="CommandParameter"
+                                            Value="{Binding}" />
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Left" />
+                                    <Setter Property="VerticalContentAlignment"
+                                            Value="Center" />
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                        </MenuItem>
+                        <MenuItem Header="{Binding Data.ResetLabel, Source={StaticResource AnalyticItemProxy}}"
+                                  Icon="{Binding Source={StaticResource ResetIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                  Command="{Binding Data.ResetCommand, Source={StaticResource AnalyticItemProxy}}" />
+                        <Separator/>
+                        <MenuItem Header="{Binding Data.ManageLabel, Source={StaticResource AnalyticItemProxy}}"
+                                  Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                  Command="{Binding Data.ManageAnalyticItemCommand, Source={StaticResource AnalyticItemProxy}}" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <Image Stretch="Uniform"
+                       Source="/MpWpfApp;component/Resources/Images/ellipses.png" />
+            </Button>
+            <!--<StackPanel DockPanel.Dock="Right"
                         Orientation="Horizontal">
                 <Button x:Name="AddPresetButton"
                         Height="30"
@@ -62,11 +119,12 @@
                     <Image Stretch="Fill"
                            Source="/MpWpfApp;component/Resources/Images/ellipses.png" />
                 </Button>
-            </StackPanel>
+            </StackPanel>-->
 
             <TextBlock x:Name="AnalyticItemTextBlock"
-                       Margin="8,0,10,0"
+                       Margin="2,0,5,0"
                        Padding="3"
+                       MaxWidth="150"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontSize="16"
@@ -79,7 +137,8 @@
                 </TextBlock.ToolTip>
                 <TextBlock.Inlines>
                     <Hyperlink x:Name="AnalyticItemTextBlockLink"
-                               Background="Transparent">
+                               Background="Transparent"
+                               Foreground="{Binding ItemTitleForegroundBrush}">
                         <Hyperlink.Inlines>
                             <Run Text="{Binding Title}" />
                         </Hyperlink.Inlines>

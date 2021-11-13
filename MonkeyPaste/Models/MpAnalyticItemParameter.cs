@@ -124,17 +124,23 @@ namespace MonkeyPaste {
         public bool IsPreset { get; set; } = false;
         #endregion
 
-        public static async Task<MpAnalyticItemParameter> Create(MpAnalyticItem parentItem,string label, int enumId, bool isRequired, bool isReadOnly = false, int sortOrderIdx = -1, string formatInfo = "") {
-            if(parentItem == null) {
+        public static async Task<MpAnalyticItemParameter> Create(
+            MpAnalyticItem analyticItem,
+            string label, 
+            int enumId, 
+            bool isRequired, 
+            bool isReadOnly = false, int sortOrderIdx = -1, string formatInfo = "", string description = "") {
+            if(analyticItem == null) {
                 throw new Exception("Parameter must be associated with an item");
             }
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemParameterByKey(parentItem.Id,label);
+            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemParameterByKey(analyticItem.Id,label);
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating parameter {label} for {parentItem.Title}");
+                MpConsole.WriteLine($"Updating parameter {label} for {analyticItem.Title}");
 
                 dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItemParameter>(dupItem.Id);
                 dupItem.IsParameterRequired = isRequired;
                 dupItem.Label = label;
+                dupItem.Description = description;
                 dupItem.SortOrderIdx = sortOrderIdx;
                 dupItem.FormatInfo = formatInfo;
                 dupItem.IsReadOnly = isReadOnly;
@@ -145,8 +151,10 @@ namespace MonkeyPaste {
 
             var newAnalyticItemParameter = new MpAnalyticItemParameter() {
                 AnalyticItemParameterGuid = System.Guid.NewGuid(),
-                AnalyticItemId = parentItem.Id,
+                AnalyticItem = analyticItem,
+                AnalyticItemId = analyticItem.Id,
                 Label = label,
+                Description = description,
                 EnumId = enumId,
                 SortOrderIdx = sortOrderIdx,
                 IsParameterRequired = isRequired,

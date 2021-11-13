@@ -11,6 +11,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows;
 using System.Web.UI;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MpWpfApp {
     public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel> {
@@ -24,23 +25,47 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemPresetViewModel> PresetViewModels { get; set; } = new ObservableCollection<MpAnalyticItemPresetViewModel>();
 
-        public MpAnalyticItemPresetViewModel SelectedPreseetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);
+        public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);
 
         public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
-        
+
         public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
-        
-        public MpResultParameterViewModel ResultViewModel => ParameterViewModels.FirstOrDefault(x=>x.Parameter.IsResult) as MpResultParameterViewModel;
+
+        public MpResultParameterViewModel ResultViewModel => ParameterViewModels.FirstOrDefault(x => x.Parameter.IsResult) as MpResultParameterViewModel;
 
         public MpExecuteParameterViewModel ExecuteViewModel => ParameterViewModels.FirstOrDefault(x => x.Parameter.IsExecute) as MpExecuteParameterViewModel;
         #endregion
 
         #region Appearance
+        public string ResetLabel {
+            get {
+                if(SelectedPresetViewModel == null) {
+                    return "Reset";
+                }
+                return SelectedPresetViewModel.ResetLabel;
+            }
+        }
+
+        public string ManageLabel => $"Manage {Title}";
+
         public Brush ItemBackgroundBrush => IsHovering ? Brushes.Yellow : Brushes.Transparent;
+
+        public Brush ItemTitleForegroundBrush {
+            get {
+                if(IsHovering) {
+                    return Brushes.Red;
+                }
+                if(IsSelected) {
+                    return Brushes.White;
+                }
+                return Brushes.Black;
+            }
+        }
         #endregion
 
         #region State
-        public bool IsInit { get; set; }
+
+        public virtual bool IsLoaded => ParameterViewModels.Count > 2;
 
         public bool HasPresets => PresetViewModels.Count > 0;
 
@@ -116,8 +141,6 @@ namespace MpWpfApp {
         public MpAnalyticItemViewModel() : base(null) { }
 
         public MpAnalyticItemViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) {
-            IsInit = true;
-
             PropertyChanged += MpAnalyticItemViewModel_PropertyChanged;
         }
 
@@ -131,6 +154,8 @@ namespace MpWpfApp {
             IsBusy = true;
             AnalyticItem = ai;
 
+            // Init Execute & Result Parameters
+            ParameterViewModels.Clear();
             MpAnalyticItemParameter eaip = new MpAnalyticItemParameter() {
                 ParameterType = MpAnalyticParameterType.Button,
                 Label = "Execute",
@@ -147,6 +172,7 @@ namespace MpWpfApp {
                 ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                     new MpAnalyticItemParameterValue() {
                         IsDefault = true,
+                        Value = string.Empty,
                         ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText
                     }
                 }
@@ -154,11 +180,20 @@ namespace MpWpfApp {
             MpAnalyticItemParameterViewModel raipvm = await CreateParameterViewModel(raip);
             ParameterViewModels.Add(raipvm);
 
+            // Init Presets
+            PresetViewModels.Clear();
+            foreach(var preset in AnalyticItem.Presets.OrderBy(x=>x.SortOrderIdx)) {
+                var naipvm = await CreatePresetViewModel(preset);
+                PresetViewModels.Add(naipvm);
+            }
+            OnPropertyChanged(nameof(PresetViewModels));
+            OnPropertyChanged(nameof(HasPresets));
+
             IsBusy = false;
         }
 
         public virtual async Task LoadChildren() {
-            if (AnalyticItem == null) {
+            if (AnalyticItem == null || IsLoaded) {
                 return;
             }
             IsBusy = true;
@@ -170,28 +205,28 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(ParameterViewModels));
 
-            foreach (var aip in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
-                var naipvm = await CreatePresetViewModel(aip);
-                PresetViewModels.Add(naipvm);
-            }
-
-            OnPropertyChanged(nameof(PresetViewModels));
-            OnPropertyChanged(nameof(HasPresets));
-
             if(PresetViewModels.Count > 0) {
                 PresetViewModels[0].IsSelected = true;
             }
 
             IsBusy = false;
-            IsInit = false;
         }
 
         public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyticItemPreset aip) {
-            MpAnalyticItemPresetViewModel naipvm = null;
-
+            MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
+            naipvm.PropertyChanged += Naipvm_PropertyChanged;
             await naipvm.InitializeAsync(aip);
 
             return naipvm;
+        }
+
+        private void Naipvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var aipvm = sender as MpAnalyticItemPresetViewModel;
+            switch(e.PropertyName) {
+                case nameof(aipvm.IsSelected):
+                    UpdateParameterValues();
+                    break;
+            }
         }
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip) {
@@ -267,6 +302,26 @@ namespace MpWpfApp {
                     break;
             }
         }
+
+        private void UpdateParameterValues(bool isReset = false) {
+            foreach (var paramVm in ParameterViewModels) {
+                if (SelectedPresetViewModel == null) {
+                    paramVm.ResetToDefault();
+                } else {
+                    var presetValue = SelectedPresetViewModel.Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
+
+                    if (presetValue == null) {
+                        paramVm.ResetToDefault();
+                    } else {
+                        if (isReset) {
+                            paramVm.SetValue(presetValue.DefaultValue);
+                        } else {
+                            paramVm.SetValue(presetValue.Value);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -286,34 +341,120 @@ namespace MpWpfApp {
             return ParameterViewModels.All(x => x.IsValid);
         }
 
-        public ICommand AddPresetCommand => new RelayCommand(
+        public ICommand CreateNewPresetCommand => new RelayCommand(
             async () => {
-                MpAnalyticItemPreset newPreset = null;
-                if(SelectedPreseetViewModel == null) {
-                    newPreset = await MpAnalyticItemPreset.Create(
+                if(!IsLoaded) {
+                    await LoadChildren();
+                }
+
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
+                var dialog = new MpSavePresetModalWindow(GetUniquePresetName());
+                bool? result = dialog.ShowDialog();
+
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+                if (result.Value == false) {
+                    return;
+                }
+                MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         AnalyticItem,
-                        GetUniquePresetName(),
+                        dialog.ResponseText,
                         AnalyticItem.Icon);
 
-                    foreach(var paramVm in ParameterViewModels.OrderBy(x=>x.Parameter.SortOrderIdx)) {
-                        if(paramVm.Parameter.IsRuntimeParameter) {
-                            continue;
-                        }
-                        var naippv = await MpAnalyticItemPresetParameterValue.Create(
-                            newPreset,
-                            paramVm.Parameter.EnumId,
-                            paramVm.CurrentValueViewModel.Value);
-
-                        newPreset.PresetParameterValues.Add(naippv);
+                foreach (var paramVm in ParameterViewModels.OrderBy(x => x.Parameter.SortOrderIdx)) {
+                    if (paramVm.Parameter.IsRuntimeParameter) {
+                        continue;
                     }
-                } else {
-                    newPreset = SelectedPreseetViewModel.Preset.Clone() as MpAnalyticItemPreset;
-                    await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPreset>(newPreset);
+                    var naippv = await MpAnalyticItemPresetParameterValue.Create(
+                        newPreset,
+                        paramVm.Parameter.EnumId,
+                        paramVm.CurrentValueViewModel.Value);
+
+                    newPreset.PresetParameterValues.Add(naippv);
                 }
+                await newPreset.WriteToDatabaseAsync();
+
                 var npvm = await CreatePresetViewModel(newPreset);
                 PresetViewModels.Add(npvm);
                 PresetViewModels.ForEach(x => x.IsSelected = false);
                 npvm.IsSelected = true;
+            });
+
+        public ICommand SelectPresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
+            async (selectedPresetVm) => {
+                if(!IsLoaded) {
+                    await LoadChildren();
+                }
+                PresetViewModels.ForEach(x => x.IsSelected = false);
+                selectedPresetVm.IsSelected = true;
+            });
+
+        public ICommand ResetCommand => new RelayCommand(
+            () => {
+                UpdateParameterValues(true);
+            },
+            () => HasAnyChanged);
+
+        public ICommand ManageAnalyticItemCommand => new RelayCommand(
+            async() => {
+                if (!IsLoaded) {
+                    await LoadChildren();
+                }
+                if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
+                    PresetViewModels.ForEach(x => x.IsSelected = false);
+                    PresetViewModels[0].IsSelected = true;
+                }
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                var manageWindow = new MpManageAnalyticItemModalWindow();
+                manageWindow.DataContext = this;
+                bool? result = manageWindow.ShowDialog();
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+                if (result.Value == false) {
+                    return;
+                }
+
+                await Task.WhenAll(PresetViewModels.Select(x => x.Preset.WriteToDatabaseAsync()).ToArray());
+            });
+
+        public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
+            async (presetVm) => {
+                foreach(var presetVal in presetVm.Preset.PresetParameterValues) {
+                    await MpDb.Instance.DeleteItemAsync<MpAnalyticItemPresetParameterValue>(presetVal);
+                }
+                await MpDb.Instance.DeleteItemAsync<MpAnalyticItemPreset>(presetVm.Preset);
+            },
+            (presetVm) => presetVm != null && !presetVm.IsReadOnly);
+
+        public ICommand ShiftPresetCommand => new RelayCommand<object>(
+            // [0] = shift dir [1] = presetvm
+            async (args) => {
+                var argParts = args as object[];
+                int dir = (int)Convert.ToInt32(argParts[0].ToString());
+                MpAnalyticItemPresetViewModel pvm = argParts[1] as MpAnalyticItemPresetViewModel;
+                int curSortIdx = PresetViewModels.IndexOf(pvm);
+                int newSortIdx = curSortIdx + dir;
+
+                PresetViewModels.Move(curSortIdx, newSortIdx);
+                for (int i = 0; i < PresetViewModels.Count; i++) {
+                    PresetViewModels[i].SortOrderIdx = i;
+                    await PresetViewModels[i].Preset.WriteToDatabaseAsync();
+                }
+            },
+            (args) => {
+                if (args == null) {
+                    return false;
+                }
+                if(args is object[] argParts) {
+                    int dir = (int)Convert.ToInt32(argParts[0].ToString());
+                    MpAnalyticItemPresetViewModel pvm = argParts[1] as MpAnalyticItemPresetViewModel;
+                    int curSortIdx = PresetViewModels.IndexOf(pvm);
+                    int newSortIdx = curSortIdx + dir;
+                    if(newSortIdx < 0 || newSortIdx >= PresetViewModels.Count || newSortIdx == curSortIdx) {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
             });
         #endregion
     }

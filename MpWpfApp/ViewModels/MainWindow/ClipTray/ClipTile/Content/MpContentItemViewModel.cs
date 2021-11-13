@@ -965,7 +965,6 @@ namespace MpWpfApp {
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
-
                 ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     this,
                     "Paste " + CopyItem.Title,

@@ -46,6 +46,9 @@ namespace MonkeyPaste {
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MpIcon Icon { get; set; }
 
+        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        public MpShortcut Shortcut { get; set; }
+
         [OneToMany(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeDelete)]
         public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
         #endregion
@@ -91,18 +94,18 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
-            MpAnalyticItem parentItem, 
+            MpAnalyticItem analyticItem, 
             string label,
             MpIcon icon = null, bool isReadOnly = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
-            if (parentItem == null) {
+            if (analyticItem == null) {
                 throw new Exception("Preset must be associated with an item");
             }
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemPresetByLabel(parentItem.Id, label);
+            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemPresetByLabel(analyticItem.Id, label);
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset {label} for {parentItem.Title}");
+                MpConsole.WriteLine($"Updating preset {label} for {analyticItem.Title}");
 
                 dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(dupItem.Id);
-                dupItem.AnalyticItemId = parentItem.Id;
+                dupItem.AnalyticItemId = analyticItem.Id;
                 dupItem.Label = label;
                 dupItem.Description = description;
                 dupItem.SortOrderIdx = sortOrderIdx;
@@ -115,13 +118,15 @@ namespace MonkeyPaste {
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyticItemId = parentItem.Id,
+                AnalyticItem = analyticItem,
+                AnalyticItemId = analyticItem.Id,
                 Label = label,
                 Description = description,
                 SortOrderIdx = sortOrderIdx,
                 IsReadOnly = isReadOnly,
                 IsQuickAction = isQuickAction,
-                IconId = icon == null ? 0 : icon.Id
+                IconId = icon == null ? 0 : icon.Id,
+                Icon = icon
             };
 
             await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPreset>(newAnalyticItemPreset);

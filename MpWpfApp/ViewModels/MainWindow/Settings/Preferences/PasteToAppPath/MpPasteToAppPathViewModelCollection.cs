@@ -354,7 +354,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-
         #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 

@@ -188,6 +188,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileInnerBorderSize {
+            get {
+                return ClipTileMinSize - (ClipTileBorderThickness * 2);
+            }
+        }
+
         public double ClipTileBorderMinSize {
             get {
                 return ClipTileMinSize - ClipTilePadding;

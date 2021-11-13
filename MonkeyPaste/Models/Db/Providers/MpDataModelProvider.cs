@@ -203,6 +203,27 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<List<MpAnalyticItemPreset>> GetAllQuickActionAnalyzers() {
+            string query = $"select * from MpAnalyticItemPreset where IsQuickAction=1";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query);
+            return result;
+        }
+
+        public async Task<List<MpAnalyticItemPreset>> GetAllShortcutAnalyzers() {
+            string query = $"select * from MpAnalyticItemPreset where pk_MpAnalyticItemPresetId in (select fk_MpAnalyticItemPresetId from MpShortcut where fk_MpAnalyticItemPresetId > 0)";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query);
+            return result;
+        }
+
+        public async Task<MpAnalyticItemPreset> GetAnalyzerPresetById(int aipid) {
+            string query = $"select * from MpAnalyticItemPreset where pk_MpAnalyticItemPresetId=?";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query,aipid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public async Task<MpAnalyticItem> GetAnalyticItemByEndpoint(string endPoint) {
             string query = $"select * from MpAnalyticItem where EndPoint=?";
             var result = await MpDb.Instance.QueryAsync<MpAnalyticItem>(query, endPoint);

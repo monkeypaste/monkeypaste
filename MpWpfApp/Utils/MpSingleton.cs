@@ -22,5 +22,6 @@ namespace MpWpfApp {
         #endregion
 
         protected MpSingletonViewModel() : base(null) { }
+        protected MpSingletonViewModel(P p) : base(p) { }
     }
 }

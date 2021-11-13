@@ -241,6 +241,22 @@ namespace MpWpfApp {
             }
         }
 
+        public int AnalyticItemPresetId {
+            get {
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return Shortcut.AnalyticItemPresetId;
+            }
+            set {
+                if (Shortcut != null && Shortcut.AnalyticItemPresetId != value) {
+                    Shortcut.AnalyticItemPresetId = value;
+                    Shortcut.WriteToDatabase();
+                    OnPropertyChanged(nameof(AnalyticItemPresetId));
+                }
+            }
+        }
+
         public int ShortcutId {
             get {
                 if (Shortcut == null) {

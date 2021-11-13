@@ -149,6 +149,7 @@
     <Compile Include="Converters\MpBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToImageConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
+    <Compile Include="Converters\MpMultiObjectToTupleConverter.cs" />
     <Compile Include="Converters\MpNegatingConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
@@ -185,18 +186,20 @@
     <Compile Include="Utils\RESTful\JsonObjects\MpOpenAiRequest.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\OpenAi\MpOpenAiViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpAnalyticItemPresetViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpExecuteParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpResultParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Translator\MpTranslatorViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Translator\MpTranslatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpQuickActionAnalyzerCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
     <Compile Include="Utils\MpWpfDbInfo.cs" />
@@ -293,6 +296,12 @@
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml.cs">
       <DependentUpon>MpAnalyzerToolbarTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpSavePresetModalWindow.xaml.cs">
+      <DependentUpon>MpSavePresetModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpManageAnalyticItemModalWindow.xaml.cs">
+      <DependentUpon>MpManageAnalyticItemModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
@@ -402,31 +411,46 @@
     <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
       <DependentUpon>MpAppModeButtonGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
+    <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpSettingsWindow.xaml.cs">
+    <Compile Include="Views\Settings\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Account\MpAccountTabPanel.xaml.cs">
+      <DependentUpon>MpAccountTabPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Help\MpHelpTabPanel.xaml.cs">
+      <DependentUpon>MpHelpTabPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Preferences\MpPreferencesTabPanel.xaml.cs">
+      <DependentUpon>MpPreferencesTabPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Security\MpSecurityTabPanel.xaml.cs">
+      <DependentUpon>MpSecurityTabPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Shortcuts\MpShortcutCollectionDataGridView.xaml.cs">
       <DependentUpon>MpShortcutCollectionDataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpSpinnerApple.xaml.cs">
+    <Compile Include="Views\Settings\Shortcuts\MpShortcutsTabPanel.xaml.cs">
+      <DependentUpon>MpShortcutsTabPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Spinners\MpSpinnerApple.xaml.cs">
       <DependentUpon>MpSpinnerApple.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpSpinnerCogs.xaml.cs">
+    <Compile Include="Views\Reusable\Spinners\MpSpinnerCogs.xaml.cs">
       <DependentUpon>MpSpinnerCogs.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpSpinnerDotCircle.xaml.cs">
+    <Compile Include="Views\Reusable\Spinners\MpSpinnerDotCircle.xaml.cs">
       <DependentUpon>MpSpinnerDotCircle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpSpinnerPiston.xaml.cs">
+    <Compile Include="Views\Reusable\Spinners\MpSpinnerPiston.xaml.cs">
       <DependentUpon>MpSpinnerPiston.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpSpinnerSwirl.xaml.cs">
+    <Compile Include="Views\Reusable\Spinners\MpSpinnerSwirl.xaml.cs">
       <DependentUpon>MpSpinnerSwirl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Spinners\MpTail.xaml.cs">
+    <Compile Include="Views\Reusable\Spinners\MpTail.xaml.cs">
       <DependentUpon>MpTail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SwirlTest.xaml.cs">
@@ -447,6 +471,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpSavePresetModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpManageAnalyticItemModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -466,6 +498,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\MpAnalyticItemCollectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Styles\MpAnalyticTreeViewStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -587,11 +623,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
+    <Page Include="Views\Settings\Account\MpAccountTabPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpStandardBalloonControl.xaml">
+    <Page Include="Views\Settings\Help\MpHelpTabPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Preferences\MpPreferencesTabPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Security\MpSecurityTabPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Shortcuts\Assign\MpAssignHotkeyModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\MpStandardBalloonControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -600,7 +652,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
-    <Page Include="Views\MpSettingsWindow.xaml">
+    <Page Include="Views\Settings\MpSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -608,27 +660,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Spinners\MpSpinnerApple.xaml">
+    <Page Include="Views\Settings\Shortcuts\MpShortcutsTabPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\Spinners\MpSpinnerApple.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\MpSpinnerCogs.xaml">
+    <Page Include="Views\Reusable\Spinners\MpSpinnerCogs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\MpSpinnerDotCircle.xaml">
+    <Page Include="Views\Reusable\Spinners\MpSpinnerDotCircle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\MpSpinnerPiston.xaml">
+    <Page Include="Views\Reusable\Spinners\MpSpinnerPiston.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\MpSpinnerSwirl.xaml">
+    <Page Include="Views\Reusable\Spinners\MpSpinnerSwirl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Spinners\MpTail.xaml">
+    <Page Include="Views\Reusable\Spinners\MpTail.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -642,7 +698,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\MpAssignHotkeyModalWindow.xaml.cs">
+    <Compile Include="Views\Settings\Shortcuts\Assign\MpAssignHotkeyModalWindow.xaml.cs">
       <DependentUpon>MpAssignHotkeyModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -2213,6 +2269,8 @@
     </Resource>
     <Resource Include="Resources\Assets\test.jpg" />
     <Resource Include="Resources\Images\ellipses.png" />
+    <Resource Include="Resources\Images\save.png" />
+    <Resource Include="Resources\Images\reset.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2233,11 +2291,6 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
-    <Folder Include="Views\Reusable\" />
-    <Folder Include="Views\Settings\Account\" />
-    <Folder Include="Views\Settings\Help\" />
-    <Folder Include="Views\Settings\Preferences\" />
-    <Folder Include="Views\Settings\Security\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

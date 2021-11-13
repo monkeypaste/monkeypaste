@@ -57,7 +57,7 @@ namespace MpWpfApp {
         #region Properties
 
         private P _parent;
-        public P Parent {
+        public virtual P Parent {
             get => _parent;
             private set => SetProperty(ref _parent, value);
         }

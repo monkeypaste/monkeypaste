@@ -16,28 +16,17 @@ namespace MpWpfApp {
 
         public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
 
-        //public MpClipTileViewModel HostClipTileViewModel { get; set; }
-
         #endregion
 
         #region Layout
 
-        public double UnexpandedHeight { get; set; } = 10;
+        public double AnalyticTreeViewMaxWidth { get; set; } = MpMeasurements.Instance.ClipTileInnerBorderSize;
 
-        public double ExpandedHeight { get; set; } = 33;//MpMeasurements.Instance.AnalyzerMenuHeight;
-
-        public double ToolbarHeight {
-            get {
-                return IsExpanded ? ExpandedHeight : UnexpandedHeight;
-            }
-        }
         #endregion
 
         #region State
 
         public bool IsLoaded => Items.Count > 0;
-
-        public bool IsExpanded { get; set; } = false;
 
         #endregion
 

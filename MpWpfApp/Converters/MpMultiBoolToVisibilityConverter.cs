@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
+
     public class MpMultiBoolToVisibilityConverter : IMultiValueConverter {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             string op = "AND";

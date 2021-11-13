@@ -28,63 +28,44 @@
                   Width="{Binding HostClipTileViewModel.TileBorderWidth}"
                   Height="{Binding HostClipTileViewModel.TileBorderHeight}"
     </Grid>-->
-    <local:MpClipBorder Margin="1"
-                        BorderThickness="{Binding Parent.Parent.TileBorderThickness}"
-                        BorderBrush="{Binding Parent.Parent.TileBorderBrush}"
-                        Width="{local:MpMeasurementsBinding ClipTileMinSize}"
-                        Height="{Binding Parent.Parent.TileBorderHeight}"
-                        CornerRadius="10">
-        <Grid>
-            <Grid.Resources>
-                <AlternationConverter x:Key="BackgroundConverter">
-                    <SolidColorBrush>White</SolidColorBrush>
-                    <SolidColorBrush>White</SolidColorBrush>
-                </AlternationConverter>
+    <Viewbox>
+        <local:MpClipBorder Margin="{local:MpMeasurementsBinding ClipTileMargin}"
+                            BorderThickness="{Binding Parent.Parent.TileBorderThickness}"
+                            BorderBrush="{Binding Parent.Parent.TileBorderBrush}"
+                            Width="{local:MpMeasurementsBinding ClipTileInnerBorderSize}"
+                            MaxWidth="{local:MpMeasurementsBinding ClipTileInnerBorderSize}"
+                            Height="{Binding Parent.Parent.TileBorderHeight}"
+                            MaxHeight="{Binding Parent.Parent.TileBorderHeight}"
+                            Background="{local:MpSettingBinding Path=ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}, Mode=OneWay}"
+                            CornerRadius="10">
 
-                <AlternationConverter x:Key="AlternateForegroundConverter">
-                    <SolidColorBrush>Black</SolidColorBrush>
-                    <SolidColorBrush>Black</SolidColorBrush>
-                </AlternationConverter>
-            </Grid.Resources>
             <TreeView Name="AnalyticTreeView"
-                      AlternationCount="2"
-                      ItemsSource="{Binding Items, IsAsync=True}">
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ItemsSource="{Binding Items, IsAsync=True}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                              ItemsSource="{Binding ParameterViewModels}">
+                                                  ItemsSource="{Binding ParameterViewModels}">
                         <local:MpAnalyticItemView />
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemParameterViewModel}">
                         <local:MpAnalyticItemParameterView />
                     </HierarchicalDataTemplate>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                         Color="Blue" />
                 </TreeView.Resources>
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
-                        <Setter Property="Background"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(TreeView.AlternationIndex), Converter={StaticResource BackgroundConverter}}" />
-
-                        <Setter Property="Foreground"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(TreeView.AlternationIndex), Converter={StaticResource AlternateForegroundConverter}}" />
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, Mode=TwoWay}" />
+                                    Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded"
-                                Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                    Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="HorizontalContentAlignment"
-                                Value="Left" />
+                                    Value="Left" />
                         <Setter Property="VerticalContentAlignment"
-                                Value="Top" />
-                        <Setter Property="FontWeight"
-                                Value="Normal" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected"
-                                     Value="True">
-                                <Setter Property="FontWeight"
-                                        Value="Bold" />
-                            </Trigger>
-                        </Style.Triggers>
+                                    Value="Top" />
                     </Style>
                 </TreeView.ItemContainerStyle>
             </TreeView>
-        </Grid>
-    </local:MpClipBorder>
+        </local:MpClipBorder>
+    </Viewbox>
 </local:MpUserControl>

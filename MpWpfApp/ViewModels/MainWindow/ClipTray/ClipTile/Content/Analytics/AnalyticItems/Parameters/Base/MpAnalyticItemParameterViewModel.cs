@@ -36,8 +36,6 @@ namespace MpWpfApp {
 
         #region Business Logic
 
-        public Enum ParamEnumId { get; private set; }
-
         #endregion
 
         #region Appearance
@@ -67,23 +65,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        private bool _isInit = false;
-        public bool IsInit {
-            get {
-                if (Parent != null && Parent.IsInit) {
-                    return true;
-                }
-                return _isInit;
-            }
-            set {
-                if (_isInit != value) {
-                    _isInit = value;
-                    OnPropertyChanged(nameof(IsInit));
-                }
-            }
-        }
 
-        public bool HasChanged { get; set; } = false;
+        public virtual bool HasChanged => ValueViewModels.Any(x => x.HasChanged);
 
         public bool IsHovering { get; set; } = false;
 
@@ -92,11 +75,18 @@ namespace MpWpfApp {
         public bool IsExpanded { get; set; } = false;
 
         public abstract bool IsValid { get; }
-
-        public virtual string UserValue { get; set; }
         #endregion
 
         #region Model
+
+        public int ParamEnumId {
+            get {
+                if (Parameter == null) {
+                    return 0;
+                }
+                return Parameter.EnumId;
+            }
+        }
 
         public bool IsRequired {
             get {
@@ -148,7 +138,6 @@ namespace MpWpfApp {
         #region Public Methods
 
         public virtual async Task InitializeAsync(MpAnalyticItemParameter aip) {
-            IsInit = true;
             IsBusy = true;
 
             Parameter = aip;
@@ -160,17 +149,11 @@ namespace MpWpfApp {
                 ValueViewModels.Add(naipvvm);
             }
 
-            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            if (defVal != null) {
-                defVal.IsSelected = true;
-            } else if (ValueViewModels.Count > 0) {
-                ValueViewModels[0].IsSelected = true;
-            }
+            ResetToDefault();
 
             OnPropertyChanged(nameof(ValueViewModels));
 
             IsBusy = false;
-            IsInit = false;
         }
 
         public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
@@ -180,6 +163,18 @@ namespace MpWpfApp {
             return naipvvm;
         }
 
+        public virtual void ResetToDefault() {
+            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
+            if (defVal != null) {
+                defVal.IsSelected = true;
+            } else if (ValueViewModels.Count > 0) {
+                ValueViewModels[0].IsSelected = true;
+            }
+        }
+
+        public virtual void SetValue(string newValue) {
+            CurrentValueViewModel.Value = newValue;
+        }
         #endregion
 
         #region Private Methods
@@ -197,9 +192,6 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(aipvvm.IsSelected):
                     OnPropertyChanged(nameof(CurrentValueViewModel));
-                    if(!IsInit) {
-                        HasChanged = true;
-                    }
                     break;
             }
         }

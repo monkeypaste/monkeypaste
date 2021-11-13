@@ -32,6 +32,7 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public class MpHelpers {
@@ -47,6 +48,7 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         #region Documents
+
         public List<int> IndexListOfAll(string text, string matchStr) {
             var idxList = new List<int>();
             int curIdx = text.IndexOf(matchStr);
@@ -410,6 +412,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Visual
+
         private List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),

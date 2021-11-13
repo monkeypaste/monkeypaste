@@ -12,27 +12,14 @@ namespace MpWpfApp {
         #region Properties
 
         #region State
-        private bool _isInit = false;
-        public bool IsInit { 
-            get {
-                if(Parent != null && Parent.IsInit) {
-                    return true;
-                }
-                return _isInit;
-            }
-            set {
-                if(_isInit != value) {
-                    _isInit = value;
-                    OnPropertyChanged(nameof(IsInit));
-                }
-            }
-        }
 
         public bool IsHovering { get; set; } = false;
 
         public bool IsSelected { get; set; } = false;
 
         public int ValueIdx { get; set; } = 0;
+
+        public bool HasChanged { get; set; } = false;
 
         #endregion
 
@@ -71,21 +58,6 @@ namespace MpWpfApp {
                     return MpAnalyticItemParameterValueUnitType.None;
                 }
                 return AnalyticItemParameterValue.ParameterValueType;
-            }
-        }
-
-        public string Value {
-            get {
-                if(AnalyticItemParameterValue == null) {
-                    return null;
-                }
-                return AnalyticItemParameterValue.Value;
-            }
-            set {
-                if(Value != value) {
-                    AnalyticItemParameterValue.Value = value;
-                    OnPropertyChanged(nameof(Value));
-                }
             }
         }
 
@@ -152,6 +124,22 @@ namespace MpWpfApp {
             }
         }
 
+        public string Value {
+            get {
+                if (AnalyticItemParameterValue == null) {
+                    return null;
+                }
+                return AnalyticItemParameterValue.Value;
+            }
+            set {
+                if (Value != value) {
+                    HasChanged = AnalyticItemParameterValue.Value != value;
+                    AnalyticItemParameterValue.Value = value;
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
+        }
+
         public MpAnalyticItemParameterValue AnalyticItemParameterValue { get; set; }
         #endregion
 
@@ -170,7 +158,6 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(int idx, MpAnalyticItemParameterValue valueSeed) {
-            IsInit = true;
             IsBusy = true;
 
             await Task.Delay(1);
@@ -179,7 +166,6 @@ namespace MpWpfApp {
             AnalyticItemParameterValue = valueSeed;
 
             IsBusy = false;
-            IsInit = false;
         }
 
         public override string ToString() {
@@ -236,9 +222,6 @@ namespace MpWpfApp {
         private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(Value):
-                    if(!IsInit) {
-                        Parent.HasChanged = true;
-                    }
                     break;
             }
 

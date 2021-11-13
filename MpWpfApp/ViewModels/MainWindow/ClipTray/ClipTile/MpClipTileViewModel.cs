@@ -1633,21 +1633,11 @@ using System.Speech.Synthesis;
         //        return true;
         //    });
 
-        private RelayCommand _assignHotkeyCommand;
-        public ICommand AssignHotkeyCommand {
-            get {
-                if (_assignHotkeyCommand == null) {
-                    _assignHotkeyCommand = new RelayCommand(AssignHotkey, CanAssignHotkey);
-                }
-                return _assignHotkeyCommand;
-            }
-        }
-        private bool CanAssignHotkey() {
-            return SelectedItems.Count == 1;
-        }
-        private void AssignHotkey() {
-            SelectedItems[0].AssignHotkeyCommand.Execute(null);
-        }
+        public ICommand AssignHotkeyCommand => new RelayCommand(
+            () => {
+                SelectedItems[0].AssignHotkeyCommand.Execute(null);
+            },
+            () => SelectedItems.Count == 1);
 
         private RelayCommand _invertSubSelectionCommand;
         public ICommand InvertSubSelectionCommand {

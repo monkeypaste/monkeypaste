@@ -67,6 +67,7 @@ namespace MpWpfApp {
         }
 
         #region Documents    
+
         public Hyperlink CreateAccessibleHyperlink(string uri) {
             uri = MpHelpers.Instance.GetFullyFormattedUrl(uri);
             if (Uri.IsWellFormedUriString(uri,UriKind.Absolute)) {
@@ -1445,6 +1446,28 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+
+        public void PrintVisualTree(int depth, object obj) {
+            // Print the object with preceding spaces that represent its depth
+            Trace.WriteLine(new string(' ', depth) + obj.GetType().ToString());
+
+            // If current element is a grid, display information about its rows and columns
+            if (obj is Grid) {
+                Grid gd = (Grid)obj;
+                Trace.WriteLine(new string(' ', depth) + "Grid has " + gd.RowDefinitions.Count +
+                                " rows and " + gd.ColumnDefinitions.Count + " columns.");
+                foreach (UIElement element in gd.Children) {
+                    Trace.WriteLine(new string(' ', depth) +
+                        element.GetType().ToString() + " in row " + Grid.GetRow(element) +
+                        " column " + Grid.GetColumn(element));
+                }
+            }
+
+            // Recursive call for each visual child
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj as DependencyObject); i++)
+                PrintVisualTree(depth + 1, VisualTreeHelper.GetChild(obj as DependencyObject, i));
+        }
+
         public List<string> CreatePrimaryColorList(BitmapSource bmpSource,int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();

@@ -79,8 +79,12 @@ namespace MpWpfApp {
                     scvml = Shortcuts.Where(x => x.Command == command && x.CommandParameter == commandParameter).ToList();
                 } else if(vm is MpContentItemViewModel) {
                     scvml = Shortcuts.Where(x => x.CopyItemId == (int)commandParameter).ToList();
-                } else {
+                } else if(vm is MpTagTileViewModel) {
                     scvml = Shortcuts.Where(x => x.TagId == (int)commandParameter).ToList();
+                } else if(vm is MpAnalyticItemPresetViewModel) {
+                    scvml = Shortcuts.Where(x => x.AnalyticItemPresetId == (int)commandParameter).ToList();
+                } else {
+                    throw new Exception("Unknown vm, cannot register: " + vm.ToString());
                 }
                 //var scvml = this.Where(x => x.Command == command && x.CommandParameter == commandParameter).ToList();
                 //if it does clear, save and unregister
@@ -93,6 +97,8 @@ namespace MpWpfApp {
                             (vm as MpContentItemViewModel).ShortcutKeyString = string.Empty;
                         } else if (vm is MpTagTileViewModel) {
                             (vm as MpTagTileViewModel).ShortcutKeyString = string.Empty;
+                        } else if (vm is MpAnalyticItemPresetViewModel) {
+                            (vm as MpAnalyticItemPresetViewModel).ShortcutKeyString = string.Empty;
                         }
 
                         if (vm is MpShortcutViewModel) {
@@ -160,6 +166,10 @@ namespace MpWpfApp {
 
                 } else if (e is MpTag t) {
                     foreach (var scvmToRemove in Shortcuts.Where(x => x.TagId == t.Id).ToList()) {
+                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
+                    }
+                } else if (e is MpAnalyticItemPreset p) {
+                    foreach (var scvmToRemove in Shortcuts.Where(x => x.AnalyticItemPresetId == p.Id).ToList()) {
                         scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
                     }
                 }
@@ -366,6 +376,9 @@ namespace MpWpfApp {
                                     ttvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = ttvm.Parent.SelectTagCommand;
                                     commandParameter = ttvm.TagId;
+                                } else if(sc.AnalyticItemPresetId > 0) {
+                                    shortcutCommand = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
+                                    commandParameter = sc.AnalyticItemPresetId;
                                 }
                             }
                             catch (Exception ex) {

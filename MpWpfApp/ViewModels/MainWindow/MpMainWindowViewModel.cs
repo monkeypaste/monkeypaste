@@ -283,8 +283,8 @@ namespace MpWpfApp {
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
-            //await MpAnalyticItemCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
+            await MpQuickActionAnalyzerCollectionViewModel.Instance.Init();
+            Application.Current.Resources["QuickActionAnalyzerCollectionViewModel"] = MpQuickActionAnalyzerCollectionViewModel.Instance;
 
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
@@ -448,6 +448,7 @@ namespace MpWpfApp {
                       !IsShowingDialog &&
                       !_isExpanded &&
                       !IsResizing &&
+                      !IsShowingDialog &&
                       !MpClipTrayViewModel.Instance.IsAnyTileItemDragging &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
