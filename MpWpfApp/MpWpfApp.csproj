@@ -155,7 +155,6 @@
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
-    <Compile Include="Converters\MpStringToAnalyticNumberConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
@@ -187,12 +186,13 @@
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemComponentViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpExecuteParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpResultParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemExecuteButtonViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemResultViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Translator\MpTranslatorViewModel.cs" />
@@ -306,10 +306,10 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\MpAnalyticItemParameterView.xaml.cs">
-      <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\MpAnalyticItemComponentView.xaml.cs">
+      <DependentUpon>MpAnalyticItemComponentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\Selectors\MpParameterViewSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\Selectors\MpParameterViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>
@@ -483,7 +483,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameter\MpAnalyticItemParameterView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\MpAnalyticItemComponentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

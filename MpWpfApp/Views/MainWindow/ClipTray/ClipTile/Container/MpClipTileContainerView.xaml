@@ -13,8 +13,8 @@
     </i:Interaction.Behaviors>
     <Grid>
         <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
-                                            DataContext="{Binding PrimaryItem.AnalyticItemCollectionViewModel}"
-                                            Visibility="{Binding Parent.Parent.BackVisibility}" />
+                                            DataContext="{Binding PrimaryItem}"
+                                            Visibility="{Binding Parent.BackVisibility}" />
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
         <local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"

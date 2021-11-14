@@ -8,8 +8,7 @@ using SQLite;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-
-    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemViewModel>{
+    public abstract class MpAnalyticItemParameterViewModel : MpAnalyticItemComponentViewModel {
         #region Private Variables
         
         #endregion
@@ -17,21 +16,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
-
-        public virtual MpAnalyticItemParameterValueViewModel CurrentValueViewModel {
-            get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
-            set {
-                if (value != CurrentValueViewModel) {
-                    ValueViewModels.ForEach(x => x.IsSelected = false);
-                    if (value != null) {
-                        value.IsSelected = true;
-                    }
-                }
-            }
-        }
-
+        
         #endregion
 
         #region Business Logic
@@ -66,18 +51,81 @@ namespace MpWpfApp {
 
         #region State
 
-        public virtual bool HasChanged => ValueViewModels.Any(x => x.HasChanged);
+        public bool HasChanged => CurrentValue != DefaultValue && !IsBusy;//=> ValueViewModels.Any(x => x.HasChanged);
 
         public bool IsHovering { get; set; } = false;
-
-        public bool IsSelected { get; set; } = false;
-
-        public bool IsExpanded { get; set; } = false;
 
         public abstract bool IsValid { get; }
         #endregion
 
         #region Model
+
+        public abstract string CurrentValue { get; set; }
+
+        public abstract string DefaultValue { get; }
+
+        public double DoubleValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToDouble(CurrentValue);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    return 0;
+                }
+            }
+            set {
+                if (DoubleValue != value) {
+                    CurrentValue = value.ToString();
+                    OnPropertyChanged(nameof(DoubleValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+
+        public int IntValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToInt32(DoubleValue);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    return 0;
+                }
+            }
+            set {
+                if (IntValue != value) {
+                    CurrentValue = value.ToString();
+                    OnPropertyChanged(nameof(IntValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+
+        public bool BoolValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return false;
+                }
+                if (CurrentValue != "0" && CurrentValue != "1") {
+                    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                }
+                return CurrentValue == "1";
+            }
+            set {
+                if (BoolValue != value) {
+                    CurrentValue = value ? "1" : "0";
+                    OnPropertyChanged(nameof(BoolValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
 
         public int ParamEnumId {
             get {
@@ -137,25 +185,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public virtual async Task InitializeAsync(MpAnalyticItemParameter aip) {
-            IsBusy = true;
-
-            Parameter = aip;
-
-            ValueViewModels.Clear();
-
-            foreach (var valueSeed in Parameter.ValueSeeds) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                ValueViewModels.Add(naipvvm);
-            }
-
-            ResetToDefault();
-
-            OnPropertyChanged(nameof(ValueViewModels));
-
-            IsBusy = false;
-        }
-
+        public abstract Task InitializeAsync(MpAnalyticItemParameter aip);// {
+        
         public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
             var naipvvm = new MpAnalyticItemParameterValueViewModel(this);
             naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
@@ -163,17 +194,18 @@ namespace MpWpfApp {
             return naipvvm;
         }
 
-        public virtual void ResetToDefault() {
-            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            if (defVal != null) {
-                defVal.IsSelected = true;
-            } else if (ValueViewModels.Count > 0) {
-                ValueViewModels[0].IsSelected = true;
-            }
+        public void ResetToDefault() {
+            //MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
+            //if (defVal != null) {
+            //    defVal.IsSelected = true;
+            //} else if (ValueViewModels.Count > 0) {
+            //    ValueViewModels[0].IsSelected = true;
+            //}
+            CurrentValue = DefaultValue;
         }
 
-        public virtual void SetValue(string newValue) {
-            CurrentValueViewModel.Value = newValue;
+        public void SetValue(string newValue) {
+            CurrentValue = newValue;
         }
         #endregion
 
@@ -187,15 +219,9 @@ namespace MpWpfApp {
             }
         }
 
-        private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var aipvvm = sender as MpAnalyticItemParameterValueViewModel;
-            switch(e.PropertyName) {
-                case nameof(aipvvm.IsSelected):
-                    OnPropertyChanged(nameof(CurrentValueViewModel));
-                    break;
-            }
+        protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            
         }
-
         #endregion
     }
 }

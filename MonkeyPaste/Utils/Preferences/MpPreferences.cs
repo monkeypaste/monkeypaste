@@ -319,7 +319,7 @@ namespace MonkeyPaste {
         }
         public string UserCultureInfoName {
             get {
-                return _prefIo.Get(nameof(UserCultureInfoName), string.Empty);
+                return _prefIo.Get(nameof(UserCultureInfoName), DefaultCultureInfoName);
             }
             set {
                 _prefIo.Set(nameof(UserCultureInfoName), value);

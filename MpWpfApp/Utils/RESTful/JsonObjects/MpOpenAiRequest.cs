@@ -40,7 +40,6 @@ namespace MpWpfApp {
     public class MpOpenAiRequest {
         //[JsonProperty("engine")]
         //public string Engine { get; set; }
-
         [JsonProperty("prompt")]
         public string Prompt { get; set; }
 

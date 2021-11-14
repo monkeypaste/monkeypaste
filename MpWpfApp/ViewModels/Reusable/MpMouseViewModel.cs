@@ -20,7 +20,7 @@ namespace MpWpfApp {
         SizeNS
     }
 
-    public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel, object> {
+    public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel> {
         #region Private Variables
 
         private readonly Cursor _defaultCursor = Cursors.Arrow;

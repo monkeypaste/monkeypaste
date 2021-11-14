@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms.Internals;
 
 namespace MpWpfApp {
-    public class MpQuickActionAnalyzerCollectionViewModel : MpSingletonViewModel<MpQuickActionAnalyzerCollectionViewModel,MpAnalyticItemCollectionViewModel> { 
+    public class MpQuickActionAnalyzerCollectionViewModel : MpSingletonViewModel<MpQuickActionAnalyzerCollectionViewModel> { 
         #region PrivateVariables
         private List<MpAnalyticItemPreset> _presets;
         #endregion
@@ -18,23 +18,15 @@ namespace MpWpfApp {
         #region View Models
         public MpContentItemViewModel HostContentItemViewModel { get; set; }
 
-        public override MpAnalyticItemCollectionViewModel Parent {
-            get {
-                if(HostContentItemViewModel == null) {
-                    return null;
-                }
-                return HostContentItemViewModel.AnalyticItemCollectionViewModel;
-            }
-        }
         #endregion
 
         #endregion
 
         #region Constructors
 
-        public MpQuickActionAnalyzerCollectionViewModel() : base(null) { }
+        //public MpQuickActionAnalyzerCollectionViewModel() : base(null) { }
 
-        public MpQuickActionAnalyzerCollectionViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) { }
+        //public MpQuickActionAnalyzerCollectionViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) { }
 
         public async Task Init() {
             var quickActionList = await MpDataModelProvider.Instance.GetAllQuickActionAnalyzers();

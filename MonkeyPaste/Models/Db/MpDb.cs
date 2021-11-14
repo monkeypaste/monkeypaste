@@ -1035,6 +1035,7 @@ namespace MonkeyPaste {
                     , MpAnalyticItemParameterGuid text not null
                     , fk_MpAnalyticItemId integer not null
                     , ParameterTypeId integer not null default 0
+                    , ParameterValueTypeId integer not null default 0
                     , Label text
                     , EnumId integer default 0
                     , SortOrderIdx integer
@@ -1047,7 +1048,6 @@ namespace MonkeyPaste {
                       pk_MpAnalyticItemParameterValueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAnalyticItemParameterValueGuid text not null
                     , fk_MpAnalyticItemParameterId integer not null
-                    , ParameterValueTypeId integer not null default 0
                     , Value text
                     , Label text
                     , IsDefault integer not null default 0   

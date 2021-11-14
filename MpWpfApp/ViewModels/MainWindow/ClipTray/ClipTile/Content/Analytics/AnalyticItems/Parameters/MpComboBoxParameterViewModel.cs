@@ -10,23 +10,56 @@ namespace MpWpfApp {
 
         #region View Models
         public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
+
+        public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
+
+        public virtual MpAnalyticItemParameterValueViewModel CurrentValueViewModel {
+            get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
+            set {
+                if (value != CurrentValueViewModel) {
+                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                    if (value != null) {
+                        value.IsSelected = true;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region State
-        public override bool HasChanged => CurrentValueViewModel != DefaultValueViewModel;
-        #endregion
-
-        #region Model
-
+        //public override bool HasChanged => CurrentValueViewModel != DefaultValueViewModel;
         public override bool IsValid {
             get {
-                if(!IsRequired) {
+                if (!IsRequired) {
                     return true;
                 }
                 return CurrentValueViewModel != null && !string.IsNullOrEmpty(CurrentValueViewModel.Value);
             }
         }
-        
+        #endregion
+
+        #region Model
+
+        public override string CurrentValue {
+            get => CurrentValueViewModel?.Value;
+            set {
+                if(CurrentValue != value) {
+                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                    if (value != null) {
+                        var ncvvm = ValueViewModels.FirstOrDefault(x => x.Value == value);
+                        if (ncvvm == null) {
+                            throw new Exception("Cannot set combobox to: " + value);
+                        }
+                        ncvvm.IsSelected = true;
+                    }
+                    OnPropertyChanged(nameof(CurrentValue));
+                    OnPropertyChanged(nameof(CurrentValueViewModel));
+                }
+            }
+        }
+
+        public override string DefaultValue => ValueViewModels.FirstOrDefault(x => x.IsDefault)?.Value;
+
         #endregion
 
         #endregion
@@ -62,18 +95,20 @@ namespace MpWpfApp {
             DefaultValueViewModel = CurrentValueViewModel;
 
             OnPropertyChanged(nameof(ValueViewModels));
+            OnPropertyChanged(nameof(CurrentValue));
+            OnPropertyChanged(nameof(DefaultValue));
 
             IsBusy = false;
         }
 
-        public override void SetValue(string newValue) {
-            var valueVm = ValueViewModels.FirstOrDefault(x => x.Value == newValue);
-            if(valueVm == null) {
-                throw new Exception($"Param {Label} does not have a '{newValue}' value");
-            }
-            ValueViewModels.ForEach(x => x.IsSelected = false);
-            valueVm.IsSelected = true;
-        }
+        //public override void SetValue(string newValue) {
+        //    var valueVm = ValueViewModels.FirstOrDefault(x => x.Value == newValue);
+        //    if(valueVm == null) {
+        //        throw new Exception($"Param {Label} does not have a '{newValue}' value");
+        //    }
+        //    ValueViewModels.ForEach(x => x.IsSelected = false);
+        //    valueVm.IsSelected = true;
+        //}
 
         #endregion
     }

@@ -31,9 +31,6 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemParameterId")]
         public int AnalyticItemParameterValueId { get; set; }
 
-        [Column("ParameterValueTypeId")]
-        public int ParameterValueTypeId { get; set; } = 0;
-
         [Column("Value")]
         public string Value { get; set; } = string.Empty;
 
@@ -94,17 +91,6 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public MpAnalyticItemParameterValueUnitType ParameterValueType {
-            get {
-                return (MpAnalyticItemParameterValueUnitType)ParameterValueTypeId;
-            }
-            set {
-                if (ParameterValueType != value) {
-                    ParameterValueTypeId = (int)value;
-                }
-            }
-        }
 
         [Ignore]
         public Guid AnalyticItemParameterValueGuid {
@@ -123,7 +109,6 @@ namespace MonkeyPaste {
 
         public static async Task<MpAnalyticItemParameterValue> Create(
             MpAnalyticItemParameter parentItem, 
-            MpAnalyticItemParameterValueUnitType valueType, 
             string value, 
             string label = "", bool isDefault = false, bool isMin = false, bool isMax = false) {
             if (parentItem == null) {
@@ -134,7 +119,6 @@ namespace MonkeyPaste {
                 AnalyticItemParameterValueGuid = System.Guid.NewGuid(),
                 AnalyticItemParameter = parentItem,
                 AnalyticItemParameterValueId = parentItem.Id,
-                ParameterValueType = valueType,
                 IsDefault = isDefault,
                 IsMinimum = isMin,
                 IsMaximum = isMax,

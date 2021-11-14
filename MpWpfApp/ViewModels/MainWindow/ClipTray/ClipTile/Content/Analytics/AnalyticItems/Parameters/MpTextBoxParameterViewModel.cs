@@ -6,6 +6,12 @@ using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
     public class MpTextBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+        #region Private Variables
+        
+        private string _defaultValue;
+
+        #endregion
+
         #region Properties
 
         #region State
@@ -15,24 +21,39 @@ namespace MpWpfApp {
                 if(!IsRequired) {
                     return true;
                 }
-                if(CurrentValueViewModel == null || string.IsNullOrEmpty(CurrentValueViewModel.Value)) {
+                if(Parameter == null || CurrentValue == null) {
                     return false;
                 }
-                var minCond = ValueViewModels.FirstOrDefault(x => x.IsMinimum);
+
+                var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
                 if(minCond != null) {
-                    if(CurrentValueViewModel.Value.Length < minCond.IntValue) {
+                    int minLength = 0;
+                    try { 
+                        minLength = Convert.ToInt32(minCond.Value); 
+                    } catch(Exception ex) {
+                        MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");
+                    }
+                    if(CurrentValue.Length < minLength) {
                         return false;
                     }
                 }
-                var maxCond = ValueViewModels.FirstOrDefault(x => x.IsMaximum);
+                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
                 if (maxCond != null) {
-                    if (CurrentValueViewModel.Value.Length > maxCond.IntValue) {
+                    // TODO should cap all input string but especially here
+                    int maxLength = int.MaxValue;
+                    try {
+                        maxLength = Convert.ToInt32(maxCond.Value);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Maximum val: {minCond.Value} could not conver to int, exception: {ex}");
+                    }
+                    if (CurrentValue.Length < maxLength) {
                         return false;
                     }
                 }
 
                 if (!string.IsNullOrEmpty(FormatInfo)) {
-                    if(CurrentValueViewModel.Value.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
+                    if(CurrentValue.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
                         return false;
                     }
                 }
@@ -41,26 +62,13 @@ namespace MpWpfApp {
         }
         #endregion
 
-        //public string InputValue {
-        //    get {
-        //        if (Parameter == null) {
-        //            return string.Empty;
-        //        }
-        //        if(string.IsNullOrEmpty(Parameter.ValueCsv) && 
-        //           !string.IsNullOrEmpty(Parameter.DefaultValue)) {
-        //            Parameter.ValueCsv = Parameter.DefaultValue;
-        //        }
-        //        return Parameter.ValueCsv;
-        //    }
-        //    set {
-        //        if (Parameter != null && Parameter.ValueCsv != value) {
-        //            Parameter.ValueCsv = value;
-        //            OnPropertyChanged(nameof(InputValue));
-        //        }
-        //    }
-        //}
+        #region Model
 
-        //public override MpAnalyticItemParameterValueViewModel CurrentValueViewModel => new MpAnalyticItemParameterValueViewModel() { Value = InputValue };
+        public override string CurrentValue { get; set; }
+
+        public override string DefaultValue => _defaultValue;
+
+        #endregion
 
         #endregion
 
@@ -79,33 +87,23 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            ValueViewModels.Clear();
-
-            foreach (var valueSeed in Parameter.ValueSeeds) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                ValueViewModels.Add(naipvvm);
-            }
-
-            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            if (defVal != null) {
-                defVal.IsSelected = true;
-            } else if (ValueViewModels.Count > 0) {
-                ValueViewModels[0].IsSelected = true;
+            if(Parameter == null || Parameter.ValueSeeds == null) {
+                ResetToDefault();
             } else {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(
-                    ValueViewModels.Count,
-                    new MpAnalyticItemParameterValue() {
-                        ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
-                        AnalyticItemParameter = Parameter,
-                        AnalyticItemParameterValueId = Parameter.Id,
-                        IsDefault = true
-                    });
+                MpAnalyticItemParameterValue defVal = Parameter.ValueSeeds.FirstOrDefault(x => x.IsDefault);
+                if (defVal != null) {
+                    _defaultValue = defVal.Value;
+                } else {
+                    _defaultValue = string.Empty;
+                }
 
-                ValueViewModels.Add(naipvvm);
-                naipvvm.IsSelected = true;
+                CurrentValue = _defaultValue;
             }
 
-            OnPropertyChanged(nameof(ValueViewModels));
+            OnPropertyChanged(nameof(DefaultValue));
+            OnPropertyChanged(nameof(CurrentValue));
+
+            await Task.Delay(1);
 
             IsBusy = false;
         }

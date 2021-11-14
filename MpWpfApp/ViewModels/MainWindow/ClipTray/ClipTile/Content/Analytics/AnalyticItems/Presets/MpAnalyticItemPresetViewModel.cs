@@ -128,6 +128,10 @@ namespace MpWpfApp {
             PropertyChanged += MpPresetParameterViewModel_PropertyChanged;
         }
 
+        public MpAnalyticItemPresetViewModel(MpAnalyticItemViewModel parent, MpAnalyticItemPreset aip) : this(parent) {
+            Preset = aip;
+        }
+
         #endregion
 
         #region Public Methods

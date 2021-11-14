@@ -25,7 +25,7 @@ using System.Collections.Concurrent;
 
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel,object>  {
+    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel>  {
         #region Private Variables      
         private object _tileLockObject = null;
 
@@ -1140,10 +1140,13 @@ namespace MpWpfApp {
                     ctvm.IsSelected = true;
                     ctvm.IsFlipping = true;
                 } else {
+                    while(!MpAnalyticItemCollectionViewModel.Instance.IsLoaded) {
+                        await Task.Delay(100);
+                    }
                     UnFlipAllTiles();
                     ClearClipSelection();
                     ctvm.IsSelected = true;
-                    await ctvm.PrimaryItem.AnalyticItemCollectionViewModel.Init();
+                    //await ctvm.PrimaryItem.AnalyticItemCollectionViewModel.Init();
                     ctvm.IsFlipping = true;
                 }
 
@@ -1657,7 +1660,25 @@ namespace MpWpfApp {
             });
 
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
-            (presetId) => {
+            async (presetId) => {
+                MpAnalyticItemViewModel analyticItemVm = null;
+                MpAnalyticItemPresetViewModel presetVm = null;
+                if(presetId > 0) {
+                    var preset = await MpDataModelProvider.Instance.GetAnalyzerPresetById(presetId);
+                    analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
+                    presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);
+                } else {
+                    //default preset is negated pk of analytic item
+                    presetId *= -1;
+                    analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == presetId);
+                    presetVm = analyticItemVm.DefaultPresetViewModel;
+                }
+
+                var prevSelectedPresetVm = analyticItemVm.SelectedPresetViewModel;
+                analyticItemVm.SelectPresetCommand.Execute(presetVm);
+                analyticItemVm.ExecuteAnalysisCommand.Execute(PrimaryItem.PrimaryItem);
+
+                MessageBox.Show(analyticItemVm.ResultViewModel.Result);
 
             });
 

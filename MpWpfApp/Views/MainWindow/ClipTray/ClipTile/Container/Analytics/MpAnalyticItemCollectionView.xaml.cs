@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemCollectionView.xaml
     /// </summary>
-    public partial class MpAnalyticItemCollectionView : MpUserControl<MpAnalyticItemCollectionViewModel> {
+    public partial class MpAnalyticItemCollectionView : MpUserControl<MpContentItemViewModel> {
         public MpAnalyticItemCollectionView() {
             InitializeComponent();
         }

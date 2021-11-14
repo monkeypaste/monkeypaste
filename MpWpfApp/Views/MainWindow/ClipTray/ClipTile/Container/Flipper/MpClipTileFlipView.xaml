@@ -95,7 +95,7 @@
                 <Viewport2DVisual3D.Material>
                     <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
                 </Viewport2DVisual3D.Material>
-                <ContentControl DataContext="{Binding PrimaryItem.AnalyticItemCollectionViewModel}"
+                <ContentControl DataContext="{Binding PrimaryItem}"
                                 Content="{StaticResource ClipTileBack}" />
             </Viewport2DVisual3D>
             <!--  Content View (Front)  -->

@@ -12,21 +12,24 @@
              Closed="ClipTile_ContextMenu_Closed"
              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
     <ContextMenu.Resources>
-        <Style x:Key="DefaultItemStyle" TargetType="MenuItem">
+        <Style x:Key="DefaultItemStyle"
+               TargetType="MenuItem">
             <Setter Property="Header"
-                        Value="{Binding Header}" />
+                    Value="{Binding Header}" />
             <Setter Property="Command"
-                        Value="{Binding Command}" />
+                    Value="{Binding Command}" />
             <Setter Property="CommandParameter"
-                        Value="{Binding CommandParameter}" />
+                    Value="{Binding CommandParameter}" />
             <Setter Property="Icon"
-                        Value="{Binding Icon}" />
+                    Value="{Binding Icon}" />
             <Setter Property="InputGestureText"
-                        Value="{Binding InputGestureText}" />
+                    Value="{Binding InputGestureText}" />
             <Setter Property="IsCheckable"
-                        Value="True" />
+                    Value="{Binding IsCheckable}" />
             <Setter Property="IsChecked"
-                        Value="{Binding IsChecked}" />
+                    Value="{Binding IsChecked}" />
+            <Setter Property="ItemsSource"
+                    Value="{Binding SubItems}"/>
         </Style>
     </ContextMenu.Resources>
     <MenuItem Header="_Copy"
@@ -76,10 +79,9 @@
     </MenuItem>
     <MenuItem x:Name="AnalyzeMenuItem"
               Header="_Analyze"
-              Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
-        <MenuItem Header="Summarize"
-                  Command="{Binding SummarizeCommand, Source={StaticResource ClipTrayViewModel}}" />
-    </MenuItem>
+              Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+              ItemsSource="{Binding PresetMenuItems, Source={StaticResource AnalyticItemCollectionViewModel}}"
+              ItemContainerStyle="{StaticResource DefaultItemStyle}"/>
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
               Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
@@ -194,5 +196,5 @@
             </Style>
         </MenuItem.ItemContainerStyle>
     </MenuItem>
-    <Separator x:Name="QuickActionSeparator"/>
+    <Separator x:Name="QuickActionSeparator" />
 </ContextMenu>

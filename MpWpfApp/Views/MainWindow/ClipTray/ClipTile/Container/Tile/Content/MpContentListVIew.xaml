@@ -84,10 +84,10 @@
                                                               TileMode="Tile">
                                                     <DrawingBrush.Drawing>
                                                         <DrawingGroup>
-                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='#FFFFFFFF'}">
+                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
-                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='50,0,50,50'}" />
+                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
                                                                         <RectangleGeometry Rect="50,50,50,50" />
                                                                     </GeometryGroup>
                                                                 </GeometryDrawing.Geometry>

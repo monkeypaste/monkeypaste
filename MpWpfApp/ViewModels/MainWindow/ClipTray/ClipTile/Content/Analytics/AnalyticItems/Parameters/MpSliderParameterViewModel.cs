@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModel {
+        #region Private Variables
+        private string _defaultValue;
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -13,24 +17,28 @@ namespace MpWpfApp {
 
         #region Model
 
+        public override string CurrentValue { get; set; } = string.Empty;
+
+        public override string DefaultValue => _defaultValue;
+
         public double SliderValue {
             get {
-                if(ValueViewModels.Count == 0) {
+                if(CurrentValue == null || Parameter == null) {
                     return 0;
                 }
-
-                switch(ValueViewModels[0].AnalyticItemParameterValue.ParameterValueType) {
+                
+                switch(Parameter.ValueType) {
                     case MpAnalyticItemParameterValueUnitType.Integer:
-                        return CurrentValueViewModel.IntValue;
+                        return IntValue;
                     case MpAnalyticItemParameterValueUnitType.Decimal:
-                        return Math.Round(CurrentValueViewModel.DoubleValue,2);
+                        return Math.Round(DoubleValue,2);
                     default:
-                        return CurrentValueViewModel.DoubleValue;
+                        return DoubleValue;
                 }
             }
             set {
                 if(SliderValue != value) {
-                    CurrentValueViewModel.Value = value.ToString();
+                    CurrentValue = value.ToString();
                     OnPropertyChanged(nameof(SliderValue));
                 }
             }
@@ -38,21 +46,37 @@ namespace MpWpfApp {
 
         public double Min {
             get {
-                var minVm = ValueViewModels.FirstOrDefault(x => x.IsMinimum);
-                if(minVm == null) {
-                    return 0;
+                if(Parameter == null) {
+                    return double.MinValue;
                 }
-                return minVm.DoubleValue;
+                var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
+                if (minCond != null) {
+                    try {
+                        return Convert.ToDouble(minCond.Value);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");                        
+                    }
+                }
+                return double.MinValue;
             }
         }
 
         public double Max {
             get {
-                var maxVm = ValueViewModels.FirstOrDefault(x => x.IsMaximum);
-                if (maxVm == null) {
-                    return 1;
+                if (Parameter == null) {
+                    return double.MaxValue;
                 }
-                return maxVm.DoubleValue;
+                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
+                if (maxCond != null) {
+                    try {
+                        return Convert.ToDouble(maxCond.Value);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Minimum val: {maxCond.Value} could not conver to int, exception: {ex}");
+                    }
+                }
+                return 0;
             }
         }
 
@@ -90,19 +114,25 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            ValueViewModels.Clear();
-
-            foreach (var valueSeed in Parameter.ValueSeeds) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                ValueViewModels.Add(naipvvm);
+            if (Parameter == null || Parameter.ValueSeeds == null) {
+                ResetToDefault();
+            } else {
+                MpAnalyticItemParameterValue defVal = Parameter.ValueSeeds.FirstOrDefault(x => x.IsDefault);
+                if (defVal != null) {
+                    _defaultValue = defVal.Value;
+                } else {
+                    _defaultValue = "0";
+                }
+                ResetToDefault();
             }
 
-            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            if (defVal != null) {
-                defVal.IsSelected = true;
-            }
-
-            OnPropertyChanged(nameof(ValueViewModels));
+            OnPropertyChanged(nameof(Min));
+            OnPropertyChanged(nameof(Max));
+            OnPropertyChanged(nameof(DefaultValue));
+            OnPropertyChanged(nameof(SliderValue));
+            OnPropertyChanged(nameof(TickFrequency));
+            
+            await Task.Delay(1);
 
             IsBusy = false;
         }

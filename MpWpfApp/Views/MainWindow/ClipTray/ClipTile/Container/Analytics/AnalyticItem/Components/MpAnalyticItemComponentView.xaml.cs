@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemParameterView.xaml
+    /// Interaction logic for MpAnalyticItemComponentView.xaml
     /// </summary>
-    public partial class MpAnalyticItemParameterView : MpUserControl<MpAnalyticItemParameterViewModel> {
-        public MpAnalyticItemParameterView() {
+    public partial class MpAnalyticItemComponentView : UserControl {
+        public MpAnalyticItemComponentView() {
             InitializeComponent();
         }
     }

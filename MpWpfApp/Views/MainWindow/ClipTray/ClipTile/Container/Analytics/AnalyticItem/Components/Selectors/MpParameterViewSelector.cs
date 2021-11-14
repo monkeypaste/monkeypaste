@@ -57,26 +57,24 @@ namespace MpWpfApp {
             var aipvm = (item as MpAnalyticItemParameterViewModel);
             
             if(aipvm == null) {
-                return ExecuteTemplate;
+                if(item is MpAnalyticItemResultViewModel) {
+                    return ResultTemplate;
+                }
+                if(item is MpAnalyticItemExecuteButtonViewModel) {
+                    return ExecuteTemplate;
+                }
+                throw new Exception("Unknown item type: " + item.GetType().ToString());
             }
 
             switch(aipvm.Parameter.ParameterType) {
-                case MpAnalyticParameterType.ComboBox:
+                case MpAnalyticItemParameterType.ComboBox:
                     return ComboBoxTemplate;
-                case MpAnalyticParameterType.Text:
-                    if(aipvm.Parameter.IsResult) {
-                        return ResultTemplate;
-                    }
+                case MpAnalyticItemParameterType.Text:
                     return TextBoxTemplate;
-                case MpAnalyticParameterType.CheckBox:
+                case MpAnalyticItemParameterType.CheckBox:
                     return CheckBoxTemplate;
-                case MpAnalyticParameterType.Slider:
+                case MpAnalyticItemParameterType.Slider:
                     return SliderTemplate;
-                case MpAnalyticParameterType.Button:
-                    if(aipvm.Parameter.IsExecute) {
-                        return ExecuteTemplate;
-                    }
-                    throw new Exception("Unsupportted parameter type");
                 default:
                     throw new Exception("Unsupportted parameter type");
             }

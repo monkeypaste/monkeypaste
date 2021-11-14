@@ -9,7 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpAppModeViewModel : MpSingletonViewModel<MpAppModeViewModel,object> {
+    public class MpAppModeViewModel : MpSingletonViewModel<MpAppModeViewModel> {
         #region Properties
 
         #region View Models

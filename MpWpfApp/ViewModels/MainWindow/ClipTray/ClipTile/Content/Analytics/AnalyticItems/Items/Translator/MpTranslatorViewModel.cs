@@ -36,9 +36,8 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpTranslatorViewModel(MpAnalyticItemCollectionViewModel parent, int aiid) : base(parent) {
+        public MpTranslatorViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpTranslatorViewModel_PropertyChanged;
-            RuntimeId = aiid;
         }
 
         #endregion
@@ -67,7 +66,8 @@ namespace MpWpfApp {
             if (!MpLanguageTranslator.Instance.IsLoaded) {
                 await MpLanguageTranslator.Instance.Init();
 
-                string defaultFromLangCode = await MpLanguageTranslator.Instance.DetectLanguage(Parent.Parent.CopyItemData.ToPlainText());
+                string defaultFromLangCode = "en"; //await MpLanguageTranslator.Instance.DetectLanguage(MpP);
+
                 if (string.IsNullOrWhiteSpace(defaultFromLangCode)) {
                     defaultFromLangCode = "en";
                 }
@@ -83,15 +83,15 @@ namespace MpWpfApp {
                 var laipv = new MpAnalyticItemParameterValue() {
                     IsDefault = MpLanguageTranslator.Instance.LanguageCodesAndTitles.IndexOf(lcat) == defFromLangIdx,
                     Label = lcat.Value.LanguageName,
-                    Value = lcat.Value.ToString(),
-                    ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText
+                    Value = lcat.Value.ToString()
                 };
                 laipvl.Add(laipv);
             }
 
             var aipl = new List<MpAnalyticItemParameter>() {
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.ComboBox,
+                    ParameterType = MpAnalyticItemParameterType.ComboBox,
+                    ValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                     Label = "From Language",
                     ValueSeeds = laipvl,
                     IsParameterRequired = true,
@@ -99,7 +99,8 @@ namespace MpWpfApp {
                     SortOrderIdx = 0
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.ComboBox,
+                    ParameterType = MpAnalyticItemParameterType.ComboBox,
+                    ValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                     Label = "To Language",
                     ValueSeeds = laipvl,
                     IsParameterRequired = true,
@@ -116,21 +117,21 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task ExecuteAnalysis() {
+        protected override async Task ExecuteAnalysis(object obj) {
             IsBusy = true;
 
-            int fromNameIdxEnd = GetParam((int)MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.IndexOf(" ");
-            string fromName = GetParam((int)MpTranslatorParamType.FromLang).CurrentValueViewModel.Value.Substring(0,fromNameIdxEnd);
+            int fromNameIdxEnd = GetParam((int)MpTranslatorParamType.FromLang).CurrentValue.IndexOf(" ");
+            string fromName = GetParam((int)MpTranslatorParamType.FromLang).CurrentValue.Substring(0,fromNameIdxEnd);
             string fromCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(fromName);
 
-            int toNameIdxEnd = GetParam((int)MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.IndexOf(" ");
-            string toName = GetParam((int)MpTranslatorParamType.ToLang).CurrentValueViewModel.Value.Substring(0,toNameIdxEnd);
+            int toNameIdxEnd = GetParam((int)MpTranslatorParamType.ToLang).CurrentValue.IndexOf(" ");
+            string toName = GetParam((int)MpTranslatorParamType.ToLang).CurrentValue.Substring(0,toNameIdxEnd);
             string toCode = MpLanguageTranslator.Instance.GetCodeByLanguageName(toName);
 
             //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();
             
             string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
-                Parent.Parent.CopyItemData.ToPlainText(),
+                obj.ToString(),
                 toCode,
                 fromCode, 
                 false);

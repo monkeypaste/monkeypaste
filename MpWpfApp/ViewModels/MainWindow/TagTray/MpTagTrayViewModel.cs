@@ -15,7 +15,7 @@ using MonkeyPaste;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
-    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel,object> {
+    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel> {
         #region Private Variables
         #endregion
 

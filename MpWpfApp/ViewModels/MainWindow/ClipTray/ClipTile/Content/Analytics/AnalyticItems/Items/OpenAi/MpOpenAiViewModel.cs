@@ -42,9 +42,8 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpOpenAiViewModel(MpAnalyticItemCollectionViewModel parent, int aiid) : base(parent) {
+        public MpOpenAiViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpOpenAiViewModel_PropertyChanged;
-            RuntimeId = aiid;
         }
 
         #endregion
@@ -72,7 +71,8 @@ namespace MpWpfApp {
 
             var aipl = new List<MpAnalyticItemParameter>() {
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.ComboBox,
+                    ParameterType = MpAnalyticItemParameterType.ComboBox,
+                    ValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                     Label = "Engine",
                     IsParameterRequired = true,
                     SortOrderIdx = 0,
@@ -80,125 +80,111 @@ namespace MpWpfApp {
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
                             IsDefault = true,
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "DaVinci",
                             Value = "davinci"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Curie",
                             Value = "curie"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Babbage",
                             Value = "babbage"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Ada",
                             Value = "ada"
                         }
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.ComboBox,
+                    ParameterType = MpAnalyticItemParameterType.ComboBox,
                     Label = "End Point",
                     IsParameterRequired = true,
                     SortOrderIdx = 1,
                     EnumId = (int)MpOpenAiParamType.EndPoint,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
-                            IsDefault = true,
                             Label = "Completions",
                             Value =  "completions"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Searches",
                             Value =  "searches"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
+                            IsDefault = true,
                             Label = "Classifications",
                             Value =  "classifications"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Answers",
                             Value =  "answers"
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.PlainText,
                             Label = "Files",
                             Value =  "files"
                         }
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.Slider,
+                    ParameterType = MpAnalyticItemParameterType.Slider,
+                    ValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                     Label = "Temperature",
                     IsParameterRequired = true,
                     SortOrderIdx = 2,
                     Description = "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
                     EnumId = (int)MpOpenAiParamType.Temperature,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
-                        new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
+                        new MpAnalyticItemParameterValue() {                            
                             Value = "0",
                             IsMinimum = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "1",
                             IsMaximum = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "0.75",
                             IsDefault = true
                         }
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.Slider,
+                    ParameterType = MpAnalyticItemParameterType.Slider,
+                    ValueType = MpAnalyticItemParameterValueUnitType.Integer,
                     Label = "Max Tokens",
                     IsParameterRequired = true,
                     SortOrderIdx = 3,
                     EnumId = (int)MpOpenAiParamType.MaxTokens,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Integer,
                             Value = "1",
                             IsMinimum = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Integer,
                             Value = "2048",
                             IsMaximum = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Integer,
                             Value = "64",
                             IsDefault = true
                         }
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.Slider,
+                    ParameterType = MpAnalyticItemParameterType.Slider,
+                    ValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                     Label = "Top P",
                     IsParameterRequired = true,
                     SortOrderIdx = 4,
                     EnumId = (int)MpOpenAiParamType.TopP,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "0",
                             IsMinimum = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "1",
                             IsMaximum = true,
                             IsDefault = true
@@ -206,40 +192,38 @@ namespace MpWpfApp {
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.Slider,
+                    ParameterType = MpAnalyticItemParameterType.Slider,
+                            ValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                     Label = "Frequency Penalty",
                     IsParameterRequired = true,
                     SortOrderIdx = 5,
                     EnumId = (int)MpOpenAiParamType.FreqPen,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "0",
                             IsMinimum = true,
                             IsDefault = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "2",
                             IsMaximum = true
                         }
                     }
                 },
                 new MpAnalyticItemParameter() {
-                    ParameterType = MpAnalyticParameterType.Slider,
+                    ParameterType = MpAnalyticItemParameterType.Slider,
+                            ValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                     Label = "Presence Penalty",
                     IsParameterRequired = true,
                     SortOrderIdx = 6,
                     EnumId = (int)MpOpenAiParamType.PresPen,
                     ValueSeeds = new List<MpAnalyticItemParameterValue>() {
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "0",
                             IsMinimum = true,
                             IsDefault = true
                         },
                         new MpAnalyticItemParameterValue() {
-                            ParameterValueType = MpAnalyticItemParameterValueUnitType.Decimal,
                             Value = "2",
                             IsMaximum = true
                         }
@@ -255,22 +239,22 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task ExecuteAnalysis() {
+        protected override async Task ExecuteAnalysis(object obj) {
             IsBusy = true;
 
             string endpoint = string.Format(
                 @"https://api.openai.com/v1/engines/{0}/{1}",
-                GetParam((int)MpOpenAiParamType.Engine).CurrentValueViewModel.Value.ToLower(),
-                GetParam((int)MpOpenAiParamType.EndPoint).CurrentValueViewModel.Value.ToLower());
+                GetParam((int)MpOpenAiParamType.Engine).CurrentValue.ToLower(),
+                GetParam((int)MpOpenAiParamType.EndPoint).CurrentValue.ToLower());
 
 
             MpOpenAiRequest jsonReq = new MpOpenAiRequest() {
-                Prompt = Regex.Escape(Parent.Parent.CopyItemData.ToPlainText()),
-                Temperature = GetParam((int)MpOpenAiParamType.Temperature).CurrentValueViewModel.DoubleValue,
-                MaxTokens = GetParam((int)MpOpenAiParamType.MaxTokens).CurrentValueViewModel.IntValue,
-                TopP = GetParam((int)MpOpenAiParamType.TopP).CurrentValueViewModel.DoubleValue,
-                FrequencyPenalty = GetParam((int)MpOpenAiParamType.FreqPen).CurrentValueViewModel.DoubleValue,
-                PresencePenalty = GetParam((int)MpOpenAiParamType.PresPen).CurrentValueViewModel.DoubleValue
+                Prompt = Regex.Escape(obj.ToString()),
+                Temperature = GetParam((int)MpOpenAiParamType.Temperature).DoubleValue,
+                MaxTokens = GetParam((int)MpOpenAiParamType.MaxTokens).IntValue,
+                TopP = GetParam((int)MpOpenAiParamType.TopP).DoubleValue,
+                FrequencyPenalty = GetParam((int)MpOpenAiParamType.FreqPen).DoubleValue,
+                PresencePenalty = GetParam((int)MpOpenAiParamType.PresPen).DoubleValue
             };
 
             string jsonRespStr = await MpOpenAi.Instance.Request(

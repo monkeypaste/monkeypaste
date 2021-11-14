@@ -1,16 +1,14 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpAnalyticItemParameterView"
+﻿<UserControl x:Class="MpWpfApp.MpAnalyticItemComponentView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpAnalyticItemParameterViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <StackPanel>
+    <StackPanel MaxWidth="200">
         <StackPanel.Resources>
-            <local:MpStringToAnalyticNumberConverter x:Key="StringToAnalyticNumberConverter" />
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
                 <Grid>
@@ -60,7 +58,7 @@
                                HorizontalAlignment="Left"
                                Text="{Binding Label}" />
                     <TextBox Grid.Column="1"
-                             Text="{Binding CurrentValueViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+                             Text="{Binding CurrentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="CheckBoxParameter"
@@ -69,7 +67,7 @@
                     <TextBlock Margin="0,0,7,0"
                                HorizontalAlignment="Left"
                                Text="{Binding Label}" />
-                    <CheckBox IsChecked="{Binding CurrentValueViewModel.BoolValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+                    <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="SliderParameter"
@@ -80,21 +78,21 @@
                                 DockPanel.Dock="Left">
                         <TextBlock Text="{Binding Label}"
                                    TextWrapping="Wrap" />
-                        <TextBox Text="{Binding SliderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+                        <TextBox Text="{Binding SliderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                     </StackPanel>
                     <Slider Minimum="{Binding Min}"
                             Maximum="{Binding Max}"
                             Margin="0,15,0,0"
                             Width="120"
                             DockPanel.Dock="Right"
-                            Value="{Binding SliderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                            Value="{Binding SliderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                             TickPlacement="None"
                             TickFrequency="{Binding TickFrequency}"
                             IsSnapToTickEnabled="False" />
                 </DockPanel>
             </DataTemplate>
             <DataTemplate x:Key="ExecuteParameter"
-                          DataType="local:MpExecuteParameterViewModel">
+                          DataType="local:MpAnalyticItemExecuteButtonViewModel">
                 <StackPanel>
                     <Button HorizontalAlignment="Right"
                             MinWidth="50"
@@ -105,7 +103,7 @@
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="ResultParameter"
-                          DataType="local:MpResultParameterViewModel">
+                          DataType="local:MpAnalyticItemResultViewModel">
                 <TextBlock MaxWidth="150"
                            Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibilityConverter}}"
                            TextWrapping="Wrap"
@@ -123,4 +121,4 @@
                         Margin="0,5"
                         ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
     </StackPanel>
-</local:MpUserControl>
+</UserControl>

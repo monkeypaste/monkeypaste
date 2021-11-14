@@ -1047,7 +1047,7 @@
         <s:Int32 x:Key="Zip">3</s:Int32>
         <s:Int32 x:Key="Up">-1</s:Int32>
         <s:Int32 x:Key="Down">1</s:Int32>
-        
+
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
 
@@ -1159,10 +1159,10 @@
         <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
         <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
         <local:MpAppModeViewModel x:Key="AppModeViewModel" />
-        <!--<local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />-->
+        <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
         <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
         <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
-        <local:MpQuickActionAnalyzerCollectionViewModel x:Key="QuickActionAnalyzerCollectionViewModel"/>
+        <!--<local:MpQuickActionAnalyzerCollectionViewModel x:Key="QuickActionAnalyzerCollectionViewModel"/>-->
         <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>

@@ -57,6 +57,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Strings
+        public static string ToTitleCase(this string str) {
+            TextInfo textInfo = new CultureInfo(MpPreferences.Instance.UserCultureInfoName, false).TextInfo;
+            return textInfo.ToTitleCase(str);
+        }
+
         public static List<int> IndexListOfAll(this string str, string compareStr) {
             return MpHelpers.Instance.IndexListOfAll(str, compareStr);
         }

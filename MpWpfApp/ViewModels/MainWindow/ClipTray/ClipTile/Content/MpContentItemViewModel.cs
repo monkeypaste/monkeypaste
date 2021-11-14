@@ -43,18 +43,18 @@ namespace MpWpfApp {
             }
         }
 
-        private MpAnalyticItemCollectionViewModel _analyticItemCollectionViewModel = null;
-        public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel {
-            get {
-                return _analyticItemCollectionViewModel;
-            }
-            set {
-                if (_analyticItemCollectionViewModel != value) {
-                    _analyticItemCollectionViewModel = value;
-                    OnPropertyChanged(nameof(AnalyticItemCollectionViewModel));
-                }
-            }
-        }
+        //private MpAnalyticItemCollectionViewModel _analyticItemCollectionViewModel = null;
+        //public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel {
+        //    get {
+        //        return _analyticItemCollectionViewModel;
+        //    }
+        //    set {
+        //        if (_analyticItemCollectionViewModel != value) {
+        //            _analyticItemCollectionViewModel = value;
+        //            OnPropertyChanged(nameof(AnalyticItemCollectionViewModel));
+        //        }
+        //    }
+        //}
 
 
         private MpTemplateCollectionViewModel _templateCollection;
@@ -607,7 +607,7 @@ namespace MpWpfApp {
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
-            AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
+            //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
             RequestUiUpdate();

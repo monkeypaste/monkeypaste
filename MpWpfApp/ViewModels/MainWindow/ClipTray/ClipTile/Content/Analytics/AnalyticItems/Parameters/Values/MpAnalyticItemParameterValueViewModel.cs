@@ -52,78 +52,6 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemParameterValueUnitType ValueUnitType {
-            get {
-                if (AnalyticItemParameterValue == null) {
-                    return MpAnalyticItemParameterValueUnitType.None;
-                }
-                return AnalyticItemParameterValue.ParameterValueType;
-            }
-        }
-
-        public double DoubleValue {
-            get {
-                if (string.IsNullOrWhiteSpace(Value)) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToDouble(Value);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                    return 0;
-                }
-            }
-            set {
-                if (DoubleValue != value) {
-                    Value = value.ToString();
-                    OnPropertyChanged(nameof(DoubleValue));
-                    OnPropertyChanged(nameof(Value));
-                }
-            }
-        }
-
-        public int IntValue {
-            get {
-                if (string.IsNullOrWhiteSpace(Value)) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToInt32(DoubleValue);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                    return 0;
-                }
-            }
-            set {
-                if (IntValue != value) {
-                    Value = value.ToString();
-                    OnPropertyChanged(nameof(IntValue));
-                    OnPropertyChanged(nameof(Value));
-                }
-            }
-        }
-
-        public bool BoolValue {
-            get {
-                if (string.IsNullOrWhiteSpace(Value)) {
-                    return false;
-                }
-                if (Value != "0" && Value != "1") {
-                    throw new Exception("Cannot convert value " + Value + " to boolean");
-                }
-                return Value == "1";
-            }
-            set {
-                if(BoolValue != value) {
-                    Value = value ? "1" : "0";
-                    OnPropertyChanged(nameof(BoolValue));
-                    OnPropertyChanged(nameof(Value));
-                }
-            }
-        }
-
         public string Value {
             get {
                 if (AnalyticItemParameterValue == null) {
@@ -224,8 +152,8 @@ namespace MpWpfApp {
                 case nameof(Value):
                     break;
             }
-
-            (Parent.Parent.ExecuteAnalysisCommand as RelayCommand).RaiseCanExecuteChanged();
+            Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));
+            //(Parent.Parent.ExecuteAnalysisCommand as RelayCommand).RaiseCanExecuteChanged();
         }
         #endregion
     }

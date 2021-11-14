@@ -18,7 +18,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSearchBoxViewModel : MpSingletonViewModel<MpSearchBoxViewModel,object> {
+    public class MpSearchBoxViewModel : MpSingletonViewModel<MpSearchBoxViewModel> {
         #region Private Variables
         #endregion
 

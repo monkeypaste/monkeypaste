@@ -24,16 +24,22 @@ namespace MpWpfApp {
             }
         }
 
-        private bool? _isTagLinkedToClip = false;
+        private bool? _isChecked = null;
         public bool? IsChecked {
             get {
-                return _isTagLinkedToClip;
+                return _isChecked;
             }
             set {
-                if (_isTagLinkedToClip != value) {
-                    _isTagLinkedToClip = value;
+                if (_isChecked != value) {
+                    _isChecked = value;
                     OnPropertyChanged(nameof(IsChecked));
                 }
+            }
+        }
+
+        public bool IsCheckable {
+            get {
+                return IsChecked.HasValue;
             }
         }
 
@@ -168,9 +174,10 @@ namespace MpWpfApp {
                                 
                             } else {
                                 icon.Source = IconSource.ToBitmapSource();
-                                icon.Height = icon.Width = 20;
+                                //icon.Height = icon.Width = 20;
                             }
                             Icon = icon;
+                            Icon.Stretch = Stretch.Fill;
                         }
                         break;
                     case nameof(IconBackgroundBrush):

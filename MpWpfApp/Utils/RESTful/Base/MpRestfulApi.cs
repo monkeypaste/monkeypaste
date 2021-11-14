@@ -6,6 +6,39 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
+    public enum MpPeriodicCycle {
+        None = 0,
+        Daily,
+        Weekly,
+        BiWeekly,
+        Monthly,
+        Yearly,
+        Indefinite
+    }
+
+    public interface MpIRestfulService {
+        string ApiName { get; }
+
+        DateTime ServiceStartDateTime { get; }
+        
+        MpPeriodicCycle CycleType { get; }
+        
+        int MaxRequestCountPerCycle { get; }
+        int CurrentCycleRequestCount { get; }
+
+        long MaxRequestBytesPerCycle { get; }
+        long CurrentCycleRequestByteSize { get; }
+
+        long MaxResponseBytesPerCycle { get; }
+        long CurrentCycleResponseByteSize { get; }
+
+        void IncrementCallCount(long requestSize,long responseSize);
+        void Reset();
+
+        bool? GetServiceStatus();
+
+    }
+
     public abstract class MpRestfulApi  {
         private string _apiName = string.Empty;
 

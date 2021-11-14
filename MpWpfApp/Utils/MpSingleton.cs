@@ -12,9 +12,8 @@ namespace MpWpfApp {
         #endregion
     }
 
-    public abstract class MpSingletonViewModel<T,P> : MpViewModelBase<P>
-        where T : new()
-        where P : class {
+    public abstract class MpSingletonViewModel<T> : MpViewModelBase<object>
+        where T : new() {
 
         #region Singleton Definition
         private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
@@ -22,6 +21,5 @@ namespace MpWpfApp {
         #endregion
 
         protected MpSingletonViewModel() : base(null) { }
-        protected MpSingletonViewModel(P p) : base(p) { }
     }
 }
