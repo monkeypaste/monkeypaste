@@ -44,7 +44,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region Controls
-        public Canvas KeyCanvas { get; set; }
+        //public Canvas KeyCanvas { get; set; }
         #endregion
 
         private ObservableCollection<MpShortcutKeyViewModel> _keyItems = new ObservableCollection<MpShortcutKeyViewModel>();
@@ -200,7 +200,6 @@ namespace MpWpfApp {
 
             _windowRef = (Window)sender;
             _shortCutListBox = _windowRef.FindName("ShortcutListBox") as ListBox;
-            KeyCanvas = _windowRef.FindName("KeyCanvas") as Canvas;
 
             //the following hides close button
             var hwnd = new WindowInteropHelper(_windowRef).Handle;

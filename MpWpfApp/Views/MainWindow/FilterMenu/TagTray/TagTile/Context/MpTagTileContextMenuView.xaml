@@ -9,7 +9,7 @@
              Loaded="TagTile_ContextMenu_Loaded"
              Opened="TagTile_ContextMenu_Opened"
              Closed="TagTile_ContextMenu_Closed"
-             d:DataContext="{d:DesignInstance local:MpTagTileViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel, IsDesignTimeCreatable=False}">
     <MenuItem Header="Rename"
               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
               Command="{Binding PlacementTarget.RenameTagCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"

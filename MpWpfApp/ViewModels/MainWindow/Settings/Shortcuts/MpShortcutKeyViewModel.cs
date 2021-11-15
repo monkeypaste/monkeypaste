@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpShortcutKeyViewModel : MpViewModelBase<object> {
+    public class MpShortcutKeyViewModel : MpViewModelBase<MpShortcutViewModel> {
         #region Properties
+
+        public ObservableCollection<DateTime> KeyDownInstances { get; set; } = new ObservableCollection<DateTime>();
+
+        public ObservableCollection<DateTime> KeyUpInstances { get; set; } = new ObservableCollection<DateTime>();
+
         private int _seqIdx = 0;
         public int SeqIdx {
             get {
@@ -75,10 +81,17 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
+        #region Constructors
         public MpShortcutKeyViewModel() : base(null) { }
 
         public MpShortcutKeyViewModel(string keyStr,bool showPlus,bool showComma, int seqIdx) : this() {
+            KeyStr = keyStr;
+            ShowPlus = showPlus;
+            ShowComma = showComma;
+            SeqIdx = seqIdx;
+        }
+
+        public MpShortcutKeyViewModel(MpShortcutViewModel parent, string keyStr, bool showPlus, bool showComma, int seqIdx) : base(parent) {
             KeyStr = keyStr;
             ShowPlus = showPlus;
             ShowComma = showComma;

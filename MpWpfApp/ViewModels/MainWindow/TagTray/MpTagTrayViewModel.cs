@@ -20,7 +20,7 @@ namespace MpWpfApp {
         #endregion
 
         #region View Models
-        public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; }
+        public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
 
         public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
 
@@ -81,8 +81,6 @@ namespace MpWpfApp {
                 MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
                 MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
                 MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
-
-                TagTileViewModels = new ObservableCollection<MpTagTileViewModel>();
 
                 List<MpTag> allTags = await MpDb.Instance.GetItemsAsync<MpTag>();
                 //create tiles for all the tags

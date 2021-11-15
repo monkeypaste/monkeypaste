@@ -8,12 +8,14 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
     <Border Margin="5"
             BorderThickness="0"
             BorderBrush="Black"
             CornerRadius="3"
             Background="{Binding ItemBackgroundBrush}"
+            Width="{local:MpMeasurementsBinding AnalyticTreeViewItemWidth}"
+            MaxWidth="{local:MpMeasurementsBinding AnalyticTreeViewItemWidth}"
             MouseEnter="Border_MouseEnter"
             MouseLeave="Border_MouseLeave">
         <DockPanel>
@@ -44,7 +46,7 @@
                 </Button.Resources>
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Save Preset"
+                        <MenuItem Header="Save New Preset"
                                   Icon="{Binding Source={StaticResource SaveIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding Data.CreateNewPresetCommand, Source={StaticResource AnalyticItemProxy}}" />
                         <MenuItem Header="Apply Preset"
@@ -54,15 +56,14 @@
                                 <Style TargetType="{x:Type MenuItem}">
                                     <Setter Property="Header"
                                             Value="{Binding Label}" />
-                                    <Setter Property="Icon">
-                                        <Setter.Value>
-                                            <Image Source="{Binding PresetIcon, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="Icon"
+                                            Value="{Binding PresetIcon, Converter={StaticResource Base64StringToIconConverter}}"/>
                                     <Setter Property="ToolTip"
                                             Value="{Binding Description}" />
                                     <Setter Property="Command"
                                             Value="{Binding Parent.SelectPresetCommand}" />
+                                    <Setter Property="InputGestureText"
+                                            Value="{Binding ShortcutKeyString}"/>
                                     <Setter Property="CommandParameter"
                                             Value="{Binding}" />
                                     <Setter Property="HorizontalContentAlignment"
@@ -76,7 +77,7 @@
                                   Icon="{Binding Source={StaticResource ResetIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding Data.ResetCommand, Source={StaticResource AnalyticItemProxy}}" />
                         <Separator />
-                        <MenuItem Header="{Binding Data.ManageLabel, Source={StaticResource AnalyticItemProxy}}"
+                        <MenuItem Header="Manage Presets"
                                   Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding Data.ManageAnalyticItemCommand, Source={StaticResource AnalyticItemProxy}}" />
                     </ContextMenu>
@@ -100,6 +101,7 @@
                 </TextBlock.ToolTip>
                 <TextBlock.Inlines>
                     <Hyperlink x:Name="AnalyticItemTextBlockLink"
+                               IsEnabled="{Binding IsSelected}"
                                Background="Transparent"
                                Foreground="{Binding ItemTitleForegroundBrush}">
                         <Hyperlink.Inlines>

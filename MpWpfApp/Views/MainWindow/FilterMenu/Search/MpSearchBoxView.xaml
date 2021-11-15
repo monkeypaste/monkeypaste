@@ -9,7 +9,7 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance local:MpSearchBoxViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpSearchBoxViewModel, IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -61,10 +61,10 @@
                          KeyUp="SearchBox_KeyUp"
                          Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 <local:MpSpinnerApple x:Name="IsSearchingSpinner"
-                                         Grid.Column="2"
-                                         VerticalAlignment="Center"
-                                         Margin="0,0,5,0"
-                                         Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                      Grid.Column="2"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,5,0"
+                                      Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <Button x:Name="ClearTextBoxButton"
                         Grid.Column="2"
                         Width="15"
@@ -72,13 +72,13 @@
                         MouseEnter="ClearTextBoxButton_MouseEnter"
                         MouseLeave="ClearTextBoxButton_MouseLeave"
                         Style="{StaticResource SemiTransparentButton}"
-                                    BorderThickness="0"
+                        BorderThickness="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Visibility="{Binding ClearTextButtonVisibility}"
                         Click="ClearTextBoxButton_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}"/>
+                        <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}" />
                     </Button.Background>
                 </Button>
             </Grid>

@@ -128,22 +128,21 @@
         <!--  Account Panel  -->
         <StackPanel Grid.Row="1"
                     Visibility="{Binding SettingsPanel1Visibility}">
-
             <local:MpAccountTabPanel DataContext="{Binding}" />
         </StackPanel>
         <!--  Preferences  -->
         <StackPanel Grid.Row="1"
-                    Visibility="{Binding SettingsPane21Visibility}">
+                    Visibility="{Binding SettingsPanel2Visibility}">
             <local:MpPreferencesTabPanel DataContext="{Binding PreferencesViewModel}" />
         </StackPanel>
         <!--  Security  -->
         <StackPanel Grid.Row="1"
-                    Visibility="{Binding SettingsPane31Visibility}">
+                    Visibility="{Binding SettingsPanel3Visibility}">
             <local:MpSecurityTabPanel DataContext="{Binding SecurityViewModel}" />
         </StackPanel>
         <!--  Shortcuts  -->
         <StackPanel Grid.Row="1"
-                    Visibility="{Binding SettingsPane41Visibility}">
+                    Visibility="{Binding SettingsPanel4Visibility}">
             <local:MpShortcutsTabPanel DataContext="{Binding}" />
         </StackPanel>
         <!--  Help  -->

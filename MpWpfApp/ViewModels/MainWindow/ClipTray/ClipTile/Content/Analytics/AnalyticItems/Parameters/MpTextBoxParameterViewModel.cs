@@ -16,50 +16,7 @@ namespace MpWpfApp {
 
         #region State
 
-        public override bool IsValid {
-            get {
-                if(!IsRequired) {
-                    return true;
-                }
-                if(Parameter == null || CurrentValue == null) {
-                    return false;
-                }
-
-                var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
-                if(minCond != null) {
-                    int minLength = 0;
-                    try { 
-                        minLength = Convert.ToInt32(minCond.Value); 
-                    } catch(Exception ex) {
-                        MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");
-                    }
-                    if(CurrentValue.Length < minLength) {
-                        return false;
-                    }
-                }
-                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
-                if (maxCond != null) {
-                    // TODO should cap all input string but especially here
-                    int maxLength = int.MaxValue;
-                    try {
-                        maxLength = Convert.ToInt32(maxCond.Value);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Maximum val: {minCond.Value} could not conver to int, exception: {ex}");
-                    }
-                    if (CurrentValue.Length < maxLength) {
-                        return false;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(FormatInfo)) {
-                    if(CurrentValue.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
+        
         #endregion
 
         #region Model
@@ -103,10 +60,68 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(CurrentValue));
 
+            OnValidate += MpTextBoxParameterViewModel_OnValidate;
             await Task.Delay(1);
 
             IsBusy = false;
         }
+
+        private void MpTextBoxParameterViewModel_OnValidate(object sender, EventArgs e) {
+            //if (!IsRequired) {
+            //    return true;
+            //}
+            //if (Parameter == null || CurrentValue == null) {
+            //    return false;
+            //}
+
+            var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
+            if (minCond != null) {
+                int minLength = 0;
+                try {
+                    minLength = Convert.ToInt32(minCond.Value);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");
+                }
+                if (CurrentValue.Length < minLength) {
+                    ValidationMessage = $"{Label} must be at least {minLength} characters";
+                } else {
+                    ValidationMessage = string.Empty;
+                }
+            }
+            if(IsValid) {
+                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
+                if (maxCond != null) {
+                    // TODO should cap all input string but especially here
+                    int maxLength = int.MaxValue;
+                    try {
+                        maxLength = Convert.ToInt32(maxCond.Value);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Maximum val: {minCond.Value} could not conver to int, exception: {ex}");
+                    }
+                    if (CurrentValue.Length > maxLength) {
+                        ValidationMessage = $"{Label} can be no more than {maxLength} characters";
+                    } else {
+                        ValidationMessage = string.Empty;
+                    }
+                }
+            }
+
+            if(IsValid) {
+                if (!string.IsNullOrEmpty(FormatInfo)) {
+                    if (CurrentValue.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
+                        ValidationMessage = $"{Label} cannot contain '{FormatInfo}' characters";
+                    }
+                }
+            }
+
+            OnPropertyChanged(nameof(IsValid));
+        }
+
+        #endregion
+
+        #region Protected Methods
 
         #endregion
     }

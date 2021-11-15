@@ -13,8 +13,6 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public override bool IsValid => true;
-
         #region Model
 
         public override string CurrentValue { get; set; }

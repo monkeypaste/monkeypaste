@@ -1136,18 +1136,28 @@ namespace MpWpfApp {
                 var ctvm = tileToFlip as MpClipTileViewModel;
                 ctvm.IsBusy = true;
                 if (ctvm.IsFlipped) {
-                    ClearClipSelection();
-                    ctvm.IsSelected = true;
+                    //ClearClipSelection();
+                    //ctvm.IsSelected = true;
                     ctvm.IsFlipping = true;
-                } else {
-                    while(!MpAnalyticItemCollectionViewModel.Instance.IsLoaded) {
+                    while(ctvm.IsFlipping) {
                         await Task.Delay(100);
                     }
-                    UnFlipAllTiles();
+                } else {
+                    var flippedCtvm = Items.FirstOrDefault(x => x.IsFlipped);
+                    if(flippedCtvm != null) {
+                        flippedCtvm.IsFlipping = true;
+                        while (flippedCtvm.IsFlipping) {
+                            await Task.Delay(100);
+                        }
+                    }
                     ClearClipSelection();
+                    ctvm.IsFlipping = true;
+                    while (ctvm.IsFlipping) {
+                        await Task.Delay(100);
+                    }
                     ctvm.IsSelected = true;
                     //await ctvm.PrimaryItem.AnalyticItemCollectionViewModel.Init();
-                    ctvm.IsFlipping = true;
+                    //ctvm.IsFlipping = true;
                 }
 
                 ctvm.IsBusy = false;

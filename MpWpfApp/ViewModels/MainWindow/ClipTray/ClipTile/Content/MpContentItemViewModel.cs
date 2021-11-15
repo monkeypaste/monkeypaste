@@ -769,7 +769,6 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpShortcut sc) {

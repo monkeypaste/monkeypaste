@@ -2,19 +2,26 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
-        Title="Manage Analyzer"
-        Width="600"
+        Title="{Binding ManageLabel}"
+        Icon="{Binding ItemIconBase64, Converter={StaticResource Base64StringToIconConverter}}"
+        d:DesignWidth="600"
+        Loaded="Window_Loaded"
+        SizeToContent="WidthAndHeight"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
-    <StackPanel>
+        Activated="Window_Activated"
+        d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
+    <StackPanel Margin="10">
         <DataGrid x:Name="AnalyticItemDatagrid"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True"
                   ItemsSource="{Binding PresetViewModels}"
                   SelectionMode="Single"
                   Margin="10,0,10,5"
@@ -23,6 +30,12 @@
                   CanUserAddRows="False"
                   IsReadOnly="False"
                   AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                 Color="Transparent" />
+                <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                 Color="#FF0000" />-->
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="50">
                     <DataGridTemplateColumn.CellTemplate>
@@ -43,23 +56,15 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--<DataGridTemplateColumn Header="Application"
-                                        Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Label Content="{Binding Parent.Title}"
-                                   VerticalAlignment="Center" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
-                <DataGridTemplateColumn Header="Preset Name"
+                <DataGridTemplateColumn Header="Label"
                                         Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox IsReadOnly="{Binding IsReadOnly}"
-                                     Background="Transparent"
+                                     Margin="3"
+                                     Background="White"
                                      BorderThickness="0"
-                                     Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                     Text="{Binding Label, Mode=TwoWay}"
                                      VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -74,11 +79,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Shortcut"
-                                    Width="100"
+                <!--<DataGridTextColumn Header="Shortcut"
+                                    Width="Auto"
                                     IsReadOnly="True"
-                                    Binding="{Binding ShortcutKeyString}" />
-                <DataGridTemplateColumn Width="50">
+                                    Binding="{Binding ShortcutKeyString}" />-->
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:MpShortcutGestureView Background="White" 
+                                                         DataContext="{Binding ShortcutViewModel}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Background="White"
@@ -92,41 +105,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Sort" Width="33">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button x:Name="ShiftDownButton"
-                                        DataContextChanged="ShiftDownButton_DataContextChanged"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        Background="Transparent"
-                                        Width="15"
-                                        Height="20"
-                                        Template="{StaticResource SearchButtonControlTemplate}">
-                                    <Image Stretch="UniformToFill" 
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Source="/MpWpfApp;component/Resources/Images/desc_black.png" />
-                                </Button>
-                                <Button x:Name="ShiftUpButton"
-                                        BorderThickness="0"
-                                        DataContextChanged="ShiftUpButton_DataContextChanged"
-                                        Cursor="Hand"
-                                        Width="15"
-                                        Height="20"
-                                        Background="Transparent"
-                                        Template="{StaticResource SearchButtonControlTemplate}">
-                                    <Image Stretch="UniformToFill"
-                                            HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Source="/MpWpfApp;component/Resources/Images/asc_black.png" />
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="50">
+                <DataGridTemplateColumn Width="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Background="White"

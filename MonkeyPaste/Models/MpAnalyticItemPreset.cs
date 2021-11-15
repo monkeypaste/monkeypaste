@@ -96,7 +96,7 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItemPreset> Create(
             MpAnalyticItem analyticItem, 
             string label,
-            MpIcon icon = null, bool isReadOnly = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
+            MpIcon icon = null, bool isDefault = false, bool isReadOnly = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
             if (analyticItem == null) {
                 throw new Exception("Preset must be associated with an item");
             }

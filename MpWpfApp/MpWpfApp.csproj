@@ -138,6 +138,7 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToCursorConverter.cs" />
     <Compile Include="Converters\MpBoolToHAlignmentConverter.cs" />
@@ -258,7 +259,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Selector\MpContentTemplateSelector.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
@@ -431,6 +432,9 @@
     </Compile>
     <Compile Include="Views\Settings\Shortcuts\MpShortcutCollectionDataGridView.xaml.cs">
       <DependentUpon>MpShortcutCollectionDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Shortcuts\MpShortcutGestureView.xaml.cs">
+      <DependentUpon>MpShortcutGestureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Shortcuts\MpShortcutsTabPanel.xaml.cs">
       <DependentUpon>MpShortcutsTabPanel.xaml</DependentUpon>
@@ -657,6 +661,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\Shortcuts\MpShortcutCollectionDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Shortcuts\MpShortcutGestureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

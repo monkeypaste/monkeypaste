@@ -35,6 +35,9 @@ namespace MonkeyPaste {
         [Column("Description")]
         public string Description { get; set; } = string.Empty;
 
+        [Column("SortOrderIdx")]
+        public int SortOrderIdx { get; set; } = -1;
+
         [Column("ApiKey")]
         public string ApiKey { get; set; } = string.Empty;
 
@@ -89,11 +92,16 @@ namespace MonkeyPaste {
             string apiKey, 
             MpInputFormatType format, 
             string title, 
-            string description) {
+            string description,
+            int sortOrderIdx = -1) {
             var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
                 dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(dupItem.Id);
                 return dupItem;
+            }
+
+            if(sortOrderIdx < 0) {
+                sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
             }
 
             var domainStr = MpHelpers.Instance.GetUrlDomain(endPoint);
@@ -109,7 +117,8 @@ namespace MonkeyPaste {
                 Icon = icon,
                 InputFormatType = format,
                 Title = title,
-                Description = description
+                Description = description,
+                SortOrderIdx = sortOrderIdx
             };
 
             await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItem>(newAnalyticItem);

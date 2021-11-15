@@ -95,8 +95,6 @@ namespace MpWpfApp {
         #endregion
         
 
-        public override bool IsValid => true;
-
         #endregion
 
         #region Constructors

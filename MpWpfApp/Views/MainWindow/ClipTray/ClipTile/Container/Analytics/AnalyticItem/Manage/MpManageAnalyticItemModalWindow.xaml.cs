@@ -53,5 +53,16 @@ namespace MpWpfApp {
             btn.Command = pvm.Parent.ShiftPresetCommand;
             btn.CommandParameter = new object[] { -1, pvm };
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            var aivm = DataContext as MpAnalyticItemViewModel;
+            aivm.OnPropertyChanged(nameof(aivm.ItemIconBase64));
+        }
+
+        private void Window_Activated(object sender, EventArgs e) {
+            //this is to update the shortcut key cell after an edit
+            var aivm = DataContext as MpAnalyticItemViewModel;
+            aivm.PresetViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ShortcutViewModel)));
+        }
     }
 }

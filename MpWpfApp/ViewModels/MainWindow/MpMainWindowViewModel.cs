@@ -263,6 +263,9 @@ namespace MpWpfApp {
 
             await MpSearchBoxViewModel.Instance.Init();
             Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
+            
+            await MpAnalyticItemCollectionViewModel.Instance.Init();
+            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
 
             await MpClipTrayViewModel.Instance.Init();
             Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
@@ -272,7 +275,6 @@ namespace MpWpfApp {
 
             await MpTagTrayViewModel.Instance.Init();
             Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
-            //OnPropertyChanged(nameof(TagTrayViewModel));
 
             await MpShortcutCollectionViewModel.Instance.Init();
             Application.Current.Resources["ShortcutCollectionViewModel"] = MpShortcutCollectionViewModel.Instance;
@@ -283,9 +285,7 @@ namespace MpWpfApp {
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
-            await MpAnalyticItemCollectionViewModel.Instance.Init();
-            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
-
+           
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
             IsMainWindowLoading = false;

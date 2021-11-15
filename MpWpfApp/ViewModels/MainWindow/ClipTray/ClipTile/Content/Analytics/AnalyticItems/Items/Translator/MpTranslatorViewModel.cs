@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -108,14 +109,39 @@ namespace MpWpfApp {
                     SortOrderIdx = 1
                 }
             };
+            //aipl[1].ValueSeeds.ForEach(x => x.IsDefault = false);
             AnalyticItem.Parameters = aipl;
 
             await base.LoadChildren();
+
             IsBusy = false;
         }
         #endregion
 
         #region Protected Methods
+
+        protected override void ParameterViewModel_OnValidate(object sender, EventArgs e) {
+            if(IsBusy) {
+                return;
+            }
+
+            var fromParam = GetParam((int)MpTranslatorParamType.FromLang) as MpComboBoxParameterViewModel;
+            var toParam = GetParam((int)MpTranslatorParamType.ToLang) as MpComboBoxParameterViewModel;
+
+            if (fromParam.CurrentValue == toParam.CurrentValue) {
+                if(sender == fromParam) {
+                    fromParam.ValidationMessage = "Cannot translate to same language";
+                } else {
+                    toParam.ValidationMessage = "Cannot translate to same language";
+                }
+            } else {
+                if (sender == fromParam) {
+                    fromParam.ValidationMessage = string.Empty;
+                } else {
+                    toParam.ValidationMessage = string.Empty;
+                }
+            }
+        }
 
         protected override async Task ExecuteAnalysis(object obj) {
             IsBusy = true;

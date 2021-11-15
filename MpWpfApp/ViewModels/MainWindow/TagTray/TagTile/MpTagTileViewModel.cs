@@ -380,6 +380,36 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Protected Methods
+
+        #region Db Events
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.TagId == TagId) {
+                    ShortcutKeyString = sc.KeyString;
+                }
+            }
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.TagId == TagId) {
+                    ShortcutKeyString = sc.KeyString;
+                }
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.TagId == TagId) {
+                    ShortcutKeyString = string.Empty;
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Private Methods
 
         #region Sync Event Handlers

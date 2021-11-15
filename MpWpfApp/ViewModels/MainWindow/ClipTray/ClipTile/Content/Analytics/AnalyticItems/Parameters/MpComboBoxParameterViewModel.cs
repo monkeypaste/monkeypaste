@@ -6,10 +6,15 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpComboBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+        #region Private Variables
+
+        private string _defaultValue;
+
+        #endregion
         #region Properties
 
         #region View Models
-        public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
+        //public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
 
         public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
 
@@ -27,15 +32,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        //public override bool HasChanged => CurrentValueViewModel != DefaultValueViewModel;
-        public override bool IsValid {
-            get {
-                if (!IsRequired) {
-                    return true;
-                }
-                return CurrentValueViewModel != null && !string.IsNullOrEmpty(CurrentValueViewModel.Value);
-            }
-        }
+        
         #endregion
 
         #region Model
@@ -92,7 +89,7 @@ namespace MpWpfApp {
             } else if(ValueViewModels.Count > 0) {
                 ValueViewModels[0].IsSelected = true;
             }
-            DefaultValueViewModel = CurrentValueViewModel;
+            DefaultValue = CurrentValueViewModel.Value;
 
             OnPropertyChanged(nameof(ValueViewModels));
             OnPropertyChanged(nameof(CurrentValue));
@@ -110,6 +107,16 @@ namespace MpWpfApp {
         //    valueVm.IsSelected = true;
         //}
 
+        #endregion
+
+        #region Protected Methods
+
+        //protected override bool Validate() {
+        //    if (!IsRequired) {
+        //        return true;
+        //    }
+        //    return CurrentValueViewModel != null && !string.IsNullOrEmpty(CurrentValueViewModel.Value);
+        //}
         #endregion
     }
 }

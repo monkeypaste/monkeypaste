@@ -1,20 +1,21 @@
 ﻿<UserControl x:Class="MpWpfApp.MpAnalyticItemComponentView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     mc:Ignorable="d"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800">
-    <StackPanel MaxWidth="200">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MpWpfApp"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <StackPanel Width="{local:MpMeasurementsBinding AnalyticTreeViewItemComponentMaxWidth}"
+                MaxWidth="{local:MpMeasurementsBinding AnalyticTreeViewItemComponentMaxWidth}">
         <StackPanel.Resources>
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="{local:MpMeasurementsBinding AnalyticTreeViewItemComponentColumnWidth}" />
+                        <ColumnDefinition Width="{local:MpMeasurementsBinding AnalyticTreeViewItemComponentColumnWidth}" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Margin="0,0,7,0"

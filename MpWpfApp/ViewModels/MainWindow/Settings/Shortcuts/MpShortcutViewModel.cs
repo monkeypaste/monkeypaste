@@ -18,6 +18,36 @@ namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel> {
         #region Properties        
 
+        #region View Models
+
+        public ObservableCollection<MpShortcutKeyViewModel> KeyItems {
+            get {
+                var keyItems = new ObservableCollection<MpShortcutKeyViewModel>();
+                foreach (var kl in KeyList) {
+                    int seqIdx = KeyList.IndexOf(kl);
+                    foreach (var k in kl) {
+                        if (kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
+                            keyItems.Add(new MpShortcutKeyViewModel(this,
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            true, false, seqIdx));
+                        } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count - 1) {
+                            keyItems.Add(new MpShortcutKeyViewModel(this,
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            false, true, seqIdx));
+                        } else {
+                            keyItems.Add(new MpShortcutKeyViewModel(this,
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            false, false, seqIdx));
+                        }
+
+                    }
+                }
+                return keyItems;
+            }
+        }
+
+        #endregion
+
         #region Visibility 
         public Visibility GlobalRoutingTypeComboItemVisibility {
             get {
@@ -190,9 +220,13 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsEmpty => KeyItems.Count == 0;
+
         #endregion
 
         #region Model
+
         public string DefaultKeyString {
             get {
                 if (Shortcut == null) {
@@ -203,7 +237,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(DefaultKeyString));
                 }
             }
@@ -219,7 +253,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.CopyItemId != value) {
                     Shortcut.CopyItemId = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemId));
                 }
             }
@@ -235,7 +269,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.TagId != value) {
                     Shortcut.TagId = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(TagId));
                 }
             }
@@ -251,7 +285,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.AnalyticItemPresetId != value) {
                     Shortcut.AnalyticItemPresetId = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
                 }
             }
@@ -299,7 +333,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
                 }
@@ -316,7 +350,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
@@ -332,7 +366,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.RoutingType != value) {
                     Shortcut.RoutingType = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(RoutingType));
                     OnPropertyChanged(nameof(SelectedRoutingType));
                 }
@@ -371,7 +405,10 @@ namespace MpWpfApp {
             PropertyChanged += MpShortcutViewModel_PropertyChanged;
             Shortcut = s;
             Command = command;
-            CommandParameter = commandParameter;
+            CommandParameter = commandParameter; 
+
+            OnPropertyChanged(nameof(KeyItems));
+            OnPropertyChanged(nameof(IsEmpty));
         }
 
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -386,6 +423,8 @@ namespace MpWpfApp {
                             ttvm.ShortcutKeyString = Shortcut.KeyString;
                         }
                     }
+                    OnPropertyChanged(nameof(KeyItems));
+                    OnPropertyChanged(nameof(IsEmpty));
                     break;
             }
         }
@@ -428,7 +467,6 @@ namespace MpWpfApp {
                     MonkeyPaste.MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
                     return;
                 }
-                await Shortcut.WriteToDatabaseAsync();
                 //MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
@@ -484,8 +522,36 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Protected Methods
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            bool wasChanged = false;
+            if(e is MpCopyItem ci) {
+                if(CopyItemId == ci.Id) {
+                    ShortcutDisplayName = $"Paste {ci.Title}";
+                    wasChanged = true;
+                }
+            } else if (e is MpTag t) {
+                if (TagId == t.Id) {
+                    ShortcutDisplayName = $"Select {t.TagName}";
+                    wasChanged = true;
+                }
+            } else if (e is MpAnalyticItemPreset aip) {
+                if (AnalyticItemPresetId == aip.Id) {
+                    ShortcutDisplayName = $"User {aip.Label} analyzer";
+                    wasChanged = true;
+                }
+            }
+            if(wasChanged) {
+                Task.Run(async () => {
+                    await Shortcut.WriteToDatabaseAsync();
+                });
+            }
+        }
+        #endregion
+
         #region Private Methods
-        
+
         #endregion
 
         #region Commands

@@ -29,17 +29,25 @@ namespace MpWpfApp {
             //    MpLanguageTranslator.Instance.Init();
             //    if(!MpLanguageTranslator.Instance)
             //}
-
+            var miToRemove = new List<object>();
             MenuItem cmi = null;
             foreach (var mi in Items) {
                 if (mi == null || mi is Separator) {
                     continue;
                 }
-                (mi as MenuItem).DataContext = DataContext;
-                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
-                    cmi = (MenuItem)mi;
+                if(mi is MenuItem) {
+                    (mi as MenuItem).DataContext = DataContext;
+                    if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
+                        cmi = (MenuItem)mi;
+                    }
+                } else {
+                    miToRemove.Add(mi);
                 }
             }
+            foreach(var mi2r in miToRemove) {
+                Items.Remove(mi2r);
+            }
+            UpdateLayout();
             MpHelpers.Instance.SetColorChooserMenuItem(
                     this,
                     cmi,

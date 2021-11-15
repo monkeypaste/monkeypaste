@@ -10,7 +10,7 @@
              Loaded="ClipTile_ContextMenu_Loaded"
              Opened="ClipTile_ContextMenu_Opened"
              Closed="ClipTile_ContextMenu_Closed"
-             d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
     <ContextMenu.Resources>
         <Style x:Key="DefaultItemStyle"
                TargetType="MenuItem">
@@ -29,7 +29,7 @@
             <Setter Property="IsChecked"
                     Value="{Binding IsChecked}" />
             <Setter Property="ItemsSource"
-                    Value="{Binding SubItems}"/>
+                    Value="{Binding SubItems}" />
         </Style>
     </ContextMenu.Resources>
     <MenuItem Header="_Copy"
@@ -81,7 +81,7 @@
               Header="_Analyze"
               Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
               ItemsSource="{Binding PresetMenuItems, Source={StaticResource AnalyticItemCollectionViewModel}}"
-              ItemContainerStyle="{StaticResource DefaultItemStyle}"/>
+              ItemContainerStyle="{StaticResource DefaultItemStyle}" />
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
               Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
@@ -158,7 +158,7 @@
                   Command="{Binding InvertSelectionCommand, Source={StaticResource ClipTrayViewModel}}" />
     </MenuItem>
     <MenuItem DataContext="{StaticResource ClipTrayViewModel}"
-              d:DataContext="{d:DesignInstance local:MpClipTrayViewModel, IsDesignTimeCreatable=False}"
+              d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel, IsDesignTimeCreatable=False}"
               Header="_Hotkey"
               Tag="14"
               Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"

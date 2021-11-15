@@ -5,7 +5,7 @@
            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
            xmlns:local="clr-namespace:MpWpfApp"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           d:DataContext="{d:DesignInstance local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+           d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
            Background="Transparent"
            IsEnabled="{Binding Parent.Parent.Parent.IsExpanded}"
            MouseEnter="Hyperlink_MouseEnter"
@@ -18,5 +18,5 @@
                       Header="Convert to QR Code" />
         </ContextMenu>
     </Hyperlink.ContextMenu>
-    <ContentPresenter/>
+    <ContentPresenter />
 </Hyperlink>

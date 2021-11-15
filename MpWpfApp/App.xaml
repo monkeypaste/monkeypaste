@@ -1149,6 +1149,7 @@
         <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
         <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
         <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
+        <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

@@ -10,16 +10,18 @@ using Windows.Foundation.Collections;
 namespace MpWpfApp {
     public abstract class MpAnalyticItemParameterViewModel : MpAnalyticItemComponentViewModel {
         #region Private Variables
-        
+
         #endregion
 
         #region Properties
 
         #region View Models
-        
+
         #endregion
 
         #region Business Logic
+
+        public string ValidationMessage { get; set; } = string.Empty;
 
         #endregion
 
@@ -38,7 +40,7 @@ namespace MpWpfApp {
         public string ParameterTooltipText {
             get {
                 if (!IsValid) {
-                    return $"{Parameter.Label} is required";
+                    return ValidationMessage;
                 }
                 if (Parameter != null && !string.IsNullOrEmpty(Parameter.Description)) {
                     return Parameter.Description;
@@ -55,14 +57,15 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; } = false;
 
-        public abstract bool IsValid { get; }
+        public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
+
         #endregion
 
         #region Model
 
         public abstract string CurrentValue { get; set; }
 
-        public abstract string DefaultValue { get; }
+        public virtual string DefaultValue { get; set; }
 
         public double DoubleValue {
             get {
@@ -167,9 +170,15 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemParameter Parameter { get; protected set; }
-        
+
 
         #endregion
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler OnValidate;
 
         #endregion
 
@@ -204,9 +213,18 @@ namespace MpWpfApp {
             CurrentValue = DefaultValue;
         }
 
-        public void SetValue(string newValue) {
-            CurrentValue = newValue;
+        public void SetValueFromPreset(string newValue) {
+            DefaultValue = CurrentValue = newValue;
         }
+
+        public bool Validate() {
+            OnValidate?.Invoke(this, new EventArgs());
+            return IsValid;
+        }
+        #endregion
+
+        #region Protected Methods
+
         #endregion
 
         #region Private Methods
@@ -216,11 +234,15 @@ namespace MpWpfApp {
                 case nameof(HasChanged):
                     Parent.OnPropertyChanged(nameof(Parent.HasAnyChanged));
                     break;
+                case nameof(ValidationMessage):
+                    OnPropertyChanged(nameof(IsValid));
+                    break;
             }
+            OnValidate?.Invoke(this, new EventArgs());
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            
+            OnValidate?.Invoke(this, new EventArgs());
         }
         #endregion
     }

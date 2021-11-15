@@ -24,19 +24,19 @@ namespace MpWpfApp {
             get {
                 var pmic = new List<MpContextMenuItemViewModel>();
 
-                foreach(var item in Items) {
+                foreach (var item in Items) {
                     var imivm = new MpContextMenuItemViewModel(
                         header: item.Title,
                         command: null,
                         commandParameter: null,
-                        isChecked: null,                        
+                        isChecked: null,
                         iconSource: item.ItemIconBase64,
                         subItems: item.PresetMenuItems,
                         inputGestureText: string.Empty,
                         bgBrush: null);
                     pmic.Add(imivm);
                 }
-                if(pmic.Count == 0) {
+                if (pmic.Count == 0) {
                     return null;
                 }
                 return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
@@ -48,7 +48,7 @@ namespace MpWpfApp {
                 var pmic = new List<MpContextMenuItemViewModel>();
 
                 foreach (var item in Items) {
-                    foreach(var qapmi in item.QuickActionPresetMenuItems) {
+                    foreach (var qapmi in item.QuickActionPresetMenuItems) {
                         pmic.Add(qapmi);
                     }
                 }
@@ -61,8 +61,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-
-        public double AnalyticTreeViewMaxWidth { get; set; } = MpMeasurements.Instance.ClipTileInnerBorderSize;
 
         #endregion
 
@@ -106,7 +104,7 @@ namespace MpWpfApp {
                 if (mi == null) {
                     continue;
                 }
-                if(mi is Separator s) {
+                if (mi is Separator s) {
                     if (s.Name == "QuickActionSeparator") {
                         quickSep = s;
                         break;
@@ -118,27 +116,27 @@ namespace MpWpfApp {
             }
             int quickSepIdx = cm.Items.IndexOf(quickSep);
             int itemsToRemove = cm.Items.Count - quickSepIdx - 1;
-            while(itemsToRemove > 0) {
+            while (itemsToRemove > 0) {
                 cm.Items.RemoveAt(quickSepIdx + 1);
                 itemsToRemove--;
             }
             var qapmic = QuickActionPresetMenuItems;
-            if(qapmic == null || qapmic.Count == 0) {
+            if (qapmic == null || qapmic.Count == 0) {
                 quickSep.Visibility = System.Windows.Visibility.Hidden;
             } else {
                 quickSep.Visibility = System.Windows.Visibility.Visible;
                 foreach (var qami in qapmic) {
                     //qami.ItemContainerStyle = cm.Resources["DefaultItemStyle"] as Style;
-                    cm.Items.Add(qami);
+                    cm.Items.Add(new MenuItem() { DataContext = qami, ItemContainerStyle = cm.Resources["DefaultItemStyle"] as Style});
                 }
             }
             return cm;
         }
-            #endregion
+        #endregion
 
-            #region Private Methods
+        #region Private Methods
 
-            private async Task InitDefaultItems() {
+        private async Task InitDefaultItems() {
             IsBusy = true;
 
             Items.Clear();
@@ -153,6 +151,7 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(Items));
 
+
             IsBusy = false;
         }
 
@@ -161,7 +160,7 @@ namespace MpWpfApp {
                 //case nameof(HostClipTileViewModel):
                 //    HostClipTileViewModel.DoCommandSelection();
                 //    break;
-                
+
             }
         }
         #endregion

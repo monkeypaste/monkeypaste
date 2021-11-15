@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <local:MpClipTileView x:Key="ClipTileFront" />
         <local:MpAnalyticItemCollectionView x:Key="ClipTileBack" />
@@ -57,13 +57,11 @@
         </Storyboard>
     </UserControl.Resources>
     <Viewport3D IsVisibleChanged="Viewport3D_IsVisibleChanged"
-             Loaded="ClipTileFlipView_Loaded"
+                Loaded="ClipTileFlipView_Loaded"
                 Unloaded="Viewport3D_Unloaded"
                 Width="{local:MpMeasurementsBinding ClipTileMinSize}"
                 Height="{local:MpMeasurementsBinding ClipTileMinSize}">
-        <Viewport3D.Resources>
-            
-        </Viewport3D.Resources>
+        <Viewport3D.Resources />
         <Viewport3D.Camera>
             <OrthographicCamera Position="0,0,3"
                                 LookDirection="0,0,-1" />
@@ -118,7 +116,7 @@
                 <Viewport2DVisual3D.Material>
                     <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True" />
                 </Viewport2DVisual3D.Material>
-                <ContentControl DataContext="{Binding}" 
+                <ContentControl DataContext="{Binding}"
                                 Content="{StaticResource ClipTileFront}" />
             </Viewport2DVisual3D>
         </Viewport3D.Children>

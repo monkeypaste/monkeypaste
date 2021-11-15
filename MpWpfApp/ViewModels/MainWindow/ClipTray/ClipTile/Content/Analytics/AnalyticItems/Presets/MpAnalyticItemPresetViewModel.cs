@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using MonkeyPaste;
@@ -16,6 +17,8 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        public MpShortcutViewModel ShortcutViewModel => MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.AnalyticItemPresetId == Preset.Id);
 
         #endregion
 
@@ -35,7 +38,14 @@ namespace MpWpfApp {
 
         #region Model 
 
-        public string ShortcutKeyString { get; set; } = string.Empty;
+        public string ShortcutKeyString {
+            get {
+                if(ShortcutViewModel == null) {
+                    return string.Empty;
+                }
+                return ShortcutViewModel.KeyString;
+            }
+        }
 
         public string Label {
             get {
@@ -48,8 +58,8 @@ namespace MpWpfApp {
                 return Preset.Label;
             }
             set {
-                if(Preset.Label != Label) {
-                    Preset.Label = Label;
+                if(Preset.Label != value) {
+                    Preset.Label = value;
                     OnPropertyChanged(nameof(Label));
                 }
             }
@@ -115,6 +125,15 @@ namespace MpWpfApp {
             }
         }
 
+        public int AnalyticItemPresetId {
+            get {
+                if(Preset == null) {
+                    return 0;
+                }
+                return Preset.Id;
+            }
+        }
+
         public MpAnalyticItemPreset Preset { get; protected set; }
         #endregion
 
@@ -141,6 +160,8 @@ namespace MpWpfApp {
 
             Preset = aip;
 
+            OnPropertyChanged(nameof(ShortcutViewModel));
+
             await Task.Delay(1);
 
             IsBusy = false;
@@ -154,13 +175,40 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Protected Methods
+
+        #region Db Events
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                }
+            }
+        }
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                }
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Private Methods
 
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsSelected):
-                    
-                    break;
             } 
         }
 
@@ -214,11 +262,14 @@ namespace MpWpfApp {
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
-                ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     this,
                     $"Use {Label} Analyzer",
                     ShortcutKeyString,
                     MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand, Preset.Id);
+
+                OnPropertyChanged(nameof(ShortcutKeyString));
+                ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
             });
         #endregion
     }

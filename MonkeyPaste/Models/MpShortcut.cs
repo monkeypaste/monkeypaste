@@ -39,10 +39,10 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne]
+        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpCopyItem CopyItem { get; set; }
 
-        [ManyToOne]
+        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpTag Tag { get; set; }
         #endregion
 

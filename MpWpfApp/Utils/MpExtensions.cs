@@ -76,6 +76,42 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region TreeView/TreeViewItem
+
+        public static ScrollViewer GetScrollViewer(this TreeView tv) {
+            ScrollViewer sv = tv.GetVisualDescendent<ScrollViewer>();
+            return sv;
+        }
+
+        public static TreeViewItem GetTreeViewItem(this TreeView tv, int index) {
+            if (tv == null) {
+                return null;
+            }
+            if (index < 0 || index >= tv.Items.Count) {
+                return null;
+            }
+            return tv.ItemContainerGenerator.ContainerFromIndex(index) as TreeViewItem;
+        }
+
+        public static Rect GetTreeViewItemRect(this TreeView tv, int index) {
+            var tvi = tv.GetTreeViewItem(index);
+            if (tvi == null || tvi.Visibility != Visibility.Visible) {
+                return new Rect();
+            }
+            var sv = tv.GetScrollViewer();
+            Point origin = tvi.TranslatePoint(new Point(0, 0), sv);
+            return new Rect(origin, new Size(tvi.ActualWidth, tvi.ActualHeight));
+        }
+
+        public static Rect GetTreeViewRect(this TreeView tv) {
+            if (tv == null) {
+                return new Rect();
+            }
+            return new Rect(new Point(0, 0), new Size(tv.ActualWidth, tv.ActualHeight));
+        }
+
+        #endregion
+
         #region Listbox/ListboxItem
 
         #region Extended Selection
@@ -236,18 +272,6 @@ namespace MpWpfApp {
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
             ScrollViewer sv = lb.GetVisualDescendent<ScrollViewer>();
-            //if (sv == null) {
-            //    int timeOut = 10000;
-            //    int t = 0;
-            //    while (t <= timeOut) {
-            //        sv = lb.GetVisualDescendent<ScrollViewer>();
-            //        if (sv != null) {
-            //            break;
-            //        }
-            //        Thread.Sleep(100);
-            //        t += 100;
-            //    }
-            //}
             return sv;
         }
 

@@ -114,9 +114,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Analytic Menu
-
-        #endregion
+        
 
         #region App Mode Menu
 
@@ -411,6 +409,20 @@ namespace MpWpfApp {
                 return ClipTileTitleHeight / 4;
             }
         }
+
+        #endregion
+
+        #region Analytic TreeView
+
+        public double TreeViewItemExpanderWidth => 20; //default value in treeview style
+
+        public double AnalyticTreeViewWidth => ClipTileInnerBorderSize - 10;
+
+        public double AnalyticTreeViewItemWidth => AnalyticTreeViewWidth - (TreeViewItemExpanderWidth*2);
+
+        public double AnalyticTreeViewItemComponentMaxWidth => AnalyticTreeViewItemWidth - (TreeViewItemExpanderWidth);
+
+        public double AnalyticTreeViewItemComponentColumnWidth => AnalyticTreeViewItemComponentMaxWidth * 0.5;
 
         #endregion
 

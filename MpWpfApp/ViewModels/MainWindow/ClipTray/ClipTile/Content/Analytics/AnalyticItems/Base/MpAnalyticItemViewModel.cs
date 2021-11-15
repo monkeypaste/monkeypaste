@@ -14,6 +14,7 @@ using System.Web.UI;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.Windows.Data;
 using System.Collections;
+using Newtonsoft.Json;
 
 namespace MpWpfApp {
     public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel> {
@@ -69,13 +70,11 @@ namespace MpWpfApp {
 
         public MpAnalyticItemExecuteButtonViewModel ExecuteViewModel { get; private set; } //=> ParameterViewModels.FirstOrDefault(x => x.Parameter.IsExecute) as MpAnalyticItemExecuteButtonViewModel;
 
-        public IList Children {
+        public ObservableCollection<MpAnalyticItemComponentViewModel> Children {
             get {
-                var children = new CompositeCollection();
+                var children = new List<MpAnalyticItemComponentViewModel>();
                 if(ParameterViewModels.Count > 0) {
-                    children.Add(new CollectionContainer {
-                        Collection = ParameterViewModels
-                    });
+                    children.AddRange(ParameterViewModels);
                 }
 
                 if (ExecuteViewModel == null) {
@@ -88,7 +87,7 @@ namespace MpWpfApp {
                 }
                 children.Add(ResultViewModel);
 
-                return children;
+                return new ObservableCollection<MpAnalyticItemComponentViewModel>(children);
             }
         }
 
@@ -149,7 +148,7 @@ namespace MpWpfApp {
             }
         }
 
-        public string ManageLabel => $"Manage {Title}";
+        public string ManageLabel => $"{Title} Preset Manager";
 
         public Brush ItemBackgroundBrush => IsHovering ? Brushes.Yellow : Brushes.Transparent;
 
@@ -244,6 +243,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemViewModel_PropertyChanged;
+            PresetViewModels.CollectionChanged += PresetViewModels_CollectionChanged;
         }
 
         #endregion
@@ -265,11 +265,13 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(ParameterViewModels));
 
-            if(PresetViewModels.Count > 0) {
-                PresetViewModels[0].IsSelected = true;
-            }
+            //if(PresetViewModels.Count > 0) {
+            //    PresetViewModels[0].IsSelected = true;
+            //}
 
             OnPropertyChanged(nameof(Children));
+
+            ParameterViewModels.ForEach(x => x.Validate());
 
             IsBusy = false;
         }
@@ -314,6 +316,8 @@ namespace MpWpfApp {
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterType), aip.ParameterType));
             }
 
+            naipvm.PropertyChanged += ParameterViewModels_PropertyChanged;
+            naipvm.OnValidate += ParameterViewModel_OnValidate;
             await naipvm.InitializeAsync(aip);
 
             return naipvm;
@@ -363,6 +367,18 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
+        protected virtual void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            
+        }
+        protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
+            var aipvm = sender as MpAnalyticItemParameterViewModel;
+            if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
+                aipvm.ValidationMessage = $"{aipvm.Label} is required";
+            } else {
+                aipvm.ValidationMessage = string.Empty;
+            }
+        }
+
         #region Db Event Handlers
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -407,6 +423,10 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private async void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            await UpdatePresetSortOrder();
+        }
+
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsExpanded):
@@ -430,10 +450,25 @@ namespace MpWpfApp {
                         paramVm.ResetToDefault();
                     } else {
                         if (isReset) {
-                            paramVm.SetValue(presetValue.DefaultValue);
+                            paramVm.SetValueFromPreset(presetValue.DefaultValue);
                         } else {
-                            paramVm.SetValue(presetValue.Value);
+                            paramVm.SetValueFromPreset(presetValue.Value);
                         }
+                    }
+                }
+            }
+        }
+
+        private async Task UpdatePresetSortOrder(bool fromModel = false) {
+            if(fromModel) {
+                PresetViewModels.Sort(x => x.SortOrderIdx);
+            } else {
+                foreach(var aipvm in PresetViewModels) {
+                    aipvm.SortOrderIdx = PresetViewModels.IndexOf(aipvm);
+                }
+                if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    foreach (var pvm in PresetViewModels) {
+                        await pvm.Preset.WriteToDatabaseAsync();
                     }
                 }
             }
@@ -494,7 +529,8 @@ namespace MpWpfApp {
 
                 OnPropertyChanged(nameof(PresetViewModels));
                 OnPropertyChanged(nameof(HasPresets));
-            });
+            },
+            ()=>IsAllValid);
 
         public ICommand SelectPresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (selectedPresetVm) => {
@@ -528,9 +564,11 @@ namespace MpWpfApp {
                 if (result.Value == false) {
                     return;
                 }
-
-                await Task.WhenAll(PresetViewModels.Select(x => x.Preset.WriteToDatabaseAsync()).ToArray());
-            });
+                foreach(var pvm in PresetViewModels) {
+                    await pvm.Preset.WriteToDatabaseAsync();
+                }
+            },
+            ()=>PresetViewModels.Count > 0);
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {

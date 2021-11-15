@@ -1027,6 +1027,7 @@ namespace MonkeyPaste {
                     , InputFormatTypeId integer NOT NULL default 0
                     , Title text NOT NULL 
                     , Description text
+                    , SortOrderIdx integer
                     , ApiKey text 
                     , EndPoint text);   
 
@@ -1050,6 +1051,7 @@ namespace MonkeyPaste {
                     , fk_MpAnalyticItemParameterId integer not null
                     , Value text
                     , Label text
+                    , Description text
                     , IsDefault integer not null default 0   
                     , IsMinimum integer not null default 0
                     , IsMaximum integer not null default 0); 

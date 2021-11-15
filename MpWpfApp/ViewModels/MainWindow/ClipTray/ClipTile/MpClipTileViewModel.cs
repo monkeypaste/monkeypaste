@@ -849,7 +849,7 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsSelected):
                     if(!IsSelected) {
-                        if(IsFlipped) {
+                        if (IsFlipped) {
                             Parent.FlipTileCommand.Execute(this);
                         }
                         //ClearSelection();
