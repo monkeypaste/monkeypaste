@@ -1,0 +1,72 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpSearchCriteriaItemView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpSearchCriteriaItemViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaItemViewModel, IsDesignTimeCreatable=False}">
+    <Border x:Name="CriteriaItemBorder"
+            Background="LightGray"
+            BorderThickness="1"
+            MouseEnter="CriteriaItemBorder_MouseEnter"
+            MouseLeave="CriteriaItemBorder_MouseLeave"
+            BorderBrush="{Binding CriteriaItemBorderBrush}">
+        <DockPanel>
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Left">
+                <Border Grid.Column="1"
+                        BorderThickness="2"
+                        CornerRadius="2"
+                        Padding="1">
+                    <ComboBox ItemsSource="{Binding CriteriaTypeLabels}"
+                              SelectedIndex="{Binding SelectedCriteriaTypeIdx, Mode=TwoWay}"
+                              MinWidth="80" />
+                </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Right">
+                <Button x:Name="RemoveCriteriaItemButton"
+                        Background="Transparent"
+                        Height="30"
+                        Width="30"
+                        BorderThickness="0"
+                        MouseEnter="RemoveCriteriaItemButton_MouseEnter"
+                        MouseLeave="RemoveCriteriaItemButton_MouseLeave"
+                        Style="{StaticResource Transparent_Button}"
+                        Command="{Binding Parent.RemoveSearchCriteriaItemCommand}"
+                        CommandParameter="{Binding}">
+                    <Border CornerRadius="5"
+                            Background="LightGray"
+                            BorderBrush="{Binding RemoveCriteriaItemButtonBorderBrush}"
+                            BorderThickness="2">
+                        <Image Stretch="Fill"
+                               Source="/MpWpfApp;component/Resources/Images/minus2.png" />
+                    </Border>
+                </Button>
+                <Button x:Name="AddCriteriaItemButton"
+                        Background="Transparent"
+                        Height="30"
+                        Width="30"
+                        BorderThickness="0"
+                        MouseEnter="AddCriteriaItemButton_MouseEnter"
+                        MouseLeave="AddCriteriaItemButton_MouseLeave"
+                        Style="{StaticResource Transparent_Button}"
+                        Command="{Binding Parent.AddSearchCriteriaItemCommand}">
+                    <Border CornerRadius="5"
+                            Background="LightGray"
+                            BorderBrush="{Binding AddCriteriaItemButtonBorderBrush}"
+                            BorderThickness="2">
+                        <Image Stretch="Fill"
+                               Source="/MpWpfApp;component/Resources/Images/add2.png" />
+                    </Border>
+                </Button>
+            </StackPanel>
+            <TextBox x:Name="SearchCriteriaTextBox"
+                     MinWidth="200"/>
+        </DockPanel>
+    </Border>
+</local:MpUserControl>

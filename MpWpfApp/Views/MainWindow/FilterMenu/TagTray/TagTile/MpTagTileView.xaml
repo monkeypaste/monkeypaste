@@ -4,7 +4,7 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:local="clr-namespace:MpWpfApp" xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpTagTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -58,12 +58,12 @@
                                 Grid.Row="0"
                                 MinWidth="20"
                                 Margin="3,0,0,0"
-                                Padding="5"
+                                Padding="5,5,5,5" 
                                 BorderThickness="0"
                                 Background="{Binding TagBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                 <TextBlock Background="Transparent"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
+                           HorizontalAlignment="Center" 
                            Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                            Foreground="{Binding TagCountTextColor}" />
             </local:MpClipBorder>

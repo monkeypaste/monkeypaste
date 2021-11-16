@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -37,12 +38,18 @@ namespace MpWpfApp {
                 }
             }
         }
+        protected override Size ArrangeOverride(Size finalSize) {
+            return base.ArrangeOverride(finalSize);
+        }
 
         protected virtual void OnApplyChildClip() {
             UIElement child = this.Child;
             if (child != null) {
                 // Get the geometry of a rounded rectangle border based on the BorderThickness and CornerRadius
-                clipGeometry = GeometryHelper.GetRoundRectangle(new Rect(Child.RenderSize), this.BorderThickness, this.CornerRadius);
+                clipGeometry = GeometryHelper.GetRoundRectangle(
+                    new Rect(Child.RenderSize), this.BorderThickness, this.CornerRadius);
+
+                //clipGeometry.Freeze();
                 child.Clip = clipGeometry;
             }
         }
@@ -150,7 +157,7 @@ namespace MpWpfApp {
                 // BottomLeft Arc
                 context.ArcTo(bottomLeftRect.TopLeft, bottomLeftRect.Size, 0, false, SweepDirection.Clockwise, true, true);
             }
-
+            
             return roundedRectGeometry;
         }
 

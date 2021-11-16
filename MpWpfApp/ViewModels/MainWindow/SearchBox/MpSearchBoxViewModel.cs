@@ -214,23 +214,34 @@ namespace MpWpfApp {
 
         public double SearchDetailHeight {
             get {
-                if(!HasText) {
+                if(!SearchDetailViewModel.HasCriteriaItems) {
                     return 0;
                 }
                 return MpMeasurements.Instance.SearchDetailRowHeight + (SearchDetailViewModel.CriteriaItems.Count * MpMeasurements.Instance.SearchDetailRowHeight);
             }
         }
+
+        public GridLength ClearAndAddCriteriaColumnWidth {
+            get {
+                if(string.IsNullOrEmpty(LastSearchText)) {
+                    return new GridLength(0.1, GridUnitType.Star);
+                } else {
+                    return new GridLength(0.3, GridUnitType.Star);
+                }
+            }
+        }
         #endregion
 
         #region Business Logic Properties
+
         public string PlaceholderText {
             get {
-                return Properties.Settings.Default.SearchPlaceHolderText;
+                return MpPreferences.Instance.SearchPlaceHolderText;
             }
         }
 
         private string _text = string.Empty;
-        public string Text {
+        public string SearchText {
             get {
                 return _text;
             }
@@ -238,7 +249,7 @@ namespace MpWpfApp {
                 if (_text != value) {
                     _text = value;
                     //SearchText = Text;
-                    OnPropertyChanged(nameof(Text));
+                    OnPropertyChanged(nameof(SearchText));
                     OnPropertyChanged(nameof(HasText));
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
                     OnPropertyChanged(nameof(TextBoxFontStyle));
@@ -247,51 +258,19 @@ namespace MpWpfApp {
             }
         }
 
-        private string _searchText = string.Empty;
-        public string SearchText {
-            get {
-                return _searchText;
-            }
-            set {
-                //if (_searchText != value) 
-                {
-                    _searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                }
-            }
-        }
-
         #endregion
 
         #region State
 
-        private bool _isTextBoxFocused = false;
-        public bool IsTextBoxFocused {
-            get {
-                return _isTextBoxFocused;
-            }
-            set {
-                if (_isTextBoxFocused != value) {
-                    _isTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsTextBoxFocused));
-                }
-            }
-        }
+        public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText);
+
+        public string LastSearchText { get; private set; } = string.Empty;
+
+        public bool IsTextBoxFocused { get; set; }
 
         public bool IsOverClearTextButton { get; set; } = false;
 
-        private bool _isSearchEnabled = true;
-        public bool IsSearchEnabled {
-            get {
-                return _isSearchEnabled;
-            }
-            set {
-                if (_isSearchEnabled != value) {
-                    _isSearchEnabled = value;
-                    OnPropertyChanged(nameof(IsSearchEnabled));
-                }
-            }
-        }
+        public bool IsSearchEnabled { get; set; }
 
         private bool _isTextValid = true;
         public bool IsTextValid {
@@ -323,13 +302,32 @@ namespace MpWpfApp {
 
         public bool HasText {
             get {
-                return Text.Length > 0 && Text != PlaceholderText;
+                return SearchText.Length > 0;
             }
         }
 
+        public bool IsPlaceholderVisible {
+            get {
+                if(IsTextBoxFocused) {
+                    return false;
+                }
+                return !HasText;
+            }
+        }
+
+        public bool IsOverSaveSearchButton { get; set; }
         #endregion
 
         #region Appearance
+
+        public Brush SaveSearchButtonBorderBrush {
+            get {
+                if(IsOverSaveSearchButton) {
+                    return Brushes.DimGray;
+                }
+                return Brushes.LightGray;
+            }
+        }
         public int SearchBorderColumnSpan {
             get {
                 if (SearchNavigationButtonPanelVisibility == Visibility.Visible) {
@@ -347,6 +345,8 @@ namespace MpWpfApp {
                 return Brushes.Red;
             }
         }
+
+        public Brush CaretBrush => IsTextBoxFocused ? Brushes.Black : Brushes.Transparent;
 
         public SolidColorBrush TextBoxTextBrush {
             get {
@@ -369,12 +369,24 @@ namespace MpWpfApp {
         public string ClearButtonImagePath {
             get {
                 if(IsOverClearTextButton) {
-                    return @"/Images/close2.png";
-                } else {
                     return @"/Images/close1.png";
+                } else {
+                    return @"/Images/close2.png";
                 }
             }
         }
+
+
+        public string AddOrClearSearchCriteriaImagePath {
+            get {
+                if (SearchDetailViewModel.HasCriteriaItems) {
+                    return @"/Resources/Images/minus2.png";
+                } else {
+                    return @"/Resources/Images/add2.png";
+                }
+            }
+        }
+
         #endregion
 
         #region Visibility Proeprties
@@ -413,13 +425,26 @@ namespace MpWpfApp {
         #region Constructors
 
         public async Task Init() {
-            await Task.Run(() => {
-                Text = PlaceholderText;
-
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
+
+                SearchDetailViewModel = new MpSearchDetailViewModel(this);
+                SearchDetailViewModel.PropertyChanged += SearchDetailViewModel_PropertyChanged;
 
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
             });
+        }
+
+        private void SearchDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SearchDetailViewModel.HasCriteriaItems):
+                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
+                    break;
+                case nameof(SearchDetailViewModel.CriteriaItems):
+                    OnPropertyChanged(nameof(SearchDetailHeight));
+                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
+                    break;
+            }
         }
 
         public MpSearchBoxViewModel() : base() { }
@@ -445,7 +470,7 @@ namespace MpWpfApp {
 
         private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(Text):
+                case nameof(SearchText):
                     Validate();
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
                     break;
@@ -455,19 +480,21 @@ namespace MpWpfApp {
                 case nameof(IsTextBoxFocused):
                     if (IsTextBoxFocused) {
                         if (!HasText) {
-                            Text = string.Empty;
+                            SearchText = string.Empty;
                         }
 
-                        if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                            MpClipTrayViewModel.Instance.ResetClipSelection(false);
-                        }
+                        //if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                        //    MpClipTrayViewModel.Instance.ResetClipSelection(false);
+                        //}
                     } else {
                         if (!HasText) {
-                            Text = PlaceholderText;
+                            //SearchText = PlaceholderText;
                         }
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));
                     OnPropertyChanged(nameof(TextBoxTextBrush));
+                    OnPropertyChanged(nameof(IsPlaceholderVisible));
+                    OnPropertyChanged(nameof(CaretBrush));
                     break;
             }
         }
@@ -487,21 +514,24 @@ namespace MpWpfApp {
         #region Commands
         public ICommand ClearTextCommand => new RelayCommand(
             () => {
-                Text = string.Empty;
-                SearchText = Text;
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                SearchText = string.Empty;
+                if(!string.IsNullOrWhiteSpace(LastSearchText)) {
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                }
+                LastSearchText = string.Empty;
             },
             () => {
-                return Text.Length > 0;
+                return SearchText.Length > 0;
             });
 
         public ICommand PerformSearchCommand => new RelayCommand(
             () => {
-                SearchText = Text;
                 if (!HasText) {
                     IsTextValid = true;
+                    LastSearchText = string.Empty;
                 } else {
                     IsSearching = true;
+                    LastSearchText = SearchText;
                 }
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             });

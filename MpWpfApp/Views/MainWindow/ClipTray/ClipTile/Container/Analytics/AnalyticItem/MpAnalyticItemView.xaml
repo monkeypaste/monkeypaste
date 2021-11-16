@@ -57,13 +57,13 @@
                                     <Setter Property="Header"
                                             Value="{Binding Label}" />
                                     <Setter Property="Icon"
-                                            Value="{Binding PresetIcon, Converter={StaticResource Base64StringToIconConverter}}"/>
+                                            Value="{Binding PresetIcon, Converter={StaticResource Base64StringToIconConverter}}" />
                                     <Setter Property="ToolTip"
                                             Value="{Binding Description}" />
                                     <Setter Property="Command"
                                             Value="{Binding Parent.SelectPresetCommand}" />
                                     <Setter Property="InputGestureText"
-                                            Value="{Binding ShortcutKeyString}"/>
+                                            Value="{Binding ShortcutKeyString}" />
                                     <Setter Property="CommandParameter"
                                             Value="{Binding}" />
                                     <Setter Property="HorizontalContentAlignment"

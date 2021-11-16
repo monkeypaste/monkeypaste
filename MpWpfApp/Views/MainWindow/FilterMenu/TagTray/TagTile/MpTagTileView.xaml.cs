@@ -81,7 +81,7 @@ namespace MpWpfApp {
         }
 
         private void TagTileBorder_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            var ttb = sender as MpClipBorder;
+            var ttb = sender as FrameworkElement;
             var ttvm = DataContext as MpTagTileViewModel;
             ttb.ContextMenu.IsOpen = true;
             e.Handled = true;

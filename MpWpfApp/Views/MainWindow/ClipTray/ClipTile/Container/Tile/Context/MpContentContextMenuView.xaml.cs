@@ -55,10 +55,6 @@ namespace MpWpfApp {
                         MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
                     }
                 );
-
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                await MpQuickActionAnalyzerCollectionViewModel.Instance.Init();
-            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private async void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {

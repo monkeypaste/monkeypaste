@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using WPFSpark;
 using static MpWpfApp.WinApi;
 
 namespace MpWpfApp {

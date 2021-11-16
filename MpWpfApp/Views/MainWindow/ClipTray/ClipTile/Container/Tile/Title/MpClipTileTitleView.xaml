@@ -7,7 +7,7 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpContentItemViewModel"
-                     mc:Ignorable="d"
+                     mc:Ignorable="d PresentationOptions"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}">
@@ -31,7 +31,7 @@
                       Fill="{Binding LayerBrush}"
                       Opacity="{Binding LayerOpacity}">
                     <Path.Data>
-                        <PathGeometry>
+                        <PathGeometry PresentationOptions:Freeze="True">
                             <PathGeometry.Figures>
                                 <PathFigure StartPoint="0,22"
                                             IsClosed="True">
@@ -51,7 +51,7 @@
                       Fill="{Binding LayerBrush}"
                       Opacity="{Binding LayerOpacity}">
                     <Path.Data>
-                        <PathGeometry>
+                        <PathGeometry PresentationOptions:Freeze="True">
                             <PathGeometry.Figures>
                                 <PathFigure StartPoint="0,35"
                                             IsClosed="True">
@@ -83,7 +83,7 @@
                       Fill="{Binding LayerBrush}"
                       Opacity="{Binding LayerOpacity}">
                     <Path.Data>
-                        <PathGeometry>
+                        <PathGeometry PresentationOptions:Freeze="True">
                             <PathGeometry.Figures>
                                 <PathFigure StartPoint="0,55"
                                             IsClosed="True">

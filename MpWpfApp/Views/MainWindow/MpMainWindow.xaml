@@ -1,34 +1,35 @@
 <Window x:Class="MpWpfApp.MpMainWindow"
-        x:Name="MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:ii="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:s="clr-namespace:System;assembly=mscorlib"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
-        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-        xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-        mc:Ignorable="d"
-        xmlns:local="clr-namespace:MpWpfApp"
-        Title="MpMainWindow"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        Top="0"
-        Left="0"
-        Visibility="Visible"
-        Loaded="MainWindow_Loaded"
-        Deactivated="MainWindow_Deactivated"
-        ShowInTaskbar="False"
-        ResizeMode="CanResize"
-        WindowState="Normal"
-        Height="{Binding MainWindowHeight}"
-        Width="{Binding MainWindowWidth}"
-        d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel, IsDesignTimeCreatable=False}">
+                x:Name="MainWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
+                xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                xmlns:ii="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                xmlns:s="clr-namespace:System;assembly=mscorlib"
+                xmlns:tb="http://www.hardcodet.net/taskbar"
+                xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+                xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+                mc:Ignorable="d"
+                xmlns:local="clr-namespace:MpWpfApp"
+                Title="MpMainWindow"
+                WindowStyle="None"
+                AllowsTransparency="True"
+                Background="Transparent"
+                Top="0"
+                Left="0"
+                Visibility="Visible"
+                Loaded="MainWindow_Loaded"
+                Deactivated="MainWindow_Deactivated"
+                ShowInTaskbar="False"
+                ResizeMode="CanResize"
+                WindowState="Normal"
+                Height="{Binding MainWindowHeight}"
+                Width="{Binding MainWindowWidth}"
+                d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel, IsDesignTimeCreatable=False}">
     <Canvas x:Name="MainWindowCanvas"
             MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
@@ -117,26 +118,16 @@
                                       Grid.Column="1"
                                       Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded, Source={StaticResource MainWindowViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
-
                 <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
                                      Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded, Source={StaticResource MainWindowViewModel}, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                      DataContext="{Binding TagTrayViewModel, IsAsync=True}" />
-
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
                                        DataContext="{Binding SearchBoxViewModel}" />
-
             </Grid>
-
-            <!--  Analytic Menu  -->
-            <!--<local:MpAnalyzerToolbarTreeView x:Name="AnalyzerToolbar"
-                                             Visibility="Collapsed"
-                                             DataContext="{StaticResource AnalyticItemCollectionViewModel}"
-                                             Grid.Row="2" />-->
-
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
@@ -157,7 +148,7 @@
                     </Grid.RowDefinitions>
                     <local:MpSearchDetailView x:Name="SearchDetailView"
                                               Grid.Row="0"
-                                              Visibility="{Binding Parent.HasText, Converter={StaticResource BoolToVisibilityConverter}}"
+                                              Visibility="{Binding HasCriteriaItems, Converter={StaticResource BoolToVisibilityConverter}}"
                                               DataContext="{Binding SearchBoxViewModel.SearchDetailViewModel}" />
                     <local:MpClipTrayView x:Name="ClipTrayView"
                                           DataContext="{Binding ClipTrayViewModel}"

@@ -407,9 +407,9 @@ namespace MpWpfApp {
                 }
                 if (!sbvm.IsTextBoxFocused) {
                     if (sbvm.HasText) {
-                        sbvm.Text += keyChar.ToString();
+                        sbvm.SearchText += keyChar.ToString();
                     } else {
-                        sbvm.Text = keyChar.ToString();
+                        sbvm.SearchText = keyChar.ToString();
                     }
                     sbvm.RequestSearchBoxFocus();
                 }

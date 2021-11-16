@@ -4,7 +4,8 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:local="clr-namespace:MpWpfApp" 
+                     xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -32,19 +33,6 @@
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <!--<local:MpClipBorder.Style>
-            <Style>
-                <Setter Property="Border.Background"
-                        Value="{Binding TileBorderBrush}" />
-                <Style.Triggers>
-                    <Trigger Property="Border.IsMouseOver"
-                             Value="True">
-                        <Setter Property="Border.Background"
-                                Value="Green" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </local:MpClipBorder.Style>-->
         <local:MpClipBorder.BorderBrush>
             <DrawingBrush Viewport="0,0,8,8"
                           ViewportUnits="Absolute"

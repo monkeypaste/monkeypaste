@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
+using WPFSpark;
 
 namespace MpWpfApp {
 
-    public class MpUserControl : UserControl {
-        public MpUserControl() : base() { }
-
-        //public static readonly DependencyProperty ResourcesProperty =
-        //    DependencyProperty.Register("Resources", typeof(ResourceDictionary), typeof(MpUserControl), new PropertyMetadata(null));
-
+    public class MpWindow : SparkWindow {
+        public MpWindow() : base() { }
     }
-    public class MpUserControl<T> : MpUserControl where T: class {
+
+    public class MpWindow<T> : MpWindow where T: class {
         public T BindingContext {
             get {
                 if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
                     return null;
                 }
-                    
+
                 if (DataContext == null) {
                     return null;
                 }
@@ -38,13 +30,9 @@ namespace MpWpfApp {
         }
         public static readonly DependencyProperty BindingContextProperty =
             DependencyProperty.Register(
-                "BindingContext", 
-                typeof(T), 
-                typeof(MpUserControl<T>), 
+                "BindingContext",
+                typeof(T),
+                typeof(MpUserControl<T>),
                 new FrameworkPropertyMetadata(null));
-
-        
-        public MpUserControl() : base() { }
-
     }
 }

@@ -27,14 +27,21 @@ namespace MpWpfApp {
         }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+                octvm.OnFocusRequest -= Nctvm_OnFocusRequest;
                 octvm.OnSearchRequest -= Ctvm_OnSearchRequest;
                 octvm.PropertyChanged -= Ctvm_PropertyChanged;
             }
             if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-
+                nctvm.OnFocusRequest += Nctvm_OnFocusRequest;
                 nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
                 nctvm.PropertyChanged += Ctvm_PropertyChanged;
             }
+        }
+
+        private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
+            Keyboard.Focus(sender as FrameworkElement);
+            bool result = Focus();
+            MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {

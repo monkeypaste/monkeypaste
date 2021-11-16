@@ -750,6 +750,7 @@ using System.Speech.Synthesis;
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
+        public event EventHandler OnFocusRequest;
 
         #endregion
 
@@ -840,6 +841,10 @@ using System.Speech.Synthesis;
             OnSearchRequest?.Invoke(this, st);
         }
 
+        public void RequestFocus() {
+            OnFocusRequest?.Invoke(this, null);
+        }
+
         #endregion
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
@@ -855,6 +860,7 @@ using System.Speech.Synthesis;
                         //ClearSelection();
                     } else {
                         LastSelectedDateTime = DateTime.Now;
+                        RequestFocus();
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));

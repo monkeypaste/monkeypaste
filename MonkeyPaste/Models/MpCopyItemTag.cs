@@ -52,31 +52,6 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        //public static async Task<List<MpCopyItemTag>> GetAllCopyItemsForTagIdAsync(int tagId) {
-        //    var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
-        //    return allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
-        //}
-
-        //public static MpCopyItemTag GetCopyItemTagByCopyItemId(int tagId,int ciid) {
-        //    return MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == ciid).FirstOrDefault();
-        //}
-
-        //public static async Task DeleteAllCopyItemTagsForCopyItemId(int CopyItemId) {
-        //    var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
-        //    var citl = allCopyItemTagList.Where(x => x.CopyItemId == CopyItemId).ToList();
-        //    foreach (var cit in citl) {
-        //        await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
-        //    }
-        //}
-
-        //public static async Task DeleteAllCopyItemTagsForTagId(int tagId) {
-        //    var allCopyItemTagList = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
-        //    var citl = allCopyItemTagList.Where(x => x.TagId == tagId).ToList();
-        //    foreach (var cit in citl) {
-        //        await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
-        //    }
-        //}
-
         public static MpCopyItemTag Create(int tagId,int copyItemId, int sortIdx = 0) {
             var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
             if(dupCheck != null) {

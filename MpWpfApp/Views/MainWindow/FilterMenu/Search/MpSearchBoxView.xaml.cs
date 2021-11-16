@@ -29,18 +29,30 @@ namespace MpWpfApp {
         }
 
         private void Sbvm_OnSearchTextBoxFocusRequest(object sender, EventArgs e) {
-            SearchBox.Focus();
+            SearchBox.Focus(); 
             SearchBox.CaretIndex = SearchBox.Text.Length - 1;
         }
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e) {
             var sbvm = DataContext as MpSearchBoxViewModel;
             sbvm.IsTextBoxFocused = true;
+
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
         }
 
-        private void SearchBox_LostFocus(object sender, RoutedEventArgs e) {
-            var sbvm = DataContext as MpSearchBoxViewModel;
-            sbvm.IsTextBoxFocused = false;
+        private void SearchBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            BindingContext.IsTextBoxFocused = true;
+            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+        }
+
+        private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+            var tbr = new Rect(0, 0, SearchTextBoxBorder.Width, SearchTextBoxBorder.Height);
+            var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), SearchTextBoxBorder);
+            if (!tbr.Contains(tb_mp)) {
+                BindingContext.IsTextBoxFocused = false;
+                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown -= ApplicationHook_MouseDown;
+                
+            }
         }
 
         private void SearchDropDownButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
@@ -150,6 +162,23 @@ namespace MpWpfApp {
 
         private void SearchBox_MouseLeave(object sender, MouseEventArgs e) {
             MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
+        private void SaveSearchButton_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.IsOverSaveSearchButton = true;
+        }
+
+        private void SaveSearchButton_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.IsOverSaveSearchButton = false;
+        }
+
+        private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
+            UpdateLayout();
+        }
+
+        private void SearchViewContainerStackPanel_SizeChanged(object sender, SizeChangedEventArgs e) {
+            SearchBoxContainerGrid.Width = SearchViewContainerStackPanel.ActualWidth;
+            SearchBoxContainerGrid.UpdateLayout();
         }
     }
 }
