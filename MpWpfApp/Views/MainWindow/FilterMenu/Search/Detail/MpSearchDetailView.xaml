@@ -6,7 +6,7 @@
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpSearchDetailViewModel"
-                     mc:Ignorable="d"
+                     mc:Ignorable="d" Background="Orange"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpSearchDetailViewModel, IsDesignTimeCreatable=False}">
@@ -15,12 +15,18 @@
              dd:DragDrop.IsDropTarget="True"
              ItemsSource="{Binding CriteriaItems}"
              SelectionMode="Single"
-             Background="Transparent"
+             Height="33"
+             VerticalAlignment="Top"
+             Background="Pink"
              BorderBrush="Transparent">
         <ListBox.ItemContainerStyle>
             <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="IsSelected"
                         Value="{Binding IsSelected}" />
+                <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                                Value="Top" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -30,5 +36,10 @@
                 </Setter>
             </Style>
         </ListBox.ItemContainerStyle>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <local:MpSearchCriteriaItemView DataContext="{Binding}"/>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
     </ListBox>
 </local:MpUserControl>

@@ -214,10 +214,7 @@ namespace MpWpfApp {
 
         public double SearchDetailHeight {
             get {
-                if(!SearchDetailViewModel.HasCriteriaItems) {
-                    return 0;
-                }
-                return MpMeasurements.Instance.SearchDetailRowHeight + (SearchDetailViewModel.CriteriaItems.Count * MpMeasurements.Instance.SearchDetailRowHeight);
+                return MpMeasurements.Instance.SearchDetailRowHeight * SearchDetailViewModel.CriteriaItems.Count;
             }
         }
 
@@ -261,6 +258,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool HasCriteriaItems => SearchDetailViewModel.HasCriteriaItems;
 
         public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText);
 
@@ -379,7 +378,7 @@ namespace MpWpfApp {
 
         public string AddOrClearSearchCriteriaImagePath {
             get {
-                if (SearchDetailViewModel.HasCriteriaItems) {
+                if (HasCriteriaItems) {
                     return @"/Resources/Images/minus2.png";
                 } else {
                     return @"/Resources/Images/add2.png";
@@ -439,6 +438,7 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(SearchDetailViewModel.HasCriteriaItems):
                     OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
+                    OnPropertyChanged(nameof(HasCriteriaItems));
                     break;
                 case nameof(SearchDetailViewModel.CriteriaItems):
                     OnPropertyChanged(nameof(SearchDetailHeight));

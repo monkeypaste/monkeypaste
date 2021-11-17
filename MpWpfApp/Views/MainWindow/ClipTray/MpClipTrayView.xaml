@@ -9,7 +9,8 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Grid x:Name="ClipTrayGrid">
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0"
@@ -26,8 +27,11 @@
                 <ListBox x:Name="ClipTray"
                          RequestBringIntoView="ClipTray_RequestBringIntoView"
                          SelectionChanged="ClipTray_SelectionChanged"
-                         Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityFlipConverter}, ConverterParameter={StaticResource Hide}}"
-                         Width="{Binding ClipTrayWidth, Source={StaticResource MainWindowViewModel}}"
+                         Visibility="{Binding IsTrayEmpty,
+                                              Converter={StaticResource BoolToVisibilityFlipConverter},
+                                              ConverterParameter={StaticResource Hide}}"
+                         Width="{Binding ClipTrayWidth,
+                                         Source={StaticResource MainWindowViewModel}}"
                          ItemsSource="{Binding Items}"
                          Background="Transparent"
                          local:MpFrictionScrollExtension.IsEnabled="True"
@@ -104,15 +108,20 @@
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                     VerticalAlignment="Top"
-                                                    HorizontalAlignment="{Binding IsAnyTileExpanded, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolToHAlignmentConverter}, ConverterParameter='center,left'}"
+                                                    HorizontalAlignment="{Binding IsAnyTileExpanded,
+                                                                                  Source={StaticResource ClipTrayViewModel},
+                                                                                  Converter={StaticResource BoolToHAlignmentConverter},
+                                                                                  ConverterParameter='center,left'}"
                                                     IsItemsHost="True"
                                                     Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                                           DataContext="{Binding ., IsAsync=True}" />
+                            <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder,
+                                                                                Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                           DataContext="{Binding .,
+                                                                                 IsAsync=True}" />
                             <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
                                                   DataContext="{Binding}" />-->
                         </DataTemplate>
@@ -122,7 +131,8 @@
             <TextBlock x:Name="EmptyListTextBlock"
                        Text="This list has no items"
                        Focusable="True"
-                       Visibility="{Binding IsTrayEmpty, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Visibility="{Binding IsTrayEmpty,
+                                            Converter={StaticResource BoolToVisibilityConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Margin="0,0,0,15"

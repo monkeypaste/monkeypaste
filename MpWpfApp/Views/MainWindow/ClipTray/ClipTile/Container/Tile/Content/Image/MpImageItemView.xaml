@@ -7,14 +7,16 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpContentItemViewModel"
                      mc:Ignorable="d"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                                      IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <Viewbox Width="{Binding Parent.TileContentWidth}"
              Height="{Binding Parent.TileContentHeight}"
              Loaded="Viewbox_Loaded">
         <Image x:Name="ClipTileAppIconImage"
-               Source="{Binding CopyItemData, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+               Source="{Binding CopyItemData,
+                                Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                Stretch="Fill"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"

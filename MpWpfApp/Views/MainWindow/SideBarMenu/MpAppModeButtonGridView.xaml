@@ -20,8 +20,10 @@
         </Grid.RowDefinitions>
         <ToggleButton Grid.Row="0"
                       Grid.Column="0"
-                      Width="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth,
+                                      Source={StaticResource MainWindowViewModel}}"
+                      Height="{Binding AppModeButtonGridWidth,
+                                       Source={StaticResource MainWindowViewModel}}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       ToolTipService.InitialShowDelay="0"
@@ -29,7 +31,9 @@
                       ToolTip="{Binding IsAppPausedTooltip}"
                       Padding="10"
                       IsChecked="{Binding IsAppPaused}">
-            <Image Source="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToImageSourceConverter}, Source={StaticResource SystemTrayViewModel}}"
+            <Image Source="{Binding PauseOrPlayIconSource,
+                                    Converter={StaticResource StringToImageSourceConverter},
+                                    Source={StaticResource SystemTrayViewModel}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -37,23 +41,28 @@
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
                       ToolTip="{Binding IsAutoCopyModeTooltip}"
-                      Width="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth,
+                                      Source={StaticResource MainWindowViewModel}}"
+                      Height="{Binding AppModeButtonGridWidth,
+                                       Source={StaticResource MainWindowViewModel}}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       IsEnabled="{Binding IsAutoCopyModeEnabled}"
                       IsChecked="{Binding IsAutoCopyMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageSourceConverter}}"
+            <Image Source="{Binding Source={StaticResource LeftClickIcon},
+                                    Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
         <ToggleButton Grid.Row="2"
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth,
+                                      Source={StaticResource MainWindowViewModel}}"
+                      Height="{Binding AppModeButtonGridWidth,
+                                       Source={StaticResource MainWindowViewModel}}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -61,7 +70,8 @@
                       IsEnabled="{Binding IsRighClickPasteModeEnabled}"
                       IsChecked="{Binding IsRightClickPasteMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageSourceConverter}}"
+            <Image Source="{Binding Source={StaticResource RightClickIcon},
+                                    Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -69,23 +79,28 @@
                       Grid.Column="0"
                       Padding="10"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth,
+                                      Source={StaticResource MainWindowViewModel}}"
+                      Height="{Binding AppModeButtonGridWidth,
+                                       Source={StaticResource MainWindowViewModel}}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="{Binding IsAppendModeTooltip}"
                       IsEnabled="{Binding IsAppendModeEnabled}"
                       IsChecked="{Binding IsInAppendMode}">
-            <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageSourceConverter}}"
+            <Image Source="{Binding Source={StaticResource AppendIcon},
+                                    Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
         <ToggleButton Grid.Row="4"
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth, Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth,
+                                      Source={StaticResource MainWindowViewModel}}"
+                      Height="{Binding AppModeButtonGridWidth,
+                                       Source={StaticResource MainWindowViewModel}}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -93,7 +108,8 @@
                       IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
                       IsChecked="{Binding IsInAutoAnalyzeMode}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageSourceConverter}}"
+            <Image Source="{Binding Source={StaticResource BrainIcon},
+                                    Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>

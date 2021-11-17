@@ -10,7 +10,8 @@
                      mc:Ignorable="d PresentationOptions"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Grid Unloaded="Grid_Unloaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
@@ -20,8 +21,10 @@
                  Stretch="Fill">
             <Canvas x:Name="TitleSwirlCanvas"
                     Visibility="Visible"
-                    Width="{local:MpMeasurementsBinding ClipTileBorderMinSize, Mode=OneWay}"
-                    Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
+                    Width="{local:MpMeasurementsBinding ClipTileBorderMinSize,
+                                                        Mode=OneWay}"
+                    Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
+                                                         Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     DataContext="{Binding TitleSwirlViewModel}">
@@ -103,7 +106,8 @@
                         Canvas.Top="3"
                         Canvas.Right="3"
                         PreviewMouseLeftButtonDown="FlipButton_PreviewMouseLeftButtonDown"
-                        Command="{Binding FlipTileCommand, Source={StaticResource ClipTrayViewModel}}"
+                        Command="{Binding FlipTileCommand,
+                                          Source={StaticResource ClipTrayViewModel}}"
                         CommandParameter="{Binding Parent.Parent}" />
             </Canvas>
         </Viewbox>
@@ -118,11 +122,14 @@
               HorizontalAlignment="Left">
             <!--  Clip Title TextBlock  -->
             <TextBlock x:Name="ClipTileTitleTextBlock"
-                       Text="{Binding Path=Text, ElementName=ClipTileTitleTextBox}"
-                       FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize, Mode=OneWay}"
+                       Text="{Binding Path=Text,
+                                      ElementName=ClipTileTitleTextBox}"
+                       FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
+                                                              Mode=OneWay}"
                        Background="{Binding TileTitleTextGridBackgroundBrush}"
                        Foreground="White"
-                       Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                       Visibility="{Binding IsEditingTitle,
+                                            Converter={StaticResource BoolToVisibilityFlipConverter}}">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0.5"
                                       Direction="300"
@@ -140,18 +147,26 @@
                      Foreground="Black"
                      FontSize="20"
                      IsReadOnly="False"
-                     Visibility="{Binding IsEditingTitle, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                     Visibility="{Binding IsEditingTitle,
+                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                     Text="{Binding CopyItemTitle,
+                                    Mode=TwoWay,
+                                    NotifyOnTargetUpdated=True,
+                                    NotifyOnSourceUpdated=True,
+                                    UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
         <Image x:Name="ClipTileAppIconHighlightedBorderImage"
                Grid.Column="1"
                HorizontalAlignment="Left"
-               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64,
+                                Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                Stretch="Fill"
                Visibility="Hidden"
-               Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}"
-               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize, Mode=OneWay}" />
+               Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize,
+                                                   Mode=OneWay}"
+               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize,
+                                                    Mode=OneWay}" />
         <!--  Clip Title Icon Image  -->
         <Grid Grid.Column="1">
             <Button x:Name="ClipTileAppIconImageButton"
@@ -175,24 +190,30 @@
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            Loaded="ClipTileAppIconBorderImage_Loaded"
-                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64,
+                                            Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"
                            Visibility="Hidden"
-                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}"
-                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}">
+                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                               Mode=OneWay}"
+                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                Mode=OneWay}">
                         <Image.RenderTransform>
                             <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
-                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64,
+                                            Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                            Stretch="Uniform"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Visibility="Visible"
-                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}"
-                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize, Mode=OneWay}" />
+                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                               Mode=OneWay}"
+                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                Mode=OneWay}" />
                     <!--<Viewbox Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                      Height="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                      Visibility="{Binding MultiSelectOrderMarkerVisibility}">

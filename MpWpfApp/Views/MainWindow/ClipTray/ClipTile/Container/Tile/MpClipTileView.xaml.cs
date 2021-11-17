@@ -41,7 +41,7 @@ namespace MpWpfApp {
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
             Keyboard.Focus(sender as FrameworkElement);
             bool result = Focus();
-            MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
+            //MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {

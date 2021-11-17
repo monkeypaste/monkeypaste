@@ -5,7 +5,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:MpWpfApp"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+             d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                              IsDesignTimeCreatable=False}"
              d:DesignHeight="50"
              d:DesignWidth="800"
              mc:Ignorable="d">
@@ -15,7 +16,8 @@
     <Border x:Name="ClipTileEditorToolbar"
             Unloaded="ClipTileEditorToolbar_Unloaded"
             Width="{Binding Parent.TileContentWidth}"
-            Height="{local:MpMeasurementsBinding ClipTileEditToolbarHeight, Mode=OneWay}"
+            Height="{local:MpMeasurementsBinding ClipTileEditToolbarHeight,
+                                                 Mode=OneWay}"
             Background="OldLace"
             BorderBrush="OldLace"
             BorderThickness="0,0,0,1"
@@ -223,7 +225,8 @@
                    Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None" />
             <ToggleButton x:Name="SpellCheck"
-                          IsChecked="{local:MpSettingBinding Path=UseSpellCheck, Mode=TwoWay}"
+                          IsChecked="{local:MpSettingBinding Path=UseSpellCheck,
+                                                             Mode=TwoWay}"
                           Template="{StaticResource FlatToggleButtonControlTemplate}"
                           ToolTip="Spell Check?">
                 <Image Width="16"

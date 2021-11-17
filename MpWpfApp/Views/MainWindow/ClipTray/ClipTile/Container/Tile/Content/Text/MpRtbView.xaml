@@ -7,7 +7,8 @@
                      mc:Ignorable="d"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpContentItemViewModel"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                                      IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <RichTextBox x:Name="Rtb"
@@ -29,7 +30,8 @@
                  IsDocumentEnabled="True"
                  IsEnabled="True"
                  IsInactiveSelectionHighlightEnabled="True"
-                 IsReadOnly="{Binding IsEditingContent, Converter={StaticResource BoolFlipConverter}}"
+                 IsReadOnly="{Binding IsEditingContent,
+                                      Converter={StaticResource BoolFlipConverter}}"
                  IsUndoEnabled="True"
                  Loaded="Rtb_Loaded"
                  PreviewKeyUp="Rtb_PreviewKeyUp"

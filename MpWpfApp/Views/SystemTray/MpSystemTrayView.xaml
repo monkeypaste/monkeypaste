@@ -15,27 +15,46 @@
                     MouseEnter="SystemTrayTaskbarIcon_MouseEnter"
                     TrayLeftMouseUp="SystemTrayTaskbarIcon_TrayLeftMouseUp"
                     IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
-                    Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}}"
-                    ToolTipText="{Binding SystemTrayIconToolTipText, Source={StaticResource SystemTrayViewModel}}">
+                    Tag="{Binding DataContext,
+                                  RelativeSource={RelativeSource Mode=Self}}"
+                    ToolTipText="{Binding SystemTrayIconToolTipText,
+                                          Source={StaticResource SystemTrayViewModel}}">
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Settings"
-                          Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                          Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+                          Icon="{Binding Source={StaticResource CogIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          Command="{Binding ShowSettingsWindowCommand,
+                                            Source={StaticResource SystemTrayViewModel}}"
                           CommandParameter="{StaticResource SettingsTabAccount}" />
-                <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-                          Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}, Source={StaticResource SystemTrayViewModel}}"
-                          Command="{Binding ToggleIsAppPausedCommand, Source={StaticResource AppModeViewModel}}" />
+                <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader,
+                                           RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                          AncestorType=ContextMenu}}"
+                          Icon="{Binding PauseOrPlayIconSource,
+                                         Converter={StaticResource StringToIconConverter},
+                                         Source={StaticResource SystemTrayViewModel}}"
+                          Command="{Binding ToggleIsAppPausedCommand,
+                                            Source={StaticResource AppModeViewModel}}" />
                 <MenuItem Header="Help"
-                          Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                          Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+                          Icon="{Binding Source={StaticResource HelpIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          Command="{Binding ShowSettingsWindowCommand,
+                                            Source={StaticResource SystemTrayViewModel}}"
                           CommandParameter="{StaticResource SettingsTabHelp}" />
                 <MenuItem Header="Log..."
-                          Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                          Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand,
+                                            RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                           AncestorType=ContextMenu}}" />
                 <Separator />
                 <MenuItem Header="Exit"
-                          Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                          Command="{Binding PlacementTarget.Tag.ExitApplicationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                          Icon="{Binding Source={StaticResource SignOutIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          Command="{Binding PlacementTarget.Tag.ExitApplicationCommand,
+                                            RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                           AncestorType=ContextMenu}}" />
             </ContextMenu>
         </tb:TaskbarIcon.ContextMenu>
         <tb:TaskbarIcon.TrayToolTip>

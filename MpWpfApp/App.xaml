@@ -821,7 +821,9 @@
                            Minimum="0"
                            ViewportSize="{TemplateBinding ViewportHeight}"
                            Visibility="Collapsed"
-                           Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                           Value="{Binding Path=VerticalOffset,
+                                           Mode=OneWay,
+                                           RelativeSource={RelativeSource TemplatedParent}}" />
                 <ScrollBar x:Name="PART_HorizontalScrollBar"
                            Grid.Row="1"
                            Grid.Column="0"
@@ -832,7 +834,9 @@
                            Orientation="Horizontal"
                            ViewportSize="{TemplateBinding ViewportWidth}"
                            Visibility="Collapsed"
-                           Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                           Value="{Binding Path=HorizontalOffset,
+                                           Mode=OneWay,
+                                           RelativeSource={RelativeSource TemplatedParent}}" />
                 <ScrollBar x:Name="PART_AniVerticalScrollBar"
                            Grid.Column="1"
                            AutomationProperties.AutomationId="VerticalScrollBar"
@@ -841,7 +845,9 @@
                            Minimum="0"
                            ViewportSize="{TemplateBinding ViewportHeight}"
                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                           Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                           Value="{Binding Path=VerticalOffset,
+                                           Mode=OneWay,
+                                           RelativeSource={RelativeSource TemplatedParent}}" />
                 <ScrollBar x:Name="PART_AniHorizontalScrollBar"
                            Grid.Row="1"
                            AutomationProperties.AutomationId="HorizontalScrollBar"
@@ -851,7 +857,9 @@
                            Orientation="Horizontal"
                            ViewportSize="{TemplateBinding ViewportWidth}"
                            Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
-                           Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                           Value="{Binding Path=HorizontalOffset,
+                                           Mode=OneWay,
+                                           RelativeSource={RelativeSource TemplatedParent}}" />
             </Grid>
         </ControlTemplate>
         <!--  End Animated Listbox  -->

@@ -7,7 +7,8 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <local:MpTileExpanderBehavior x:Name="ExpandBehavior" />
     </i:Interaction.Behaviors>
@@ -19,6 +20,7 @@
                               Visibility="{Binding FrontVisibility}" />
         <local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
-                                  Visibility="{Binding IsFlipping, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                  Visibility="{Binding IsFlipping,
+                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
     </Grid>
 </local:MpUserControl>

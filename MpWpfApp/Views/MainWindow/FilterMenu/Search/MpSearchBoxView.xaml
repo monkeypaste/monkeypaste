@@ -8,180 +8,182 @@
                      xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpSearchBoxViewModel"
                      mc:Ignorable="d"
-                     d:DesignHeight="450" 
+                     d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpSearchBoxViewModel, IsDesignTimeCreatable=False}">
-    <StackPanel x:Name="SearchViewContainerStackPanel" 
-                Loaded="SearchViewContainerStackPanel_Loaded"
-                SizeChanged="SearchViewContainerStackPanel_SizeChanged"
+                     d:DataContext="{d:DesignInstance Type=local:MpSearchBoxViewModel,
+                                                      IsDesignTimeCreatable=False}">
+    <StackPanel x:Name="SearchViewContainerStackPanel"
                 Orientation="Horizontal">
         <Button x:Name="SaveSearchButton"
-                Background="Transparent" 
+                Background="Transparent"
                 Foreground="Transparent"
                 BorderThickness="0"
                 MouseEnter="SaveSearchButton_MouseEnter"
                 MouseLeave="SaveSearchButton_MouseLeave"
-                Visibility="{Binding SearchDetailViewModel.HasCriteriaItems, Converter={StaticResource BoolToVisibilityConverter}}"
+                Visibility="{Binding SearchDetailViewModel.HasCriteriaItems,
+                                     Converter={StaticResource BoolToVisibilityConverter},
+                                     ConverterParameter={StaticResource Hide}}"
                 Style="{StaticResource Transparent_Button}">
             <Border CornerRadius="5"
                     Padding="12,5"
                     Background="LightGray"
                     BorderBrush="{Binding SaveSearchButtonBorderBrush}"
                     BorderThickness="3">
-                <TextBlock FontWeight="Bold" 
+                <TextBlock FontWeight="Bold"
                            Text="SAVE"
                            Foreground="DimGray"
                            Background="Transparent" />
             </Border>
         </Button>
-        <Grid x:Name="SearchBoxContainerGrid" 
-              Width="{Binding Path=ActualWidth, ElementName=SearchViewContainerStackPanel}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="0.2*" />
-            </Grid.ColumnDefinitions>
-            <!--  Search Border  -->
-            <Border x:Name="SearchTextBoxBorder"
-                                DataContextChanged="SearchTextBoxBorder_DataContextChanged"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"
-                                Margin="8"
-                                CornerRadius="10"
-                                BorderBrush="{Binding TextBoxBorderBrush}"
-                                Background="White"
-                                BorderThickness="0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.15*" />
-                        <ColumnDefinition Width="*" />
-                        <!--  Width is 0.1* or 0.2*  -->
-                        <ColumnDefinition Width="{Binding ClearAndAddCriteriaColumnWidth}" />
-                    </Grid.ColumnDefinitions>
-                    <!-- Search Icon Dropdown Button -->
-                    <Button x:Name="SearchDropDownButton"
-                            PreviewMouseLeftButtonDown="SearchDropDownButton_PreviewMouseLeftButtonDown"
+
+        <!--  Search Border  -->
+        <!--  Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"  -->
+        <local:MpClipBorder x:Name="SearchTextBoxBorder"
+                DataContextChanged="SearchTextBoxBorder_DataContextChanged"
+                Grid.Column="0"
+                Margin="8"
+                Width="280"
+                CornerRadius="10"
+                BorderBrush="{Binding TextBoxBorderBrush}"
+                Background="White"
+                BorderThickness="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="*" />
+                    <!--  Width is 0.1* or 0.2*  -->
+                    <ColumnDefinition Width="{Binding ClearAndAddCriteriaColumnWidth}" />
+                </Grid.ColumnDefinitions>
+                <!--  Search Icon Dropdown Button  -->
+                <Button x:Name="SearchDropDownButton"
+                        PreviewMouseLeftButtonDown="SearchDropDownButton_PreviewMouseLeftButtonDown"
+                        Background="Transparent"
+                        Grid.Column="0"
+                        Margin="3,0,0,0"
+                        Width="25"
+                        Height="25"
+                        Template="{StaticResource SearchButtonControlTemplate}"
+                        BorderThickness="0">
+                    <Image Source="/MpWpfApp;component/Resources/Images/search.png"
+                           Stretch="Fill"
+                           SnapsToDevicePixels="True" />
+                </Button>
+                <!--  Search TextBox  -->
+                <TextBox x:Name="SearchBox"
+                         GotFocus="SearchBox_GotFocus"
+                         Grid.Column="1"
+                         AllowDrop="False"
+                         FontSize="18"
+                         Background="Transparent"
+                         MouseEnter="SearchBox_MouseEnter"
+                         MouseLeave="SearchBox_MouseLeave"
+                         PreviewMouseLeftButtonDown="SearchBox_PreviewMouseLeftButtonDown"
+                         Foreground="{Binding TextBoxTextBrush}"
+                         FontStyle="{Binding TextBoxFontStyle}"
+                         BorderThickness="0"
+                         VerticalContentAlignment="Center"
+                         KeyUp="SearchBox_KeyUp"
+                         CaretBrush="{Binding CaretBrush}"
+                         Text="{Binding SearchText,
+                                        Mode=TwoWay,
+                                        NotifyOnTargetUpdated=True,
+                                        UpdateSourceTrigger=PropertyChanged}" />
+                <!--  Placeholder TextBlock  -->
+                <TextBlock x:Name="SearchBoxPlaceholderBlock"
+                           Grid.Column="1"
+                           FontSize="18"
+                           IsHitTestVisible="False"
+                           Visibility="{Binding IsPlaceholderVisible,
+                                                Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding PlaceholderText}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="0"
+                           Foreground="DarkGray"
+                           FontStyle="Italic" />
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="2">
+                    <!--  IsSearching Spinner  -->
+                    <local:MpSpinnerApple x:Name="IsSearchingSpinner"
+                                          VerticalAlignment="Center"
+                                          Margin="0,0,5,0"
+                                          Visibility="{Binding IsSearching,
+                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <!--  Clear SearchText Button  -->
+                    <Button x:Name="ClearTextBoxButton"
+                            Width="15"
+                            Height="15"
+                            MouseEnter="ClearTextBoxButton_MouseEnter"
+                            MouseLeave="ClearTextBoxButton_MouseLeave"
+                            Style="{StaticResource SemiTransparentButton}"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding ClearTextButtonVisibility}"
+                            Click="ClearTextBoxButton_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}" />
+                        </Button.Background>
+                    </Button>
+                    <!--  Add Or Clear Search Criteria Button  -->
+                    <Button x:Name="AddOrClearSearchCriteriaButton"
                             Background="Transparent"
-                            Grid.Column="0"
-                            Margin="3,0,0,0"
-                            Width="25"
-                            Height="25"
-                            Template="{StaticResource SearchButtonControlTemplate}"
-                            BorderThickness="0">
-                        <Image Source="/MpWpfApp;component/Resources/Images/search.png"
-                               Stretch="Fill"
-                               SnapsToDevicePixels="True" />
-                    </Button>
-                    <!-- Search TextBox -->
-                    <TextBox x:Name="SearchBox"
-                             GotFocus="SearchBox_GotFocus"
-                             Grid.Column="1"
-                             AllowDrop="False"
-                             FontSize="18"
-                             Background="Transparent"
-                             MouseEnter="SearchBox_MouseEnter"
-                             MouseLeave="SearchBox_MouseLeave"
-                             PreviewMouseLeftButtonDown="SearchBox_PreviewMouseLeftButtonDown"
-                             Foreground="{Binding TextBoxTextBrush}"
-                             FontStyle="{Binding TextBoxFontStyle}"
-                             BorderThickness="0"
-                             VerticalContentAlignment="Center"
-                             KeyUp="SearchBox_KeyUp"
-                             CaretBrush="{Binding CaretBrush}"
-                             Text="{Binding SearchText, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                    <!-- Placeholder TextBlock -->
-                    <TextBlock x:Name="SearchBoxPlaceholderBlock"
-                               Grid.Column="1"
-                               FontSize="18"
-                               IsHitTestVisible="False"
-                               Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Text="{Binding PlaceholderText}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="0"
-                               Foreground="DarkGray"
-                               FontStyle="Italic" />
-                    <StackPanel Orientation="Horizontal"
-                                Grid.Column="2">
-                        <!-- IsSearching Spinner -->
-                        <local:MpSpinnerApple x:Name="IsSearchingSpinner"
-                                              VerticalAlignment="Center"
-                                              Margin="0,0,5,0"
-                                              Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        <!-- Clear SearchText Button -->
-                        <Button x:Name="ClearTextBoxButton"
-                                Width="15"
-                                Height="15"
-                                MouseEnter="ClearTextBoxButton_MouseEnter"
-                                MouseLeave="ClearTextBoxButton_MouseLeave"
-                                Style="{StaticResource SemiTransparentButton}"
-                                BorderThickness="0"
-                                VerticalAlignment="Center"
-                                Visibility="{Binding ClearTextButtonVisibility}"
-                                Click="ClearTextBoxButton_Click">
-                            <Button.Background>
-                                <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}" />
-                            </Button.Background>
-                        </Button>
-                        <!-- Add Or Clear Search Criteria Button-->
-                        <Button x:Name="AddOrClearSearchCriteriaButton" 
-                                Background="Transparent"
-                                BorderThickness="0"                                
-                                Margin="5,0,0,0"
-                                Command="{Binding SearchDetailViewModel.AddSearchCriteriaItemCommand}"
-                                Visibility="{Binding CanAddCriteriaItem, Converter={StaticResource BoolToVisibilityConverter}}"
-                                Style="{StaticResource SemiTransparentButton}">
-                            <Border BorderThickness="0"
-                                    Padding="7"
-                                    Height="40"
-                                    Width="40">
-                                <Border.Background>
-                                    <RadialGradientBrush GradientOrigin="0.5,0.5"
-                                                         Center="0.5,0.4"
-                                                         RadiusX="0.7"
-                                                         RadiusY="0.7">
-                                        <RadialGradientBrush.GradientStops>
-                                            <GradientStop Color="Violet"
-                                                          Offset="0" />
-                                            <GradientStop Color="Violet"
-                                                          Offset="1.0" />
-                                        </RadialGradientBrush.GradientStops>
-                                    </RadialGradientBrush>
-                                </Border.Background>
-                                <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Stretch="Uniform"
-                                       Margin="0,0,0,10" />
-                            </Border>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Border>
-            <!--  Search Navigation Border  -->
-            <Border Grid.Column="1"
-                                CornerRadius="10"
-                                Visibility="{Binding SearchNavigationButtonPanelVisibility}"
-                                HorizontalAlignment="Center"
-                                Margin="3,0,10,0">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="PreviousTemplateButton"
-                            TabIndex="2"
-                            Command="{Binding PrevMatchCommand}"
-                            Width="20"
-                            Height="20"
-                            Padding="5">
-                        <Image Source="/Resources/Images/back_black.png" />
-                    </Button>
-                    <Button x:Name="NextTemplateButton"
-                            TabIndex="3"
-                            Command="{Binding NextMatchCommand}"
-                            Width="20"
-                            Height="20"
-                            Padding="5">
-                        <Image Source="/Resources/Images/forward_black.png" />
+                            BorderThickness="0"
+                            Margin="5,0,0,0"
+                            Command="{Binding SearchDetailViewModel.AddSearchCriteriaItemCommand}"
+                            Visibility="{Binding CanAddCriteriaItem,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                            Style="{StaticResource SemiTransparentButton}">
+                        <local:MpClipBorder BorderThickness="0"
+                                            Padding="5"
+                                            Height="40"
+                                            Width="40">
+                            <local:MpClipBorder.Background>
+                                <RadialGradientBrush GradientOrigin="0.5,0.5"
+                                                     Center="0.5,0.4"
+                                                     RadiusX="0.7"
+                                                     RadiusY="0.7">
+                                    <RadialGradientBrush.GradientStops>
+                                        <GradientStop Color="Violet"
+                                                      Offset="0" />
+                                        <GradientStop Color="Violet"
+                                                      Offset="1.0" />
+                                    </RadialGradientBrush.GradientStops>
+                                </RadialGradientBrush>
+                            </local:MpClipBorder.Background>
+                            <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Stretch="Uniform"
+                                   Margin="0,0,0,10" />
+                        </local:MpClipBorder>
                     </Button>
                 </StackPanel>
-            </Border>
-        </Grid>
+            </Grid>
+        </local:MpClipBorder>
+        <!--  Search Navigation Border  -->
+        <Border Grid.Column="1"
+                CornerRadius="10"
+                Visibility="{Binding SearchNavigationButtonPanelVisibility}"
+                HorizontalAlignment="Center"
+                Margin="3,0,10,0">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="PreviousTemplateButton"
+                        TabIndex="2"
+                        Command="{Binding PrevMatchCommand}"
+                        Width="20"
+                        Height="20"
+                        Padding="5">
+                    <Image Source="/Resources/Images/back_black.png" />
+                </Button>
+                <Button x:Name="NextTemplateButton"
+                        TabIndex="3"
+                        Command="{Binding NextMatchCommand}"
+                        Width="20"
+                        Height="20"
+                        Padding="5">
+                    <Image Source="/Resources/Images/forward_black.png" />
+                </Button>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </local:MpUserControl>

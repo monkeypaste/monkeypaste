@@ -171,14 +171,5 @@ namespace MpWpfApp {
         private void SaveSearchButton_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsOverSaveSearchButton = false;
         }
-
-        private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            UpdateLayout();
-        }
-
-        private void SearchViewContainerStackPanel_SizeChanged(object sender, SizeChangedEventArgs e) {
-            SearchBoxContainerGrid.Width = SearchViewContainerStackPanel.ActualWidth;
-            SearchBoxContainerGrid.UpdateLayout();
-        }
     }
 }

@@ -8,7 +8,8 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Border Margin="5"
             BorderThickness="0"
             BorderBrush="Black"
@@ -20,14 +21,16 @@
             MouseLeave="Border_MouseLeave">
         <DockPanel>
             <Image DockPanel.Dock="Left"
-                   Source="{Binding ItemIconBase64, Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                   Source="{Binding ItemIconBase64,
+                                    Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                    Margin="5,0,5,0"
                    Height="25"
                    Width="25" />
             <local:MpSpinnerApple DockPanel.Dock="Right"
                                   VerticalAlignment="Center"
                                   Margin="0,0,5,0"
-                                  Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                  Visibility="{Binding IsBusy,
+                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
             <Button x:Name="PresetOptionsButton"
                     DockPanel.Dock="Right"
                     Height="30"
@@ -38,7 +41,8 @@
                     Click="PresetOptionsButton_Click"
                     ToolTipService.InitialShowDelay="100"
                     Template="{StaticResource SearchButtonControlTemplate}"
-                    Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                    Visibility="{Binding IsBusy,
+                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
                     Background="Transparent">
                 <Button.Resources>
                     <local:MpBindingProxy x:Key="AnalyticItemProxy"
@@ -47,17 +51,24 @@
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Save New Preset"
-                                  Icon="{Binding Source={StaticResource SaveIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding Data.CreateNewPresetCommand, Source={StaticResource AnalyticItemProxy}}" />
+                                  Icon="{Binding Source={StaticResource SaveIcon},
+                                                 Converter={StaticResource StringToIconConverter},
+                                                 Mode=OneWay}"
+                                  Command="{Binding Data.CreateNewPresetCommand,
+                                                    Source={StaticResource AnalyticItemProxy}}" />
                         <MenuItem Header="Apply Preset"
-                                  Visibility="{Binding Data.HasPresets, Source={StaticResource AnalyticItemProxy}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                  ItemsSource="{Binding Data.PresetViewModels, Source={StaticResource AnalyticItemProxy}}">
+                                  Visibility="{Binding Data.HasPresets,
+                                                       Source={StaticResource AnalyticItemProxy},
+                                                       Converter={StaticResource BoolToVisibilityConverter}}"
+                                  ItemsSource="{Binding Data.PresetViewModels,
+                                                        Source={StaticResource AnalyticItemProxy}}">
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="{x:Type MenuItem}">
                                     <Setter Property="Header"
                                             Value="{Binding Label}" />
                                     <Setter Property="Icon"
-                                            Value="{Binding PresetIcon, Converter={StaticResource Base64StringToIconConverter}}" />
+                                            Value="{Binding PresetIcon,
+                                                            Converter={StaticResource Base64StringToIconConverter}}" />
                                     <Setter Property="ToolTip"
                                             Value="{Binding Description}" />
                                     <Setter Property="Command"
@@ -73,13 +84,20 @@
                                 </Style>
                             </MenuItem.ItemContainerStyle>
                         </MenuItem>
-                        <MenuItem Header="{Binding Data.ResetLabel, Source={StaticResource AnalyticItemProxy}}"
-                                  Icon="{Binding Source={StaticResource ResetIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding Data.ResetCommand, Source={StaticResource AnalyticItemProxy}}" />
+                        <MenuItem Header="{Binding Data.ResetLabel,
+                                                   Source={StaticResource AnalyticItemProxy}}"
+                                  Icon="{Binding Source={StaticResource ResetIcon},
+                                                 Converter={StaticResource StringToIconConverter},
+                                                 Mode=OneWay}"
+                                  Command="{Binding Data.ResetCommand,
+                                                    Source={StaticResource AnalyticItemProxy}}" />
                         <Separator />
                         <MenuItem Header="Manage Presets"
-                                  Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                  Command="{Binding Data.ManageAnalyticItemCommand, Source={StaticResource AnalyticItemProxy}}" />
+                                  Icon="{Binding Source={StaticResource CogIcon},
+                                                 Converter={StaticResource StringToIconConverter},
+                                                 Mode=OneWay}"
+                                  Command="{Binding Data.ManageAnalyticItemCommand,
+                                                    Source={StaticResource AnalyticItemProxy}}" />
                     </ContextMenu>
                 </Button.ContextMenu>
                 <Image Stretch="Uniform"

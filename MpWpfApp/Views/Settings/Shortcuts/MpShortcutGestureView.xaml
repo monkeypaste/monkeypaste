@@ -8,7 +8,8 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpShortcutViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpShortcutViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Grid>
         <ListBox x:Name="ShortcutListBox"
                  Grid.Row="2"
@@ -17,7 +18,8 @@
                  HorizontalAlignment="Center"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                 Visibility="{Binding IsEmpty,
+                                      Converter={StaticResource BoolToVisibilityFlipConverter}}"
                  ItemsSource="{Binding KeyItems}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -55,7 +57,7 @@
                                     BorderThickness="2"
                                     CornerRadius="5">
                                 <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"                                           
+                                           VerticalAlignment="Center"
                                            Padding="3,0"
                                            FontSize="10"
                                            Foreground="Black"
@@ -111,13 +113,14 @@
             </ListBox.GroupStyle>
         </ListBox>
         <StackPanel Orientation="Horizontal"
-                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Visibility="{Binding IsEmpty,
+                                         Converter={StaticResource BoolToVisibilityConverter}}">
             <Ellipse Width="15"
                      Height="15"
                      Fill="Red"
                      Margin="3"
                      HorizontalAlignment="Center"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center" />
             <TextBlock x:Name="EmptyGestureTextBlock"
                        Margin="3,0"
                        VerticalAlignment="Center"

@@ -194,6 +194,12 @@ namespace MpWpfApp {
             }
         }
 
+        //public double ClipTrayAndCriteriaListHeight {
+        //    get {
+        //        return ClipTrayHeight + SearchBoxViewModel
+        //    }
+        //}
+
         private double _clipTrayWidth = MpMeasurements.Instance.ClipTrayWidth;
         public double ClipTrayWidth {
             get {

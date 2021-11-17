@@ -6,7 +6,8 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpContentItemViewModel"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                                      IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      mc:Ignorable="d">
@@ -53,7 +54,8 @@
                           MouseLeave="ClipTileToggleEditButton_MouseLeave"
                           PreviewMouseLeftButtonDown="ClipTileToggleEditButton_PreviewMouseLeftButtonDown"
                           IsChecked="{Binding Parent.IsExpanded}"
-                          Visibility="{Binding Parent.IsTextItem, Converter={StaticResource BoolToVisibilityConverter}}"
+                          Visibility="{Binding Parent.IsTextItem,
+                                               Converter={StaticResource BoolToVisibilityConverter}}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/edit.png" />
             </ToggleButton>

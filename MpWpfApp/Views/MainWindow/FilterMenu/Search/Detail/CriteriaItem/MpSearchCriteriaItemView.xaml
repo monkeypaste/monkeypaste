@@ -12,6 +12,7 @@
     <Border x:Name="CriteriaItemBorder"
             Background="LightGray"
             BorderThickness="1"
+            Height="{local:MpMeasurementsBinding SearchDetailRowHeight}"
             MouseEnter="CriteriaItemBorder_MouseEnter"
             MouseLeave="CriteriaItemBorder_MouseLeave"
             BorderBrush="{Binding CriteriaItemBorderBrush}">
