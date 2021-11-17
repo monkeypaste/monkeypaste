@@ -30,8 +30,6 @@
                          Visibility="{Binding IsTrayEmpty,
                                               Converter={StaticResource BoolToVisibilityFlipConverter},
                                               ConverterParameter={StaticResource Hide}}"
-                         Width="{Binding ClipTrayWidth,
-                                         Source={StaticResource MainWindowViewModel}}"
                          ItemsSource="{Binding Items}"
                          Background="Transparent"
                          local:MpFrictionScrollExtension.IsEnabled="True"
@@ -45,10 +43,10 @@
                          Margin="0,0,0,0"
                          Focusable="True"
                          BorderThickness="0"
-                         VerticalAlignment="Center"
-                         VerticalContentAlignment="Top"
-                         HorizontalAlignment="Left"
-                         HorizontalContentAlignment="Center"
+                         VerticalAlignment="Stretch"
+                         VerticalContentAlignment="Stretch"
+                         HorizontalAlignment="Stretch"
+                         HorizontalContentAlignment="Stretch"
                          SelectionMode="Single"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.ScrollUnit="Pixel"
@@ -57,18 +55,6 @@
                          ScrollViewer.IsDeferredScrollingEnabled="True"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                    <!--<ListBox.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="0,1">
-                        <GradientStop Offset="0"
-                                      Color="Transparent" />
-                        <GradientStop Offset=".65"
-                                      Color="Transparent" />
-                        <GradientStop Offset="0"
-                                      Color="{Binding ClipTrayBackgroundBrush, Converter={StaticResource BrushToColorConverter}, ConverterParameter=1}" />
-
-                    </LinearGradientBrush>
-                </ListBox.Background>-->
                     <i:Interaction.Behaviors>
                         <local:MpDropBehavior x:Name="DropBehavior" />
                     </i:Interaction.Behaviors>
@@ -83,7 +69,7 @@
                             <Setter Property="FocusVisualStyle"
                                     Value="{x:Null}" />
                             <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
+                                    Value="Stretch" />
                             <Setter Property="VerticalContentAlignment"
                                     Value="Top" />
                             <Setter Property="Template">
@@ -107,11 +93,7 @@
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalAlignment="{Binding IsAnyTileExpanded,
-                                                                                  Source={StaticResource ClipTrayViewModel},
-                                                                                  Converter={StaticResource BoolToHAlignmentConverter},
-                                                                                  ConverterParameter='center,left'}"
+                                                    HorizontalAlignment="Stretch"
                                                     IsItemsHost="True"
                                                     Orientation="Horizontal" />
                         </ItemsPanelTemplate>

@@ -19,11 +19,10 @@ namespace MpWpfApp {
                     today, yesterday, this week/month/year 
     */
     public enum MpSearchCriteriaPropertyType {
-        None = 0,
+        Content = 0,
+        ContentType,
         Collection,
         Title,
-        Content,
-        ContentType,
         Source,
         Time
         //CopiedDate,
@@ -41,7 +40,7 @@ namespace MpWpfApp {
         Other = 32
     };
 
-    public class MpSearchCriteriaItemViewModel : MpViewModelBase<MpSearchDetailViewModel> {
+    public class MpSearchCriteriaItemViewModel : MpViewModelBase<MpSearchBoxViewModel> {
         #region Private Variables
         #endregion
 
@@ -65,6 +64,38 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<string> SecondaryLabels {
+            get {
+                switch (SelectedCriteriaType) {
+                    case MpSearchCriteriaPropertyType.Title:
+                    case MpSearchCriteriaPropertyType.Content:
+                        return TextUnitOptionLabels;
+                    case MpSearchCriteriaPropertyType.ContentType:
+                        return ContentTypeOptionLabels;
+
+                    //case MpSearchCriteriaPropertyType.ContentType:
+                    //case MpSearchCriteriaPropertyType.Collection:
+                    //case MpSearchCriteriaPropertyType.Source:
+                    //    return MpSearchCriteriaUnitType.Text | MpSearchCriteriaUnitType.Enumerable;
+
+                    //case MpSearchCriteriaPropertyType.Time:
+                    //    return MpSearchCriteriaUnitType.Text |
+                    //           MpSearchCriteriaUnitType.Number |
+                    //           MpSearchCriteriaUnitType.DateTime |
+                    //           MpSearchCriteriaUnitType.TimeSpan |
+                    //           MpSearchCriteriaUnitType.Enumerable;
+
+                    default: return null;
+                }
+            }
+        }
+
+        public ObservableCollection<string> TertiaryOptionLabels {
+            get {
+                return null;
+            }
+        }
+
         public ObservableCollection<string> TextUnitOptionLabels {
             get {
                 return new ObservableCollection<string>() {
@@ -75,6 +106,16 @@ namespace MpWpfApp {
                 };
             }
         }
+
+        public ObservableCollection<string> ContentTypeOptionLabels {
+            get {
+                return new ObservableCollection<string>() {
+                    "Text",
+                    "Image",
+                    "Files"
+                };
+            }
+        }        
 
         public ObservableCollection<string> NumberUnitOptionLabels {
             get {
@@ -147,11 +188,17 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool HasSecondaryLabels => SecondaryLabels != null && SecondaryLabels.Count > 0;
+
+        //public bool HasTertiaryLabels => SecondaryLabels != null && SecondaryLabels[SelectedSecondaryIdx] ;
+
         public bool IsSelected { get; set; } = false;
 
         public bool IsHovering { get; set; } = false;
 
         public int SelectedCriteriaTypeIdx { get; set; } = 0;
+
+        public int SelectedSecondaryIdx { get; set; } = 0;
 
         public MpSearchCriteriaPropertyType SelectedCriteriaType => (MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx;
 
@@ -197,9 +244,25 @@ namespace MpWpfApp {
         public bool IsOverAddCriteriaButton { get; set; } = false;
 
         public bool IsOverRemoveCriteriaButton { get; set; } = false;
+
         #endregion
 
-        #region Models
+        #region Model
+
+        public string InputValue {
+            get {
+                if(SearchCriteriaItem == null) {
+                    return string.Empty;
+                }
+                return SearchCriteriaItem.InputValue;
+            }
+            set {
+                if(SearchCriteriaItem.InputValue != value) {
+                    SearchCriteriaItem.InputValue = value;
+                    OnPropertyChanged(nameof(InputValue));
+                }
+            }
+        }
 
         public MpSearchCriteriaItem SearchCriteriaItem { get; set; }
 
@@ -208,19 +271,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
         public MpSearchCriteriaItemViewModel() : base(null) { }
 
-        public MpSearchCriteriaItemViewModel(MpSearchDetailViewModel parent) : base(parent) {
+        public MpSearchCriteriaItemViewModel(MpSearchBoxViewModel parent) : base(parent) {
+            PropertyChanged += MpSearchCriteriaItemViewModel_PropertyChanged;
         }
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
             IsBusy = true;
 
             SearchCriteriaItem = sci;
+            SelectedCriteriaTypeIdx = 0;
             await Task.Delay(1);
 
             IsBusy = false;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedCriteriaTypeIdx):
+                    OnPropertyChanged(nameof(SecondaryLabels));
+                    break;
+            }
+        }
+
         #endregion
 
         #region Commands

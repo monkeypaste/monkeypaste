@@ -73,7 +73,6 @@ namespace MpWpfApp {
             if (e.PropertyName == nameof(SystemParameters.WorkArea)) {
                 var mwvm = DataContext as MpMainWindowViewModel;
                 this.Dispatcher.Invoke(() => {
-                    mwvm.OnPropertyChanged(nameof(mwvm.MainWindowContainerRect));
                     mwvm.SetupMainWindowRect();
                 });
             }

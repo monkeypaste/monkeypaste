@@ -266,7 +266,6 @@
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\SearchBox\Detail\MpSearchDetailViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />
@@ -385,13 +384,13 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\Search\Detail\MpSearchDetailView.xaml.cs">
-      <DependentUpon>MpSearchDetailView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml.cs">
+      <DependentUpon>MpSearchCriteriaListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\MpSearchBoxView.xaml.cs">
       <DependentUpon>MpSearchBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\Search\Detail\CriteriaItem\MpSearchCriteriaItemView.xaml.cs">
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaItemView.xaml.cs">
       <DependentUpon>MpSearchCriteriaItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml.cs">
@@ -591,7 +590,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\Search\Detail\MpSearchDetailView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -599,7 +598,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\Search\Detail\CriteriaItem\MpSearchCriteriaItemView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

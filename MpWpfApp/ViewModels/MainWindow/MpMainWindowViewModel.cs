@@ -44,6 +44,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
+        private double _lastMainWindowTop;
+        private double _lastMainWindowHeight;
+
         private double _startMainWindowTop;
         private double _endMainWindowTop;
 
@@ -114,56 +117,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        public double AppModeButtonGridWidth {
-            get {
-                if(IsMainWindowLoading || MpClipTrayViewModel.Instance == null || !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                    return MpMeasurements.Instance.AppStateButtonPanelWidth;
-                }
-                return 0;
-            }
-        }
 
         public double MainWindowWidth { get; set; } = SystemParameters.WorkArea.Width;
 
-        //public double MainWindowHeight {
-        //    get {
-        //        return TitleMenuHeight + FilterMenuHeight + ClipTrayHeight;
-        //    }
-        //}
+        public double MainWindowContainerHeight { get; set; } = SystemParameters.WorkArea.Height;
 
-        //public double MainWindowBottom {
-        //    get {
-        //        return MainWindowTop + MainWindowHeight;
-        //    }
-        //}
-
-        public Rect MainWindowContainerRect {
+        private double _mainWindowHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
+        public double MainWindowHeight { 
             get {
-                return SystemParameters.WorkArea;
-            }
-        }
-
-        private Rect _mainWindowContentRect;
-        public Rect MainWindowContentRect {
-            get {
-                if(_mainWindowContentRect.IsEmpty) {
-                    _mainWindowContentRect = new Rect(
-                        MainWindowContainerRect.Left,
-                        MainWindowContainerRect.Bottom - MpMeasurements.Instance.MainWindowDefaultHeight,
-                        MainWindowContainerRect.Width,
-                        MpMeasurements.Instance.MainWindowDefaultHeight);
-                }
-                return _mainWindowContentRect;
+                return _mainWindowHeight;
             }
             set {
-                if(_mainWindowContentRect != value) {
-                    _mainWindowContentRect = value;
-                    OnPropertyChanged(nameof(MainWindowContentRect));
+                if(_mainWindowHeight != value) {
+                    _lastMainWindowHeight = _mainWindowHeight;
+                    _mainWindowHeight = value;
+                    OnPropertyChanged(nameof(MainWindowHeight));
                 }
             }
         }
-
-        public double MainWindowHeight { get; set; } = SystemParameters.WorkArea.Height;
 
         public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
 
@@ -174,12 +145,12 @@ namespace MpWpfApp {
             }
             set {
                 if(_mainWindowGridTop != value) {
+                    _lastMainWindowTop = _mainWindowGridTop;
                     _mainWindowGridTop = value;
                     OnPropertyChanged(nameof(MainWindowTop));
                 }
             }
         }
-
 
         private double _clipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
         public double ClipTrayHeight {
@@ -194,22 +165,33 @@ namespace MpWpfApp {
             }
         }
 
-        //public double ClipTrayAndCriteriaListHeight {
-        //    get {
-        //        return ClipTrayHeight + SearchBoxViewModel
-        //    }
-        //}
+        public double ClipTrayAndCriteriaListHeight {
+            get {
+                return ClipTrayHeight + SearchCriteriaListBoxHeight;
+            }
+        }
 
-        private double _clipTrayWidth = MpMeasurements.Instance.ClipTrayWidth;
+        public double SearchCriteriaListBoxHeight {
+            get {
+                return ((MpMeasurements.Instance.SearchDetailRowHeight * SearchBoxViewModel.CriteriaItems.Count) +
+                       ((MpMeasurements.Instance.SearchDetailBorderThickness * 2) * SearchBoxViewModel.CriteriaItems.Count));
+            }
+        }
+
+        public double AppModeButtonGridWidth {
+            get {
+                if (IsMainWindowLoading ||
+                   MpClipTrayViewModel.Instance == null ||
+                   !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                    return MpMeasurements.Instance.AppStateButtonPanelWidth;
+                }
+                return 0;
+            }
+        }
+
         public double ClipTrayWidth {
             get {
-                return _clipTrayWidth;
-            }
-            set {
-                if (_clipTrayWidth != value) {
-                    _clipTrayWidth = Math.Max(0,value);
-                    OnPropertyChanged(nameof(ClipTrayWidth));
-                }
+                return MainWindowWidth - AppModeButtonGridWidth;
             }
         }
 
@@ -253,6 +235,7 @@ namespace MpWpfApp {
 
         public async Task Init() {
             MpConsole.WriteLine("MainWindow Init");
+            PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
             MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
@@ -319,7 +302,7 @@ namespace MpWpfApp {
             if (SystemParameters.WorkArea.Top == 0) {
                 //if taskbar is at the bottom
                 mw.Width = SystemParameters.PrimaryScreenWidth;
-                _endMainWindowTop = SystemParameters.WorkArea.Height - MpMeasurements.Instance.MainWindowDefaultHeight;
+                _endMainWindowTop = SystemParameters.WorkArea.Height - MainWindowHeight;
             } else if (SystemParameters.WorkArea.Left != 0) {
                 //if taskbar is on the right
                 mw.Width = SystemParameters.WorkArea.Width;
@@ -337,11 +320,40 @@ namespace MpWpfApp {
             MainWindowTop = _startMainWindowTop;
 
             OnPropertyChanged(nameof(MainWindowWidth));
-            OnPropertyChanged(nameof(MainWindowHeight));
+            OnPropertyChanged(nameof(MainWindowContainerHeight));
         }
         #endregion
 
         #region Private Methods
+
+        private void MpMainWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(ClipTrayAndCriteriaListHeight):
+                    if(!IsResizing) {
+                        MainWindowHeight = MpMeasurements.Instance.TitleMenuHeight +
+                                        MpMeasurements.Instance.FilterMenuHeight +
+                                        ClipTrayAndCriteriaListHeight;
+
+                        MainWindowTop -= MainWindowHeight - _lastMainWindowHeight;
+                        OnPropertyChanged(nameof(ClipTrayHeight));
+                    }
+                    break;
+                case nameof(MainWindowTop):
+                    if(IsResizing) {
+                        //double topDelta = MainWindowTop - _lastMainWindowTop;
+                        //MpConsole.WriteLine("-----------------------");
+                        //MpConsole.WriteLine($"Last Tray Height: {ClipTrayHeight}");
+                        //ClipTrayHeight -= topDelta;
+                        //ClipTrayViewModel.ExpandedTile.TileBorderHeight -= topDelta;
+                        //ClipTrayViewModel.ExpandedTile.TileContentHeight -= topDelta;
+                        //OnPropertyChanged(nameof())
+                    }
+                    break;
+                case nameof(AppModeButtonGridWidth):
+                    OnPropertyChanged(nameof(ClipTrayWidth));
+                    break;
+            }
+        }
 
         public void AddTempFile(string fp) {
             if(_tempFilePathList.Contains(fp.ToLower())) {

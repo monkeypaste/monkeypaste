@@ -43,20 +43,6 @@ namespace MpWpfApp {
             }
         }
 
-        //private MpAnalyticItemCollectionViewModel _analyticItemCollectionViewModel = null;
-        //public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel {
-        //    get {
-        //        return _analyticItemCollectionViewModel;
-        //    }
-        //    set {
-        //        if (_analyticItemCollectionViewModel != value) {
-        //            _analyticItemCollectionViewModel = value;
-        //            OnPropertyChanged(nameof(AnalyticItemCollectionViewModel));
-        //        }
-        //    }
-        //}
-
-
         private MpTemplateCollectionViewModel _templateCollection;
         [MpChildViewModel(typeof(MpTemplateCollectionViewModel), false)]
         public MpTemplateCollectionViewModel TemplateCollection {
@@ -74,6 +60,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
+
         public Brush DetailTextColor {
             get {
                 if (IsSelected || Parent.IsSelected) {
@@ -183,7 +170,9 @@ namespace MpWpfApp {
                 if(Parent == null || CopyItem == null) {
                     return 0;
                 }
-                return Parent.IsExpanded ? Double.NaN : UnexpandedSize.Height;
+                return Parent.IsExpanded && Parent.Count > 1 ? 
+                            Double.NaN : Parent.IsExpanded ? 
+                                Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15 : UnexpandedSize.Height;
             }
         }
 

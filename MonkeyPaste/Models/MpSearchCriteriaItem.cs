@@ -20,6 +20,8 @@ namespace MonkeyPaste {
         [Column("fk_MpUserSearchId")]
         public int UserSearchId { get; set; } = 0;
 
+        public string InputValue { get; set; } 
+
         public int SortOrderIdx { get; set; } = 0;
 
         #endregion

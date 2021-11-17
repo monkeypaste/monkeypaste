@@ -102,7 +102,13 @@ namespace MpWpfApp {
 
         public double SearchDetailRowHeight {
             get {
-                return MainWindowDefaultHeight / 10;
+                return (MainWindowDefaultHeight / 10) + (SearchDetailBorderThickness*2);
+            }
+        }
+
+        public double SearchDetailBorderThickness {
+            get {
+                return 1;
             }
         }
 
@@ -146,11 +152,11 @@ namespace MpWpfApp {
 
         public int TotalVisibleClipTiles {
             get {
-                return (int)(ClipTrayWidth / ClipTileMinSize) + 1;
+                return (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
             }
         }
 
-        public double ClipTrayWidth {
+        public double ClipTrayDefaultWidth {
             get {
                 return ScreenWidth - AppStateButtonPanelWidth;
             }

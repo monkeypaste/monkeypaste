@@ -126,8 +126,9 @@ namespace MpWpfApp {
             if(!ctvm.IsExpanded) {
                 return;
             }
-            
+
             var mwvm = MpMainWindowViewModel.Instance;
+            mwvm.IsResizing = true;
 
             mwvm.MainWindowTop -= deltaHeight;
             mwvm.ClipTrayHeight += deltaHeight;
@@ -137,14 +138,17 @@ namespace MpWpfApp {
             double boundAdjust = 0;
             if(mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
                 boundAdjust = mwvm.MainWindowTop - MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
-            } else if (mwvm.MainWindowTop > mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight) {
-                boundAdjust = mwvm.MainWindowTop - (mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight);
+            } else if (mwvm.MainWindowTop > mwvm.MainWindowContainerHeight - MpMeasurements.Instance.MainWindowMinHeight) {
+                boundAdjust = mwvm.MainWindowTop - (mwvm.MainWindowContainerHeight - MpMeasurements.Instance.MainWindowMinHeight);
             }
 
             mwvm.MainWindowTop -= boundAdjust;
             mwvm.ClipTrayHeight += boundAdjust;
             ctvm.TileBorderHeight += boundAdjust;
             ctvm.TileContentHeight += boundAdjust;
+
+            mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
+            mwvm.IsResizing = false;
 
             Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
         }
@@ -166,13 +170,14 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
+            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            var mwvm = MpMainWindowViewModel.Instance;
             //need to do this so listboxitem matches w/ datacontext or it will expand to another tiles size
             IsExpandingOrUnexpanding = true;
+            mwvm.IsResizing = true;
 
             var _deltaSize = new Point();
 
-            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            var mwvm = MpMainWindowViewModel.Instance;
 
             _originalMainWindowTop = mwvm.MainWindowTop;
 
@@ -221,6 +226,8 @@ namespace MpWpfApp {
             ctvm.TileContentWidth += _deltaSize.X;
             ctvm.TileContentHeight += _deltaSize.Y;
 
+            mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
+
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             if(clv != null) {
                 clv.EditToolbarView.Visibility = Visibility.Visible;
@@ -254,15 +261,18 @@ namespace MpWpfApp {
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
 
+            mwvm.IsResizing = false;
             IsExpandingOrUnexpanding = false;
         }
 
         public void Unexpand() {
-            MpConsole.WriteLine("Unexpanding...");
-            IsExpandingOrUnexpanding = true;
-
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = MpMainWindowViewModel.Instance;
+
+            MpConsole.WriteLine("Unexpanding...");
+            mwvm.IsResizing = true;
+            IsExpandingOrUnexpanding = true;
+
 
             //trigger app mode column to hide
             ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
@@ -284,6 +294,8 @@ namespace MpWpfApp {
 
             ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
             ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
+
+            mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
 
             ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
 
@@ -319,6 +331,7 @@ namespace MpWpfApp {
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
 
+            mwvm.IsResizing = false;
             IsExpandingOrUnexpanding = false;
         }
 

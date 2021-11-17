@@ -17,8 +17,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpSearchDetailView.xaml
     /// </summary>
-    public partial class MpSearchDetailView : MpUserControl<MpSearchDetailViewModel> {
-        public MpSearchDetailView() {
+    public partial class MpSearchCriteriaListView : MpUserControl<MpSearchBoxViewModel> {
+        public MpSearchCriteriaListView() {
             InitializeComponent();
         }
     }

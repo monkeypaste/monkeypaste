@@ -20,7 +20,7 @@
                 BorderThickness="0"
                 MouseEnter="SaveSearchButton_MouseEnter"
                 MouseLeave="SaveSearchButton_MouseLeave"
-                Visibility="{Binding SearchDetailViewModel.HasCriteriaItems,
+                Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
                 Style="{StaticResource Transparent_Button}">
@@ -39,14 +39,14 @@
         <!--  Search Border  -->
         <!--  Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"  -->
         <local:MpClipBorder x:Name="SearchTextBoxBorder"
-                DataContextChanged="SearchTextBoxBorder_DataContextChanged"
-                Grid.Column="0"
-                Margin="8"
-                Width="280"
-                CornerRadius="10"
-                BorderBrush="{Binding TextBoxBorderBrush}"
-                Background="White"
-                BorderThickness="0">
+                            DataContextChanged="SearchTextBoxBorder_DataContextChanged"
+                            Grid.Column="0"
+                            Margin="8"
+                            Width="280"
+                            CornerRadius="10"
+                            BorderBrush="{Binding TextBoxBorderBrush}"
+                            Background="White"
+                            BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.15*" />
@@ -106,7 +106,7 @@
                     <!--  IsSearching Spinner  -->
                     <local:MpSpinnerApple x:Name="IsSearchingSpinner"
                                           VerticalAlignment="Center"
-                                          Margin="0,0,5,0"
+                                          Margin="0,0,10,0"
                                           Visibility="{Binding IsSearching,
                                                                Converter={StaticResource BoolToVisibilityConverter}}" />
                     <!--  Clear SearchText Button  -->
@@ -126,36 +126,31 @@
                     </Button>
                     <!--  Add Or Clear Search Criteria Button  -->
                     <Button x:Name="AddOrClearSearchCriteriaButton"
-                            Background="Transparent"
                             BorderThickness="0"
+                            Width="40"
                             Margin="5,0,0,0"
-                            Command="{Binding SearchDetailViewModel.AddSearchCriteriaItemCommand}"
+                            Padding="5"
+                            Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
                             Visibility="{Binding CanAddCriteriaItem,
                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                             Style="{StaticResource SemiTransparentButton}">
-                        <local:MpClipBorder BorderThickness="0"
-                                            Padding="5"
-                                            Height="40"
-                                            Width="40">
-                            <local:MpClipBorder.Background>
-                                <RadialGradientBrush GradientOrigin="0.5,0.5"
-                                                     Center="0.5,0.4"
-                                                     RadiusX="0.7"
-                                                     RadiusY="0.7">
-                                    <RadialGradientBrush.GradientStops>
-                                        <GradientStop Color="Violet"
+                        <Button.Background>
+                            <RadialGradientBrush GradientOrigin="0.5,0.5"
+                                                     Center="0.3,0.5"
+                                                     RadiusX="1.0"
+                                                     RadiusY="0.5">
+                                <RadialGradientBrush.GradientStops>
+                                    <GradientStop Color="DimGray"
                                                       Offset="0" />
-                                        <GradientStop Color="Violet"
+                                    <GradientStop Color="Violet"
                                                       Offset="1.0" />
-                                    </RadialGradientBrush.GradientStops>
-                                </RadialGradientBrush>
-                            </local:MpClipBorder.Background>
-                            <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Stretch="Uniform"
-                                   Margin="0,0,0,10" />
-                        </local:MpClipBorder>
+                                </RadialGradientBrush.GradientStops>
+                            </RadialGradientBrush>
+                        </Button.Background>
+                        <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
+                               Height="20"
+                               Width="30"
+                               Stretch="Uniform" />
                     </Button>
                 </StackPanel>
             </Grid>

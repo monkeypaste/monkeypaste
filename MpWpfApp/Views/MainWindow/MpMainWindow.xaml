@@ -27,7 +27,7 @@
         ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
-        Height="{Binding MainWindowHeight}"
+        Height="{Binding MainWindowContainerHeight}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                          IsDesignTimeCreatable=False}">
@@ -58,7 +58,7 @@
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
                 <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
                 <!--<RowDefinition Height="{Binding ToolbarHeight, Source={StaticResource AnalyticItemCollectionViewModel}}" />-->
-                <RowDefinition Height="{Binding ClipTrayHeight}" />
+                <RowDefinition Height="{Binding ClipTrayAndCriteriaListHeight}" />
             </Grid.RowDefinitions>
 
             <!--  System Tray  -->
@@ -72,6 +72,7 @@
                         Background="DarkGreen">
                 <TextBlock Text="{Binding LogText}" />
             </StackPanel>
+
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
@@ -136,6 +137,7 @@
                                        Grid.Column="3"
                                        DataContext="{Binding SearchBoxViewModel}" />
             </Grid>
+
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
@@ -151,20 +153,19 @@
                                                                     Source={StaticResource ClipTrayViewModel},
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />
-                <StackPanel Orientation="Vertical"
-                            Grid.Column="1">
-                    <StackPanel>
-                        <local:MpSearchDetailView x:Name="SearchDetailView"
-                                                  Height="{Binding SearchDetailHeight,
-                                                                   Source={StaticResource SearchBoxViewModel}}"
-                                                  DataContext="{Binding SearchDetailViewModel,
-                                                                        Source={StaticResource SearchBoxViewModel}}" />
-                    </StackPanel>
+                <Grid Grid.Column="1"
+                      HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="{Binding SearchCriteriaListBoxHeight}" />
+                        <RowDefinition Height="{Binding ClipTrayHeight}" />
+                    </Grid.RowDefinitions>
+                    <local:MpSearchCriteriaListView x:Name="SearchDetailView"
+                                                    Grid.Row="0"
+                                                    DataContext="{Binding SearchBoxViewModel}" />
                     <local:MpClipTrayView x:Name="ClipTrayView"
-                                          DataContext="{Binding ClipTrayViewModel}"
-                                          Height="{Binding ClipTrayHeight,
-                                                           Source={StaticResource MainWindowViewModel}}"/>
-                </StackPanel>
+                                          Grid.Row="1"
+                                          DataContext="{Binding ClipTrayViewModel}" />
+                </Grid>
                 <Grid Background="DarkGray"
                       Opacity="0.3"
                       HorizontalAlignment="Stretch"

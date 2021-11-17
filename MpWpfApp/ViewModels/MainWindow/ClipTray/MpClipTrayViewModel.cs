@@ -115,6 +115,7 @@ namespace MpWpfApp {
                 return scivml;
             }
         }
+
         public List<MpCopyItem> SelectedModels {
             get {
                 var cil = new List<MpCopyItem>();
@@ -124,6 +125,8 @@ namespace MpWpfApp {
                 return cil;
             }
         }
+
+        public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
 
         #region Context Menu Item View Models
 

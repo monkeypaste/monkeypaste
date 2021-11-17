@@ -8,28 +8,51 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaItemViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaItemViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Border x:Name="CriteriaItemBorder"
             Background="LightGray"
-            BorderThickness="1"
+            BorderThickness="{local:MpMeasurementsBinding SearchDetailBorderThickness}"
             Height="{local:MpMeasurementsBinding SearchDetailRowHeight}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
             MouseEnter="CriteriaItemBorder_MouseEnter"
             MouseLeave="CriteriaItemBorder_MouseLeave"
             BorderBrush="{Binding CriteriaItemBorderBrush}">
         <DockPanel>
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Left">
-                <Border Grid.Column="1"
-                        BorderThickness="2"
-                        CornerRadius="2"
-                        Padding="1">
-                    <ComboBox ItemsSource="{Binding CriteriaTypeLabels}"
-                              SelectedIndex="{Binding SelectedCriteriaTypeIdx, Mode=TwoWay}"
+                <local:MpClipBorder BorderBrush="DimGray"
+                                    BorderThickness="1.5"
+                                    Background="Transparent"
+                                    CornerRadius="5"
+                                    Margin="10,3"
+                                    Padding="1">
+                    <ComboBox Padding="3"
+                              ItemsSource="{Binding CriteriaTypeLabels}"
+                              SelectedIndex="{Binding SelectedCriteriaTypeIdx,
+                                                      Mode=TwoWay}"
+                              MinWidth="80">
+                    </ComboBox>
+                </local:MpClipBorder>
+                <local:MpClipBorder BorderBrush="DimGray"
+                                    BorderThickness="1.5"
+                                    Background="Transparent"
+                                    Visibility="{Binding HasSecondaryLabels,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    CornerRadius="5"
+                                    Margin="10,3"
+                                    Padding="3">
+                    <ComboBox Padding="3"
+                              ItemsSource="{Binding SecondaryLabels}"
+                              SelectedIndex="{Binding SelectedSecondaryIdx,
+                                                      Mode=TwoWay}"
                               MinWidth="80" />
-                </Border>
+                </local:MpClipBorder>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        DockPanel.Dock="Right">
+                        DockPanel.Dock="Right"
+                        Margin="0,0,5,0">
                 <Button x:Name="RemoveCriteriaItemButton"
                         Background="Transparent"
                         Height="30"
@@ -37,7 +60,7 @@
                         BorderThickness="0"
                         MouseEnter="RemoveCriteriaItemButton_MouseEnter"
                         MouseLeave="RemoveCriteriaItemButton_MouseLeave"
-                        Style="{StaticResource Transparent_Button}"
+                        Style="{StaticResource SemiTransparentButton}"
                         Command="{Binding Parent.RemoveSearchCriteriaItemCommand}"
                         CommandParameter="{Binding}">
                     <Border CornerRadius="5"
@@ -55,7 +78,7 @@
                         BorderThickness="0"
                         MouseEnter="AddCriteriaItemButton_MouseEnter"
                         MouseLeave="AddCriteriaItemButton_MouseLeave"
-                        Style="{StaticResource Transparent_Button}"
+                        Style="{StaticResource SemiTransparentButton}"
                         Command="{Binding Parent.AddSearchCriteriaItemCommand}">
                     <Border CornerRadius="5"
                             Background="LightGray"
@@ -66,8 +89,23 @@
                     </Border>
                 </Button>
             </StackPanel>
-            <TextBox x:Name="SearchCriteriaTextBox"
-                     MinWidth="200"/>
+            <local:MpClipBorder x:Name="SearchCriteriaInputBorder"
+                                CornerRadius="10"
+                                BorderThickness="1" 
+                                 MouseEnter="SearchCriteriaTextBox_MouseEnter"
+                                MouseLeave="SearchCriteriaTextBox_MouseLeave"
+                                Margin="3,5,10,5">
+                <TextBox x:Name="SearchCriteriaTextBox"
+                         BorderThickness="0"
+                         HorizontalAlignment="Stretch"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding InputValue,
+                                        Mode=TwoWay,
+                                        NotifyOnSourceUpdated=True,
+                                        NotifyOnTargetUpdated=True,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                         Padding="5,0,0,0" />
+            </local:MpClipBorder>
         </DockPanel>
     </Border>
 </local:MpUserControl>

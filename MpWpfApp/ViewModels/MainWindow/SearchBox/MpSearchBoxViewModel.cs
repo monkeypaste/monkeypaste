@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpSearchDetailViewModel SearchDetailViewModel { get; set; } = new MpSearchDetailViewModel();
+        public ObservableCollection<MpSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpSearchCriteriaItemViewModel>();
 
         #endregion
 
@@ -212,15 +212,9 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double SearchDetailHeight {
-            get {
-                return MpMeasurements.Instance.SearchDetailRowHeight * SearchDetailViewModel.CriteriaItems.Count;
-            }
-        }
-
         public GridLength ClearAndAddCriteriaColumnWidth {
             get {
-                if(string.IsNullOrEmpty(LastSearchText)) {
+                if(string.IsNullOrEmpty(LastSearchText) || IsSearching) {
                     return new GridLength(0.1, GridUnitType.Star);
                 } else {
                     return new GridLength(0.3, GridUnitType.Star);
@@ -237,31 +231,15 @@ namespace MpWpfApp {
             }
         }
 
-        private string _text = string.Empty;
-        public string SearchText {
-            get {
-                return _text;
-            }
-            set {
-                if (_text != value) {
-                    _text = value;
-                    //SearchText = Text;
-                    OnPropertyChanged(nameof(SearchText));
-                    OnPropertyChanged(nameof(HasText));
-                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
-                    OnPropertyChanged(nameof(TextBoxFontStyle));
-                    OnPropertyChanged(nameof(TextBoxBorderBrush));
-                }
-            }
-        }
-
         #endregion
 
         #region State
 
-        public bool HasCriteriaItems => SearchDetailViewModel.HasCriteriaItems;
+        public bool HasCriteriaItems => CriteriaItems.Count > 0;
 
-        public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText);
+        public bool IsSaved => UserSearch != null && UserSearch.Id > 0;
+
+        public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText) && !IsSearching;
 
         public string LastSearchText { get; private set; } = string.Empty;
 
@@ -315,6 +293,7 @@ namespace MpWpfApp {
         }
 
         public bool IsOverSaveSearchButton { get; set; }
+
         #endregion
 
         #region Appearance
@@ -413,6 +392,30 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Model
+
+        private string _text = string.Empty;
+        public string SearchText {
+            get {
+                return _text;
+            }
+            set {
+                if (_text != value) {
+                    _text = value;
+                    //SearchText = Text;
+                    OnPropertyChanged(nameof(SearchText));
+                    OnPropertyChanged(nameof(HasText));
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(TextBoxFontStyle));
+                    OnPropertyChanged(nameof(TextBoxBorderBrush));
+                }
+            }
+        }
+
+        public MpUserSearch UserSearch { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Events
@@ -426,47 +429,68 @@ namespace MpWpfApp {
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
-
-                SearchDetailViewModel = new MpSearchDetailViewModel(this);
-                SearchDetailViewModel.PropertyChanged += SearchDetailViewModel_PropertyChanged;
+                CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
 
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
             });
         }
 
-        private void SearchDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(SearchDetailViewModel.HasCriteriaItems):
-                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
-                    OnPropertyChanged(nameof(HasCriteriaItems));
-                    break;
-                case nameof(SearchDetailViewModel.CriteriaItems):
-                    OnPropertyChanged(nameof(SearchDetailHeight));
-                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
-                    break;
-            }
-        }
-
         public MpSearchBoxViewModel() : base() { }
+
         #endregion
+
         #region Public Methods
 
+        public async Task InitializeAsync(MpUserSearch us) {
+            IsBusy = true;
+
+            if (us == null) {
+                UserSearch = null;
+            } else {
+                if (us.CriteriaItems == null || us.CriteriaItems.Count == 0) {
+                    us = await MpDb.Instance.GetItemAsync<MpUserSearch>(us.Id);
+                }
+
+                UserSearch = us;
+                CriteriaItems.Clear();
+                foreach (var ci in UserSearch.CriteriaItems) {
+                    var civm = await CreateCriteriaItemViewModel(ci);
+                    CriteriaItems.Add(civm);
+                }
+            }
+
+            OnPropertyChanged(nameof(CriteriaItems));
+            OnPropertyChanged(nameof(HasCriteriaItems));
+
+            IsBusy = false;
+        }
+
+        #region View Method Invokers
 
         public void RequestSearchBoxFocus() {
             OnSearchTextBoxFocusRequest?.Invoke(this, new EventArgs());
         }
 
-        public void ReceiveClipTrayViewModelMessage(MpMessageType msg) {
-            switch(msg) {
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private async Task<MpSearchCriteriaItemViewModel> CreateCriteriaItemViewModel(MpSearchCriteriaItem sci) {
+            MpSearchCriteriaItemViewModel nscivm = new MpSearchCriteriaItemViewModel(this);
+            await nscivm.InitializeAsync(sci);
+            return nscivm;
+        }
+
+        private void ReceiveClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     Validate();
                     break;
             }
         }
-        #endregion
-
-        #region Private Methods
 
         private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -475,17 +499,15 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
                     break;
                 case nameof(IsSearching):
+                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(CanAddCriteriaItem));
                     break;
                 case nameof(IsTextBoxFocused):
                     if (IsTextBoxFocused) {
                         if (!HasText) {
                             SearchText = string.Empty;
                         }
-
-                        //if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                        //    MpClipTrayViewModel.Instance.ResetClipSelection(false);
-                        //}
                     } else {
                         if (!HasText) {
                             //SearchText = PlaceholderText;
@@ -496,6 +518,44 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsPlaceholderVisible));
                     OnPropertyChanged(nameof(CaretBrush));
                     break;
+
+                case nameof(HasCriteriaItems):
+                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
+                    break;
+            }
+        }
+
+        private async void CriteriaItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (IsBusy) {
+                return;
+            }
+
+            OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
+            OnPropertyChanged(nameof(HasCriteriaItems));
+
+            MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.ClipTrayAndCriteriaListHeight));
+            MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.SearchCriteriaListBoxHeight));
+
+            await UpdateCriteriaSortOrder();
+        }
+
+        private async Task UpdateCriteriaSortOrder(bool fromModel = false) {
+            if (fromModel) {
+                CriteriaItems.Sort(x => x.SortOrderIdx);
+            } else {
+                foreach (var scivm in CriteriaItems) {
+                    scivm.SortOrderIdx = CriteriaItems.IndexOf(scivm);
+                }
+                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading &&
+                    IsSaved) {
+                    IsBusy = true;
+
+                    foreach (var scivm in CriteriaItems) {
+                        await scivm.SearchCriteriaItem.WriteToDatabaseAsync();
+                    }
+
+                    IsBusy = false;
+                }
             }
         }
 
@@ -512,6 +572,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
         public ICommand ClearTextCommand => new RelayCommand(
             () => {
                 SearchText = string.Empty;
@@ -549,6 +610,49 @@ namespace MpWpfApp {
                     ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
                 }
             });
+
+        public ICommand CreateOrClearSearchCriteriaItemsCommand => new RelayCommand(
+            async () => {
+                if(HasCriteriaItems) {
+                    CriteriaItems.Clear();
+
+                } else {
+                    MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
+                        SortOrderIdx = CriteriaItems.Count
+                    };
+                    MpSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
+                    CriteriaItems.Add(nscivm);
+                }
+                OnPropertyChanged(nameof(CriteriaItems));
+                OnPropertyChanged(nameof(HasCriteriaItems));
+            }, CanAddCriteriaItem);
+
+        public ICommand AddSearchCriteriaItemCommand => new RelayCommand(
+            async () => {
+                MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
+                    SortOrderIdx = CriteriaItems.Count
+                };
+                MpSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
+                CriteriaItems.Add(nscivm);
+                OnPropertyChanged(nameof(CriteriaItems));
+                OnPropertyChanged(nameof(HasCriteriaItems));
+            },CanAddCriteriaItem);
+
+        public ICommand RemoveSearchCriteriaItemCommand => new RelayCommand<MpSearchCriteriaItemViewModel>(
+            async (scivm) => {
+                int scivmIdx = CriteriaItems.IndexOf(scivm);
+                CriteriaItems.RemoveAt(scivmIdx);
+                if (scivm.SearchCriteriaItem.Id > 0) {
+                    await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
+                }
+                await UpdateCriteriaSortOrder();
+            });
+
+        public ICommand SaveSearchCommand => new RelayCommand(
+            async () => {
+                await UserSearch.WriteToDatabaseAsync();
+            });
+
         #endregion
     }
 }

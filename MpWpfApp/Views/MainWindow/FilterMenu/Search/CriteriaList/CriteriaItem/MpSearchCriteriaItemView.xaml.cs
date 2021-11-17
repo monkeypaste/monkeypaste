@@ -49,5 +49,23 @@ namespace MpWpfApp {
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e) {
 
         }
+
+        private void SearchCriteriaTextBox_MouseEnter(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+        }
+
+        private void SearchCriteriaTextBox_MouseLeave(object sender, MouseEventArgs e) {
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
+        private void SearchCriteriaInputBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            //if(SearchCriteriaTextBox.IsFocused) {
+            //    e.Handled = false;
+            //    return;
+            //}
+            //Keyboard.Focus(SearchCriteriaTextBox);
+            SearchCriteriaTextBox.Focus();
+            e.Handled = true;
+        }
     }
 }

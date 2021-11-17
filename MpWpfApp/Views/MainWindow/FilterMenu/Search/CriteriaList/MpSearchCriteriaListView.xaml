@@ -1,23 +1,25 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpSearchDetailView"
+﻿<local:MpUserControl x:Class="MpWpfApp.MpSearchCriteriaListView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpSearchDetailViewModel"
-                     mc:Ignorable="d" Background="Orange"
+                     x:TypeArguments="local:MpSearchBoxViewModel"
+                     mc:Ignorable="d" 
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpSearchDetailViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpSearchBoxViewModel, IsDesignTimeCreatable=False}">
     <ListBox x:Name="SearchCriteriaListBox"
              dd:DragDrop.IsDragSource="True"
              dd:DragDrop.IsDropTarget="True"
              ItemsSource="{Binding CriteriaItems}"
              SelectionMode="Single"
-             Height="33"
-             VerticalAlignment="Top"
-             Background="Pink"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             HorizontalContentAlignment="Stretch"
+             VerticalContentAlignment="Stretch"
+             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
              BorderBrush="Transparent">
         <ListBox.ItemContainerStyle>
             <Style TargetType="{x:Type ListBoxItem}">

@@ -9,11 +9,13 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <DockPanel x:Name="ContentListDockPanel"
                DataContextChanged="UserControl_DataContextChanged"
                Unloaded="ContentListDockPanel_Unloaded"
-               Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+               Background="{local:MpSettingBinding ThemeClipTileBackgroundColor,
+                                                   Converter={StaticResource StringToBrushConverter}}"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch">
         <local:MpRtbEditToolbarView x:Name="EditToolbarView"
@@ -21,11 +23,13 @@
                                     DataContext="{Binding PrimaryItem}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                          DockPanel.Dock="Bottom"
-                                         Visibility="{Binding IsAnyEditingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                         Visibility="{Binding IsAnyEditingTemplate,
+                                                              Converter={StaticResource BoolToVisibilityConverter}}"
                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                           DockPanel.Dock="Bottom"
-                                          Visibility="{Binding Parent.IsPastingTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          Visibility="{Binding Parent.IsPastingTemplate,
+                                                               Converter={StaticResource BoolToVisibilityConverter}}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
             <ListBox x:Name="ContentListBox"
@@ -34,10 +38,13 @@
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
                      BorderThickness="0"
                      SelectionMode="Extended"
                      IsSynchronizedWithCurrentItem="False"
-                     ItemsSource="{Binding ItemViewModels, IsAsync=True}"
+                     ItemsSource="{Binding ItemViewModels,
+                                           IsAsync=True}"
                      Focusable="True"
                      IsEnabled="True"
                      VirtualizingPanel.IsVirtualizing="True"
@@ -58,13 +65,19 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True"
+                                                VerticalAlignment="Stretch"
+                                                HorizontalAlignment="Stretch"
                                                 Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                         <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
                         <Setter Property="HorizontalContentAlignment"
