@@ -363,8 +363,7 @@ namespace MonkeyPaste {
         RichText,
         Image,
         FileList,
-        //Composite,
-        Csv, //this is only used during runtime
+       // Csv, //this is only used during runtime
         Html
     }
 

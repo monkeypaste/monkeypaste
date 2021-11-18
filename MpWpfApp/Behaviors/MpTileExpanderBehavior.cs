@@ -16,6 +16,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTileExpanderBehavior : Behavior<MpClipTileContainerView> {
+        private double _unexpandedScrollOfset = 0;
         private double _originalMainWindowTop = 0;
         private double _initialExpandedMainWindowTop = 0;
         private Point _lastMousePosition;
@@ -111,7 +112,6 @@ namespace MpWpfApp {
                 case MpMessageType.Unexpand:
                     Unexpand();
 
-
                     _mainWindowTitlePanel.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
                     _mainWindowTitlePanel.MouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
                     _mainWindowTitlePanel.PreviewMouseMove -= AssociatedObject_MouseMove;
@@ -178,6 +178,8 @@ namespace MpWpfApp {
 
             var _deltaSize = new Point();
 
+            _unexpandedScrollOfset = AssociatedObject.GetVisualAncestor<MpClipTrayView>()
+                                        .ClipTray.GetScrollViewer().HorizontalOffset;
 
             _originalMainWindowTop = mwvm.MainWindowTop;
 
@@ -330,6 +332,9 @@ namespace MpWpfApp {
             AssociatedObject.GetVisualAncestor<ListBoxItem>().UpdateLayout();
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
+
+            AssociatedObject.GetVisualAncestor<MpClipTrayView>()
+                                        .ClipTray.GetScrollViewer().ScrollToHorizontalOffset(_unexpandedScrollOfset);
 
             mwvm.IsResizing = false;
             IsExpandingOrUnexpanding = false;

@@ -561,7 +561,7 @@ using System.Speech.Synthesis;
                 if(HeadItem == null) {
                     return false;
                 }
-                return HeadItem.CopyItemType == MpCopyItemType.Csv ||
+                return //HeadItem.CopyItemType == MpCopyItemType.Csv ||
                         HeadItem.CopyItemType == MpCopyItemType.Html ||
                         HeadItem.CopyItemType == MpCopyItemType.RichText;
             }

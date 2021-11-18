@@ -463,8 +463,11 @@ namespace MpWpfApp {
             }
             ClearClipSelection();
             foreach (var nci in _newModels) {
-                var ctvm = await CreateClipTileViewModel(nci);
-                Items.Insert(0, ctvm);
+                //var ctvm = await CreateClipTileViewModel(nci);
+                //Items.Insert(0, ctvm);
+
+                await Items[Items.Count - 1].InitializeAsync(nci);
+                Items.Move(Items.Count - 1, 0);
                 Items[0].IsSelected = true;
             }
             _newModels.Clear();

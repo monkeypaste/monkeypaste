@@ -247,6 +247,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsOverHyperlink { get; set; } = false;
+
         public MpCopyItemDetailType CurDetailType { 
             get {
                 return (MpCopyItemDetailType)_detailIdx;

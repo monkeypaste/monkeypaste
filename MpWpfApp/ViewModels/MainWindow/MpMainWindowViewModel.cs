@@ -436,7 +436,7 @@ namespace MpWpfApp {
             double fps = 30;
             double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 
-            var timer = new DispatcherTimer(DispatcherPriority.Render);
+            var timer = new DispatcherTimer(DispatcherPriority.Normal);
             timer.Interval = TimeSpan.FromMilliseconds(fps);
             
             timer.Tick += async (s, e32) => {

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -694,7 +695,6 @@ namespace MpWpfApp {
             rtb.UpdateLayout();
         }
 
-
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
             return MpHelpers.Instance.ConvertFlowDocumentToBitmap(
                                 fd.Clone(),
@@ -805,10 +805,15 @@ namespace MpWpfApp {
                     if (run != null) {
                         yield return run;
                     } else {
-                        Paragraph para = position.Parent as Paragraph;
+                        //Paragraph para = position.Parent as Paragraph;
 
-                        if (para != null) {
-                            yield return para;
+                        //if (para != null) {
+                        //    yield return para;
+                        //} 
+                        Block block = position.Parent as Block;
+
+                        if (block != null) {
+                            yield return block;
                         }
                     }
                 }
@@ -830,6 +835,14 @@ namespace MpWpfApp {
                 // If exception is caught, then it is not a base64 encoded string
                 return false;
             }
+        }
+
+        public static bool IsStringRichTextTable(this string text) {
+            if(!text.IsStringRichText()) {
+                return false;
+            }
+            string rtfTableCheckToken = @"{\trowd";
+            return text.IndexOf(rtfTableCheckToken) >= 0;
         }
 
         public static bool IsStringCsv(this string text) {
@@ -892,6 +905,14 @@ namespace MpWpfApp {
             return true;
         }
 
+        public static string ToRichTextTable(this string csvStr) {
+            if(string.IsNullOrEmpty(csvStr) || !csvStr.IsStringCsv()) {
+                return csvStr;
+            }
+            //return new MpCsvReader(csvStr).FlowDocument.ToRichText();
+            return MpEasyCSV.GetFlowDocument(csvStr).ToRichText();
+        }
+
         public static string ToQuillText(this string text) {
             if(text.IsStringQuillText()) {
                 return text;
@@ -923,6 +944,24 @@ namespace MpWpfApp {
                 return str;
             }
             return MpHelpers.Instance.ConvertRichTextToPlainText(str);
+        }
+
+        public static string EscapeExtraOfficeRtfFormatting(this string str) {
+            string extraFormatToken = @"{\*\themedata";
+            int tokenIdx = str.IndexOf(extraFormatToken);
+            if(tokenIdx >= 0) {
+                str = str.Substring(0, tokenIdx);
+            }
+            return str;
+        }
+
+        public static string EscapeExtraOfficeHTMLFormatting(this string str) {
+            string extraFormatToken = @"{\*\themedata";
+            int tokenIdx = str.IndexOf(extraFormatToken);
+            if (tokenIdx >= 0) {
+                str = str.Substring(0, tokenIdx);
+            }
+            return str;
         }
 
         public static string ToRichText(this FlowDocument doc) {
@@ -973,8 +1012,16 @@ namespace MpWpfApp {
         }
 
         public static Size GetDocumentSize(this FlowDocument doc) {
+            //Table docTable = doc.GetVisualDescendent<Table>();
+            //if (docTable != null) {
+            //    // TODO may need to uniquely find table dimensions
+            //}
             var ft = doc.GetFormattedText();
-            return new Size(ft.Width, ft.Height);
+            var ds = new Size(ft.Width, ft.Height);
+            if(ds.Width + ds.Height == 0) {
+                Debugger.Break();
+            }
+            return ds;
         }
 
         public static List<KeyValuePair<TextRange, Brush>> FindNonTransparentRangeList(this RichTextBox rtb) {

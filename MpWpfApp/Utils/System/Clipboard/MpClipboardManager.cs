@@ -33,7 +33,15 @@ namespace MpWpfApp {
 
         #region Private Varibles
 
-        private readonly string[] _managedDataFormats = { DataFormats.UnicodeText, DataFormats.Text, DataFormats.Html, DataFormats.Rtf, DataFormats.Bitmap, DataFormats.FileDrop };
+        private readonly string[] _managedDataFormats = { 
+            DataFormats.UnicodeText, 
+            DataFormats.Text, 
+            DataFormats.Html, 
+            DataFormats.Rtf, 
+            DataFormats.Bitmap, 
+            DataFormats.FileDrop,
+            DataFormats.CommaSeparatedValue
+        };
 
         private InputSimulator sim = null;
 
@@ -230,6 +238,11 @@ namespace MpWpfApp {
                             MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
                             ClipboardChanged?.Invoke(this, cbo);
+                            // NOTE word 2007 does weird stuff and alters cb after read
+                            // this attempts to circumvent that by waiting a second
+                            // then replacing _last with current
+                            Thread.Sleep(1000);
+                            _lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
                         }                        
                     }
                 }
@@ -243,28 +256,31 @@ namespace MpWpfApp {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return cbDict;
             }
-            if (ido == null) {
-                return cbDict;
-            }
             try {
+                if(ido == null) {
+                    ido = Clipboard.GetDataObject();
+                }
                 foreach (var af in _managedDataFormats) {
                     if (ido.GetDataPresent(af)) {
-                        var data = ido.GetData(af, false);
+                        object data = ido.GetData(af, false);
                         if (data == null) {
                             data = ido.GetData(af, true);
                         }
-                        if (af == DataFormats.FileDrop) {
-                            var sa = data as string[];
-                            data = string.Join(Environment.NewLine, sa);
-                        } else if (af == DataFormats.Bitmap && data is BitmapSource bmpSrc) {
-                            data = bmpSrc.ToBase64String();
+                        if (data != null) {
+                            if (af == DataFormats.FileDrop) {
+                                var sa = data as string[];
+                                data = string.Join(Environment.NewLine, sa);
+                            } else if (af == DataFormats.Bitmap && data is BitmapSource bmpSrc) {
+                                data = bmpSrc.ToBase64String();
+                            }
+                            cbDict.Add(af, data.ToString());
                         }
-                        cbDict.Add(af, data.ToString());
                     }
                 }
                 return cbDict;
             } catch(Exception ex) {
                 MpConsole.WriteLine($"Error accessing clipboard {retryCount} attempts remaining", ex);
+                Thread.Sleep((5 - retryCount) * 100);
                 return ConvertManagedFormats(ido, retryCount--);
             }
         }
@@ -284,6 +300,17 @@ namespace MpWpfApp {
                     return true;
                 }
                 if (!_lastCbo[nce.Key].Equals(nce.Value)) {
+                    if(nce.Key == DataFormats.Rtf) {
+                        // NOTE when clipboard has data from MS Word (maybe other office apps too)
+                        // it alters the rtf returned (probably makes unique for each return).
+                        // To account for this convert each operand to plain text and compare...
+                        string lastPt = _lastCbo[nce.Key].ToPlainText();
+                        string curPt = nce.Value.ToPlainText();
+                        if (!lastPt.Equals(curPt)) {
+                            return true;
+                        }
+                        return false;
+                    }
                     return true;
                 }
             }

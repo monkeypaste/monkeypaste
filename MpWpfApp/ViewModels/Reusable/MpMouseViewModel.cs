@@ -17,14 +17,15 @@ namespace MpWpfApp {
         Invalid,
         Waiting,
         IBeam,
-        SizeNS
+        SizeNS,
+        Hand
     }
 
     public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel> {
         #region Private Variables
 
         private readonly Cursor _defaultCursor = Cursors.Arrow;
-        private readonly Cursor _moveCursor = Cursors.Hand;
+        private readonly Cursor _handCursor = Cursors.Hand;
         private readonly Cursor _copyCursor = Cursors.Cross;
         private readonly Cursor _invalidCursor = Cursors.No;
         private readonly Cursor _waitingCursor = Cursors.Wait;
@@ -91,8 +92,9 @@ namespace MpWpfApp {
                 case MpCursorType.Invalid:
                     cursor = _invalidCursor;
                     break;
+                case MpCursorType.Hand:
                 case MpCursorType.Move:
-                    cursor = _moveCursor;
+                    cursor = _handCursor;
                     break;
                 case MpCursorType.Copy:
                     cursor = _copyCursor;

@@ -39,7 +39,7 @@ namespace MpWpfApp {
         }
 
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
-            Keyboard.Focus(sender as FrameworkElement);
+            //Keyboard.Focus(sender as FrameworkElement);
             bool result = Focus();
             //MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
         }

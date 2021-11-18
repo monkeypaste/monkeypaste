@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,11 +54,12 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.FileList;
                     itemData = iData[DataFormats.FileDrop];
                 } else if (iData.ContainsKey(DataFormats.CommaSeparatedValue)) {
-                    itemType = MpCopyItemType.Csv;
-                    itemData = iData[DataFormats.CommaSeparatedValue];
+                    itemType = MpCopyItemType.RichText;
+                    string csvStr = iData[DataFormats.CommaSeparatedValue];
+                    itemData = csvStr.ToRichTextTable();
                 } else if (iData.ContainsKey(DataFormats.Rtf)) {
                     itemType = MpCopyItemType.RichText;
-                    itemData = iData[DataFormats.Rtf];
+                    itemData = iData[DataFormats.Rtf].EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
                 } else if (iData.ContainsKey(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;

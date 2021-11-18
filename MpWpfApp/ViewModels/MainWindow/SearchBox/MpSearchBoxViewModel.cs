@@ -241,7 +241,7 @@ namespace MpWpfApp {
 
         public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText) && !IsSearching;
 
-        public string LastSearchText { get; private set; } = string.Empty;
+        public string LastSearchText /*{ get; private set; } =*/ => string.Empty;
 
         public bool IsTextBoxFocused { get; set; }
 
@@ -579,7 +579,7 @@ namespace MpWpfApp {
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 }
-                LastSearchText = string.Empty;
+                //LastSearchText = string.Empty;
             },
             () => {
                 return SearchText.Length > 0;
@@ -589,10 +589,10 @@ namespace MpWpfApp {
             () => {
                 if (!HasText) {
                     IsTextValid = true;
-                    LastSearchText = string.Empty;
+                    //LastSearchText = string.Empty;
                 } else {
                     IsSearching = true;
-                    LastSearchText = SearchText;
+                    //LastSearchText = SearchText;
                 }
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             });

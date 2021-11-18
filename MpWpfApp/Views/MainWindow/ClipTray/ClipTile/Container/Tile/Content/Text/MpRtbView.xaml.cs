@@ -323,32 +323,48 @@ namespace MpWpfApp {
                                 var hlink = new Hyperlink(matchRun, matchRange.Start);
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 hl = hlink;
+                                hl.ToolTip = @"[Ctrl + Click to follow link]";
                                 var linkText = c.Value;
                                 hl.Tag = linkType;
                                 //if (linkText == @"DragAction.Cancel") {
                                 //    linkText = linkText;
                                 //}
                                 //MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
-                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
-                                    if (rtbvm.IsEditingContent) {
-                                        hl.Cursor = Cursors.Hand;
-                                        hl.IsEnabled = true;
+
+                                KeyEventHandler hlKeyDown = (object o, KeyEventArgs e) => {
+                                    // This gives user feedback so if they see the 'ctrl + click to follow'
+                                    // and they aren't holding ctrl until they see the message it will change cursor while
+                                    // over link
+                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Hand;
                                     } else {
-                                        hl.Cursor = Cursors.Arrow;
-                                        hl.IsEnabled = false;
+                                        if (rtbvm.IsEditingContent) {
+                                            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                                        } else {
+                                            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                                        }
                                     }
+                                };
+                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
+                                    if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Hand;
+                                    }                                    
+                                    hl.IsEnabled = true;
+                                    //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
+                                    rtbvm.IsOverHyperlink = true;
                                 };
                                 MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
-                                    if (rtbvm.IsEditingContent) {
-                                        hl.Cursor = Cursors.IBeam;
-                                        hl.IsEnabled = false;
+                                    if (rtbvm.Parent.IsAnyEditingContent) {
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;                                        
                                     } else {
-                                        hl.Cursor = Cursors.Arrow;
-                                        hl.IsEnabled = false;
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
                                     }
+                                    hl.IsEnabled = false;
+                                    //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
+                                    rtbvm.IsOverHyperlink = false;
                                 };
                                 MouseButtonEventHandler hlMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
-                                    if (hl.NavigateUri != null && rtbvm.Parent.IsSelected) {
+                                    if (hl.NavigateUri != null && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
                                         MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
@@ -485,17 +501,14 @@ namespace MpWpfApp {
                                             MonkeyPaste.MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
                                         }
                                         break;
-                                    case MpSubTextTokenType.HexColor8:
-                                    case MpSubTextTokenType.HexColor6:
+                                    case MpSubTextTokenType.HexColor:
                                         var rgbColorStr = linkText;
                                         if (rgbColorStr.Length > 7) {
                                             rgbColorStr = rgbColorStr.Substring(0, 7);
                                         }
                                         hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
-
-                                        MenuItem changeColorItem = new MenuItem();
-                                        changeColorItem.Header = "Change Color";
-                                        RoutedEventHandler changeColorClick = (object o, RoutedEventArgs e) => {
+                                        hl.IsEnabled = true;
+                                        Action showChangeColorDialog = () => {
                                             var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
                                             if (result != null) {
                                                 var run = new Run(result.ToString());
@@ -507,6 +520,30 @@ namespace MpWpfApp {
                                                 tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
                                                 tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
                                             }
+                                        };
+                                        //hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
+                                        hl.Click += (s, e) => {
+                                            if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                                                showChangeColorDialog.Invoke();
+                                            }
+                                        };
+                                        MouseButtonEventHandler hexColorMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
+                                            showChangeColorDialog.Invoke();
+                                        };
+                                        hl.MouseLeftButtonDown += hexColorMouseLeftButtonDown;
+
+
+                                        RoutedEventHandler hexColorUnload = null;
+                                        hexColorUnload = (object o, RoutedEventArgs e) => {
+                                            hl.MouseLeftButtonDown -= hexColorMouseLeftButtonDown;
+                                            hl.Unloaded -= hexColorUnload;
+                                        };
+
+                                        hl.Unloaded += hexColorUnload;
+                                        MenuItem changeColorItem = new MenuItem();
+                                        changeColorItem.Header = "Change Color";
+                                        RoutedEventHandler changeColorClick = (object o, RoutedEventArgs e) => {
+                                            showChangeColorDialog.Invoke();
                                         };
                                         changeColorItem.Click += changeColorClick;
 

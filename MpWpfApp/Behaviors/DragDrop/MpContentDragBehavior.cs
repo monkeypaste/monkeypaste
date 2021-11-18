@@ -80,14 +80,19 @@ namespace MpWpfApp {
             }
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
 
-            AssociatedObject.CaptureMouse();
             //
             if (AssociatedObject.DataContext is MpContentItemViewModel civm) {                
                 if (civm.IsSelected) {
                 } else {
                     civm.IsSelected = true;
                 }
+                //if(civm.IsOverHyperlink) {
+                //    e.Handled = false;
+                //    return;
+                //}
             }
+            AssociatedObject.CaptureMouse();
+
             e.Handled = true;
         }
 

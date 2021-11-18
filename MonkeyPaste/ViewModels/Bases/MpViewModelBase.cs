@@ -6,7 +6,8 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public abstract class MpViewModelBase1<P> : INotifyPropertyChanged, IDisposable where P : class {
+    public abstract class MpViewModelBase1<P> : INotifyPropertyChanged, IDisposable
+        where P : class {
         #region Private Variables
         #endregion
 

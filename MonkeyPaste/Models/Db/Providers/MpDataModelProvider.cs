@@ -1,14 +1,9 @@
-﻿using FFImageLoading.Helpers.Exif;
-using MonkeyPaste;
-using Org.BouncyCastle.Asn1.X509;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using static System.Net.Mime.MediaTypeNames;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
     public class MpDataModelProvider {
@@ -43,11 +38,31 @@ namespace MonkeyPaste {
             int count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
             return count;
         }
-
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             string query = GetFetchQuery(startIndex, count);
             IList<MpCopyItem> result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
             return result;
+        }
+
+        private int[] _allFetchedAndSortedCopyItemIds;
+
+        public async Task<int> FetchCopyItemCountAsync2() {
+            /*
+                Fetching the count needs to create a list of 
+                all 
+            */
+
+            return _allFetchedAndSortedCopyItemIds.Length;
+        }
+
+        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync2(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+            /*
+                
+            */
+            string[] query = GetFetchQueries(startIndex, count);
+            IList<IList<int>> totalResults = await Task.WhenAll(query.Select(x=>MpDb.Instance.QueryScalarsAsync<int>(x)).ToArray());
+
+            return null;
         }
 
         #endregion
@@ -146,6 +161,13 @@ namespace MonkeyPaste {
         #endregion MpSource
 
         #region MpCopyItem
+
+        public async Task<List<MpCopyItem>> GetCopyItemsByIdList(int[] ciida) {
+            string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0}", x)));
+            string query = $"select * from MpCopyItem where {whereStr}";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
 
         public async Task<List<MpCopyItem>> GetCopyItemsByData(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
@@ -351,98 +373,64 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public async Task<List<MpCopyItem>> GetPageAsync(
-            int tagId,
-            int start,
-            int count,
-            MpContentSortType sortType,
-            bool isDescending,
-            Dictionary<int, int> manualSortOrderLookup = null) {
-            List<MpCopyItem> result = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
-
-            switch (tagId) {
-                case MpTag.RecentTagId:
-                    result = result.Where(x => x.CompositeParentCopyItemId == 0)
-                                 .OrderByDynamic(isDescending, x => x.CopyDateTime)
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    return result;
-                case MpTag.AllTagId:
-                    result = result.Where(x => x.CompositeParentCopyItemId == 0).ToList();
-                    break;
-                default:
-                    var citl = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
-                    if (isDescending) {
-                        result = (from value in
-                                    (from ci in result
-                                     from cit in citl
-                                     where ci.Id == cit.CopyItemId &&
-                                         tagId == cit.TagId
-                                     select new { ci, cit })
-                                  orderby value.cit.CopyItemSortIdx descending
-                                  select value.ci)
-                                                  .Where(x => x.CompositeParentCopyItemId == 0)
-                                                 .ToList();
-                    } else {
-                        result = (from value in
-                                    (from ci in result
-                                     from cit in citl
-                                     where ci.Id == cit.CopyItemId &&
-                                         tagId == cit.TagId
-                                     select new { ci, cit })
-                                  orderby value.cit.CopyItemSortIdx ascending
-                                  select value.ci)
-                                                  .Where(x => x.CompositeParentCopyItemId == 0)
-                                                 .ToList();
-                    }
-                    break;
-            }
-            switch (sortType) {
-                case MpContentSortType.CopyDateTime:
-                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.CopyDateTime)).GetValue(x))
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    break;
-                case MpContentSortType.ItemType:
-                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.ItemType)).GetValue(x))
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    break;
-                // TODO add rest of sort types
-                case MpContentSortType.Manual:
-                    if (manualSortOrderLookup == null) {
-                        result = result.Take(count).Skip(start).ToList();
-                    } else {
-                        int missingCount = 0;
-                        var missingItems = new List<MpCopyItem>();
-                        foreach (var ci in result) {
-                            if (manualSortOrderLookup.ContainsKey(ci.Id)) {
-                                ci.ManualSortIdx = manualSortOrderLookup[ci.Id];
-                            } else {
-                                missingCount++;
-                                if (isDescending) {
-                                    ci.ManualSortIdx = manualSortOrderLookup.Min(x => x.Value) - missingCount;
-                                } else {
-                                    ci.ManualSortIdx = manualSortOrderLookup.Max(x => x.Value) + missingCount;
-                                }
-
-                            }
-                        }
-                        result = result.OrderByDynamic(isDescending, x => x.ManualSortIdx).Take(count).Skip(start).ToList();
-                    }
-                    break;
-            }
-            return result;
-        }
-
-        
-
         #endregion
 
         #region Private Methods
+
+        private string[] GetFetchQueries(int startIndex, int count, bool queryForTotalCount = false, int forceTagId = -1, bool ignoreSearchStr = false, int forceCheckCopyItemId = -1) {
+            int tagId = forceTagId > 0 ? forceTagId : QueryInfo.TagId;
+            string descStr = QueryInfo.IsDescending ? "DESC" : "ASC";
+            string sortStr = Enum.GetName(typeof(MpContentSortType), QueryInfo.SortType);
+            string searchStr = string.IsNullOrWhiteSpace(QueryInfo.SearchText) ? null : QueryInfo.SearchText;
+            searchStr = ignoreSearchStr ? null : searchStr;
+            var st = QueryInfo.SortType;
+
+            if (st == MpContentSortType.Source ||
+                st == MpContentSortType.UsageScore ||
+                st == MpContentSortType.Manual) {
+                if (st != MpContentSortType.Manual) {
+                    MpConsole.WriteLine("Ignoring unimplemented sort type: " + sortStr + " and sorting by id...");
+                }
+                sortStr = "pk_MpCopyItemId";
+            }
+
+            string checkCopyItemToken = string.Empty;
+            if (forceCheckCopyItemId > 0) {
+                checkCopyItemToken = $" and pk_MpCopyItemId={forceCheckCopyItemId}";
+                queryForTotalCount = true;
+            }
+
+            string selectToken = "*";
+            if (queryForTotalCount) {
+                startIndex = 0;
+                count = int.MaxValue;
+                selectToken = "count(pk_MpCopyItemId)";
+            }
+
+            if (tagId == MpTag.RecentTagId) {
+                startIndex = 0;
+                count = MpPreferences.Instance.MaxRecentClipItems;
+            }
+
+
+            List<string> queryList = new List<string>();
+
+            foreach(MpContentFilterType searchCond in Enum.GetValues(typeof(MpContentFilterType))) {
+                if(searchCond == MpContentFilterType.None ||
+                    !QueryInfo.FilterFlags.HasFlag(searchCond)) {
+                    continue;
+                }
+                
+                switch(searchCond) {
+                    case MpContentFilterType.Text:
+
+                        break;
+                }
+            }
+
+            
+            return queryList.ToArray();
+        }
 
         private string GetFetchQuery(int startIndex,int count, bool queryForTotalCount = false, int forceTagId = -1, bool ignoreSearchStr = false, int forceCheckCopyItemId = -1) {
             int tagId = forceTagId > 0 ? forceTagId : QueryInfo.TagId;
@@ -545,10 +533,100 @@ namespace MonkeyPaste {
             return query;
         }
 
-        #region Db Event Handlers
+        #region Search Query Strings
 
+        //private string QueryTextContent(string matchText, bool isCaseSensitive) {
+
+        //}
         #endregion
 
         #endregion
+
+        public async Task<List<MpCopyItem>> GetPageAsync(
+            int tagId,
+            int start,
+            int count,
+            MpContentSortType sortType,
+            bool isDescending,
+            Dictionary<int, int> manualSortOrderLookup = null) {
+            List<MpCopyItem> result = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
+
+            switch (tagId) {
+                case MpTag.RecentTagId:
+                    result = result.Where(x => x.CompositeParentCopyItemId == 0)
+                                 .OrderByDynamic(isDescending, x => x.CopyDateTime)
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    return result;
+                case MpTag.AllTagId:
+                    result = result.Where(x => x.CompositeParentCopyItemId == 0).ToList();
+                    break;
+                default:
+                    var citl = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+                    if (isDescending) {
+                        result = (from value in
+                                    (from ci in result
+                                     from cit in citl
+                                     where ci.Id == cit.CopyItemId &&
+                                         tagId == cit.TagId
+                                     select new { ci, cit })
+                                  orderby value.cit.CopyItemSortIdx descending
+                                  select value.ci)
+                                                  .Where(x => x.CompositeParentCopyItemId == 0)
+                                                 .ToList();
+                    } else {
+                        result = (from value in
+                                    (from ci in result
+                                     from cit in citl
+                                     where ci.Id == cit.CopyItemId &&
+                                         tagId == cit.TagId
+                                     select new { ci, cit })
+                                  orderby value.cit.CopyItemSortIdx ascending
+                                  select value.ci)
+                                                  .Where(x => x.CompositeParentCopyItemId == 0)
+                                                 .ToList();
+                    }
+                    break;
+            }
+            switch (sortType) {
+                case MpContentSortType.CopyDateTime:
+                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.CopyDateTime)).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    break;
+                case MpContentSortType.ItemType:
+                    result = result.OrderBy(x => x.GetType().GetProperty(nameof(x.ItemType)).GetValue(x))
+                                 .Take(count)
+                                 .Skip(start)
+                                 .ToList();
+                    break;
+                // TODO add rest of sort types
+                case MpContentSortType.Manual:
+                    if (manualSortOrderLookup == null) {
+                        result = result.Take(count).Skip(start).ToList();
+                    } else {
+                        int missingCount = 0;
+                        var missingItems = new List<MpCopyItem>();
+                        foreach (var ci in result) {
+                            if (manualSortOrderLookup.ContainsKey(ci.Id)) {
+                                ci.ManualSortIdx = manualSortOrderLookup[ci.Id];
+                            } else {
+                                missingCount++;
+                                if (isDescending) {
+                                    ci.ManualSortIdx = manualSortOrderLookup.Min(x => x.Value) - missingCount;
+                                } else {
+                                    ci.ManualSortIdx = manualSortOrderLookup.Max(x => x.Value) + missingCount;
+                                }
+
+                            }
+                        }
+                        result = result.OrderByDynamic(isDescending, x => x.ManualSortIdx).Take(count).Skip(start).ToList();
+                    }
+                    break;
+            }
+            return result;
+        }
     }
 }
