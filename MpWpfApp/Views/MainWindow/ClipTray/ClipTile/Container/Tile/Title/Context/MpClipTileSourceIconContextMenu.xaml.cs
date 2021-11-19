@@ -26,7 +26,7 @@ namespace MpWpfApp {
             var civm = DataContext as MpContentItemViewModel;
 
             if(civm.CopyItem.Source.IsUrlSource) {
-                string domainName = MpHelpers.Instance.GetUrlDomain(civm.CopyItem.Source.PrimarySource.SourcePath);                
+                string domainName = MonkeyPaste.MpHelpers.Instance.GetUrlDomain(civm.CopyItem.Source.PrimarySource.SourcePath);                
                 ExcludeSourceItem.Header = string.Format(@"Exclude '{0}'",domainName);
             } else {
 

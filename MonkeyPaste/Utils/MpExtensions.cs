@@ -150,11 +150,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Visual
-        /// <summary>
-        /// Gets the screen coordinates from top left corner.
-        /// </summary>
-        /// <returns>The screen coordinates.</returns>
-        /// <param name="view">View.</param>
+        
         public static Point GetScreenCoordinates(this VisualElement view) {
             var locationFetcher = DependencyService.Get<MpIUiLocationFetcher>();
             return locationFetcher.GetCoordinates(view);

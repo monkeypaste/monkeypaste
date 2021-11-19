@@ -39,7 +39,7 @@ namespace MpWpfApp {
                             return string.Empty;
                         }
                         if(MpHelpers.Instance.IsValidUrl(word.text)) {
-                            return MpHelpers.Instance.GetFullyFormattedUrl(word.text);
+                            return MonkeyPaste.MpHelpers.Instance.GetFullyFormattedUrl(word.text);
                         }
                     }
                 }

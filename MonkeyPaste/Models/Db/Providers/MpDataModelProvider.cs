@@ -6,21 +6,11 @@ using System.Threading.Tasks;
 using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
-    public class MpDataModelProvider {
-        #region Singleton Definition
-        private static readonly Lazy<MpDataModelProvider> _Lazy = new Lazy<MpDataModelProvider>(() => new MpDataModelProvider());
-        public static MpDataModelProvider Instance { get { return _Lazy.Value; } }
-        
-        private MpDataModelProvider() { }
-
-        public void Init(MpIQueryInfo queryInfo, int pageSize) {
-            QueryInfo = queryInfo;
-            QueryInfo.PageSize = pageSize;
-        }
-
-        #endregion
-
+    public class MpDataModelProvider : MpSingleton<MpDataModelProvider> {
         #region Private Variables
+        private IList<MpCopyItem> _lastResult;
+
+        private List<int> _allFetchedAndSortedCopyItemIds = new List<int>();
         #endregion
 
         #region Properties
@@ -29,40 +19,68 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Constructor
+
+        public MpDataModelProvider() { }
+
+        #endregion
+
         #region Public Methods
+
+        public void Init(MpIQueryInfo queryInfo, int pageSize) {
+            QueryInfo = queryInfo;
+            QueryInfo.PageSize = pageSize;
+        }
+
+        public void ResetQuery() {
+            _allFetchedAndSortedCopyItemIds.Clear();
+            _lastResult = new List<MpCopyItem>();
+        }
 
         #region MpQueryInfo Fetch Methods
 
-        public async Task<int> FetchCopyItemCountAsync() {
+        public async Task<int> FetchCopyItemCountAsync2() {
             string totalCountQuery = GetFetchQuery(0, 0, true, -1, true);
             int count = await MpDb.Instance.QueryScalarAsync<int>(totalCountQuery);
             return count;
         }
-        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync2(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             string query = GetFetchQuery(startIndex, count);
             IList<MpCopyItem> result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
             return result;
         }
 
-        private int[] _allFetchedAndSortedCopyItemIds;
+        /* Fetch Notes
+        -first query sortable view for all matching pk's for count and sort order
+        -
+        */
+        
 
-        public async Task<int> FetchCopyItemCountAsync2() {
+        public async Task<int> FetchCopyItemCountAsync() {
             /*
                 Fetching the count needs to create a list of 
                 all 
             */
-
-            return _allFetchedAndSortedCopyItemIds.Length;
+            string allRootIdQuery = GetQueryForCount();
+            _allFetchedAndSortedCopyItemIds = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
+            MpConsole.WriteLine($"Before distinct({_allFetchedAndSortedCopyItemIds.Count}): ", string.Join(",", _allFetchedAndSortedCopyItemIds));
+            _allFetchedAndSortedCopyItemIds.Distinct();
+            MpConsole.WriteLine($"After distinct({_allFetchedAndSortedCopyItemIds.Count}): ", string.Join(",", _allFetchedAndSortedCopyItemIds));
+            return _allFetchedAndSortedCopyItemIds.Count;
         }
 
-        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync2(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
-            /*
-                
-            */
-            string[] query = GetFetchQueries(startIndex, count);
-            IList<IList<int>> totalResults = await Task.WhenAll(query.Select(x=>MpDb.Instance.QueryScalarsAsync<int>(x)).ToArray());
-
-            return null;
+        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+            if(startIndex >= _allFetchedAndSortedCopyItemIds.Count) {
+                return _lastResult;
+            }
+            if(startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
+                count = _allFetchedAndSortedCopyItemIds.Count - (startIndex + count);
+            }
+            if(count <= 0) {
+                count = _allFetchedAndSortedCopyItemIds.Count - startIndex;
+            }
+            _lastResult = await GetCopyItemsByIdList(_allFetchedAndSortedCopyItemIds.GetRange(startIndex, count).ToArray());
+            return _lastResult;
         }
 
         #endregion
@@ -373,6 +391,105 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region View Queries
+
+        public string GetQueryForCount() {
+            string query = "select RootId from MpSortableCopyItem_View";
+            string tagClause = string.Empty;
+            string sortClause = string.Empty;
+            List<string> filters = new List<string>();
+
+            if (QueryInfo.TagId != MpTag.AllTagId) {
+                tagClause = string.Format(
+                    @"RootId in 
+                    (select 
+		                case fk_ParentCopyItemId
+			                when 0
+				                then pk_MpCopyItemId
+			                ELSE
+				                fk_ParentCopyItemId
+		                end
+		                from MpCopyItem where pk_MpCopyItemId in 
+		                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}))",
+                    QueryInfo.TagId);
+            }
+            if(!string.IsNullOrEmpty(QueryInfo.SearchText)) {
+                if(QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
+
+                }
+                string searchText = QueryInfo.SearchText;
+
+                string escapeStr = string.Empty;
+                if (searchText.Contains('%')) {
+                    searchText = searchText.Replace("%", @"\%");
+                    escapeStr = @" ESCAPE '\'";
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Title)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}",CaseFormat("Title"), searchText,escapeStr));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Text) ||
+                    QueryInfo.FilterFlags.HasFlag(MpContentFilterType.File)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("ItemData"), searchText, escapeStr));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Url)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("UrlPath"), searchText, escapeStr));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("AppName"), searchText, escapeStr));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("AppPath"), searchText, escapeStr));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
+                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("ItemDescription"), searchText, escapeStr));
+                }
+            }
+            switch(QueryInfo.SortType) {
+                case MpContentSortType.CopyDateTime:
+                    sortClause = string.Format(@"order by {0}", "CopyDateTime");
+                    break;
+                case MpContentSortType.Source:
+                    sortClause = string.Format(@"order by {0}", "SourcePath");
+                    break;
+                case MpContentSortType.Title:
+                    sortClause = string.Format(@"order by {0}", "Title");
+                    break;
+                case MpContentSortType.ItemData:
+                    sortClause = string.Format(@"order by {0}", "ItemData");
+                    break;
+                case MpContentSortType.ItemType:
+                    sortClause = string.Format(@"order by {0}", "fk_MpCopyItemTypeId");
+                    break;
+                case MpContentSortType.UsageScore:
+                    sortClause = string.Format(@"order by {0}", "UsageScore");
+                    break;
+            }
+            if (QueryInfo.IsDescending) {
+                sortClause += " DESC";
+            }
+            if(!string.IsNullOrEmpty(tagClause)) {
+                query += " where " + tagClause;
+                if(filters.Count > 0) {
+                    query += " and (";
+                    query += string.Join(" or ", filters) + ")";
+                }
+            } else if (filters.Count > 0) {
+                query += " where ";
+                query += string.Join(" or ", filters);
+            }
+            query += " group by RootId";
+            query += " "+sortClause;
+            return query;
+        }
+
+        private string CaseFormat(string fieldOrSearchText) {
+            //if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
+            //    return string.Format(@"UPPER({0})", fieldOrSearchText);
+            //}
+            return fieldOrSearchText;
+        }
+        #endregion
+
         #endregion
 
         #region Private Methods
@@ -535,9 +652,6 @@ namespace MonkeyPaste {
 
         #region Search Query Strings
 
-        //private string QueryTextContent(string matchText, bool isCaseSensitive) {
-
-        //}
         #endregion
 
         #endregion

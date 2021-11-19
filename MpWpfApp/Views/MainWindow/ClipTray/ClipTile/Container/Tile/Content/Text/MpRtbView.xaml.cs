@@ -28,20 +28,42 @@ namespace MpWpfApp {
     /// Interaction logic for Mpxaml
     /// </summary>
     public partial class MpRtbView : MpUserControl<MpContentItemViewModel> {
-        private static int RTB_COUNT = 0;
+        public static int DropOverHomeItemId = -1;
+        public static int DropOverEndItemId = -1;
+        private static MpRtbView _CurDropOverRtbView = null;
 
-        private int rtbId = -1;
+        protected MpContentItemCaretAdorner CaretAdorner;
+        protected AdornerLayer CaretAdornerLayer;
+
+        protected Point[] HomeCaretLine = new Point[2];
+        protected Point[] EndCaretLine = new Point[2];
+
+        public Rect HomeRect, EndRect;
+
         public TextRange NewStartRange;
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
 
+
         public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
         public MpRtbView() {
-            rtbId = RTB_COUNT++;
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
-        }      
+        }
+
+        public void ScrollToHome() {
+            Rtb.ScrollToHome();
+            InitCaretAdorner();
+        }
+
+        public void ScrollToEnd() {
+            Rtb.ScrollToEnd();
+            InitCaretAdorner();
+        }
+
+        #region Event Handlers
+
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
                 if(rtbivm.IsPlaceholder) {
@@ -54,6 +76,7 @@ namespace MpWpfApp {
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
                 }
+
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });
@@ -120,27 +143,7 @@ namespace MpWpfApp {
             BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
             BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
-        }
-
-        private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
-            await SyncModelsAsync();
-        }
-
-        private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
-            Rtb.UpdateLayout();
-        }
-
-        private void Rtbivm_OnScrollWheelRequest(object sender, int e) {
-            Rtb.ScrollToVerticalOffset(Rtb.VerticalOffset + e);
-        }
-
-        private void Rtbivm_OnRtbResetRequest(object sender, bool focusRtb) {
-            Rtb.ScrollToHome();
-            Rtb.CaretPosition = Rtb.Document.ContentStart;
-            if(focusRtb) {
-                Rtb.Focus();
-            }
-        }
+        }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
@@ -189,7 +192,6 @@ namespace MpWpfApp {
             }
         }
 
-
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Space && civm.IsEditingContent) {
@@ -200,8 +202,144 @@ namespace MpWpfApp {
             } 
         }
 
-        #region Template/Hyperlinks
+        #endregion
 
+        #region View Model Callbacks
+
+        private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
+            await SyncModelsAsync();
+        }
+
+        private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
+            Rtb.UpdateLayout();
+        }
+
+        private void Rtbivm_OnScrollWheelRequest(object sender, int e) {
+            Rtb.ScrollToVerticalOffset(Rtb.VerticalOffset + e);
+        }
+
+        private void Rtbivm_OnRtbResetRequest(object sender, bool focusRtb) {
+            ScrollToHome();
+            Rtb.CaretPosition = Rtb.Document.ContentStart;
+            if (focusRtb) {
+                Rtb.Focus();
+            }
+        }
+
+        #endregion
+
+        #region Merging
+
+        public void InitCaretAdorner() {
+            if(CaretAdorner == null) {
+                CaretAdorner = new MpContentItemCaretAdorner(Rtb);
+                CaretAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
+                CaretAdornerLayer.Add(CaretAdorner);
+            }
+
+            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+            HomeCaretLine[0] = HomeRect.TopLeft;
+            HomeCaretLine[1] = HomeRect.BottomLeft;
+            //HomeRect.Location = Rtb.TranslatePoint(HomeRect.Location, this);
+
+            EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
+            EndCaretLine[0] = EndRect.TopRight;
+            EndCaretLine[1] = EndRect.BottomRight;
+
+            //EndRect.Location = Rtb.TranslatePoint(EndRect.Location, this);
+
+            //CaretAdorner.Test = new List<Rect> { HomeRect,EndRect };\
+
+            CaretAdornerLayer.Update();
+        }
+
+        public static void ShowHomeCaretAdorner(MpRtbView rtbView) {
+            ClearCaretAdorner();
+            DropOverHomeItemId = rtbView.BindingContext.CopyItemId;
+            rtbView.ScrollToHome();
+            rtbView.CaretAdorner.CaretLine = rtbView.HomeCaretLine;
+            rtbView.CaretAdornerLayer.Update();
+            _CurDropOverRtbView = rtbView;
+        }
+
+        public static void ShowEndCaretAdorner(MpRtbView rtbView) {
+            ClearCaretAdorner();
+            DropOverEndItemId = rtbView.BindingContext.CopyItemId;
+            rtbView.ScrollToEnd();
+            rtbView.CaretAdorner.CaretLine = rtbView.EndCaretLine;
+            rtbView.CaretAdornerLayer.Update();
+            _CurDropOverRtbView = rtbView;
+        }
+
+        public static void ClearCaretAdorner() {
+            DropOverHomeItemId = DropOverEndItemId = -1;
+            if(_CurDropOverRtbView != null) {
+                _CurDropOverRtbView.ScrollToHome();
+                _CurDropOverRtbView.CaretAdornerLayer.Update();
+                _CurDropOverRtbView = null;
+            }
+        }
+
+        public async Task MergeContentItem(MpCopyItem mci, bool isDuplicating) {
+            bool isHomeMerge;
+            if(BindingContext.CopyItemId == DropOverHomeItemId) {
+                isHomeMerge = true;
+            } else if (BindingContext.CopyItemId == DropOverEndItemId) {
+                isHomeMerge = false;
+            } else {
+                throw new Exception("RtbVIew is not flagged for drop");
+            }
+            BindingContext = DataContext as MpContentItemViewModel;
+            BindingContext.IsBusy = true;
+
+            await ClearHyperlinks();
+
+            // merge content
+            if (isHomeMerge) {
+                BindingContext.CopyItem.ItemData = MpHelpers.Instance.CombineRichText(Rtb.Document.ToRichText(), mci.ItemData);
+            } else {
+                BindingContext.CopyItem.ItemData = MpHelpers.Instance.CombineRichText(mci.ItemData, Rtb.Document.ToRichText());
+            }
+
+            // merge templates
+            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(BindingContext.CopyItemId);
+            var mcitl = await MpDataModelProvider.Instance.GetTemplatesAsync(mci.Id);
+            foreach (MpCopyItemTemplate mcit in mcitl) {
+                if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
+                    //if merged item has template w/ same name just ignore it since it will already be parsed
+                    continue;
+                }
+                mcit.CopyItemId = BindingContext.CopyItemId;
+                await mcit.WriteToDatabaseAsync();
+            }
+
+            // merge tags
+            var tl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(BindingContext.CopyItemId);
+            var mtl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(mci.Id);
+            foreach (MpCopyItemTag mt in mtl) {
+                if (tl.Any(x => x.TagId == mt.TagId)) {
+                    //if merged item has tags w/ same name just ignore it 
+                    continue;
+                }
+                mt.CopyItemId = BindingContext.CopyItemId;
+                await mt.WriteToDatabaseAsync();
+            }
+
+            if(!isDuplicating) {
+                await mci.DeleteFromDatabaseAsync();
+            }
+
+            // write and restore item
+            await BindingContext.CopyItem.WriteToDatabaseAsync();
+
+            BindingContext.OnPropertyChanged(nameof(BindingContext.CopyItemData));
+
+            await CreateHyperlinksAsync();
+        }
+
+        #endregion
+
+        #region Template/Hyperlinks
 
         public async Task SyncModelsAsync() {
             var rtbvm = DataContext as MpContentItemViewModel;
@@ -293,16 +431,16 @@ namespace MpWpfApp {
                     continue;
                 }
                 var lastRangeEnd = Rtb.Document.ContentStart;
-                var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
+                Regex regEx = MpRegEx.Instance.RegExList[i]; //MpRegEx.Instance.GetRegExForTokenType(linkType);
                 if (linkType == MpSubTextTokenType.TemplateSegment) {
-                    regExStr = templateRegEx;
-                    //continue;
+                    if (string.IsNullOrEmpty(templateRegEx)) {
+                        //this occurs for templates when copyitem has no templates
+                        continue;
+                    }
+                    regEx = new Regex(templateRegEx, RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 }
-                if (string.IsNullOrEmpty(regExStr)) {
-                    //this occurs for templates when copyitem has no templates
-                    continue;
-                }
-                var mc = Regex.Matches(pt, regExStr, RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                
+                var mc = regEx.Matches(pt);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
@@ -405,7 +543,7 @@ namespace MpWpfApp {
                                         break;
                                     case MpSubTextTokenType.Uri:
                                         try {
-                                            string urlText = MpHelpers.Instance.GetFullyFormattedUrl(linkText);
+                                            string urlText = MonkeyPaste.MpHelpers.Instance.GetFullyFormattedUrl(linkText);
                                             if (MpHelpers.Instance.IsValidUrl(urlText) /*&&
                                                    Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
                                                 hl.NavigateUri = new Uri(urlText);
@@ -571,6 +709,8 @@ namespace MpWpfApp {
             if(rtbSelection != null) {
                 Rtb.Selection.Select(rtbSelection.Start,rtbSelection.End);
             }
+
+            InitCaretAdorner();
 
             BindingContext.IsBusy = false;
             //CleanUpNonExistantTemplates();

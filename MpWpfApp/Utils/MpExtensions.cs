@@ -335,6 +335,15 @@ namespace MpWpfApp {
             return lb.ItemContainerGenerator.IndexFromContainer(lbi);
         }
 
+        public static Rect GetRect(this ListBoxItem lbi, bool relativeToListBox = false) {
+            var lbir = lbi.GetParentListBox().GetListBoxItemRect(lbi.GetListBoxItemIdx());
+            if(relativeToListBox) {
+                return lbir;
+            }
+            lbir.Location = new Point();
+            return lbir;
+        }
+
         public static ListBox GetParentListBox(this ListBoxItem lbi) {
             return lbi.GetVisualAncestor<ListBox>();
         }
@@ -423,7 +432,11 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Visual Tree
+        #region Visual 
+
+        public static double Distance(this Point from, Point to) {
+            return MpHelpers.Instance.DistanceBetweenPoints(from, to);
+        }
 
         public static UIElement TryGetNextAncestorDropTargetElement(this UIElement element) {
             if (element == null) {
@@ -684,6 +697,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Documents
+
+        public static bool HasTable(this RichTextBox rtb) {
+            return MpHelpers.Instance.HasTable(rtb);
+        }
 
         public static void UpdateLayout(this UIElement rtb) {
             rtb.UpdateLayout();

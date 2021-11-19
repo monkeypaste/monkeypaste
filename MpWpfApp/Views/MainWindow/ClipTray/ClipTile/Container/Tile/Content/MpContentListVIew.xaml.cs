@@ -22,16 +22,10 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
     public partial class MpContentListView : MpUserControl<MpClipTileViewModel> {
-        private static int _ContentListViewCount = 0;
-        private int _clvIdx = -1;
-
         private MpContentItemSeperatorAdorner seperatorAdorner;
         public AdornerLayer SeperatorAdornerLayer;
 
         public MpContentListView() : base() {
-            if(_clvIdx < 0) {
-                _clvIdx = _ContentListViewCount++;
-            }
             InitializeComponent();
         }
 

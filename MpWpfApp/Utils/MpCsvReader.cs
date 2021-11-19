@@ -115,7 +115,6 @@ namespace MpWpfApp {
             for (int c = 0; c < totalColumns; c++) {
                 table.Columns.Add(new TableColumn()); 
             }
-
            
             for (int r = 0; r < csv.Count; r++) {
                 TableRow row = new TableRow();
@@ -141,7 +140,8 @@ namespace MpWpfApp {
             
             FlowDocument fd = new FlowDocument();
             fd.Blocks.Add(table);
-
+            //add a blank trailing paragraph for merging in case table goes outside tile bounds
+            fd.Blocks.Add(new Paragraph());
             return fd;
         }
 

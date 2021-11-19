@@ -44,6 +44,8 @@ namespace MonkeyPaste {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
+
+        public bool IsBusy { get; set; } = false;
         #endregion
 
         #region Events
@@ -213,6 +215,12 @@ namespace MonkeyPaste {
         }
 
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            while (IsBusy) {
+                MpConsole.WriteLine("Db busy, waiting...");
+                await Task.Delay(100);
+            }
+            IsBusy = true;
+
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -239,6 +247,8 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
+
+            IsBusy = false;
         }
 
         public void AddItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -267,6 +277,12 @@ namespace MonkeyPaste {
         }
 
         public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            while (IsBusy) {
+                MpConsole.WriteLine("Db busy, waiting...");
+                await Task.Delay(100);
+            }
+            IsBusy = true;
+
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -288,6 +304,8 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
+
+            IsBusy = false;
         }
 
         public void UpdateItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -313,6 +331,12 @@ namespace MonkeyPaste {
         }
 
         public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            while (IsBusy) {
+                MpConsole.WriteLine("Db busy, waiting...");
+                await Task.Delay(100);
+            }
+            IsBusy = true;
+
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -323,7 +347,8 @@ namespace MonkeyPaste {
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if (!ignoreTracking) {
-                    MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+                    //MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
                 }
             }
 
@@ -332,6 +357,8 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
+
+            IsBusy = false;
         }
 
         public void DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -356,7 +383,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
+        public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {                        
             if ((item as MpDbModelBase).Id == 0) {
                 await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
             } else {
@@ -886,23 +913,17 @@ namespace MonkeyPaste {
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpAppGuid text not null
                     , SourcePath text NOT NULL 
+                    , ProcessName text
                     , AppName text 
                     , IsAppRejected integer NOT NULL   
                     , fk_MpUserDeviceId integer not null
                     , fk_MpIconId integer);   
                     
-                    CREATE TABLE MpUrlDomain (
-                      pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUrlDomainGuid text not null
-                    , UrlDomainPath text NOT NULL 
-                    , UrlDomainTitle text
-                    , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
-                    , fk_MpIconId integer);  
-                    
                     CREATE TABLE MpUrl (
                       pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpUrlGuid text not null
                     , UrlPath text NOT NULL 
+                    , UrlDomainPath text 
                     , UrlTitle text
                     , fk_MpUrlDomainId int 
                     ); 
@@ -1074,6 +1095,32 @@ namespace MonkeyPaste {
                     , ParameterEnumId integer
                     , Value text
                     , DefaultValue text); 
+
+                    CREATE VIEW MpSortableCopyItem_View
+                    AS 
+                    SELECT
+	                    pk_MpCopyItemId,
+	                    fk_ParentCopyItemId,
+	                    fk_MpCopyItemTypeId,
+	                    CompositeSortOrderIdx,
+	                    Title,
+	                    ItemData,
+	                    ItemDescription,
+	                    CopyDateTime,
+	                    CopyCount,
+	                    PasteCount,
+	                    MpSource.pk_MpSourceId AS SourceId,
+	                    MpApp.AppName,
+	                    MpApp.SourcePath,
+	                    MpApp.pk_MpAppId AS AppId,
+	                    MpUrl.pk_MpUrlId AS UrlId,
+	                    MpUrl.UrlPath,
+	                    MpUrl.UrlTitle
+                    FROM
+	                    MpCopyItem
+                    INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
+                    INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
+                    LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId;
             ";
         }
         #endregion

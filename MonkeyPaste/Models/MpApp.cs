@@ -5,6 +5,7 @@ using System.Text;
 using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using System.Linq;
+using System.IO;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpICopyItemSource, MpISyncableDbObject {
@@ -19,6 +20,8 @@ namespace MonkeyPaste {
         [Indexed]
         [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
+        
+        public string ProcessName { get; set; }
 
         public string AppName { get; set; } = string.Empty;
 
@@ -99,7 +102,8 @@ namespace MonkeyPaste {
                 IconId = icon.Id,
                 Icon = icon,
                 UserDeviceId = thisDevice.Id,
-                UserDevice = thisDevice
+                UserDevice = thisDevice,
+                ProcessName = Path.GetFileName(appPath)
             };
 
             await MpDb.Instance.AddOrUpdateAsync<MpApp>(newApp);

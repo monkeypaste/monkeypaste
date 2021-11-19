@@ -164,6 +164,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || IsBusy;
+
         public bool IsRequery { get; private set; } = false;
 
         public bool IsTrayEmpty => Items.Count == 0;// || Items.All(x => x.IsPlaceholder);
@@ -339,6 +341,8 @@ namespace MpWpfApp {
 
             IsBusy = true;
             ClearClipSelection();
+
+            MpDataModelProvider.Instance.ResetQuery();
 
             TotalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
             _nextQueryOffsetIdx = 0;

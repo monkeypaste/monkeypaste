@@ -366,30 +366,4 @@ namespace MonkeyPaste {
        // Csv, //this is only used during runtime
         Html
     }
-
-    public enum MpContentSortType {
-        None = 0,
-        CopyDateTime,
-        Source,
-        Title,
-        ItemData,
-        ItemType,
-        UsageScore,
-        Manual
-    }
-
-    [Flags]
-    public enum MpContentFilterType {
-        None = 0,
-        CaseSensitive = 1,
-        Title = 2,
-        Text = 4,
-        File = 8,
-        Image = 16,
-        Url = 32,
-        AppName = 64,
-        AppPath = 128,
-        Meta = 256,
-        Tag = 512
-    }
 }

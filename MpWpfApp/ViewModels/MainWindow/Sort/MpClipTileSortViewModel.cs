@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpSingletonViewModel<MpClipTileSortViewModel> {
-
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {

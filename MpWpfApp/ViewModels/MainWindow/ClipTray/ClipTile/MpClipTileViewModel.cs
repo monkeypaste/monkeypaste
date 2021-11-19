@@ -501,7 +501,6 @@ using System.Speech.Synthesis;
 
         #region Brush Properties        
 
-        
         public Rect TileBorderBrushRect {
             get {
                 if (IsAnyItemDragging || IsAnyContextMenuOpened) {
@@ -572,7 +571,7 @@ using System.Speech.Synthesis;
 
         #region State Properties 
 
-        public bool IsAnyBusy => ItemViewModels.Any(x => x.IsBusy);
+        public bool IsAnyBusy => ItemViewModels.Any(x => x.IsBusy) || IsBusy;
 
         public bool IsFlipping { get; set; } = false;
 
@@ -849,6 +848,11 @@ using System.Speech.Synthesis;
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
+                case nameof(IsAnyBusy):
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    }
+                    break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
@@ -893,6 +897,8 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(DropIdx):
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
+                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))

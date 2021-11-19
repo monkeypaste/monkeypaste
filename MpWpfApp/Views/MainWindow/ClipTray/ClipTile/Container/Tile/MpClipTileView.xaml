@@ -4,18 +4,20 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp" 
+                     xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <!--<i:Interaction.Behaviors>
         <local:MpContentDragBehavior x:Name="DragBehavior" />
     </i:Interaction.Behaviors>-->
     <local:MpClipBorder x:Name="ClipTileClipBorder"
-                        DataContext="{Binding ., IsAsync=True}"
+                        DataContext="{Binding .,
+                                              IsAsync=True}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin}"
                         BorderThickness="{Binding TileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
@@ -30,7 +32,8 @@
                         Focusable="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor,
+                                                            Converter={StaticResource StringToBrushConverter}}"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
         <local:MpClipBorder.BorderBrush>
@@ -66,12 +69,14 @@
                 <!--  Tile Title Canvas  -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
                                            DockPanel.Dock="Top"
-                                           Height="{local:MpMeasurementsBinding ClipTileTitleHeight, Mode=OneWay}"
+                                           Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
+                                                                                Mode=OneWay}"
                                            DataContext="{Binding PrimaryItem}" />
                 <!--  Tile Detail Grid  -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
-                                            Height="{local:MpMeasurementsBinding ClipTileDetailHeight, Mode=OneWay}"
+                                            Height="{local:MpMeasurementsBinding ClipTileDetailHeight,
+                                                                                 Mode=OneWay}"
                                             Visibility="{Binding Parent.DetailGridVisibility}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
@@ -82,7 +87,8 @@
             <!--  Loading Spinner  -->
             <local:MpClipTileLoadingOverlayView x:Name="ClipTileBusyView"
                                                 Background="#FF3D3D3D"
-                                                Visibility="{Binding IsAnyBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                Visibility="{Binding IsAnyBusy,
+                                                                     Converter={StaticResource BoolToVisibilityConverter}}" />
             <!--  Trial Expired  -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>

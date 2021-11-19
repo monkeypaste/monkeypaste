@@ -341,6 +341,9 @@ namespace MpWpfApp {
         [MpAffectsParent]
         public bool IsItemDragging { get; set; } = false;
 
+
+        public bool IsDragOverItem { get; set; } = false;
+
         public Point MouseDownPosition { get; set; }
         public IDataObject DragDataObject { get; set; }
         #endregion
@@ -845,7 +848,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsEditingTitle):
                     if(!IsEditingTitle) {
-                        CopyItem.WriteToDatabase();
+                        Task.Run(async () => {
+                            await CopyItem.WriteToDatabaseAsync();
+                        });
                     }
                     break;
                 case nameof(IsBusy):

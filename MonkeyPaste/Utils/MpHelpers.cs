@@ -893,22 +893,22 @@ namespace MonkeyPaste {
                 }
                 return host;
 
-                int domainStartIdx = url.IndexOf(@"//") + 2;
-                if (url.Length <= domainStartIdx) {
-                    return string.Empty;
-                }
-                if (!url.Substring(domainStartIdx).Contains(@"/")) {
-                    if (subDomainIdxList.Count > 1) {
-                        return url.Substring(domainStartIdx).Substring(subDomainIdxList[subDomainIdxList.Count - 1]);
-                    }
-                    return url.Substring(domainStartIdx);
-                }
-                int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
-                int preIdx = 0;
-                if (subDomainIdxList.Count > 1) {
-                    preIdx = subDomainIdxList[subDomainIdxList.Count - 1];
-                }
-                return url.Substring(domainStartIdx).Substring(preIdx, domainEndIdx - preIdx);
+                //int domainStartIdx = url.IndexOf(@"//") + 2;
+                //if (url.Length <= domainStartIdx) {
+                //    return string.Empty;
+                //}
+                //if (!url.Substring(domainStartIdx).Contains(@"/")) {
+                //    if (subDomainIdxList.Count > 1) {
+                //        return url.Substring(domainStartIdx).Substring(subDomainIdxList[subDomainIdxList.Count - 1]);
+                //    }
+                //    return url.Substring(domainStartIdx);
+                //}
+                //int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
+                //int preIdx = 0;
+                //if (subDomainIdxList.Count > 1) {
+                //    preIdx = subDomainIdxList[subDomainIdxList.Count - 1];
+                //}
+                //return url.Substring(domainStartIdx).Substring(preIdx, domainEndIdx - preIdx);
             }
             catch (Exception ex) {
                 MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);

@@ -8,12 +8,37 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     public class MpUrl : MpDbModelBase, MpICopyItemSource {
+
+        #region Columns
+
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpUrlId")]
         public override int Id { get; set; }
 
         [Column("MpUrlGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Indexed]
+        public string UrlPath { get; set; }
+
+        public string UrlDomainPath { get; set; }
+
+        public string UrlTitle { get; set; }
+
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; } = 0;
+
+        #endregion
+
+        #region Fk Objects
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpIcon Icon { get; set; }
+
+        #endregion
+
+        #region Properties
 
         [Ignore]
         public Guid UrlGuid {
@@ -40,16 +65,7 @@ namespace MonkeyPaste {
             }
         }
 
-        [Indexed]
-        public string UrlPath { get; set; }
-        public string UrlTitle { get; set; }
-
-        [ForeignKey(typeof(MpIcon))]
-        [Column("fk_MpIconId")]
-        public int IconId { get; set; } = 0;
-
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpIcon Icon { get; set; }
+        #endregion
 
         public static async Task<MpUrl> Create(string urlPath,string urlTitle, MpApp app) {
             var dupCheck = await MpDataModelProvider.Instance.GetUrlByPath(urlPath);
@@ -57,13 +73,14 @@ namespace MonkeyPaste {
                 dupCheck = await MpDb.Instance.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;
             }
-            
+
+            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
                 UrlPath = urlPath,
-                UrlTitle = urlTitle
+                UrlTitle = urlTitle,
+                UrlDomainPath = domainStr
             };
-            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
             if(string.IsNullOrEmpty(domainStr)) {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
@@ -87,6 +104,7 @@ namespace MonkeyPaste {
         public MpUrl() { }
 
         #region MpICopyItemSource Implementation
+
         [Ignore]
         public MpIcon SourceIcon {
             get {

@@ -136,14 +136,14 @@
                             Style="{StaticResource SemiTransparentButton}">
                         <Button.Background>
                             <RadialGradientBrush GradientOrigin="0.5,0.5"
-                                                     Center="0.3,0.5"
-                                                     RadiusX="1.0"
-                                                     RadiusY="0.5">
+                                                 Center="0.3,0.5"
+                                                 RadiusX="1.0"
+                                                 RadiusY="0.5">
                                 <RadialGradientBrush.GradientStops>
                                     <GradientStop Color="DimGray"
-                                                      Offset="0" />
+                                                  Offset="0" />
                                     <GradientStop Color="Violet"
-                                                      Offset="1.0" />
+                                                  Offset="1.0" />
                                 </RadialGradientBrush.GradientStops>
                             </RadialGradientBrush>
                         </Button.Background>

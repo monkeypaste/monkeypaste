@@ -32,8 +32,7 @@
                               ItemsSource="{Binding CriteriaTypeLabels}"
                               SelectedIndex="{Binding SelectedCriteriaTypeIdx,
                                                       Mode=TwoWay}"
-                              MinWidth="80">
-                    </ComboBox>
+                              MinWidth="80" />
                 </local:MpClipBorder>
                 <local:MpClipBorder BorderBrush="DimGray"
                                     BorderThickness="1.5"
@@ -91,8 +90,8 @@
             </StackPanel>
             <local:MpClipBorder x:Name="SearchCriteriaInputBorder"
                                 CornerRadius="10"
-                                BorderThickness="1" 
-                                 MouseEnter="SearchCriteriaTextBox_MouseEnter"
+                                BorderThickness="1"
+                                MouseEnter="SearchCriteriaTextBox_MouseEnter"
                                 MouseLeave="SearchCriteriaTextBox_MouseLeave"
                                 Margin="3,5,10,5">
                 <TextBox x:Name="SearchCriteriaTextBox"
