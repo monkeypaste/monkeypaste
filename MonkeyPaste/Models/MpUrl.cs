@@ -163,7 +163,7 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.Parse(objParts[0])
             };
 
-            url.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[1]) as MpIcon;
+            url.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", objParts[1]) as MpIcon;
             url.IconId = url.Icon.Id;
             url.UrlPath = objParts[2];
             url.UrlTitle = objParts[3];

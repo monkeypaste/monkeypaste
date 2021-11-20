@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -33,52 +34,71 @@ namespace MonkeyPaste {
 
         public string Content { get; set; } = string.Empty;
 
-        public MpStreamMessage() { }
+        public static async Task<MpStreamMessage> Create(string streamMsgStr) {
+            var msgParts = streamMsgStr.Split(new string[] { MpStreamMessage.HeaderContentParseToken }, StringSplitOptions.RemoveEmptyEntries);
 
-        public MpStreamMessage(
+            var header = await MpStreamHeader.Parse(msgParts[0]);
+            string content = msgParts.Length > 1 ? msgParts[1] : string.Empty;
+            return new MpStreamMessage() {
+                Header = header,
+                Content = content
+            };
+        }
+
+        public static async Task<MpStreamMessage> Create(
             MpSyncMesageType msgType,
             string fromGuid,
             string toGuid,
             string content) {
-            Header = new MpStreamHeader(
-                msgType,
-                fromGuid,
-                toGuid,
-                DateTime.UtcNow,
-                content.CheckSum());
-            Content = content;
+
+            string checkSum = await content.CheckSum();
+            return new MpStreamMessage() {
+                Header = new MpStreamHeader(
+                    msgType,
+                    fromGuid,
+                    toGuid,
+                    DateTime.UtcNow,
+                    checkSum),
+                Content = content
+            };
         }
 
+        private MpStreamMessage() { }
+
         #region Sync Phase Message Builders
-        public static MpStreamMessage CreateWebDeviceRequest(MpDeviceEndpoint dep) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateWebDeviceRequest(MpDeviceEndpoint dep) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.WebDeviceRequest,
                 dep.DeviceGuid,
                 "hub",
-                dep.SerializeDbObject());
+                depStr);
             return sm;
         }
 
-        public static MpStreamMessage CreateHandshakeRequest(MpDeviceEndpoint dep) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateHandshakeRequest(MpDeviceEndpoint dep) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.HandshakeRequest,
                 dep.DeviceGuid,
                 "hub",
-                dep.SerializeDbObject());
+                depStr);
             return sm;
         }
 
-        public static MpStreamMessage CreateHandshakeResponse(MpDeviceEndpoint dep, string toGuid) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateHandshakeResponse(MpDeviceEndpoint dep, string toGuid) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.HandshakeResponse,
                 dep.DeviceGuid,
                 toGuid,
-                dep.SerializeDbObject());
+                depStr);
             return sm;
         }
 
-        public static MpStreamMessage CreateDbLogRequest(MpDeviceEndpoint dep, string toGuid, DateTime lastSyncUtc) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateDbLogRequest(MpDeviceEndpoint dep, string toGuid, DateTime lastSyncUtc) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DbLogRequest,
                 dep.DeviceGuid,
                 toGuid,
@@ -86,8 +106,9 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateDbLogResponse(MpDeviceEndpoint dep, string toGuid, string logDbMessageStr) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateDbLogResponse(MpDeviceEndpoint dep, string toGuid, string logDbMessageStr) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DbLogResponse,
                 dep.DeviceGuid,
                 toGuid,
@@ -95,10 +116,11 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateFlipRequest(MpDeviceEndpoint dep, string toGuid) {
+        public static async Task<MpStreamMessage> CreateFlipRequest(MpDeviceEndpoint dep, string toGuid) {
+            string depStr = await dep.SerializeDbObject();
             // once B has needed A data it will make a flipRequest = true
             // once A has needed B data it will make a flipRequest of false to finish sync
-            var sm = new MpStreamMessage(
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.FlipRequest,
                 dep.DeviceGuid,
                 toGuid,
@@ -106,8 +128,9 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateDisconnectRequest(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateDisconnectRequest(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DisconnectRequest,
                 dep.DeviceGuid,
                 toGuid,
@@ -115,8 +138,9 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateDisconnectResponse(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
-            var sm = new MpStreamMessage(
+        public static async Task<MpStreamMessage> CreateDisconnectResponse(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
+            string depStr = await dep.SerializeDbObject();
+            var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DisconnectRequest,
                 dep.DeviceGuid,
                 toGuid,
@@ -124,8 +148,9 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        //public static MpStreamMessage CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
-        //    var sm = new MpStreamMessage(
+//public static async Task<MpStreamMessage> CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
+        //string depStr = await dep.SerializeDbObject();
+        //    var sm = await MpStreamMessage.Create(
         //        errorType,
         //        dep.DeviceGuid,
         //        toGuid,
@@ -135,23 +160,18 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static MpStreamMessage Parse(string streamMessageStr) {
-            var msgParts = streamMessageStr.Split(new string[] { MpStreamMessage.HeaderContentParseToken }, StringSplitOptions.RemoveEmptyEntries);
-
-            var sm = new MpStreamMessage() {
-                Header = MpStreamHeader.Parse(msgParts[0]),
-                Content = msgParts.Length > 1 ? msgParts[1] : string.Empty
-            };
-            sm.Validate();
+        public static async Task<MpStreamMessage> Parse(string streamMessageStr) {
+            var sm = await MpStreamMessage.Create(streamMessageStr);
+            await sm.Validate();
             return sm;
         }
 
-        private void Validate() {
+        private async Task Validate() {
             if (Header == null) {
                 throw new Exception("Header must be non-null");
             }
             string givenCheckSum = Header.ContentCheckSum;
-            string calcCheckSum = Content.CheckSum();
+            string calcCheckSum = await Content.CheckSum();
 
             if (calcCheckSum != givenCheckSum) {
                 throw new Exception(string.Format(@"Checksum mismatch given: {0} calc: {1} for msg: {2}", givenCheckSum, calcCheckSum, Content));
@@ -165,7 +185,9 @@ namespace MonkeyPaste {
             return (int)Header.MessageType > (int)MpSyncMesageType.ErrorBase;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
+
             //format: <header><content><Eof>
             return string.Format(
                 @"{1}{0}{2}{0}{3}",
@@ -183,7 +205,7 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

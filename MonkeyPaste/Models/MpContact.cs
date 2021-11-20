@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpContact {
@@ -8,10 +9,8 @@ namespace MonkeyPaste {
         public string LastName { get; set; }
         public string Email { get; set; }
 
-        public string HashKey {
-            get {
-                return this.ToString().CheckSum();
-            }
+        public async Task<string> GetHashKey() {
+            return await this.ToString().CheckSum();
         }
 
         public override string ToString() {

@@ -222,7 +222,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #endregion
 
         #region Events
@@ -237,14 +236,14 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            MpSystemTrayViewModel.Instance.Init();
+            await MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
 
             MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
                 IconBuilder = new MpIconBuilder()
             });
 
-            MpHelpers.Instance.Init();
+            await MpHelpers.Instance.Init();
 
             //MpPluginManager.Instance.Init();
 

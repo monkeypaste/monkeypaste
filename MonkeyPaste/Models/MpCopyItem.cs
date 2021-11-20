@@ -196,13 +196,15 @@ namespace MonkeyPaste {
                 ItemDescription = objParts[5],
                 ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6])
             };
-            ci.Source = MpDb.Instance.GetDbObjectByTableGuid("MpSource", objParts[7]) as MpSource;
+            ci.Source = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added
             //ci.ItemType = MpCopyItemType.RichText;
             return ci;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
+
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}",
                 ParseToken,
@@ -221,7 +223,9 @@ namespace MonkeyPaste {
             return typeof(MpCopyItem);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
+
             MpCopyItem other = null;
             if(drOrModel == null) {
                 other = new MpCopyItem();
@@ -326,8 +330,8 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public object Clone() {
-            var s = MpDb.Instance.GetItem<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+        public async Task<object> Clone() {
+            var s = await MpDb.Instance.GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
 
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
@@ -343,7 +347,7 @@ namespace MonkeyPaste {
                 Id = 0
             };
 
-            newItem.WriteToDatabase();
+            await newItem.WriteToDatabaseAsync();
 
             return newItem;
         }

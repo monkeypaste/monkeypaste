@@ -57,6 +57,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Strings
+
         public static string ToTitleCase(this string str) {
             TextInfo textInfo = new CultureInfo(MpPreferences.Instance.UserCultureInfoName, false).TextInfo;
             return textInfo.ToTitleCase(str);
@@ -76,8 +77,9 @@ namespace MonkeyPaste {
             return str.ToLowerInvariant().Contains(ostr.ToLowerInvariant());
         }
 
-        public static string CheckSum(this string str) {
-            return MpHelpers.Instance.GetCheckSum(str);
+        public static async Task<string> CheckSum(this string str) {
+            string result = await MpHelpers.Instance.GetCheckSum(str);
+            return result;
         }
 
 
@@ -222,6 +224,16 @@ namespace MonkeyPaste {
             //return Color.FromArgb(r, g, b);
             return Color.FromRgba(r, g, b, 255);
         }
+        #endregion
+
+        #region Data
+
+        public static DateTime ToDateTime(this double unixTimeStamp) {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dateTime;
+        }
+                
         #endregion
 
         #region Reflection

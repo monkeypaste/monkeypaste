@@ -334,7 +334,7 @@ namespace MpWpfApp {
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
                         case 27:
-                            shortcutCommand = MpClipTrayViewModel.Instance.CopyCommand;
+                            //shortcutCommand = MpClipTrayViewModel.Instance.CopyCommand;
                             break;
                         default:
                             try {

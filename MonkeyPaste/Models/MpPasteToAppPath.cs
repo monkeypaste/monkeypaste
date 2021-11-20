@@ -97,17 +97,7 @@ namespace MonkeyPaste {
             }
         }
         #endregion
-        public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
-            //var pasteToAppPathList = new List<MpPasteToAppPath>();
-            //DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);
-            //if (dt != null && dt.Rows.Count > 0) {
-            //    foreach (DataRow dr in dt.Rows) {
-            //        pasteToAppPathList.Add(new MpPasteToAppPath(dr));
-            //    }
-            //}
-            //return pasteToAppPathList;
-            return MpDb.Instance.GetItems<MpPasteToAppPath>();
-        }
+        
 
         public MpPasteToAppPath(
             string appPath, 

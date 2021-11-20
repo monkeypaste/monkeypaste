@@ -169,13 +169,13 @@ namespace MpWpfApp {
             UpdateCommandsCanExecute();
         }
 
-        public bool RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+        public async Task<bool> RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
             MpConsole.WriteLine("Removing template: " + cit.TemplateName);
             //returns true if this was the last instance of the template
             var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
-                    thlvmToRemove.CopyItemTemplate.DeleteFromDatabase();
+                    await thlvmToRemove.CopyItemTemplate.DeleteFromDatabaseAsync();
                     Templates.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;

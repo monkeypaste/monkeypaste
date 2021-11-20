@@ -71,13 +71,13 @@ namespace MonkeyPaste {
             _ = Task.Run(() => Initialize(tagId));
         }
 
-        public void SetTag(int tagId) {
+        public async Task SetTag(int tagId) {
             TagId = tagId; 
-            Device.InvokeOnMainThreadAsync(async () => {                                
+            await Device.InvokeOnMainThreadAsync(async () => {                                
                 var clips = await MpDataModelProvider.Instance.GetPageAsync(TagId, 0, _pageSize, MpContentSortType.CopyDateTime, true);
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
-                    var tl = MpDb.Instance.GetItems<MpTag>();
+                    var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
                     var t = tl.Where(x => x.Id == TagId).FirstOrDefault();
                     if(t != null) {
                         EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);
@@ -115,10 +115,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private void Initialize(int tagId) {
+        private async Task Initialize(int tagId) {
             IsBusy = true;
 
-            SetTag(tagId);
+            await SetTag(tagId);
             //await Task.Delay(300);
             IsBusy = false;
         }

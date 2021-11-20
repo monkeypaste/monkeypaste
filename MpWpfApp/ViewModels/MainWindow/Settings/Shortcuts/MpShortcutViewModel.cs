@@ -301,7 +301,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutId != value) {
                     Shortcut.ShortcutId = value;
-                    Shortcut.WriteToDatabase();
+                    //Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(ShortcutId));
                 }
             }

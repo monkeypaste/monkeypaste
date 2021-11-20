@@ -118,14 +118,16 @@ namespace MonkeyPaste {
             return new MpImageConverter().Convert(buffer,typeof(SKBitmap)) as SKBitmap;
         }
 
-        public string GetCheckSum(string theString) {
-            string hash;
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
-                hash = BitConverter.ToString(
-                  md5.ComputeHash(Encoding.UTF8.GetBytes(theString))
-                ).Replace("-", String.Empty);
-            }
-            return hash;
+        public async Task<string> GetCheckSum(string theString) {
+            string result = await Task<string>.Run(() => {
+                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
+                    string hash = BitConverter.ToString(
+                        md5.ComputeHash(
+                            Encoding.UTF8.GetBytes(theString))).Replace("-", String.Empty);
+                    return hash;
+                }
+            });
+            return result;
         }
 
         public const string AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

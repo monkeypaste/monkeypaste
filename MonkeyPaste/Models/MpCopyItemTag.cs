@@ -52,12 +52,12 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        public static MpCopyItemTag Create(int tagId,int copyItemId, int sortIdx = 0) {
-            var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
+        public static async Task<MpCopyItemTag> Create(int tagId,int copyItemId, int sortIdx = 0) {
+            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(tagId, copyItemId); //MpDb.Instance.GetItemsAsync<MpCopyItemTag>().Where(x => x.TagId == tagId && x.CopyItemId == copyItemId).FirstOrDefault();
             if(dupCheck != null) {
                 if(dupCheck.CopyItemSortIdx != sortIdx) {
                     dupCheck.CopyItemSortIdx = sortIdx;
-                    MpDb.Instance.UpdateItem<MpCopyItemTag>(dupCheck);
+                    await MpDb.Instance.UpdateItemAsync<MpCopyItemTag>(dupCheck);
                 }
                 return dupCheck;
             }
@@ -69,7 +69,7 @@ namespace MonkeyPaste {
                 CopyItemSortIdx = sortIdx
             };
 
-            MpDb.Instance.AddItem<MpCopyItemTag>(newCopyItemTag);
+            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(newCopyItemTag);
 
             return newCopyItemTag;
         }
@@ -115,31 +115,33 @@ namespace MonkeyPaste {
             var cit = new MpCopyItemTag() {
                 CopyItemTagGuid = System.Guid.Parse(objParts[0])
             };
-            var ci = MpDb.Instance.GetDbObjectByTableGuid("MpCopyItem", objParts[1]) as MpCopyItem;
-            var t = MpDb.Instance.GetDbObjectByTableGuid("MpTag", objParts[2]) as MpTag;
+            var ci = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpCopyItem>(objParts[1]);
+            var t = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpTag>(objParts[2]);
             cit.CopyItemId = ci.Id;
             cit.TagId = t.Id;
             return cit;
         }
 
-        public string SerializeDbObject() { 
-            var cig = MpDb.Instance.GetItem<MpCopyItem>(CopyItemId)?.CopyItemGuid;
-            var tg = MpDb.Instance.GetItem<MpTag>(TagId)?.TagGuid;
+        public async Task<string> SerializeDbObject() {
+            var cit =await  MpDb.Instance.GetItemAsync<MpCopyItem>(CopyItemId);
+            var t = await MpDb.Instance.GetItemAsync<MpTag>(TagId);
+
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}",
                 ParseToken,
                 CopyItemTagGuid.ToString(),
-                cig,
-                tg);
+                (cit == null ? string.Empty : cit.Guid),
+                (t == null ? string.Empty : t.Guid));
         }
 
         public Type GetDbObjectType() {
             return typeof(MpCopyItemTag);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
-            var cig = MpDb.Instance.GetItem<MpCopyItem>(CopyItemId)?.CopyItemGuid;
-            var tg = MpDb.Instance.GetItem<MpTag>(TagId)?.TagGuid;
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            var cit = await MpDb.Instance.GetItemAsync<MpCopyItem>(CopyItemId);
+            var t = await MpDb.Instance.GetItemAsync<MpTag>(TagId);
+
             MpCopyItemTag other = null;
             if (drOrModel is MpCopyItemTag) {
                 other = drOrModel as MpCopyItemTag;
@@ -155,11 +157,11 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(CopyItemId, other.CopyItemId,
                 "fk_MpCopyItemId",
                 diffLookup,
-                cig);
+                (cit == null ? string.Empty : cit.Guid));
             diffLookup = CheckValue(TagId, other.TagId,
                 "fk_MpTagId",
                 diffLookup,
-                tg);
+                (t == null ? string.Empty : t.Guid));
 
             return diffLookup;
         }

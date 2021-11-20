@@ -70,8 +70,8 @@ namespace MonkeyPaste {
         //public MpCopyItem CopyItem { get; set; }
         #endregion
 
-        public static MpCopyItemTemplate Create(int copyItemId,string templateName, string templateColor = "") {
-            var dupCheck = MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
+        public static async Task<MpCopyItemTemplate> Create(int copyItemId,string templateName, string templateColor = "") {
+            var dupCheck = await MpDataModelProvider.Instance.GetTemplateByNameAsync(copyItemId, templateName); //MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
             if (dupCheck != null) {
                 return dupCheck;
             }
@@ -82,7 +82,7 @@ namespace MonkeyPaste {
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.Instance.GetRandomColor().ToHex() : templateColor
             };
 
-            MpDb.Instance.AddOrUpdate<MpCopyItemTemplate>(newCopyItemTemplate);
+            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTemplate>(newCopyItemTemplate);
 
             return newCopyItemTemplate;
         }

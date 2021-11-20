@@ -8,7 +8,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2f008"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
@@ -18,11 +18,11 @@
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         Topmost="True"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance Type=local:MpSettingsWindowViewModel, IsDesignTimeCreatable=False}">
     <Window.DataContext>
-        <local:MpSettingsWindowViewModel />
+        <local:MpSettingsWindowViewModel/>
     </Window.DataContext>
-    <Window.Resources />
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:CallMethodAction MethodName="SettingsWindow_Loaded"

@@ -8,13 +8,15 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpShortcutCollectionViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpShortcutCollectionViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Grid>
         <DataGrid x:Name="ShortcutDatagrid"
                   ItemsSource="{Binding Shortcuts}"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   HorizontalAlignment="Center"
-                  SelectedIndex="{Binding SelectedShortcutIndex, Mode=TwoWay}"
+                  SelectedIndex="{Binding SelectedShortcutIndex,
+                                          Mode=TwoWay}"
                   SelectionMode="Single"
                   GridLinesVisibility="None"
                   IsReadOnly="True"
@@ -29,7 +31,11 @@
                                     Binding="{Binding ShortcutDisplayName}" />
                 <DataGridTextColumn Header="Shortcut"
                                     Width="150"
-                                    Binding="{Binding KeyString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                    Binding="{Binding KeyString,
+                                                      Mode=TwoWay,
+                                                      UpdateSourceTrigger=PropertyChanged,
+                                                      NotifyOnTargetUpdated=True,
+                                                      NotifyOnSourceUpdated=True}" />
                 <DataGridTemplateColumn Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -53,7 +59,8 @@
                                         ToolTip="Delete"
                                         Template="{StaticResource SearchButtonControlTemplate}"
                                         Visibility="{Binding DeleteButtonVisibility}"
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteShortcutCommand}">
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
+                                                          Path=DataContext.DeleteShortcutCommand}">
                                     <Image Width="20"
                                            Height="20"
                                            Source="/MpWpfApp;component/Resources/Images/delete.png" />
@@ -63,7 +70,8 @@
                                         ToolTip="Reset"
                                         Template="{StaticResource SearchButtonControlTemplate}"
                                         Visibility="{Binding ResetButtonVisibility}"
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
+                                                          Path=DataContext.ResetShortcutCommand}">
                                     <Image Width="20"
                                            Height="20"
                                            Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png" />

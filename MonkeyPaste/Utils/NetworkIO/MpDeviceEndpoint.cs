@@ -84,15 +84,20 @@ namespace MonkeyPaste {
             return PublicIp4Address == oep.PublicIp4Address;
         }
 
-        public override string ToString() {
-            return SerializeDbObject();
+        public async Task<string> ToStringAsync() {
+            string result = await SerializeDbObject();
+            return result;
         }
 
-        public static MpDeviceEndpoint Parse(string str) {
-            return new MpDeviceEndpoint().DeserializeDbObject(str).Result as MpDeviceEndpoint;
+        public static async Task<MpDeviceEndpoint> Parse(string str) {
+            var temp = new MpDeviceEndpoint();
+            var result = await temp.DeserializeDbObject(str);
+
+            return result as MpDeviceEndpoint;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}",
                 ParseToken,
@@ -130,7 +135,7 @@ namespace MonkeyPaste {
             return ep;
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

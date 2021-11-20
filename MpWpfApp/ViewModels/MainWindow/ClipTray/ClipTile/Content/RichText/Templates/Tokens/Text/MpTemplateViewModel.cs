@@ -441,14 +441,10 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand DeleteTemplateCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        CopyItemTemplate.DeleteFromDatabase();
-                    });
-            }
-        }
+        public ICommand DeleteTemplateCommand => new RelayCommand(
+            async() => {
+                await CopyItemTemplate.DeleteFromDatabaseAsync();
+            });
 
         public ICommand ClearTemplateCommand {
             get {
@@ -462,60 +458,46 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand CancelCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        IsSelected = false;
-                        if (WasNewOnEdit) {
-                            Parent.RemoveItem(CopyItemTemplate, false);
-                        }
-                        CopyItemTemplate = _originalModel;
-                        IsEditingTemplate = false;
-                        
-                    });
-            }
-        }
+        public ICommand CancelCommand => new RelayCommand(
+            async() => {
+                IsSelected = false;
+                if (WasNewOnEdit) {
+                    await Parent.RemoveItem(CopyItemTemplate, false);
+                }
+                CopyItemTemplate = _originalModel;
+                IsEditingTemplate = false;
 
-        public ICommand OkCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        CopyItemTemplate.WriteToDatabase();
-                        //Parent.Parent.RequestSyncModels();
-                        WasNewOnEdit = false; 
-                        IsEditingTemplate = false;
-                        IsSelected = false;
-                    },
-                    () => {
-                        return Validate();
-                    });
-            }
-        }
+            });
 
-        public ICommand ChangeTemplateColorCommand {
-            get {
-                return new RelayCommand<object>(
-                    (args) => {
-                        var templateColorButton = args as Button;
-                        var colorMenuItem = new MenuItem();
-                        var colorContextMenu = new ContextMenu();
-                        colorContextMenu.Items.Add(colorMenuItem);
-                        MpHelpers.Instance.SetColorChooserMenuItem(
-                            colorContextMenu,
-                            colorMenuItem,
-                            (s1, e1) => {
-                                TemplateBrush = (Brush)((Border)s1).Tag;
-                            }
-                        );
-                        templateColorButton.ContextMenu = colorContextMenu;
-                        colorContextMenu.PlacementTarget = templateColorButton;
-                        //colorContextMenu.Width = 200;
-                        //colorContextMenu.Height = 100;
-                        colorContextMenu.IsOpen = true;
-                    });
-            }
-        }
+        public ICommand OkCommand => new RelayCommand(
+            async () => {
+                await CopyItemTemplate.WriteToDatabaseAsync();
+                //Parent.Parent.RequestSyncModels();
+                WasNewOnEdit = false;
+                IsEditingTemplate = false;
+                IsSelected = false;
+            },
+            Validate());
+
+        public ICommand ChangeTemplateColorCommand => new RelayCommand<object>(
+        (args) => {
+            var templateColorButton = args as Button;
+            var colorMenuItem = new MenuItem();
+            var colorContextMenu = new ContextMenu();
+            colorContextMenu.Items.Add(colorMenuItem);
+            MpHelpers.Instance.SetColorChooserMenuItem(
+                colorContextMenu,
+                colorMenuItem,
+                (s1, e1) => {
+                    TemplateBrush = (Brush)((Border)s1).Tag;
+                }
+            );
+            templateColorButton.ContextMenu = colorContextMenu;
+            colorContextMenu.PlacementTarget = templateColorButton;
+            //colorContextMenu.Width = 200;
+            //colorContextMenu.Height = 100;
+            colorContextMenu.IsOpen = true;
+        });
         #endregion
 
         #region Overrides

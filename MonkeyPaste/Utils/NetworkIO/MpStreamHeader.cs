@@ -29,7 +29,8 @@ namespace MonkeyPaste {
         }
 
 
-        public static MpStreamHeader Parse(string headerStr) {
+        public static async Task<MpStreamHeader> Parse(string headerStr) {
+            await Task.Delay(1);
             //header string format: <MessageTypeId><FromGuid><ToGuid><SendDateTime><checksum>
             var headerParts = headerStr.Split(new string[] { HeaderParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var header = new MpStreamHeader(
@@ -42,7 +43,8 @@ namespace MonkeyPaste {
             return header;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
             //header string format: <MessageTypeId><FromGuid><ToGuid><SendDateTime><checksum>
             return string.Format(
                  @"{1}{0}{2}{0}{3}{0}{4}{0}{5}",
@@ -63,7 +65,7 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

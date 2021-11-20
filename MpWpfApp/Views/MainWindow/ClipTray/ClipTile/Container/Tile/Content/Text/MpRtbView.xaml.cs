@@ -195,10 +195,10 @@ namespace MpWpfApp {
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Space && civm.IsEditingContent) {
-                MpHelpers.Instance.RunOnMainThread(async () => {
+               // MpHelpers.Instance.RunOnMainThread(async () => {
                     // TODO Update regex hyperlink matches (but ignore current ones??)
                     //await SyncModelsAsync();
-                });
+                //});
             } 
         }
 
@@ -713,21 +713,8 @@ namespace MpWpfApp {
             InitCaretAdorner();
 
             BindingContext.IsBusy = false;
-            //CleanUpNonExistantTemplates();
         }
 
-        private async Task CleanUpNonExistantTemplates() {
-            //this should only be called after CreateTemplates and not between ClearTemplates
-            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(BindingContext.CopyItemId);
-            var ecitl = BindingContext.TemplateCollection.Templates.Where(x => x.InstanceCount > 0).Select(x=>x.CopyItemTemplate).ToList();
-
-            foreach(var ecit in ecitl) {
-                if(citl.Contains(ecit)) {
-                    citl.Remove(ecit);
-                }
-            }
-            citl.ForEach(x => x.DeleteFromDatabase());
-        }
         #endregion
     }
 }

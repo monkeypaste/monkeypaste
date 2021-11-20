@@ -84,8 +84,7 @@ namespace MpWpfApp {
             }
             set {
                 if(App != null && App.IsAppRejected != value) {
-                    App.IsAppRejected = MpAppCollectionViewModel.Instance.UpdateRejection(this, value); 
-                    App.WriteToDatabase();
+                    App.IsAppRejected = value;
                     OnPropertyChanged(nameof(IsAppRejected));
                     OnPropertyChanged(nameof(App));
                 }
@@ -147,7 +146,21 @@ namespace MpWpfApp {
         public MpAppViewModel() : base(null) { }
 
         public MpAppViewModel(MpAppCollectionViewModel parent, MpApp app) : base(parent) {
+            PropertyChanged += MpAppViewModel_PropertyChanged;
             App = app;
+        }
+
+        private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsAppRejected):
+                    Task.Run(async () => {
+                        bool isRejected = await MpAppCollectionViewModel.Instance.UpdateRejection(this, IsAppRejected);
+                        if(isRejected != App.IsAppRejected) {
+                            await App.WriteToDatabaseAsync();
+                        }                        
+                    });
+                    break;
+            }
         }
         #endregion
 

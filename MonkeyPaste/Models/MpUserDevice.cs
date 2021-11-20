@@ -72,14 +72,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public static MpUserDevice GetUserDeviceByGuid(string deviceGuid) {
-            return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.UserDeviceGuid.ToString() == deviceGuid).FirstOrDefault();
-        }
-
-        public static MpUserDevice GetUserDeviceById(int udid) {
-            return MpDb.Instance.GetItems<MpUserDevice>().Where(x => x.Id == udid).FirstOrDefault();
-        }
-
         public MpUserDevice() { }
 
         public MpUserDevice(string deviceGuid, MonkeyPaste.MpUserDeviceType platformTypeId) : this() {
@@ -116,7 +108,9 @@ namespace MonkeyPaste {
             return ud;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
+
             return string.Format(
                 @"{0}{1}{0}{2}{0}",
                 ParseToken,
@@ -128,7 +122,9 @@ namespace MonkeyPaste {
             return typeof(MpUserDevice);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
+
             MpUserDevice other = null;
             if (drOrModel is MpUserDevice) {
                 other = drOrModel as MpUserDevice;

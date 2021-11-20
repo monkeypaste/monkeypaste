@@ -18,7 +18,8 @@
                       VerticalAlignment="Top"
                       Width="Auto"
                       Height="Auto"
-                      SelectedIndex="{Binding SelectedExcludedAppIndex, Mode=TwoWay}"
+                      SelectedIndex="{Binding SelectedExcludedAppIndex,
+                                              Mode=TwoWay}"
                       SelectionMode="Single"
                       GridLinesVisibility="None"
                       CanUserAddRows="False"
@@ -33,7 +34,9 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -63,7 +66,9 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
                                           VerticalContentAlignment="Stretch"
-                                          IsChecked="{Binding IsAppRejected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                          IsChecked="{Binding IsAppRejected,
+                                                              Mode=TwoWay,
+                                                              UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

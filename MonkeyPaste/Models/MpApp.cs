@@ -171,9 +171,9 @@ namespace MonkeyPaste {
             var a = new MpApp() {
                 AppGuid = System.Guid.Parse(objParts[0])
             };
-            a.UserDevice = MpDb.Instance.GetDbObjectByTableGuid("MpUserDevice", objParts[1]) as MpUserDevice;
+            a.UserDevice = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
             a.UserDeviceId = a.UserDevice.Id;
-            a.Icon = MpDb.Instance.GetDbObjectByTableGuid("MpIcon", objParts[2]) as MpIcon;
+            a.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
             a.IconId = a.Icon.Id;
 
             a.AppPath = objParts[3];
@@ -182,7 +182,9 @@ namespace MonkeyPaste {
             return a;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
+
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
                 ParseToken,
@@ -198,7 +200,9 @@ namespace MonkeyPaste {
             return typeof(MpApp);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
+
             MpApp other = null;
             if (drOrModel is MpApp) {
                 other = drOrModel as MpApp;

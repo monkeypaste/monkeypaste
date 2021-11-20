@@ -106,27 +106,27 @@ namespace MonkeyPaste {
         #endregion
 
         #region Static Methods
-        public static List<MpShortcut> GetAllShortcuts() {
-            //List<MpShortcut> commands = new List<MpShortcut>();
-            //DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
-            //if (dt != null && dt.Rows.Count > 0) {
-            //    foreach (DataRow dr in dt.Rows) {
-            //        commands.Add(new MpShortcut(dr));
-            //    }
-            //}
-            //return commands;
+        //public static List<MpShortcut> GetAllShortcuts() {
+        //    //List<MpShortcut> commands = new List<MpShortcut>();
+        //    //DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
+        //    //if (dt != null && dt.Rows.Count > 0) {
+        //    //    foreach (DataRow dr in dt.Rows) {
+        //    //        commands.Add(new MpShortcut(dr));
+        //    //    }
+        //    //}
+        //    //return commands;
 
-            return MpDb.Instance.GetItems<MpShortcut>();
-        }
-        public static List<MpShortcut> GetShortcutByName(string shortcutName) {
-            return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();
-        }
-        public static List<MpShortcut> GetShortcutListByCopyItemId(int copyItemId) {
-            return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
-        }
-        public static List<MpShortcut> GetShortcutByTagId(int tagId) {
-            return GetAllShortcuts().Where(x => x.TagId == tagId).ToList();
-        }
+        //    return MpDb.Instance.GetItems<MpShortcut>();
+        //}
+        //public static List<MpShortcut> GetShortcutByName(string shortcutName) {
+        //    return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();
+        //}
+        //public static List<MpShortcut> GetShortcutListByCopyItemId(int copyItemId) {
+        //    return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
+        //}
+        //public static List<MpShortcut> GetShortcutByTagId(int tagId) {
+        //    return GetAllShortcuts().Where(x => x.TagId == tagId).ToList();
+        //}
         #endregion
 
         #region Public Methods

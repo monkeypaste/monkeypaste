@@ -10,7 +10,8 @@
              Loaded="ClipTile_ContextMenu_Loaded"
              Opened="ClipTile_ContextMenu_Opened"
              Closed="ClipTile_ContextMenu_Closed"
-             d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
+                                              IsDesignTimeCreatable=False}">
     <ContextMenu.Resources>
         <Style x:Key="DefaultItemStyle"
                TargetType="MenuItem">
@@ -34,33 +35,53 @@
     </ContextMenu.Resources>
     <MenuItem Header="_Copy"
               Tag="27"
-              Icon="{Binding Source={StaticResource CopyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding CopyCommand, Source={StaticResource ClipTrayViewModel}}" />
+              Icon="{Binding Source={StaticResource CopyIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding CopySelectedClipsCommand,
+                                Source={StaticResource ClipTrayViewModel}}" />
     <MenuItem Header="_Paste"
               Tag="6"
-              Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding PasteCommand, Source={StaticResource ClipTrayViewModel}}" />
+              Icon="{Binding Source={StaticResource PasteIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding PasteSelectedClipsCommand,
+                                Source={StaticResource ClipTrayViewModel}}" />
     <Separator />
     <MenuItem Header="Delete"
               Tag="7"
-              Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding DeleteCommand, Source={StaticResource ClipTrayViewModel}}" />
+              Icon="{Binding Source={StaticResource DeleteIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding DeleteSelectedClipsCommand,
+                                Source={StaticResource ClipTrayViewModel}}" />
     <Separator />
     <MenuItem Header="_Edit"
-              Icon="{Binding Source={StaticResource EditIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
+              Icon="{Binding Source={StaticResource EditIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}">
         <MenuItem Header="_Edit Content"
                   Tag="20"
-                  Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding EditSelectedContentCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource EditContentIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding EditSelectedContentCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="_Rename"
                   Tag="21"
-                  Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding EditTitleCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource RenameIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding EditSelectedTitleCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <Separator />
         <MenuItem x:Name="TranslateMenuItem"
                   Header="Translate"
-                  Icon="{Binding Source={StaticResource TranslateIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  ItemsSource="{Binding TranslateLanguageMenuItems, Source={StaticResource ClipTrayViewModel}}">
+                  Icon="{Binding Source={StaticResource TranslateIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  ItemsSource="{Binding TranslateLanguageMenuItems,
+                                        Source={StaticResource ClipTrayViewModel}}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="{x:Type MenuItem}">
                     <Setter Property="Header"
@@ -79,104 +100,167 @@
     </MenuItem>
     <MenuItem x:Name="AnalyzeMenuItem"
               Header="_Analyze"
-              Icon="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              ItemsSource="{Binding PresetMenuItems, Source={StaticResource AnalyticItemCollectionViewModel}}"
+              Icon="{Binding Source={StaticResource BrainIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              ItemsSource="{Binding PresetMenuItems,
+                                    Source={StaticResource AnalyticItemCollectionViewModel}}"
               ItemContainerStyle="{StaticResource DefaultItemStyle}" />
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
-              Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
+              Icon="{Binding Source={StaticResource ToolsIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}">
         <MenuItem Header="Duplicate"
                   Tag="22"
-                  Icon="{Binding Source={StaticResource DuplicateIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding DuplicateCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource DuplicateIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding DuplicateSelectedClipsCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="_Merge"
                   Tag="17"
-                  Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding MergeCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource MergeIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding MergeSelectedClipsCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <Separator />
         <MenuItem Header="Send as Email"
                   Tag="23"
-                  Icon="{Binding Source={StaticResource EmailIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding SendToEmailCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource EmailIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding SendToEmailCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="Duplicate As _Qr Code"
                   Tag="24"
-                  Icon="{Binding Source={StaticResource QrIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding CreateQrCodeCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource QrIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding CreateQrCodeFromSelectedClipsCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <Separator />
         <MenuItem Header="Say"
                   Tag="16"
-                  Icon="{Binding Source={StaticResource SpeakIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding SpeakCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource SpeakIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding SpeakSelectedClipsCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <Separator />
         <MenuItem Header="Search"
-                  Icon="{Binding Source={StaticResource SearchIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
+                  Icon="{Binding Source={StaticResource SearchIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}">
             <MenuItem Header="_Google"
-                      Icon="{Binding Source={StaticResource GoogleIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                      Command="{Binding SearchWebCommand, Source={StaticResource ClipTrayViewModel}}"
+                      Icon="{Binding Source={StaticResource GoogleIcon},
+                                     Converter={StaticResource StringToIconConverter},
+                                     Mode=OneWay}"
+                      Command="{Binding SearchWebCommand,
+                                        Source={StaticResource ClipTrayViewModel}}"
                       CommandParameter="https://www.google.com/search?q=" />
             <MenuItem Header="_Bing"
-                      Icon="{Binding Source={StaticResource BingIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                      Command="{Binding SearchWebCommand, Source={StaticResource ClipTrayViewModel}}"
+                      Icon="{Binding Source={StaticResource BingIcon},
+                                     Converter={StaticResource StringToIconConverter},
+                                     Mode=OneWay}"
+                      Command="{Binding SearchWebCommand,
+                                        Source={StaticResource ClipTrayViewModel}}"
                       CommandParameter="https://www.bing.com/search?q=" />
             <MenuItem Header="_DuckDuckGo"
-                      Icon="{Binding Source={StaticResource DuckIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                      Command="{Binding SearchWebCommand, Source={StaticResource ClipTrayViewModel}}"
+                      Icon="{Binding Source={StaticResource DuckIcon},
+                                     Converter={StaticResource StringToIconConverter},
+                                     Mode=OneWay}"
+                      Command="{Binding SearchWebCommand,
+                                        Source={StaticResource ClipTrayViewModel}}"
                       CommandParameter="https://duckduckgo.com/?q=" />
             <MenuItem Header="_Yandex"
-                      Icon="{Binding Source={StaticResource YandexIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                      Command="{Binding SearchWebCommand, Source={StaticResource ClipTrayViewModel}}"
+                      Icon="{Binding Source={StaticResource YandexIcon},
+                                     Converter={StaticResource StringToIconConverter},
+                                     Mode=OneWay}"
+                      Command="{Binding SearchWebCommand,
+                                        Source={StaticResource ClipTrayViewModel}}"
                       CommandParameter="https://yandex.com/search/?text=" />
         </MenuItem>
         <Separator />
         <MenuItem x:Name="ExcludeApplication"
                   Header="Exclude Application"
-                  Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding ExcludeApplicationCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource NoEntryIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding ExcludeSubSelectedItemApplicationCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="Add Paste Macro For Application"
-                  Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+                  Icon="{Binding Source={StaticResource RobotClawIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding ShowSettingsWindowCommand,
+                                    Source={StaticResource SystemTrayViewModel}}"
                   CommandParameter="{Binding}" />
     </MenuItem>
     <MenuItem Header="_Selection"
-              Icon="{Binding Source={StaticResource SelectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
+              Icon="{Binding Source={StaticResource SelectionIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}">
         <MenuItem Header="_Bring to Front"
                   Tag="12"
-                  Icon="{Binding Source={StaticResource BringToFrontIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding BringToFrontCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource BringToFrontIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding BringSelectedClipTilesToFrontCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="_Send to Back"
                   Tag="13"
-                  Icon="{Binding Source={StaticResource SendToBackIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding SendToBackCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource SendToBackIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding SendSelectedClipTilesToBackCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <Separator />
         <MenuItem Header="Select _All"
                   Tag="10"
-                  Icon="{Binding Source={StaticResource SelectAllIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding SelectAllCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource SelectAllIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding SelectAllCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
         <MenuItem Header="_Invert Selection"
                   Tag="11"
-                  Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                  Command="{Binding InvertSelectionCommand, Source={StaticResource ClipTrayViewModel}}" />
+                  Icon="{Binding Source={StaticResource InvertSelectionIcon},
+                                 Converter={StaticResource StringToIconConverter},
+                                 Mode=OneWay}"
+                  Command="{Binding InvertSelectionCommand,
+                                    Source={StaticResource ClipTrayViewModel}}" />
     </MenuItem>
     <MenuItem DataContext="{StaticResource ClipTrayViewModel}"
-              d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel, IsDesignTimeCreatable=False}"
+              d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
+                                               IsDesignTimeCreatable=False}"
               Header="_Hotkey"
               Tag="14"
-              Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+              Icon="{Binding Source={StaticResource HotkeyIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
               InputGestureText="{Binding PrimaryItem.PrimaryItem.ShortcutKeyString}"
-              Command="{Binding AssignHotkeyCommand, Source={StaticResource ClipTrayViewModel}}" />
+              Command="{Binding AssignHotkeyCommand,
+                                Source={StaticResource ClipTrayViewModel}}" />
     <Separator />
     <MenuItem x:Name="ClipTileColorContextMenuItem"
               Style="{StaticResource ColorPalleteMenuItemStyle}" />
     <Separator />
     <MenuItem x:Name="PasteToAppPathMenuItem"
               Header="Paste To Application"
-              Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
+              Icon="{Binding Source={StaticResource PasteIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}" />
     <Separator />
     <MenuItem x:Name="CollectionParentMenuItem"
               Header="Pin To _Collection"
               Tag="8080"
-              Icon="{Binding Source={StaticResource PinToCollectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              ItemsSource="{Binding TagMenuItems, Source={StaticResource ClipTrayViewModel}}">
+              Icon="{Binding Source={StaticResource PinToCollectionIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              ItemsSource="{Binding TagMenuItems,
+                                    Source={StaticResource ClipTrayViewModel}}">
         <MenuItem.ItemContainerStyle>
             <Style TargetType="{x:Type MenuItem}">
                 <Setter Property="Header"

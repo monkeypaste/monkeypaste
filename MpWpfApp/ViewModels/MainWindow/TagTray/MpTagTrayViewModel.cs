@@ -251,14 +251,14 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand DeleteTagCommand => new RelayCommand<object>(
-            (tagId) => {
+            async (tagId) => {
                 //when removing a tag auto-select the history tag
 
                 var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
                 TagTileViewModels.Remove(ttvm);
 
                 if (!ttvm.Tag.IsSyncing) {
-                    ttvm.Tag.DeleteFromDatabase();
+                    await ttvm.Tag.DeleteFromDatabaseAsync();
                 }
 
                 ResetTagSelection();
@@ -276,14 +276,14 @@ namespace MpWpfApp {
             });
 
         public ICommand CreateTagCommand => new RelayCommand(
-            () => {
+            async() => {
                 //add tag to datastore so TagTile collection will automatically add the tile
                 MpTag newTag = new MpTag() {
                     TagName = "Untitled",
                     HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
                     TagSortIdx = TagTileViewModels.Count
                 };
-                newTag.WriteToDatabase();
+                await newTag.WriteToDatabaseAsync();
                 TagTileViewModels.Add(CreateTagTileViewModel(newTag));
             });
 

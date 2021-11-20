@@ -55,7 +55,7 @@ namespace MpWpfApp {
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator");
             } else {
-                tai = MpDb.Instance.GetItem<MpAnalyticItem>(tai.Id);
+                tai = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(tai.Id);
             }            
 
             await InitializeDefaultsAsync(tai);

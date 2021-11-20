@@ -74,7 +74,7 @@
                                Foreground="White"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding TotalItemCount}"
+                    <TextBlock Text="{Binding TotalItemCountLabel}"
                                Foreground="White"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />

@@ -5,15 +5,10 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using MonkeyPaste;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpViewModelBase<object> {
-        #region Singleton Definition
-        private static readonly Lazy<MpSystemTrayViewModel> _Lazy = new Lazy<MpSystemTrayViewModel>(() => new MpSystemTrayViewModel());
-        public static MpSystemTrayViewModel Instance { get { return _Lazy.Value; } }
-
-        public void Init() { }
-        #endregion
+    public class MpSystemTrayViewModel : MpSingletonViewModel<MpSystemTrayViewModel> {
 
         #region View Models
         private MpSettingsWindowViewModel _settingsWindowViewModel = null;
@@ -63,11 +58,7 @@ namespace MpWpfApp {
             }
         }
 
-        public string TotalItemCount {
-            get {
-                return MpDb.Instance.GetItems<MpCopyItem>().Count.ToString() + " total entries";
-            }
-        }
+        public string TotalItemCountLabel { get; set; }
 
         public string DbSizeInMbs {
             get {
@@ -100,8 +91,13 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
-        public MpSystemTrayViewModel() : base(null) { }
+        #region Constructors
+
+
+        public async Task Init() {
+            int totalItemCount = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            TotalItemCountLabel = string.Format(@"{0} total entries", totalItemCount);
+        }
 
         #endregion
 

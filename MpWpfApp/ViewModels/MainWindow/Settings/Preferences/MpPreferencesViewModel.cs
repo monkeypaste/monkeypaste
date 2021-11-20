@@ -212,6 +212,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpPreferencesViewModel() : base(null) { }
+
         public MpPreferencesViewModel(MpSettingsWindowViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {

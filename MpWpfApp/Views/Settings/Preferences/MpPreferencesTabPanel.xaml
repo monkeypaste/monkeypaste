@@ -49,7 +49,11 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Language" />
                 <ComboBox ItemsSource="{Binding Languages}"
-                          SelectedItem="{Binding SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                          SelectedItem="{Binding SelectedLanguage,
+                                                 Mode=TwoWay,
+                                                 UpdateSourceTrigger=PropertyChanged,
+                                                 NotifyOnTargetUpdated=True,
+                                                 NotifyOnSourceUpdated=True}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Max Rtf Char Count" />
@@ -63,7 +67,11 @@
                         Orientation="Horizontal">
                 <Label Content="Speaking Voice" />
                 <ComboBox ItemsSource="{Binding VoiceNames}"
-                          SelectedItem="{Binding SelectedVoiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                          SelectedItem="{Binding SelectedVoiceName,
+                                                 Mode=TwoWay,
+                                                 UpdateSourceTrigger=PropertyChanged,
+                                                 NotifyOnTargetUpdated=True,
+                                                 NotifyOnSourceUpdated=True}" />
             </StackPanel>
             <Grid>
                 <StackPanel Orientation="Vertical"
@@ -71,7 +79,8 @@
                     <Label Content="Paste to Applications" />
                     <DataGrid x:Name="PasteToAppPathDatagrid"
                               ItemsSource="{Binding}"
-                              SelectedItem="{Binding SelectedPasteToAppPathViewModel, Mode=TwoWay}"
+                              SelectedItem="{Binding SelectedPasteToAppPathViewModel,
+                                                     Mode=TwoWay}"
                               SelectionMode="Single"
                               Margin="10,0,10,5"
                               Width="Auto"
@@ -121,7 +130,11 @@
                                         <TextBox IsReadOnly="{Binding IsReadOnly}"
                                                  Background="Transparent"
                                                  BorderThickness="0"
-                                                 Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                 Text="{Binding Label,
+                                                                Mode=TwoWay,
+                                                                UpdateSourceTrigger=LostFocus,
+                                                                NotifyOnTargetUpdated=True,
+                                                                NotifyOnSourceUpdated=True}"
                                                  VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -133,7 +146,11 @@
                                         <TextBox IsReadOnly="{Binding IsReadOnly}"
                                                  Background="Transparent"
                                                  BorderThickness="0"
-                                                 Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                 Text="{Binding Args,
+                                                                Mode=TwoWay,
+                                                                UpdateSourceTrigger=LostFocus,
+                                                                NotifyOnTargetUpdated=True,
+                                                                NotifyOnSourceUpdated=True}"
                                                  VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -144,7 +161,11 @@
                                     <DataTemplate>
                                         <CheckBox HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
-                                                  IsChecked="{Binding IsAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                                  IsChecked="{Binding IsAdmin,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged,
+                                                                      NotifyOnTargetUpdated=True,
+                                                                      NotifyOnSourceUpdated=True}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -154,7 +175,11 @@
                                     <DataTemplate>
                                         <CheckBox HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
-                                                  IsChecked="{Binding IsSilent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                                  IsChecked="{Binding IsSilent,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged,
+                                                                      NotifyOnTargetUpdated=True,
+                                                                      NotifyOnSourceUpdated=True}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -164,7 +189,11 @@
                                     <DataTemplate>
                                         <CheckBox HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
-                                                  IsChecked="{Binding PressEnter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                                  IsChecked="{Binding PressEnter,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged,
+                                                                      NotifyOnTargetUpdated=True,
+                                                                      NotifyOnSourceUpdated=True}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -189,7 +218,8 @@
                                         <Button Background="White"
                                                 BorderThickness="0"
                                                 ToolTip="Delete"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeletePasteToAppPathCommand}">
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
+                                                                  Path=DataContext.DeletePasteToAppPathCommand}">
                                             <Image Width="20"
                                                    Height="20"
                                                    Source="/MpWpfApp;component/Resources/Images/delete.png" />

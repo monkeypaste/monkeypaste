@@ -8,8 +8,6 @@ namespace MpWpfApp {
     public class MpComboBoxParameterViewModel : MpAnalyticItemParameterViewModel {
         #region Private Variables
 
-        private string _defaultValue;
-
         #endregion
         #region Properties
 

@@ -207,7 +207,9 @@ namespace MpWpfApp {
             set {
                 if (Tag.Id != value) {
                     Tag.Id = value;
-                    Tag.WriteToDatabase();
+                    Task.Run(async () => {
+                        await Tag.WriteToDatabaseAsync();
+                    });
                     OnPropertyChanged(nameof(TagId));
                 }
             }
@@ -220,7 +222,9 @@ namespace MpWpfApp {
             set {
                 if (Tag.TagSortIdx != value) {
                     Tag.TagSortIdx = value;
-                    Tag.WriteToDatabase();
+                    Task.Run(async () => {
+                        await Tag.WriteToDatabaseAsync();
+                    });
                     OnPropertyChanged(nameof(TagSortIdx));
                 }
             }
@@ -252,7 +256,9 @@ namespace MpWpfApp {
             set {
                 if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
                     Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    Tag.WriteToDatabase();
+                    Task.Run(async () => {
+                        await Tag.WriteToDatabaseAsync();
+                    });
                     OnPropertyChanged(nameof(TagBrush));
                     OnPropertyChanged(nameof(TagCountTextColor));
                 }
@@ -296,7 +302,7 @@ namespace MpWpfApp {
             Tag = tag;
         }
                 
-        private  void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEditing):
                     if (IsEditing) {
@@ -306,7 +312,9 @@ namespace MpWpfApp {
                         if (_wasEditingName) {
                             _wasEditingName = false;
                             if (TagName != _originalTagName) {
-                                Tag.WriteToDatabase();
+                                Task.Run(async () => {
+                                    await Tag.WriteToDatabaseAsync();
+                                });
                             }
                         }
                     }
@@ -433,19 +441,20 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.Instance.RunOnMainThread(
+                async() => {
                 if (sender is MpCopyItemTag cit) {
                     if(TagId == cit.TagId) {
                         cit.StartSync(e.SourceGuid);
-                        var dupCheck = MpDb.Instance.GetItems<MpCopyItemTag>().Where(x=>x.TagId == cit.TagId && x.CopyItemId == cit.CopyItemId).FirstOrDefault();
+                            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(cit.TagId, cit.CopyItemId);
                         if (dupCheck != null) {
                             MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
                         }
-                        cit.WriteToDatabase();
+                        await cit.WriteToDatabaseAsync();
                         cit.EndSync();
                     }                    
                 }
-            }));
+            });
         }
 
 
@@ -466,11 +475,11 @@ namespace MpWpfApp {
             });
 
         public ICommand ChangeColorCommand => new RelayCommand<object>(
-            (args) => {
+            async (args) => {
                 var newBrush = args as Brush;
                 if (newBrush != null) {
                     TagBrush = newBrush;
-                    Tag.WriteToDatabase();
+                    await Tag.WriteToDatabaseAsync();
                 }
             });
 
@@ -481,9 +490,9 @@ namespace MpWpfApp {
             });
 
         public ICommand FinishRenameTagCommand => new RelayCommand(
-            () => {
+            async() => {
                 IsEditing = false;
-                Tag.WriteToDatabase();
+                await Tag.WriteToDatabaseAsync();
             });
 
         public ICommand RenameTagCommand => new RelayCommand(

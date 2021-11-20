@@ -234,7 +234,7 @@ namespace MpWpfApp {
                     } else  {
                         IntPtr hwnd = LastWindowWatcher.LastHandle;
                         string processPath = MpHelpers.Instance.GetProcessPath(hwnd);
-                        if(MpDataModelProvider.Instance.IsAppRejected(processPath)) {
+                        if(MpAppCollectionViewModel.Instance.IsAppRejected(processPath)) {
                             MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
                             ClipboardChanged?.Invoke(this, cbo);

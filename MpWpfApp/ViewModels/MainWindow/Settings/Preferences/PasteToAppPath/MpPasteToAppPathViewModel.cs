@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, IDisposable {
+    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection> {
         #region Private Variables
         #endregion
 
@@ -137,7 +137,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.PressEnter != value) {
                     PasteToAppPath.PressEnter = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(PressEnter));
                 }
             }
@@ -153,7 +153,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath.WindowState != (int)value) {
                     PasteToAppPath.WindowState = (int)value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(WindowState));
                 }
             }
@@ -171,7 +171,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null) {
                     PasteToAppPath.AvatarDbImage.ImageBase64 = value.ToBase64String();
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(AppIcon));
                 }
             }
@@ -190,7 +190,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.Args != value) {
                     PasteToAppPath.Args = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(Args));
                 }
             }
@@ -209,7 +209,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.Label != value) {
                     PasteToAppPath.Label = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(Label));
                 }
             }
@@ -225,7 +225,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.IsSilent != value) {
                     PasteToAppPath.IsSilent = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(IsSilent));
                     OnPropertyChanged(nameof(AppName));
                 }
@@ -242,7 +242,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.IsAdmin != value) {
                     PasteToAppPath.IsAdmin = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(IsAdmin));
                     OnPropertyChanged(nameof(AppName));
                 }
@@ -262,7 +262,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath.AppName != value && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppName = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(AppName));
                 }
             }
@@ -278,7 +278,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppPath = value;
-                    PasteToAppPath.WriteToDatabase();
+                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(AppPath));
                 }
             }
@@ -351,9 +351,9 @@ namespace MpWpfApp {
             }
             return string.Empty;
         }
-        public override void Dispose() {
+        public async Task DisposeAsync() {
             base.Dispose();
-            PasteToAppPath.DeleteFromDatabase();
+            await PasteToAppPath.DeleteFromDatabaseAsync();
         }
         #endregion
 

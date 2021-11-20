@@ -108,7 +108,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        private MpPasteToAppPathViewModelCollection() : base() {
+        public async Task Init() {
             MpRunningApplicationManager.Instance.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):
@@ -118,9 +118,13 @@ namespace MpWpfApp {
                 }
             };
 
-            foreach (var ptap in MpPasteToAppPath.GetAllPasteToAppPaths()) {
-                this.Add(new MpPasteToAppPathViewModel(this,ptap));
+            var allPasteToAppPaths = await MpDb.Instance.GetItemsAsync<MpPasteToAppPath>();
+            foreach (var ptap in allPasteToAppPaths) {
+                this.Add(new MpPasteToAppPathViewModel(this, ptap));
             }
+        }
+        private MpPasteToAppPathViewModelCollection() : base() {
+            
         }
         public void PasteToAppPathDataGrid_Loaded(object sender, RoutedEventArgs args) {
             var dg = (DataGrid)sender;
@@ -312,46 +316,44 @@ namespace MpWpfApp {
             this.Remove(SelectedPasteToAppPathViewModel);
         }
 
-        private RelayCommand<object> _addPasteToAppPathCommand;
-        public ICommand AddPasteToAppPathCommand {
-            get {
-                if (_addPasteToAppPathCommand == null) {
-                    _addPasteToAppPathCommand = new RelayCommand<object>(AddPasteToAppPath);
-                }
-                return _addPasteToAppPathCommand;
-            }
-        }
-        private void AddPasteToAppPath(object args) {
-            string appPath = string.Empty;
-            if (args is MpApp) {
-                appPath = (args as MpApp).AppPath;
-                if (!File.Exists(appPath)) {
-                    Console.WriteLine("AddPasteToAppPath error, appPath does not exist: " + appPath);
-                    return;
-                }
-            } else {
-                var openFileDialog = new OpenFileDialog() {
-                    Filter = "Applications|*.lnk;*.exe",
-                    Title = "Select application path",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                };
-                bool? openResult = openFileDialog.ShowDialog();
-                if (openResult != null && openResult.Value) {
-                    appPath = openFileDialog.FileName;
-                    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                        appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+        public ICommand AddPasteToAppPathCommand => new RelayCommand<object>(
+            async (args) => {
+                string appPath = string.Empty;
+                if (args is MpApp) {
+                    appPath = (args as MpApp).AppPath;
+                    if (!File.Exists(appPath)) {
+                        Console.WriteLine("AddPasteToAppPath error, appPath does not exist: " + appPath);
+                        return;
+                    }
+                } else {
+                    var openFileDialog = new OpenFileDialog() {
+                        Filter = "Applications|*.lnk;*.exe",
+                        Title = "Select application path",
+                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                    };
+                    bool? openResult = openFileDialog.ShowDialog();
+                    if (openResult != null && openResult.Value) {
+                        appPath = openFileDialog.FileName;
+                        if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                            appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                        }
                     }
                 }
-            }
 
-            var nptapvm = new MpPasteToAppPathViewModel(this,new MpPasteToAppPath(
-                appPath, string.Empty, MpHelpers.Instance.GetIconImage(appPath).ToBase64String(),false));
-            nptapvm.PasteToAppPath.WriteToDatabase();
-            this.Add(nptapvm);
+                var nptapvm = new MpPasteToAppPathViewModel(
+                    this, 
+                    new MpPasteToAppPath(
+                        appPath, 
+                        string.Empty, 
+                        MpHelpers.Instance.GetIconImage(appPath).ToBase64String(), 
+                        false));
 
-            SelectedPasteToAppPathViewModel = nptapvm;
-            Validate();
-        }
+                await nptapvm.PasteToAppPath.WriteToDatabaseAsync();
+                this.Add(nptapvm);
+
+                SelectedPasteToAppPathViewModel = nptapvm;
+                Validate();
+            });
         #endregion
 
         #region INotifyPropertyChanged 

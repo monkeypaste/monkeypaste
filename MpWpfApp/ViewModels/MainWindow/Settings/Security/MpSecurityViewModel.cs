@@ -70,22 +70,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _deleteExcludedAppCommand;
-        public ICommand DeleteExcludedAppCommand {
-            get {
-                if (_deleteExcludedAppCommand == null) {
-                    _deleteExcludedAppCommand = new RelayCommand(DeleteExcludedApp);
-                }
-                return _deleteExcludedAppCommand;
-            }
-        }
-        private void DeleteExcludedApp() {
-            MonkeyPaste.MpConsole.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
-            var eavm = AppViewModels[SelectedExcludedAppIndex];
-            AppViewModels[AppViewModels.IndexOf(eavm)].IsAppRejected = false;
-            AppViewModels[AppViewModels.IndexOf(eavm)].App.WriteToDatabase();
-            OnPropertyChanged(nameof(AppViewModels));
-        }
+        public ICommand DeleteExcludedAppCommand => new RelayCommand(
+            async () => {
+                MonkeyPaste.MpConsole.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
+                var eavm = AppViewModels[SelectedExcludedAppIndex];
+                AppViewModels[AppViewModels.IndexOf(eavm)].IsAppRejected = false;
+                await AppViewModels[AppViewModels.IndexOf(eavm)].App.WriteToDatabaseAsync();
+                OnPropertyChanged(nameof(AppViewModels));
+            });
 
         public ICommand AddExcludedAppCommand => new RelayCommand(
             async () => {
@@ -106,16 +98,16 @@ namespace MpWpfApp {
                         //if unknown app just add it with rejection flag
                         var app = await MpApp.Create(appPath, string.Empty, null);
                         neavm = new MpAppViewModel(MpAppCollectionViewModel.Instance, app);
-                        MpAppCollectionViewModel.Instance.Add(neavm);
+                        await MpAppCollectionViewModel.Instance.AddApp(neavm);
                     } else if (neavm.IsAppRejected) {
                         //if app is already rejected set it to selected in grid
                         MessageBox.Show(neavm.AppName + " is already being rejected");
                         neavm.IsSelected = true;
                     } else {
                         //otherwise update rejection and prompt about current clips
-                        MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
+                        await MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
                     }
-                    MpAppCollectionViewModel.Instance.Refresh();
+                    await MpAppCollectionViewModel .Instance.Refresh();
                 }
                 //OnPropertyChanged(nameof(AppViewModels));
             });

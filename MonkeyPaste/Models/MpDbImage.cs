@@ -30,14 +30,7 @@ namespace MonkeyPaste {
 
         public string ImageBase64 { get; set; }
 
-        public static async Task<MpDbImage> GetDbImageByIdAsync(int id) {
-            var allicons = await MpDb.Instance.GetItemsAsync<MpDbImage>();
-            return allicons.Where(x => x.Id == id).FirstOrDefault();
-        }
-
-        public static MpDbImage GetDbImageById(int id) {
-            return MpDb.Instance.GetItems<MpDbImage>().Where(x => x.Id == id).FirstOrDefault();
-        }
+        
         public MpDbImage() { }
 
         public async Task<object> CreateFromLogs(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
@@ -74,7 +67,8 @@ namespace MonkeyPaste {
             return img;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
             return string.Format(
                 @"{0}{1}{0}{2}{0}",
                 ParseToken,
@@ -86,8 +80,11 @@ namespace MonkeyPaste {
             return typeof(MpDbImage);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
+
             MpDbImage other = null;
+            
             if (drOrModel is MpDbImage) {
                 other = drOrModel as MpDbImage;
             } else {

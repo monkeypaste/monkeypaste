@@ -137,6 +137,7 @@ using System.Speech.Synthesis;
                 if (HoverItem != null) {
                     return HoverItem;
                 }
+
                 return HeadItem;
             }
         }
@@ -774,16 +775,15 @@ using System.Speech.Synthesis;
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem headItem) {
+        public async Task InitializeAsync(MpCopyItem headItem, int primaryItemId = 0) {
             IsBusy = true;
-
             ItemViewModels.Clear();
             if (headItem != null) {
                 var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.Count; i++) {
-                    var civm = await CreateContentItemViewModel(ccil[i]);
+                    var civm = await CreateContentItemViewModel(ccil[i],primaryItemId);
                     ItemViewModels.Add(civm);
                 }
 
@@ -801,9 +801,9 @@ using System.Speech.Synthesis;
             IsBusy = false;
         }
 
-        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci) {
+        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci, int queryItemId = -1) {
             var civm = new MpContentItemViewModel(this);
-            await civm.InitializeAsync(ci);
+            await civm.InitializeAsync(ci,queryItemId);
             return civm;
         }
 
@@ -1714,8 +1714,7 @@ using System.Speech.Synthesis;
                 var tempSubSelectedRtbvml = SelectedItems;
                 ClearSelection();
                 foreach (var srtbvm in tempSubSelectedRtbvml) {
-                    var clonedCopyItem = (MpCopyItem)srtbvm.CopyItem.Clone();
-                    clonedCopyItem.WriteToDatabase();
+                    var clonedCopyItem = (MpCopyItem)await srtbvm.CopyItem.Clone();
                     var rtbvm = await CreateContentItemViewModel(clonedCopyItem);
                     ItemViewModels.Add(rtbvm);
                     rtbvm.IsSelected = true;

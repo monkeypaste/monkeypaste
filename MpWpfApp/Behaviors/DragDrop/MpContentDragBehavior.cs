@@ -142,6 +142,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State Changes
+
         private void Drag(MouseEventArgs e) {
             var parent = Application.Current.MainWindow;
 

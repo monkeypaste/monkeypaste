@@ -408,32 +408,24 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(KeyString));
         }
 
-        private RelayCommand _okCommand;
-        public ICommand OkCommand {
-            get {
-                if (_okCommand == null) {
-                    _okCommand = new RelayCommand(Ok);
-                }
-                return _okCommand;
-            }
-        }
-        private void Ok() {
-            if(DuplicatedShortcutViewModel != null) {
-                if(DuplicatedShortcutViewModel.IsCustom()) {
-                    if(DuplicatedShortcutViewModel.CopyItemId > 0) {
-                        //clear input gesture text
-                        MpClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
-                    } else {
-                        MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
+        public ICommand OkCommand => new RelayCommand(
+            async () => {
+                if (DuplicatedShortcutViewModel != null) {
+                    if (DuplicatedShortcutViewModel.IsCustom()) {
+                        if (DuplicatedShortcutViewModel.CopyItemId > 0) {
+                            //clear input gesture text
+                            MpClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
+                        } else {
+                            MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
+                        }
                     }
+                    DuplicatedShortcutViewModel.KeyString = string.Empty;
+                    await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
+                    DuplicatedShortcutViewModel.Unregister();
                 }
-                DuplicatedShortcutViewModel.KeyString = string.Empty;
-                DuplicatedShortcutViewModel.Shortcut.WriteToDatabase();
-                DuplicatedShortcutViewModel.Unregister();
-            }
-            _windowRef.DialogResult = true;
-            _windowRef.Close();
-        }
+                _windowRef.DialogResult = true;
+                _windowRef.Close();
+            });
         #endregion
     }
 }

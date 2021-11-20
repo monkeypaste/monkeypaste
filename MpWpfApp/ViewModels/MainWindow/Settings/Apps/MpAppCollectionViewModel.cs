@@ -10,9 +10,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpViewModelBase<object> {
-        private static readonly Lazy<MpAppCollectionViewModel> _Lazy = new Lazy<MpAppCollectionViewModel>(() => new MpAppCollectionViewModel());
-        public static MpAppCollectionViewModel Instance { get { return _Lazy.Value; } }
+    public class MpAppCollectionViewModel : MpSingletonViewModel<MpAppCollectionViewModel> {
 
         #region View Models
         private ObservableCollection<MpAppViewModel> _appViewModels = new ObservableCollection<MpAppViewModel>();
@@ -33,13 +31,16 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Constructors
+
+        public async Task Init() {
+            await Refresh();
+        }
+        public MpAppCollectionViewModel() : base() { }
+
+        #endregion
+
         #region Public Methods
-        public void Init() {
-            //empty to initialize singleton
-        }
-        private MpAppCollectionViewModel() : base(null) {
-            Refresh();
-        }
 
         public MpAppViewModel GetAppViewModelByAppId(int appId) {
             foreach(var avm in AppViewModels.Where(x => x.AppId == appId)) {
@@ -55,7 +56,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        public bool UpdateRejection(MpAppViewModel app, bool rejectApp) {
+        public async Task<bool> UpdateRejection(MpAppViewModel app, bool rejectApp) {
             if(app.App.IsAppRejected == rejectApp) {
                 return rejectApp;
             }
@@ -90,7 +91,7 @@ namespace MpWpfApp {
                 }
                 int appIdx = AppViewModels.IndexOf(app);
                 AppViewModels[appIdx].App.IsAppRejected = rejectApp;
-                AppViewModels[appIdx].App.WriteToDatabase();
+                await AppViewModels[appIdx].App.WriteToDatabaseAsync();
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
                 foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
@@ -106,7 +107,7 @@ namespace MpWpfApp {
             return rejectApp;
         }
 
-        public void Add(MpAppViewModel avm) {
+        public async Task AddApp(MpAppViewModel avm) {
             if(avm.IsAppRejected && avm.App != null) {
                 var dupList = AppViewModels.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {
@@ -134,25 +135,34 @@ namespace MpWpfApp {
                                 // TODO Remove content items or empty clips above
                             }
                             appToReject.IsAppRejected = true;
-                            appToReject.WriteToDatabase();
+                            await appToReject.WriteToDatabaseAsync();
                             return;
                         }
                     }
                 } else {
-                    avm.App.WriteToDatabase();
+                    await avm .App.WriteToDatabaseAsync();
                 }
             }
             //base.Add(avm);
-            Refresh();
+            await Refresh();
+        }
+
+        public bool IsAppRejected(string processPath) {
+            var avm = AppViewModels.FirstOrDefault(x => x.AppPath == processPath);
+            if(avm == null) {
+                return false;
+            }
+            return avm.IsAppRejected;
         }
 
         public void Remove(MpAppViewModel avm) {
             AppViewModels.Remove(avm);
         }
 
-        public void Refresh() {
+        public async Task Refresh() {
+            var appl = await MpDb.Instance.GetItemsAsync<MpApp>();
             AppViewModels.Clear();
-            foreach (var app in MpDb.Instance.GetItems<MpApp>()) {
+            foreach (var app in appl) {
                 AppViewModels.Add(new MpAppViewModel(this,app));
             }
         }

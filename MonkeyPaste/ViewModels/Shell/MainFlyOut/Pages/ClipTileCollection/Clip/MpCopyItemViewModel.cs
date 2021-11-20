@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {
@@ -27,6 +28,8 @@ namespace MonkeyPaste {
 
         #region View Models
         public MpContextMenuViewModel ContextMenuViewModel { get; set; }
+
+        //public ObservableCollection<MpTemp>
         #endregion
 
         public Func<string, Task<string>> EvaluateEditorJavaScript { get; set; }
@@ -69,7 +72,7 @@ namespace MonkeyPaste {
 
         public bool HasTemplates {
             get {
-                return GetTemplates().Count > 0;
+                return false;
             }
         }
 
@@ -167,16 +170,7 @@ namespace MonkeyPaste {
 
             EditorHtml = html;
         }
-
-        private List<MpCopyItemTemplate> GetTemplates() {
-            var tl = new List<MpCopyItemTemplate>();
-            if(CopyItem == null) {
-                return tl;
-            }
-            return MpDb.Instance.GetItems<MpCopyItemTemplate>()
-                                .Where(x => x.CopyItemId == CopyItem.Id)
-                                .ToList();
-        }
+                
 
         private async Task<string> EvalJs(string js) {
             while(EvaluateEditorJavaScript == null) {
@@ -247,7 +241,10 @@ namespace MonkeyPaste {
                 case nameof(IsTitleReadOnly):
                     if (IsTitleReadOnly && CopyItem.Title != _orgTitle) {
                         _orgTitle = CopyItem.Title;
-                        MpDb.Instance.AddOrUpdate<MpCopyItem>(CopyItem);
+                        Task.Run(async()=>{
+                            await CopyItem.WriteToDatabaseAsync();
+                        });
+                        
                     }
                     break;
                 case nameof(EvaluateEditorJavaScript):
@@ -285,7 +282,8 @@ namespace MonkeyPaste {
             //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithCopyItemAsync(CopyItem.Id);
         });
 
-        public ICommand RenameCopyItemCommand => new Command<object>(async (args) => {
+        public ICommand RenameCopyItemCommand => new Command<object>(
+            async (args) => {
             if(!IsExpanded && args != null) {
                 return;
             }
@@ -297,13 +295,13 @@ namespace MonkeyPaste {
                 } else if (e != _orgTitle) {
                     CopyItem.Title = e;
                     OnPropertyChanged(nameof(CopyItem));
-                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
                 }
 
                 if (string.IsNullOrEmpty(CopyItem.Title)) {
                     CopyItem.Title = "Untitled";
                     OnPropertyChanged(nameof(CopyItem));
-                    MpDb.Instance.UpdateItem<MpCopyItem>(CopyItem);
+                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
                 }
 
                 await PopupNavigation.Instance.PopAllAsync();

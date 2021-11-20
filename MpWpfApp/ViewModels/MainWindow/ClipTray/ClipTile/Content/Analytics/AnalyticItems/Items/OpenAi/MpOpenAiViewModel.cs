@@ -60,7 +60,7 @@ namespace MpWpfApp {
                         "Open Ai",
                         "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.");
             } else {
-                oaai = MpDb.Instance.GetItem<MpAnalyticItem>(oaai.Id);
+                oaai = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(oaai.Id);
             }
 
             await InitializeDefaultsAsync(oaai);

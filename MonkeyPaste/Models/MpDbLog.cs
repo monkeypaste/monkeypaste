@@ -71,20 +71,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<MpDbLog> GetDbLogById(int DbLogId) {
-            var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
-            return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
-        }
-
-        public static async Task<List<MpDbLog>> GetDbLogsByGuidAsync(string dboGuid,DateTime fromDateUtc) {
-            var dboLogs = new List<MpDbLog>();
-
-            var allLogs = await MpDb.Instance.GetItemsAsync<MpDbLog>();
-            return allLogs
-                    .Where(x => x.DbObjectGuid.ToString() == dboGuid && x.LogActionDateTime > fromDateUtc)
-                    .ToList();
-        }
-
         public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs (string dboGuid, List<MpDbLog> rlogs, DateTime lastSyncDt) {
             //this is an update so cross check local log and only apply updates more recent
             //than what is local            
@@ -93,7 +79,7 @@ namespace MonkeyPaste {
             var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
             var rlogsToRemove = new List<MpDbLog>();
             //query local db and get logs for item since oldest remote transaction datetime
-            var llogs = await MpDbLog.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
+            var llogs = await MpDataModelProvider.Instance.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
                 if(rlog.LogActionDateTime < lastSyncDt) {
                     rlogsToRemove.Add(rlog);
@@ -131,7 +117,9 @@ namespace MonkeyPaste {
             return dbLog;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
+
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
                 ParseToken,
@@ -148,7 +136,7 @@ namespace MonkeyPaste {
             return typeof(MpDbLog);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
 

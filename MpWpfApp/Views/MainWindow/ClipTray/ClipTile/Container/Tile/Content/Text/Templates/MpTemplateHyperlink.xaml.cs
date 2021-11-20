@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
     public partial class MpTemplateHyperlink : Hyperlink {
-        public static MpTemplateHyperlink Create(TextRange tr, MpCopyItemTemplate cit) {
+        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpCopyItemTemplate cit) {
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
             var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
@@ -53,10 +53,10 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(templateName)) {
                     templateName = thcvm.GetUniqueTemplateName();
                 } 
-                cit = MpCopyItemTemplate.Create(
+                cit = await MpCopyItemTemplate.Create(
                             thcvm.Parent.CopyItemId,
                             templateName);
-                cit.WriteToDatabase();
+                await cit.WriteToDatabaseAsync();
             }
 
             tr.Text = string.Empty;

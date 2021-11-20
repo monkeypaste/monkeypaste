@@ -87,8 +87,6 @@ namespace MpWpfApp {
                 octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
                 octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
                 octvm.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
-
-                MpMessenger.Instance.Unregister<MpMessageType>(octvm, ReceivedContentItemsChangedMessage);
             }
             if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
                 nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
@@ -96,8 +94,6 @@ namespace MpWpfApp {
                 nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
                 nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
                 nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
-
-                MpMessenger.Instance.Register<MpMessageType>(nctvm,ReceivedContentItemsChangedMessage);
             } 
         }
 
@@ -110,14 +106,6 @@ namespace MpWpfApp {
                     }
                 }
             });
-        }
-
-        private async void ReceivedContentItemsChangedMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ItemsInitialized:
-                   // await RefreshContext();
-                    break;
-            }
         }
 
         private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -196,12 +184,12 @@ namespace MpWpfApp {
             for (int i = 0; i < rtbl.Count; i++) {
                 var rtb = rtbl[i];
                 if (i != 0) {
-                    MpHelpers.Instance.CombineFlowDocuments(
+                    await MpHelpers.Instance.CombineFlowDocumentsAsync(
                     separatorDocument,
                     fullDocument,
                     false);
                 }
-                MpHelpers.Instance.CombineFlowDocuments(
+                await MpHelpers.Instance.CombineFlowDocumentsAsync(
                     (MpEventEnabledFlowDocument)rtb.Document,
                     fullDocument,
                     false);
@@ -222,8 +210,6 @@ namespace MpWpfApp {
             BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
             BindingContext.PropertyChanged -= Rtbcvm_PropertyChanged;
             BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
-
-            MpMessenger.Instance.Unregister<MpMessageType>(BindingContext, ReceivedContentItemsChangedMessage);
         }
     }
 }

@@ -95,6 +95,7 @@ namespace MpWpfApp {
             if (e.Key == Key.Enter || e.Key == Key.Escape) {
                 //ctvm.CopyItemTitle = ClipTileTitleTextBox.Text;
                 BindingContext.IsEditingTitle = false;
+                e.Handled = true;
             }
         }
 

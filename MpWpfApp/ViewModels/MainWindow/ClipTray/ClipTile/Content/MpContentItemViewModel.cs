@@ -18,6 +18,9 @@ using PropertyChanged;
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
         #region Private Variables
+
+        private int _queryPrimaryItemId = -1;
+
         Size itemSize;
         int fc = 0, lc = 0, cc = 0;
         double ds = 0;
@@ -116,6 +119,10 @@ namespace MpWpfApp {
 
         public Brush ItemBorderBrush {
             get {
+                if(CopyItemId == _queryPrimaryItemId) {
+                    return Brushes.Blue;
+                }
+
                 if(Parent == null || 
                    Parent.Count <= 1 || 
                    !IsSelected/* || 
@@ -589,9 +596,10 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem ci) {
+        public async Task InitializeAsync(MpCopyItem ci,int queryItemId = -1) {
             IsBusy = true;
 
+            _queryPrimaryItemId = queryItemId;
             if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
@@ -605,6 +613,7 @@ namespace MpWpfApp {
 
             CycleDetailCommand.Execute(null);
             RequestUiUpdate();
+            OnPropertyChanged(nameof(ItemBorderBrush));
 
             IsBusy = false;
         }
@@ -923,23 +932,8 @@ namespace MpWpfApp {
             (toLanguage) => {
                 return CopyItem.ItemType == MpCopyItemType.RichText;
             });
-        
 
-        private RelayCommand _excludeSubSelectedItemApplicationCommand;
-        public ICommand ExcludeSubSelectedItemApplicationCommand {
-            get {
-                if (_excludeSubSelectedItemApplicationCommand == null) {
-                    _excludeSubSelectedItemApplicationCommand = new RelayCommand(ExcludeSubSelectedItemApplication, CanExcludeSubSelectedItemApplication);
-                }
-                return _excludeSubSelectedItemApplicationCommand;
-            }
-        }
-        private bool CanExcludeSubSelectedItemApplication() {
-            return MpClipTrayViewModel.Instance.SelectedItems.Count == 1;
-        }
-        private void ExcludeSubSelectedItemApplication() {
-            MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItem.Source.AppId), true);
-        }
+
 
         private RelayCommand _pasteSubItemCommand;
         public ICommand PasteSubItemCommand {
@@ -964,7 +958,7 @@ namespace MpWpfApp {
                     this,
                     "Paste " + CopyItem.Title,
                     ShortcutKeyString,
-                     MpClipTrayViewModel.Instance.HotkeyPasteCommand, CopyItem.Id);
+                     MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand, CopyItem.Id);
             });
 
         public ICommand RefreshDocumentCommand {
@@ -1000,16 +994,12 @@ namespace MpWpfApp {
             IsEditingTitle = !IsEditingTitle;
         }
 
-        public ICommand ChangeColorCommand {
-            get {
-                return new RelayCommand<Brush>(
-                    (b) => {
-                        CopyItem.ItemColor = b.ToHex();
-                        TitleSwirlViewModel.ForceBrush(b);
-                        Task.Run(CopyItem.WriteToDatabase);
-                    });
-            }
-        }
+        public ICommand ChangeColorCommand => new RelayCommand<Brush>(
+            async (b) => {
+                CopyItem.ItemColor = b.ToHex();
+                TitleSwirlViewModel.ForceBrush(b);
+                await CopyItem.WriteToDatabaseAsync();
+            });
 
         public ICommand BringToFrontCommand {
             get {

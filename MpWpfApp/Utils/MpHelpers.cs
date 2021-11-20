@@ -49,21 +49,20 @@ using Yolov5Net.Scorer;
 
 
 namespace MpWpfApp {
-    public class MpHelpers {
-        private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
-        public static MpHelpers Instance { get { return _Lazy.Value; } }
+    public class MpHelpers : MpSingleton<MpHelpers> {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
         private YoloScorer<YoloCocoP5Model> yoloWrapper = null;
 
-        public void Init() {
-
-            Rand = new Random((int)DateTime.Now.Ticks);
-            // SharedRtb = new RichTextBox();
-            //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
-            yoloWrapper = new YoloScorer<YoloCocoP5Model>();
-            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
+        public async Task Init() {
+            await Task.Run(() => {
+                Rand = new Random((int)DateTime.Now.Ticks);
+                // SharedRtb = new RichTextBox();
+                //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
+                yoloWrapper = new YoloScorer<YoloCocoP5Model>();
+                _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
+            });
         }
 
         #region Documents    

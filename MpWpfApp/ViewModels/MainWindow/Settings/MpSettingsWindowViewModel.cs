@@ -68,6 +68,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
         #region View Models
         public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
             get {

@@ -1,42 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using SQLite;
+﻿using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Extensions;
-using SQLiteNetExtensions.Exceptions;
-using SQLiteNetExtensions.Attributes;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using Xamarin.Forms;
-using System.IO;
-using Newtonsoft.Json;
-using Xamarin.Forms.PlatformConfiguration;
+using System;
 using System.Collections;
-using System.Reflection;
-using SkiaSharp;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
-namespace MonkeyPaste {    
-    public class MpDb : MpISync {
-        #region Singleton
-        private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
-        public static MpDb Instance { get { return _Lazy.Value; } }
-
-        private MpDb() {
-            //CreateConnection();
-            //Init();
-        }
-        #endregion
-
+namespace MonkeyPaste {
+    public class MpDb : MpSingleton<MpDb>, MpISync {
         #region Private Variables
         private MpIDbInfo _dbInfo;
         private object _rdLock;
         private SQLiteAsyncConnection _connectionAsync;
-        private SQLiteConnection _connection;
         #endregion
 
         #region Properties
@@ -45,7 +25,6 @@ namespace MonkeyPaste {
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
 
-        public bool IsBusy { get; set; } = false;
         #endregion
 
         #region Events
@@ -59,7 +38,10 @@ namespace MonkeyPaste {
         public event EventHandler<MpDbSyncEventArgs> SyncDelete;
         #endregion
 
-        #region Public Methods
+        #region Constructors
+
+        public MpDb() { }
+
         public async Task Init(MpIDbInfo dbInfo) {
             await Task.Run(async () => {
                 var sw = new Stopwatch();
@@ -73,30 +55,27 @@ namespace MonkeyPaste {
             });
         }
 
+        #endregion
+
+        #region Public Methods
+
         #region Queries
 
-        public SQLite.TableMapping GetTableMapping(string tableName) {
-            if (_connection == null) {
+        public async Task<TableMapping> GetTableMappingAsync(string tableName) {
+            await Task.Delay(1);
+            if (_connectionAsync == null) {
                 CreateConnection();
             }
-            return _connection
+            return _connectionAsync
                     .TableMappings
                     .Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
         }
 
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
-            if(_connectionAsync == null) {
+            if (_connectionAsync == null) {
                 CreateConnection();
             }
             var result = await _connectionAsync.QueryAsync<T>(query, args);
-            return result;
-        }
-
-        public List<T> Query<T>(string query, params object[] args) where T : new() {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            var result = _connection.Query<T>(query, args);
             return result;
         }
 
@@ -118,37 +97,11 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public List<object> Query(string tableName, string query, params object[] args) {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            TableMapping qtm = null;
-            foreach (var tm in _connectionAsync.TableMappings) {
-                if (tm.TableName.ToLower() == tableName.ToLower()) {
-                    qtm = tm;
-                    break;
-                }
-            }
-            if (qtm == null) {
-                return new List<object>();
-            }
-            var result = _connection.Query(qtm, query, args);
-            return result;
-        }
-
         public async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
             if(_connectionAsync == null) {
                 CreateConnection();
             }
             var result = await _connectionAsync.ExecuteScalarAsync<T>(query, args);
-            return result;
-        }
-
-        public T QueryScalar<T>(string query, params object[] args) {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            var result = _connection.ExecuteScalar<T>(query, args);
             return result;
         }
 
@@ -160,50 +113,19 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public List<T> QueryScalars<T>(string query, params object[] args) {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            var result = _connection.QueryScalars<T>(query, args);
-            return result;
-        }
-
         public async Task<List<T>> GetItemsAsync<T>() where T : new() {
             if (_connectionAsync == null) {
                 await InitDb ();
             }
-            //return await _connectionAsync.Table<T>().ToListAsync();
             var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
             return dbol;
         }
-
-        public List<T> GetItems<T>() where T : new() {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            return _connection.GetAllWithChildren<T>(recursive: true);
-        }
-
         public async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
                 await InitDb();
             }
             var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
             return dbo;
-        }
-
-        public T GetItem<T>(int id) where T : new() {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            return _connection.GetWithChildren<T>(id,true);
-        }
-
-        public List<T> GetAllWithChildren<T>(Expression<Func<T,bool>> exp, bool recursive = true) where T:new() {
-            if(_connection == null) {
-                CreateConnection();
-            }
-            return _connection.GetAllWithChildren<T>(exp,recursive);
         }
 
         public async Task<List<T>> GetAllWithChildrenAsync<T>(Expression<Func<T, bool>> exp, bool recursive = true) where T : new() {
@@ -215,12 +137,6 @@ namespace MonkeyPaste {
         }
 
         public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            while (IsBusy) {
-                MpConsole.WriteLine("Db busy, waiting...");
-                await Task.Delay(100);
-            }
-            IsBusy = true;
-
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -247,42 +163,10 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
-
-            IsBusy = false;
         }
 
-        public void AddItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
-            if (_connection == null) {
-                CreateConnection();
-            }
-            if (item == null) {
-                MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
-                return;
-            }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
-                    (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
-                }
-                if (!ignoreTracking) {
-                    MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
-                }
-
-            }
-            _connection.InsertOrReplaceWithChildren(item,true);
-            OnItemAdded?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-            }
-        }
 
         public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            while (IsBusy) {
-                MpConsole.WriteLine("Db busy, waiting...");
-                await Task.Delay(100);
-            }
-            IsBusy = true;
-
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -304,39 +188,31 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
-
-            IsBusy = false;
         }
 
-        public void UpdateItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
-            if (_connection == null) {
-                CreateConnection();
-            }
+        //public void UpdateItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        //    sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
+        //    if (_connection == null) {
+        //        CreateConnection();
+        //    }
 
-            if (item == null) {
-                MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
-                return;
-            }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                if (!ignoreTracking) {
-                    MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
-                }
-            }
-            _connection.UpdateWithChildren(item);
-            OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-            }
-        }
+        //    if (item == null) {
+        //        MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
+        //        return;
+        //    }
+        //    if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+        //        if (!ignoreTracking) {
+        //            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
+        //        }
+        //    }
+        //    _connection.UpdateWithChildren(item);
+        //    OnItemUpdated?.Invoke(this, item as MpDbModelBase);
+        //    if (!ignoreSyncing && item is MpISyncableDbObject) {
+        //        OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+        //    }
+        //}
 
         public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            while (IsBusy) {
-                MpConsole.WriteLine("Db busy, waiting...");
-                await Task.Delay(100);
-            }
-            IsBusy = true;
-
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -357,31 +233,29 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
-
-            IsBusy = false;
         }
 
-        public void DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
-            if (_connection == null) {
-                CreateConnection();
-            }
-            if (item == null) {
-                MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
-                return;
-            }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                if (!ignoreTracking) {
-                    MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
-                }
-            }
+        //public void DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        //    sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
+        //    if (_connection == null) {
+        //        CreateConnection();
+        //    }
+        //    if (item == null) {
+        //        MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
+        //        return;
+        //    }
+        //    if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+        //        if (!ignoreTracking) {
+        //            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
+        //        }
+        //    }
 
-            _connection.Delete(item, true);
-            OnItemDeleted?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-            }
-        }
+        //    _connection.Delete(item, true);
+        //    OnItemDeleted?.Invoke(this, item as MpDbModelBase);
+        //    if (!ignoreSyncing && item is MpISyncableDbObject) {
+        //        OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+        //    }
+        //}
 
         public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {                        
             if ((item as MpDbModelBase).Id == 0) {
@@ -391,18 +265,18 @@ namespace MonkeyPaste {
             }
         }
 
-        public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
-            if ((item as MpDbModelBase).Id == 0) {
-                AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-            } else {
-                UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-            }
-        }
-        
+        //public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
+        //    if ((item as MpDbModelBase).Id == 0) {
+        //        AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+        //    } else {
+        //        UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+        //    }
+        //}
+
         public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
-                string.Format("select * from {0} where {1}=?",tableName,tableName+"Guid"),
+                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
                 objGuid);
 
             if (dt != null && dt.Count > 0) {
@@ -431,231 +305,13 @@ namespace MonkeyPaste {
             var dbo = Activator.CreateInstance(typeof(T));
             return (T)dbo;
         }
-
-        public object GetDbObjectByTableGuid(string tableName, string objGuid) {
-            var dt = Query(
-                tableName,
-                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
-                objGuid);
-
-            if (dt != null && dt.Count > 0) {
-                return dt[0];
-            }
-            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
-
-            var dbo = Activator.CreateInstance(dbot);
-            return dbo;
-        }
-
-        public T GetDbObjectByTableGuid<T>(string objGuid) where T : new() {
-            string tableName = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
-            var dt = Query(
-                tableName,
-                string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
-                objGuid);
-
-            if (dt != null && dt.Count > 0) {
-                return GetItem<T>((dt[0] as MpDbModelBase).Id);
-                //return dbo;
-                //return dt[0];
-            }
-
-            var dbo = Activator.CreateInstance(typeof(T));
-            return (T)dbo;
-        }
+        
         #endregion
 
         public byte[] GetDbFileBytes() {
             var dbPath = _dbInfo.GetDbFilePath();
             return File.ReadAllBytes(dbPath);
         }
-
-        #region Wpf compatability
-
-        private string GetTableName(string query) {
-            string tableName = "UnknownTableName";
-
-            if (query.ToLower().StartsWith("select")) {
-                string preStr = "from ";
-                int tableNameStartIdx = query.IndexOf(preStr) + preStr.Length;
-                int tableNameEndIdx = query.Substring(tableNameStartIdx).IndexOf(" ");
-                int tableNameLength = query.Length - tableNameStartIdx;
-                if(tableNameEndIdx >= 0) {
-                    tableNameEndIdx += tableNameStartIdx;
-                    tableNameLength = tableNameEndIdx - tableNameStartIdx;
-                }
-                tableName = query.Substring(tableNameStartIdx, tableNameLength);
-            } else if (query.ToLower().StartsWith("insert")) {
-                string preStr = "insert into ";
-                int tableNameLength = query.IndexOf(@"(") - preStr.Length;
-                tableName = query.Substring(preStr.Length, tableNameLength);
-            } else if (query.ToLower().StartsWith("update")) {
-                string preStr = "update ";
-                int tableNameLength = query.Substring(preStr.Length).IndexOf(@" ");
-                tableName = query.Substring(preStr.Length, tableNameLength);
-            } else if (query.ToLower().StartsWith("delete")) {
-                string preStr = "delete from ";
-                int tableNameLength = query.Substring(preStr.Length).IndexOf(@" ");
-                tableName = query.Substring(preStr.Length, tableNameLength);
-            } else {
-                throw new Exception(@"Unknown query format: " + query);
-            }
-
-            return tableName;
-        }
-        private Tuple<string,object[]> PrepareQuery(string query, Dictionary<string, object> args) {
-            MpConsole.WriteLine("Prepare @ " + DateTime.Now);
-            if (string.IsNullOrEmpty(query.Trim())) {
-                return null;
-            }
-
-            string newQuery = query;
-            object[] newArgs = new object[] { };
-            //var sb = new StringBuilder();
-
-            if (args != null) {
-                var newArgDict = new Dictionary<int, object>();
-                foreach (var arg in args) {
-                    int argStartIdx = query.IndexOf(arg.Key);
-                    if (argStartIdx < 0) {
-                        throw new Exception(@"Error with query: " + query);
-                    }
-                    newArgDict.Add(argStartIdx, arg.Value);
-                    newQuery = newQuery.Replace(arg.Key, "?");
-                }
-                var sortedArgs = from pair in newArgDict
-                                 orderby pair.Key ascending
-                                 select pair.Value;
-                newArgs = sortedArgs.ToArray();
-            }
-            return new Tuple<string, object[]>(newQuery, newArgs);
-        }
-
-        public DataTable Execute(string query, Dictionary<string, object> args) {
-            if (string.IsNullOrEmpty(query.Trim())) {
-                return null;
-            }
-            if (_connection == null) {
-                CreateConnection();
-            }
-
-            string tn = GetTableName(query);
-            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tn);
-
-            var tuple = PrepareQuery(query, args);
-
-            var queryMethod = _connection.GetType().GetMethod("Query",new Type[] {typeof(string), typeof(object[]) });
-            var queryByDboTypeMethod = queryMethod.MakeGenericMethod(new[] { dbot });
-            var resultObj = queryByDboTypeMethod.Invoke(_connection, new object[] { tuple.Item1, tuple.Item2 });
-
-            var result = Activator.CreateInstance(typeof(List<>).MakeGenericType(dbot), resultObj);
-            var dt = new DataTable();
-
-            var tm = GetTableMapping(tn);
-            foreach(var row in result as IList) {
-                var dr = new DataRow(); 
-                foreach (var rowProp in row.GetType().GetProperties()) {
-                    if(rowProp.GetAttribute<SQLite.IgnoreAttribute>() != null) {
-                        continue;
-                    }
-                    string cn = tm.FindColumnWithPropertyName(rowProp.Name).Name;
-                    dr.AddColumn(cn, rowProp.GetValue(row));
-                }
-                dt.Rows.Add(dr);
-            }
-
-            return dt;
-        }
-
-        public async Task<DataTable> ExecuteAsync(string query, Dictionary<string, object> args) {
-            if (string.IsNullOrEmpty(query.Trim())) {
-                return null;
-            }
-            if (_connectionAsync == null) {
-                CreateConnection();
-            }
-
-            string tn = GetTableName(query);
-            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tn);
-
-            var tuple = PrepareQuery(query, args);
-
-            var queryMethod = _connectionAsync.GetType().GetMethod("QueryAsync", new Type[] { typeof(string), typeof(object[]) });
-            var queryByDboTypeMethod = queryMethod.MakeGenericMethod(new[] { dbot });
-            var resultObj = queryByDboTypeMethod.InvokeAsync(_connectionAsync, new object[] { tuple.Item1, tuple.Item2 });
-            await resultObj;
-            var result = Activator.CreateInstance(typeof(List<>).MakeGenericType(dbot), resultObj);
-            var dt = new DataTable();
-
-            var tm = GetTableMapping(tn);
-            foreach (var row in result as IList) {
-                var dr = new DataRow();
-                foreach (var rowProp in row.GetType().GetProperties()) {
-                    if (rowProp.GetAttribute<SQLite.IgnoreAttribute>() != null) {
-                        continue;
-                    }
-                    string cn = tm.FindColumnWithPropertyName(rowProp.Name).Name;
-                    dr.AddColumn(cn, rowProp.GetValue(row));
-                }
-                dt.Rows.Add(dr);
-            }
-
-            return dt;
-        }
-
-        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            MpDbLogActionType actionType = MonkeyPaste.MpDbLogActionType.None;
-            if (!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking && dbObject != null && dbObject is MonkeyPaste.MpISyncableDbObject) {
-                //only track objects providing a guid
-                actionType = MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);
-            }
-
-            var tuple = PrepareQuery(query, args);
-
-            if(tuple.Item2 == null) {
-                return _connection.Execute(tuple.Item1);
-            }
-            int rowsAffected = _connection.Execute(tuple.Item1, tuple.Item2);
-
-            if (actionType != MonkeyPaste.MpDbLogActionType.None &&
-                    !ignoreSyncing &&
-                    dbObject is MonkeyPaste.MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(dbObject, dbObjectGuid);
-            } else if (dbObject != null) {
-                //dbObject will only be non-null when this write is coming from perform sync
-                string tableName = dbObject.GetType().ToString().Replace("MpWpfApp.", string.Empty);
-                string pkPropName = dbObject.GetType().ToString().Replace("MpWpfApp.Mp", string.Empty) + "Id";
-                int pk = GetLastRowId(tableName, "pk_Mp" + pkPropName);
-                dbObject.GetType().GetProperty(pkPropName).SetValue(dbObject, pk);
-
-                NotifyRemoteUpdate(actionType, dbObject, sourceClientGuid);
-            }
-            return rowsAffected;
-        }
-        public int GetLastRowId(string tableName, string pkName) {
-            if (_connection == null) {
-                CreateConnection();
-            }
-
-            DataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;", null);
-            if (dt.Rows.Count > 0) {
-                return Convert.ToInt32(dt.Rows[0][0].ToString());
-            }
-            return -1;
-        }
-
-        public DataRow GetDbDataRowByTableGuid(string tableName, string objGuid) {
-            var dt = MpDb.Instance.Execute(
-                "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
-            if (dt != null && dt.Rows.Count > 0) {
-                return dt.Rows[0];
-            }
-            return null;
-        }
-        #endregion
 
         #endregion
 
@@ -664,20 +320,12 @@ namespace MonkeyPaste {
             SQLiteConnectionString connStr = null;
             connStr = new SQLiteConnectionString(
                     databasePath: _dbInfo.GetDbFilePath(),
-                    storeDateTimeAsTicks: false,
+                    storeDateTimeAsTicks: true,
                     openFlags: SQLiteOpenFlags.ReadWrite |
                                SQLiteOpenFlags.Create |
                                SQLiteOpenFlags.SharedCache |
                                SQLiteOpenFlags.FullMutex
                     );
-
-            if (_connection == null) {
-                try {
-                    _connection = new SQLiteConnection(connStr) { Trace = true };
-                }catch(Exception ex) {
-                    Console.WriteLine(ex);
-                }
-            }
 
             if (_connectionAsync == null) {
                 _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
@@ -701,15 +349,15 @@ namespace MonkeyPaste {
                     if (string.IsNullOrEmpty(c.Trim().Replace(Environment.NewLine, string.Empty))) {
                         continue;
                     }
-                    ExecuteWrite(c + ";", null);
+                    //ExecuteWrite(c + ";", null);
                 }
             }
 
             if (UseWAL) {
                 // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                if (_connection != null) {
-                    _connection.EnableWriteAheadLogging();
-                }
+                //if (_connection != null) {
+                //    _connection.EnableWriteAheadLogging();
+                //}
 
                 if (_connectionAsync != null) {
                     await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
@@ -730,30 +378,31 @@ namespace MonkeyPaste {
         }
 
         private async Task InitTables() {
-            await Task.Run(() => {
-                _connection.CreateTable<MpAnalyticItem>();
-                _connection.CreateTable<MpAnalyticItemParameter>();
-                _connection.CreateTable<MpAnalyticItemPreset>();
-                _connection.CreateTable<MpAnalyticItemPresetParameterValue>();
-                _connection.CreateTable<MpApp>();
-                _connection.CreateTable<MpCopyItem>();
-                _connection.CreateTable<MpCopyItemTag>();
-                _connection.CreateTable<MpCopyItemTemplate>();
-                _connection.CreateTable<MpDbImage>();
-                _connection.CreateTable<MpDbLog>();
-                _connection.CreateTable<MpIcon>();
-                _connection.CreateTable<MpPasteHistory>();
-                _connection.CreateTable<MpPasteToAppPath>();
-                _connection.CreateTable<MpShortcut>();
-                _connection.CreateTable<MpSource>();
-                _connection.CreateTable<MpSyncHistory>();
-                _connection.CreateTable<MpTag>();
-                _connection.CreateTable<MpUrl>();
-                _connection.CreateTable<MpUserDevice>();
-            });
+            //await Task.Run(() => {
+            //    _connection.CreateTable<MpAnalyticItem>();
+            //    _connection.CreateTable<MpAnalyticItemParameter>();
+            //    _connection.CreateTable<MpAnalyticItemPreset>();
+            //    _connection.CreateTable<MpAnalyticItemPresetParameterValue>();
+            //    _connection.CreateTable<MpApp>();
+            //    _connection.CreateTable<MpCopyItem>();
+            //    _connection.CreateTable<MpCopyItemTag>();
+            //    _connection.CreateTable<MpCopyItemTemplate>();
+            //    _connection.CreateTable<MpDbImage>();
+            //    _connection.CreateTable<MpDbLog>();
+            //    _connection.CreateTable<MpIcon>();
+            //    _connection.CreateTable<MpPasteHistory>();
+            //    _connection.CreateTable<MpPasteToAppPath>();
+            //    _connection.CreateTable<MpShortcut>();
+            //    _connection.CreateTable<MpSource>();
+            //    _connection.CreateTable<MpSyncHistory>();
+            //    _connection.CreateTable<MpTag>();
+            //    _connection.CreateTable<MpUrl>();
+            //    _connection.CreateTable<MpUserDevice>();
+            //});
 
             await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemParameter>();
+            await _connectionAsync.CreateTableAsync<MpAnalyticItemParameterValue>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
@@ -762,15 +411,19 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
+            await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
+            //await _connectionAsync.CreateTableAsync<MpCopyItemFetchResult>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
+            await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
             await _connectionAsync.CreateTableAsync<MpShortcut>();
             await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
+            await _connectionAsync.CreateTableAsync<MpUserSearch>();
         }
 
         private async Task InitDefaultData() {
@@ -1111,7 +764,7 @@ namespace MonkeyPaste {
 	                    PasteCount,
 	                    MpSource.pk_MpSourceId AS SourceId,
 	                    MpApp.AppName,
-	                    MpApp.SourcePath,
+	                    MpApp.SourcePath as AppPath,
 	                    MpApp.pk_MpAppId AS AppId,
 	                    MpUrl.pk_MpUrlId AS UrlId,
 	                    MpUrl.UrlPath,
@@ -1164,8 +817,8 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetExternalIp4Address();
         }
 
-        public async Task<List<MonkeyPaste.MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
-            var logs = await MpDbLog.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
+        public async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
+            var logs = await MpDataModelProvider.Instance.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
             return logs;
         }
 
@@ -1342,21 +995,19 @@ namespace MonkeyPaste {
             return;
         }
 
-        public void UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
-            Task.Run(async () => {
-                MpSyncHistory sh = MpSyncHistory.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+        public async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
+            MpSyncHistory sh = await MpDataModelProvider.Instance.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
 
-                if (sh == null) {
-                    sh = new MpSyncHistory() {
-                        OtherClientGuid = otherDeviceGuid,
-                        SyncDateTime = utcDtSentLocalChanges
-                    };
-                } else {
-                    sh.SyncDateTime = utcDtSentLocalChanges;
-                }
+            if (sh == null) {
+                sh = new MpSyncHistory() {
+                    OtherClientGuid = otherDeviceGuid,
+                    SyncDateTime = utcDtSentLocalChanges
+                };
+            } else {
+                sh.SyncDateTime = utcDtSentLocalChanges;
+            }
 
-                await MpDb.Instance.AddOrUpdateAsync<MpSyncHistory>(sh);
-            });
+            await MpDb.Instance.AddOrUpdateAsync<MpSyncHistory>(sh);
         }
 
         private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {

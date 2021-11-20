@@ -12,11 +12,11 @@
              d:DesignWidth="800">
     <MenuItem x:Name="ExcludeSourceItem"
               Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding ExcludeApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
+              Command="{Binding ExcludeSubSelectedItemApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
               CommandParameter="False" />
     <MenuItem x:Name="ExcludeSourceDomainItem"
               Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding ExcludeApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
+              Command="{Binding ExcludeSubSelectedItemApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
               CommandParameter="True" />
     <MenuItem x:Name="PasteMacroMenuItem"
               Header="Add Paste Macro For Source"

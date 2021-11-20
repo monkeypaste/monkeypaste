@@ -85,7 +85,7 @@ namespace MonkeyPaste {
                 ImageBase64 = iconImgBase64
             };
 
-            await MpDb.Instance.AddItemAsync<MpDbImage>(iconImage);
+            await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconImage);
 
             var newIcon = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),
@@ -108,9 +108,9 @@ namespace MonkeyPaste {
                     ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Pink.ToHex())
                 };
 
-                await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderImage);
-                await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightImage);
-                await MpDb.Instance.AddItemAsync<MpDbImage>(iconBorderHighlightSelectedImage);
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderImage);
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightImage);
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightSelectedImage);
 
                 var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
 
@@ -128,16 +128,14 @@ namespace MonkeyPaste {
 
             }
             
-            MpDb.Instance.AddItem<MpIcon>(newIcon);
+            await MpDb.Instance.AddOrUpdateAsync<MpIcon>(newIcon);
 
             return newIcon;
         }
 
         #endregion
 
-        public MpIcon() {
-        }
-
+        public MpIcon() { }
 
         #region Sync
 
@@ -194,16 +192,16 @@ namespace MonkeyPaste {
             var icon = new MpIcon() {
                 IconGuid = System.Guid.Parse(objParts[0])
             };
-            icon.IconImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[1]) as MpDbImage;
+            icon.IconImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[1]);
             icon.IconImageId = icon.IconImage.Id;
 
-            icon.IconBorderImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[2]) as MpDbImage;
+            icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[2]);
             icon.IconBorderImageId = icon.IconBorderImage.Id;
 
-            icon.IconBorderHighlightSelectedImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[3]) as MpDbImage;
+            icon.IconBorderHighlightSelectedImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", objParts[3]) as MpDbImage;
             icon.IconBorderHighlightSelectedImageId = icon.IconBorderHighlightSelectedImage.Id;
 
-            icon.IconBorderHighlightImage = MpDb.Instance.GetDbObjectByTableGuid("MpDbImage", objParts[4]) as MpDbImage;
+            icon.IconBorderHighlightImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", objParts[4]) as MpDbImage;
             icon.IconBorderHighlightImageId = icon.IconBorderHighlightImage.Id;
 
             icon.HexColor1 = objParts[5];
@@ -215,7 +213,8 @@ namespace MonkeyPaste {
             return icon;
         }
 
-        public string SerializeDbObject() {
+        public async Task<string> SerializeDbObject() {
+            await Task.Delay(1);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}",
                 ParseToken,
@@ -235,7 +234,9 @@ namespace MonkeyPaste {
             return typeof(MpIcon);
         }
 
-        public Dictionary<string, string> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+            await Task.Delay(1);
+
             MpIcon other = null;
             if (drOrModel is MpIcon) {
                 other = drOrModel as MpIcon;

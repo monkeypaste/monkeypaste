@@ -13,10 +13,6 @@ namespace MonkeyPaste {
         public string OtherClientGuid { get; set; }
         public DateTime SyncDateTime { get; set; }
 
-        public static MpSyncHistory GetSyncHistoryByDeviceGuid(string dg) {
-            return MpDb.Instance.GetItems<MpSyncHistory>().Where(x => x.OtherClientGuid == dg).FirstOrDefault();
-        }
-
         public MpSyncHistory() { }
     }
 }

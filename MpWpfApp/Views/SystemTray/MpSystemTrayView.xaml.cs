@@ -27,7 +27,7 @@ namespace MpWpfApp {
         private void SystemTrayTaskbarIcon_MouseEnter(object sender, MouseEventArgs e) {
             BindingContext.OnPropertyChanged(nameof(BindingContext.AppStatus));
             BindingContext.OnPropertyChanged(nameof(BindingContext.AccountStatus));
-            BindingContext.OnPropertyChanged(nameof(BindingContext.TotalItemCount));
+            //BindingContext.OnPropertyChanged(nameof(BindingContext.TotalItemCount));
             BindingContext.OnPropertyChanged(nameof(BindingContext.DbSizeInMbs));
         }
 
