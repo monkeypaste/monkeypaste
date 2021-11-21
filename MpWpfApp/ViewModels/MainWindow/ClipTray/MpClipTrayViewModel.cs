@@ -165,7 +165,7 @@ namespace MpWpfApp {
 
         public bool IsRequery { get; private set; } = false;
 
-        public bool IsTrayEmpty => Items.Count == 0;// || Items.All(x => x.IsPlaceholder);
+        public bool IsTrayEmpty => Items.Count == 0 && !IsRequery;// || Items.All(x => x.IsPlaceholder);
 
         public bool IsSelectionReset { get; set; } = false;
 
@@ -298,6 +298,13 @@ namespace MpWpfApp {
                     if (ctvm != null) {
                         ctvm.OnPropertyChanged(nameof(ctvm.TileBorderBrush));
                         //ctvm.ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.TileBorderBrush)));
+                    }
+                    break;
+                case nameof(IsAnyTileItemDragging):
+                    if(IsAnyTileItemDragging) {
+                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ItemDragBegin);
+                    } else {
+                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ItemDragEnd);
                     }
                     break;
             }

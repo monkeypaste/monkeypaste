@@ -19,6 +19,8 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTileTitleView.xaml
     /// </summary>
     public partial class MpClipTileTitleView : MpUserControl<MpContentItemViewModel> {
+        private bool _isAnimating = false;
+
         public MpClipTileTitleView() {
             InitializeComponent();
         }
@@ -99,24 +101,31 @@ namespace MpWpfApp {
             }
         }
 
-        private async void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(AnimateEnter);
+        private void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                while(_isAnimating) {
+                    await Task.Delay(10);
+                }
+                AnimateEnter();
+            });
         }
 
-        private async void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(AnimateLeave);
+        private void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                while (_isAnimating) {
+                    await Task.Delay(10);
+                }
+                AnimateLeave();
+            });
         }
 
         private void AnimateEnter() {
-            if (BindingContext == null) {
+            if (BindingContext == null || 
+                MpClipTrayViewModel.Instance.IsScrolling ||
+                BindingContext.Parent.IsExpanded) {
                 return;
             }
-            if (MpClipTrayViewModel.Instance.IsScrolling) {
-                return;
-            }
-            if (BindingContext.Parent.IsExpanded) {
-                return;
-            }
+
             double t = 100;
             double angle = 15;
             var a = new DoubleAnimation(0, angle, new Duration(TimeSpan.FromMilliseconds(t)));
@@ -125,6 +134,7 @@ namespace MpWpfApp {
                 b.Completed += (s2, e2) => {
                     var c = new DoubleAnimation(-angle, 0, new Duration(TimeSpan.FromMilliseconds(t)));
                     ClipTileAppIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, c);
+                    _isAnimating = false;
                 };
                 ClipTileAppIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, b);
             };
@@ -141,13 +151,12 @@ namespace MpWpfApp {
             sa.EasingFunction = easing;
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
+            _isAnimating = true;
         }
 
         private void AnimateLeave() {
-            if (BindingContext == null) {
-                return;
-            }
-            if (MpClipTrayViewModel.Instance.IsScrolling || 
+            if (BindingContext == null ||
+                MpClipTrayViewModel.Instance.IsScrolling || 
                 BindingContext.Parent.IsContextMenuOpened || 
                 BindingContext.Parent.IsExpanded) {
                 return;
@@ -159,12 +168,14 @@ namespace MpWpfApp {
             var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
             sa.Completed += (s1, e31) => {
                 ClipTileAppIconBorderImage.Visibility = Visibility.Hidden;
+                _isAnimating = false;
             };
             var easing = new CubicEase();
             easing.EasingMode = EasingMode.EaseIn;
             sa.EasingFunction = easing;
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
             ClipTileAppIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
+            _isAnimating = true;
         }
 
         private void ClipTileAppIconImageButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

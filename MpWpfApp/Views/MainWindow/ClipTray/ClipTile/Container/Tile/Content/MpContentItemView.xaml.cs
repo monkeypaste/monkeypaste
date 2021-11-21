@@ -51,24 +51,18 @@ namespace MpWpfApp {
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = true;
-
-            //Application.Current.MainWindow.ForceCursor = true;
-            //Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
-
-            //Application.Current.MainWindow.ForceCursor = true;
-            //Application.Current.MainWindow.Cursor = civm.EditorCursor;
         }
         #region Event Handlers
 
         #region View Model Ui Requests
 
         private void Civm_OnUiUpdateRequest(object sender, EventArgs e) {
-            this.UpdateLayout();
+            this.UpdateLayout();            
         }
 
         private void Civm_OnScrollWheelRequest(object sender, int e) {

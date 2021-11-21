@@ -118,9 +118,7 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion
-
-        
+        #endregion        
 
         #region App Mode Menu
 
@@ -160,9 +158,7 @@ namespace MpWpfApp {
             get {
                 return ScreenWidth - AppStateButtonPanelWidth;
             }
-        }
-
-        
+        }        
 
         #region Clip Tile
 

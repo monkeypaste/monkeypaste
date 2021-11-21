@@ -138,7 +138,7 @@ namespace MpWpfApp {
                 if(Parent == null ||
                    Parent.Count == 1 ||
                    ItemIdx == Parent.Count - 1 ||
-                   (ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
+                   //(ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
                    IsSelected ||
                    Parent.SelectedItems.Any(x=>x.ItemIdx == ItemIdx + 1)) {
                     return Brushes.Transparent;
@@ -866,6 +866,11 @@ namespace MpWpfApp {
                     if(Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
+                    break;
+                case nameof(IsItemDragging):
+                    Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                    Parent.OnPropertyChanged(nameof(Parent.TileBorderBrushRect));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnyTileItemDragging));
                     break;
             }
         }

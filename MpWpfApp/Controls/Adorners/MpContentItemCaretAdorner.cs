@@ -14,15 +14,15 @@ namespace MpWpfApp {
 
         public bool IsShowing { get; set; } = false;
 
-        private Pen caretPen {
+        private Pen focusPen {
             get {
-                return new Pen(Brushes.Red, 1.5); ;
+                return new Pen(Brushes.Red, 1.5);
             }
         }
 
-        private Pen linePen {
+        private Pen unfocusPen {
             get {
-                return new Pen(Brushes.DimGray, 0.5); ;
+                return new Pen(Brushes.Blue, 1.5);
             }
         }
         #endregion
@@ -36,17 +36,20 @@ namespace MpWpfApp {
         #region Overrides
 
         protected override void OnRender(DrawingContext drawingContext) {
-            //foreach(var p in Test) {
-
-            //    Visibility = Visibility.Visible;
-            //    drawingContext.DrawRectangle(Brushes.Orange,pen, p);
-            //}
-            //return;
             var civm = (AdornedElement as FrameworkElement).DataContext as MpContentItemViewModel;
-            IsShowing = MpRtbView.DropOverHomeItemId == civm.CopyItemId || MpRtbView.DropOverEndItemId == civm.CopyItemId;
+            IsShowing = MpClipTrayViewModel.Instance.IsAnyTileItemDragging; 
             if (IsShowing) {
+                var rtbv = AdornedElement.GetVisualAncestor<MpRtbView>();
+
                 Visibility = Visibility.Visible;
-                drawingContext.DrawLine(caretPen, CaretLine[0], CaretLine[1]);
+                bool isFocus = MpRtbView.DropOverHomeItemId == civm.CopyItemId || MpRtbView.DropOverEndItemId == civm.CopyItemId;
+                
+                drawingContext.DrawLine(unfocusPen, rtbv.HomeCaretLine[0], rtbv.HomeCaretLine[1]);
+                drawingContext.DrawLine(unfocusPen, rtbv.EndCaretLine[0], rtbv.EndCaretLine[1]);
+
+                if(isFocus) {
+                    drawingContext.DrawLine(focusPen, CaretLine[0], CaretLine[1]);
+                }
             } else {
                 Visibility = Visibility.Hidden;
             }

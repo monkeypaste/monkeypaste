@@ -17,7 +17,9 @@ namespace MonkeyPaste {
         MainWindowOpening,
         MainWindowOpened,
         MainWindowHiding,
-        MainWindowHid
+        MainWindowHid,
+        ItemDragBegin,
+        ItemDragEnd
     }
 
     public class MpMessenger {

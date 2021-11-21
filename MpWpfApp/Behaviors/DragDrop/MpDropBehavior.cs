@@ -121,7 +121,7 @@ namespace MpWpfApp {
                 isTail = true;
             }
 
-            if (isTrayDrop) {
+            if (isTrayDrop) {                
                 if (isTail) {
                     lineAdorner.Points[0] = overRect.TopRight;
                     lineAdorner.Points[1] = overRect.BottomRight;
@@ -351,7 +351,7 @@ namespace MpWpfApp {
                                 await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
                             }
                         }
-                        await dropTile.InitializeAsync(dropTile.HeadItem.CopyItem);
+                        //await dropTile.InitializeAsync(dropTile.HeadItem.CopyItem);
                     }
                 }
 
@@ -381,7 +381,11 @@ namespace MpWpfApp {
                         AssociatedObject.FindParentOfType<MpRtbView>().BindingContext.IsSelected = true;
                         //lb.ScrollIntoView(lbi);
                     }
-                } 
+                }
+
+
+                MpClipTrayViewModel.Instance.Items.ForEach(x =>
+                    x.ItemViewModels.ForEach(y => y.IsItemDragging = false));
             });
         }
 

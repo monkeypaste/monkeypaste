@@ -30,13 +30,13 @@ namespace MpWpfApp {
     public partial class MpRtbView : MpUserControl<MpContentItemViewModel> {
         public static int DropOverHomeItemId = -1;
         public static int DropOverEndItemId = -1;
-        private static MpRtbView _CurDropOverRtbView = null;
+        public static MpRtbView CurDropOverRtbView = null;
 
         protected MpContentItemCaretAdorner CaretAdorner;
         protected AdornerLayer CaretAdornerLayer;
 
-        protected Point[] HomeCaretLine = new Point[2];
-        protected Point[] EndCaretLine = new Point[2];
+        public Point[] HomeCaretLine = new Point[2];
+        public Point[] EndCaretLine = new Point[2];
 
         public Rect HomeRect, EndRect;
 
@@ -51,17 +51,14 @@ namespace MpWpfApp {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
         }
-
-        public void ScrollToHome() {
-            Rtb.ScrollToHome();
-            InitCaretAdorner();
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemDragBegin:
+                case MpMessageType.ItemDragEnd:
+                    CaretAdornerLayer.Update();
+                    break;
+            }
         }
-
-        public void ScrollToEnd() {
-            Rtb.ScrollToEnd();
-            InitCaretAdorner();
-        }
-
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
@@ -80,6 +77,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });
+                MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
             }
         }
 
@@ -211,6 +209,7 @@ namespace MpWpfApp {
         }
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
+            ScrollToHome();
             Rtb.UpdateLayout();
         }
 
@@ -230,25 +229,33 @@ namespace MpWpfApp {
 
         #region Merging
 
+        public void ScrollToHome() {
+            Rtb.ScrollToHome();
+            InitCaretAdorner();
+        }
+
+        public void ScrollToEnd() {
+            Rtb.ScrollToEnd();
+            InitCaretAdorner();
+        }
+
         public void InitCaretAdorner() {
             if(CaretAdorner == null) {
                 CaretAdorner = new MpContentItemCaretAdorner(Rtb);
                 CaretAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
                 CaretAdornerLayer.Add(CaretAdorner);
             }
+            CaretAdorner.Test.Clear();
 
-            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);            
             HomeCaretLine[0] = HomeRect.TopLeft;
             HomeCaretLine[1] = HomeRect.BottomLeft;
-            //HomeRect.Location = Rtb.TranslatePoint(HomeRect.Location, this);
+            //HomeRect.Size = new Size(20, HomeRect.Size.Height);
 
             EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
             EndCaretLine[0] = EndRect.TopRight;
             EndCaretLine[1] = EndRect.BottomRight;
-
-            //EndRect.Location = Rtb.TranslatePoint(EndRect.Location, this);
-
-            //CaretAdorner.Test = new List<Rect> { HomeRect,EndRect };\
+            //EndRect.Size = new Size(20, EndRect.Size.Height);
 
             CaretAdornerLayer.Update();
         }
@@ -259,7 +266,7 @@ namespace MpWpfApp {
             rtbView.ScrollToHome();
             rtbView.CaretAdorner.CaretLine = rtbView.HomeCaretLine;
             rtbView.CaretAdornerLayer.Update();
-            _CurDropOverRtbView = rtbView;
+            CurDropOverRtbView = rtbView;
         }
 
         public static void ShowEndCaretAdorner(MpRtbView rtbView) {
@@ -268,15 +275,15 @@ namespace MpWpfApp {
             rtbView.ScrollToEnd();
             rtbView.CaretAdorner.CaretLine = rtbView.EndCaretLine;
             rtbView.CaretAdornerLayer.Update();
-            _CurDropOverRtbView = rtbView;
+            CurDropOverRtbView = rtbView;
         }
 
         public static void ClearCaretAdorner() {
             DropOverHomeItemId = DropOverEndItemId = -1;
-            if(_CurDropOverRtbView != null) {
-                _CurDropOverRtbView.ScrollToHome();
-                _CurDropOverRtbView.CaretAdornerLayer.Update();
-                _CurDropOverRtbView = null;
+            if(CurDropOverRtbView != null) {
+                CurDropOverRtbView.ScrollToHome();
+                CurDropOverRtbView.CaretAdornerLayer.Update();
+                CurDropOverRtbView = null;
             }
         }
 
