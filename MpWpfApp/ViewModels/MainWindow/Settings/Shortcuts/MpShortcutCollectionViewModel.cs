@@ -506,7 +506,7 @@ namespace MpWpfApp {
         #region Global Mouse Handlers
 
         private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpMainWindowViewModel.IsMainWindowOpen && !MpMainWindowViewModel.IsMainWindowOpening) {
+            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && !MpMainWindowViewModel.Instance.IsMainWindowOpening) {
                 if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
@@ -516,7 +516,7 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpMainWindowViewModel.IsMainWindowOpen) {
+            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
                !Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
@@ -527,7 +527,7 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpMainWindowViewModel.IsMainWindowOpen) {
+            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
                     if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
                         System.Windows.Forms.SendKeys.SendWait(" ^ c");

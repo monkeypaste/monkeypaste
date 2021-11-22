@@ -32,11 +32,14 @@ namespace MonkeyPaste {
         public static IEnumerable<TSource> IntersectBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TKey> keys, Func<TSource, TKey> keySelector) => source.Join(keys, keySelector, id => id, (o, id) => o);
         
         public static void RemoveRange<TSource>(this IList<TSource> collection, int startIdx, int count) where TSource: class {
+            if(count == 0) {
+                return;
+            }
             if(startIdx < 0 || startIdx >= collection.Count()) {
-                throw new IndexOutOfRangeException($"Start Idx: {startIdx} out of range {collection.Count()}");
+                return;
             }
             if(startIdx + count >= collection.Count()) {
-                throw new IndexOutOfRangeException($"Idx at count: {startIdx + count} is out of range {collection.Count()}");
+                count = collection.Count() - startIdx;
             }
             while(count > 0) {
                 collection.RemoveAt(startIdx);

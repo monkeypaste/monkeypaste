@@ -19,8 +19,6 @@ namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
         #region Private Variables
 
-        private int _queryPrimaryItemId = -1;
-
         Size itemSize;
         int fc = 0, lc = 0, cc = 0;
         double ds = 0;
@@ -119,10 +117,6 @@ namespace MpWpfApp {
 
         public Brush ItemBorderBrush {
             get {
-                if(CopyItemId == _queryPrimaryItemId) {
-                    return Brushes.Blue;
-                }
-
                 if(Parent == null || 
                    Parent.Count <= 1 || 
                    !IsSelected/* || 
@@ -596,10 +590,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem ci,int queryItemId = -1) {
+        public async Task InitializeAsync(MpCopyItem ci) {
             IsBusy = true;
-
-            _queryPrimaryItemId = queryItemId;
             if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
@@ -609,9 +601,12 @@ namespace MpWpfApp {
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+
+            await TitleSwirlViewModel.InitializeAsync();
             //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
+
             RequestUiUpdate();
             OnPropertyChanged(nameof(ItemBorderBrush));
 

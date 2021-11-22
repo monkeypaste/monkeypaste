@@ -25,10 +25,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Statics
-        public static bool IsMainWindowOpening { get; set; } = false;
-        public static bool IsMainWindowClosing { get; set; } = false;
-
-        public static bool IsMainWindowOpen { get; private set; } = false;
 
 
         public static void SetLogText(string text, bool append = false) {
@@ -80,6 +76,11 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsMainWindowOpening { get; set; } = false;
+        public bool IsMainWindowClosing { get; set; } = false;
+
+        public bool IsMainWindowOpen { get; private set; } = false;
 
         public bool IsMainWindowLoading { get; set; } = true;
 

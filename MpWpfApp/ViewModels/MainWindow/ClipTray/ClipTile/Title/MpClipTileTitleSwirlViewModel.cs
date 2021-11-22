@@ -94,30 +94,33 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
-        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) {
-            if(parent.IsPlaceholder) {
-                for (int i = 0; i < 5; i++) {
-                    Swirls.Add(new MpSwirlLayerViewModel(this));
-                }
-            } else {
-                var cl = MpHelpers.Instance.GetRandomizedList<string>(parent.ColorPallete);
-                for (int i = 0; i < cl.Count; i++) {
-                    var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
-                    if (i < Swirls.Count) {
-                        Swirls[i].LayerId = i;
-                        Swirls[i].LayerBrush = scb;
-                        Swirls[i].LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
-                    } else {
-                        Swirls.Add(
-                            new MpSwirlLayerViewModel(
-                                this,
-                                i,
-                                scb,
-                                (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
+        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) { }
+
+        public async Task InitializeAsync() {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                if (Parent.IsPlaceholder) {
+                    //for (int i = 0; i < 5; i++) {
+                    //    Swirls.Add(new MpSwirlLayerViewModel(this));
+                    //}
+                } else {
+                    var cl = MpHelpers.Instance.GetRandomizedList<string>(Parent.ColorPallete);
+                    for (int i = 0; i < cl.Count; i++) {
+                        var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
+                        if (i < Swirls.Count) {
+                            Swirls[i].LayerId = i;
+                            Swirls[i].LayerBrush = scb;
+                            Swirls[i].LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
+                        } else {
+                            Swirls.Add(
+                                new MpSwirlLayerViewModel(
+                                    this,
+                                    i,
+                                    scb,
+                                    (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
+                        }
                     }
                 }
-            }
-            
+            });
         }
         public void ForceBrush(Brush forcedBrush) {
             foreach(var slvm in Swirls) {

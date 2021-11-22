@@ -25,38 +25,37 @@
         <Grid>
             <AdornerDecorator>
                 <ListBox x:Name="ClipTray"
-                         RequestBringIntoView="ClipTray_RequestBringIntoView"
                          SelectionChanged="ClipTray_SelectionChanged"
                          Visibility="{Binding IsTrayEmpty,
                                               Converter={StaticResource BoolToVisibilityFlipConverter},
                                               ConverterParameter={StaticResource Hide}}"
                          ItemsSource="{Binding Items}"
                          Background="Transparent"
-                         local:MpFrictionScrollExtension.IsEnabled="True"
-                         local:MpFrictionScrollExtension.IsHorizontal="True"
-                         local:MpFrictionScrollExtension.WheelDampening="0.08"
-                         local:MpFrictionScrollExtension.Friction="0.85"
-                         local:MpLoadMoreItemsExtension.RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                         local:MpLoadMoreItemsExtension.RemainingItemsThresholdReachedCommand="{Binding LoadMoreClipsCommand}"
                          Loaded="ClipTray_Loaded"
-                         IsSynchronizedWithCurrentItem="False"
+                         IsSynchronizedWithCurrentItem="True"
                          Margin="0,0,0,0"
                          Focusable="True"
                          BorderThickness="0"
                          VerticalAlignment="Stretch"
                          VerticalContentAlignment="Stretch"
-                         HorizontalAlignment="Stretch"
-                         HorizontalContentAlignment="Stretch"
+                         HorizontalAlignment="Left"
+                         HorizontalContentAlignment="Left"
                          SelectionMode="Single"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.ScrollUnit="Pixel"
-                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         VirtualizingPanel.VirtualizationMode="Standard"                         
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
                         <local:MpDropBehavior x:Name="DropBehavior" />
+                        <local:MpKinematicScrollWheelBehavior x:Name="KinematicScrollWheelBehavior"
+                                                              Friction="0.85"
+                                                              WheelDampening="0.08" />
+                        <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
+                                                       RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
+                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}"/>
                     </i:Interaction.Behaviors>
                     <ListBox.InputBindings>
                         <KeyBinding Gesture="Ctrl+A"
@@ -69,7 +68,7 @@
                             <Setter Property="FocusVisualStyle"
                                     Value="{x:Null}" />
                             <Setter Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
+                                    Value="Left" />
                             <Setter Property="VerticalContentAlignment"
                                     Value="Top" />
                             <Setter Property="Template">
@@ -92,8 +91,8 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                    HorizontalAlignment="Stretch"
+                            <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                                    HorizontalAlignment="Left"
                                                     IsItemsHost="True"
                                                     Orientation="Horizontal" />
                         </ItemsPanelTemplate>

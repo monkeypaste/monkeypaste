@@ -9,10 +9,9 @@ using static SQLite.SQLite3;
 namespace MonkeyPaste {
     public class MpDataModelProvider : MpSingleton<MpDataModelProvider> {
         #region Private Variables
-        private MpCopyItemFetchResultComparer _fetchComparer = new MpCopyItemFetchResultComparer();
-        private IList<Tuple<MpCopyItem,int>> _lastResult;
+        private IList<MpCopyItem> _lastResult;
 
-        private List<MpCopyItemFetchResult> _allFetchedAndSortedCopyItemIds = new List<MpCopyItemFetchResult>();
+        private List<int> _allFetchedAndSortedCopyItemIds = new List<int>();
         #endregion
 
         #region Properties
@@ -36,37 +35,33 @@ namespace MonkeyPaste {
 
         public void ResetQuery() {
             _allFetchedAndSortedCopyItemIds.Clear();
-            _lastResult = new List<Tuple<MpCopyItem,int>>();
+            _lastResult = new List<MpCopyItem>();
         }
 
         #region MpQueryInfo Fetch Methods
 
         public async Task<int> FetchCopyItemCountAsync() {
             string allRootIdQuery = GetQueryForCount();
-            var test = await MpDb.Instance.QueryAsync<(int a, int b)>(allRootIdQuery);
-            _allFetchedAndSortedCopyItemIds = await MpDb.Instance.QueryAsync<MpCopyItemFetchResult>(allRootIdQuery);
-            _allFetchedAndSortedCopyItemIds = _allFetchedAndSortedCopyItemIds.Distinct(_fetchComparer).ToList();
+            _allFetchedAndSortedCopyItemIds = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
+            _allFetchedAndSortedCopyItemIds = _allFetchedAndSortedCopyItemIds.Distinct().ToList();
             return _allFetchedAndSortedCopyItemIds.Count;
         }
 
-        public async Task<IList<Tuple<MpCopyItem,int>>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+        public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             if(startIndex >= _allFetchedAndSortedCopyItemIds.Count) {
                 return _lastResult;
             }
             if(startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
-                count = _allFetchedAndSortedCopyItemIds.Count - (startIndex + count);
+                startIndex = _allFetchedAndSortedCopyItemIds.Count - count - 1;
             }
             if(count <= 0) {
                 count = _allFetchedAndSortedCopyItemIds.Count - startIndex;
             }
             var fetchRange = _allFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
 
-            var items = await GetCopyItemsByIdList(fetchRange.Select(x=>x.RootId).ToList());
+            var items = await GetCopyItemsByIdList(fetchRange);
 
-            return items.Select(x => 
-                new Tuple<MpCopyItem, int>(
-                    x, 
-                    fetchRange.FirstOrDefault(y => y.RootId == x.Id).PrimaryItemId)).ToList();
+            return items;
         }
 
         #endregion
@@ -75,7 +70,7 @@ namespace MonkeyPaste {
         #region View Queries
 
         public string GetQueryForCount() {
-            string query = "select RootId,pk_MpCopyItemId from MpSortableCopyItem_View";
+            string query = "select RootId from MpSortableCopyItem_View";
             string tagClause = string.Empty;
             string sortClause = string.Empty;
             List<string> filters = new List<string>();

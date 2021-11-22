@@ -61,29 +61,34 @@ namespace MpWpfApp {
         #endregion
 
         public static bool IsScrollJumping = false;
+
         private static double _accumHorizontalChange = 0;
         private static ListBox lb;
 
         private static void Lb_Loaded(object sender, RoutedEventArgs e) {
             lb = sender as ListBox;
             var sv = lb.GetScrollViewer();
-            sv.PreviewMouseWheel += Sv_ScrollChanged;
+            sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
+            sv.ScrollChanged += Sv_ScrollChanged;
         }
 
+        private static void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e) {
+
+        }
 
         private static void Lb_Unloaded(object sender, RoutedEventArgs e) {
             var lb = sender as ListBox;
             if(lb != null) {
                 var sv = lb.GetScrollViewer();
                 if(sv != null) {
-                    sv.PreviewMouseWheel -= Sv_ScrollChanged;
+                    sv.PreviewMouseWheel -= Sv_PreviewMouseWheel;
                 }
                 lb.Loaded -= Lb_Loaded;
                 lb.Unloaded -= Lb_Unloaded;
             }
         }
 
-        private static void Sv_ScrollChanged(object sender, MouseWheelEventArgs e) {
+        private static void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
             if (IsScrollJumping || 
                 MpClipTrayViewModel.Instance.SelectedItems.Any(x=>x.IsFlipped) ||
                 MpClipTrayViewModel.Instance.IsAnyTileItemDragging || /*e.HorizontalChange == 0 || */
@@ -91,19 +96,16 @@ namespace MpWpfApp {
                 IsScrollJumping = false;
                 return;
             }
-            //e.Handled = true;
+
+            ApplyScrollBarOffset(e.Delta);
+        }
+
+        public static void ApplyScrollBarOffset(double offset) {
             int thresholdRemainingItemCount = (int)lb.GetValue(RemainingItemsThresholdProperty);
             var loadMoreCommand = (ICommand)lb.GetValue(RemainingItemsThresholdReachedCommandProperty);
 
-            if (loadMoreCommand == null) {
-                return;
-            }
 
             var ctrvm = MpClipTrayViewModel.Instance;
-            if (ctrvm == null) {
-                MpConsole.WriteTraceLine("tray vm is null");
-                return;
-            }
             int itemCountInListbox = ctrvm.Items.Count;
             if (itemCountInListbox <= thresholdRemainingItemCount) {
                 //list is shorter than remaining threshold so there will be no more to load
@@ -111,11 +113,14 @@ namespace MpWpfApp {
             }
             var lbr = lb.GetListBoxRect();
 
-            if((_accumHorizontalChange > 0 && e.Delta < 0) ||
-               (_accumHorizontalChange < 0 && e.Delta > 0)) {
-                _accumHorizontalChange = 0;
+            if ((_accumHorizontalChange > 0 && offset < 0) ||
+               (_accumHorizontalChange < 0 && offset > 0)) {
+                _accumHorizontalChange = offset;
+            } else {
+                _accumHorizontalChange += offset;
             }
-            _accumHorizontalChange += e.Delta;
+
+            
             if (_accumHorizontalChange < 0) {
                 //scrolling down through list
 
@@ -135,7 +140,7 @@ namespace MpWpfApp {
                     //MpConsole.WriteLine($"Scrolling left, right most idx: {r_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
                     if (itemsRemaining <= thresholdRemainingItemCount) {
-                        if(!ctrvm.IsBusy) {
+                        if (!ctrvm.IsBusy) {
                         }
 
                         _accumHorizontalChange = 0;

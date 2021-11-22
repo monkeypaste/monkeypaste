@@ -161,6 +161,16 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsLastItemVisible {
+            get {
+                return _nextQueryOffsetIdx >= TotalItemsInQuery;
+            }
+        }
+
+        public bool IsLoadingMore { get; set; } = false;
+
+        public bool IsScrollJumping { get; set; } = false;
+
         public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || IsBusy;
 
         public bool IsRequery { get; private set; } = false;
@@ -255,7 +265,7 @@ namespace MpWpfApp {
                 MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
                 _pageSize = (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
-                RemainingItemsCountThreshold = 0;// _pageSize;
+                RemainingItemsCountThreshold = _pageSize;
                 MpDataModelProvider.Instance.Init(new MpWpfQueryInfo(), _pageSize);
 
                 _initialLoadCount = _pageSize * 3;
@@ -339,21 +349,21 @@ namespace MpWpfApp {
             }
 
 
-            var citl = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
-            if (citl.Count >= Items.Count) {
+            var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
+            if (cil.Count >= Items.Count) {
                 //occurs when tags switched quickly
-                int itemsToAdd = citl.Count - Items.Count;
+                int itemsToAdd = cil.Count - Items.Count;
                 while(itemsToAdd > 0) {
                     var ctvm = await CreateClipTileViewModel(null);
                     Items.Add(ctvm);
                 }
             }
-            for (int i = 0; i < citl.Count; i++) {                
-                await Items[i].InitializeAsync(citl[i].Item1,citl[i].Item2);
+            for (int i = 0; i < cil.Count; i++) {                
+                await Items[i].InitializeAsync(cil[i]);
             }
 
             _lastQueryOffsetIdx = 0;
-            _nextQueryOffsetIdx = citl.Count;
+            _nextQueryOffsetIdx = cil.Count;
 
             IsBusy = false;
             ResetClipSelection();
@@ -368,32 +378,32 @@ namespace MpWpfApp {
 
         public ICommand LoadMoreClipsCommand => new RelayCommand<object>(
             async (isLoadMore) => {
-                IsBusy = true;
+                IsBusy = IsLoadingMore = true;
                 bool isLeft = ((int)isLoadMore) >= 0;
                 if (isLeft && _nextQueryOffsetIdx < TotalItemsInQuery) {
-                    IList<Tuple<MpCopyItem,int>> citl = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffsetIdx, _pageSize);
+                    var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffsetIdx, _pageSize);
 
-                    for (int i = 0; i < citl.Count; i++) {
-                        var ctvm = await CreateClipTileViewModel(citl[i].Item1, citl[i].Item2);
+                    for (int i = 0; i < cil.Count; i++) {
+                        var ctvm = await CreateClipTileViewModel(cil[i]);
                         Items.Add(ctvm);
                     }
 
-                    _nextQueryOffsetIdx += citl.Count;
+                    _nextQueryOffsetIdx += cil.Count;
 
-                    int itemsToRemove = Items.Count - _initialLoadCount;
+                    int itemsToRemove = Items.Count - cil.Count;
                     Items.RemoveRange(0, itemsToRemove);
 
                     _lastQueryOffsetIdx = _nextQueryOffsetIdx - _initialLoadCount - _pageSize;
                     //MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
                 } else if(_lastQueryOffsetIdx >= 0) {
-                    IList<Tuple<MpCopyItem,int>> citl = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_lastQueryOffsetIdx, _pageSize);
+                    var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_lastQueryOffsetIdx, _pageSize);
 
-                    for (int i = 0; i < citl.Count; i++) {
-                        var ctvm = await CreateClipTileViewModel(citl[i].Item1, citl[i].Item2);
+                    for (int i = 0; i < cil.Count; i++) {
+                        var ctvm = await CreateClipTileViewModel(cil[i]);
                         Items.Insert(i,ctvm);
                     }
 
-                    _lastQueryOffsetIdx -= citl.Count;
+                    _lastQueryOffsetIdx -= cil.Count;
 
                     int itemsToRemove = Items.Count - _initialLoadCount;
                     if(itemsToRemove > 0) {
@@ -402,34 +412,45 @@ namespace MpWpfApp {
                         _nextQueryOffsetIdx = _lastQueryOffsetIdx + _initialLoadCount + _pageSize;
                     }
                 }
-                //await Task.Delay(100);
-                IsBusy = false;
+
+                IsBusy = IsLoadingMore = false;
             },
             (itemsToLoad) => {
-                return itemsToLoad != null && !IsBusy;
+                return itemsToLoad != null && 
+                       !IsBusy && 
+                       !IsScrollJumping &&
+                       !IsAnyTileFlipped &&
+                       !IsAnyTileItemDragging &&
+                       !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             });
 
 
         public ICommand JumpToPageIdxCommand => new RelayCommand<int>(
             async (idx) => {
-                IList<Tuple<MpCopyItem,int>> citl = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(idx, _initialLoadCount);
+                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(idx, _initialLoadCount);
 
-                int firstPlaceHolderIdx = Items.IndexOf(Items.Where(x => x.IsPlaceholder).FirstOrDefault());
-
-                for (int i = 0; i < citl.Count; i++) {
-                    if (i + firstPlaceHolderIdx >= Items.Count - 1) {
-                        var phctvm2 = await CreateClipTileViewModel(null);
-                        Items.Add(phctvm2);
-                    }
-                    await Items[i + firstPlaceHolderIdx].InitializeAsync(citl[i].Item1, citl[i].Item2);
-
-                    var phctvm = await CreateClipTileViewModel(null);
-                    Items.Add(phctvm);
+                for (int i = 0; i < cil.Count; i++) {
+                    //var ctvm = await CreateClipTileViewModel(citl[i].Item1, citl[i].Item2);
+                    //Items.Add(ctvm);
+                    await Items[i].InitializeAsync(cil[i]);
                 }
 
-                _nextQueryOffsetIdx = idx + citl.Count - 1;
+                int itemsToRemove = Items.Count - cil.Count - 1;
+                if(idx + cil.Count >= TotalItemsInQuery) {
+                    while(itemsToRemove > 0) {
+                        await Items[cil.Count + itemsToRemove].InitializeAsync(null);
+                        itemsToRemove--;
+                    }
+                } else {
+                    Items.RemoveRange(cil.Count, itemsToRemove);
+                }
+                
 
-                MpConsole.WriteLine($"Loaded {citl.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
+                _nextQueryOffsetIdx = idx + cil.Count - 1;
+                _lastQueryOffsetIdx = _nextQueryOffsetIdx - _initialLoadCount - _pageSize;
+
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.JumpToIdx);
+                MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
             },
             (idx) => {
                 return idx >= 0 && idx < TotalItemsInQuery;
@@ -726,9 +747,9 @@ namespace MpWpfApp {
             });            
         }
 
-        public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci, int queryPrimaryItemId = 0) {
+        public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci) {
             var nctvm = new MpClipTileViewModel(this);
-            await nctvm.InitializeAsync(ci,queryPrimaryItemId);
+            await nctvm.InitializeAsync(ci);
             return nctvm;
         }
 
@@ -1271,7 +1292,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                if (MpMainWindowViewModel.IsMainWindowOpen) {
+                if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                     //occurs during hotkey paste and set in ctvm.GetPastableRichText
                     MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
                 } else if (pasteDataObject != null) {
@@ -1282,7 +1303,7 @@ namespace MpWpfApp {
                 }
             },
             (args) => {
-                return !MpMainWindowViewModel.IsMainWindowOpen;
+                return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
             });
 
         public ICommand CopySelectedClipsCommand => new RelayCommand(

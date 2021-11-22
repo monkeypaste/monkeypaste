@@ -108,7 +108,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
-    <Compile Include="AttachedProperties\MpFrictionScrollExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
@@ -128,13 +127,14 @@
     <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
+    <Compile Include="Behaviors\MpKinematicScrollWheelBehavior.cs" />
+    <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
     <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemCaretAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="AttachedProperties\MpLoadMoreItemsExtension.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />

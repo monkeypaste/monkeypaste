@@ -174,6 +174,9 @@ namespace MpWpfApp {
                                 dropIdx--;
                                 MpConsole.WriteLine("Decrementing tray dropIdx: " + dropIdx);
                             }
+                            //to prevent bounds exceptions
+                            dropIdx = Math.Min(Math.Max(0, dropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
+                            oldIdx = Math.Min(Math.Max(0, oldIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
                             MpClipTrayViewModel.Instance.Items.Move(oldIdx, dropIdx);
                         }
                     } else {
@@ -225,8 +228,10 @@ namespace MpWpfApp {
                             }
                         }
                         await dropTile.InitializeAsync(dragModels[0]);
-                        
                         int oldDropIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dropTile);
+                        //to prevent bounds exceptions
+                        dropIdx = Math.Min(Math.Max(0, dropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
+                        oldDropIdx = Math.Min(Math.Max(0, oldDropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
                         MpClipTrayViewModel.Instance.Items.Move(oldDropIdx, dropIdx);
 
                         dropTile.RequestUiUpdate();
@@ -249,6 +254,9 @@ namespace MpWpfApp {
                                     dropIdx--;
                                     MpConsole.WriteLine("Decrementing tile dropIdx: " + dropIdx);
                                 }
+                                //to prevent bounds exceptions
+                                dropIdx = Math.Min(Math.Max(0, dropIdx), dragTiles[0].ItemViewModels.Count - 1);
+                                oldIdx = Math.Min(Math.Max(0, oldIdx), dragTiles[0].ItemViewModels.Count - 1);
                                 dragTiles[0].ItemViewModels.Move(oldIdx, dropIdx);
                             }
                         } else {
@@ -276,6 +284,9 @@ namespace MpWpfApp {
                             //range insert drag items into drop and reorder based on drop idx
                             dragModels.Reverse();
                             var dropModels = dropTile.ItemViewModels.Select(x => x.CopyItem).ToList();
+
+                            //to prevent bounds exceptions
+                            dropIdx = Math.Min(Math.Max(0, dropIdx), dropModels.Count - 1);
                             dropModels.InsertRange(dropIdx, dragModels);
                             for (int i = 0; i < dropModels.Count; i++) {
                                 dropModels[i].CompositeSortOrderIdx = i;
@@ -434,6 +445,7 @@ namespace MpWpfApp {
                     targetOffsetX = ctr_sv.HorizontalOffset + autoScrollOffset;
                 }
                 ctr_sv.ScrollToHorizontalOffset(targetOffsetX);
+                MpConsole.WriteLine($"Tray auto-scroll: {targetOffsetX}");
             } else {
                 if(AssociatedObject.DataContext is MpClipTileViewModel) {
                     var lb = AssociatedObject as ListBox;

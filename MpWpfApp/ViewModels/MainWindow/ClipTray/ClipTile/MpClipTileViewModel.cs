@@ -775,7 +775,7 @@ using System.Speech.Synthesis;
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem headItem, int primaryItemId = 0) {
+        public async Task InitializeAsync(MpCopyItem headItem) {
             IsBusy = true;
             ItemViewModels.Clear();
             if (headItem != null) {
@@ -783,7 +783,7 @@ using System.Speech.Synthesis;
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.Count; i++) {
-                    var civm = await CreateContentItemViewModel(ccil[i],primaryItemId);
+                    var civm = await CreateContentItemViewModel(ccil[i]);
                     ItemViewModels.Add(civm);
                 }
 
@@ -801,9 +801,9 @@ using System.Speech.Synthesis;
             IsBusy = false;
         }
 
-        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci, int queryItemId = -1) {
+        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci) {
             var civm = new MpContentItemViewModel(this);
-            await civm.InitializeAsync(ci,queryItemId);
+            await civm.InitializeAsync(ci);
             return civm;
         }
 
@@ -1020,7 +1020,7 @@ using System.Speech.Synthesis;
                 bool isPastingTemplate = SelectedItems.Any(x => x.HasTemplates);
                 if (isPastingTemplate) {
                     SelectedItems.Where(x => x.HasTemplates).Select(y => y.IsPastingTemplate = true);
-                    if (!MpMainWindowViewModel.IsMainWindowOpen) {
+                    if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                     await FillAllTemplates();
