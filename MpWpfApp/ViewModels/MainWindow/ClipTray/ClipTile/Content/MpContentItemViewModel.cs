@@ -568,6 +568,7 @@ namespace MpWpfApp {
 
         public event EventHandler<int> OnScrollWheelRequest;
         public event EventHandler OnUiUpdateRequest;
+        public event EventHandler OnFitContentRequest;
         //public event EventHandler OnSubSelected;
 
 
@@ -659,6 +660,9 @@ namespace MpWpfApp {
 
         #region UI Invokers
 
+        public void RequestFitContent() {
+            OnFitContentRequest?.Invoke(this, null);
+        }
         public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
         }
@@ -747,7 +751,7 @@ namespace MpWpfApp {
             }
         }
 
-
+        
         public void MoveToArchive() {
             // TODO maybe add archiving
         }
@@ -873,6 +877,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand UnexpandItemCommand => new RelayCommand(
+            () => {
+                RequestSyncModel();
+                ClearEditing();
+                OnPropertyChanged(nameof(EditorHeight));
+                OnPropertyChanged(nameof(IsEditingContent));
+            });
 
         public ICommand CycleDetailCommand => new RelayCommand(
             () => {

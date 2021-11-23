@@ -76,7 +76,6 @@
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
-                  Focusable="True"
                   Background="DarkViolet">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*" />
@@ -141,7 +140,6 @@
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2"
                   Grid.Column="0"
-                  Focusable="True"
                   Background="{local:MpThemeColorsBinding Clip_Tray_Background_Color}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />

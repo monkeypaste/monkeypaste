@@ -329,14 +329,14 @@ namespace MpWpfApp {
         private void MpMainWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(ClipTrayAndCriteriaListHeight):
-                    if(!IsResizing) {
-                        MainWindowHeight = MpMeasurements.Instance.TitleMenuHeight +
-                                        MpMeasurements.Instance.FilterMenuHeight +
-                                        ClipTrayAndCriteriaListHeight;
+                    //if(!IsResizing) {
+                    //    MainWindowHeight = MpMeasurements.Instance.TitleMenuHeight +
+                    //                    MpMeasurements.Instance.FilterMenuHeight +
+                    //                    ClipTrayAndCriteriaListHeight;
 
-                        MainWindowTop -= MainWindowHeight - _lastMainWindowHeight;
-                        OnPropertyChanged(nameof(ClipTrayHeight));
-                    }
+                    //    MainWindowTop -= MainWindowHeight - _lastMainWindowHeight;
+                    //    OnPropertyChanged(nameof(ClipTrayHeight));
+                    //}
                     break;
                 case nameof(MainWindowTop):
                     if(IsResizing) {

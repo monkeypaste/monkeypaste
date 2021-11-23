@@ -272,6 +272,9 @@ namespace MpWpfApp {
         }
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
+            if(lb is AnimatedListBox alb) {
+                return alb.AnimatedScrollViewer;
+            }
             ScrollViewer sv = lb.GetVisualDescendent<ScrollViewer>();
             return sv;
         }

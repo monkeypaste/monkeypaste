@@ -134,8 +134,12 @@
     <Compile Include="Controls\Adorners\MpContentItemCaretAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
+    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
+    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListView.cs" />
+    <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
+    <Compile Include="Controls\MpListBox.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -472,6 +476,10 @@
     <Page Include="Styles\MpListBoxScrollBarResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MpPagingListBoxResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml">
       <SubType>Designer</SubType>

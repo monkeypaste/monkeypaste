@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
@@ -9,9 +11,6 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpPagingListBoxBehavior : Behavior<ListBox> {
         #region Private Variables
-
-        private double _accumOffset = 0;
-
         #endregion
 
         #region Properties
@@ -54,19 +53,57 @@ namespace MpWpfApp {
                 }
                 sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
 
-                sv.PreviewMouseDown += Sv_PreviewMouseDown;
+                sv.GetScrollBar(Orientation.Horizontal).PreviewMouseDown += Sv_PreviewMouseDown;
+
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
             });
         }
 
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.JumpToIdxCompleted:
+                case MpMessageType.RequeryCompleted:
+                    AssociatedObject.UpdateLayout();
+                    var sv = AssociatedObject.GetScrollViewer();
+                    if (sv != null) {
+                        double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
+                        double ttw = tw * MpClipTrayViewModel.Instance.TotalItemsInQuery;
+                        var hsb = sv.GetScrollBar(Orientation.Horizontal);
+
+                        hsb.Maximum = ttw;
+                        hsb.Minimum = 0;
+                        hsb.UpdateLayout();
+
+                        if (msg == MpMessageType.RequeryCompleted) {
+                            hsb.Value = 0;
+                            sv.ScrollToHorizontalOffset(0);
+                            sv.ScrollToLeftEnd();
+                            sv.ScrollToHome();
+                        } else {
+                            MpClipTrayViewModel.Instance.IsScrollJumping = false;
+                            sv.ScrollToHorizontalOffset(0);
+                        }
+
+                        sv.UpdateLayout();
+                        AssociatedObject.UpdateLayout();
+                    }
+                    break;
+                case MpMessageType.Expand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Center;
+                    break;
+                case MpMessageType.Unexpand:
+                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Left;
+                    break;
+            }
+        }
+
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            var sv = sender as ScrollViewer;
-            var hsb = sv.GetScrollBar(Orientation.Horizontal);
+            var hsb = sender as ScrollBar;
             var htrack = hsb.Track;
             var hthumb = htrack.Thumb;
 
-            var hsb_mp = e.GetPosition(hsb);
-            if (hsb_mp.Y < 0) {
+            var htrack_mp = e.GetPosition(htrack);
+            if (htrack_mp.Y < 0) {
                 return;
             }
             var hthumb_rect = hthumb.Bounds();
@@ -77,7 +114,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.IsScrollJumping = true;
 
             e.Handled = true;
-            double norm_x = e.GetPosition(sv).X / sv.ActualWidth;
+            double norm_x = htrack_mp.X / htrack.ActualWidth;
 
             int targetTileIdx = (int)(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);            
 
@@ -93,6 +130,7 @@ namespace MpWpfApp {
             if(!MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                 e.Handled = true;
             }
+
             ApplyOffsetChange(e.Delta);
         }
 
@@ -100,10 +138,9 @@ namespace MpWpfApp {
             if (!LoadMoreCommand.CanExecute(0)) {
                 return;
             }
-            _accumOffset = horizontalChange;
             Rect lbr = AssociatedObject.GetListBoxRect();
 
-            if (_accumOffset < 0) {
+            if (horizontalChange < 0) {
                 //scrolling down towards end of list
 
                 //get item under point in middle of right edge of listbox
@@ -116,20 +153,20 @@ namespace MpWpfApp {
                 }
                 //get item over right edge's rect
                 var rlbir = AssociatedObject.GetListBoxItemRect(r_lbi_idx);
-                if (rlbir.Right >= lbr.Right - MpMeasurements.Instance.ClipTileMargin) {
+                if (rlbir.Right < lbr.Right) { // - MpMeasurements.Instance.ClipTileMargin) {
                     //when last visible item's right edge is past the listboxes edge
                     int itemsRemaining = AssociatedObject.Items.Count - r_lbi_idx - 1;
 
                     if (itemsRemaining <= RemainingItemsThreshold) {
                         LoadMoreCommand.Execute(1);
+
                         AssociatedObject
                             .GetVisualDescendent<ScrollViewer>()
                                 .GetScrollBar(Orientation.Horizontal)
                                     .Value += MpMeasurements.Instance.ClipTileBorderMinSize * RemainingItemsThreshold;
-                        _accumOffset = 0;
                     }
                 }
-            } else if (_accumOffset > 0) {
+            } else if (horizontalChange > 0) {
                 //scrolling up towards beginning of list
 
                 int l_lbi_idx = AssociatedObject.GetItemIndexAtPoint(new Point(lbr.Left, lbr.Height / 2));
@@ -148,47 +185,8 @@ namespace MpWpfApp {
                             .GetVisualDescendent<ScrollViewer>()
                                 .GetScrollBar(Orientation.Horizontal)
                                     .Value -= MpMeasurements.Instance.ClipTileBorderMinSize * RemainingItemsThreshold;
-                        _accumOffset = 0;
                     }
                 }
-            }
-        }
-
-
-        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.JumpToIdx:
-                case MpMessageType.RequeryCompleted:
-                    AssociatedObject.UpdateLayout();
-                    var sv = AssociatedObject.GetScrollViewer();
-                    if (sv != null) {
-                        double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
-                        double ttw = tw * MpClipTrayViewModel.Instance.TotalItemsInQuery;
-                        var hsb = sv.GetScrollBar(Orientation.Horizontal);
-
-                        hsb.Maximum = ttw;
-                        hsb.Minimum = 0;
-                        hsb.UpdateLayout();
-
-                        if(msg == MpMessageType.RequeryCompleted) {
-                            hsb.Value = 0;
-                            sv.ScrollToHorizontalOffset(0);
-                            sv.ScrollToLeftEnd();
-                            sv.ScrollToHome();
-                        } else {
-                            MpClipTrayViewModel.Instance.IsScrollJumping = false;
-                        }
-                        
-                        sv.UpdateLayout();
-                        AssociatedObject.UpdateLayout();
-                    }
-                    break;
-                case MpMessageType.Expand:
-                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Center;
-                    break;
-                case MpMessageType.Unexpand:
-                    //TrayItemsPanel.HorizontalAlignment = HorizontalAlignment.Left;
-                    break;
             }
         }
     }

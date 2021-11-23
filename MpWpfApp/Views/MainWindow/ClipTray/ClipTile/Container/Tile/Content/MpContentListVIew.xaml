@@ -34,6 +34,7 @@
         <AdornerDecorator>
             <ListBox x:Name="ContentListBox"
                      Loaded="ContentListBox_Loaded"
+                     RequestBringIntoView="ContentListBox_RequestBringIntoView"
                      SelectionChanged="ContentListBox_SelectionChanged"
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
@@ -45,7 +46,7 @@
                      IsSynchronizedWithCurrentItem="False"
                      ItemsSource="{Binding ItemViewModels,
                                            IsAsync=True}"
-                     Focusable="True"
+                     Focusable="False"
                      IsEnabled="True"
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"

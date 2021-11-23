@@ -4,12 +4,14 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp" xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpTagTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <local:MpClipBorder x:Name="TagTileBorder"
                         Loaded="TagTileBorder_Loaded"
                         MouseEnter="TagTileBorder_MouseEnter"
@@ -24,7 +26,8 @@
                         VerticalAlignment="Stretch"
                         Background="{Binding TagBorderBackgroundBrush}"
                         BorderBrush="{Binding TagBorderBrush}"
-                        Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}}"
+                        Tag="{Binding DataContext,
+                                      RelativeSource={RelativeSource Mode=Self}}"
                         BorderThickness="1.5"
                         Height="{Binding TagHeight}">
         <local:MpClipBorder.ContextMenu>
@@ -32,18 +35,28 @@
                          Opened="TagTile_ContextMenu_Opened"
                          Closed="TagTile_ContextMenu_Closed">
                 <MenuItem Header="Rename"
-                          Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                          Icon="{Binding Source={StaticResource RenameIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
                           Click="RenameMenuItem_Click" />
                 <MenuItem Header="Assign Hotkey"
-                          Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                          InputGestureText="{Binding PlacementTarget.Tag.ShortcutKeyString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-                          Command="{Binding PlacementTarget.Tag.AssignHotkeyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                          Icon="{Binding Source={StaticResource HotkeyIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          InputGestureText="{Binding PlacementTarget.Tag.ShortcutKeyString,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                    AncestorType=ContextMenu}}"
+                          Command="{Binding PlacementTarget.Tag.AssignHotkeyCommand,
+                                            RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                           AncestorType=ContextMenu}}" />
                 <Separator />
                 <MenuItem x:Name="ClipTileColorContextMenuItem"
                           Style="{StaticResource ColorPalleteMenuItemStyle}" />
                 <Separator />
                 <MenuItem Header="Delete"
-                          Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                          Icon="{Binding Source={StaticResource DeleteIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
                           Click="DeleteMenuItem_Clicked" />
             </ContextMenu>
         </local:MpClipBorder.ContextMenu>
@@ -58,13 +71,22 @@
                                 Grid.Row="0"
                                 MinWidth="20"
                                 Margin="3,0,0,0"
-                                Padding="5,5,5,5" 
+                                Padding="5,5,5,5"
                                 BorderThickness="0"
-                                Background="{Binding TagBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                Background="{Binding TagBrush,
+                                                     Mode=TwoWay,
+                                                     UpdateSourceTrigger=PropertyChanged,
+                                                     NotifyOnTargetUpdated=True,
+                                                     NotifyOnSourceUpdated=True}">
                 <TextBlock Background="Transparent"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center" 
-                           Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                           HorizontalAlignment="Center"
+                           Text="{Binding TagClipCount,
+                                          Converter={StaticResource IntToStringConverter},
+                                          Mode=TwoWay,
+                                          UpdateSourceTrigger=PropertyChanged,
+                                          NotifyOnTargetUpdated=True,
+                                          NotifyOnSourceUpdated=True}"
                            Foreground="{Binding TagCountTextColor}" />
             </local:MpClipBorder>
             <TextBlock x:Name="TagTextBlock"
@@ -74,11 +96,16 @@
                        Background="Transparent"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                       Visibility="{Binding IsEditing,
+                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                        FontSize="{Binding TagFontSize}"
                        FontWeight="SemiBold"
                        Foreground="{Binding TagTextColor}"
-                       Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                       Text="{Binding TagName,
+                                      Mode=TwoWay,
+                                      UpdateSourceTrigger=PropertyChanged,
+                                      NotifyOnTargetUpdated=True,
+                                      NotifyOnSourceUpdated=True}" />
             <TextBox x:Name="TagTextBox"
                      IsVisibleChanged="TagTextBox_IsVisibleChanged"
                      LostFocus="TagTextBox_LostFocus"
@@ -91,9 +118,14 @@
                      IsReadOnly="False"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Visibility="{Binding IsEditing,
+                                          Converter={StaticResource BoolToVisibilityConverter}}"
                      FontSize="{Binding TagFontSize}"
-                     Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                     Text="{Binding TagName,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged,
+                                    NotifyOnTargetUpdated=True,
+                                    NotifyOnSourceUpdated=True}" />
         </Grid>
     </local:MpClipBorder>
 </local:MpUserControl>

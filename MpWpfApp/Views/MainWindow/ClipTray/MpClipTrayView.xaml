@@ -12,6 +12,9 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid x:Name="ClipTrayGrid">
+        <Grid.Resources>
+            <ResourceDictionary Source="/Styles/MpPagingListBoxResourceDictionary.xaml"/>
+        </Grid.Resources>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0"
                                  Opacity="0.0"
@@ -34,7 +37,7 @@
                          Loaded="ClipTray_Loaded"
                          IsSynchronizedWithCurrentItem="True"
                          Margin="0,0,0,0"
-                         Focusable="True"
+                         Focusable="False"
                          BorderThickness="0"
                          VerticalAlignment="Stretch"
                          VerticalContentAlignment="Stretch"
@@ -43,7 +46,7 @@
                          SelectionMode="Single"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.ScrollUnit="Pixel"
-                         VirtualizingPanel.VirtualizationMode="Standard"                         
+                         VirtualizingPanel.VirtualizationMode="Recycling"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -55,7 +58,7 @@
                                                               WheelDampening="0.08" />
                         <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
                                                        RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}"/>
+                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
                     </i:Interaction.Behaviors>
                     <ListBox.InputBindings>
                         <KeyBinding Gesture="Ctrl+A"
@@ -91,7 +94,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                            <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                     HorizontalAlignment="Left"
                                                     IsItemsHost="True"
                                                     Orientation="Horizontal" />
@@ -103,15 +106,13 @@
                                                                                 Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                            DataContext="{Binding .,
                                                                                  IsAsync=True}" />
-                            <!--<local:MpClipTileView Visibility="{Binding ItemVisibility}"
-                                                  DataContext="{Binding}" />-->
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </AdornerDecorator>
             <TextBlock x:Name="EmptyListTextBlock"
                        Text="This list has no items"
-                       Focusable="True"
+                       Focusable="False"
                        Visibility="{Binding IsTrayEmpty,
                                             Converter={StaticResource BoolToVisibilityConverter}}"
                        HorizontalAlignment="Center"

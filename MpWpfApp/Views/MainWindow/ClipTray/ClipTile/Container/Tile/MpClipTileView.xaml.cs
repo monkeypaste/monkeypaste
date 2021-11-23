@@ -35,12 +35,13 @@ namespace MpWpfApp {
                 nctvm.OnFocusRequest += Nctvm_OnFocusRequest;
                 nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
                 nctvm.PropertyChanged += Ctvm_PropertyChanged;
+                UpdateLayout();
             }
         }
 
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
             //Keyboard.Focus(sender as FrameworkElement);
-            bool result = Focus();
+            //bool result = Focus();
             //MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
         }
 

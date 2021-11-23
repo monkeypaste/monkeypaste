@@ -87,6 +87,7 @@ namespace MpWpfApp {
                 ocivm.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
                 ocivm.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
                 ocivm.OnSyncModels -= Rtbivm_OnSyncModels;
+                ocivm.OnFitContentRequest -= Ncivm_OnFitContentRequest;
             }
             if (e.NewValue != null && e.NewValue is MpContentItemViewModel ncivm) {
                 if (!ncivm.IsPlaceholder) {
@@ -94,7 +95,7 @@ namespace MpWpfApp {
                     ncivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                     ncivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
                     ncivm.OnSyncModels += Rtbivm_OnSyncModels;
-
+                    ncivm.OnFitContentRequest += Ncivm_OnFitContentRequest;
                     if(e.OldValue != null) {
                         MpHelpers.Instance.RunOnMainThread(async () => {
                             await CreateHyperlinksAsync();
@@ -103,6 +104,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
 
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
@@ -141,6 +143,7 @@ namespace MpWpfApp {
             BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
             BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
+            BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
@@ -203,6 +206,10 @@ namespace MpWpfApp {
         #endregion
 
         #region View Model Callbacks
+
+        private void Ncivm_OnFitContentRequest(object sender, EventArgs e) {
+            Rtb.FitDocToRtb();
+        }
 
         private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
             await SyncModelsAsync();

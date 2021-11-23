@@ -39,7 +39,7 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
                 sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
-                sv.HorizontalAlignment = sv.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
+                
                 _timer = new DispatcherTimer();
                 _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
                 _timer.Tick += HandleWorldTimerTick;
@@ -68,11 +68,11 @@ namespace MpWpfApp {
                 }
             }
 
-            if (MpClipTrayViewModel.Instance.IsLoadingMore ||
-                MpClipTrayViewModel.Instance.IsLastItemVisible) {
-                _scrollTarget = sv.HorizontalOffset;
-                _velocity = _lastWheelDelta = 0;
-            }
+            //if (MpClipTrayViewModel.Instance.IsLoadingMore ||
+            //    MpClipTrayViewModel.Instance.IsLastItemVisible) {
+            //    _scrollTarget = sv.HorizontalOffset;
+            //    _velocity = _lastWheelDelta = 0;
+            //}
 
             if (Math.Abs(_velocity) > 0.1) {
                 sv.ScrollToHorizontalOffset(_scrollTarget);

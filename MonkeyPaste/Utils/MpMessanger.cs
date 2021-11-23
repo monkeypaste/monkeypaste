@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste {
-    // from https://stackoverflow.com/a/68272972/105028
     public enum MpMessageType {
         None,
         RequeryCompleted,
         QueryChanged,
+        JumpToIdxCompleted,
         ItemsInitialized,
         Expand,
         Unexpand,
@@ -19,11 +19,11 @@ namespace MonkeyPaste {
         MainWindowHiding,
         MainWindowHid,
         ItemDragBegin,
-        ItemDragEnd,
-        JumpToIdx
+        ItemDragEnd        
     }
 
     public class MpMessenger {
+        // from https://stackoverflow.com/a/68272972/105028
         private static readonly Lazy<MpMessenger> _Lazy = new Lazy<MpMessenger>(() => new MpMessenger());
         public static MpMessenger Instance { get { return _Lazy.Value; } }
 

@@ -39,7 +39,12 @@ namespace MpWpfApp {
         //        new FrameworkPropertyMetadata(new object()));
 
         
-        public MpUserControl() : base() { }
+        public MpUserControl() : base() {
+            //RequestBringIntoView += MpUserControl_RequestBringIntoView;
+        }
 
+        private void MpUserControl_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+            //e.Handled = true;
+        }
     }
 }

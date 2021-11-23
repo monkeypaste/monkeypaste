@@ -46,6 +46,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
         public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
         public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
         
@@ -264,11 +265,11 @@ namespace MpWpfApp {
                 MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
                 MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
-                _pageSize = (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
-                RemainingItemsCountThreshold = _pageSize;
-                MpDataModelProvider.Instance.Init(new MpWpfQueryInfo(), _pageSize);
+                _pageSize = 1;// (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
+                RemainingItemsCountThreshold = 1;// _pageSize;
+                MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
 
-                _initialLoadCount = _pageSize * 3;
+                _initialLoadCount = _pageSize * 9;
 
                 MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
             });
@@ -304,6 +305,9 @@ namespace MpWpfApp {
         private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsScrolling):
+                    if(IsScrolling) {
+
+                    }
                     var ctvm = Items.Where(x => x.IsHovering).FirstOrDefault();
                     if (ctvm != null) {
                         ctvm.OnPropertyChanged(nameof(ctvm.TileBorderBrush));
@@ -348,7 +352,6 @@ namespace MpWpfApp {
                 }
             }
 
-
             var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, _initialLoadCount);
             if (cil.Count >= Items.Count) {
                 //occurs when tags switched quickly
@@ -381,17 +384,23 @@ namespace MpWpfApp {
                 IsBusy = IsLoadingMore = true;
                 bool isLeft = ((int)isLoadMore) >= 0;
                 if (isLeft && _nextQueryOffsetIdx < TotalItemsInQuery) {
+                    ClearClipSelection();
+
                     var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(_nextQueryOffsetIdx, _pageSize);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        var ctvm = await CreateClipTileViewModel(cil[i]);
-                        Items.Add(ctvm);
+                        //var ctvm = await CreateClipTileViewModel(cil[i]);
+                        //Items.Add(ctvm);
+                        Items[0].IsSelected = false;
+                        //Items[0].IsLoadMoreItem = true;
+                        await Items[0].InitializeAsync(cil[i]);
+                        Items.Move(0, Items.Count - 1);
                     }
 
                     _nextQueryOffsetIdx += cil.Count;
 
-                    int itemsToRemove = Items.Count - cil.Count;
-                    Items.RemoveRange(0, itemsToRemove);
+                    //int itemsToRemove = Items.Count - cil.Count;
+                    //Items.RemoveRange(0, itemsToRemove);
 
                     _lastQueryOffsetIdx = _nextQueryOffsetIdx - _initialLoadCount - _pageSize;
                     //MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
@@ -435,21 +444,21 @@ namespace MpWpfApp {
                     await Items[i].InitializeAsync(cil[i]);
                 }
 
-                int itemsToRemove = Items.Count - cil.Count - 1;
-                if(idx + cil.Count >= TotalItemsInQuery) {
-                    while(itemsToRemove > 0) {
-                        await Items[cil.Count + itemsToRemove].InitializeAsync(null);
-                        itemsToRemove--;
-                    }
-                } else {
-                    Items.RemoveRange(cil.Count, itemsToRemove);
-                }
+                //int itemsToRemove = Items.Count - cil.Count - 1;
+                //if(idx + cil.Count >= TotalItemsInQuery) {
+                //    while(itemsToRemove > 0) {
+                //        await Items[cil.Count + itemsToRemove].InitializeAsync(null);
+                //        itemsToRemove--;
+                //    }
+                //} else {
+                //    Items.RemoveRange(cil.Count, itemsToRemove);
+                //}
                 
 
                 _nextQueryOffsetIdx = idx + cil.Count - 1;
                 _lastQueryOffsetIdx = _nextQueryOffsetIdx - _initialLoadCount - _pageSize;
 
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.JumpToIdx);
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                 MpConsole.WriteLine($"Loaded {cil.Count} items, offsetIdx: {_nextQueryOffsetIdx}");
             },
             (idx) => {

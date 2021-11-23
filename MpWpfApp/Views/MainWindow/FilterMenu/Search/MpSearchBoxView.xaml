@@ -13,6 +13,7 @@
                      d:DataContext="{d:DesignInstance Type=local:MpSearchBoxViewModel,
                                                       IsDesignTimeCreatable=False}">
     <StackPanel x:Name="SearchViewContainerStackPanel"
+                Loaded="SearchViewContainerStackPanel_Loaded"
                 Orientation="Horizontal">
         <Button x:Name="SaveSearchButton"
                 Background="Transparent"

@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileFlipView.xaml
     /// </summary>
-    public partial class MpClipTileFlipView : UserControl {
+    public partial class MpClipTileFlipView : MpUserControl<MpClipTileViewModel> {
         Storyboard frontToBack, backToFront;
 
         public MpClipTileFlipView() {

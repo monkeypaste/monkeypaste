@@ -24,28 +24,37 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpClipTrayView : MpUserControl<MpClipTrayViewModel> {
         public VirtualizingStackPanel TrayItemsPanel;
+        public static ScrollViewer ScrollViewer;
 
         public MpClipTrayView() : base() {
             InitializeComponent();
         }
 
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
-            var ctrvm = DataContext as MpClipTrayViewModel;
-
             MpClipboardManager.Instance.Init();
-            MpClipboardManager.Instance.ClipboardChanged += ctrvm.OnClipboardChanged;
+            MpClipboardManager.Instance.ClipboardChanged += BindingContext.OnClipboardChanged;
          
             if (MpPreferences.Instance.IsInitialLoad) {
-                ctrvm.InitIntroItems();
+                BindingContext.InitIntroItems();
             }
 
-            ctrvm.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
-            ctrvm.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
-            ctrvm.OnFocusRequest += Ctrvm_OnFocusRequest;
-            ctrvm.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
-            ctrvm.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
+            BindingContext.OnScrollIntoViewRequest += Ctrvm_OnScrollIntoViewRequest;
+            BindingContext.OnScrollToHomeRequest += Ctrvm_OnScrollToHomeRequest;
+            BindingContext.OnFocusRequest += Ctrvm_OnFocusRequest;
+            BindingContext.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
+            BindingContext.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
 
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+
+
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                var sv = ClipTray.GetScrollViewer();
+                while(sv == null) {
+                    await Task.Delay(10);
+                    sv = ClipTray.GetScrollViewer();
+                }
+                ScrollViewer = sv;
+            });
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
@@ -94,7 +103,10 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            ClipTray?.GetScrollViewer().ScrollToLeftEnd();
+            if(ScrollViewer == null) {
+                return;
+            }
+            ScrollViewer.ScrollToLeftEnd();
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {

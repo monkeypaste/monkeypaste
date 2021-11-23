@@ -28,9 +28,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public void Init(MpIQueryInfo queryInfo, int pageSize) {
+        public void Init(MpIQueryInfo queryInfo) {
             QueryInfo = queryInfo;
-            QueryInfo.PageSize = pageSize;
         }
 
         public void ResetQuery() {
@@ -52,10 +51,10 @@ namespace MonkeyPaste {
                 return _lastResult;
             }
             if(startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
-                startIndex = _allFetchedAndSortedCopyItemIds.Count - count - 1;
+                startIndex = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - count - 1);
             }
             if(count <= 0) {
-                count = _allFetchedAndSortedCopyItemIds.Count - startIndex;
+                count = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - startIndex);
             }
             var fetchRange = _allFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
 

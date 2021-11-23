@@ -21,6 +21,9 @@ namespace MpWpfApp {
         public MpSearchBoxView() {
             InitializeComponent();
         }
+        private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
+            SearchBox.Focus();
+        }
 
         private void SearchTextBoxBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (DataContext != null && DataContext is MpSearchBoxViewModel sbvm) {
@@ -37,7 +40,13 @@ namespace MpWpfApp {
             var sbvm = DataContext as MpSearchBoxViewModel;
             sbvm.IsTextBoxFocused = true;
 
-            MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                while(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    await Task.Delay(100);
+                }
+                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+            });
+            
         }
 
         private void SearchBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

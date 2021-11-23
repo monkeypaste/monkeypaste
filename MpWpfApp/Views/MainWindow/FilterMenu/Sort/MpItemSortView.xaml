@@ -4,11 +4,13 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:MpWpfApp" xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
+             xmlns:local="clr-namespace:MpWpfApp"
+             xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=local:MpClipTileSortViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=local:MpClipTileSortViewModel,
+                                              IsDesignTimeCreatable=False}">
     <Grid Grid.Column="1"
           Margin="0">
         <Grid.ColumnDefinitions>
@@ -35,7 +37,8 @@
                       ItemsSource="{Binding SortTypes}">
                 <ComboBox.ItemTemplate>
                     <ItemContainerTemplate>
-                        <TextBlock Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                        <TextBlock Visibility="{Binding IsVisible,
+                                                        Converter={StaticResource BoolToVisibilityConverter}}"
                                    Text="{Binding Header}" />
                     </ItemContainerTemplate>
                 </ComboBox.ItemTemplate>
@@ -51,10 +54,12 @@
                 Command="{Binding ToggleSortOrderCommand}">
             <Grid>
                 <Image Source="/Resources/Images/asc_black.png"
-                       Visibility="{Binding IsSortDescending, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                       Visibility="{Binding IsSortDescending,
+                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                        Stretch="Fill" />
                 <Image Source="/Resources/Images/desc_black.png"
-                       Visibility="{Binding IsSortDescending, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Visibility="{Binding IsSortDescending,
+                                            Converter={StaticResource BoolToVisibilityConverter}}"
                        Stretch="Fill" />
             </Grid>
         </Button>

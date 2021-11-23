@@ -697,6 +697,7 @@ using System.Speech.Synthesis;
                 }
             }
         }
+        public bool IsLoadMoreItem { get; set; } = false;
 
         [MpDependsOnParent("IsAnyTileExpanded")]
         [MpDependsOnChild("IsPlaceholder")]
@@ -706,7 +707,7 @@ using System.Speech.Synthesis;
                 if(Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
-                return Parent.IsAnyTileExpanded && !IsExpanded;
+                return IsLoadMoreItem || (Parent.IsAnyTileExpanded && !IsExpanded);
             }
         }
 
@@ -902,6 +903,9 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))
+                    break;
+                case nameof(IsLoadMoreItem):
+                    OnPropertyChanged(nameof(IsPlaceholder));
                     break;
             }
         }
