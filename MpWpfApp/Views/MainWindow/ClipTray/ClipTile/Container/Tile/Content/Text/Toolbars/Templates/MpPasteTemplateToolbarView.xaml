@@ -87,7 +87,7 @@
                     FontSize="12"
                     TabIndex="0"
                     Visibility="{Binding IsAnyTemplateHasText,
-                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                                         Converter={StaticResource BoolToVisibilityConverter}}" />
             <local:MpClipBorder Grid.Column="2"
                                 Margin="1"
                                 Padding="0"

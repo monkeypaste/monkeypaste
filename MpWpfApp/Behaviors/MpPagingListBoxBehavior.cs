@@ -46,6 +46,7 @@ namespace MpWpfApp {
 
         private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e) {
             MpHelpers.Instance.RunOnMainThread(async () => {
+                AssociatedObject.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
                 ScrollViewer sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
                 while (sv == null) {
                     sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
@@ -59,6 +60,16 @@ namespace MpWpfApp {
             });
         }
 
+        private void ItemContainerGenerator_ItemsChanged(object sender, ItemsChangedEventArgs e) {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move) {
+             MpClipTrayView.ScrollViewer.ScrollToHorizontalOffset(0);
+
+                MpClipTrayView.ScrollViewer.ScrollToHorizontalOffset(0);
+                MpClipTrayView.ScrollViewer.ScrollToLeftEnd();
+                MpClipTrayView.ScrollViewer.ScrollToHome();
+            }
+        }
+
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.JumpToIdxCompleted:
@@ -69,12 +80,12 @@ namespace MpWpfApp {
                         double tw = MpMeasurements.Instance.ClipTileBorderMinSize;
                         double ttw = tw * MpClipTrayViewModel.Instance.TotalItemsInQuery;
                         var hsb = sv.GetScrollBar(Orientation.Horizontal);
-
                         hsb.Maximum = ttw;
                         hsb.Minimum = 0;
                         hsb.UpdateLayout();
 
                         if (msg == MpMessageType.RequeryCompleted) {
+                            MpConsole.WriteLine("Tray Width: " + AssociatedObject.ActualWidth);
                             hsb.Value = 0;
                             sv.ScrollToHorizontalOffset(0);
                             sv.ScrollToLeftEnd();
@@ -83,7 +94,7 @@ namespace MpWpfApp {
                             MpClipTrayViewModel.Instance.IsScrollJumping = false;
                             sv.ScrollToHorizontalOffset(0);
                         }
-
+                        sv.InvalidateScrollInfo();
                         sv.UpdateLayout();
                         AssociatedObject.UpdateLayout();
                     }
@@ -143,19 +154,22 @@ namespace MpWpfApp {
             if (horizontalChange < 0) {
                 //scrolling down towards end of list
 
+                //find idx of item and trigger load more when it is fully realized
+                //int r_target_idx = AssociatedObject.Items.Count - RemainingItemsThreshold - 1;
+                //r_target_idx = Math.Min(Math.Max(0, r_target_idx), AssociatedObject.Items.Count - 1);
                 //get item under point in middle of right edge of listbox
-                int r_lbi_idx = AssociatedObject.GetItemIndexAtPoint(new Point(lbr.Right, lbr.Height / 2));
-                if (r_lbi_idx < 0) {// || r_lbi_idx > AssociatedObject.Items.Count) {
+                int r_target_idx = AssociatedObject.GetItemIndexAtPoint(new Point(lbr.Right, lbr.Height / 2));
+                if (r_target_idx < 0) {// || r_lbi_idx > AssociatedObject.Items.Count) {
                     return;
                 }
-                if (r_lbi_idx >= AssociatedObject.Items.Count) {
-                    r_lbi_idx = AssociatedObject.Items.Count - 1;
+                if (r_target_idx >= AssociatedObject.Items.Count) {
+                    r_target_idx = AssociatedObject.Items.Count - 1;
                 }
                 //get item over right edge's rect
-                var rlbir = AssociatedObject.GetListBoxItemRect(r_lbi_idx);
+                var rlbir = AssociatedObject.GetListBoxItemRect(r_target_idx);
                 if (rlbir.Right < lbr.Right) { // - MpMeasurements.Instance.ClipTileMargin) {
                     //when last visible item's right edge is past the listboxes edge
-                    int itemsRemaining = AssociatedObject.Items.Count - r_lbi_idx - 1;
+                    int itemsRemaining = AssociatedObject.Items.Count - r_target_idx - 1;
 
                     if (itemsRemaining <= RemainingItemsThreshold) {
                         LoadMoreCommand.Execute(1);

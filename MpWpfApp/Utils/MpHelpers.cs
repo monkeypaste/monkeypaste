@@ -2647,11 +2647,16 @@ namespace MpWpfApp {
             }
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
-                var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
-                range2.Save(ms, System.Windows.DataFormats.Rtf);
-                ms.Seek(0, SeekOrigin.Begin);
-                using (var sr = new StreamReader(ms)) {
-                    rtf = sr.ReadToEnd();
+                try {
+                    var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
+                    range2.Save(ms, System.Windows.DataFormats.Rtf);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    using (var sr = new StreamReader(ms)) {
+                        rtf = sr.ReadToEnd();
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine("Error converting flow document to text: ", ex);
+                    return rtf;
                 }
             }
             if(rtb != null && rtbSelection != null) {

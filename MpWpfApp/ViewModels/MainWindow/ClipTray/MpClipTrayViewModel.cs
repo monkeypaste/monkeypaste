@@ -266,7 +266,7 @@ namespace MpWpfApp {
                 MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
                 _pageSize = 1;// (int)(MpMeasurements.Instance.TotalVisibleClipTiles / 2);
-                RemainingItemsCountThreshold = 1;// _pageSize;
+                RemainingItemsCountThreshold = _pageSize;
                 MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
 
                 _initialLoadCount = _pageSize * 9;
@@ -283,11 +283,12 @@ namespace MpWpfApp {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
-            return;
             if(e.OldItems != null && e.OldItems.Count > 0 && !IsAnyTileItemDragging) {
-                foreach(MpClipTileViewModel octvm in e.OldItems) {
-                    octvm.Dispose();
-                }
+                GC.Collect();
+
+                //foreach(MpClipTileViewModel octvm in e.OldItems) {
+                //    octvm.Dispose();
+                //}
             }
         }
 
@@ -382,6 +383,7 @@ namespace MpWpfApp {
         public ICommand LoadMoreClipsCommand => new RelayCommand<object>(
             async (isLoadMore) => {
                 IsBusy = IsLoadingMore = true;
+                
                 bool isLeft = ((int)isLoadMore) >= 0;
                 if (isLeft && _nextQueryOffsetIdx < TotalItemsInQuery) {
                     ClearClipSelection();

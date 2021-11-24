@@ -358,6 +358,7 @@ namespace MpWpfApp {
             }
             var sv = lb.GetScrollViewer();
             Point origin = lbi.TranslatePoint(new Point(0, 0), sv);
+            Point origin2 = lbi.TranslatePoint(new Point(0, 0), lb);
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
         }
 

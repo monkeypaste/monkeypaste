@@ -20,9 +20,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTileView.xaml
     /// </summary>
     public partial class MpClipTileView : MpUserControl<MpClipTileViewModel> {
-        public List<Tuple<TextBlock,RichTextBox>> TitlesAndRtbs = new List<Tuple<TextBlock, RichTextBox>>();
-
-        public MpClipTileView() {
+       public MpClipTileView() {
             InitializeComponent();
         }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -46,16 +44,12 @@ namespace MpWpfApp {
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
-            TitlesAndRtbs.Clear();
-            var rtbvl = this.GetVisualDescendents<MpRtbView>();
-
-            foreach (var rtbv in rtbvl) {
-                TitlesAndRtbs.Add(new Tuple<TextBlock,RichTextBox>(
-                    new TextBlock() {
-                        Text = rtbv.BindingContext.CopyItemTitle
-                    },
-                    rtbv.Rtb));
-            }
+            MpConsole.WriteLine($"Tile Min Size: {MpMeasurements.Instance.ClipTileMinSize}");
+            MpConsole.WriteLine($"Tile Border View: {ClipTileClipBorder.ActualWidth}x{ClipTileClipBorder.ActualHeight}");
+            MpConsole.WriteLine($"Tile Border Properties: {BindingContext.TileBorderWidth}x{BindingContext.TileBorderHeight}");
+            MpConsole.WriteLine($"Tile Border Margin: {MpMeasurements.Instance.ClipTileMargin}");
+            MpConsole.WriteLine($"Tile Border Thickness: {BindingContext.TileBorderThickness}");
+            MpConsole.WriteLine("------------------");
         }
 
         private void Ctvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -109,7 +103,7 @@ namespace MpWpfApp {
             if(BindingContext.IsPlaceholder) {
                 return;
             }
-            var result = await BindingContext.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(e, TitlesAndRtbs);
+            //var result = await BindingContext.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(e, TitlesAndRtbs);
         }
 
         private void ClipTileClipBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -124,6 +118,10 @@ namespace MpWpfApp {
             }
             BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;
             BindingContext.PropertyChanged -= Ctvm_PropertyChanged;
+        }
+
+        private void ClipTileClipBorder_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+            e.Handled = true;
         }
     }
 }

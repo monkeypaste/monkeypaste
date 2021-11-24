@@ -54,6 +54,12 @@ namespace MpWpfApp {
                     sv = ClipTray.GetScrollViewer();
                 }
                 ScrollViewer = sv;
+                ScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
+                //ScrollViewer.Width = 1594.28571428571;
+                //var vsp = ClipTray.GetVisualDescendent<MpVirtualizingStackPanel>();
+                //vsp.ScrollOwner = ScrollViewer;
+                
+                return;
             });
         }
 
@@ -115,7 +121,8 @@ namespace MpWpfApp {
         #endregion
 
         private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            TrayItemsPanel = sender as VirtualizingStackPanel;
+            var vsp = sender as MpVirtualizingStackPanel;
+            vsp.ScrollOwner = ScrollViewer;
         }
 
         private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {

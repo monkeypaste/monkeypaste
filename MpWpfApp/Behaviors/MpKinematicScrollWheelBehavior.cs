@@ -49,6 +49,9 @@ namespace MpWpfApp {
         }
 
         private void HandleWorldTimerTick(object sender, EventArgs e) {
+            if(MpClipTrayViewModel.Instance.IsLoadingMore) {
+                return;
+            }
             ScrollViewer sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
             if (sv == null) {
                 return;

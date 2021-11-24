@@ -184,7 +184,7 @@ namespace MpWpfApp {
 
         public double ClipTileMinSize {
             get {
-                return ClipTrayMinHeight - (ClipTileMargin * 2) - ClipTilePadding;
+                return ClipTrayMinHeight - (ClipTileMargin * 2) - (ClipTilePadding);
             }
         }
 

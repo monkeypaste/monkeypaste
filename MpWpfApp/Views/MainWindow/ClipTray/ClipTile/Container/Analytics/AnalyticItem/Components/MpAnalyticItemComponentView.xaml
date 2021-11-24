@@ -90,7 +90,7 @@
                                    TextWrapping="Wrap" />
                         <TextBox Text="{Binding SliderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                     </StackPanel>
-                    <!--<Slider Minimum="{Binding Min}"
+                    <Slider Minimum="{Binding Min}"
                             Maximum="{Binding Max}"
                             Margin="0,15,0,0"
                             Width="120"
@@ -102,7 +102,7 @@
                                             NotifyOnSourceUpdated=True}"
                             TickPlacement="None"
                             TickFrequency="{Binding TickFrequency}"
-                            IsSnapToTickEnabled="False" />-->
+                            IsSnapToTickEnabled="False" />
                 </DockPanel>
             </DataTemplate>
             <DataTemplate x:Key="ExecuteParameter"

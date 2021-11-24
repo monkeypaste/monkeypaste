@@ -26,7 +26,7 @@
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
                         IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
-                        Focusable="True"
+                        Focusable="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor,
@@ -51,11 +51,6 @@
                 </DrawingBrush.Drawing>
             </DrawingBrush>
         </local:MpClipBorder.BorderBrush>
-        <local:MpClipBorder.RenderTransform>
-            <TranslateTransform X="0"
-                                Y="0"
-                                x:Name="ClipTileBorderTranslateTransform" />
-        </local:MpClipBorder.RenderTransform>
         <!--<local:MpClipBorder.Effect>
                                     <DropShadowEffect Color="DarkGray"
                                                       BlurRadius="7" />

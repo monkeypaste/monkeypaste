@@ -145,13 +145,15 @@
                         <Border.BorderBrush>
                             <SolidColorBrush Color="{StaticResource BorderMediumColor}" />
                         </Border.BorderBrush>
-                        <local:MpScrollViewer Margin="0"
-                                              Focusable="false"
-                                              Style="{StaticResource PagingScrollViewer}">
-                            <VirtualizingStackPanel HorizontalAlignment="Left"
-                                                    IsItemsHost="True"
-                                                    Orientation="Horizontal" />
-                        </local:MpScrollViewer>
+                        <ScrollViewer Margin="0"
+                                      Focusable="false">
+                            <local:MpVirtualizingStackPanel HorizontalAlignment="Left"
+                                                            Orientation="Horizontal"
+                                                    IsItemsHost="True" />
+                            <!--<VirtualizingStackPanel IsItemsHost="True"
+                                                    Margin="2"
+                                                    Orientation="Horizontal"/>-->
+                        </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled"

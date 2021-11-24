@@ -13,7 +13,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid x:Name="ClipTrayGrid">
         <Grid.Resources>
-            <ResourceDictionary Source="/Styles/MpPagingListBoxResourceDictionary.xaml"/>
+            <ResourceDictionary Source="/Styles/MpPagingListBoxResourceDictionary.xaml" />
         </Grid.Resources>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0"
@@ -28,6 +28,8 @@
         <Grid>
             <AdornerDecorator>
                 <ListBox x:Name="ClipTray"
+                         SnapsToDevicePixels="True"
+                         Style="{StaticResource PagingListBoxStyle}"
                          SelectionChanged="ClipTray_SelectionChanged"
                          Visibility="{Binding IsTrayEmpty,
                                               Converter={StaticResource BoolToVisibilityFlipConverter},
@@ -49,7 +51,7 @@
                          VirtualizingPanel.VirtualizationMode="Recycling"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
-                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Visible"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
                         <local:MpDropBehavior x:Name="DropBehavior" />
@@ -66,6 +68,8 @@
                     </ListBox.InputBindings>
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
+                            <EventSetter Event="RequestBringIntoView"
+                                         Handler="ClipTray_RequestBringIntoView" />
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected}" />
                             <Setter Property="FocusVisualStyle"
@@ -94,10 +98,22 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                            <local:MpVirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                                            Orientation="Horizontal"
+                                                            SnapsToDevicePixels="True"
+                                                            HorizontalAlignment="Left"
+                                                            IsItemsHost="True" />
+                            <!--<local:MpVirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                                            ChildWidth="{local:MpMeasurementsBinding ClipTileBorderMinSize}"
+                                                            ChildHeight="{local:MpMeasurementsBinding ClipTileMinSize}"
+                                                            ChildCount="{Binding TotalItemsInQuery, Source={StaticResource ClipTrayViewModel}}"
+                                                            SnapsToDevicePixels="True"
+                                                            HorizontalAlignment="Left"
+                                                            IsItemsHost="True" />-->
+                            <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                     HorizontalAlignment="Left"
                                                     IsItemsHost="True"
-                                                    Orientation="Horizontal" />
+                                                    Orientation="Horizontal" />-->
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>

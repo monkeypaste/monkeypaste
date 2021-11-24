@@ -81,7 +81,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTilePasteTemplateToolbar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(BindingContext == null) {
+            if(BindingContext == null || ((bool)e.NewValue) == false) {
                 return;
             }
             foreach(var civm in BindingContext.Parent.Parent.ItemViewModels) {
@@ -89,7 +89,7 @@ namespace MpWpfApp {
                     thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
                 }
             }
-            
+
             SelectedTemplateTextBox.Focus();
         }
 
