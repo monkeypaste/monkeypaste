@@ -5,7 +5,6 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -16,16 +15,14 @@
                         DataContext="{Binding .,
                                               IsAsync=True}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin}"
-                        BorderThickness="{Binding TileBorderThickness}"
+                        BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
-                        Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
-                        IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
                         Focusable="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -69,7 +66,9 @@
                                             DockPanel.Dock="Bottom"
                                             Height="{local:MpMeasurementsBinding ClipTileDetailHeight,
                                                                                  Mode=OneWay}"
-                                            Visibility="{Binding Parent.DetailGridVisibility}"
+                                            Visibility="{Binding Parent.IsDetailGridVisibile,
+                                                                 Converter={StaticResource BoolToVisibilityConverter},
+                                                                 ConverterParameter={StaticResource Hide}}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
                 <local:MpContentListView x:Name="ContentListView" />

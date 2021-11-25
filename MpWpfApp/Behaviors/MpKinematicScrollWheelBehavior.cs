@@ -9,10 +9,11 @@ using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
 
 namespace MpWpfApp {
-    public class MpKinematicScrollWheelBehavior : Behavior<ListBox>{
+    public class MpKinematicScrollWheelBehavior : Behavior<ScrollViewer>{
         #region Private Variables
 
-        private double _lastWheelDelta = 0;
+        private bool _isTickScrolling = false;
+
         private double _velocity = 0;
         private double _scrollTarget = 0;
 
@@ -32,44 +33,39 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                ScrollViewer sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
-                while (sv == null) {
-                    sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
-                    await Task.Delay(100);
-                }
-                sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
-                
-                _timer = new DispatcherTimer();
-                _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-                _timer.Tick += HandleWorldTimerTick;
-                _timer.Start();
+            AssociatedObject.PreviewMouseWheel += Sv_PreviewMouseWheel;
+            AssociatedObject.ScrollChanged += AssociatedObject_ScrollChanged;
+            _timer = new DispatcherTimer();
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            _timer.Tick += HandleWorldTimerTick;
+            _timer.Start();
+        }
 
-            });
+        private void AssociatedObject_ScrollChanged(object sender, ScrollChangedEventArgs e) {
+            if (MpClipTrayViewModel.Instance.IsLoadingMore) {
+                _scrollTarget -= e.HorizontalChange;
+                AssociatedObject.ScrollToHorizontalOffset(_scrollTarget);
+            }
         }
 
         private void HandleWorldTimerTick(object sender, EventArgs e) {
-            if(MpClipTrayViewModel.Instance.IsLoadingMore) {
-                return;
-            }
-            ScrollViewer sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
-            if (sv == null) {
-                return;
-            }
+            //if(MpClipTrayViewModel.Instance.IsLoadingMore) {
+            //    return;
+            //}
 
-            double lbw = AssociatedObject.ActualWidth;
-            double sbo = sv.ContentHorizontalOffset;
-            if(_lastWheelDelta < 0) {
-                if (lbw + sbo >= sv.ExtentWidth) {
-                    //when scrolling down and scrollViewer is at end of list do not let velocity accumulate
-                    _velocity = _lastWheelDelta = 0;
-                }
-            } else if(_lastWheelDelta > 0) {
-                if(sbo == 0) {
-                    //when scrolling up and scrollViewer is at beginning of list do not let velocity accumulate
-                    _velocity = _lastWheelDelta = 0;
-                }
-            }
+            //double lbw = AssociatedObject.ActualWidth;
+            //double sbo = sv.ContentHorizontalOffset;
+            //if(_lastWheelDelta < 0) {
+            //    if (lbw + sbo >= sv.ExtentWidth) {
+            //        //when scrolling down and scrollViewer is at end of list do not let velocity accumulate
+            //        _velocity = _lastWheelDelta = 0;
+            //    }
+            //} else if(_lastWheelDelta > 0) {
+            //    if(sbo == 0) {
+            //        //when scrolling up and scrollViewer is at beginning of list do not let velocity accumulate
+            //        _velocity = _lastWheelDelta = 0;
+            //    }
+            //}
 
             //if (MpClipTrayViewModel.Instance.IsLoadingMore ||
             //    MpClipTrayViewModel.Instance.IsLastItemVisible) {
@@ -78,10 +74,11 @@ namespace MpWpfApp {
             //}
 
             if (Math.Abs(_velocity) > 0.1) {
-                sv.ScrollToHorizontalOffset(_scrollTarget);
+                _isTickScrolling = true;
+                AssociatedObject.ScrollToHorizontalOffset(_scrollTarget);
+                _isTickScrolling = false;
                 _scrollTarget += _velocity;
                 _velocity *= Friction;
-                _lastWheelDelta = 0;
             }
         }
 
@@ -95,7 +92,6 @@ namespace MpWpfApp {
                 return;
             }
             _velocity -= e.Delta * WheelDampening;
-            _lastWheelDelta = e.Delta;
 
             e.Handled = false;
             //wheel event is passed to the loadMoreExtentsion which marks handled=true if there's a wheel delta

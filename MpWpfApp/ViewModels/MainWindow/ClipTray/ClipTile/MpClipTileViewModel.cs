@@ -277,19 +277,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        private double _tileBorderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
-        public double TileBorderThickness {
-            get {
-                return _tileBorderThickness;
-            }
-            set {
-                if (_tileBorderThickness != value) {
-                    _tileBorderThickness = value;
-                    OnPropertyChanged(nameof(TileBorderThickness));
-                }
-            }
-        }
-
         public double LoadingSpinnerSize {
             get {
                 return MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
@@ -396,23 +383,7 @@ using System.Speech.Synthesis;
 
         #endregion
 
-        #region Visibility        
-
-        public Visibility DetailGridVisibility {
-            get {
-                if (IsExpanded) {
-                    if (IsAnyEditingTemplate ||
-                        IsAnyPastingTemplate) {
-                        return Visibility.Collapsed;
-                    }
-                } else {
-                    if (!IsSelected && !IsHovering) {
-                        return Visibility.Collapsed;
-                    }
-                }
-                return Visibility.Visible;
-            }
-        }
+        #region Visibility    
 
         public Visibility FlipButtonVisibility {
             get {
@@ -577,6 +548,22 @@ using System.Speech.Synthesis;
         public bool IsFlipping { get; set; } = false;
 
         public bool IsFlipped { get; set; } = false;
+
+        public bool IsDetailGridVisibile {
+            get {
+                if (IsExpanded) {
+                    if (IsAnyEditingTemplate ||
+                        IsAnyPastingTemplate) {
+                        return false;
+                    }
+                } else {
+                    if (!IsSelected && !IsHovering) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
 
         public string MultiSelectedOrderIdxDisplayValue {
             get {

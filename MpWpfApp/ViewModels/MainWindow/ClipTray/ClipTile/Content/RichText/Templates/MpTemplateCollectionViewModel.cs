@@ -146,7 +146,7 @@ namespace MpWpfApp {
                         Templates.Where(x => x != thlvm).ForEach(x => x.IsSelected = false);
                     }
                     OnPropertyChanged(nameof(SelectedTemplate));
-                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
+                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
                     break;
                 case nameof(thlvm.IsEditingTemplate):
                     if(thlvm.IsEditingTemplate) {
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                         thlvm.IsSelected = false;
                     }
                     OnPropertyChanged(nameof(IsAnyEditingTemplate));
-                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
+                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
                     break;
             }
             UpdateCommandsCanExecute();
@@ -254,7 +254,7 @@ namespace MpWpfApp {
                 }
             }
             OnPropertyChanged(nameof(SelectedTemplate));
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.DetailGridVisibility));
+            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
         }
 
         #endregion

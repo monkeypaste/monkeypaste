@@ -46,7 +46,7 @@ namespace MpWpfApp {
 
         public MpRegEx() {
             RegExList = _regExStrings.Select(x => 
-                new Regex(x, RegexOptions.ExplicitCapture | RegexOptions.Multiline | RegexOptions.Compiled)).ToList();
+                new Regex(x, RegexOptions.ExplicitCapture | RegexOptions.Multiline)).ToList();
         }
 
         public Regex GetRegExForTokenType(MpSubTextTokenType tokenType) {

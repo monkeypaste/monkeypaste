@@ -64,7 +64,7 @@ namespace MpWpfApp {
             MpTemplateViewModel thlvm = thcvm.CreateTemplateViewModel(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
-            nthl.Tag = MpSubTextTokenType.TemplateSegment;
+            nthl.Tag = Application.Current.Resources["TemplateHyperlinkTag"] as string;
            //tb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
             return nthl;
         }
@@ -79,7 +79,7 @@ namespace MpWpfApp {
         }
 
         private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
-            Tag = MpSubTextTokenType.TemplateSegment;
+            Tag = Application.Current.Resources["TemplateHyperlinkTag"] as string;
             var rtbv = ElementStart.Parent.FindParentOfType<MpRtbView>();
             rtbv.TemplateViews.Add(this);
 
@@ -168,7 +168,7 @@ namespace MpWpfApp {
             var thlvm = DataContext as MpTemplateViewModel;
             MpConsole.WriteLine($"DELETING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //ensure Tag is non null so deleted in unload
-            Tag = MpSubTextTokenType.TemplateSegment;
+            Tag = Application.Current.Resources["TemplateHyperlinkTag"] as string;
             Inlines.Clear();
             new Span(new Run(string.Empty), ElementStart);
 

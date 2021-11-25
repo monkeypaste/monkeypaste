@@ -22,7 +22,7 @@ namespace MpWpfApp {
             typeof(string),
             typeof(MpDocumentRtfExtension),
             new FrameworkPropertyMetadata {
-                PropertyChangedCallback = (obj, e) => {
+                PropertyChangedCallback =  (obj, e) => {
                     string rtf = string.Empty;
                     if (string.IsNullOrEmpty((string)e.NewValue)) {
                         rtf = string.Empty;
@@ -32,7 +32,7 @@ namespace MpWpfApp {
                     var rtb = (RichTextBox)obj;
                     var fd = ((string)e.NewValue).ToFlowDocument();
                     rtb.Document = fd;
-                    rtb.FitDocToRtb();                    
+                    rtb.FitDocToRtb();
                 }
             });
     }

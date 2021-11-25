@@ -47,20 +47,7 @@ namespace MpWpfApp {
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                var sv = ClipTray.GetScrollViewer();
-                while(sv == null) {
-                    await Task.Delay(10);
-                    sv = ClipTray.GetScrollViewer();
-                }
-                ScrollViewer = sv;
-                ScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
-                //ScrollViewer.Width = 1594.28571428571;
-                //var vsp = ClipTray.GetVisualDescendent<MpVirtualizingStackPanel>();
-                //vsp.ScrollOwner = ScrollViewer;
-                
-                return;
-            });
+            ScrollViewer = PagingScrollViewer;
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {

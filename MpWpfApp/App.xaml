@@ -1062,6 +1062,7 @@
 
         <s:String x:Key="Hide">Hide</s:String>
         <s:String x:Key="Collapse">Collapse</s:String>
+        <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
         <!--  Command Parameter Primitives End  -->
 
         <!--  Icon/Image Source Paths  -->
@@ -1159,6 +1160,7 @@
         <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
         <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
         <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
+        <local:MpBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

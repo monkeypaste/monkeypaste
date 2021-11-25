@@ -272,11 +272,10 @@ namespace MpWpfApp {
         }
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
-            if(lb is AnimatedListBox alb) {
-                return alb.AnimatedScrollViewer;
+            if(lb.DataContext is MpClipTrayViewModel) {
+                return lb.GetVisualAncestor<ScrollViewer>();
             }
-            ScrollViewer sv = lb.GetVisualDescendent<ScrollViewer>();
-            return sv;
+            return lb.GetVisualDescendent<ScrollViewer>();
         }
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {

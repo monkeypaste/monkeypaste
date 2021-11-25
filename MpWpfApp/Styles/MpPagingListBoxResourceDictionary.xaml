@@ -140,19 +140,19 @@
                 <ControlTemplate TargetType="ListBox">
                     <Border Name="Border"
                             Background="Transparent"
-                            BorderThickness="1"
+                            BorderThickness="0"
                             CornerRadius="2">
                         <Border.BorderBrush>
                             <SolidColorBrush Color="{StaticResource BorderMediumColor}" />
                         </Border.BorderBrush>
                         <ScrollViewer Margin="0"
                                       Focusable="false">
-                            <local:MpVirtualizingStackPanel HorizontalAlignment="Left"
+                            <!--<local:MpVirtualizingStackPanel HorizontalAlignment="Left"
                                                             Orientation="Horizontal"
-                                                    IsItemsHost="True" />
-                            <!--<VirtualizingStackPanel IsItemsHost="True"
-                                                    Margin="2"
-                                                    Orientation="Horizontal"/>-->
+                                                    IsItemsHost="True" />-->
+                            <VirtualizingStackPanel IsItemsHost="True"
+                                                    Margin="0"
+                                                    Orientation="Horizontal" />
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -169,7 +169,6 @@
                                 <Setter.Value>
                                     <SolidColorBrush Color="{DynamicResource DisabledBorderLightColor}" />
                                 </Setter.Value>
-
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsGrouping"

@@ -50,8 +50,11 @@ namespace MonkeyPaste {
             if(startIndex >= _allFetchedAndSortedCopyItemIds.Count) {
                 return _lastResult;
             }
-            if(startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
-                startIndex = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - count - 1);
+            if(startIndex + count > _allFetchedAndSortedCopyItemIds.Count) {
+                startIndex = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - count);
+                if (startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
+                    count = _allFetchedAndSortedCopyItemIds.Count;
+                }
             }
             if(count <= 0) {
                 count = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - startIndex);

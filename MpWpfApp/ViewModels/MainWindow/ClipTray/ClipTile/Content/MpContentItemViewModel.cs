@@ -230,20 +230,6 @@ namespace MpWpfApp {
             }
         }
 
-        public Thickness ContentPadding {
-            get {
-                double dp = MpMeasurements.Instance.ClipTileContentItemRtbViewPadding;
-                if(Parent == null) {
-                    return new Thickness(dp);
-                }
-                if (IsHovering && Parent.Count > 1) {
-                    double dbw = MpMeasurements.Instance.ClipTileContentItemDragButtonSize;
-                    return new Thickness(dp + dbw, dp, dp, dp);
-                }
-                return new Thickness(dp);
-            }
-        }
-
         #endregion
 
         #region State

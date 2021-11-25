@@ -208,11 +208,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic Properties
-        public int TemplateTokenTag {
-            get {
-                return (int)MpSubTextTokenType.TemplateSegment;
-            }
-        }
 
         public string TemplateDisplayValue {
             get {
@@ -394,7 +389,7 @@ namespace MpWpfApp {
                         OnTemplateSelected?.Invoke(this, null);
                     } else {
                         IsEditingTemplate = false;
-                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.SelectedTemplateIdx));
@@ -408,7 +403,7 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(IsEditingTemplate):
-                    Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.DetailGridVisibility));
+                    Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     break;
             }

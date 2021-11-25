@@ -78,6 +78,7 @@ namespace MpWpfApp {
         #region State
 
         public bool IsMainWindowOpening { get; set; } = false;
+
         public bool IsMainWindowClosing { get; set; } = false;
 
         public bool IsMainWindowOpen { get; private set; } = false;
@@ -165,6 +166,8 @@ namespace MpWpfApp {
                 }
             }
         }
+
+
 
         public double ClipTrayAndCriteriaListHeight {
             get {
@@ -449,7 +452,8 @@ namespace MpWpfApp {
                     IsMainWindowOpening = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
-                    await MpClipTrayViewModel.Instance.AddNewModels();
+
+                    MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                 }
             };
             

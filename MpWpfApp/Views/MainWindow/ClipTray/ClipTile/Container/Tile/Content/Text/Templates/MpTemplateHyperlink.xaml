@@ -5,7 +5,8 @@
            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
            xmlns:local="clr-namespace:MpWpfApp"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           d:DataContext="{d:DesignInstance Type=local:MpTemplateViewModel, IsDesignTimeCreatable=False}"
+           d:DataContext="{d:DesignInstance Type=local:MpTemplateViewModel,
+                                            IsDesignTimeCreatable=False}"
            Background="Transparent"
            IsEnabled="{Binding Parent.Parent.Parent.IsExpanded}"
            Loaded="Hyperlink_Loaded"
@@ -13,7 +14,7 @@
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
-           Tag="{Binding TemplateTokenTag}"
+           Tag="{StaticResource TemplateHyperlinkTag}"
            TextDecorations="{x:Null}"
            mc:Ignorable="d">
     <Hyperlink.ContextMenu>
