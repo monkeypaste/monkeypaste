@@ -595,6 +595,7 @@ namespace MpWpfApp {
             CycleDetailCommand.Execute(null);
 
             RequestUiUpdate();
+            OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
 
             IsBusy = false;
@@ -830,6 +831,11 @@ namespace MpWpfApp {
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    if (!Parent.Parent.IsLoadingMore &&
+                        !Parent.Parent.IsScrollJumping &&
+                        Parent.IsSelected) {
+                        Parent.Parent.StoreSelectionState(Parent);
+                    }
                     break;
                 case nameof(CopyItem):
                     if(CopyItem == null) {

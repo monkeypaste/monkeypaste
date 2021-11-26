@@ -163,6 +163,7 @@ namespace MpWpfApp {
             ctvm.TileBorderHeight += boundAdjust;
             ctvm.TileContentHeight += boundAdjust;
 
+            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
             mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
             mwvm.IsResizing = false;
 
@@ -229,6 +230,8 @@ namespace MpWpfApp {
             ctvm.TileContentWidth += _deltaSize.X;
             ctvm.TileContentHeight += _deltaSize.Y;
 
+            ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
             mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
 
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
@@ -298,6 +301,8 @@ namespace MpWpfApp {
             ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
             ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
 
+            ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
             mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
 
             ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));

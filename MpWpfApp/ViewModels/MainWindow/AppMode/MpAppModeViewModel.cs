@@ -233,7 +233,7 @@ namespace MpWpfApp {
         private void UpdateAppendMode() {
             if (IsInAppendMode &&
                MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
-               MpClipTrayViewModel.Instance.SelectedItems[0] != MpClipTrayViewModel.Instance.VisibleItems[0]) {
+               MpClipTrayViewModel.Instance.SelectedItems[0] != MpClipTrayViewModel.Instance.Items[0]) {
                 int selectedIdx = MpClipTrayViewModel.Instance.Items.IndexOf(MpClipTrayViewModel.Instance.SelectedItems[0]);
                 MpClipTrayViewModel.Instance.Items.Move(selectedIdx, 0);
             }

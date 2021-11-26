@@ -187,7 +187,7 @@ namespace MpWpfApp {
             //MpHelpers.Instance.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();
             BindingContext.IsSelected = true;
-            foreach (var vctvm in MpClipTrayViewModel.Instance.VisibleItems) {
+            foreach (var vctvm in MpClipTrayViewModel.Instance.Items) {
                 if (vctvm.ItemViewModels.Any(x=>x.CopyItem.Source.AppId != BindingContext.CopyItem.Source.AppId)) {
                     bool hasSubItemWithApp = false;
                     if (vctvm.ItemViewModels.Count > 1) {

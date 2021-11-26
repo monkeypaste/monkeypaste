@@ -599,14 +599,14 @@ namespace MpWpfApp {
 
         public ICommand NextMatchCommand => new RelayCommand(
             () => {
-                foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
                     ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
                 }
             });
 
         public ICommand PrevMatchCommand => new RelayCommand(
             () => {
-                foreach (var ctvm in MpClipTrayViewModel.Instance.VisibleItems) {
+                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
                     ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
                 }
             });

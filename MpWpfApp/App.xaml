@@ -1161,6 +1161,7 @@
         <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
         <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
         <local:MpBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
+        <local:MpBoolToScrollBarVisibilityFlipConverter x:Key="BoolToScrollBarVisibilityFlipConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

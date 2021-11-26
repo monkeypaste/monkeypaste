@@ -272,9 +272,6 @@ namespace MpWpfApp {
         }
 
         public static ScrollViewer GetScrollViewer(this ListBox lb) {
-            if(lb.DataContext is MpClipTrayViewModel) {
-                return lb.GetVisualAncestor<ScrollViewer>();
-            }
             return lb.GetVisualDescendent<ScrollViewer>();
         }
 

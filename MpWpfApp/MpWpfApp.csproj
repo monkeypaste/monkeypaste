@@ -149,6 +149,7 @@
     <Compile Include="Converters\MpBoolToCursorConverter.cs" />
     <Compile Include="Converters\MpBoolToHAlignmentConverter.cs" />
     <Compile Include="Converters\MpBoolToScrollBarVisibilityConverter.cs" />
+    <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />

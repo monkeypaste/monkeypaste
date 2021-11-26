@@ -43,9 +43,8 @@
                      VerticalContentAlignment="Stretch"
                      BorderThickness="0"
                      SelectionMode="Extended"
-                     IsSynchronizedWithCurrentItem="False"
-                     ItemsSource="{Binding ItemViewModels,
-                                           IsAsync=True}"
+                     IsSynchronizedWithCurrentItem="True"
+                     ItemsSource="{Binding ItemViewModels}"
                      Focusable="False"
                      IsEnabled="True"
                      VirtualizingPanel.IsVirtualizing="True"

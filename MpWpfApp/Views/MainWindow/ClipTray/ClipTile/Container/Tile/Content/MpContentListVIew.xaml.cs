@@ -151,7 +151,7 @@ namespace MpWpfApp {
         public void UpdateUi() {
             UpdateAdorner();
             if(ContentListBox.Items.Count > 1) {
-                //ContentListBox.Items.Refresh();
+                ContentListBox.Items.Refresh();
             }
             this.UpdateLayout();
         }

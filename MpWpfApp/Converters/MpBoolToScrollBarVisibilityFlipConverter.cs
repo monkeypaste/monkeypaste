@@ -5,13 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-
-    public class MpBoolToScrollBarVisibilityConverter : IValueConverter {
+    public class MpBoolToScrollBarVisibilityFlipConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value == null) {
+            if (value == null) {
                 return ScrollBarVisibility.Hidden;
             }
-            return (bool)value ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+            return (bool)value ? ScrollBarVisibility.Hidden : ScrollBarVisibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

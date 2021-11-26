@@ -336,6 +336,12 @@ namespace MpWpfApp {
                         case 27:
                             //shortcutCommand = MpClipTrayViewModel.Instance.CopyCommand;
                             break;
+                        case 28:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollToHomeCommand;
+                            break;
+                        case 29:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollToEndCommand;
+                            break;
                         default:
                             try {
                                 if (sc.CopyItemId > 0) {

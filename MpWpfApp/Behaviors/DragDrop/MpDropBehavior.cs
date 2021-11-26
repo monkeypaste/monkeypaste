@@ -148,7 +148,7 @@ namespace MpWpfApp {
         }
 
         public void Drop(bool isCopy = false) {
-            MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
                 if (this.dragTiles == null || this.dragTiles.Count == 0) {
                     Reset();
                     return;
@@ -159,8 +159,8 @@ namespace MpWpfApp {
                 var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
                 int tileCount = MpClipTrayViewModel.Instance.Items.Count;
                 if (isTrayDrop) {
-                    if(dropIdx > MpClipTrayViewModel.Instance.VisibleItems.Count) {
-                        dropIdx = MpClipTrayViewModel.Instance.VisibleItems.Count;
+                    if(dropIdx > MpClipTrayViewModel.Instance.Items.Count) {
+                        dropIdx = MpClipTrayViewModel.Instance.Items.Count;
 
                         MpConsole.WriteLine("Dropping at visible tail, reset tray dropIdx: " + dropIdx);
                     }
@@ -175,8 +175,8 @@ namespace MpWpfApp {
                                 MpConsole.WriteLine("Decrementing tray dropIdx: " + dropIdx);
                             }
                             //to prevent bounds exceptions
-                            dropIdx = Math.Min(Math.Max(0, dropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
-                            oldIdx = Math.Min(Math.Max(0, oldIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
+                            dropIdx = Math.Min(Math.Max(0, dropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+                            oldIdx = Math.Min(Math.Max(0, oldIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
                             MpClipTrayViewModel.Instance.Items.Move(oldIdx, dropIdx);
                         }
                     } else {
@@ -230,8 +230,8 @@ namespace MpWpfApp {
                         await dropTile.InitializeAsync(dragModels[0]);
                         int oldDropIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dropTile);
                         //to prevent bounds exceptions
-                        dropIdx = Math.Min(Math.Max(0, dropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
-                        oldDropIdx = Math.Min(Math.Max(0, oldDropIdx), MpClipTrayViewModel.Instance.Items.Count - 1);
+                        dropIdx = Math.Min(Math.Max(0, dropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+                        oldDropIdx = Math.Min(Math.Max(0, oldDropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
                         MpClipTrayViewModel.Instance.Items.Move(oldDropIdx, dropIdx);
 
                         dropTile.RequestUiUpdate();
@@ -344,7 +344,7 @@ namespace MpWpfApp {
                         dragModels.Reverse();
                         
                         foreach(var dragModel in dragModels) {
-                            await dropItemView.MergeContentItem(dragModel,isCopy);
+                            await dropItemView.MergeContentItem(dragModel, isCopy);
                         }
                         //clean up all tiles with content dragged
                         //if tile has no items recycle it
@@ -387,7 +387,7 @@ namespace MpWpfApp {
                         }
                         selectedTile.AllowMultiSelect = false;
                     } else {
-                       // var lb = AssociatedObject.FindParentOfType<ListBox>();
+                        // var lb = AssociatedObject.FindParentOfType<ListBox>();
                         //var lbi = AssociatedObject.FindParentOfType<ListBoxItem>();
                         AssociatedObject.FindParentOfType<MpRtbView>().BindingContext.IsSelected = true;
                         //lb.ScrollIntoView(lbi);
@@ -395,9 +395,9 @@ namespace MpWpfApp {
                 }
 
 
-                MpClipTrayViewModel.Instance.Items.ForEach(x =>
-                    x.ItemViewModels.ForEach(y => y.IsItemDragging = false));
-            });
+                MpExtensions.ForEach<MpClipTileViewModel>(MpClipTrayViewModel.Instance.Items, (Action<MpClipTileViewModel>)(x =>
+                     x.ItemViewModels.ForEach((Action<MpContentItemViewModel>)(y => y.IsItemDragging = false))));
+            }));
         }
 
         private void Reset() {

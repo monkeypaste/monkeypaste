@@ -179,6 +179,19 @@ using System.Speech.Synthesis;
 
         #region Layout
 
+        public double TrayX {
+            get {
+                if(Parent == null || !Parent.Items.Contains(this)) {
+                    return 0;
+                }
+                if(IsExpanded) {
+                    return MpMeasurements.Instance.ClipTileExpandedMargin;
+                }
+
+                return (Parent.Items.IndexOf(this) * MpMeasurements.Instance.ClipTileMinSize) - Math.Max(0, Parent.ScrollOffset);
+            }
+        }
+
         public double PasteTemplateToolbarHeight {
             get {
                 return MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
@@ -511,25 +524,28 @@ using System.Speech.Synthesis;
         }
         #endregion
 
-        #region Business Logic
+        #region State Properties 
+
+        public int QueryOffsetIdx { get; set; } = 0;
+
         public bool IsLoading {
             get {
                 return HeadItem == null || HeadItem.CopyItem.Id == 0;
             }
         }
 
-        public int SortOrderIdx {
+        public int TileIdx {
             get {
                 if (Parent == null || IsPlaceholder) {
                     return -1;
                 }
-                return Parent.VisibleItems.IndexOf(this);
+                return Parent.Items.IndexOf(this);
             }
         }
 
         public bool IsTextItem {
             get {
-                if(HeadItem == null) {
+                if (HeadItem == null) {
                     return false;
                 }
                 return //HeadItem.CopyItemType == MpCopyItemType.Csv ||
@@ -539,9 +555,6 @@ using System.Speech.Synthesis;
         }
 
         public int DropIdx { get; set; } = -1;
-        #endregion
-
-        #region State Properties 
 
         public bool IsAnyBusy => ItemViewModels.Any(x => x.IsBusy) || IsBusy;
 
@@ -763,8 +776,10 @@ using System.Speech.Synthesis;
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem headItem) {
+        public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
             IsBusy = true;
+            QueryOffsetIdx = queryOffset;
+
             ItemViewModels.Clear();
             if (headItem != null) {
                 var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
@@ -783,8 +798,7 @@ using System.Speech.Synthesis;
             OnPropertyChanged(nameof(ItemViewModels));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(PrimaryItem));
-
-            MpMessenger.Instance.Send(MpMessageType.ItemsInitialized);
+            OnPropertyChanged(nameof(TrayX));
 
             IsBusy = false;
         }
@@ -854,16 +868,11 @@ using System.Speech.Synthesis;
                         LastSelectedDateTime = DateTime.Now;
                         RequestFocus();
                     }
+                    if(!Parent.IsLoadingMore && !Parent.IsScrollJumping && IsSelected) {
+                        Parent.StoreSelectionState(this);
+                    }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
-                    break;
-                case nameof(IsHovering):
-                    if (IsHovering) {
-                        //if (Parent.IsScrolling) {
-                        //    IsHovering = false;
-                        //    ClearSubHovering();
-                        //}
-                    } 
                     break;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
@@ -929,7 +938,7 @@ using System.Speech.Synthesis;
             //    FileListBox.Items.Refresh();
             //}
             sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + Parent.VisibleItems.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + Parent.Items.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
         public void ClearSelection(bool clearEditing = true) {
@@ -995,7 +1004,7 @@ using System.Speech.Synthesis;
             MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
 
             sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + Parent.VisibleItems.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + Parent.Items.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
 
             if (rtbSelection != null && SelectedItems.Count == 1) {
                 //ContentContainerViewModel.SubSelectedContentItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);

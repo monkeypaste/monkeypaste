@@ -18,11 +18,11 @@ namespace MpWpfApp {
         public double ScreenHeight { get; private set; } = SystemParameters.PrimaryScreenHeight;
 
         public double TaskBarHeight { get; private set; } = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
-        
-        public double WorkAreaBottom { 
+
+        public double WorkAreaBottom {
             get {
                 return ScreenHeight - TaskBarHeight;
-            } 
+            }
         }
 
         public double ClipTileExpandedMaxHeightPadding {
@@ -102,7 +102,7 @@ namespace MpWpfApp {
 
         public double SearchDetailRowHeight {
             get {
-                return (MainWindowDefaultHeight / 10) + (SearchDetailBorderThickness*2);
+                return (MainWindowDefaultHeight / 10) + (SearchDetailBorderThickness * 2);
             }
         }
 
@@ -150,7 +150,7 @@ namespace MpWpfApp {
 
         public int TotalVisibleClipTiles {
             get {
-                return (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
+                return 6;// (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
             }
         }
 
@@ -158,7 +158,7 @@ namespace MpWpfApp {
             get {
                 return ScreenWidth - AppStateButtonPanelWidth;
             }
-        }        
+        }
 
         #region Clip Tile
 
@@ -170,23 +170,24 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTilePadding {
-            get {
-                return 17;
-            }
-        }
+        //public double ClipTilePadding {
+        //    get {
+        //        return 17;
+        //    }
+        //}
 
         public double ClipTileExpandedMargin {
             get {
-                return ClipTilePadding * 2;
+                return 5;// ClipTilePadding * 2;
             }
         }
 
         public double ClipTileMinSize {
             get {
-                return ClipTrayMinHeight - (ClipTileMargin * 2) - (ClipTilePadding);
+                return ClipTrayDefaultWidth / TotalVisibleClipTiles; //ClipTrayMinHeight - (ClipTileMargin * 2);// - (ClipTilePadding);
             }
         }
+
 
         public double ClipTileInnerBorderSize {
             get {
@@ -196,7 +197,7 @@ namespace MpWpfApp {
 
         public double ClipTileBorderMinSize {
             get {
-                return ClipTileMinSize - ClipTilePadding;
+                return ClipTileMinSize - (ClipTileMargin * 2);
             }
         }
 

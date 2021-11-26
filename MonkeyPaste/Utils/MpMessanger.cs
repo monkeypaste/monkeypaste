@@ -11,7 +11,6 @@ namespace MonkeyPaste {
         RequeryCompleted,
         QueryChanged,
         JumpToIdxCompleted,
-        ItemsInitialized,
         Expand,
         Unexpand,
         MainWindowOpening,
@@ -19,7 +18,11 @@ namespace MonkeyPaste {
         MainWindowHiding,
         MainWindowHid,
         ItemDragBegin,
-        ItemDragEnd        
+        ItemDragEnd,
+        KeyboardNext,
+        KeyboardPrev,
+        KeyboardHome,
+        KeyboardEnd
     }
 
     public class MpMessenger {
