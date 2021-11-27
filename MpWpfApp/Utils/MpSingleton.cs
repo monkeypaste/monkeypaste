@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public abstract class MpSingleton<T> where T: new() {
         #region Singleton Definition
-        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
+        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T(),true);
         public static T Instance { get { return _Lazy.Value; } }
         #endregion
     }
@@ -16,7 +16,7 @@ namespace MpWpfApp {
         where T : new() {
 
         #region Singleton Definition
-        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
+        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T(),true);
         public static T Instance { get { return _Lazy.Value; } }
         #endregion
 

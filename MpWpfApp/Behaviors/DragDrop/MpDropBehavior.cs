@@ -12,6 +12,83 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+    public class MpContentDropBehaviorSelector : MpSingleton<MpContentDropBehaviorSelector> {
+        private List<MpIContentDropTarget> _dropTargets = new List<MpIContentDropTarget>();
+
+        public void Register(MpIContentDropTarget dropBehavior) {
+            var dupCheck = _dropTargets.FirstOrDefault(x => x == dropBehavior);
+            if(dupCheck != null) {
+                _dropTargets[_dropTargets.IndexOf(dupCheck)] = dropBehavior;
+            } else {
+                _dropTargets.Add(dropBehavior);
+            }
+        }
+
+        public void Unregister(MpIContentDropTarget dropBehavior) {
+            var dropBehaviorToRemove = _dropTargets.FirstOrDefault(x => x.TargetId == dropBehavior.TargetId);
+            if (dropBehaviorToRemove != null) {
+                _dropTargets.Remove(dropBehaviorToRemove);
+            } else {
+                MpConsole.WriteLine("Warning! Cannot identify dropBehavior to remove so ignoring");
+                return;
+            }
+        }
+
+        public MpIContentDropTarget Select(object dragData, MouseEventArgs e) {
+            MpIContentDropTarget selectedTarget = null;
+
+            foreach (var dt in _dropTargets) {
+                if(!dt.IsDragDataValid(dragData)) {
+                    continue;
+                }
+                if(dt.GetDropTargetRectIdx(e) >= 0) {
+                    if(selectedTarget == null) {
+                        selectedTarget = dt;
+                    } else if(dt.DropPriority > selectedTarget.DropPriority) {
+                        selectedTarget = dt;
+                    }
+                }
+            }
+
+            return selectedTarget;
+        }
+    }
+
+    public class MpClipTrayDropBehavior : MpDropBehavior {
+
+    }
+
+    public class MpContentListDropBehavior : MpDropBehavior {
+
+    }
+
+    public class MpContentItemDropBehavior : MpDropBehavior {
+
+    }
+
+    public interface MpIContentDropTarget {
+        void AutoScrollByMouse();
+        
+        bool IsDragDataValid(object dragData);
+        void CancelDrop();
+        int GetDropTargetRectIdx(MouseEventArgs e);
+        void ContinueDragOverTarget(MouseEventArgs e);
+        List<Rect> GetDropTargetRects();
+
+        void InitAdorner();
+        void UpdateAdorner();
+        void EnableDebugMode();
+
+        Task Drop(object dragData);
+
+        void Reset();
+
+        int DropPriority { get; }
+        int TargetId { get; }
+
+        MpDropBehavior DropBehavior { get; }
+    }
+
     public class MpDropBehavior : Behavior<FrameworkElement> {
         private bool isTrayDrop {
             get {

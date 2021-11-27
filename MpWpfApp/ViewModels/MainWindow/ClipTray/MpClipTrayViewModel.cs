@@ -164,7 +164,7 @@ namespace MpWpfApp {
 
         public int TotalItemsInQuery { get; private set; } = 0;
 
-        public int InitialLoadCount { get; private set; } = 0;
+        public int DefaultLoadCount { get; private set; } = 0;
 
         #endregion
 
@@ -313,7 +313,7 @@ namespace MpWpfApp {
                 RemainingItemsCountThreshold = 1;// (int)(_pageSize / 2);
                 MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
 
-                InitialLoadCount = MpMeasurements.Instance.TotalVisibleClipTiles * 1 + 2;
+                DefaultLoadCount = MpMeasurements.Instance.TotalVisibleClipTiles * 1 + 2;
 
                 MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, this.ReceivedQueryInfoMessage);
             }));
@@ -549,7 +549,7 @@ namespace MpWpfApp {
 
         public void ResetClipSelection(bool clearEditing = true) {
             IsSelectionReset = true;
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.Instance.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
 
                 if (Items.Count > 0 && Items[0] != null) {
@@ -561,7 +561,7 @@ namespace MpWpfApp {
                 }
                 RequestScrollToHome();
 
-            }));
+            });
             IsSelectionReset = false;
         }
 
@@ -1044,7 +1044,6 @@ namespace MpWpfApp {
 
         #region Sync Events
 
-
         #endregion
 
         #endregion
@@ -1090,20 +1089,20 @@ namespace MpWpfApp {
                 sw.Start();
 
                 IsBusy = true;
-                //ClearClipSelection();
+
+                ScrollOffset = 0;
 
                 MpDataModelProvider.Instance.ResetQuery();
 
                 TotalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
 
-                //NextQueryOffsetIdx = 0;
+                int loadCount = Math.Min(DefaultLoadCount, TotalItemsInQuery);
 
-                int itemCountDiff = Items.Count - Math.Min(InitialLoadCount, TotalItemsInQuery);
+                // Cleanup Tray item count depending on last query
+                int itemCountDiff = Items.Count - loadCount;
                 if (itemCountDiff > 0) {
                     while (itemCountDiff > 0) {
-                        //extra item is added when dropping partial composite (creating new tile) at end of page so remove extra
-                        //items need to be removed when query total count is less than initialLoadCount
                         Items.RemoveAt(0);
                         itemCountDiff--;
                     }
@@ -1115,24 +1114,22 @@ namespace MpWpfApp {
                     }
                 }
 
-                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, InitialLoadCount);
+                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
                     await Items[i].InitializeAsync(cil[i], i);
                 }
 
-                //LastQueryOffsetIdx = 0;
-                //NextQueryOffsetIdx = cil.Count;
-
                 ResetClipSelection();
+
+                IsBusy = false;
+                IsRequery = false;
 
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.RequeryCompleted);
 
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
 
-                IsBusy = false;
-                IsRequery = false;
             });
 
         public ICommand LoadMoreClipsCommand => new RelayCommand<object>(
@@ -1221,7 +1218,7 @@ namespace MpWpfApp {
 
                 IsBusy = true;
                 IsScrollJumping = true;
-                int loadCount = InitialLoadCount;
+                int loadCount = DefaultLoadCount;
                 if (idx + loadCount > TotalItemsInQuery) {
                     //loadCount = MpMeasurements.Instance.TotalVisibleClipTiles;
                     idx = TotalItemsInQuery - loadCount;

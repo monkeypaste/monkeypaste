@@ -146,7 +146,7 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.KeyboardEnd:
                     _htrack.Value = _htrack.Maximum;
-                    _scrollTarget = ((MpClipTrayViewModel.Instance.InitialLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
+                    _scrollTarget = ((MpClipTrayViewModel.Instance.DefaultLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
                     break;
             }
         }
@@ -184,7 +184,7 @@ namespace MpWpfApp {
             double targetThumbValue = MpMeasurements.Instance.ClipTileMinSize * targetTileIdx;
             if(MpClipTrayViewModel.Instance.TotalItemsInQuery - targetTileIdx <= MpMeasurements.Instance.TotalVisibleClipTiles) {
                 //when target position is beyond total track width - half thumb width need to manually set thumb to max
-                targetThumbValue = _hsb.Maximum - ((MpClipTrayViewModel.Instance.InitialLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
+                targetThumbValue = _hsb.Maximum - ((MpClipTrayViewModel.Instance.DefaultLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
             }
             _hsb.Value = targetThumbValue;
         }

@@ -55,7 +55,8 @@
                          VirtualizingPanel.VirtualizationMode="Recycling"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
-                         ScrollViewer.HorizontalScrollBarVisibility="{Binding IsAnyTileExpanded, Converter={StaticResource BoolToScrollBarVisibilityFlipConverter}}"
+                         ScrollViewer.HorizontalScrollBarVisibility="{Binding IsAnyTileExpanded,
+                                                                              Converter={StaticResource BoolToScrollBarVisibilityFlipConverter}}"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
                         <local:MpDropBehavior x:Name="DropBehavior" />

@@ -241,8 +241,10 @@ namespace MpWpfApp {
                             // NOTE word 2007 does weird stuff and alters cb after read
                             // this attempts to circumvent that by waiting a second
                             // then replacing _last with current
-                            Thread.Sleep(1000);
-                            _lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
+                            // NOTE 2 commenting this out because it itermittently
+                            // creates duplicates...
+                            //Thread.Sleep(1000);
+                            //_lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
                         }                        
                     }
                 }

@@ -12,19 +12,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MpWpfApp {
-    public class MpContentDragBehavior : Behavior<FrameworkElement> {
+namespace MpWpfApp {    
+    public class MpContentDragBehavior : Behavior<MpContentItemView> {
         private const double MINIMUM_DRAG_DISTANCE = 10;
         private static MpContentContextMenuView _ContentContextMenu;
 
         private bool isDropValid = false;
         private bool isDragging = false;
         private bool isDragCopy = false;
-
-        public Cursor DefaultCursor = Cursors.Arrow;
-        private Cursor MoveCursor = Cursors.Hand;
-        private Cursor CopyCursor = Cursors.Cross;
-        private Cursor InvalidCursor = Cursors.No;
 
         private Point mouseStartPosition;
 
@@ -59,17 +54,10 @@ namespace MpWpfApp {
             }
             mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
 
-            //
-            if (AssociatedObject.DataContext is MpContentItemViewModel civm) {
-                if (civm.IsSelected) {
-                } else {
-                    civm.IsSelected = true;
-                }
-                //if(civm.IsOverHyperlink) {
-                //    e.Handled = false;
-                //    return;
-                //}
+            if(!AssociatedObject.BindingContext.IsSelected) {
+                AssociatedObject.BindingContext.IsSelected = true;
             }
+
             AssociatedObject.CaptureMouse();
 
             e.Handled = true;
@@ -83,12 +71,11 @@ namespace MpWpfApp {
             if (_ContentContextMenu == null) {
                 _ContentContextMenu = new MpContentContextMenuView();
             }
-            if (AssociatedObject.DataContext is MpContentItemViewModel civm) {
-                if (civm.IsSelected) {
-                } else {
-                    civm.IsSelected = true;
-                }
+
+            if (!AssociatedObject.BindingContext.IsSelected) {
+                AssociatedObject.BindingContext.IsSelected = true;
             }
+
             e.Handled = true;
 
             AssociatedObject.ContextMenu = _ContentContextMenu;
@@ -103,7 +90,6 @@ namespace MpWpfApp {
             AssociatedObject.ReleaseMouseCapture();
             EndDrop();
             ResetCursor();
-
 
             e.Handled = true;
         }
