@@ -123,8 +123,14 @@
     <Compile Include="Attributes\MpChildViewModelAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDragSource.cs" />
     <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\MpContentDropManager.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\MpKinematicScrollWheelBehavior.cs" />
@@ -159,6 +165,7 @@
     <Compile Include="Converters\MpBrushToImageConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpMultiObjectToTupleConverter.cs" />
+    <Compile Include="Converters\MpNegateDoubleConverter.cs" />
     <Compile Include="Converters\MpNegatingConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />

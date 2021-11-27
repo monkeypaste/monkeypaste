@@ -29,7 +29,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, IDisposable {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentDragSource, IDisposable {
         #region Private Variables
         private object _itemLockObject;
 
@@ -181,14 +181,14 @@ using System.Speech.Synthesis;
 
         public double TrayX {
             get {
-                if(Parent == null || !Parent.Items.Contains(this)) {
-                    return 0;
-                }
+                //if(Parent == null || !Parent.Items.Contains(this)) {
+                //    return 0;
+                //}
                 if(IsExpanded) {
                     return MpMeasurements.Instance.ClipTileExpandedMargin;
                 }
 
-                return (Parent.Items.IndexOf(this) * MpMeasurements.Instance.ClipTileMinSize) - Math.Max(0, Parent.ScrollOffset);
+                return (QueryOffsetIdx * MpMeasurements.Instance.ClipTileMinSize);// - Parent.ScrollOffset;
             }
         }
 
@@ -1761,6 +1761,36 @@ using System.Speech.Synthesis;
         //}
 
         #endregion
+
+        #endregion
+
+
+        #region MpIDragSource Implementation
+
+        public void StartDrag() {
+            DoCommandSelection();
+            ItemViewModels.ForEach(x => x.IsItemDragging = x.IsSelected);
+        }
+
+        public void CancelDrag() {
+            ItemViewModels.ForEach(x => x.IsItemDragging = false);
+        }
+
+        public object GetDragData() {
+            return ItemViewModels.Where(x => x.IsItemDragging).ToList();
+        }
+
+        public async Task<object> PrepareForDrop() {
+            var dropItems = ItemViewModels.Where(x => x.IsItemDragging);
+            foreach(var dcivm in dropItems) {
+                ItemViewModels.Remove(dcivm);
+            }
+            await UpdateSortOrderAsync(false);
+
+            dropItems.ForEach(x => x.IsItemDragging = false);
+            
+            return dropItems;
+        }
 
         #endregion
     }

@@ -22,7 +22,8 @@ namespace MonkeyPaste {
         KeyboardNext,
         KeyboardPrev,
         KeyboardHome,
-        KeyboardEnd
+        KeyboardEnd,
+        ScrollChanged
     }
 
     public class MpMessenger {

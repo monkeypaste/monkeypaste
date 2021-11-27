@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-
-    public class MpBoolFlipConverter : IValueConverter {
+    public class MpNegateDoubleConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null) {
-                return false;
+                return 0;
             }
-            return !(bool)value;
+            return -(double)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (Visibility)value == Visibility.Visible ? true : false;
+            if (value == null) {
+                return 0;
+            }
+            return -(double)value;
         }
     }
 }

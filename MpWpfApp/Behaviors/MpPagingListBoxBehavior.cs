@@ -20,15 +20,6 @@ namespace MpWpfApp {
         private int _lastWheelDelta = 0;
         private static double _velocity = 0;
 
-        private double _scrollTarget {
-            get {
-                return MpClipTrayViewModel.Instance.ScrollOffset;
-            }
-            set {
-                MpClipTrayViewModel.Instance.ScrollOffset = value;
-            }
-        }
-
         private DispatcherTimer _timer;
 
         private Thumb _hthumb;
@@ -77,9 +68,9 @@ namespace MpWpfApp {
 
         private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e) {
             MpHelpers.Instance.RunOnMainThread(async () => {
-                _sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
+                _sv = AssociatedObject.GetVisualAncestor<ScrollViewer>();
                 while (_sv == null) {
-                    _sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
+                    _sv = AssociatedObject.GetVisualAncestor<ScrollViewer>();
                     await Task.Delay(100);
                 }
                 _sv.PreviewMouseWheel += Sv_PreviewMouseWheel;
@@ -93,8 +84,28 @@ namespace MpWpfApp {
                 _htrack = _hsb.Track;
                 _hthumb = _htrack.Thumb;
 
+                MpHelpers.Instance.CreateBinding(
+                    MpClipTrayViewModel.Instance, 
+                    new PropertyPath(
+                        nameof(MpClipTrayViewModel.Instance.ScrollOffset)), 
+                    _htrack, Track.ValueProperty);
+
+                MpHelpers.Instance.CreateBinding(
+                    MpClipTrayViewModel.Instance,
+                    new PropertyPath(
+                        nameof(MpClipTrayViewModel.Instance.ClipTrayTotalWidth)),
+                    _htrack, Track.MaximumProperty);
+
+
+                _htrack.Minimum = 0;
+                MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ScrollOffset));
+                MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayTotalWidth));
+
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
 
+                MpMessenger.Instance.Register<MpMessageType>(
+                    AssociatedObject.GetVisualAncestor<MpClipTrayView>().ClipTrayDropBehavior, 
+                    ReceivedClipTrayViewModelMessage);
             });
             
             _timer = new DispatcherTimer(DispatcherPriority.Normal);
@@ -108,26 +119,30 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayTotalWidth));
 
                     AssociatedObject.UpdateLayout();
                     
-                    _hsb.Maximum = MpClipTrayViewModel.Instance.ClipTrayTotalWidth;                    
-                    _hsb.Minimum = 0;
+                    //_hsb.Maximum = MpClipTrayViewModel.Instance.ClipTrayTotalWidth;                    
+                    //_hsb.Minimum = 0;
 
-                    _hsb.UpdateLayout();
+                    //_hsb.UpdateLayout();
 
                     if (msg == MpMessageType.RequeryCompleted) {
                         MpConsole.WriteLine("Tray Width: " + AssociatedObject.ActualWidth);
-                        _hsb.Value = 0;
+                        //MpClipTrayViewModel.Instance.ScrollOffset = 0;
                         //AssociatedObject.ScrollToHorizontalOffset(0);
                         //AssociatedObject.ScrollToLeftEnd();
                         //AssociatedObject.ScrollToHome();
+
+                        
                     }
                     //_sv.ScrollToHorizontalOffset(0);
                     //_sv.InvalidateScrollInfo();
                     _sv.UpdateLayout();
+                    MpClipTrayViewModel.Instance.ScrollOffset = MpClipTrayViewModel.Instance.HeadItem.TrayX;
 
-                    //_scrollTarget = _hsb.Value;
+                    //_scrollTarget = MpClipTrayViewModel.Instance.ScrollOffset;
                     break;
                 case MpMessageType.KeyboardNext:
                 case MpMessageType.KeyboardPrev:
@@ -136,31 +151,23 @@ namespace MpWpfApp {
                         offset = -offset;
                     }
                     
-                    _htrack.Value -= offset;
-                    _scrollTarget -= offset;
+                    MpClipTrayViewModel.Instance.ScrollOffset -= offset;
                     ApplyOffsetChange(offset);
                     break;
                 case MpMessageType.KeyboardHome:
-                    _htrack.Value = 0;
-                    _scrollTarget = 0;
+                    MpClipTrayViewModel.Instance.ScrollOffset = 0;
                     break;
                 case MpMessageType.KeyboardEnd:
-                    _htrack.Value = _htrack.Maximum;
-                    _scrollTarget = ((MpClipTrayViewModel.Instance.DefaultLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
+                    //MpClipTrayViewModel.Instance.ScrollOffset = _htrack.Maximum;
+                    MpClipTrayViewModel.Instance.ScrollOffset = ((MpClipTrayViewModel.Instance.DefaultLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
                     break;
             }
         }
 
         private void HandleWorldTimerTick(object sender, EventArgs e) {
-           // if (Math.Abs(_velocity) > 0.1) 
-                {                 
-                _sv.ScrollToHorizontalOffset(_scrollTarget);
-                //MpMeasurements.Instance.ClipTileBorderMinSize * RemainingItemsThreshold;
-
-                _scrollTarget += _velocity;
-                _velocity *= Friction;
-                _htrack.Value += _velocity;
-            }
+            _sv.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
+            MpClipTrayViewModel.Instance.ScrollOffset += _velocity;
+            _velocity *= Friction;
         }
 
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
@@ -177,16 +184,9 @@ namespace MpWpfApp {
             _lastWheelDelta = 0;
             double norm_x = htrack_mp.X / _htrack.ActualWidth;
 
-            int targetTileIdx = (int)(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);            
-
+            int targetTileIdx = targetTileIdx = (int)(norm_x * MpClipTrayViewModel.Instance.TotalItemsInQuery);
+                        
             MpClipTrayViewModel.Instance.JumpToPageIdxCommand.Execute(targetTileIdx);
-
-            double targetThumbValue = MpMeasurements.Instance.ClipTileMinSize * targetTileIdx;
-            if(MpClipTrayViewModel.Instance.TotalItemsInQuery - targetTileIdx <= MpMeasurements.Instance.TotalVisibleClipTiles) {
-                //when target position is beyond total track width - half thumb width need to manually set thumb to max
-                targetThumbValue = _hsb.Maximum - ((MpClipTrayViewModel.Instance.DefaultLoadCount - MpMeasurements.Instance.TotalVisibleClipTiles) * MpMeasurements.Instance.ClipTileMinSize);
-            }
-            _hsb.Value = targetThumbValue;
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
@@ -200,8 +200,8 @@ namespace MpWpfApp {
                 _velocity = 0;
             }
 
-            if ((e.Delta < 0 && _hsb.Value >= _htrack.Maximum) ||
-                   (e.Delta > 0 && _hsb.Value <= 0)) {
+            if ((e.Delta < 0 && MpClipTrayViewModel.Instance.ScrollOffset >= _htrack.Maximum) ||
+                   (e.Delta > 0 && MpClipTrayViewModel.Instance.ScrollOffset <= 0)) {
                 _velocity = 0;
                 return;
             }
@@ -218,7 +218,7 @@ namespace MpWpfApp {
             if (!LoadMoreCommand.CanExecute(0)) {
                 return;
             }
-            Rect svr = AssociatedObject.Bounds();
+            Rect svr = _sv.Bounds();
             ListBox lb = AssociatedObject;
 
             if (horizontalChange < 0) {

@@ -11,6 +11,9 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
                                                       IsDesignTimeCreatable=False}">
+    <i:Interaction.Behaviors>
+        <local:MpClipTrayDropBehavior x:Name="ClipTrayDropBehavior" />
+    </i:Interaction.Behaviors>
     <Grid x:Name="ClipTrayGrid">
         <Grid.Resources>
             <ResourceDictionary Source="/Styles/MpPagingListBoxResourceDictionary.xaml" />
@@ -27,126 +30,126 @@
         </Grid.Background>
         <Grid>
             <AdornerDecorator>
-                <!--<ScrollViewer x:Name="PagingScrollViewer"
+                <ScrollViewer x:Name="PagingScrollViewer"
                               Width="{Binding ClipTrayScreenWidth}"
-                              HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Hidden">-->
-                <ListBox x:Name="ClipTray"
-                         SnapsToDevicePixels="True"
-                         Width="{Binding ClipTrayScreenWidth}"
-                         SelectionChanged="ClipTray_SelectionChanged"
-                         Visibility="{Binding IsTrayEmpty,
-                                              Converter={StaticResource BoolToVisibilityFlipConverter},
-                                              ConverterParameter={StaticResource Hide}}"
-                         ItemsSource="{Binding Items}"
-                         Background="Transparent"
-                         Loaded="ClipTray_Loaded"
-                         IsSynchronizedWithCurrentItem="True"
-                         Margin="0,0,0,0"
-                         Focusable="False"
-                         BorderThickness="0"
-                         VerticalAlignment="Stretch"
-                         VerticalContentAlignment="Stretch"
-                         HorizontalAlignment="Left"
-                         HorizontalContentAlignment="Stretch"
-                         SelectionMode="Single"
-                         VirtualizingPanel.IsVirtualizing="True"
-                         VirtualizingPanel.ScrollUnit="Pixel"
-                         VirtualizingPanel.VirtualizationMode="Recycling"
-                         ScrollViewer.CanContentScroll="False"
-                         ScrollViewer.IsDeferredScrollingEnabled="True"
-                         ScrollViewer.HorizontalScrollBarVisibility="{Binding IsAnyTileExpanded,
-                                                                              Converter={StaticResource BoolToScrollBarVisibilityFlipConverter}}"
-                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                    <i:Interaction.Behaviors>
-                        <local:MpDropBehavior x:Name="DropBehavior" />
-                        <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
-                                                       Friction="0.85"
-                                                       WheelDampening="0.08"
-                                                       RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
-                    </i:Interaction.Behaviors>
-                    <ListBox.InputBindings>
-                        <KeyBinding Gesture="Ctrl+A"
-                                    Command="{Binding SelectAllCommand}" />
-                    </ListBox.InputBindings>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <EventSetter Event="RequestBringIntoView"
-                                         Handler="ClipTray_RequestBringIntoView" />
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsSelected}" />
-                            <Setter Property="FocusVisualStyle"
-                                    Value="{x:Null}" />
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
-                            <Setter Property="VerticalContentAlignment"
-                                    Value="Top" />
-                            <Setter Property="Canvas.Left"
-                                    Value="{Binding TrayX}" />
-                            <Setter Property="Canvas.Top"
-                                    Value="0" />
-                            <!--<Setter Property="Width"
+                              HorizontalScrollBarVisibility="{Binding IsAnyTileExpanded,
+                                                                      Converter={StaticResource BoolToScrollBarVisibilityFlipConverter}}"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ListBox x:Name="ClipTray"
+                             SnapsToDevicePixels="True"
+                             Width="{Binding ClipTrayTotalWidth}"
+                             SelectionChanged="ClipTray_SelectionChanged"
+                             Visibility="{Binding IsTrayEmpty,
+                                                  Converter={StaticResource BoolToVisibilityFlipConverter},
+                                                  ConverterParameter={StaticResource Hide}}"
+                             ItemsSource="{Binding Items}"
+                             Background="Transparent"
+                             Loaded="ClipTray_Loaded"
+                             IsSynchronizedWithCurrentItem="True"
+                             Margin="0,0,0,0"
+                             Focusable="False"
+                             BorderThickness="0"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Stretch"
+                             HorizontalAlignment="Left"
+                             HorizontalContentAlignment="Stretch"
+                             SelectionMode="Single"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             VirtualizingPanel.ScrollUnit="Pixel"
+                             VirtualizingPanel.VirtualizationMode="Recycling"
+                             ScrollViewer.CanContentScroll="False"
+                             ScrollViewer.IsDeferredScrollingEnabled="True"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <i:Interaction.Behaviors>
+                            <local:MpDropBehavior x:Name="DropBehavior" />
+                            <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
+                                                           Friction="0.85"
+                                                           WheelDampening="0.08"
+                                                           RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
+                                                           LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
+                        </i:Interaction.Behaviors>
+                        <ListBox.InputBindings>
+                            <KeyBinding Gesture="Ctrl+A"
+                                        Command="{Binding SelectAllCommand}" />
+                        </ListBox.InputBindings>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <EventSetter Event="RequestBringIntoView"
+                                             Handler="ClipTray_RequestBringIntoView" />
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected}" />
+                                <Setter Property="FocusVisualStyle"
+                                        Value="{x:Null}" />
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalContentAlignment"
+                                        Value="Top" />
+                                <Setter Property="Canvas.Left"
+                                        Value="{Binding TrayX}" />
+                                <Setter Property="Canvas.Top"
+                                        Value="0" />
+                                <!--<Setter Property="Width"
                                         Value="{Binding TileBorderWidth}"/>
                                 <Setter Property="Height"
                                         Value="{Binding TileBorderHeight}"/>-->
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <ContentPresenter />
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected"
-                                                     Value="True">
-                                                <Setter Property="BorderBrush"
-                                                        Value="Transparent" />
-                                                <Setter Property="Background"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas IsItemsHost="True"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch" />
-                            <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected"
+                                                         Value="True">
+                                                    <Setter Property="BorderBrush"
+                                                            Value="Transparent" />
+                                                    <Setter Property="Background"
+                                                            Value="Transparent" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas IsItemsHost="True"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch" />
+                                <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                         Orientation="Horizontal"
                                                         SnapsToDevicePixels="True"
                                                         HorizontalAlignment="Left"
                                                         IsItemsHost="True" />-->
-                            <!--<local:MpVirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                <!--<local:MpVirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                             ChildWidth="{local:MpMeasurementsBinding ClipTileBorderMinSize}"
                                                             ChildHeight="{local:MpMeasurementsBinding ClipTileMinSize}"
                                                             ChildCount="{Binding TotalItemsInQuery, Source={StaticResource ClipTrayViewModel}}"
                                                             SnapsToDevicePixels="True"
                                                             HorizontalAlignment="Left"
                                                             IsItemsHost="True" />-->
-                            <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
+                                <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                     HorizontalAlignment="Left"
                                                     IsItemsHost="True"
                                                     Orientation="Horizontal" />-->
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder,
-                                                                                Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                                           DataContext="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <!--<i:Interaction.Behaviors>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder,
+                                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                               DataContext="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <!--<i:Interaction.Behaviors>
                         <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
                                                        Friction="0.85"
                                                        WheelDampening="0.08"
                                                        RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
                                                        LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
-                    </i:Interaction.Behaviors>
-                </ScrollViewer>-->
+                    </i:Interaction.Behaviors>-->
+                </ScrollViewer>
             </AdornerDecorator>
             <TextBlock x:Name="EmptyListTextBlock"
                        Text="This list has no items"
