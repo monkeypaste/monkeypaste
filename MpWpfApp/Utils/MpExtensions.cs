@@ -350,22 +350,21 @@ namespace MpWpfApp {
             return lbi.GetVisualAncestor<ListBox>();
         }
 
-        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
+        public static Rect GetListBoxItemRect(this ListBox lb, int index, Visual relativeTo = null) {
             var lbi = lb.GetListBoxItem(index);
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            var sv = lb.GetScrollViewer();
-            Point origin = lbi.TranslatePoint(new Point(0, 0), sv);
-            Point origin2 = lbi.TranslatePoint(new Point(0, 0), lb);
+            var sv = relativeTo == null ? lb.GetScrollViewer():relativeTo;
+            Point origin = lbi.TranslatePoint(new Point(0, 0), (UIElement)sv);
+            //Point origin2 = lbi.TranslatePoint(new Point(0, 0), lb);
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
         }
 
-        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {
-            relativeTo = relativeTo == null ? lb : relativeTo;
+        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {            
             var rl = new List<Rect>();
             for (int i = 0; i < lb.Items.Count; i++) {
-                rl.Add(lb.GetListBoxItemRect(i));
+                rl.Add(lb.GetListBoxItemRect(i,relativeTo));
             }
             return rl;
         }

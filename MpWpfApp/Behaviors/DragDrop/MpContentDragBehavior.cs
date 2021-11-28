@@ -23,7 +23,7 @@ namespace MpWpfApp {
 
         private Point _mouseStartPosition;
 
-        private MpDropBehavior _currentDropBehavior;
+        //private MpDropBehavior _currentDropBehavior;
 
         private MpIContentDropTarget _curDropTarget;
 
@@ -143,19 +143,18 @@ namespace MpWpfApp {
             if(dropTarget != _curDropTarget) {
                 _curDropTarget?.CancelDrop();
                 _curDropTarget = dropTarget;
+                _curDropTarget?.StartDrop();
             }
             if(_curDropTarget == null) {
                 InvalidateDrop();
             } else {
                 _isDropValid = true;
-                UpdateCursor();
-                _curDropTarget.AutoScrollByMouse(e);
                 _curDropTarget.ContinueDragOverTarget(e);
             }
-            
 
+            UpdateCursor();
             return;
-
+            /*
             var parent = Application.Current.MainWindow;
             var ClipTrayView = parent.GetVisualDescendent<MpClipTrayView>();
             MpDropBehavior lastDropBehavior = _currentDropBehavior;
@@ -232,12 +231,15 @@ namespace MpWpfApp {
                     StartDrop(ctvIdx);
                 }
                 _currentDropBehavior.AutoScrollByMouse();
-            }
+            }*/
         }
 
         private void InvalidateDrop() {
-            _currentDropBehavior?.CancelDrop();
-            _currentDropBehavior = null;
+            //_currentDropBehavior?.CancelDrop();
+            //_currentDropBehavior = null;
+            _curDropTarget?.CancelDrop();
+            _curDropTarget = null;
+
             _isDropValid = false;
 
             UpdateCursor();
@@ -249,37 +251,35 @@ namespace MpWpfApp {
             }
             AssociatedObject.ReleaseMouseCapture();
             _isDragging = false;
-            MpClipTrayViewModel.Instance.SelectedContentItemViewModels.ForEach(x => x.IsItemDragging = false);
+            MpClipTrayViewModel.Instance.CancelDrag();
 
             InvalidateDrop();
         }
 
-        private void StartDrop(int dropIdx) {
-            _isDropValid = _currentDropBehavior.StartDrop(MpClipTrayViewModel.Instance.SelectedItems, dropIdx);
+        //private void StartDrop(int dropIdx) {
+        //    _isDropValid = _currentDropBehavior.StartDrop(MpClipTrayViewModel.Instance.SelectedItems, dropIdx);
 
-            UpdateCursor();
-        }
+        //    UpdateCursor();
+        //}
 
         private void EndDrop() {
-            if (!_isDragging) {
-                return;
-            }
-            if (_currentDropBehavior != null) {
-                _currentDropBehavior.Drop(_isDragCopy);
-                _currentDropBehavior = null;
-            } else {
-                MpClipTrayViewModel.Instance.CancelDrag();
-            }
-            _isDropValid = false;
-            _isDragging = false;
-            AssociatedObject.ReleaseMouseCapture();
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                if (!_isDragging) {
+                    return;
+                }
+                if (_curDropTarget != null) {
+                    await _curDropTarget.Drop(_isDragCopy);
+                    _curDropTarget = null;
+                } else {
+                    MpClipTrayViewModel.Instance.CancelDrag();
+                }
+                _isDropValid = false;
+                _isDragging = false;
+                AssociatedObject.ReleaseMouseCapture();
 
-            UpdateCursor();
+                UpdateCursor();
+            });
         }
-
-        #endregion
-
-        #region Adorner Updates
 
         #endregion
 

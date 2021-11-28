@@ -831,8 +831,7 @@ namespace MpWpfApp {
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
-                    if (!Parent.Parent.IsLoadingMore &&
-                        !Parent.Parent.IsScrollJumping &&
+                    if (!Parent.Parent.IsRestoringSelection &&
                         Parent.IsSelected) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }

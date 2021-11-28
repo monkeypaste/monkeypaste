@@ -11,6 +11,10 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
+    <i:Interaction.Behaviors>
+        <!--<local:MpDropBehavior x:Name="DropBehavior" />-->
+        <local:MpRtbViewDropBehavior x:Name="RtbViewDropBehavior"/>
+    </i:Interaction.Behaviors>
     <AdornerDecorator>
         <RichTextBox x:Name="Rtb"
                      DataContext="{Binding}"
@@ -45,9 +49,6 @@
                      SizeChanged="Rtb_SizeChanged"
                      MouseEnter="Rtb_MouseEnter"
                      MouseLeave="Rtb_MouseLeave">
-            <i:Interaction.Behaviors>
-                <local:MpDropBehavior x:Name="DropBehavior" />
-            </i:Interaction.Behaviors>
             <RichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />

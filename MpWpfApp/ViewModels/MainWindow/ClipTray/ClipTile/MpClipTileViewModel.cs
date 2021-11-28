@@ -181,14 +181,11 @@ using System.Speech.Synthesis;
 
         public double TrayX {
             get {
-                //if(Parent == null || !Parent.Items.Contains(this)) {
-                //    return 0;
-                //}
                 if(IsExpanded) {
                     return MpMeasurements.Instance.ClipTileExpandedMargin;
                 }
 
-                return (QueryOffsetIdx * MpMeasurements.Instance.ClipTileMinSize);// - Parent.ScrollOffset;
+                return QueryOffsetIdx * MpMeasurements.Instance.ClipTileMinSize;
             }
         }
 
@@ -777,8 +774,8 @@ using System.Speech.Synthesis;
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
-            IsBusy = true;
             QueryOffsetIdx = queryOffset;
+            IsBusy = true;
 
             ItemViewModels.Clear();
             if (headItem != null) {
@@ -868,9 +865,6 @@ using System.Speech.Synthesis;
                         LastSelectedDateTime = DateTime.Now;
                         RequestFocus();
                     }
-                    if(!Parent.IsLoadingMore && !Parent.IsScrollJumping && IsSelected) {
-                        Parent.StoreSelectionState(this);
-                    }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
@@ -881,6 +875,7 @@ using System.Speech.Synthesis;
                         MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
+                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
                     break;
                 case nameof(IsFlipping):
                     if(IsFlipping) {

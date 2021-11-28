@@ -128,7 +128,7 @@
     <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpContentDropManager.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
-    <Compile Include="Behaviors\DragDrop\MpDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />

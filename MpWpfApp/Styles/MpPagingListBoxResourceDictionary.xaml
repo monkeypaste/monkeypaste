@@ -74,7 +74,7 @@
 
 
     <!--  BEGIN ScrollViewer  -->
-    <Style x:Key="PagingScrollViewer"
+    <Style x:Key="PagingScrollViewerStyle"
            TargetType="{x:Type ScrollViewer}">
         <Setter Property="OverridesDefaultStyle"
                 Value="True" />
@@ -95,7 +95,7 @@
                             <Border.BorderBrush>
                                 <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                             </Border.BorderBrush>
-                            <local:MpScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
+                            <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
                         </Border>
                         <ScrollBar x:Name="PART_VerticalScrollBar"
                                    Value="{TemplateBinding VerticalOffset}"
@@ -110,7 +110,15 @@
                                    Maximum="{TemplateBinding ScrollableWidth}"
                                    ViewportSize="{TemplateBinding ViewportWidth}"
                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
-
+                        <!--<ScrollBar x:Name="PART_HorizontalScrollBar"
+                                   Orientation="Horizontal"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Value="{Binding ScrollOffset, Source={StaticResource ClipTrayViewModel}}"
+                                   Minimum="0"
+                                   Maximum="{Binding ClipTrayTotalWidth, Source={StaticResource ClipTrayViewModel}}"
+                                   ViewportSize="{TemplateBinding ViewportWidth}"
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

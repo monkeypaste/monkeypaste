@@ -61,9 +61,8 @@ namespace MpWpfApp {
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:
-                    _dropTargets.ForEach(x => x.UpdateAdorner());
-                    break;
                 case MpMessageType.ScrollChanged:
                     _dropTargets.ForEach(x => x.UpdateAdorner());
                     break;

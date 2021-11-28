@@ -336,11 +336,5 @@ namespace MpWpfApp {
             var clv = AssociatedObject.GetVisualDescendent<MpContentListView>();
             clv.Civm_OnScrollWheelRequest(this, -e.Delta);
         }
-
-        private void MpTileExpanderBehavior_MouseWheel(object sender, MouseWheelEventArgs e) {
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - (e.Delta / 10));
-            e.Handled = true;
-        }
     }
 }

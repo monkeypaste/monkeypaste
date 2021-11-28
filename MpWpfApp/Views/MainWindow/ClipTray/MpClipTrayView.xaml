@@ -32,9 +32,16 @@
             <AdornerDecorator>
                 <ScrollViewer x:Name="PagingScrollViewer"
                               Width="{Binding ClipTrayScreenWidth}"
-                              HorizontalScrollBarVisibility="{Binding IsAnyTileExpanded,
-                                                                      Converter={StaticResource BoolToScrollBarVisibilityFlipConverter}}"
+                              HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
+                                                                      Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                               VerticalScrollBarVisibility="Hidden">
+                    <i:Interaction.Behaviors>
+                        <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
+                                                       Friction="0.85"
+                                                       WheelDampening="0.08"
+                                                       RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
+                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
+                    </i:Interaction.Behaviors>
                     <ListBox x:Name="ClipTray"
                              SnapsToDevicePixels="True"
                              Width="{Binding ClipTrayTotalWidth}"
@@ -61,14 +68,6 @@
                              ScrollViewer.IsDeferredScrollingEnabled="True"
                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                              ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                        <i:Interaction.Behaviors>
-                            <local:MpDropBehavior x:Name="DropBehavior" />
-                            <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
-                                                           Friction="0.85"
-                                                           WheelDampening="0.08"
-                                                           RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                                           LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
-                        </i:Interaction.Behaviors>
                         <ListBox.InputBindings>
                             <KeyBinding Gesture="Ctrl+A"
                                         Command="{Binding SelectAllCommand}" />
@@ -142,13 +141,6 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <!--<i:Interaction.Behaviors>
-                        <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
-                                                       Friction="0.85"
-                                                       WheelDampening="0.08"
-                                                       RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
-                    </i:Interaction.Behaviors>-->
                 </ScrollViewer>
             </AdornerDecorator>
             <TextBlock x:Name="EmptyListTextBlock"

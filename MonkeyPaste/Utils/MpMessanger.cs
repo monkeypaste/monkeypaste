@@ -19,10 +19,6 @@ namespace MonkeyPaste {
         MainWindowHid,
         ItemDragBegin,
         ItemDragEnd,
-        KeyboardNext,
-        KeyboardPrev,
-        KeyboardHome,
-        KeyboardEnd,
         ScrollChanged
     }
 

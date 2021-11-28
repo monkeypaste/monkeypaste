@@ -67,6 +67,7 @@ namespace MpWpfApp {
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
             SeperatorAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
             SeperatorAdornerLayer.Add(seperatorAdorner);
+
             UpdateAdorner();
             
             UpdateUi();

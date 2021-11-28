@@ -8,11 +8,12 @@ namespace MpWpfApp {
         int DropPriority { get; }
         int TargetId { get; set; }
 
-        void AutoScrollByMouse(MouseEventArgs e);
+        void AutoScrollByMouse();
         
         bool IsDragDataValid(object dragData);
         void CancelDrop();
         int GetDropTargetRectIdx(MouseEventArgs e);
+        void StartDrop();
         void ContinueDragOverTarget(MouseEventArgs e);
         List<Rect> GetDropTargetRects();
 

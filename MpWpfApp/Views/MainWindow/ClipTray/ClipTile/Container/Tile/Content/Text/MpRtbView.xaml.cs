@@ -74,6 +74,8 @@ namespace MpWpfApp {
                     rtbivm.IsNewAndFirstLoad = false;
                 }
 
+                
+
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });

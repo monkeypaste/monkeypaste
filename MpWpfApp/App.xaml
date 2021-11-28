@@ -1162,7 +1162,7 @@
         <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
         <local:MpBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
         <local:MpBoolToScrollBarVisibilityFlipConverter x:Key="BoolToScrollBarVisibilityFlipConverter" />
-        <local:MpNegateDoubleConverter x:Key="NegateDoubleConverter"/>
+        <local:MpNegateDoubleConverter x:Key="NegateDoubleConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->
