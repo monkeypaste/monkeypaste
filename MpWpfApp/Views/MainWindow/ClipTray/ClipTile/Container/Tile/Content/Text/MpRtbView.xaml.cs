@@ -112,7 +112,7 @@ namespace MpWpfApp {
             var civm = DataContext as MpContentItemViewModel;
             if (civm != null && civm.Parent.IsExpanded) {
                 var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
-                if (ctcv != null && e.HeightChanged && !ctcv.ExpandBehavior.IsExpandingOrUnexpanding) {
+                if (ctcv != null && e.HeightChanged && !MpTileExpanderBehavior.IsAnyExpandingOrUnexpanding) {
                     ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
                 }
 

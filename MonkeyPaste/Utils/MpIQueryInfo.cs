@@ -31,6 +31,8 @@ namespace MonkeyPaste {
     }
 
     public interface MpIQueryInfo {
+        public int TotalItemsInQuery { get; set; }
+
         public bool IsDescending { get;  set; }
 
         public MpContentSortType SortType { get; set; }
@@ -40,8 +42,6 @@ namespace MonkeyPaste {
         public int TagId { get; set; }
 
         public string SearchText { get;  set; }
-
-        //public int PageSize { get; set; }
 
         void NotifyQueryChanged();
     }

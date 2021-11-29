@@ -49,6 +49,10 @@
                 <BlurEffect KernelType="Gaussian"  Radius="15" RenderingBias="Performance"/>
             </Image.Effect>
         </Image>-->
+        <local:MpExternalDropView Canvas.Left="0"
+                                Canvas.Top="0"
+                                Width="{local:MpMeasurementsBinding ScreenWidth}"
+                                Height="{Binding DropCanvasHeight}"/>
         <Grid x:Name="MainWindowGrid"
               Canvas.Top="{Binding MainWindowTop}"
               Canvas.Left="0"

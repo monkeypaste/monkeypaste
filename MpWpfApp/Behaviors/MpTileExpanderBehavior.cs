@@ -22,7 +22,7 @@ namespace MpWpfApp {
         private Point _lastMousePosition;
         private FrameworkElement _mainWindowTitlePanel;
 
-        public bool IsExpandingOrUnexpanding { get; set; } = false;
+        public static bool IsAnyExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
             AssociatedObject.Loaded += AssociatedObject_Loaded;
@@ -176,12 +176,13 @@ namespace MpWpfApp {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = MpMainWindowViewModel.Instance;
             //need to do this so listboxitem matches w/ datacontext or it will expand to another tiles size
-            IsExpandingOrUnexpanding = true;
+            IsAnyExpandingOrUnexpanding = true;
             mwvm.IsResizing = true;
 
             var _deltaSize = new Point();
 
-            _unexpandedScrollOfset = MpClipTrayView.ScrollViewer.HorizontalOffset;
+            _unexpandedScrollOfset = MpClipTrayViewModel.Instance.ScrollOffset;
+            MpClipTrayViewModel.Instance.ScrollOffset = MpClipTrayViewModel.Instance.LastScrollOfset = 0;
 
             _originalMainWindowTop = mwvm.MainWindowTop;
 
@@ -217,7 +218,7 @@ namespace MpWpfApp {
             //make change in height so window doesn't get smaller but also doesn't extend past top of screen
             //_deltaSize.Height = Math.Min(maxDeltaHeight, deltaContentHeight);
             //sanity check so heights are the same after all that
-            _deltaSize.X =  mwvm.ClipTrayWidth - ctvm.TileBorderWidth - MpMeasurements.Instance.ClipTileExpandedMargin;
+            _deltaSize.X =  mwvm.ClipTrayWidth - MpMeasurements.Instance.ClipTileMinSize - (MpMeasurements.Instance.ClipTileExpandedMargin*2);
 
             mwvm.MainWindowTop -= _deltaSize.Y;
             _initialExpandedMainWindowTop = mwvm.MainWindowTop;
@@ -268,7 +269,7 @@ namespace MpWpfApp {
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel += ApplicationHook_MouseWheel;
 
             mwvm.IsResizing = false;
-            IsExpandingOrUnexpanding = false;
+            IsAnyExpandingOrUnexpanding = false;
         }
 
         public void Unexpand() {
@@ -277,7 +278,7 @@ namespace MpWpfApp {
 
             MpConsole.WriteLine("Unexpanding...");
             mwvm.IsResizing = true;
-            IsExpandingOrUnexpanding = true;
+            IsAnyExpandingOrUnexpanding = true;
 
 
             //trigger app mode column to hide
@@ -326,10 +327,10 @@ namespace MpWpfApp {
 
             MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseWheel -= ApplicationHook_MouseWheel;
 
-            MpClipTrayView.ScrollViewer.ScrollToHorizontalOffset(_unexpandedScrollOfset);
+            MpClipTrayViewModel.Instance.ScrollOffset = MpClipTrayViewModel.Instance.LastScrollOfset = _unexpandedScrollOfset;
 
             mwvm.IsResizing = false;
-            IsExpandingOrUnexpanding = false;
+            IsAnyExpandingOrUnexpanding = false;
         }
 
         private void ApplicationHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {

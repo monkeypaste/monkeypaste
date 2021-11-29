@@ -9,8 +9,9 @@ namespace MonkeyPaste {
     public enum MpMessageType {
         None,
         RequeryCompleted,
-        QueryChanged,
+        QueryChanged,        
         JumpToIdxCompleted,
+        TotalQueryCountChanged,
         Expand,
         Unexpand,
         MainWindowOpening,

@@ -104,7 +104,6 @@ namespace MpWpfApp {
 
         public MpTagTrayViewModel() : base() { }
 
-
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
         }
@@ -302,7 +301,11 @@ namespace MpWpfApp {
                     ttvm.IsSelected = ttvm.TagId == tagId;
                 }
 
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                if(MpClipTileSortViewModel.Instance.SelectedSortType.SortType == MpContentSortType.Manual) {
+                    MpClipTileSortViewModel.Instance.ResetToDefault();
+                } else {
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                }                
             });
         #endregion
     }

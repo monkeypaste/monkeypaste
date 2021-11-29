@@ -150,9 +150,12 @@ namespace MpWpfApp {
                     _lastMainWindowTop = _mainWindowGridTop;
                     _mainWindowGridTop = value;
                     OnPropertyChanged(nameof(MainWindowTop));
+                    OnPropertyChanged(nameof(DropCanvasHeight));
                 }
             }
         }
+
+        public double DropCanvasHeight => MainWindowTop;
 
         private double _clipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
         public double ClipTrayHeight {

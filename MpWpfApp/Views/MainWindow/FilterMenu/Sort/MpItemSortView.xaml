@@ -52,16 +52,8 @@
                 Height="30"
                 Width="30"
                 Command="{Binding ToggleSortOrderCommand}">
-            <Grid>
-                <Image Source="/Resources/Images/asc_black.png"
-                       Visibility="{Binding IsSortDescending,
-                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+            <Image Source="{Binding SortImagePath, Converter={StaticResource StringToImageSourceConverter}}"
                        Stretch="Fill" />
-                <Image Source="/Resources/Images/desc_black.png"
-                       Visibility="{Binding IsSortDescending,
-                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                       Stretch="Fill" />
-            </Grid>
         </Button>
     </Grid>
 </UserControl>

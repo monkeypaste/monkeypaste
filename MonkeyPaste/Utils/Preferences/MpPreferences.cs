@@ -148,11 +148,19 @@ namespace MonkeyPaste {
         #endregion
 
         #region Resources
+
         public string AbsoluteResourcesPath {
             get {
                 return @"pack://application:,,,/Resources";
             }
         }
+
+        public int MaxFilePathCharCount {
+            get {
+                return 260;
+            }
+        }
+
         #endregion
 
         #region Drag & Drop

@@ -39,8 +39,35 @@ namespace MpWpfApp {
 
         #region Properties
 
+        public string SortImagePath {
+            get {
+                if(SelectedSortType == null) {
+                    return Application.Current.Resources["DecendingIcon"] as string;
+                }
+                if(IsSortDescending) { 
+                    if(SelectedSortType.SortType == MpContentSortType.Manual) {
+                        return Application.Current.Resources["DecendingIcon_Disabled"] as string;
+                    }
+                    return Application.Current.Resources["DecendingIcon"] as string;
+                }
+                if (SelectedSortType.SortType == MpContentSortType.Manual) {
+                    return Application.Current.Resources["AscendingIcon_Disabled"] as string;
+                }
+                return Application.Current.Resources["AscendingIcon"] as string;
+            }
+        }
+
+        public bool IsManualSort {
+            get {
+                if(SelectedSortType == null) {
+                    return false;
+                }
+                return SelectedSortType.SortType == MpContentSortType.Manual;
+            }
+        }
         public bool IsSortDescending { get; set; } = true;
 
+        public bool IsReseting { get; private set; } = false;
         #endregion
 
         #region Events
@@ -67,6 +94,17 @@ namespace MpWpfApp {
             SelectedSortType = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();
             SelectedSortType.IsVisible = true;
         }
+
+        public void ResetToDefault() {
+            IsReseting = true;
+
+            SelectedSortType = SortTypes[0];
+            IsSortDescending = true;
+
+            IsReseting = false;
+
+            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+        }
         #endregion
 
         #region Private Methods       
@@ -83,13 +121,22 @@ namespace MpWpfApp {
                         } else {
                             manualSort.IsVisible = true;
                         }
-                        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                        if(!IsReseting) {
+                            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                        }
                     }
+                    OnPropertyChanged(nameof(SortImagePath));
+                    OnPropertyChanged(nameof(IsManualSort));
                     break;
                 case nameof(IsSortDescending):
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                    if (!IsReseting) {
+                        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                    }
+                    OnPropertyChanged(nameof(SortImagePath));
+                    OnPropertyChanged(nameof(IsManualSort));
                     break;
             }
+            
         }
         #endregion
 
@@ -97,7 +144,7 @@ namespace MpWpfApp {
         public ICommand ToggleSortOrderCommand => new RelayCommand(
             () => {
                 IsSortDescending = !IsSortDescending;
-            });
+            },!IsManualSort);
         #endregion
     }
 }

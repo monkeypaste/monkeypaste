@@ -124,6 +124,7 @@
     <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDragSource.cs" />
     <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpContentDropManager.cs" />
@@ -400,6 +401,9 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\DropCanvas\MpExternalDropView.xaml.cs">
+      <DependentUpon>MpExternalDropView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml.cs">
       <DependentUpon>MpSearchCriteriaListView.xaml</DependentUpon>
     </Compile>
@@ -607,6 +611,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\DropCanvas\MpExternalDropView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2301,6 +2309,8 @@
     <Resource Include="Resources\Images\ellipses.png" />
     <Resource Include="Resources\Images\save.png" />
     <Resource Include="Resources\Images\reset.png" />
+    <Resource Include="Resources\Images\desc_gray.png" />
+    <Resource Include="Resources\Images\asc_gray.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

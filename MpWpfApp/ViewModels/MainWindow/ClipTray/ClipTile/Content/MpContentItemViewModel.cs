@@ -772,6 +772,10 @@ namespace MpWpfApp {
                 if (sc.CopyItemId == CopyItemId) {
                     ShortcutKeyString = sc.KeyString;
                 }
+            } else if(e is MpCopyItem ci) {
+                if(ci.Id == CopyItemId) {
+
+                }
             }
         }
 

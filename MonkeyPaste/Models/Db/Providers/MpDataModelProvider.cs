@@ -18,6 +18,8 @@ namespace MonkeyPaste {
 
         public MpIQueryInfo QueryInfo { get; set; }
 
+        public int TotalItems => _allFetchedAndSortedCopyItemIds.Count;
+
         #endregion
 
         #region Constructor
@@ -37,32 +39,58 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
+        public async Task UpdateQuery(int copyItemId, int newIdx) {
+            if(newIdx < 0) {
+                if(_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                    int newParentId = 0;
+                    var ccil = await GetCompositeChildrenAsync(copyItemId);
+                    for (int i = 0; i < ccil.Count; i++) {
+                        if(i == 0) {
+                            newParentId = ccil[i].Id;
+                            ccil[i].CompositeParentCopyItemId = 0;
+                        }  else {
+                            ccil[i].CompositeParentCopyItemId = newParentId;
+                        }
+                        ccil[i].CompositeSortOrderIdx = i;
+                        await ccil[i].WriteToDatabaseAsync();
+                    }
+                    if(newParentId > 0) {
+                        _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(copyItemId)] = newParentId;
+                    } else {
+                        _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
+                    }                    
+                }
+                return;
+            }
+
+            if(_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                int oldIdx = _allFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
+                if(newIdx > oldIdx) {
+                    newIdx--;
+                }
+                _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
+
+            } 
+
+            if (newIdx >= _allFetchedAndSortedCopyItemIds.Count) {
+                _allFetchedAndSortedCopyItemIds.Add(newIdx);
+            } else {
+                _allFetchedAndSortedCopyItemIds.Insert(newIdx, copyItemId);
+            }
+        }
+
         #region MpQueryInfo Fetch Methods
 
-        public async Task<int> FetchCopyItemCountAsync() {
+        public async Task QueryForTotalCount() {
             string allRootIdQuery = GetQueryForCount();
             _allFetchedAndSortedCopyItemIds = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
             _allFetchedAndSortedCopyItemIds = _allFetchedAndSortedCopyItemIds.Distinct().ToList();
-            return _allFetchedAndSortedCopyItemIds.Count;
+            QueryInfo.TotalItemsInQuery = _allFetchedAndSortedCopyItemIds.Count;
         }
 
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
-            //if(startIndex >= _allFetchedAndSortedCopyItemIds.Count) {
-            //    return _lastResult;
-            //}
-            //if(startIndex + count > _allFetchedAndSortedCopyItemIds.Count) {
-            //    startIndex = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - count);
-            //    if (startIndex + count >= _allFetchedAndSortedCopyItemIds.Count) {
-            //        count = _allFetchedAndSortedCopyItemIds.Count;
-            //    }
-            //}
-            //if(count <= 0) {
-            //    count = Math.Max(0,_allFetchedAndSortedCopyItemIds.Count - startIndex);
-            //}
             var fetchRange = _allFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-
             var items = await GetCopyItemsByIdList(fetchRange);
-
             return items;
         }
 
@@ -140,6 +168,9 @@ namespace MonkeyPaste {
                     break;
                 case MpContentSortType.UsageScore:
                     sortClause = string.Format(@"order by {0}", "UsageScore");
+                    break;
+                case MpContentSortType.Manual:
+
                     break;
             }
             if (QueryInfo.IsDescending) {
@@ -711,5 +742,7 @@ namespace MonkeyPaste {
             }
             return result;
         }
+
+
     }
 }

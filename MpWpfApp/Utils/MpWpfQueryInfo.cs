@@ -7,6 +7,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpWpfQueryInfo : MpIQueryInfo {
+        public int TotalItemsInQuery { get; set; }
         public bool IsDescending { get; set; }
         public MpContentSortType SortType { get; set; }
         public int TagId { get; set; }
@@ -20,8 +21,11 @@ namespace MpWpfApp {
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
+            TotalItemsInQuery = MpDataModelProvider.Instance.TotalItems;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);
         }
+
+        
     }
 }

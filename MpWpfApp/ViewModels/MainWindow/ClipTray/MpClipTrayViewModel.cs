@@ -25,7 +25,7 @@ using System.Collections.Concurrent;
 
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel>, MpIContentDragSource {
+    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel> {
         #region Private Variables      
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -170,7 +170,7 @@ namespace MpWpfApp {
 
         public int RemainingItemsCountThreshold { get; private set; }
 
-        public int TotalItemsInQuery { get; private set; } = 0;
+        public int TotalItemsInQuery => MpDataModelProvider.Instance.TotalItems;
 
         public int DefaultLoadCount { get; private set; } = 0;
 
@@ -180,7 +180,8 @@ namespace MpWpfApp {
 
         public bool IsRestoringSelection { get; private set; } = false;
 
-        public Dictionary<int, List<int>> SelectionLookup { get; set; } = new Dictionary<int, List<int>>();
+        //public Dictionary<int, List<int>> SelectionLookup { get; set; } = new Dictionary<int, List<int>>();
+        public List<MpCopyItem> PersistentSelectedModels { get; private set; } = new List<MpCopyItem>();
 
         public double LastScrollOfset { get; set; } = 0;
 
@@ -342,7 +343,7 @@ namespace MpWpfApp {
 
                 DefaultLoadCount = MpMeasurements.Instance.TotalVisibleClipTiles * 1 + 2;
 
-                MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, this.ReceivedQueryInfoMessage);
+                MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
             }));
         }
 
@@ -387,9 +388,15 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.QueryChanged:
                     IsRequery = true;
-                    await Task.Delay(300);
 
-                    RequeryCommand.Execute(null);
+                    if(MpContentDropManager.Instance.IsDragAndDrop &&
+                       MpContentDropManager.Instance.CurrentDropTarget.DropPriority == 1) {
+                        RequeryCommand.Execute(HeadQueryIdx);
+                    } else {
+                        await Task.Delay(300);
+                        RequeryCommand.Execute(null);
+                    }
+                    
                     break;
             }
         }
@@ -936,22 +943,31 @@ namespace MpWpfApp {
         }
 
         public void StoreSelectionState(MpClipTileViewModel tile) {
-            SelectionLookup.Clear();
-            SelectionLookup.Add(
-                tile.QueryOffsetIdx,
-                tile.SelectedItems.Select(x => x.CompositeSortOrderIdx).ToList());
+            //SelectionLookup.Clear();
+            //SelectionLookup.Add(
+            //    tile.QueryOffsetIdx,
+            //    tile.SelectedItems.Select(x => x.CompositeSortOrderIdx).ToList());
+            PersistentSelectedModels = tile.SelectedItems.Select(x => x.CopyItem).ToList();
         }
 
         public void RestoreSelectionState(MpClipTileViewModel tile) {
-            if(!SelectionLookup.ContainsKey(tile.QueryOffsetIdx)) {
+            //if(!SelectionLookup.ContainsKey(tile.QueryOffsetIdx)) {
+            //    return;
+            //}
+            var prevSelectedItems = tile.ItemViewModels.Where(x => 
+                                                PersistentSelectedModels.Any(y => 
+                                                    y.Id == x.CopyItemId)).ToList();
+            if (prevSelectedItems.Count == 0) {
+                tile.ClearSelection();
                 return;
             }
             
             IsRestoringSelection = true;
 
-            foreach(var civm in tile.ItemViewModels) {
-                civm.IsSelected = SelectionLookup[tile.QueryOffsetIdx].Contains(civm.CompositeSortOrderIdx);
-            }
+            //foreach(var civm in tile.ItemViewModels) {
+            //    civm.IsSelected = SelectionLookup[tile.QueryOffsetIdx].Contains(civm.CompositeSortOrderIdx);
+            //}
+            tile.ItemViewModels.ForEach(x => x.IsSelected = prevSelectedItems.Contains(x));
 
             IsRestoringSelection = false;
         }
@@ -1124,6 +1140,9 @@ namespace MpWpfApp {
                 if (_newModels.Count == 0) {
                     return false;
                 }
+                if(MpDataModelProvider.Instance.QueryInfo.SortType == MpContentSortType.Manual) {
+                    return false;
+                }
                 if (MpDataModelProvider.Instance.QueryInfo.TagId == MpTag.AllTagId) {
                     return true;
                 }
@@ -1133,18 +1152,23 @@ namespace MpWpfApp {
                 return true;
             });
 
-        public ICommand RequeryCommand => new RelayCommand(
-            async () => {
+        public ICommand RequeryCommand => new RelayCommand<object>(
+            async (offsetIdxArg) => {
                 var sw = new Stopwatch();
                 sw.Start();
+                bool isDragDropRequery = offsetIdxArg != null;
+                int offsetIdx = offsetIdxArg == null ? 0 : (int)offsetIdxArg;
 
                 IsBusy = true;
 
-                ScrollOffset = LastScrollOfset = 0;
+                ScrollOffset = LastScrollOfset = offsetIdx * MpMeasurements.Instance.ClipTileMinSize;
 
-                MpDataModelProvider.Instance.ResetQuery();
+                if(offsetIdxArg == null) {
+                    MpDataModelProvider.Instance.ResetQuery();
 
-                TotalItemsInQuery = await MpDataModelProvider.Instance.FetchCopyItemCountAsync();
+                    await MpDataModelProvider.Instance.QueryForTotalCount();
+                }
+                OnPropertyChanged(nameof(TotalItemsInQuery));
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
                 OnPropertyChanged(nameof(MaximumScrollOfset));
                 OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
@@ -1166,13 +1190,21 @@ namespace MpWpfApp {
                     }
                 }
 
-                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(0, loadCount);
+                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
-                    await Items[i].InitializeAsync(cil[i], i);
+                    await Items[i].InitializeAsync(cil[i], i + offsetIdx);
+
+                    if (isDragDropRequery) {
+                        RestoreSelectionState(Items[i]);
+                    }
                 }
 
-                ResetClipSelection();
+                if(isDragDropRequery) {
+                    
+                } else {
+                    ResetClipSelection();
+                }
 
                 IsBusy = false;
                 IsRequery = false;
@@ -1237,6 +1269,8 @@ namespace MpWpfApp {
                        !IsLoadingMore &&
                        !IsScrollJumping &&
                        !IsAnyTileFlipped &&
+                       !IsAnyTileExpanded &&
+                       !MpTileExpanderBehavior.IsAnyExpandingOrUnexpanding &&
                        //!IsAnyTileItemDragging &&
                        !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             });
@@ -1270,7 +1304,6 @@ namespace MpWpfApp {
                     await Items[i].InitializeAsync(cil[i], idx + i);
                     RestoreSelectionState(Items[i]);
                 }
-
 
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.JumpToIdxCompleted);
 
@@ -1873,38 +1906,6 @@ namespace MpWpfApp {
                 MessageBox.Show(analyticItemVm.ResultViewModel.Result);
 
             });
-
-        #endregion
-
-        #region MpIDragSource Implementation
-
-        public void StartDrag() {
-            SelectedItems.ForEach(x => x.StartDrag());            
-        }
-
-        public void CancelDrag() {
-            SelectedItems.ForEach(x => x.CancelDrag());
-        }
-
-        public object GetDragData() {
-            List<MpContentItemViewModel> dragItems = new List<MpContentItemViewModel>();
-            foreach(var sctvm in SelectedItems) {
-                dragItems.AddRange(sctvm.GetDragData() as List<MpContentItemViewModel>);
-            }
-
-            return dragItems;
-        }
-
-        public async Task<object> PrepareForDrop() {
-            var prepareTasks = SelectedItems.Select(x => x.PrepareForDrop());
-            var dropItems = await Task<object>.WhenAll(prepareTasks.ToArray());
-
-            var tilesToRemove = SelectedItems.Where(x => x.ItemViewModels.Count == 0);
-            foreach(var tileToRemove in tilesToRemove) {
-                Items.Remove(tileToRemove);
-            }
-            return dropItems.ToList();
-        }
 
         #endregion
     }

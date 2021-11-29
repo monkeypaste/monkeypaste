@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -169,7 +170,7 @@ namespace MpWpfApp {
                     case nameof(IconSource):
                         if (!string.IsNullOrEmpty(IconSource)) {
                             var icon = new Image();
-                            if (File.Exists(IconSource)) {
+                            if (IconSource.Length <= MpPreferences.Instance.MaxFilePathCharCount && File.Exists(IconSource)) {
                                 icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
                                 
                             } else {

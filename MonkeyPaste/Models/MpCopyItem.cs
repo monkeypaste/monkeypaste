@@ -9,8 +9,8 @@ using SQLiteNetExtensions.Attributes;
 namespace MonkeyPaste {
     [Table("MpCopyItem")]
     public class MpCopyItem : MpDbModelBase, MpISyncableDbObject {
-
         #region Column Definitions
+
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; } = 0;
@@ -182,6 +182,12 @@ namespace MonkeyPaste {
             return $"Id:{Id} Text:{ItemData}" + Environment.NewLine;
         }
 
+        public override async Task WriteToDatabaseAsync() {
+            if(Source == null) {
+                Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
+            }
+            await base.WriteToDatabaseAsync();
+        }
         #region Sync
 
         public async Task<object> DeserializeDbObject(string objStr) {

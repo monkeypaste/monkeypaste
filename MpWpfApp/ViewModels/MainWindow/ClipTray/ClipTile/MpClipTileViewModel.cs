@@ -1107,16 +1107,31 @@ using System.Speech.Synthesis;
 
         #region DB Overrides
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            //throw new NotImplementedException();
-        }
-
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 var civm = ItemViewModels.Where(x => x.CopyItemId == ci.Id);
 
             }
         }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+                //DragDrop Cases
+                // 1. Item Resorted
+
+                //var civm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                //if(civm != null) {
+                //    if(civm.CompositeParentCopyItemId != ci.CompositeParentCopyItemId) {
+
+                //    }
+                //}
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            //throw new NotImplementedException();
+        }
+
+        
 
         #endregion
 

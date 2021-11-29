@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Threading;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -9,11 +11,31 @@ namespace MpWpfApp {
 
         private List<MpIContentDropTarget> _dropTargets = new List<MpIContentDropTarget>();
 
+        private DispatcherTimer _autoScrollTimer;
+
+        private MouseEventArgs _curCapturedMouseEvent;
+
+        #endregion
+
+        #region Properties
+
+        #region State
+
+        public MpIContentDropTarget CurrentDropTarget { get; private set; }
+
+        public bool IsDragAndDrop { get; private set; }
+
+        #endregion
+
         #endregion
 
         #region Init
 
         public MpContentDropManager() {
+            _autoScrollTimer = new DispatcherTimer();
+            _autoScrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            _autoScrollTimer.Tick += _autoScrollTimer_Tick;
+
             MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
         }
 
@@ -37,13 +59,15 @@ namespace MpWpfApp {
         }
 
         public MpIContentDropTarget Select(object dragData, MouseEventArgs e) {
+            _curCapturedMouseEvent = e;
+
             MpIContentDropTarget selectedTarget = null;
 
             foreach (var dt in _dropTargets) {
                 if (!dt.IsDragDataValid(dragData)) {
                     continue;
                 }
-                if (dt.GetDropTargetRectIdx(e) >= 0) {
+                if (dt.GetDropTargetRectIdx(_curCapturedMouseEvent) >= 0) {
                     if (selectedTarget == null) {
                         selectedTarget = dt;
                     } else if (dt.DropPriority > selectedTarget.DropPriority) {
@@ -51,13 +75,33 @@ namespace MpWpfApp {
                     }
                 }
             }
+            CurrentDropTarget = selectedTarget;
 
-            return selectedTarget;
+            return CurrentDropTarget;
         }
 
+        public void StartDrag() {
+            //MpClipTrayViewModel.Instance.StartDrag();
+            IsDragAndDrop = true;
+            _autoScrollTimer.Start();
+        }
+
+        public void StopDrag() {
+            IsDragAndDrop = false;
+            _autoScrollTimer.Stop(); 
+            _dropTargets.ForEach(x => x.Reset());
+        }
         #endregion
 
         #region Private Methods
+
+        private void _autoScrollTimer_Tick(object sender, EventArgs e) {
+            //if (MpClipTrayViewModel.Instance.IsBusy) {
+            //    return;
+            //}
+            _dropTargets.ForEach(x => x.UpdateAdorner());
+            _dropTargets.ForEach(x => x.AutoScrollByMouse(_curCapturedMouseEvent));
+        }
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
