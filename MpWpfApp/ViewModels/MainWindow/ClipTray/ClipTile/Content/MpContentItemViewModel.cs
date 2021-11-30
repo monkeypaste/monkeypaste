@@ -95,10 +95,11 @@ namespace MpWpfApp {
         private Brush _itemBackgroundBrush;
         public Brush ItemBackgroundBrush {
             get {
-                if (Parent.IsExpanded) {
-                    return Brushes.White;
-                }
+                //if (Parent.IsExpanded) {
+                //    return Brushes.White;
+                //}
                 if (IsHovering &&
+                    ((Parent.IsExpanded && !IsSelected) || !Parent.IsExpanded) &&
                     Parent.Count > 1) {
                     if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
                         if(_itemBackgroundBrush == null) {
@@ -598,6 +599,10 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
 
+            if (ci != null) {
+               // MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ItemInitialized);
+            }
+
             IsBusy = false;
         }
 
@@ -813,7 +818,7 @@ namespace MpWpfApp {
             });
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) { 
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
@@ -835,8 +840,10 @@ namespace MpWpfApp {
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    
                     if (!Parent.Parent.IsRestoringSelection &&
-                        Parent.IsSelected) {
+                        Parent.IsSelected &&
+                        !Parent.Parent.IsAnyTileExpanded) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }
                     break;

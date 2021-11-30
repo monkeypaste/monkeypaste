@@ -336,24 +336,42 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public async Task<object> Clone() {
-            var s = await MpDb.Instance.GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+        public async Task<object> Clone(bool isReplica) {
+            //var s = await MpDb.Instance.GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+            if(Source == null) {
+                Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
+            }
 
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
                 Title = this.Title,
                 ItemData = this.ItemData,
                 ItemColor = this.ItemColor,
-                Source = s,
-                SourceId = s.Id,
+                Source = this.Source,
+                SourceId = this.Source.Id,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
-                CompositeParentCopyItemId = 0,
-                CompositeSortOrderIdx = 0,
-                Id = 0
+                CompositeParentCopyItemId = isReplica ? 0:this.CompositeParentCopyItemId,
+                CompositeSortOrderIdx = isReplica ? 0:this.CompositeSortOrderIdx,
+                Id = isReplica ? 0:this.Id,
+                CopyItemGuid = isReplica ? System.Guid.NewGuid():this.CopyItemGuid
             };
 
-            await newItem.WriteToDatabaseAsync();
+            if(isReplica) {
+                await newItem.WriteToDatabaseAsync();
+
+                var tags = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(this.Id);
+                foreach (var tag in tags) {
+                    await MpCopyItemTag.Create(tag.Id, newItem.Id);
+                }
+
+                var templates = await MpDataModelProvider.Instance.GetTemplatesAsync(this.Id);
+                foreach (var template in templates) {
+                    var templateClone = template.Clone(true) as MpCopyItemTemplate;
+                    templateClone.CopyItemId = newItem.Id;
+                    await templateClone.WriteToDatabaseAsync();
+                }
+            }
 
             return newItem;
         }

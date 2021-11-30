@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MonkeyPaste;
@@ -63,14 +64,17 @@ namespace MpWpfApp {
 
             MpIContentDropTarget selectedTarget = null;
 
-            foreach (var dt in _dropTargets) {
+            foreach (var dt in _dropTargets.Where(x=>x.IsEnabled)) {
                 if (!dt.IsDragDataValid(dragData)) {
                     continue;
                 }
-                if (dt.GetDropTargetRectIdx(_curCapturedMouseEvent) >= 0) {
+                dt.DropIdx = dt.GetDropTargetRectIdx(_curCapturedMouseEvent);
+                if (dt.DropIdx >= 0) {
                     if (selectedTarget == null) {
                         selectedTarget = dt;
-                    } else if (dt.DropPriority > selectedTarget.DropPriority) {
+                    } else {//if (dt != selectedTarget && 
+                              // dt.DropPriority > selectedTarget.DropPriority) {
+                        selectedTarget.DropIdx = -1;
                         selectedTarget = dt;
                     }
                 }
@@ -81,7 +85,6 @@ namespace MpWpfApp {
         }
 
         public void StartDrag() {
-            //MpClipTrayViewModel.Instance.StartDrag();
             IsDragAndDrop = true;
             _autoScrollTimer.Start();
         }
@@ -96,9 +99,6 @@ namespace MpWpfApp {
         #region Private Methods
 
         private void _autoScrollTimer_Tick(object sender, EventArgs e) {
-            //if (MpClipTrayViewModel.Instance.IsBusy) {
-            //    return;
-            //}
             _dropTargets.ForEach(x => x.UpdateAdorner());
             _dropTargets.ForEach(x => x.AutoScrollByMouse(_curCapturedMouseEvent));
         }
@@ -107,7 +107,7 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:
-                case MpMessageType.ScrollChanged:
+                case MpMessageType.TrayScrollChanged:
                     _dropTargets.ForEach(x => x.UpdateAdorner());
                     break;
             }

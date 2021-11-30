@@ -23,14 +23,40 @@ namespace MpWpfApp {
 
         protected override FrameworkElement AdornedElement => AssociatedObject.ClipTray;
 
+        public override bool IsEnabled { get; set; } = true;
+
         public override int DropPriority => 1;
+
+        protected override void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.TrayScrollChanged:
+                    _dropRects = GetDropTargetRects(); 
+                    UpdateAdorner();
+                    break;
+            }
+        }
+
+        protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ExpandComplete:
+                    IsEnabled = false;
+                    //_dropRects.Clear();
+                    UpdateAdorner();
+                    break;
+                case MpMessageType.UnexpandComplete:
+                    IsEnabled = false;
+                    //_dropRects = GetDropTargetRects();
+                    UpdateAdorner();
+                    break;
+            }
+        }
 
         public override void AutoScrollByMouse(MouseEventArgs e) {
             var sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
             var ctr_mp = e.GetPosition(sv);
             Rect ctr_sv_rect = sv.Bounds();
             if(!ctr_sv_rect.Contains(ctr_mp)) {
-                MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({ctr_sv_rect})");
+                //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({ctr_sv_rect})");
                 return;
             }
 
@@ -47,9 +73,9 @@ namespace MpWpfApp {
             List<Rect> targetRects = new List<Rect>();
 
             var tileRects = AssociatedObject.ClipTray.GetListBoxItemRects(AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>());
-            for (int i = 0; i < tileRects.Count; i++) {                
+            for (int i = 0; i < tileRects.Count; i++) {
                 Rect targetRect = tileRects[i];
-                if(i == 0) {
+                if (i == 0) {
                     targetRect.Location = new Point(0, 0);
 
                     targetRect.Width = targetRect.Left + tileMargin;
@@ -63,7 +89,7 @@ namespace MpWpfApp {
 
                 targetRects.Add(targetRect);
 
-                if(i == tileRects.Count - 1 &&
+                if (i == tileRects.Count - 1 &&
                    MpClipTrayViewModel.Instance.TailQueryIdx == MpClipTrayViewModel.Instance.TotalItemsInQuery - 1) {
                     Rect tailRect = tileRects[i];
 
@@ -72,12 +98,12 @@ namespace MpWpfApp {
                         targetRect.Location.Y);
 
                     Rect trayRect = AssociatedObject.ClipTray.GetListBoxRect();
-                    if(trayRect.Right > tailRect.Left) {
+                    if (trayRect.Right > tailRect.Left) {
                         //when last tile is within viewport
                         tailRect.Width = trayRect.Right - tailRect.Left;
                     } else {
                         tailRect.Width = tailRect.Left + tileMargin;
-                    }                    
+                    }
 
                     targetRects.Add(tailRect);
                 }
@@ -86,7 +112,7 @@ namespace MpWpfApp {
             return targetRects;
         }
 
-        public override void StartDrop() { }
+        public override async Task StartDrop() { await Task.Delay(1); }
 
         public override async Task Drop(bool isCopy, object dragData) {
             if(dragData == null || dragData.GetType() != typeof(List<MpCopyItem>)) {
@@ -96,9 +122,13 @@ namespace MpWpfApp {
             MpClipTileSortViewModel.Instance.SetToManualSort();            
 
             List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
+            if(isCopy) {
+                var clones = await Task.WhenAll(dragModels.Select(x => x.Clone(true)).ToArray());
+                dragModels = clones.Cast<MpCopyItem>().ToList();
+            }
             for (int i = 0; i < dragModels.Count; i++) {
                 if(dragModels[i].CompositeParentCopyItemId == 0 && 
-                   i > 0) {
+                   i > 0 && !isCopy) {
                     await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
                 }
                 dragModels[i].CompositeSortOrderIdx = i;

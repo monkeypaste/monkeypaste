@@ -51,6 +51,7 @@
                 BorderThickness="0"
                 Height="30"
                 Width="30"
+                IsEnabled="{Binding IsManualSort, Converter={StaticResource BoolFlipConverter}}"
                 Command="{Binding ToggleSortOrderCommand}">
             <Image Source="{Binding SortImagePath, Converter={StaticResource StringToImageSourceConverter}}"
                        Stretch="Fill" />

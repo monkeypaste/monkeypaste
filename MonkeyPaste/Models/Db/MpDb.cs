@@ -370,36 +370,16 @@ namespace MonkeyPaste {
                 await InitDefaultData();
             }
 
+            MpPreferences.Instance.ThisUserDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+
+            MpPreferences.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
-
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
         private async Task InitTables() {
-            //await Task.Run(() => {
-            //    _connection.CreateTable<MpAnalyticItem>();
-            //    _connection.CreateTable<MpAnalyticItemParameter>();
-            //    _connection.CreateTable<MpAnalyticItemPreset>();
-            //    _connection.CreateTable<MpAnalyticItemPresetParameterValue>();
-            //    _connection.CreateTable<MpApp>();
-            //    _connection.CreateTable<MpCopyItem>();
-            //    _connection.CreateTable<MpCopyItemTag>();
-            //    _connection.CreateTable<MpCopyItemTemplate>();
-            //    _connection.CreateTable<MpDbImage>();
-            //    _connection.CreateTable<MpDbLog>();
-            //    _connection.CreateTable<MpIcon>();
-            //    _connection.CreateTable<MpPasteHistory>();
-            //    _connection.CreateTable<MpPasteToAppPath>();
-            //    _connection.CreateTable<MpShortcut>();
-            //    _connection.CreateTable<MpSource>();
-            //    _connection.CreateTable<MpSyncHistory>();
-            //    _connection.CreateTable<MpTag>();
-            //    _connection.CreateTable<MpUrl>();
-            //    _connection.CreateTable<MpUserDevice>();
-            //});
-
             await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemParameter>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemParameterValue>();
@@ -412,7 +392,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
-            //await _connectionAsync.CreateTableAsync<MpCopyItemFetchResult>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
@@ -427,6 +406,7 @@ namespace MonkeyPaste {
         }
 
         private async Task InitDefaultData() {
+            // create record for this device
             MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
@@ -435,6 +415,7 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
 
+            // create source for this app
             var process = Process.GetCurrentProcess();
             string appPath = process.MainModule.FileName;
             string appName = MpPreferences.Instance.ApplicationName;

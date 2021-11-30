@@ -308,6 +308,10 @@ namespace MonkeyPaste {
 
         #region User Properties        
 
+        public MpSource ThisAppSource { get; set; }
+
+        public MpUserDevice ThisUserDevice { get; set; }
+
         public bool SearchByDescription {
             get {
                 return _prefIo.Get(nameof(SearchByDescription), false);

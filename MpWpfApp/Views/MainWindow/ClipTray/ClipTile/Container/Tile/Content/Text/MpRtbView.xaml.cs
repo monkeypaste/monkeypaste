@@ -133,6 +133,18 @@ namespace MpWpfApp {
             MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
+        private void Rtb_MouseMove(object sender, MouseEventArgs e) {
+            e.Handled = false;
+            if (BindingContext.Parent.IsExpanded) {
+                if (BindingContext.IsSelected) {
+                    MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    return;
+                }
+            }
+
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
             MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
@@ -192,6 +204,7 @@ namespace MpWpfApp {
                         pttb.SetActiveRtb(Rtb);
                     }
                 }
+                
             }
         }
 

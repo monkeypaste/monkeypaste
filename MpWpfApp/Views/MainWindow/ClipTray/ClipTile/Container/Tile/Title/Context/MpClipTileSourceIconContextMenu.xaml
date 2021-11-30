@@ -11,16 +11,25 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <MenuItem x:Name="ExcludeSourceItem"
-              Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding ExcludeSubSelectedItemApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
+              Icon="{Binding Source={StaticResource NoEntryIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding ExcludeSubSelectedItemApplicationCommand,
+                                Source={StaticResource ClipTrayViewModel}}"
               CommandParameter="False" />
     <MenuItem x:Name="ExcludeSourceDomainItem"
-              Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding ExcludeSubSelectedItemApplicationCommand, Source={StaticResource ClipTrayViewModel}}"
+              Icon="{Binding Source={StaticResource NoEntryIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding ExcludeSubSelectedItemApplicationCommand,
+                                Source={StaticResource ClipTrayViewModel}}"
               CommandParameter="True" />
     <MenuItem x:Name="PasteMacroMenuItem"
               Header="Add Paste Macro For Source"
-              Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-              Command="{Binding ShowSettingsWindowCommand, Source={StaticResource SystemTrayViewModel}}"
+              Icon="{Binding Source={StaticResource RobotClawIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding ShowSettingsWindowCommand,
+                                Source={StaticResource SystemTrayViewModel}}"
               CommandParameter="{Binding}" />
 </ContextMenu>

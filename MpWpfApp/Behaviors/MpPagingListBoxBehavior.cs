@@ -110,7 +110,7 @@ namespace MpWpfApp {
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ScrollChanged:
+                case MpMessageType.TrayScrollChanged:
                     ApplyOffsetChange();
                     break;
                 case MpMessageType.RequeryCompleted:

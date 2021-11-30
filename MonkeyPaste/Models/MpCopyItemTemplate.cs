@@ -56,9 +56,9 @@ namespace MonkeyPaste {
             get {
                 return string.Format(
                                         @"{0}{1}{2}",
-                                        "<",
+                                        TEMPLATE_PREFIX,
                                         TemplateName,
-                                        ">");
+                                        TEMPLATE_SUFFIX);
             }
         }
 
@@ -136,12 +136,17 @@ namespace MonkeyPaste {
         }
 
         public object Clone() {
-            var ccit = new MpCopyItemTemplate() {
-                Id = this.Id,
-                CopyItemTemplateGuid = this.CopyItemTemplateGuid,
+            return Clone(false);
+        }
+
+        public object Clone(bool isReplica) {
+            var ccit = new MpCopyItemTemplate() {                
+                CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
                 HexColor = this.HexColor,
-                TemplateText = this.TemplateText
+                TemplateText = this.TemplateText,
+                Id = isReplica ? 0 : this.Id,
+                CopyItemTemplateGuid = isReplica ? System.Guid.NewGuid() : this.CopyItemTemplateGuid,
             };
             return ccit;
         }

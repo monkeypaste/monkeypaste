@@ -171,7 +171,6 @@ namespace MpWpfApp {
         }
 
         private void Expand() {
-
             MpConsole.WriteLine("Expanding...");
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             var mwvm = MpMainWindowViewModel.Instance;
@@ -186,16 +185,19 @@ namespace MpWpfApp {
 
             _originalMainWindowTop = mwvm.MainWindowTop;
 
-            if(ctvm.ItemViewModels.Count > 1 && ctvm.SelectedItems.Count == ctvm.ItemViewModels.Count) {
-                ctvm.ResetSubSelection(false);
-            }
+            ctvm.ResetSubSelection(false);
+            //if (ctvm.ItemViewModels.Count > 1 && ctvm.SelectedItems.Count == ctvm.ItemViewModels.Count) {
+            //    ctvm.ResetSubSelection(false);
+            //} else {
+            //    ctvm.IsSelected = true;
+            //}
 
             //trigger app mode column to hide
             ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
             mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
-            ctvm.IsSelected = true;
+            //
 
             //find max change in y so main window doesn't go past top of screen
             double maxDeltaHeight = SystemParameters.PrimaryScreenHeight - MpMeasurements.Instance.MainWindowDefaultHeight;
@@ -260,9 +262,8 @@ namespace MpWpfApp {
 
             if(clv != null) {
                 var sv = clv.ContentListBox.GetScrollViewer();
-                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-                clv.UpdateAdorner();
             }
             AssociatedObject.UpdateLayout();
 
@@ -318,8 +319,6 @@ namespace MpWpfApp {
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
                 ctvm.ItemViewModels.ForEach(x => x.UnexpandItemCommand.Execute(null));
-
-                clv.UpdateAdorner();
             }
 
             AssociatedObject.UpdateLayout();

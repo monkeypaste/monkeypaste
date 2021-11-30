@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpRtbEditToolbarView.xaml
     /// </summary>
-    public partial class MpRtbEditToolbarView : UserControl {
+    public partial class MpRtbEditToolbarView : MpUserControl<MpContentItemViewModel> {
         ToggleButton selectedAlignmentButton;
         ToggleButton selectedListButton;
         RichTextBox artb;

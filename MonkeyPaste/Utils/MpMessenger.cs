@@ -14,13 +14,17 @@ namespace MonkeyPaste {
         TotalQueryCountChanged,
         Expand,
         Unexpand,
+        ExpandComplete,
+        UnexpandComplete,
         MainWindowOpening,
         MainWindowOpened,
         MainWindowHiding,
         MainWindowHid,
+        ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,
-        ScrollChanged
+        TrayScrollChanged,
+        ContentListScrollChanged
     }
 
     public class MpMessenger {

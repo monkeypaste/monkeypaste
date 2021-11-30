@@ -27,7 +27,7 @@ using System.Collections.Concurrent;
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel> {
         #region Private Variables      
-
+                
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
 
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
@@ -354,6 +354,9 @@ namespace MpWpfApp {
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
 
+            if(IsAnyTileExpanded) {
+                return;
+            }
             //if(e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
             //    foreach (MpClipTileViewModel octvm in e.OldItems) {
             //        if (octvm.IsSelected) {
@@ -424,7 +427,7 @@ namespace MpWpfApp {
                     foreach (MpClipTileViewModel nctvm in Items) {
                         nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
                     }
-                    MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ScrollChanged);
+                    MpMessenger.Instance.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
             }
         }
@@ -1209,6 +1212,7 @@ namespace MpWpfApp {
                 IsBusy = false;
                 IsRequery = false;
 
+                //MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ItemInitialized);
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.RequeryCompleted);
 
                 sw.Stop();
@@ -1853,7 +1857,7 @@ namespace MpWpfApp {
 
                 foreach (var sctvm in SelectedItems) {
                     foreach (var ivm in sctvm.SelectedItems) {
-                        var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone();
+                        var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone(true);
                         await clonedCopyItem.WriteToDatabaseAsync();
                         _newModels.Add(clonedCopyItem);
                     }

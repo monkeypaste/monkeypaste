@@ -358,6 +358,15 @@ namespace MpWpfApp {
                 case nameof(AppModeButtonGridWidth):
                     OnPropertyChanged(nameof(ClipTrayWidth));
                     break;
+                case nameof(IsResizing):
+                    if(!IsResizing) {
+                        if(MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ExpandComplete);
+                        } else {
+                            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.UnexpandComplete);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -445,7 +454,7 @@ namespace MpWpfApp {
             var timer = new DispatcherTimer(DispatcherPriority.Normal);
             timer.Interval = TimeSpan.FromMilliseconds(fps);
             
-            timer.Tick += async (s, e32) => {
+            timer.Tick += (s, e32) => {
                 if (MainWindowTop > _endMainWindowTop) {
                     MainWindowTop += dt;
                 } else {

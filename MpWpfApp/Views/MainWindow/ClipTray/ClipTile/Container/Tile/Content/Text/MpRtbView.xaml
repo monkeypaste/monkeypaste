@@ -16,7 +16,7 @@
         <local:MpRtbViewDropBehavior x:Name="RtbViewDropBehavior"/>
     </i:Interaction.Behaviors>
     <AdornerDecorator>
-        <RichTextBox x:Name="Rtb"
+        <RichTextBox x:Name="Rtb" 
                      DataContext="{Binding}"
                      Width="Auto"
                      Height="{Binding EditorHeight}"
@@ -48,6 +48,7 @@
                      TextChanged="Rtb_TextChanged"
                      SizeChanged="Rtb_SizeChanged"
                      MouseEnter="Rtb_MouseEnter"
+                     MouseMove="Rtb_MouseMove"
                      MouseLeave="Rtb_MouseLeave">
             <RichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"

@@ -694,7 +694,6 @@ using System.Speech.Synthesis;
                 }
             }
         }
-        public bool IsLoadMoreItem { get; set; } = false;
 
         [MpDependsOnParent("IsAnyTileExpanded")]
         [MpDependsOnChild("IsPlaceholder")]
@@ -704,7 +703,7 @@ using System.Speech.Synthesis;
                 if(Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
-                return IsLoadMoreItem || (Parent.IsAnyTileExpanded && !IsExpanded);
+                return Parent.IsAnyTileExpanded && !IsExpanded;
             }
         }
 
@@ -894,9 +893,6 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))
-                    break;
-                case nameof(IsLoadMoreItem):
-                    OnPropertyChanged(nameof(IsPlaceholder));
                     break;
             }
         }
@@ -1724,7 +1720,7 @@ using System.Speech.Synthesis;
                 var tempSubSelectedRtbvml = SelectedItems;
                 ClearSelection();
                 foreach (var srtbvm in tempSubSelectedRtbvml) {
-                    var clonedCopyItem = (MpCopyItem)await srtbvm.CopyItem.Clone();
+                    var clonedCopyItem = (MpCopyItem)await srtbvm.CopyItem.Clone(true);
                     var rtbvm = await CreateContentItemViewModel(clonedCopyItem);
                     ItemViewModels.Add(rtbvm);
                     rtbvm.IsSelected = true;

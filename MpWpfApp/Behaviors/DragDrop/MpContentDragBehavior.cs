@@ -56,8 +56,8 @@ namespace MpWpfApp {
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
             if(_isDragging) {
                 _wasUnloaded = true;
-            } else {
-                Detach();
+            } else if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //Detach();
             }
         }
 
@@ -75,18 +75,24 @@ namespace MpWpfApp {
         #region Mouse Events
 
         private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                return;
-            }
+            //if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+            //    return;
+            //}
             _mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
 
-            if(!AssociatedObject.BindingContext.IsSelected) {
-                AssociatedObject.BindingContext.IsSelected = true;
-            }
+            
 
             //AssociatedObject.CaptureMouse();
             Mouse.AddMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
             Mouse.AddMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
+
+            if (AssociatedObject.BindingContext.IsSelected &&
+                AssociatedObject.BindingContext.Parent.IsExpanded) {
+                e.Handled = false;
+                return;
+            } else {
+                AssociatedObject.BindingContext.IsSelected = true;
+            }
             e.Handled = true;
         }
 
@@ -111,9 +117,9 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e) {
-            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                return;
-            }
+            //if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+            //    return;
+            //}
 
             Mouse.RemoveMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
             Mouse.RemoveMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
@@ -171,15 +177,15 @@ namespace MpWpfApp {
             UpdateCursor();
 
             var dropTarget = MpContentDropManager.Instance.Select(
-                MpClipTrayViewModel.Instance.PersistentSelectedModels,
-                e);
+                        MpClipTrayViewModel.Instance.PersistentSelectedModels,
+                        e);
 
-            if(dropTarget != _curDropTarget) {
+            if (dropTarget != _curDropTarget) {
                 _curDropTarget?.CancelDrop();
                 _curDropTarget = dropTarget;
                 _curDropTarget?.StartDrop();
             }
-            if(_curDropTarget == null) {
+            if (_curDropTarget == null) {
                 InvalidateDrop();
             } else {
                 _isDropValid = true;

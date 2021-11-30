@@ -12,7 +12,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <!--<local:MpDropBehavior x:Name="DropBehavior" />-->
         <local:MpContentListDropBehavior x:Name="ContentListDropBehavior" />
     </i:Interaction.Behaviors>
     <DockPanel x:Name="ContentListDockPanel"
@@ -36,10 +35,10 @@
                                                                Converter={StaticResource BoolToVisibilityConverter}}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
-            <ListBox x:Name="ContentListBox"
+            <ListBox x:Name="ContentListBox" 
                      Loaded="ContentListBox_Loaded"
-                     RequestBringIntoView="ContentListBox_RequestBringIntoView"
                      SelectionChanged="ContentListBox_SelectionChanged"
+                     RequestBringIntoView="ContentListBox_RequestBringIntoView"
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"
@@ -47,9 +46,8 @@
                      VerticalContentAlignment="Stretch"
                      BorderThickness="0"
                      SelectionMode="Extended"
-                     IsSynchronizedWithCurrentItem="True"
+                     IsSynchronizedWithCurrentItem="False"
                      ItemsSource="{Binding ItemViewModels}"
-                     Focusable="False"
                      IsEnabled="True"
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"

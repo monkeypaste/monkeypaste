@@ -1,27 +1,27 @@
-﻿<UserControl x:Class="MpWpfApp.MpRtbEditToolbarView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:MpWpfApp"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
-                                              IsDesignTimeCreatable=False}"
-             d:DesignHeight="50"
-             d:DesignWidth="800"
-             mc:Ignorable="d">
-    <UserControl.Resources>
-        <RichTextBox x:Key="CurrentRtbTarget" />
-    </UserControl.Resources>
+﻿<local:MpUserControl x:Class="MpWpfApp.MpRtbEditToolbarView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpContentItemViewModel"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                                      IsDesignTimeCreatable=False}"
+                     d:DesignHeight="50"
+                     d:DesignWidth="800"
+                     mc:Ignorable="d">
     <Border x:Name="ClipTileEditorToolbar"
             Unloaded="ClipTileEditorToolbar_Unloaded"
             Width="{Binding Parent.TileContentWidth}"
-            Height="{local:MpMeasurementsBinding ClipTileEditToolbarHeight,
-                                                 Mode=OneWay}"
+            Height="{local:MpMeasurementsBinding Path=ClipTileEditToolbarHeight}"
             Background="OldLace"
             BorderBrush="OldLace"
             BorderThickness="0,0,0,1"
             Loaded="ClipTileEditorToolbar_Loaded">
+        <Border.Resources>
+            <RichTextBox x:Key="CurrentRtbTarget" />
+        </Border.Resources>
         <StackPanel Orientation="Horizontal">
             <Button x:Name="PrintButton"
                     Margin="10,1,0,1"
@@ -265,4 +265,4 @@
                                                         </Button>-->
         </StackPanel>
     </Border>
-</UserControl>
+</local:MpUserControl>

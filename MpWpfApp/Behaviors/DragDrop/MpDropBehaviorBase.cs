@@ -11,58 +11,81 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public abstract class MpDropBehaviorBase<T> : Behavior<T>, MpIContentDropTarget where T : FrameworkElement {
         #region Private Variables
-
-        private MpDropLineAdorner lineAdorner;
+        
         private AdornerLayer adornerLayer;
 
-        private int _dropIdx = -1;
         #endregion
 
         #region Properties
+        
+        public MpDropLineAdorner DropLineAdorner { get; set; }
 
-        public int DropIdx => _dropIdx;
+        public int DropIdx { get; set; } = -1;
 
+        public abstract bool IsEnabled { get; set; }
         public abstract int DropPriority { get; }
 
         public int TargetId { get; set; }
 
-        #endregion
-
-        private bool isTrayDrop {
+        protected List<Rect> _dropRects = null;
+        public List<Rect> DropRects {
             get {
-                return containerType == MpCopyItemType.None;
+                if(IsEnabled && (_dropRects == null || _dropRects.Count == 0)) {
+                    _dropRects = GetDropTargetRects();
+                }
+                return _dropRects;
             }
         }
 
-
+        #endregion
 
         protected abstract FrameworkElement AdornedElement { get; }
         public abstract Orientation AdornerOrientation { get; }
-
-        private List<MpClipTileViewModel> dragTiles;
-        private MpCopyItemType containerType;
 
         public MpDropBehaviorBase() { }
 
         protected override void OnAttached() {
             base.OnAttached();
-            AssociatedObject.Loaded += AssociatedObject_Loaded; 
-
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
             TargetId = MpContentDropManager.Instance.Register(this);
         }
 
+        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            OnLoaded();
+        }
+
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
+            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+            MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+            MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceivedAssociateObjectViewModelMessage);
             InitAdorner();
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+            //OnLoaded();
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
         }
+
+        protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) { }
+
+        protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
+
+        protected virtual void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemInitialized:
+                   // OnLoaded();
+                    break;
+            }
+        }
+        protected virtual void OnLoaded() { }
+        
 
         public abstract List<Rect> GetDropTargetRects();
         public abstract Task Drop(bool isCopy, object dragData);
@@ -73,262 +96,8 @@ namespace MpWpfApp {
             Reset();
         }
 
-        public void Drop(bool isCopy = false) {
-            MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
-                if (this.dragTiles == null || this.dragTiles.Count == 0) {
-                    Reset();
-                    return;
-                }
-
-                MpConsole.WriteLine("DropIdx: " + _dropIdx);
-                MpClipTileViewModel dropTile = null;
-                var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
-                int tileCount = MpClipTrayViewModel.Instance.Items.Count;
-                if (isTrayDrop) {
-                    if(_dropIdx > MpClipTrayViewModel.Instance.Items.Count) {
-                        _dropIdx = MpClipTrayViewModel.Instance.Items.Count;
-
-                        MpConsole.WriteLine("Dropping at visible tail, reset tray dropIdx: " + _dropIdx);
-                    }
-                    bool isTileResort = dragTiles.All(x => x.SelectedItems.Count == x.ItemViewModels.Count);
-                    if (isTileResort) {
-                        //For full tile's moved on tray reverse order and use standard move
-                        dragTiles.Reverse();
-                        foreach (var dragTile in dragTiles) {
-                            int oldIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                            if (oldIdx < _dropIdx) {
-                                _dropIdx--;
-                                MpConsole.WriteLine("Decrementing tray dropIdx: " + _dropIdx);
-                            }
-                            //to prevent bounds exceptions
-                            _dropIdx = Math.Min(Math.Max(0, _dropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
-                            oldIdx = Math.Min(Math.Max(0, oldIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
-                            MpClipTrayViewModel.Instance.Items.Move(oldIdx, _dropIdx);
-                        }
-                    } else {
-                        //some collection of items dropped onto tray
-                        //recycle tail item to use for dropped content
-                        dropTile = MpClipTrayViewModel.Instance.TailItem; //MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
-                        if (dragTiles.Any(x => x == dropTile)) {
-                            // special case where items are dragged from last item
-                            // create a new tile at end of list
-
-                            dropTile = await MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
-                            MpClipTrayViewModel.Instance.Items.Add(dropTile);
-                        }
-                        foreach (var dragTile in dragTiles) {
-                            //remove drag content from their tiles
-                            foreach (var dci in dragModels) {
-                                var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
-                                if (dcivm != null) {
-                                    dragTile.ItemViewModels.Remove(dcivm);
-                                }
-                            }
-                        }
-                        //update drag items into new composite 
-                        //selected models is ordered by select time ascending
-                        //dragModels.Reverse();
-                        for (int i = 0; i < dragModels.Count; i++) {
-                            dragModels[i].CompositeSortOrderIdx = i;
-                            if (i == 0) {
-                                dragModels[i].CompositeParentCopyItemId = 0;
-                            } else {
-                                dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
-                            }
-                            await dragModels[i].WriteToDatabaseAsync();
-                        }
-                        foreach (var dragTile in dragTiles) {
-                            //clean up tiles removed items and recycle if empty
-                            if (dragTile.Count == 0) {
-                                int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                                if(dragIdxToRemove < _dropIdx) {
-                                    _dropIdx--;
-                                    MpConsole.WriteLine("Decrementing tray dropIdx: " + _dropIdx);
-                                }
-                                //await dragTile.InitializeAsync(null);
-                                //MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
-                                MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
-                            } else {
-                                await dragTile.UpdateSortOrderAsync();
-                                await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
-                            }
-                        }
-                        await dropTile.InitializeAsync(dragModels[0]);
-                        int oldDropIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dropTile);
-                        //to prevent bounds exceptions
-                        _dropIdx = Math.Min(Math.Max(0, _dropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
-                        oldDropIdx = Math.Min(Math.Max(0, oldDropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
-                        MpClipTrayViewModel.Instance.Items.Move(oldDropIdx, _dropIdx);
-
-                        dropTile.RequestUiUpdate();
-                        MpClipTrayViewModel.Instance.ClearClipSelection();
-                        dropTile.SubSelectAll();
-                        dropTile.ItemViewModels.ForEach(x => x.IsItemDragging = false);
-                    }
-                    MpClipTileSortViewModel.Instance.SetToManualSort();
-                } else {
-                    if(AssociatedObject.DataContext is MpClipTileViewModel) {
-                        dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
-                        bool isContentResort = dragTiles.Count == 1 && dragTiles[0] == dropTile;
-                        if (isContentResort) {
-                            //For items moved within a tile reverse order and move
-                            var dragCivml = dragTiles[0].SelectedItems;
-                            dragCivml.Reverse();
-                            foreach (var dragCivm in dragCivml) {
-                                int oldIdx = dragTiles[0].ItemViewModels.IndexOf(dragCivm);
-                                if (oldIdx < _dropIdx) {
-                                    _dropIdx--;
-                                    MpConsole.WriteLine("Decrementing tile dropIdx: " + _dropIdx);
-                                }
-                                //to prevent bounds exceptions
-                                _dropIdx = Math.Min(Math.Max(0, _dropIdx), dragTiles[0].ItemViewModels.Count - 1);
-                                oldIdx = Math.Min(Math.Max(0, oldIdx), dragTiles[0].ItemViewModels.Count - 1);
-                                dragTiles[0].ItemViewModels.Move(oldIdx, _dropIdx);
-                            }
-                        } else {
-                            foreach (var dragTile in dragTiles) {
-                                //remove all items from their drag tiles
-                                foreach (var dci in dragModels) {
-                                    //check if drag item is in this drag tile
-                                    var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
-                                    if (dcivm != null) {
-                                        //drag item is in drag tile
-                                        if (dragTile == dropTile) {
-                                            // drag item is IN the drop tile
-                                            int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
-                                            if (dcivmIdx < _dropIdx) {
-                                                //drag item idx is lower than drop idx so adjust
-                                                _dropIdx--;
-                                                MpConsole.WriteLine("Decrementing tile dropIdx: " + _dropIdx);
-                                            }
-                                        }
-                                        dragTile.ItemViewModels.Remove(dcivm);
-                                    }
-                                }
-                            }
-                            //now all drag items are removed from their tiles and dropIdx should be correct
-                            //range insert drag items into drop and reorder based on drop idx
-                            dragModels.Reverse();
-                            var dropModels = dropTile.ItemViewModels.Select(x => x.CopyItem).ToList();
-
-                            //to prevent bounds exceptions
-                            _dropIdx = Math.Min(Math.Max(0, _dropIdx), dropModels.Count - 1);
-                            dropModels.InsertRange(_dropIdx, dragModels);
-                            for (int i = 0; i < dropModels.Count; i++) {
-                                dropModels[i].CompositeSortOrderIdx = i;
-                                if (i == 0) {
-                                    dropModels[i].CompositeParentCopyItemId = 0;
-                                } else {
-                                    dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
-                                }
-                                await dropModels[i].WriteToDatabaseAsync();
-                            }
-                            //clean up all tiles with content dragged
-                            //if tile has no items recycle it
-                            //if it still has items sync sort order from its visuals
-                            foreach (var dragTile in dragTiles) {
-                                if (dragTile == dropTile) {
-                                    continue;
-                                }
-                                if (dragTile.Count == 0) {
-                                    //recycle empty tile
-                                    int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                                    MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
-                                } else {
-                                    await dragTile.UpdateSortOrderAsync();
-                                    await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
-                                }
-                            }
-                            await dropTile.InitializeAsync(dropModels[0]);
-                        }
-                    } else {
-                        // drop is content merge
-                        dropTile = (AssociatedObject.DataContext as MpContentItemViewModel).Parent;
-                        foreach (var dragTile in dragTiles) {
-                            //remove all items from their drag tiles
-                            foreach (var dci in dragModels) {
-                                //check if drag item is in this drag tile
-                                var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
-                                if (dcivm != null) {
-                                    //drag item is in drag tile
-                                    if (dragTile == dropTile) {
-                                        // drag item is IN the drop tile
-                                        int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
-                                        if (dcivmIdx < _dropIdx) {
-                                            //drag item idx is lower than drop idx so adjust
-                                            _dropIdx--;
-                                            MpConsole.WriteLine("Decrementing tile dropIdx: " + _dropIdx);
-                                        }
-                                    }
-                                    dragTile.ItemViewModels.Remove(dcivm);
-                                }
-                            }
-                        }
-                        //now all drag items are removed from their tiles and dropIdx should be correct
-                        //reverse drag items and merge incrementally
-                        var dropItemView = AssociatedObject.GetVisualAncestor<MpRtbView>();
-                        dragModels.Reverse();
-                        
-                        foreach(var dragModel in dragModels) {
-                            await dropItemView.MergeContentItem(dragModel, isCopy);
-                        }
-                        //clean up all tiles with content dragged
-                        //if tile has no items recycle it
-                        //if it still has items sync sort order from its visuals
-                        foreach (var dragTile in dragTiles) {
-                            if (dragTile == dropTile) {
-                                continue;
-                            }
-                            if (dragTile.Count == 0) {
-                                //recycle empty tile
-                                int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
-                                MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
-                            } else {
-                                await dragTile.UpdateSortOrderAsync();
-                                await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
-                            }
-                        }
-                        //await dropTile.InitializeAsync(dropTile.HeadItem.CopyItem);
-                    }
-                }
-
-                while(MpClipTrayViewModel.Instance.IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-
-                Reset();
-
-                if (!isTrayDrop) {
-                    MpClipTrayViewModel.Instance.ClearClipSelection();
-                    if (AssociatedObject.DataContext is MpClipTileViewModel) {
-                        MpClipTileViewModel selectedTile = null;
-                        foreach (var dragModel in dragModels) {
-                            var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModel.Id);
-                            if (selectedTile == null) {
-                                selectedTile = dcivm.Parent;
-                                selectedTile.AllowMultiSelect = true;
-                            }
-                            dcivm.IsSelected = true;
-                            dcivm.IsItemDragging = false;
-                        }
-                        selectedTile.AllowMultiSelect = false;
-                    } else {
-                        // var lb = AssociatedObject.FindParentOfType<ListBox>();
-                        //var lbi = AssociatedObject.FindParentOfType<ListBoxItem>();
-                        AssociatedObject.FindParentOfType<MpRtbView>().BindingContext.IsSelected = true;
-                        //lb.ScrollIntoView(lbi);
-                    }
-                }
-
-
-                MpExtensions.ForEach<MpClipTileViewModel>(MpClipTrayViewModel.Instance.Items, (Action<MpClipTileViewModel>)(x =>
-                     x.ItemViewModels.ForEach((Action<MpContentItemViewModel>)(y => y.IsItemDragging = false))));
-            }));
-        }
-
         public void Reset() {
-            _dropIdx = -1;
-            dragTiles = null;
+            DropIdx = -1;
             UpdateAdorner();
 
             //MpRtbView.ClearCaretAdorner();
@@ -361,31 +130,31 @@ namespace MpWpfApp {
             return false;
         }
 
-        public abstract void StartDrop();
+        public abstract Task StartDrop();
 
         public int GetDropTargetRectIdx(MouseEventArgs e) {
             Point trayMp = e.GetPosition(AdornedElement);
 
-            var dropRects = GetDropTargetRects();
-            Rect targetRect = dropRects.FirstOrDefault(x => x.Contains(trayMp));
+            Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(trayMp));
             if (targetRect == null || targetRect.IsEmpty) {
                 return -1;
             }
-            return dropRects.IndexOf(targetRect);
+            return DropRects.IndexOf(targetRect);
         }
 
         public void ContinueDragOverTarget(MouseEventArgs e) {
-            _dropIdx = GetDropTargetRectIdx(e);
+            DropIdx = GetDropTargetRectIdx(e);
             UpdateAdorner();
         }
 
         public void InitAdorner() {
-            lineAdorner = new MpDropLineAdorner(AdornedElement,this);
+            //_dropRects = GetDropTargetRects();
+            DropLineAdorner = new MpDropLineAdorner(AdornedElement,this);
             adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
-            adornerLayer.Add(lineAdorner);
+            adornerLayer.Add(DropLineAdorner);
 
             if(GetType() != typeof(MpExternalDropBehavior)) {
-                EnableDebugMode();
+                //EnableDebugMode();
             }
 
             adornerLayer.Update();
@@ -396,8 +165,263 @@ namespace MpWpfApp {
         }
 
         public void EnableDebugMode() {
-            lineAdorner.IsDebugMode = true;
+            DropLineAdorner.IsDebugMode = true;
         }
+
+
+
+        //public void Drop(bool isCopy = false) {
+        //    MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {
+        //        if (this.dragTiles == null || this.dragTiles.Count == 0) {
+        //            Reset();
+        //            return;
+        //        }
+
+        //        MpConsole.WriteLine("DropIdx: " + DropIdx);
+        //        MpClipTileViewModel dropTile = null;
+        //        var dragModels = MpClipTrayViewModel.Instance.SelectedModels;
+        //        int tileCount = MpClipTrayViewModel.Instance.Items.Count;
+        //        if (isTrayDrop) {
+        //            if (DropIdx > MpClipTrayViewModel.Instance.Items.Count) {
+        //                DropIdx = MpClipTrayViewModel.Instance.Items.Count;
+
+        //                MpConsole.WriteLine("Dropping at visible tail, reset tray dropIdx: " + DropIdx);
+        //            }
+        //            bool isTileResort = dragTiles.All(x => x.SelectedItems.Count == x.ItemViewModels.Count);
+        //            if (isTileResort) {
+        //                //For full tile's moved on tray reverse order and use standard move
+        //                dragTiles.Reverse();
+        //                foreach (var dragTile in dragTiles) {
+        //                    int oldIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
+        //                    if (oldIdx < DropIdx) {
+        //                        DropIdx--;
+        //                        MpConsole.WriteLine("Decrementing tray dropIdx: " + DropIdx);
+        //                    }
+        //                    //to prevent bounds exceptions
+        //                    DropIdx = Math.Min(Math.Max(0, DropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+        //                    oldIdx = Math.Min(Math.Max(0, oldIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+        //                    MpClipTrayViewModel.Instance.Items.Move(oldIdx, DropIdx);
+        //                }
+        //            } else {
+        //                //some collection of items dropped onto tray
+        //                //recycle tail item to use for dropped content
+        //                dropTile = MpClipTrayViewModel.Instance.TailItem; //MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
+        //                if (dragTiles.Any(x => x == dropTile)) {
+        //                    // special case where items are dragged from last item
+        //                    // create a new tile at end of list
+
+        //                    dropTile = await MpClipTrayViewModel.Instance.CreateClipTileViewModel(null);
+        //                    MpClipTrayViewModel.Instance.Items.Add(dropTile);
+        //                }
+        //                foreach (var dragTile in dragTiles) {
+        //                    //remove drag content from their tiles
+        //                    foreach (var dci in dragModels) {
+        //                        var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
+        //                        if (dcivm != null) {
+        //                            dragTile.ItemViewModels.Remove(dcivm);
+        //                        }
+        //                    }
+        //                }
+        //                //update drag items into new composite 
+        //                //selected models is ordered by select time ascending
+        //                //dragModels.Reverse();
+        //                for (int i = 0; i < dragModels.Count; i++) {
+        //                    dragModels[i].CompositeSortOrderIdx = i;
+        //                    if (i == 0) {
+        //                        dragModels[i].CompositeParentCopyItemId = 0;
+        //                    } else {
+        //                        dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
+        //                    }
+        //                    await dragModels[i].WriteToDatabaseAsync();
+        //                }
+        //                foreach (var dragTile in dragTiles) {
+        //                    //clean up tiles removed items and recycle if empty
+        //                    if (dragTile.Count == 0) {
+        //                        int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
+        //                        if (dragIdxToRemove < DropIdx) {
+        //                            DropIdx--;
+        //                            MpConsole.WriteLine("Decrementing tray dropIdx: " + DropIdx);
+        //                        }
+        //                        //await dragTile.InitializeAsync(null);
+        //                        //MpClipTrayViewModel.Instance.Items.Move(dragIdxToRemove, MpClipTrayViewModel.Instance.Items.Count - 1);
+        //                        MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
+        //                    } else {
+        //                        await dragTile.UpdateSortOrderAsync();
+        //                        await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
+        //                    }
+        //                }
+        //                await dropTile.InitializeAsync(dragModels[0]);
+        //                int oldDropIdx = MpClipTrayViewModel.Instance.Items.IndexOf(dropTile);
+        //                //to prevent bounds exceptions
+        //                DropIdx = Math.Min(Math.Max(0, DropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+        //                oldDropIdx = Math.Min(Math.Max(0, oldDropIdx), (int)(MpClipTrayViewModel.Instance.Items.Count - 1));
+        //                MpClipTrayViewModel.Instance.Items.Move(oldDropIdx, DropIdx);
+
+        //                dropTile.RequestUiUpdate();
+        //                MpClipTrayViewModel.Instance.ClearClipSelection();
+        //                dropTile.SubSelectAll();
+        //                dropTile.ItemViewModels.ForEach(x => x.IsItemDragging = false);
+        //            }
+        //            MpClipTileSortViewModel.Instance.SetToManualSort();
+        //        } else {
+        //            if (AssociatedObject.DataContext is MpClipTileViewModel) {
+        //                dropTile = AssociatedObject.DataContext as MpClipTileViewModel;
+        //                bool isContentResort = dragTiles.Count == 1 && dragTiles[0] == dropTile;
+        //                if (isContentResort) {
+        //                    //For items moved within a tile reverse order and move
+        //                    var dragCivml = dragTiles[0].SelectedItems;
+        //                    dragCivml.Reverse();
+        //                    foreach (var dragCivm in dragCivml) {
+        //                        int oldIdx = dragTiles[0].ItemViewModels.IndexOf(dragCivm);
+        //                        if (oldIdx < DropIdx) {
+        //                            DropIdx--;
+        //                            MpConsole.WriteLine("Decrementing tile dropIdx: " + DropIdx);
+        //                        }
+        //                        //to prevent bounds exceptions
+        //                        DropIdx = Math.Min(Math.Max(0, DropIdx), dragTiles[0].ItemViewModels.Count - 1);
+        //                        oldIdx = Math.Min(Math.Max(0, oldIdx), dragTiles[0].ItemViewModels.Count - 1);
+        //                        dragTiles[0].ItemViewModels.Move(oldIdx, DropIdx);
+        //                    }
+        //                } else {
+        //                    foreach (var dragTile in dragTiles) {
+        //                        //remove all items from their drag tiles
+        //                        foreach (var dci in dragModels) {
+        //                            //check if drag item is in this drag tile
+        //                            var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
+        //                            if (dcivm != null) {
+        //                                //drag item is in drag tile
+        //                                if (dragTile == dropTile) {
+        //                                    // drag item is IN the drop tile
+        //                                    int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
+        //                                    if (dcivmIdx < DropIdx) {
+        //                                        //drag item idx is lower than drop idx so adjust
+        //                                        DropIdx--;
+        //                                        MpConsole.WriteLine("Decrementing tile dropIdx: " + DropIdx);
+        //                                    }
+        //                                }
+        //                                dragTile.ItemViewModels.Remove(dcivm);
+        //                            }
+        //                        }
+        //                    }
+        //                    //now all drag items are removed from their tiles and dropIdx should be correct
+        //                    //range insert drag items into drop and reorder based on drop idx
+        //                    dragModels.Reverse();
+        //                    var dropModels = dropTile.ItemViewModels.Select(x => x.CopyItem).ToList();
+
+        //                    //to prevent bounds exceptions
+        //                    DropIdx = Math.Min(Math.Max(0, DropIdx), dropModels.Count - 1);
+        //                    dropModels.InsertRange(DropIdx, dragModels);
+        //                    for (int i = 0; i < dropModels.Count; i++) {
+        //                        dropModels[i].CompositeSortOrderIdx = i;
+        //                        if (i == 0) {
+        //                            dropModels[i].CompositeParentCopyItemId = 0;
+        //                        } else {
+        //                            dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
+        //                        }
+        //                        await dropModels[i].WriteToDatabaseAsync();
+        //                    }
+        //                    //clean up all tiles with content dragged
+        //                    //if tile has no items recycle it
+        //                    //if it still has items sync sort order from its visuals
+        //                    foreach (var dragTile in dragTiles) {
+        //                        if (dragTile == dropTile) {
+        //                            continue;
+        //                        }
+        //                        if (dragTile.Count == 0) {
+        //                            //recycle empty tile
+        //                            int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
+        //                            MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
+        //                        } else {
+        //                            await dragTile.UpdateSortOrderAsync();
+        //                            await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
+        //                        }
+        //                    }
+        //                    await dropTile.InitializeAsync(dropModels[0]);
+        //                }
+        //            } else {
+        //                // drop is content merge
+        //                dropTile = (AssociatedObject.DataContext as MpContentItemViewModel).Parent;
+        //                foreach (var dragTile in dragTiles) {
+        //                    //remove all items from their drag tiles
+        //                    foreach (var dci in dragModels) {
+        //                        //check if drag item is in this drag tile
+        //                        var dcivm = dragTile.GetContentItemByCopyItemId(dci.Id);
+        //                        if (dcivm != null) {
+        //                            //drag item is in drag tile
+        //                            if (dragTile == dropTile) {
+        //                                // drag item is IN the drop tile
+        //                                int dcivmIdx = dragTile.ItemViewModels.IndexOf(dcivm);
+        //                                if (dcivmIdx < DropIdx) {
+        //                                    //drag item idx is lower than drop idx so adjust
+        //                                    DropIdx--;
+        //                                    MpConsole.WriteLine("Decrementing tile dropIdx: " + DropIdx);
+        //                                }
+        //                            }
+        //                            dragTile.ItemViewModels.Remove(dcivm);
+        //                        }
+        //                    }
+        //                }
+        //                //now all drag items are removed from their tiles and dropIdx should be correct
+        //                //reverse drag items and merge incrementally
+        //                var dropItemView = AssociatedObject.GetVisualAncestor<MpRtbView>();
+        //                dragModels.Reverse();
+
+        //                foreach (var dragModel in dragModels) {
+        //                    await dropItemView.MergeContentItem(dragModel, isCopy);
+        //                }
+        //                //clean up all tiles with content dragged
+        //                //if tile has no items recycle it
+        //                //if it still has items sync sort order from its visuals
+        //                foreach (var dragTile in dragTiles) {
+        //                    if (dragTile == dropTile) {
+        //                        continue;
+        //                    }
+        //                    if (dragTile.Count == 0) {
+        //                        //recycle empty tile
+        //                        int dragIdxToRemove = MpClipTrayViewModel.Instance.Items.IndexOf(dragTile);
+        //                        MpClipTrayViewModel.Instance.Items.RemoveAt(dragIdxToRemove);
+        //                    } else {
+        //                        await dragTile.UpdateSortOrderAsync();
+        //                        await dragTile.InitializeAsync(dragTile.HeadItem.CopyItem);
+        //                    }
+        //                }
+        //                //await dropTile.InitializeAsync(dropTile.HeadItem.CopyItem);
+        //            }
+        //        }
+
+        //        while (MpClipTrayViewModel.Instance.IsAnyBusy) {
+        //            await Task.Delay(100);
+        //        }
+
+        //        Reset();
+
+        //        if (!isTrayDrop) {
+        //            MpClipTrayViewModel.Instance.ClearClipSelection();
+        //            if (AssociatedObject.DataContext is MpClipTileViewModel) {
+        //                MpClipTileViewModel selectedTile = null;
+        //                foreach (var dragModel in dragModels) {
+        //                    var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModel.Id);
+        //                    if (selectedTile == null) {
+        //                        selectedTile = dcivm.Parent;
+        //                        selectedTile.AllowMultiSelect = true;
+        //                    }
+        //                    dcivm.IsSelected = true;
+        //                    dcivm.IsItemDragging = false;
+        //                }
+        //                selectedTile.AllowMultiSelect = false;
+        //            } else {
+        //                // var lb = AssociatedObject.FindParentOfType<ListBox>();
+        //                //var lbi = AssociatedObject.FindParentOfType<ListBoxItem>();
+        //                AssociatedObject.FindParentOfType<MpRtbView>().BindingContext.IsSelected = true;
+        //                //lb.ScrollIntoView(lbi);
+        //            }
+        //        }
+
+
+        //        MpExtensions.ForEach<MpClipTileViewModel>(MpClipTrayViewModel.Instance.Items, (Action<MpClipTileViewModel>)(x =>
+        //             x.ItemViewModels.ForEach((Action<MpContentItemViewModel>)(y => y.IsItemDragging = false))));
+        //    }));
+        //}
 
         //private void UpdateDropLineAdorner() {
         //    Rect overRect;
@@ -409,8 +433,8 @@ namespace MpWpfApp {
         //        adornerLayer.Update();
         //        return;
         //    }
-        //    if (_dropIdx < lb.Items.Count) {
-        //        overRect = lb.GetListBoxItemRect(_dropIdx);
+        //    if (DropIdx < lb.Items.Count) {
+        //        overRect = lb.GetListBoxItemRect(DropIdx);
         //    } else {
         //        overRect = lb.GetListBoxItemRect(lb.Items.Count - 1);
         //        isTail = true;

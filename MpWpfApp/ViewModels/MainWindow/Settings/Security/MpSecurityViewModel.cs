@@ -59,7 +59,7 @@ namespace MpWpfApp {
         public MpSecurityViewModel() : base(null) { }
 
         public MpSecurityViewModel(MpSettingsWindowViewModel parent) : base(parent) {
-            MpAppCollectionViewModel.Instance.Init();
+            //MpAppCollectionViewModel.Instance.Init();
         }
 
         public void AppCollectionDataGrid_Loaded(object sender, RoutedEventArgs args) {
