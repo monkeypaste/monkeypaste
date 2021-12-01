@@ -12,8 +12,8 @@ namespace MonkeyPaste {
         QueryChanged,        
         JumpToIdxCompleted,
         TotalQueryCountChanged,
-        Expand,
-        Unexpand,
+        Expand, //has context (tile)
+        Unexpand,   //has context (tile)
         ExpandComplete,
         UnexpandComplete,
         MainWindowOpening,
@@ -24,45 +24,44 @@ namespace MonkeyPaste {
         ItemDragBegin,
         ItemDragEnd,
         TrayScrollChanged,
-        ContentListScrollChanged
+        ContentListScrollChanged, //has context (tile)
+        ContentListItemsChanged //has context (tile)
     }
 
-    public class MpMessenger {
+    public class MpMessenger : MpSingleton<MpMessenger> {
         // from https://stackoverflow.com/a/68272972/105028
-        private static readonly Lazy<MpMessenger> _Lazy = new Lazy<MpMessenger>(() => new MpMessenger());
-        public static MpMessenger Instance { get { return _Lazy.Value; } }
 
-        private readonly ConcurrentDictionary<MessengerKey, List<object>> RecipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
+        private readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
         public MpMessenger() { }
 
-        public void Register<T>(object recipient, Action<T> action) {
-            Register(recipient, action, null);
+        public void Register<T>(object sender, Action<T> callback) {
+            Register(sender, callback, null);
         }
 
-        public void Register<T>(object recipient, Action<T> action, object context) {
-            var key = new MessengerKey(recipient, typeof(T), context);
-            if(RecipientDictionary.ContainsKey(key)) {
-                RecipientDictionary[key].Add(action);
+        public void Register<T>(object sender, Action<T> action, object context) {
+            var key = new MessengerKey(sender, typeof(T), context);
+            if(_recipientDictionary.ContainsKey(key)) {
+                _recipientDictionary[key].Add(action);
             } else {
-                RecipientDictionary.TryAdd(key, new List<object> { action });
+                _recipientDictionary.TryAdd(key, new List<object> { action });
             }            
         }
 
-        public void Unregister<T>(object recipient, Action<T> action) {
-            Unregister(recipient, action, null);
+        public void Unregister<T>(object sender, Action<T> callback) {
+            Unregister(sender, callback, null);
         }
 
         public void Unregister<T>(object recipient, Action<T> action, object context) {
             var key = new MessengerKey(recipient, typeof(T), context);
             //RecipientDictionary.TryRemove(key, out removeAction);
-            if (RecipientDictionary.ContainsKey(key)) {
-                RecipientDictionary[key].Remove(action);
+            if (_recipientDictionary.ContainsKey(key)) {
+                _recipientDictionary[key].Remove(action);
             }
         }
 
         public void UnregisterAll() {
-            RecipientDictionary.Clear();
+            _recipientDictionary.Clear();
         }
 
         public void Send<T>(T message) {
@@ -74,10 +73,10 @@ namespace MonkeyPaste {
 
             if (context == null) {
                 // Get all recipients where the context is null.
-                results = from r in RecipientDictionary where r.Key.Context == null select r;
+                results = from r in _recipientDictionary where r.Key.Context == null select r;
             } else {
                 // Get all recipients where the context is matching.
-                results = from r in RecipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
+                results = from r in _recipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
             }
 
             foreach(var result in results) {

@@ -21,33 +21,31 @@ namespace MpWpfApp {
 
         #region Properties
         
-        public Line DropLine { 
+        public MpLine DropLine { 
             get {
-                var line = new Line();
                 if(DropIdx < 0 || 
                    _dropBehavior == null ||
                    DropIdx >= DropRects.Count) {
-                    return line;
+                    return new MpLine();
                 }
                 Rect dropRect = DropRects[DropIdx];
                 if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
                     //tray vertical drop line
-                    line.X1 = dropRect.Left + (dropRect.Width / 2);
-                    line.Y1 = dropRect.Top;
-                    line.X2 = line.X1;
-                    line.Y2 = dropRect.Bottom;
-                } else {
-                    line.X1 = dropRect.Left;
-                    line.X2 = dropRect.Right;
-                    if (DropIdx == 0) {
-                        line.Y1 = line.Y2 = dropRect.Bottom;
-                    } else if (DropIdx == DropRects.Count - 1) {
-                        line.Y1 = line.Y2 = dropRect.Top;
-                    } else {
-                        line.Y1 = line.Y2 = dropRect.Top + (dropRect.Height / 2);
-                    }
+                    double x = dropRect.Left + (dropRect.Width / 2);
+                    return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
                 }
-                return line;
+
+                double x1 = dropRect.Left;
+                double x2 = dropRect.Right;
+                double y = dropRect.Bottom - 3;
+                //if (DropIdx == 0) {
+                //    y = dropRect.Bottom;
+                //} else if (DropIdx == DropRects.Count - 1) {
+                //    y = dropRect.Top;
+                //} else {
+                //    y = dropRect.Top + (dropRect.Height / 2);
+                //}
+                return new MpLine(x1, y, x2, y);
             }        
         }
 
@@ -87,19 +85,7 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
-            //if(AdornedElement is ListBox) {
-            //    drawingContext.DrawRectangle(Brushes.Transparent, new Pen(Brushes.Transparent, 1), ((ListBox)AdornedElement).GetListBoxRect());
-            //}
-            if(!_dropBehavior.IsEnabled) {
-                Visibility = Visibility.Hidden;
-            }
-
-            if (MpClipTrayViewModel.Instance.IsBusy ||
-                DropRects == null ||
-                !_dropBehavior.IsEnabled) {
-                return;
-            }
-            if(IsDebugMode) {
+            if(IsDebugMode && DropRects != null) {
                 Visibility = Visibility.Visible;
                 foreach(var debugRect in DropRects) {
                     if(DropRects.IndexOf(debugRect) == DropIdx) {
@@ -114,14 +100,22 @@ namespace MpWpfApp {
                             debugRect);
                     }                    
                 }
+            } else {
+                if (MpClipTrayViewModel.Instance.IsBusy || 
+                   !MpContentDropManager.Instance.IsDragAndDrop || 
+                   !_dropBehavior.IsEnabled ||
+                   DropRects == null) {
+                    Visibility = Visibility.Hidden;
+                    return;
+                }
             }
 
             if(IsShowing) {
                 Visibility = Visibility.Visible;
                 drawingContext.DrawLine(
                     new Pen(Brushes.Red, 1.5) { DashStyle = DashStyles.Dash },
-                    new Point(DropLine.X1,DropLine.Y1),
-                    new Point(DropLine.X2, DropLine.Y2));
+                    DropLine.P1,
+                    DropLine.P2);
             } else if(!IsDebugMode) {
                 Visibility = Visibility.Hidden;
             }

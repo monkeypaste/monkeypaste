@@ -31,7 +31,6 @@ using System.Speech.Synthesis;
 
     public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentDragSource, IDisposable {
         #region Private Variables
-        private object _itemLockObject;
 
         private List<string> _tempFileList = new List<string>();
         //container
@@ -172,9 +171,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        #endregion
-
-        #region Appearance
         #endregion
 
         #region Layout
@@ -481,7 +477,7 @@ using System.Speech.Synthesis;
         }
         #endregion
 
-        #region Brush Properties        
+        #region Appearance       
 
         public Rect TileBorderBrushRect {
             get {
@@ -496,7 +492,7 @@ using System.Speech.Synthesis;
         [MpDependsOnSibling("IsSelected")]
         public Brush TileBorderBrush {
             get {
-                if(Parent.IsScrolling) {
+                if(Parent.IsScrolling || Parent.HasScrollVelocity) {
                     return Brushes.Transparent;
                 }
 
@@ -617,19 +613,8 @@ using System.Speech.Synthesis;
 
         public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPastingTemplate);
 
-        //private bool _isExpanded = false;
         [MpAffectsSibling]
         public bool IsExpanded { get; set; } = false;
-        //    get {
-        //        return _isExpanded;
-        //    }
-        //    set {
-        //        if(_isExpanded != value) {
-        //            _isExpanded = value;
-        //            OnPropertyChanged(nameof(IsExpanded));
-        //        }
-        //    }
-        //}
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -764,8 +749,9 @@ using System.Speech.Synthesis;
 
         public MpClipTileViewModel(MpClipTrayViewModel parent) : base(parent) {
             IsBusy = true;
-            _itemLockObject = new object();
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;            
+
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;
+            ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
         }
 
         #endregion
@@ -789,7 +775,12 @@ using System.Speech.Synthesis;
                 HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
                 RequestUiUpdate();
-            } 
+
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
+            }
+
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
 
             OnPropertyChanged(nameof(ItemViewModels));
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -843,6 +834,10 @@ using System.Speech.Synthesis;
         }
 
         #endregion
+
+        private void ItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            
+        }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {

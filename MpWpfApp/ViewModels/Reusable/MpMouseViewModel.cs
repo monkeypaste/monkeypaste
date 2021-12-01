@@ -12,25 +12,34 @@ namespace MpWpfApp {
     public enum MpCursorType {
         None = 0,
         Default,
-        Move,
-        Copy,
+        ContentMove,
+        TileMove,
+        ContentCopy,
+        TileCopy,
         Invalid,
         Waiting,
         IBeam,
-        SizeNS,
-        Hand
+        ResizeNS,
+        Link
     }
 
     public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel> {
         #region Private Variables
 
-        private readonly Cursor _defaultCursor = Cursors.Arrow;
-        private readonly Cursor _handCursor = Cursors.Hand;
-        private readonly Cursor _copyCursor = Cursors.Cross;
-        private readonly Cursor _invalidCursor = Cursors.No;
-        private readonly Cursor _waitingCursor = Cursors.Wait;
-        private readonly Cursor _inputCursor = Cursors.IBeam;
-        private readonly Cursor _sizeNSCursor = Cursors.SizeNS;
+        private Dictionary<MpCursorType, Cursor> _cursorLookup = 
+            new Dictionary<MpCursorType, Cursor>() {
+                {MpCursorType.None, Cursors.Arrow },
+                {MpCursorType.Default, Cursors.Arrow },
+                {MpCursorType.ContentMove, Cursors.SizeNS },
+                {MpCursorType.TileMove, Cursors.SizeWE },
+                {MpCursorType.ContentCopy, Cursors.ScrollNS },
+                {MpCursorType.TileCopy, Cursors.ScrollWE },
+                {MpCursorType.Invalid, Cursors.No },
+                {MpCursorType.Waiting, Cursors.Wait },
+                {MpCursorType.IBeam, Cursors.IBeam },
+                {MpCursorType.ResizeNS, Cursors.SizeNS },
+                {MpCursorType.Link, Cursors.Hand },
+            };
 
         private int _isBusyCount = 0;
 
@@ -74,42 +83,14 @@ namespace MpWpfApp {
                 return MpCursorType.IBeam;
             }
             if (text.ToLower() == "hand") {
-                return MpCursorType.Move;
+                return MpCursorType.Link;
             } else {
                 throw new Exception("Unknown cursor string: " + text);
             }
         }
 
         public Cursor GetCurrentCursor() {
-            Cursor cursor;
-            switch (CurrentCursor) {
-                case MpCursorType.Default:
-                    cursor = _defaultCursor;
-                    break;
-                case MpCursorType.IBeam:
-                    cursor = _inputCursor;
-                    break;
-                case MpCursorType.Invalid:
-                    cursor = _invalidCursor;
-                    break;
-                case MpCursorType.Hand:
-                case MpCursorType.Move:
-                    cursor = _handCursor;
-                    break;
-                case MpCursorType.Copy:
-                    cursor = _copyCursor;
-                    break;
-                case MpCursorType.Waiting:
-                    cursor = _waitingCursor;
-                    break;
-                case MpCursorType.SizeNS:
-                    cursor = _sizeNSCursor;
-                    break;
-                default:
-                    cursor = _defaultCursor;
-                    break;
-            }
-            return cursor;
+            return _cursorLookup[CurrentCursor];
         }
 
         public void NotifyAppBusy(bool isAppBusy) {
@@ -134,6 +115,10 @@ namespace MpWpfApp {
         }
 
         private void UpdateCursor() {
+            if(MpClipTrayViewModel.Instance.IsScrolling ||
+               MpClipTrayViewModel.Instance.IsLoadingMore) {
+                return;
+            }
             MpHelpers.Instance.RunOnMainThread(() => {
                 Cursor cursor = GetCurrentCursor();
 

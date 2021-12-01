@@ -35,8 +35,8 @@ namespace MpWpfApp {
         protected MpContentItemCaretAdorner CaretAdorner;
         protected AdornerLayer CaretAdornerLayer;
 
-        public Point[] HomeCaretLine = new Point[2];
-        public Point[] EndCaretLine = new Point[2];
+        //public MpLine HomeCaretLine = new MpLine();
+        //public MpLine EndCaretLine = new MpLine();
 
         public Rect HomeRect, EndRect;
 
@@ -73,8 +73,6 @@ namespace MpWpfApp {
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
                 }
-
-                
 
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
@@ -269,15 +267,9 @@ namespace MpWpfApp {
             }
             CaretAdorner.Test.Clear();
 
-            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);            
-            HomeCaretLine[0] = HomeRect.TopLeft;
-            HomeCaretLine[1] = HomeRect.BottomLeft;
-            //HomeRect.Size = new Size(20, HomeRect.Size.Height);
+            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
 
             EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
-            EndCaretLine[0] = EndRect.TopRight;
-            EndCaretLine[1] = EndRect.BottomRight;
-            //EndRect.Size = new Size(20, EndRect.Size.Height);
 
             CaretAdornerLayer.Update();
         }
@@ -286,7 +278,7 @@ namespace MpWpfApp {
             ClearCaretAdorner();
             DropOverHomeItemId = rtbView.BindingContext.CopyItemId;
             rtbView.ScrollToHome();
-            rtbView.CaretAdorner.CaretLine = rtbView.HomeCaretLine;
+            rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.HomeRect.TopLeft, rtbView.HomeRect.BottomLeft);
             rtbView.CaretAdornerLayer.Update();
             CurDropOverRtbView = rtbView;
         }
@@ -295,7 +287,7 @@ namespace MpWpfApp {
             ClearCaretAdorner();
             DropOverEndItemId = rtbView.BindingContext.CopyItemId;
             rtbView.ScrollToEnd();
-            rtbView.CaretAdorner.CaretLine = rtbView.EndCaretLine;
+            rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.EndRect.TopRight, rtbView.EndRect.BottomRight);
             rtbView.CaretAdornerLayer.Update();
             CurDropOverRtbView = rtbView;
         }
@@ -503,7 +495,7 @@ namespace MpWpfApp {
                                     // and they aren't holding ctrl until they see the message it will change cursor while
                                     // over link
                                     if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Hand;
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Link;
                                     } else {
                                         if (rtbvm.IsEditingContent) {
                                             MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
@@ -514,7 +506,7 @@ namespace MpWpfApp {
                                 };
                                 MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
                                     if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Hand;
+                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Link;
                                     }                                    
                                     hl.IsEnabled = true;
                                     //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);

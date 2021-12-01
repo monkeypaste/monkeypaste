@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpContentListDropBehavior : MpDropBehaviorBase<MpContentListView> {
@@ -22,21 +23,30 @@ namespace MpWpfApp {
 
         public override int DropPriority => 2;
 
-        protected override FrameworkElement AdornedElement => AssociatedObject.ContentListBox;
+        public override MpCursorType MoveCursor => MpCursorType.ContentMove;
+        public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
 
+        public override FrameworkElement AdornedElement => AssociatedObject.ContentListBox;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
+        public override UIElement RelativeToElement => AssociatedObject.GetVisualDescendent<ScrollViewer>();
+
         protected override void OnLoaded() {
-            //DropRects.Clear();
+            base.OnLoaded();
+
+            MpMessenger.Instance.Register<MpMessageType>(
+                AssociatedObject.DataContext, 
+                ReceivedAssociateObjectViewModelMessage,
+                AssociatedObject.DataContext);
         }
 
-        protected override void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
-            //switch(msg) {
-            //    case MpMessageType.ContentListScrollChanged:
-            //        _dropRects = GetDropTargetRects();
-            //        UpdateAdorner();
-            //        break;
-            //}
+        private void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ContentListItemsChanged:
+                case MpMessageType.ContentListScrollChanged:
+                    RefreshDropRects();
+                    break;
+            }
         }
 
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
@@ -44,18 +54,15 @@ namespace MpWpfApp {
                 case MpMessageType.ExpandComplete:
                     if (AssociatedObject.BindingContext.IsExpanded) {
                         IsEnabled = true;
-                        _dropRects = GetDropTargetRects();
+                        RefreshDropRects();
                     } else {
                         IsEnabled = false;
-                        //_dropRects.Clear();
                     }
                     UpdateAdorner();
                     break;
                 case MpMessageType.UnexpandComplete:
                     if (IsEnabled) {
-                        //the item that was expanded
-
-                        _dropRects = GetDropTargetRects();
+                        RefreshDropRects();
                     }
                     IsEnabled = true;
                     UpdateAdorner();
@@ -64,65 +71,65 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
+            if(AssociatedObject.ContentListBox.Items.Count == 0) {
+                return new List<Rect>() { new Rect() };
+            }
             double itemMargin = 3;
-
             List<Rect> targetRects = new List<Rect>();
 
             var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>().ToList();
-            var tileRects = AssociatedObject.ContentListBox.GetListBoxItemRects();
-            for (int i = 0; i < tileRects.Count; i++) {
-                Rect targetRect = tileRects[i];
-                targetRect.Location = new Point(
-                        targetRect.Location.X,
-                        targetRect.Location.Y - itemMargin);
+            if (rtbvl.Count == 0) {
+                return new List<Rect>() { new Rect() };
+            }
+            var itemRects = AssociatedObject.ContentListBox.GetListBoxItemRects(RelativeToElement);
+
+            for (int i = 0; i < itemRects.Count; i++) {
+                double x = itemRects[i].Location.X;
+                double y = itemRects[i].Location.Y - itemMargin;
+                double w = itemRects[i].Width;
+                double h = itemRects[i].Height;
 
                 if (i == 0) {
-                    targetRect.Location = new Point(targetRect.Location.X, -MpMeasurements.Instance.ClipTileTitleHeight);
-                    targetRect.Height = MpMeasurements.Instance.ClipTileTitleHeight + itemMargin;
+                    //for head drop make target from top of content all the way up to top of actual tile
+                    y = -MpMeasurements.Instance.ClipTileTitleHeight;
+                    h = MpMeasurements.Instance.ClipTileTitleHeight + itemMargin;
                 } else {
-                    int refIdx = Math.Max(0, i - 1);
-                    double adjustedY = double.MaxValue;
-                    if (i < rtbvl.Count) {
-                        adjustedY = rtbvl[refIdx].Rtb.TranslatePoint(rtbvl[refIdx].EndCaretLine[1], AssociatedObject.ContentListBox).Y;
-                    }
+                    //for subsequent targets find prev end of content Y, if its within lbi height increase target rect
+                    y = rtbvl.Count != itemRects.Count ?
+                            y :
+                            rtbvl[i - 1].Rtb.TranslatePoint(rtbvl[i - 1].EndRect.BottomRight, AssociatedObject.ContentListBox).Y;
 
-                    Rect prevItemRect = AssociatedObject.ContentListBox.GetListBoxItemRect(refIdx);
-                    if (adjustedY > prevItemRect.Bottom) {
-                        adjustedY = prevItemRect.Bottom - itemMargin;
+                    double prevItemBottom = itemRects[i - 1].Bottom;
+                    if (y > prevItemBottom) {
+                        y = prevItemBottom - itemMargin;
                     }
-                    targetRect.Location = new Point(
-                        targetRect.Location.X,
-                        adjustedY);
-                    targetRect.Height = Math.Abs(tileRects[i].Top + itemMargin - adjustedY );
-
-                    //targetRect.Height = itemMargin * 2;
+                    h = Math.Abs(itemRects[i].Top + itemMargin - y);
                 }
-                targetRects.Add(targetRect);
+                targetRects.Add(new Rect(x, y, w, h));
+            }
 
-                if (i == tileRects.Count - 1) {
-                    Rect listRect = new Rect(new Point(), new Size(AssociatedObject.ActualWidth, AssociatedObject.ActualHeight));
-                    if (targetRect.Bottom <= listRect.Bottom) {
-                        Rect tailRect = targetRect;
-                        //due to async loading sometimes the rtb view's are not always loaded in time (probably for larger or heavy tokened items)
-                        //or this item is a different content type so don't expect item list to be populated
-                        double tailY = double.MaxValue;
-                        if (i < rtbvl.Count) {
-                            tailY = rtbvl[i].Rtb.TranslatePoint(rtbvl[i].EndCaretLine[1], AssociatedObject.ContentListBox).Y;
-                        } else {
-                            //Debugger.Break();
-                        }
+            int lastItemIdx = targetRects.Count - 1;
+            if(lastItemIdx < rtbvl.Count) {
+                Rect lastItemRect = targetRects[lastItemIdx];
+                double listRectBottom = AssociatedObject.ActualHeight;
+                if (lastItemRect.Bottom <= listRectBottom) {
+                    //Rect tailRect = targetRect;
+                    //due to async loading sometimes the rtb view's are not always loaded in time (probably for larger or heavy tokened items)
+                    //or this item is a different content type so don't expect item list to be populated
+                    double tailX = lastItemRect.Location.X;
+                    double tailY = rtbvl.Count != itemRects.Count ?
+                                         listRectBottom : 
+                                         rtbvl[lastItemIdx].Rtb.TranslatePoint(rtbvl[lastItemIdx].EndRect.BottomRight, AssociatedObject.ContentListBox).Y;
+                    double tailW = lastItemRect.Width;
+                    double tailH;
 
-                        if (tailY > listRect.Bottom) {
-                            tailY = listRect.Bottom - itemMargin;
-                        }
-                        tailRect.Location = new Point(
-                            tailRect.Location.X,
-                            tailY);
-                        tailRect.Height = Math.Abs(listRect.Bottom - tailY);
-
-                        targetRects.Add(tailRect);
+                    if (tailY > listRectBottom) {
+                        tailY = listRectBottom - itemMargin;
                     }
-                } 
+                    tailH = Math.Abs(listRectBottom - tailY);
+
+                    targetRects.Add(new Rect(tailX, tailY, tailW, tailH));
+                }
             }
 
             return targetRects;
@@ -133,22 +140,33 @@ namespace MpWpfApp {
                 MpConsole.WriteTraceLine("Invalid drop data: " + dragData?.ToString());
                 return;
             }
-
+            List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
             List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
             var dropModels = AssociatedObject.BindingContext.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
 
             int actualDropIdx = DropIdx;
             for (int i = 0; i < dragModels.Count; i++) {
                 if (dragModels[i].CompositeParentCopyItemId == 0 &&
-                    i > 0 &&
+                    //i > 0 &&
                     !AssociatedObject.BindingContext.ItemViewModels.Any(x=>x.CopyItemId == dragModels[i].Id)) {
+                    //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
                     await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
+
                 }
                 if(AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
+                    //if drag item is part of this tile
                     if(actualDropIdx > dragModels[i].CompositeSortOrderIdx) {
                         actualDropIdx--;
                     }                    
                     dropModels.Remove(dragModels[i]);
+                } else {
+                    var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
+                    if(dcivm != null) {
+                        //will be null if virtualized
+                        if(!dragTiles.Contains(dcivm.Parent)) {
+                            dragTiles.Add(dcivm.Parent);
+                        }
+                    }
                 }
             }
             dragModels.Reverse();
@@ -163,29 +181,50 @@ namespace MpWpfApp {
                 await dropModels[i].WriteToDatabaseAsync();
             }
 
-            await AssociatedObject.BindingContext.InitializeAsync(dropModels[0]);
+            await AssociatedObject.BindingContext.InitializeAsync(dropModels[0],AssociatedObject.BindingContext.QueryOffsetIdx);
+
+            bool needsRequery = false;
+            foreach(var dctvm in dragTiles) {
+                if(dropModels.Any(x=>x.Id == dctvm.HeadItem.CopyItemId)) {
+                    if(dctvm.ItemViewModels.Count == 1) {
+                        //this tile needs to be removed and instead of shifting all the query idx's 
+                        //just requery at current offset
+                        needsRequery = true;
+                        break;
+                    }
+                    await dctvm.InitializeAsync(dctvm.ItemViewModels[1].CopyItem, dctvm.QueryOffsetIdx);
+                } else {
+                    await dctvm.InitializeAsync(dctvm.ItemViewModels[0].CopyItem, dctvm.QueryOffsetIdx);
+                }                
+            }
+
+            if(needsRequery) {
+                MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
+            } 
+
         }
 
         public override void AutoScrollByMouse(MouseEventArgs e) {
-            return;
-
             var lb = AssociatedObject.ContentListBox;
-            var ctr_mp = e.GetPosition(lb);
-            Rect clb_rect = lb.Bounds();
+            var ctr_mp = e.GetPosition(RelativeToElement);
+            Rect clb_rect = new Rect(0,0,lb.ActualWidth,lb.ActualHeight);
             if (!clb_rect.Contains(ctr_mp)) {
-                MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({clb_rect})");
+                //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({clb_rect})");
                 return;
             }
             var sv = lb.GetScrollViewer();
             double vertOffset = sv.VerticalOffset;
-            if (Math.Abs(clb_rect.Top - ctr_mp.X) <= _minScrollDist) {
-                vertOffset += _autoScrollVelocity;
-            } else if (Math.Abs(clb_rect.Left - ctr_mp.X) <= _minScrollDist) {
+            if (Math.Abs(clb_rect.Top - ctr_mp.Y) <= _minScrollDist) {
                 vertOffset -= _autoScrollVelocity;
+            } else if (Math.Abs(clb_rect.Bottom - ctr_mp.Y) <= _minScrollDist) {
+                vertOffset += _autoScrollVelocity;
             }
             sv.ScrollToVerticalOffset(vertOffset);
         }
 
-        public override async Task StartDrop() { await Task.Delay(1); }
+        public override async Task StartDrop() { 
+            await Task.Delay(1);
+            MpConsole.WriteLine("New DropTarget, dropIdx: " + DropIdx);
+        }
     }
 }

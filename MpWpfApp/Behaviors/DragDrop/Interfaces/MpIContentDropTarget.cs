@@ -7,9 +7,12 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public interface MpIContentDropTarget {
         bool IsEnabled { get; set; }
+
         int DropIdx { get; set; }
         int DropPriority { get; }
-        int TargetId { get; set; }
+
+        MpCursorType MoveCursor { get; }
+        MpCursorType CopyCursor { get; }
 
         void AutoScrollByMouse(MouseEventArgs e);
         
@@ -19,6 +22,7 @@ namespace MpWpfApp {
         Task Drop(bool isCopy, object dragData);
         void CancelDrop();
 
+        UIElement RelativeToElement { get; }
         List<Rect> DropRects { get; }
         List<Rect> GetDropTargetRects();
         int GetDropTargetRectIdx(MouseEventArgs e);
@@ -32,7 +36,6 @@ namespace MpWpfApp {
 
 
         void Reset();
-
     }
 
 }

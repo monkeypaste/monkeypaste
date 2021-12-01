@@ -4,11 +4,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MpWpfApp {
     public class MpContentItemCaretAdorner : Adorner {
         #region Properties
-        public Point[] CaretLine { get; set; } = new Point[2];
+        //public Line CaretLine { get; set; } = new Line();
+
+        public MpLine CaretLine { get; set; } = new MpLine();
 
         public List<Rect> Test { get; set; } = new List<Rect>(2);
 
@@ -43,12 +46,11 @@ namespace MpWpfApp {
 
                 Visibility = Visibility.Visible;
                 bool isFocus = MpRtbView.DropOverHomeItemId == civm.CopyItemId || MpRtbView.DropOverEndItemId == civm.CopyItemId;
-                
-                drawingContext.DrawLine(unfocusPen, rtbv.HomeCaretLine[0], rtbv.HomeCaretLine[1]);
-                drawingContext.DrawLine(unfocusPen, rtbv.EndCaretLine[0], rtbv.EndCaretLine[1]);
 
-                if(isFocus) {
-                    drawingContext.DrawLine(focusPen, CaretLine[0], CaretLine[1]);
+                drawingContext.DrawLine(unfocusPen, rtbv.HomeRect.TopLeft, rtbv.HomeRect.BottomLeft);
+                drawingContext.DrawLine(unfocusPen, rtbv.EndRect.TopRight, rtbv.EndRect.BottomRight);
+                if (isFocus) {
+                    drawingContext.DrawLine(focusPen, CaretLine.P1, CaretLine.P2);
                 }
             } else {
                 Visibility = Visibility.Hidden;

@@ -19,7 +19,8 @@ namespace MpWpfApp {
 
         private bool _wasUnloaded = false;
 
-        private bool _isDropValid = false;
+        private bool _isDropValid => _curDropTarget != null;
+
         private bool _isDragging = false;
         private bool _isDragCopy = false;
 
@@ -79,10 +80,6 @@ namespace MpWpfApp {
             //    return;
             //}
             _mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
-
-            
-
-            //AssociatedObject.CaptureMouse();
             Mouse.AddMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
             Mouse.AddMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
 
@@ -177,8 +174,7 @@ namespace MpWpfApp {
             UpdateCursor();
 
             var dropTarget = MpContentDropManager.Instance.Select(
-                        MpClipTrayViewModel.Instance.PersistentSelectedModels,
-                        e);
+                        MpClipTrayViewModel.Instance.PersistentSelectedModels,e);
 
             if (dropTarget != _curDropTarget) {
                 _curDropTarget?.CancelDrop();
@@ -188,7 +184,6 @@ namespace MpWpfApp {
             if (_curDropTarget == null) {
                 InvalidateDrop();
             } else {
-                _isDropValid = true;
                 _curDropTarget.ContinueDragOverTarget(e);
             }
 
@@ -275,13 +270,11 @@ namespace MpWpfApp {
         }
 
         private void InvalidateDrop() {
-            MpConsole.WriteLine("Drop Invalidated");
+            //MpConsole.WriteLine("Drop Invalidated");
             //_currentDropBehavior?.CancelDrop();
             //_currentDropBehavior = null;
             _curDropTarget?.CancelDrop();
             _curDropTarget = null;
-
-            _isDropValid = false;
 
             UpdateCursor();
         }
@@ -316,9 +309,8 @@ namespace MpWpfApp {
                     //MpClipTrayViewModel.Instance.CancelDrag();
                 }
                 MpContentDropManager.Instance.StopDrag();
-                _isDropValid = false;
                 _isDragging = false;
-                AssociatedObject.ReleaseMouseCapture();
+                //AssociatedObject.ReleaseMouseCapture();
 
                 UpdateCursor();
 
@@ -340,9 +332,9 @@ namespace MpWpfApp {
             } else if (!_isDropValid) {
                 currentCursor = MpCursorType.Invalid;
             } else if (_isDragCopy) {
-                currentCursor = MpCursorType.Copy;
+                currentCursor = _curDropTarget.CopyCursor;
             } else if (_isDragging) {
-                currentCursor = MpCursorType.Move;
+                currentCursor = _curDropTarget.MoveCursor;
             }
 
             MpMouseViewModel.Instance.CurrentCursor = currentCursor;

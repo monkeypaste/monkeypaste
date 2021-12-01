@@ -20,18 +20,24 @@ namespace MpWpfApp {
         #endregion
 
         public override Orientation AdornerOrientation => Orientation.Vertical;
-
-        protected override FrameworkElement AdornedElement => AssociatedObject.ClipTray;
+        public override FrameworkElement AdornedElement => AssociatedObject.ClipTray;
 
         public override bool IsEnabled { get; set; } = true;
 
         public override int DropPriority => 1;
 
-        protected override void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
+        public override UIElement RelativeToElement => AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>();
+
+        public override MpCursorType MoveCursor => MpCursorType.TileMove;
+        public override MpCursorType CopyCursor => MpCursorType.TileCopy;
+
+        protected override void OnLoaded() {
+            base.OnLoaded();
+        }
+        protected override void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.TrayScrollChanged:
-                    _dropRects = GetDropTargetRects(); 
-                    UpdateAdorner();
+                    RefreshDropRects();
                     break;
             }
         }
@@ -52,9 +58,8 @@ namespace MpWpfApp {
         }
 
         public override void AutoScrollByMouse(MouseEventArgs e) {
-            var sv = AssociatedObject.GetVisualDescendent<ScrollViewer>();
-            var ctr_mp = e.GetPosition(sv);
-            Rect ctr_sv_rect = sv.Bounds();
+            var ctr_mp = e.GetPosition(RelativeToElement);
+            Rect ctr_sv_rect = new Rect(0, 0, RelativeToElement.RenderSize.Width, RelativeToElement.RenderSize.Height);
             if(!ctr_sv_rect.Contains(ctr_mp)) {
                 //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({ctr_sv_rect})");
                 return;
@@ -72,7 +77,7 @@ namespace MpWpfApp {
 
             List<Rect> targetRects = new List<Rect>();
 
-            var tileRects = AssociatedObject.ClipTray.GetListBoxItemRects(AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>());
+            var tileRects = AssociatedObject.ClipTray.GetListBoxItemRects(RelativeToElement);
             for (int i = 0; i < tileRects.Count; i++) {
                 Rect targetRect = tileRects[i];
                 if (i == 0) {

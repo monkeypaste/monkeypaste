@@ -39,7 +39,7 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
-        public async Task UpdateQuery(int copyItemId, int newIdx) {
+        public async Task UpdateQuery(int copyItemId, int newIdx, int newHeadId = -1) {
             if(newIdx < 0) {
                 if(_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
                     int newParentId = 0;

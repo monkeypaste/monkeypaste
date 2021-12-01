@@ -60,7 +60,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.SizeNS;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -86,7 +86,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.SizeNS;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
 
             var mp = e.GetPosition(Application.Current.MainWindow);
             double deltaY = mp.Y - _lastMousePosition.Y;

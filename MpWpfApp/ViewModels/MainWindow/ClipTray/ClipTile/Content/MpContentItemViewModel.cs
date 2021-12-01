@@ -95,9 +95,9 @@ namespace MpWpfApp {
         private Brush _itemBackgroundBrush;
         public Brush ItemBackgroundBrush {
             get {
-                //if (Parent.IsExpanded) {
-                //    return Brushes.White;
-                //}
+                if (MpContentDropManager.Instance.IsDragAndDrop) {
+                    return Brushes.White;
+                }
                 if (IsHovering &&
                     ((Parent.IsExpanded && !IsSelected) || !Parent.IsExpanded) &&
                     Parent.Count > 1) {
@@ -130,7 +130,8 @@ namespace MpWpfApp {
 
         public Brush ItemSeparatorBrush {
             get {
-                if(Parent == null ||
+                if(//MpContentDropManager.Instance.IsDragAndDrop ||
+                   Parent == null ||
                    Parent.Count == 1 ||
                    ItemIdx == Parent.Count - 1 ||
                    //(ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
@@ -172,9 +173,16 @@ namespace MpWpfApp {
                 if(Parent == null || CopyItem == null) {
                     return 0;
                 }
-                return Parent.IsExpanded && Parent.Count > 1 ? 
-                            Double.NaN : Parent.IsExpanded ? 
-                                Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15 : UnexpandedSize.Height;
+                if(Parent.IsExpanded) {
+                    if(Parent.Count > 1) {
+                        return Double.NaN;
+                    }
+                    return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                }
+                return UnexpandedSize.Height;
+                //return Parent.IsExpanded && Parent.Count > 1 ? 
+                //            Double.NaN : Parent.IsExpanded ? 
+                //                Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15 : UnexpandedSize.Height;
             }
         }
 

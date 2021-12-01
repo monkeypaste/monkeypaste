@@ -19,10 +19,12 @@ namespace MpWpfApp {
         
         private AdornerLayer adornerLayer;
 
+        private bool _hasRegistered = false;
+
         #endregion
 
         #region Properties
-        
+                
         public MpDropLineAdorner DropLineAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
@@ -30,43 +32,41 @@ namespace MpWpfApp {
         public abstract bool IsEnabled { get; set; }
         public abstract int DropPriority { get; }
 
-        public int TargetId { get; set; }
+        public abstract UIElement RelativeToElement { get; }
 
-        protected List<Rect> _dropRects = null;
-        public List<Rect> DropRects {
-            get {
-                if(IsEnabled && (_dropRects == null || _dropRects.Count == 0)) {
-                    _dropRects = GetDropTargetRects();
-                }
-                return _dropRects;
-            }
-        }
+        public List<Rect> DropRects => GetDropTargetRects();
 
+        public abstract FrameworkElement AdornedElement { get; }
+        public abstract Orientation AdornerOrientation { get; }
         #endregion
 
-        protected abstract FrameworkElement AdornedElement { get; }
-        public abstract Orientation AdornerOrientation { get; }
 
         public MpDropBehaviorBase() { }
 
         protected override void OnAttached() {
-            base.OnAttached();
+            //base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Loaded;
-            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
-            TargetId = MpContentDropManager.Instance.Register(this);
+            AssociatedObject.Unloaded += AssociatedObject_Unloaded;
+            //MpContentDropManager.Instance.Register(this);
         }
 
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            OnLoaded();
+        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
+            Detach();
+        }
+
+        protected override void OnDetaching() {
+            AssociatedObject.Loaded -= AssociatedObject_Loaded;
+            AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+            //MpContentDropManager.Instance.Unregister(this);
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
             MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
             MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
-            MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceivedAssociateObjectViewModelMessage);
+                        
             InitAdorner();
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
-            //OnLoaded();
+            OnLoaded();
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
@@ -74,19 +74,12 @@ namespace MpWpfApp {
         }
 
         protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) { }
-
         protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
 
-        protected virtual void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ItemInitialized:
-                   // OnLoaded();
-                    break;
-            }
-        }
         protected virtual void OnLoaded() { }
         
-
+        public abstract MpCursorType MoveCursor { get; }
+        public abstract MpCursorType CopyCursor { get; }
         public abstract List<Rect> GetDropTargetRects();
         public abstract Task Drop(bool isCopy, object dragData);
         public abstract void AutoScrollByMouse(MouseEventArgs e);
@@ -133,7 +126,7 @@ namespace MpWpfApp {
         public abstract Task StartDrop();
 
         public int GetDropTargetRectIdx(MouseEventArgs e) {
-            Point trayMp = e.GetPosition(AdornedElement);
+            Point trayMp = Mouse.GetPosition(RelativeToElement);
 
             Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(trayMp));
             if (targetRect == null || targetRect.IsEmpty) {
@@ -144,11 +137,13 @@ namespace MpWpfApp {
 
         public void ContinueDragOverTarget(MouseEventArgs e) {
             DropIdx = GetDropTargetRectIdx(e);
+            if(DropIdx >= 0) {
+                MpConsole.WriteLine("DropIdx: " + DropIdx);
+            }
             UpdateAdorner();
         }
 
         public void InitAdorner() {
-            //_dropRects = GetDropTargetRects();
             DropLineAdorner = new MpDropLineAdorner(AdornedElement,this);
             adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
             adornerLayer.Add(DropLineAdorner);
@@ -157,7 +152,11 @@ namespace MpWpfApp {
                 //EnableDebugMode();
             }
 
-            adornerLayer.Update();
+            RefreshDropRects();
+        }
+
+        public void RefreshDropRects() {
+            UpdateAdorner();
         }
 
         public void UpdateAdorner() {

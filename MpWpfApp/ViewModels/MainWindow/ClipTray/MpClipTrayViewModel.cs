@@ -178,6 +178,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool HasScrollVelocity { get; set; }
+
         public bool IsRestoringSelection { get; private set; } = false;
 
         //public Dictionary<int, List<int>> SelectionLookup { get; set; } = new Dictionary<int, List<int>>();
@@ -353,7 +355,7 @@ namespace MpWpfApp {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
-
+            return;
             if(IsAnyTileExpanded) {
                 return;
             }
@@ -393,7 +395,7 @@ namespace MpWpfApp {
                     IsRequery = true;
 
                     if(MpContentDropManager.Instance.IsDragAndDrop &&
-                       MpContentDropManager.Instance.CurrentDropTarget.DropPriority == 1) {
+                       MpContentDropManager.Instance.DropPriority == 1) {
                         RequeryCommand.Execute(HeadQueryIdx);
                     } else {
                         await Task.Delay(300);
@@ -406,15 +408,23 @@ namespace MpWpfApp {
 
         private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(HasScrollVelocity):
+                    if(!HasScrollVelocity) {
+                        var hctvm = Items.FirstOrDefault(x => x.IsHovering);
+                        if(hctvm != null) {
+                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderBrush));
+                        }
+                    }
+                    break;
                 case nameof(IsScrolling):
-                    if (IsScrolling) {
+                    //if (IsScrolling) {
 
-                    }
-                    var ctvm = Items.Where(x => x.IsHovering).FirstOrDefault();
-                    if (ctvm != null) {
-                        ctvm.OnPropertyChanged(nameof(ctvm.TileBorderBrush));
-                        //ctvm.ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.TileBorderBrush)));
-                    }
+                    //}
+                    //var ctvm = Items.Where(x => x.IsHovering).FirstOrDefault();
+                    //if (ctvm != null) {
+                    //    ctvm.OnPropertyChanged(nameof(ctvm.TileBorderBrush));
+                    //    //ctvm.ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.TileBorderBrush)));
+                    //}
                     break;
                 case nameof(IsAnyTileItemDragging):
                     if (IsAnyTileItemDragging) {

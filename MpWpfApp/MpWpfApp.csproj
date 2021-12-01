@@ -198,6 +198,7 @@
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
+    <Compile Include="Utils\MpLine.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpCurrency.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOpenAiRequest.cs" />

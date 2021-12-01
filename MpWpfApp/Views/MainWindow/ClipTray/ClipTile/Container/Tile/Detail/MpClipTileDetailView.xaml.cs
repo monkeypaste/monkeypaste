@@ -85,7 +85,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTileToggleEditButton_MouseEnter(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Move;
+            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Link;
         }
 
         private void ClipTileToggleEditButton_MouseLeave(object sender, MouseEventArgs e) {

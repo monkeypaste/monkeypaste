@@ -9,11 +9,15 @@ namespace MpWpfApp {
     public class MpExternalDropBehavior : MpDropBehaviorBase<MpExternalDropView> {
         public override int DropPriority => int.MaxValue;
 
-        protected override FrameworkElement AdornedElement => AssociatedObject;
+        public override FrameworkElement AdornedElement => AssociatedObject;
+        public override Orientation AdornerOrientation => Orientation.Horizontal;
 
         public override bool IsEnabled { get; set; } = false;
 
-        public override Orientation AdornerOrientation => Orientation.Horizontal;
+        public override UIElement RelativeToElement => Application.Current.MainWindow;
+
+        public override MpCursorType MoveCursor => MpCursorType.ContentMove;
+        public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
 
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
@@ -29,7 +33,7 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
-            return new List<Rect> { AssociatedObject.Bounds() };
+            return new List<Rect> { new Rect() };// AssociatedObject.Bounds() };
         }
 
         public override async Task StartDrop() {

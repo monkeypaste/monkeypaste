@@ -8,7 +8,8 @@
         xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
         Title="{Binding ManageLabel}"
-        Icon="{Binding ItemIconBase64, Converter={StaticResource Base64StringToIconConverter}}"
+        Icon="{Binding ItemIconBase64,
+                       Converter={StaticResource Base64StringToIconConverter}}"
         d:DesignWidth="600"
         Loaded="Window_Loaded"
         SizeToContent="WidthAndHeight"
@@ -17,7 +18,8 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Activated="Window_Activated"
-        d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel, IsDesignTimeCreatable=False}">
+        d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel,
+                                         IsDesignTimeCreatable=False}">
     <StackPanel Margin="10">
         <DataGrid x:Name="AnalyticItemDatagrid"
                   dd:DragDrop.IsDragSource="True"
@@ -51,7 +53,8 @@
                                        Height="20"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Source="{Binding PresetIcon, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                       Source="{Binding PresetIcon,
+                                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -64,7 +67,8 @@
                                      Margin="3"
                                      Background="White"
                                      BorderThickness="0"
-                                     Text="{Binding Label, Mode=TwoWay}"
+                                     Text="{Binding Label,
+                                                    Mode=TwoWay}"
                                      VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -75,7 +79,11 @@
                         <DataTemplate>
                             <CheckBox HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
-                                      IsChecked="{Binding IsQuickAction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                      IsChecked="{Binding IsQuickAction,
+                                                          Mode=TwoWay,
+                                                          UpdateSourceTrigger=PropertyChanged,
+                                                          NotifyOnTargetUpdated=True,
+                                                          NotifyOnSourceUpdated=True}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -86,8 +94,8 @@
                 <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <local:MpShortcutGestureView Background="White" 
-                                                         DataContext="{Binding ShortcutViewModel}"/>
+                            <local:MpShortcutGestureView Background="White"
+                                                         DataContext="{Binding ShortcutViewModel}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -115,7 +123,8 @@
                                     CommandParameter="{Binding}">
                                 <Image Width="20"
                                        Height="20"
-                                       Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                       Visibility="{Binding IsReadOnly,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        Source="/MpWpfApp;component/Resources/Images/delete.png" />
                             </Button>
                         </DataTemplate>
