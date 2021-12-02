@@ -483,7 +483,7 @@ namespace MpWpfApp {
                       !_isExpanded &&
                       !IsResizing &&
                       !IsShowingDialog &&
-                      !MpClipTrayViewModel.Instance.IsAnyTileItemDragging &&
+                      !MpContentDropManager.Instance.IsDragAndDrop &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);

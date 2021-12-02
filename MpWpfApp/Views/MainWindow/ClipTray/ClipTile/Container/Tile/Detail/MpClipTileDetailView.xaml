@@ -50,9 +50,9 @@
                           Width="16"
                           Height="16"
                           HorizontalAlignment="Right"
+                          PreviewMouseLeftButtonDown="ClipTileToggleEditButton_PreviewMouseLeftButtonDown"
                           MouseEnter="ClipTileToggleEditButton_MouseEnter"
                           MouseLeave="ClipTileToggleEditButton_MouseLeave"
-                          IsChecked="{Binding Parent.IsExpanded}"
                           Visibility="{Binding Parent.IsTextItem,
                                                Converter={StaticResource BoolToVisibilityConverter}}"
                           Template="{StaticResource LockToggleButtonControlTemplate}">

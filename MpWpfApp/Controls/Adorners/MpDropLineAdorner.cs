@@ -17,6 +17,20 @@ namespace MpWpfApp {
         private Color _debugColor;
 
         private MpIContentDropTarget _dropBehavior;
+
+        private bool _isTargetSelected {
+            get {
+                if(_dropBehavior == null || 
+                    _dropBehavior.DataContext == null ||
+                    _dropBehavior.DataContext is MpClipTrayViewModel) {
+                    return false;
+                }
+                if(_dropBehavior.DataContext is MpClipTileViewModel ctvm) {
+                    return ctvm.IsSelected;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Properties
@@ -30,21 +44,15 @@ namespace MpWpfApp {
                 }
                 Rect dropRect = DropRects[DropIdx];
                 if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
-                    //tray vertical drop line
+                    //tray or rtb view vertical drop line
                     double x = dropRect.Left + (dropRect.Width / 2);
                     return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
                 }
 
                 double x1 = dropRect.Left;
                 double x2 = dropRect.Right;
-                double y = dropRect.Bottom - 3;
-                //if (DropIdx == 0) {
-                //    y = dropRect.Bottom;
-                //} else if (DropIdx == DropRects.Count - 1) {
-                //    y = dropRect.Top;
-                //} else {
-                //    y = dropRect.Top + (dropRect.Height / 2);
-                //}
+                double y = dropRect.Bottom - MpContentListDropBehavior.TargetMargin;
+                
                 return new MpLine(x1, y, x2, y);
             }        
         }
@@ -76,7 +84,6 @@ namespace MpWpfApp {
         #region Public Methods
         public MpDropLineAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
-
             _debugColor = MpHelpers.Instance.GetRandomColor();
             _debugColor.A = 50;
             
@@ -85,7 +92,12 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
-            if(IsDebugMode && DropRects != null) {
+            //if(!_isTargetSelected && IsDebugMode) {
+            //    return;
+            //}
+
+            if(IsDebugMode && 
+               DropRects != null) {
                 Visibility = Visibility.Visible;
                 foreach(var debugRect in DropRects) {
                     if(DropRects.IndexOf(debugRect) == DropIdx) {

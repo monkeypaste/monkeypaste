@@ -129,14 +129,13 @@ using System.Speech.Synthesis;
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-
-                if (SelectedItem != null) {
-                    return SelectedItem;
-                }
                 if (HoverItem != null) {
                     return HoverItem;
                 }
 
+                if (SelectedItem != null) {
+                    return SelectedItem;
+                }
                 return HeadItem;
             }
         }
@@ -700,6 +699,9 @@ using System.Speech.Synthesis;
                 return Parent.Items.IndexOf(this);
             }
         }
+
+        public bool IsLoadMoreTile { get; set; } = false;
+
         #endregion
 
         #region Model
@@ -749,9 +751,6 @@ using System.Speech.Synthesis;
 
         public MpClipTileViewModel(MpClipTrayViewModel parent) : base(parent) {
             IsBusy = true;
-
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            ItemViewModels.CollectionChanged += ItemViewModels_CollectionChanged;
         }
 
         #endregion
@@ -759,6 +758,8 @@ using System.Speech.Synthesis;
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
+            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;
             QueryOffsetIdx = queryOffset;
             IsBusy = true;
 
@@ -835,10 +836,6 @@ using System.Speech.Synthesis;
 
         #endregion
 
-        private void ItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            
-        }
-
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):
@@ -892,20 +889,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        public void RefreshAsyncCommands() {
-            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
-
-            //(Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
-            //(Parent.PerformHotkeyPasteCommand as RelayCommand<object>).NotifyCanExecuteChanged();
-            //(Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
-            //(Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
-            //(Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
-            //(Parent.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
-            //(Parent.TranslateSelectedClipTextAsyncCommand as RelayCommand<string>).NotifyCanExecuteChanged();
-            //(Parent.CreateQrCodeFromSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
-        }
 
         public async Task GatherAnalytics() {
             var analyticsTask = new List<Task>();
@@ -915,16 +898,6 @@ using System.Speech.Synthesis;
                 analyticsTask.Add(itemTask);
             }
             await Task.WhenAll(analyticsTask.ToArray());
-        }
-        public void Refresh() {
-            var sw = new Stopwatch();
-            sw.Start();
-            RequestUiUpdate();
-            //if (FileListBox != null) {
-            //    FileListBox.Items.Refresh();
-            //}
-            sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("ClipTile(VIdx:" + Parent.Items.IndexOf(this) + ") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
         public void ClearSelection(bool clearEditing = true) {
@@ -946,57 +919,6 @@ using System.Speech.Synthesis;
                 ivm.ClearEditing();
             }
         }
-
-        public void SaveToDatabase() {
-            MpConsole.WriteLine("Ignoring save since syncing on changes");
-            return;
-            var sw = new Stopwatch();
-            sw.Start();
-
-            TextSelection rtbSelection = null;
-            if (SelectedItems.Count == 1 && IsAnyEditingContent) {
-                //rtbSelection = ContentContainerViewModel.SubSelectedContentItems[0].Rtb.Selection;
-                MonkeyPaste.MpConsole.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
-            }
-
-            //remove links to update model rich text
-            //RichTextBoxViewModelCollection.ClearAllHyperlinks();
-
-            //clear any search highlighting when saving the document then restore after save
-            HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(null);
-
-            var rtsw = new Stopwatch();
-            rtsw.Start();
-            foreach (var ivm in ItemViewModels) {
-                //ivm.SaveToDatabase();
-            }
-            rtsw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
-
-            //CopyItemRichText = RichTextBoxViewModelCollection.FullDocument.ToRichText();
-            HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
-            //RichTextBoxViewModelCollection.CreateAllHyperlinks();
-            //CopyItem.WriteToDatabase();
-
-            var cipcsw = new Stopwatch();
-            cipcsw.Start();
-            //if(CopyItemType == MpCopyItemType.RichText) {
-            //    CopyItemBmp = RichTextBoxViewModelCollection[0].CopyItemBmp;
-            //}
-
-            //CopyItemBmp = GetSeparatedCompositeFlowDocument().ToBitmapSource();
-            //OnPropertyChanged(nameof(CopyItem));
-            cipcsw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
-
-            sw.Stop();
-            MonkeyPaste.MpConsole.WriteLine("Saving(VIdx:" + Parent.Items.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
-
-            if (rtbSelection != null && SelectedItems.Count == 1) {
-                //ContentContainerViewModel.SubSelectedContentItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
-        }
-
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
             if(IsTextItem) {
@@ -1079,6 +1001,21 @@ using System.Speech.Synthesis;
             RequestScrollToHome();
         }
 
+        public void RefreshAsyncCommands() {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
+
+            //(Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
+            //(Parent.PerformHotkeyPasteCommand as RelayCommand<object>).NotifyCanExecuteChanged();
+            //(Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.MergeSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+            //(Parent.TranslateSelectedClipTextAsyncCommand as RelayCommand<string>).NotifyCanExecuteChanged();
+            //(Parent.CreateQrCodeFromSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
+        }
+
         #region IDisposable
 
         public override void Dispose() {
@@ -1087,7 +1024,6 @@ using System.Speech.Synthesis;
             ClearSelection();
             ItemViewModels.ForEach(x => x.Dispose());
             ItemViewModels.Clear();
-
         }
 
         #endregion
@@ -1690,9 +1626,13 @@ using System.Speech.Synthesis;
 
                     speechSynthesizer.Rate = 0;
 
-                    speechSynthesizer.SpeakCompleted += (s, e) => {
+                    EventHandler<SpeakCompletedEventArgs> speakCompleted = null;
+                    speakCompleted = (s, e) => {
+                        speechSynthesizer.SpeakCompleted -= speakCompleted;
                         speechSynthesizer.Dispose();
                     };
+                    speechSynthesizer.SpeakCompleted += speakCompleted;
+
                     // Create a PromptBuilder object and append a text string.
                     PromptBuilder promptBuilder = new PromptBuilder();
 

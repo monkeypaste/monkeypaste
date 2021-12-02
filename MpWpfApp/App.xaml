@@ -1065,6 +1065,12 @@
         <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
         <!--  Command Parameter Primitives End  -->
 
+        <!--  Cursor Source Paths  -->
+        <s:String x:Key="CopyCursor">Resources\Cursors\copy.cur</s:String>
+        <s:String x:Key="HandOpenCursor">Resources\Cursors\hand_open.cur</s:String>
+        <s:String x:Key="HandClosedCursor">Resources\Cursors\hand_closed.cur</s:String>
+        <!--  Cursor Source Paths END  -->
+
         <!--  Icon/Image Source Paths  -->
         <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
         <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>

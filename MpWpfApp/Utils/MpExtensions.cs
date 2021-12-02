@@ -30,6 +30,32 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+        #region System
+
+        public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject dependencyObject) {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++) {
+                yield return VisualTreeHelper.GetChild(dependencyObject, i);
+            }
+        }
+
+        public static IEnumerable<DependencyObject> EnumerateVisualDescendents(this DependencyObject dependencyObject) {
+            yield return dependencyObject;
+
+            foreach (DependencyObject child in dependencyObject.EnumerateVisualChildren()) {
+                foreach (DependencyObject descendent in child.EnumerateVisualDescendents()) {
+                    yield return descendent;
+                }
+            }
+        }
+
+        public static void ClearBindings(this DependencyObject dependencyObject) {
+            foreach (DependencyObject element in dependencyObject.EnumerateVisualDescendents()) {
+                BindingOperations.ClearAllBindings(element);
+            }
+        }
+
+        #endregion
+
         #region Collections
 
         public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace MpWpfApp {
     public enum MpCursorType {
         None = 0,
         Default,
+        OverDragItem,
         ContentMove,
         TileMove,
         ContentCopy,
@@ -23,17 +25,18 @@ namespace MpWpfApp {
         Link
     }
 
-    public class MpMouseViewModel : MpSingletonViewModel<MpMouseViewModel> {
+    public class MpMouseViewModel : MpThreadSafeSingletonViewModel<MpMouseViewModel> {
         #region Private Variables
 
         private Dictionary<MpCursorType, Cursor> _cursorLookup = 
             new Dictionary<MpCursorType, Cursor>() {
                 {MpCursorType.None, Cursors.Arrow },
                 {MpCursorType.Default, Cursors.Arrow },
-                {MpCursorType.ContentMove, Cursors.SizeNS },
-                {MpCursorType.TileMove, Cursors.SizeWE },
-                {MpCursorType.ContentCopy, Cursors.ScrollNS },
-                {MpCursorType.TileCopy, Cursors.ScrollWE },
+                {MpCursorType.OverDragItem, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandOpenCursor"] as string))  },
+                {MpCursorType.ContentMove, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandClosedCursor"] as string))  },
+                {MpCursorType.TileMove, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandClosedCursor"] as string))  },
+                {MpCursorType.ContentCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["CopyCursor"] as string)) },
+                {MpCursorType.TileCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["CopyCursor"] as string))  },
                 {MpCursorType.Invalid, Cursors.No },
                 {MpCursorType.Waiting, Cursors.Wait },
                 {MpCursorType.IBeam, Cursors.IBeam },
@@ -119,7 +122,7 @@ namespace MpWpfApp {
                MpClipTrayViewModel.Instance.IsLoadingMore) {
                 return;
             }
-            MpHelpers.Instance.RunOnMainThread(() => {
+            if(Application.Current.Dispatcher.CheckAccess()) {
                 Cursor cursor = GetCurrentCursor();
 
                 Mouse.OverrideCursor = cursor;
@@ -127,7 +130,10 @@ namespace MpWpfApp {
 
                 Application.Current.MainWindow.ForceCursor = true;
                 Application.Current.MainWindow.Cursor = cursor;
-            });
+            } else {
+                MpHelpers.Instance.RunOnMainThread(UpdateCursor);
+            }
+            
         }
         #endregion
     }

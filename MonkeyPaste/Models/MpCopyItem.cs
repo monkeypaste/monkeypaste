@@ -186,6 +186,10 @@ namespace MonkeyPaste {
             if(Source == null) {
                 Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
             }
+            if(CompositeParentCopyItemId == Id) {
+                MpConsole.WriteLine("Warning! circular copy item ref detected, attempting to fix...");
+                CompositeParentCopyItemId = CompositeSortOrderIdx = 0;
+            }
             await base.WriteToDatabaseAsync();
         }
         #region Sync
@@ -344,7 +348,7 @@ namespace MonkeyPaste {
 
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
-                Title = this.Title,
+                Title = isReplica ? this.Title + " Copy":this.Title,
                 ItemData = this.ItemData,
                 ItemColor = this.ItemColor,
                 Source = this.Source,

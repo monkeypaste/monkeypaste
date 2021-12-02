@@ -37,6 +37,7 @@
         <AdornerDecorator>
             <ListBox x:Name="ContentListBox" 
                      Loaded="ContentListBox_Loaded"
+                     Unloaded="ContentListDockPanel_Unloaded"
                      SelectionChanged="ContentListBox_SelectionChanged"
                      RequestBringIntoView="ContentListBox_RequestBringIntoView"
                      ClipToBounds="True"

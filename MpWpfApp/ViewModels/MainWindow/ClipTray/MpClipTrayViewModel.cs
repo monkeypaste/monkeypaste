@@ -355,37 +355,14 @@ namespace MpWpfApp {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
-            return;
+            //return;
             if(IsAnyTileExpanded) {
                 return;
             }
-            //if(e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
-            //    foreach (MpClipTileViewModel octvm in e.OldItems) {
-            //        if (octvm.IsSelected) {
-            //            StoreSelectionState(octvm);
-            //            octvm.ClearSelection();
-            //        }
-            //    }
-            //    foreach (MpClipTileViewModel nctvm in e.NewItems) {
-            //        if (octvm.IsSelected) {
-            //            StoreSelectionState(octvm);
-            //            octvm.ClearSelection();
-            //        }
-            //    }
-            //}
-            if (e.NewItems != null && e.NewItems.Count > 0) {
-                foreach (MpClipTileViewModel nctvm in e.NewItems) {
-                    nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
-
+            if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
+                foreach (MpClipTileViewModel octvm in e.OldItems) {
+                    octvm.Dispose();
                 }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0 && !IsAnyTileItemDragging) {
-                
-                GC.Collect();
-
-                //foreach(MpClipTileViewModel octvm in e.OldItems) {
-                //    octvm.Dispose();
-                //}
             }
         }
 
@@ -732,7 +709,6 @@ namespace MpWpfApp {
                     string sctrtf = await sctvm.GetSubSelectedPastableRichText(isToExternalApp);
                     rtf = MpHelpers.Instance.CombineRichText(sctrtf, rtf);
                 }
-
             }
 
             //set file drop (always must set so when dragged out of application user doesn't get no-drop cursor)
@@ -1203,13 +1179,15 @@ namespace MpWpfApp {
                     }
                 }
 
-                var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, loadCount);
+                if(loadCount > 0) {
+                    var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, loadCount);
 
-                for (int i = 0; i < cil.Count; i++) {
-                    await Items[i].InitializeAsync(cil[i], i + offsetIdx);
+                    for (int i = 0; i < cil.Count; i++) {
+                        await Items[i].InitializeAsync(cil[i], i + offsetIdx);
 
-                    if (isDragDropRequery) {
-                        RestoreSelectionState(Items[i]);
+                        if (isDragDropRequery) {
+                            RestoreSelectionState(Items[i]);
+                        }
                     }
                 }
 

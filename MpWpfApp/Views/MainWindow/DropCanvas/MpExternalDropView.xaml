@@ -10,7 +10,7 @@
              d:DesignWidth="800"
              Background="Transparent">
     <i:Interaction.Behaviors>
-        <!--<local:MpExternalDropBehavior />-->
+        <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
     </i:Interaction.Behaviors>
-    <Grid MouseDown="UserControl_MouseDown"/>
+    <Grid MouseDown="UserControl_MouseDown" />
 </UserControl>

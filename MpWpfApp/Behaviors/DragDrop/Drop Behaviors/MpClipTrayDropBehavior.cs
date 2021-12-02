@@ -31,7 +31,7 @@ namespace MpWpfApp {
         public override MpCursorType MoveCursor => MpCursorType.TileMove;
         public override MpCursorType CopyCursor => MpCursorType.TileCopy;
 
-        protected override void OnLoaded() {
+        public override void OnLoaded() {
             base.OnLoaded();
         }
         protected override void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
@@ -46,22 +46,19 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.ExpandComplete:
                     IsEnabled = false;
-                    //_dropRects.Clear();
                     UpdateAdorner();
                     break;
                 case MpMessageType.UnexpandComplete:
-                    IsEnabled = false;
-                    //_dropRects = GetDropTargetRects();
+                    IsEnabled = true;
                     UpdateAdorner();
                     break;
             }
         }
 
-        public override void AutoScrollByMouse(MouseEventArgs e) {
-            var ctr_mp = e.GetPosition(RelativeToElement);
+        public override void AutoScrollByMouse() {
+            var ctr_mp = Mouse.GetPosition(RelativeToElement);
             Rect ctr_sv_rect = new Rect(0, 0, RelativeToElement.RenderSize.Width, RelativeToElement.RenderSize.Height);
             if(!ctr_sv_rect.Contains(ctr_mp)) {
-                //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({ctr_sv_rect})");
                 return;
             }
 

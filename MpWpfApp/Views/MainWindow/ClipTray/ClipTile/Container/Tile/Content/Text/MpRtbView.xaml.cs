@@ -32,13 +32,13 @@ namespace MpWpfApp {
         public static int DropOverEndItemId = -1;
         public static MpRtbView CurDropOverRtbView = null;
 
-        protected MpContentItemCaretAdorner CaretAdorner;
-        protected AdornerLayer CaretAdornerLayer;
+        //protected MpContentItemCaretAdorner CaretAdorner;
+        //protected AdornerLayer CaretAdornerLayer;
 
         //public MpLine HomeCaretLine = new MpLine();
         //public MpLine EndCaretLine = new MpLine();
 
-        public Rect HomeRect, EndRect;
+        //public Rect HomeRect, EndRect;
 
         public TextRange NewStartRange;
         public string NewOriginalText;
@@ -55,7 +55,7 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
                 case MpMessageType.ItemDragEnd:
-                    CaretAdornerLayer.Update();
+                    //CaretAdornerLayer.Update();
                     break;
             }
         }
@@ -73,11 +73,14 @@ namespace MpWpfApp {
                     Rtb.Document.TextAlignment = TextAlignment.Left;
                     rtbivm.IsNewAndFirstLoad = false;
                 }
+                ScrollToHome();
 
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+
+                RtbViewDropBehavior.Attach(this);
             }
         }
 
@@ -128,7 +131,7 @@ namespace MpWpfApp {
                 }
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void Rtb_MouseMove(object sender, MouseEventArgs e) {
@@ -140,14 +143,16 @@ namespace MpWpfApp {
                 }
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            RtbViewDropBehavior.Detach();
+
             if(BindingContext == null) {
                 return;
             }
@@ -156,6 +161,8 @@ namespace MpWpfApp {
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
             BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
             BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+
+            //BindingContext.Dispose();
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
@@ -260,103 +267,48 @@ namespace MpWpfApp {
         }
 
         public void InitCaretAdorner() {
-            if(CaretAdorner == null) {
-                CaretAdorner = new MpContentItemCaretAdorner(Rtb);
-                CaretAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
-                CaretAdornerLayer.Add(CaretAdorner);
-            }
-            CaretAdorner.Test.Clear();
+            //if(CaretAdorner == null) {
+            //    CaretAdorner = new MpContentItemCaretAdorner(Rtb);
+            //    CaretAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
+            //    CaretAdornerLayer.Add(CaretAdorner);
+            //}
+            //CaretAdorner.Test.Clear();
 
-            HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+            //HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
 
-            EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
+            //EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
 
-            CaretAdornerLayer.Update();
+            //CaretAdornerLayer.Update();
         }
 
-        public static void ShowHomeCaretAdorner(MpRtbView rtbView) {
-            ClearCaretAdorner();
-            DropOverHomeItemId = rtbView.BindingContext.CopyItemId;
-            rtbView.ScrollToHome();
-            rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.HomeRect.TopLeft, rtbView.HomeRect.BottomLeft);
-            rtbView.CaretAdornerLayer.Update();
-            CurDropOverRtbView = rtbView;
-        }
+        //public static void ShowHomeCaretAdorner(MpRtbView rtbView) {
+        //    ClearCaretAdorner();
+        //    DropOverHomeItemId = rtbView.BindingContext.CopyItemId;
+        //    rtbView.ScrollToHome();
+        //    rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.HomeRect.TopLeft, rtbView.HomeRect.BottomLeft);
+        //    rtbView.CaretAdornerLayer.Update();
+        //    CurDropOverRtbView = rtbView;
+        //}
 
-        public static void ShowEndCaretAdorner(MpRtbView rtbView) {
-            ClearCaretAdorner();
-            DropOverEndItemId = rtbView.BindingContext.CopyItemId;
-            rtbView.ScrollToEnd();
-            rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.EndRect.TopRight, rtbView.EndRect.BottomRight);
-            rtbView.CaretAdornerLayer.Update();
-            CurDropOverRtbView = rtbView;
-        }
+        //public static void ShowEndCaretAdorner(MpRtbView rtbView) {
+        //    ClearCaretAdorner();
+        //    DropOverEndItemId = rtbView.BindingContext.CopyItemId;
+        //    rtbView.ScrollToEnd();
+        //    rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.EndRect.TopRight, rtbView.EndRect.BottomRight);
+        //    rtbView.CaretAdornerLayer.Update();
+        //    CurDropOverRtbView = rtbView;
+        //}
 
-        public static void ClearCaretAdorner() {
-            DropOverHomeItemId = DropOverEndItemId = -1;
-            if(CurDropOverRtbView != null) {
-                CurDropOverRtbView.ScrollToHome();
-                CurDropOverRtbView.CaretAdornerLayer.Update();
-                CurDropOverRtbView = null;
-            }
-        }
+        //public static void ClearCaretAdorner() {
+        //    DropOverHomeItemId = DropOverEndItemId = -1;
+        //    if(CurDropOverRtbView != null) {
+        //        CurDropOverRtbView.ScrollToHome();
+        //        CurDropOverRtbView.CaretAdornerLayer.Update();
+        //        CurDropOverRtbView = null;
+        //    }
+        //}
 
-        public async Task MergeContentItem(MpCopyItem mci, bool isDuplicating) {
-            bool isHomeMerge;
-            if(BindingContext.CopyItemId == DropOverHomeItemId) {
-                isHomeMerge = true;
-            } else if (BindingContext.CopyItemId == DropOverEndItemId) {
-                isHomeMerge = false;
-            } else {
-                throw new Exception("RtbVIew is not flagged for drop");
-            }
-            BindingContext = DataContext as MpContentItemViewModel;
-            BindingContext.IsBusy = true;
-
-            await ClearHyperlinks();
-
-            // merge content
-            if (isHomeMerge) {
-                BindingContext.CopyItem.ItemData = MpHelpers.Instance.CombineRichText(Rtb.Document.ToRichText(), mci.ItemData);
-            } else {
-                BindingContext.CopyItem.ItemData = MpHelpers.Instance.CombineRichText(mci.ItemData, Rtb.Document.ToRichText());
-            }
-
-            // merge templates
-            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(BindingContext.CopyItemId);
-            var mcitl = await MpDataModelProvider.Instance.GetTemplatesAsync(mci.Id);
-            foreach (MpCopyItemTemplate mcit in mcitl) {
-                if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
-                    //if merged item has template w/ same name just ignore it since it will already be parsed
-                    continue;
-                }
-                mcit.CopyItemId = BindingContext.CopyItemId;
-                await mcit.WriteToDatabaseAsync();
-            }
-
-            // merge tags
-            var tl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(BindingContext.CopyItemId);
-            var mtl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(mci.Id);
-            foreach (MpCopyItemTag mt in mtl) {
-                if (tl.Any(x => x.TagId == mt.TagId)) {
-                    //if merged item has tags w/ same name just ignore it 
-                    continue;
-                }
-                mt.CopyItemId = BindingContext.CopyItemId;
-                await mt.WriteToDatabaseAsync();
-            }
-
-            if(!isDuplicating) {
-                await mci.DeleteFromDatabaseAsync();
-            }
-
-            // write and restore item
-            await BindingContext.CopyItem.WriteToDatabaseAsync();
-
-            BindingContext.OnPropertyChanged(nameof(BindingContext.CopyItemData));
-
-            await CreateHyperlinksAsync();
-        }
+        
 
         #endregion
 

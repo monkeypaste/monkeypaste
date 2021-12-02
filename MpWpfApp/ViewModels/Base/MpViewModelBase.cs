@@ -38,11 +38,6 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _itemVisibility = Visibility.Visible;
-        public Visibility ItemVisibility {
-            get => _itemVisibility;
-            set => SetProperty(ref _itemVisibility, value);
-        }
         #endregion
 
         #region Events
@@ -63,15 +58,32 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
-
+        #region IDisposable Implementation
+        // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/
+        // and https://web.archive.org/web/20200720045029/https://docs.microsoft.com/en-us/archive/blogs/jgoldb/finding-memory-leaks-in-wpf-based-applications
+        
         public virtual void Dispose() {
-            MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
-            MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
-            MpDb.Instance.SyncAdd -= Instance_SyncAdd;
-            MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
-            MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) {
+            // Release unmanaged memory
+            if (disposing) {
+                // Release other objects
+                IsBusy = false;
+
+                MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
+                MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
+                MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
+                MpDb.Instance.SyncAdd -= Instance_SyncAdd;
+                MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
+                MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+            }
+        }
+
+        ~MpViewModelBase() {
+            Dispose(false);
         }
 
         #endregion

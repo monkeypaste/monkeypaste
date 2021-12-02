@@ -854,6 +854,8 @@ namespace MpWpfApp {
                         !Parent.Parent.IsAnyTileExpanded) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }
+
+                    Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     break;
                 case nameof(CopyItem):
                     if(CopyItem == null) {
@@ -880,6 +882,9 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     Parent.OnPropertyChanged(nameof(Parent.TileBorderBrushRect));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnyTileItemDragging));
+                    break;
+                case nameof(IsHovering):
+                    Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     break;
             }
         }

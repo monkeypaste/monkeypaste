@@ -193,14 +193,14 @@ namespace MpWpfApp {
                     if (vctvm.ItemViewModels.Count > 1) {
                         foreach (var vrtbvm in vctvm.ItemViewModels) {
                             if (vrtbvm.CopyItem.Source.App.Id != BindingContext.CopyItem.Source.AppId) {
-                                vrtbvm.ItemVisibility = Visibility.Collapsed;
+                               // vrtbvm.ItemVisibility = Visibility.Collapsed;
                             } else {
                                 hasSubItemWithApp = true;
                             }
                         }
                     }
                     if (!hasSubItemWithApp) {
-                        vctvm.ItemVisibility = Visibility.Collapsed;
+                        //vctvm.ItemVisibility = Visibility.Collapsed;
                     }
                 }
             }

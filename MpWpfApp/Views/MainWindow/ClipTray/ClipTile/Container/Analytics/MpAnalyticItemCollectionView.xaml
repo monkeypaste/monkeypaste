@@ -54,7 +54,7 @@
                     <local:MpAnalyticItemView DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemComponentViewModel}">
-                    <local:MpAnalyticItemComponentView />
+                    <local:MpAnalyticItemComponentView DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />

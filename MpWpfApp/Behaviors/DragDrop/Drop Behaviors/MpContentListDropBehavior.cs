@@ -17,7 +17,11 @@ namespace MpWpfApp {
         private double _minScrollDist = 10;
         private double _autoScrollVelocity = 10;
 
+        private object _dataContext;
+
         #endregion
+
+        public static double TargetMargin = 3;
 
         public override bool IsEnabled { get; set; } = true;
 
@@ -29,15 +33,26 @@ namespace MpWpfApp {
         public override FrameworkElement AdornedElement => AssociatedObject.ContentListBox;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
-        public override UIElement RelativeToElement => AssociatedObject.GetVisualDescendent<ScrollViewer>();
+        public override UIElement RelativeToElement => AssociatedObject.ContentListBox;//GetVisualDescendent<ScrollViewer>();
 
-        protected override void OnLoaded() {
+        public override void OnLoaded() {
             base.OnLoaded();
+
+            _dataContext = AssociatedObject.DataContext;
 
             MpMessenger.Instance.Register<MpMessageType>(
                 AssociatedObject.DataContext, 
                 ReceivedAssociateObjectViewModelMessage,
                 AssociatedObject.DataContext);
+        }
+
+        public override void OnUnloaded() {
+            base.OnUnloaded();
+
+            MpMessenger.Instance.Unregister<MpMessageType>(
+                _dataContext,
+                ReceivedAssociateObjectViewModelMessage,
+                _dataContext);
         }
 
         private void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
@@ -71,10 +86,11 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
-            if(AssociatedObject.ContentListBox.Items.Count == 0) {
+            if(AssociatedObject == null ||
+               AssociatedObject.ContentListBox.Items.Count == 0) {
                 return new List<Rect>() { new Rect() };
             }
-            double itemMargin = 3;
+            double itemMargin = TargetMargin;
             List<Rect> targetRects = new List<Rect>();
 
             var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>().ToList();
@@ -97,7 +113,7 @@ namespace MpWpfApp {
                     //for subsequent targets find prev end of content Y, if its within lbi height increase target rect
                     y = rtbvl.Count != itemRects.Count ?
                             y :
-                            rtbvl[i - 1].Rtb.TranslatePoint(rtbvl[i - 1].EndRect.BottomRight, AssociatedObject.ContentListBox).Y;
+                            rtbvl[i - 1].Rtb.TranslatePoint(rtbvl[i - 1].RtbViewDropBehavior.DropRects[1].BottomRight, RelativeToElement).Y;
 
                     double prevItemBottom = itemRects[i - 1].Bottom;
                     if (y > prevItemBottom) {
@@ -113,13 +129,12 @@ namespace MpWpfApp {
                 Rect lastItemRect = targetRects[lastItemIdx];
                 double listRectBottom = AssociatedObject.ActualHeight;
                 if (lastItemRect.Bottom <= listRectBottom) {
-                    //Rect tailRect = targetRect;
                     //due to async loading sometimes the rtb view's are not always loaded in time (probably for larger or heavy tokened items)
                     //or this item is a different content type so don't expect item list to be populated
                     double tailX = lastItemRect.Location.X;
                     double tailY = rtbvl.Count != itemRects.Count ?
                                          listRectBottom : 
-                                         rtbvl[lastItemIdx].Rtb.TranslatePoint(rtbvl[lastItemIdx].EndRect.BottomRight, AssociatedObject.ContentListBox).Y;
+                                         rtbvl[lastItemIdx].Rtb.TranslatePoint(rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects[1].BottomRight, RelativeToElement).Y;
                     double tailW = lastItemRect.Width;
                     double tailH;
 
@@ -136,35 +151,39 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            if (dragData == null || dragData.GetType() != typeof(List<MpCopyItem>)) {
+            if (!IsDragDataValid(dragData)) {
                 MpConsole.WriteTraceLine("Invalid drop data: " + dragData?.ToString());
                 return;
             }
             List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
             List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
+            if (isCopy) {
+                var clones = await Task.WhenAll(dragModels.Select(x => x.Clone(true)).ToArray());
+                dragModels = clones.Cast<MpCopyItem>().ToList();
+            }
             var dropModels = AssociatedObject.BindingContext.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
 
             int actualDropIdx = DropIdx;
-            for (int i = 0; i < dragModels.Count; i++) {
-                if (dragModels[i].CompositeParentCopyItemId == 0 &&
-                    //i > 0 &&
-                    !AssociatedObject.BindingContext.ItemViewModels.Any(x=>x.CopyItemId == dragModels[i].Id)) {
-                    //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-                    await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
-
-                }
-                if(AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
-                    //if drag item is part of this tile
-                    if(actualDropIdx > dragModels[i].CompositeSortOrderIdx) {
-                        actualDropIdx--;
-                    }                    
-                    dropModels.Remove(dragModels[i]);
-                } else {
-                    var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
-                    if(dcivm != null) {
-                        //will be null if virtualized
-                        if(!dragTiles.Contains(dcivm.Parent)) {
-                            dragTiles.Add(dcivm.Parent);
+            if(!isCopy) {
+                for (int i = 0; i < dragModels.Count; i++) {
+                    if (dragModels[i].CompositeParentCopyItemId == 0 &&
+                        !AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
+                        //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
+                        await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
+                    }
+                    if (AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
+                        //if drag item is part of this tile
+                        if (actualDropIdx > dragModels[i].CompositeSortOrderIdx) {
+                            actualDropIdx--;
+                        }
+                        dropModels.Remove(dragModels[i]);
+                    } else {
+                        var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
+                        if (dcivm != null) {
+                            //will be null if virtualized
+                            if (!dragTiles.Contains(dcivm.Parent) && dcivm.Parent != AssociatedObject.DataContext) {
+                                dragTiles.Add(dcivm.Parent);
+                            }
                         }
                     }
                 }
@@ -183,30 +202,32 @@ namespace MpWpfApp {
 
             await AssociatedObject.BindingContext.InitializeAsync(dropModels[0],AssociatedObject.BindingContext.QueryOffsetIdx);
 
-            bool needsRequery = false;
-            foreach(var dctvm in dragTiles) {
-                if(dropModels.Any(x=>x.Id == dctvm.HeadItem.CopyItemId)) {
-                    if(dctvm.ItemViewModels.Count == 1) {
-                        //this tile needs to be removed and instead of shifting all the query idx's 
-                        //just requery at current offset
-                        needsRequery = true;
-                        break;
+            if(!AssociatedObject.BindingContext.IsExpanded && !isCopy) {
+                bool needsRequery = false;
+                foreach (var dctvm in dragTiles) {
+                    if (dropModels.Any(x => x.Id == dctvm.HeadItem.CopyItemId)) {
+                        if (dctvm.ItemViewModels.Count == 1) {
+                            //this tile needs to be removed and instead of shifting all the query idx's 
+                            //just requery at current offset
+                            needsRequery = true;
+                            break;
+                        }
+                        await dctvm.InitializeAsync(dctvm.ItemViewModels[1].CopyItem, dctvm.QueryOffsetIdx);
+                    } else {
+                        await dctvm.InitializeAsync(dctvm.ItemViewModels[0].CopyItem, dctvm.QueryOffsetIdx);
                     }
-                    await dctvm.InitializeAsync(dctvm.ItemViewModels[1].CopyItem, dctvm.QueryOffsetIdx);
-                } else {
-                    await dctvm.InitializeAsync(dctvm.ItemViewModels[0].CopyItem, dctvm.QueryOffsetIdx);
-                }                
-            }
+                }
 
-            if(needsRequery) {
-                MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
-            } 
+                if (needsRequery) {
+                    MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
+                }
+            }
 
         }
 
-        public override void AutoScrollByMouse(MouseEventArgs e) {
+        public override void AutoScrollByMouse() {
             var lb = AssociatedObject.ContentListBox;
-            var ctr_mp = e.GetPosition(RelativeToElement);
+            var ctr_mp = Mouse.GetPosition(RelativeToElement);
             Rect clb_rect = new Rect(0,0,lb.ActualWidth,lb.ActualHeight);
             if (!clb_rect.Contains(ctr_mp)) {
                 //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({clb_rect})");

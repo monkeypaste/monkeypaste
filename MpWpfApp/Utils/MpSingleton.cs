@@ -22,4 +22,15 @@ namespace MpWpfApp {
 
         protected MpSingletonViewModel() : base(null) { }
     }
+
+    public abstract class MpThreadSafeSingletonViewModel<T> : MpViewModelBase<object>
+        where T : new() {
+
+        #region Singleton Definition
+        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T(),true);
+        public static T Instance { get { return _Lazy.Value; } }
+        #endregion
+
+        protected MpThreadSafeSingletonViewModel() : base(null) { }
+    }
 }

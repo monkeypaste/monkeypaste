@@ -18,7 +18,9 @@ namespace MpWpfApp {
     public class MpUserControl<T> : MpUserControl where T: class {
         public T BindingContext {
             get {
-                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
+                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this) ||
+                    GetValue(DataContextProperty) == null//.GetType() != typeof(T)
+                        ) {
                     return null;
                 }
                 return (T)GetValue(DataContextProperty);

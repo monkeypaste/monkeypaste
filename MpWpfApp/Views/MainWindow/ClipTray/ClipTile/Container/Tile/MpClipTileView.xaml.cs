@@ -71,7 +71,7 @@ namespace MpWpfApp {
 
 
         private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
                 return;
             }
             BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;

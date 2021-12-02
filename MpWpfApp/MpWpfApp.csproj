@@ -138,7 +138,6 @@
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
     <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
-    <Compile Include="Controls\Adorners\MpContentItemCaretAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
@@ -2312,6 +2311,15 @@
     <Resource Include="Resources\Images\reset.png" />
     <Resource Include="Resources\Images\desc_gray.png" />
     <Resource Include="Resources\Images\asc_gray.png" />
+    <EmbeddedResource Include="Resources\Cursors\copy.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Cursors\hand_open.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Cursors\hand_closed.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

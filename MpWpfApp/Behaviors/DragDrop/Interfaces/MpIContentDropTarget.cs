@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public interface MpIContentDropTarget {
+        object DataContext { get; }
         bool IsEnabled { get; set; }
 
         int DropIdx { get; set; }
@@ -14,7 +15,7 @@ namespace MpWpfApp {
         MpCursorType MoveCursor { get; }
         MpCursorType CopyCursor { get; }
 
-        void AutoScrollByMouse(MouseEventArgs e);
+        void AutoScrollByMouse();
         
         bool IsDragDataValid(object dragData);
         
@@ -25,8 +26,8 @@ namespace MpWpfApp {
         UIElement RelativeToElement { get; }
         List<Rect> DropRects { get; }
         List<Rect> GetDropTargetRects();
-        int GetDropTargetRectIdx(MouseEventArgs e);
-        void ContinueDragOverTarget(MouseEventArgs e);
+        int GetDropTargetRectIdx();
+        void ContinueDragOverTarget();
 
         MpDropLineAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }

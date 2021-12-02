@@ -51,7 +51,7 @@ namespace MpWpfApp {
                 Header = "Add New..."
             };
             var icon = new Image();
-            icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));
+            icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));            
             ami.Icon = icon;
 
             mil.Add(ami);

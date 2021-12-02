@@ -26,7 +26,7 @@ namespace MpWpfApp {
         public AdornerLayer SeperatorAdornerLayer;
 
         public MpContentListView() : base() {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         public void UpdateAdorner() {
@@ -69,6 +69,8 @@ namespace MpWpfApp {
             SeperatorAdornerLayer.Add(seperatorAdorner);
 
             UpdateAdorner();
+
+            ContentListDropBehavior.Attach(this);
             
             UpdateUi();
         }
@@ -203,6 +205,8 @@ namespace MpWpfApp {
         }
 
         private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
+            ContentListDropBehavior.Detach();
+
             if(BindingContext == null) {
                 return;
             }

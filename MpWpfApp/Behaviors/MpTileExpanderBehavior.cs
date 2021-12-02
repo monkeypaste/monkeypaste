@@ -22,27 +22,46 @@ namespace MpWpfApp {
         private Point _lastMousePosition;
         private FrameworkElement _mainWindowTitlePanel;
 
+        private object _dataContext;
+
         public static bool IsAnyExpandingOrUnexpanding { get; set; } = false;
 
         protected override void OnAttached() {
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
-            AssociatedObject.Unloaded += AssociatedObject_Unloaded;
-
-            _mainWindowTitlePanel = (Application.Current.MainWindow as MpMainWindow).TitleMenu;
+            base.OnAttached();
+            if(!AssociatedObject.IsLoaded) {
+                AssociatedObject.Loaded += AssociatedObject_Loaded;
+                AssociatedObject.Unloaded += AssociatedObject_Unloaded;
+            } else {
+                OnLoaded();
+            }
         }
 
-        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
-            if(AssociatedObject != null) {
+        protected override void OnDetaching() {
+            base.OnDetaching();
+            if (AssociatedObject != null) {
                 AssociatedObject.Loaded -= AssociatedObject_Loaded;
                 AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
             }
             MpMainWindowViewModel.Instance.OnMainWindowHide -= MainWindowViewModel_OnMainWindowHide;
+
+            MpMessenger.Instance.Unregister<MpMessageType>(_dataContext, ReceiveClipTileMessage, _dataContext);
+        }
+
+        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
+            Detach();
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {
-            MpMessenger.Instance.Register<MpMessageType>(AssociatedObject.DataContext, ReceiveClipTileMessage, AssociatedObject.DataContext);
+            OnLoaded();
+        }
+
+        private void OnLoaded() {
+            _dataContext = AssociatedObject.DataContext;
+            MpMessenger.Instance.Register<MpMessageType>(_dataContext, ReceiveClipTileMessage, _dataContext);
 
             MpMainWindowViewModel.Instance.OnMainWindowHide += MainWindowViewModel_OnMainWindowHide;
+
+            _mainWindowTitlePanel = (Application.Current.MainWindow as MpMainWindow).TitleMenu;
         }
 
         #region Manual Resize Event Handlers
@@ -100,9 +119,9 @@ namespace MpWpfApp {
 
         private void ReceiveClipTileMessage(MpMessageType msg) {
             switch(msg) {
+
                 case MpMessageType.Expand:
                     Expand();
-
                     _mainWindowTitlePanel.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
                     _mainWindowTitlePanel.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
                     _mainWindowTitlePanel.PreviewMouseMove += AssociatedObject_MouseMove;
@@ -139,7 +158,7 @@ namespace MpWpfApp {
 
         public void Resize(double deltaHeight) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            if (!ctvm.IsExpanded) {
+            if (!ctvm.IsExpanded || MpContentDropManager.Instance.IsDragAndDrop) {
                 return;
             }
 
@@ -177,6 +196,8 @@ namespace MpWpfApp {
             //need to do this so listboxitem matches w/ datacontext or it will expand to another tiles size
             IsAnyExpandingOrUnexpanding = true;
             mwvm.IsResizing = true;
+
+            MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
 
             var _deltaSize = new Point();
 

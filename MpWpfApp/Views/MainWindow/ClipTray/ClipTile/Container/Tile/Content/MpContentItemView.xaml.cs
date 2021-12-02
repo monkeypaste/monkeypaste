@@ -51,11 +51,18 @@ namespace MpWpfApp {
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = true;
+            if(!MpContentDropManager.Instance.IsDragAndDrop &&
+                (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
+                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
+            }
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
+            if (!MpContentDropManager.Instance.IsDragAndDrop) {
+                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            }
         }
         #region Event Handlers
 

@@ -76,6 +76,8 @@ namespace MpWpfApp {
 
         private void ClipTileToggleEditButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             ClipTileToggleEditButton.IsChecked = !ClipTileToggleEditButton.IsChecked;
+            BindingContext.Parent.IsExpanded = ClipTileToggleEditButton.IsChecked.Value;
+
             e.Handled = true;
         }
 
