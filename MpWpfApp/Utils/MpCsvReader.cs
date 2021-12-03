@@ -96,14 +96,34 @@ namespace MpWpfApp {
                 result.Add(curValue.ToString());
             if (result.Count > 0)
                 yield return result;
+        }
 
+        public static string GetCsv(string str) {
+            //var sb = new StringBuilder();
+            string outStr = string.Empty;
+            var fd = str.ToFlowDocument();
+
+            foreach(var block in fd.Blocks) {
+                if(block is Table t) {
+                    foreach(var rowGroup in t.RowGroups) {
+                        foreach(var row in rowGroup.Rows) {
+                            foreach(var c in row.Cells) {
+                                outStr += c.ToPlainText() + ",";
+                            }
+                            outStr += Environment.NewLine;
+                        }
+                    }
+                }
+            }
+
+            return outStr;
         }
 
         public static FlowDocument GetFlowDocument(string str) {
             var csv = FromString(str).ToList();
             // from https://docs.microsoft.com/en-us/dotnet/desktop/wpf/advanced/how-to-build-a-table-programmatically?redirectedfrom=MSDN&view=netframeworkdesktop-4.8
 
-            var table = new System.Windows.Documents.Table();
+            var table = new Table();
 
             //table.CellSpacing = double.NaN;
             table.Background = Brushes.White;

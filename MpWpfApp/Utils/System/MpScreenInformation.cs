@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace MpWpfApp {
     // note this class considers dpix = dpiy
@@ -99,6 +100,8 @@ namespace MpWpfApp {
         Raw = 2,
     }
     public class MpScreenInformation {
+        public static uint DefaultDpi = 96;
+
         public static uint RawDpi { get; private set; }
         public static uint DpiX { get; private set; }
         public static uint DpiY { get; private set; }
@@ -110,6 +113,19 @@ namespace MpWpfApp {
             RawDpi = Math.Max(dpiX, dpiY);
             DpiX = dpiX;
             DpiY = dpiY;
+        }
+
+        public static MpTaskbarLocation TaskbarLocation {
+            get {
+                if (SystemParameters.WorkArea.Top == 0) {
+                    return MpTaskbarLocation.Bottom;
+                } else if (SystemParameters.WorkArea.Left != 0) {
+                    return MpTaskbarLocation.Right;
+                } else if (SystemParameters.WorkArea.Right != SystemParameters.PrimaryScreenWidth) {
+                    return MpTaskbarLocation.Left;
+                }
+                return MpTaskbarLocation.Top;
+            }
         }
 
         /// <summary>

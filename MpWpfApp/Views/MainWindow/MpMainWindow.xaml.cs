@@ -23,11 +23,11 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            await LoadMainWindow();
+        private  void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+            LoadMainWindow();
         }
 
-        private async Task LoadMainWindow() {
+        private void LoadMainWindow() {
             WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
@@ -45,12 +45,7 @@ namespace MpWpfApp {
 
             // MpPasteToAppPathViewModelCollection.Instance.Init();
 
-            int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
-            await Task.Delay(3000);
-            MpStandardBalloonViewModel.ShowBalloon(
-                    "Monkey Paste",
-                    "Successfully loaded w/ " + totalItems + " items",
-                    Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+            
 
             sw.Stop();
 
@@ -87,7 +82,7 @@ namespace MpWpfApp {
         }
 
         private void MainWindowCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            if (Mouse.GetPosition(MainWindowGrid).Y < -10) {
+            if (Mouse.GetPosition(this).Y < 0) {
                 var mwvm = DataContext as MpMainWindowViewModel;
                 mwvm.HideWindowCommand.Execute(null);
             }

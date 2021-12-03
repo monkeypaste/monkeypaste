@@ -981,6 +981,13 @@ namespace MpWpfApp {
             return MpHelpers.Instance.ConvertPlainTextToRichText(str);
         }
 
+        public static string ToCsv(this string str) {
+            if(string.IsNullOrWhiteSpace(str)) {
+                return str == null ? string.Empty:str;
+            }
+            return MpEasyCSV.GetCsv(str);
+        }
+
         public static string ToPlainText(this string str) {
             if (str == null) {
                 return string.Empty;
@@ -1015,6 +1022,13 @@ namespace MpWpfApp {
 
         public static string ToPlainText(this FlowDocument doc) {
             return doc.ToRichText().ToPlainText();
+        }
+
+        public static string ToPlainText(this TextElement te) {
+            if(te == null) {
+                return string.Empty;
+            }
+            return new TextRange(te.ContentStart, te.ContentEnd).Text;
         }
 
         public static MpEventEnabledFlowDocument ToFlowDocument(this string str) {

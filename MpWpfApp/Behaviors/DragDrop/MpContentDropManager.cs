@@ -81,6 +81,10 @@ namespace MpWpfApp {
 
         public void StopDrag() {
             IsDragAndDrop = false;
+            if(DropPriority == int.MaxValue) {
+
+            }
+            DropPriority = -1;
             _autoScrollTimer.Stop(); 
             _dropTargets.ForEach(x => x.Reset());
         }

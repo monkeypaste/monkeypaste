@@ -120,40 +120,54 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double MainWindowWidth { get; set; } = SystemParameters.WorkArea.Width;
+        //public Rect MainWindowRect { get; set; } = new Rect(0, 0, MpMeasurements.Instance.ScreenWidth, MpMeasurements.Instance.MainWindowDefaultHeight);
 
-        public double MainWindowContainerHeight { get; set; } = SystemParameters.WorkArea.Height;
+        public double MainWindowWidth { get; set; } = MpMeasurements.Instance.ScreenWidth;
 
-        private double _mainWindowHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
-        public double MainWindowHeight { 
+        public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
+
+        public double MainWindowTop { get; set; } = SystemParameters.WorkArea.Bottom;// (double)int.MaxValue;
+
+        public double MainWindowContainerTop {
             get {
-                return _mainWindowHeight;
-            }
-            set {
-                if(_mainWindowHeight != value) {
-                    _lastMainWindowHeight = _mainWindowHeight;
-                    _mainWindowHeight = value;
-                    OnPropertyChanged(nameof(MainWindowHeight));
+                switch (MpScreenInformation.TaskbarLocation) {
+                    case MpTaskbarLocation.Bottom:
+                        return SystemParameters.WorkArea.Height - MainWindowHeight;
                 }
+                return 0;
             }
         }
 
-        public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
+        //private double _mainWindowHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
+        //public double MainWindowHeight { 
+        //    get {
+        //        return _mainWindowHeight;
+        //    }
+        //    set {
+        //        if(_mainWindowHeight != value) {
+        //            _lastMainWindowHeight = _mainWindowHeight;
+        //            _mainWindowHeight = value;
+        //            OnPropertyChanged(nameof(MainWindowHeight));
+        //        }
+        //    }
+        //}
 
-        private double _mainWindowGridTop = SystemParameters.PrimaryScreenHeight;
-        public double MainWindowTop {
-            get {
-                return _mainWindowGridTop;
-            }
-            set {
-                if(_mainWindowGridTop != value) {
-                    _lastMainWindowTop = _mainWindowGridTop;
-                    _mainWindowGridTop = value;
-                    OnPropertyChanged(nameof(MainWindowTop));
-                    OnPropertyChanged(nameof(DropCanvasHeight));
-                }
-            }
-        }
+        //public double MainWindowBottom { get; set; } = SystemParameters.WorkArea.Height;
+
+        //private double _mainWindowGridTop = SystemParameters.PrimaryScreenHeight;
+        //public double MainWindowTop {
+        //    get {
+        //        return _mainWindowGridTop;
+        //    }
+        //    set {
+        //        if(_mainWindowGridTop != value) {
+        //            _lastMainWindowTop = _mainWindowGridTop;
+        //            _mainWindowGridTop = value;
+        //            OnPropertyChanged(nameof(MainWindowTop));
+        //            OnPropertyChanged(nameof(DropCanvasHeight));
+        //        }
+        //    }
+        //}
 
         public double DropCanvasHeight => MainWindowTop;
 
@@ -169,8 +183,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-
 
         public double ClipTrayAndCriteriaListHeight {
             get {
@@ -237,11 +249,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods        
-        public MpMainWindowViewModel() : base(null) {  }
+        public MpMainWindowViewModel() : base(null) {
+        }
 
         public async Task Init() {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
+
+            
 
             await MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
@@ -279,9 +294,20 @@ namespace MpWpfApp {
 
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
-
-           
+                        
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
+
+            MpClipTrayViewModel.Instance.RequeryCommand.Execute(null);
+
+            while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
+
+            int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            MpStandardBalloonViewModel.ShowBalloon(
+                    "Monkey Paste",
+                    "Successfully loaded w/ " + totalItems + " items",
+                    Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+            Application.Current.Resources["MainWindowViewModel"] = MpMainWindowViewModel.Instance;
 
             IsMainWindowLoading = false;
         }
@@ -298,36 +324,46 @@ namespace MpWpfApp {
             }
         }
 
-        public void SetupMainWindowRect() {
-            var mw = (MpMainWindow)Application.Current.MainWindow;
 
-            mw.Left = SystemParameters.WorkArea.Left;
+        public void SetupMainWindowRect() {
+            //var mw = (MpMainWindow)Application.Current.MainWindow;
+
+            //mw.Left = SystemParameters.WorkArea.Left;
             //mw.Height = MpMeasurements.Instance.MainWindowMinHeight;
 
-            _startMainWindowTop = SystemParameters.WorkArea.Bottom;
-            if (SystemParameters.WorkArea.Top == 0) {
-                //if taskbar is at the bottom
-                mw.Width = SystemParameters.PrimaryScreenWidth;
-                _endMainWindowTop = SystemParameters.WorkArea.Height - MainWindowHeight;
-            } else if (SystemParameters.WorkArea.Left != 0) {
-                //if taskbar is on the right
-                mw.Width = SystemParameters.WorkArea.Width;
-                _endMainWindowTop = SystemParameters.PrimaryScreenHeight - mw.Height;
-            } else if (SystemParameters.WorkArea.Right != SystemParameters.PrimaryScreenWidth) {
-                //if taskbar is on the left
-                mw.Width = SystemParameters.WorkArea.Width;
-                _endMainWindowTop = SystemParameters.WorkArea.Height - mw.Height;
-            } else {
-                //if taskbar is on the top
-                mw.Width = SystemParameters.PrimaryScreenWidth;
-                _endMainWindowTop = SystemParameters.PrimaryScreenHeight - mw.Height;
+            switch (MpScreenInformation.TaskbarLocation) {
+                case MpTaskbarLocation.Bottom:
+                    _startMainWindowTop = MainWindowHeight; //SystemParameters.WorkArea.Bottom;
+                    _endMainWindowTop = 0;// SystemParameters.WorkArea.Height - MainWindowHeight;
+                    break;
             }
+
+            //_startMainWindowTop = SystemParameters.WorkArea.Bottom;
+            //if (SystemParameters.WorkArea.Top == 0) {
+
+            //    //if taskbar is at the bottom
+            //    //mw.Width = SystemParameters.PrimaryScreenWidth;
+            //    _endMainWindowTop = SystemParameters.WorkArea.Height - MainWindowHeight;
+            //} else if (SystemParameters.WorkArea.Left != 0) {
+            //    //if taskbar is on the right
+            //    //mw.Width = SystemParameters.WorkArea.Width;
+            //    _endMainWindowTop = SystemParameters.PrimaryScreenHeight - MainWindowHeight;
+            //} else if (SystemParameters.WorkArea.Right != SystemParameters.PrimaryScreenWidth) {
+            //    //if taskbar is on the left
+            //    //mw.Width = SystemParameters.WorkArea.Width;
+            //    _endMainWindowTop = SystemParameters.WorkArea.Height - MainWindowHeight;
+            //} else {
+            //    //if taskbar is on the top
+            //    //mw.Width = SystemParameters.PrimaryScreenWidth;
+            //    _endMainWindowTop = SystemParameters.PrimaryScreenHeight - MainWindowHeight;
+            //}
 
             MainWindowTop = _startMainWindowTop;
 
-            OnPropertyChanged(nameof(MainWindowWidth));
-            OnPropertyChanged(nameof(MainWindowContainerHeight));
+            //OnPropertyChanged(nameof(MainWindowWidth));
+            //OnPropertyChanged(nameof(MainWindowContainerHeight));
         }
+
         #endregion
 
         #region Private Methods
@@ -367,6 +403,11 @@ namespace MpWpfApp {
                         }
                     }
                     break;
+                //case nameof(MainWindowRect):
+                //    OnPropertyChanged(nameof(MainWindowTop));
+                //    OnPropertyChanged(nameof(MainWindowHeight));
+                //    OnPropertyChanged(nameof(MainWindowWidth));
+                //    break;
             }
         }
 
@@ -433,9 +474,9 @@ namespace MpWpfApp {
             //Ss = MpHelpers.Instance.CopyScreen();
             //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
-            if (Application.Current.MainWindow == null) {
-                Application.Current.MainWindow = new MpMainWindow();
-            }            
+            //if (Application.Current.MainWindow == null) {
+            //    Application.Current.MainWindow = new MpMainWindow();
+            //}            
 
             SetupMainWindowRect();
 
@@ -447,9 +488,20 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
+            OnPropertyChanged(nameof(MainWindowContainerTop));
+
+            //MainWindowTop = _endMainWindowTop;
+            //IsMainWindowLoading = false;
+            //IsMainWindowOpening = false;
+            //IsMainWindowOpen = true;
+            //OnMainWindowShow?.Invoke(this, null);
+
+            //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+
+            //return;
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             double fps = 30;
-            double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
+            double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
 
             var timer = new DispatcherTimer(DispatcherPriority.Normal);
             timer.Interval = TimeSpan.FromMilliseconds(fps);
@@ -460,7 +512,7 @@ namespace MpWpfApp {
                 } else {
                     MainWindowTop = _endMainWindowTop;
                     timer.Stop();
-                    MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+                    IsMainWindowLoading = false;
                     IsMainWindowOpening = false;
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
@@ -483,7 +535,7 @@ namespace MpWpfApp {
                       !_isExpanded &&
                       !IsResizing &&
                       !IsShowingDialog &&
-                      !MpContentDropManager.Instance.IsDragAndDrop &&
+                      //!MpContentDropManager.Instance.IsDragAndDrop &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);
@@ -520,7 +572,7 @@ namespace MpWpfApp {
             if(IsMainWindowOpen) {
                 double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
                 double fps = 30;
-                double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
+                double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
 
                 var timer = new DispatcherTimer(DispatcherPriority.Render);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);

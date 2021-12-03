@@ -17,22 +17,23 @@
         xmlns:local="clr-namespace:MpWpfApp"
         Title="MpMainWindow"
         WindowStyle="None"
+        
         AllowsTransparency="True"
         Background="Transparent"
-        Top="0"
+        Top="{Binding MainWindowContainerTop}"
         Left="0"
         Visibility="Visible"
         Loaded="MainWindow_Loaded"
         Deactivated="MainWindow_Deactivated"
         ShowInTaskbar="False"
         ResizeMode="CanResize"
-        WindowState="Normal"
-        Height="{Binding MainWindowContainerHeight}"
+        WindowState="Normal" 
+            MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
+        Height="{Binding MainWindowHeight}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                          IsDesignTimeCreatable=False}">
     <Canvas x:Name="MainWindowCanvas"
-            MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
             Height="{Binding MainWindowHeight}"
             Width="{Binding MainWindowWidth}">
         <!--<Image Source="{Binding Ss}"
@@ -49,11 +50,12 @@
                 <BlurEffect KernelType="Gaussian"  Radius="15" RenderingBias="Performance"/>
             </Image.Effect>
         </Image>-->
-        <local:MpExternalDropView />
+        <local:MpExternalDropView x:Name="ExternalDropView" />
         <Grid x:Name="MainWindowGrid"
-              Canvas.Top="{Binding MainWindowTop}"
-              Canvas.Left="0"
+              Height="{Binding MainWindowHeight}"
               Width="{Binding MainWindowWidth}"
+              Canvas.Top="{Binding MainWindowTop}"
+              Canvas.Left="0"              
               Background="Green">
             <Grid.RowDefinitions>
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />

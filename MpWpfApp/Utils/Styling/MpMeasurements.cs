@@ -3,6 +3,14 @@ using System.Windows;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+    public enum MpTaskbarLocation {
+        None,
+        Bottom,
+        Right,
+        Top,
+        Left
+    }
+
     public class MpMeasurements : MpSingleton<MpMeasurements> {
         public readonly double PHI = 1.618033988749894;
 
@@ -10,7 +18,12 @@ namespace MpWpfApp {
             MpConsole.WriteLine($"Old screen height: {SystemParameters.PrimaryScreenHeight * 0.35} New Height: {MainWindowDefaultHeight}");
         }
 
+        #region Public Methods
+
         public void Measure() { }
+
+
+        #endregion
 
         #region Screen
 
@@ -67,7 +80,7 @@ namespace MpWpfApp {
 
         public double MainWindowDefaultHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;// SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
+                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;// * MpPreferences.Instance.ThisAppDip;// SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
             }
         }
 
@@ -79,7 +92,7 @@ namespace MpWpfApp {
 
         public double MainWindowMaxHeight {
             get {
-                return SystemParameters.WorkArea.Height;
+                return SystemParameters.WorkArea.Height;// * MpPreferences.Instance.ThisAppDip;
             }
         }
 

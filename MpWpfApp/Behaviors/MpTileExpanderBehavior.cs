@@ -173,8 +173,8 @@ namespace MpWpfApp {
             double boundAdjust = 0;
             if (mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
                 boundAdjust = mwvm.MainWindowTop - MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
-            } else if (mwvm.MainWindowTop > mwvm.MainWindowContainerHeight - MpMeasurements.Instance.MainWindowMinHeight) {
-                boundAdjust = mwvm.MainWindowTop - (mwvm.MainWindowContainerHeight - MpMeasurements.Instance.MainWindowMinHeight);
+            } else if (mwvm.MainWindowTop > mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight) {
+                boundAdjust = mwvm.MainWindowTop - (mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight);
             }
 
             mwvm.MainWindowTop -= boundAdjust;

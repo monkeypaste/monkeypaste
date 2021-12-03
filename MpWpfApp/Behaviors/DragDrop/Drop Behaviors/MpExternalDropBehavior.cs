@@ -1,12 +1,29 @@
 ﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
+    public enum MpExternalDropFileType {
+        None = 0,
+        Txt,
+        Csv,
+        Rtf,
+        Bmp,
+        Png,
+        File
+    }
+
     public class MpExternalDropBehavior : MpDropBehaviorBase<MpExternalDropView> {
+        #region Singleton Definition
+        private static readonly Lazy<MpExternalDropBehavior> _Lazy = new Lazy<MpExternalDropBehavior>(() => new MpExternalDropBehavior());
+        public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
+        #endregion
+
         private IDataObject _ido;
 
         public override int DropPriority => int.MaxValue;
@@ -16,7 +33,7 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override UIElement RelativeToElement => Application.Current.MainWindow;
+        public override UIElement RelativeToElement => Application.Current.MainWindow as MpMainWindow;
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
@@ -41,26 +58,98 @@ namespace MpWpfApp {
                 MpMeasurements.Instance.ScreenWidth, 
                 MpMeasurements.Instance.ScreenHeight - MpMainWindowViewModel.Instance.MainWindowTop);
 
-            return new List<Rect> { extRect };
+            return new List<Rect> { new Rect() };
+        }
+
+        public override int GetDropTargetRectIdx() {
+            Point mp = Mouse.GetPosition(RelativeToElement);
+            MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
+            if(mp.Y < 0) {
+                return 0;
+            }
+            return -1;
         }
 
         public override async Task StartDrop() {
             // TODO create IDataObject and call DoDragDrop here, ignoring templates
             //await Task.Delay(1);
 
-            Application.Current.MainWindow.IsEnabled = false;
+            //Application.Current.MainWindow.IsEnabled = false;
+
+            MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp += GlobalHook_MouseUp;
             _ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             DragDrop.DoDragDrop(AssociatedObject, _ido, DragDropEffects.Copy);
         }
 
+        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+            MpContentDropManager.Instance.StopDrag();
+
+            Application.Current.MainWindow.Activate();
+            Application.Current.MainWindow.Focus();
+            Application.Current.MainWindow.Topmost = true;
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+
+            MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp -= GlobalHook_MouseUp;
+        }
+
         public override async Task Drop(bool isCopy, object dragData) {
             // TODO when templates present trigger w/ HideWindow command
-            await Task.Delay(10);
-            Application.Current.MainWindow.IsEnabled = true;
+            await Task.Delay(300);
+                        
+            
+            //Application.Current.MainWindow.IsEnabled = true;
         }
 
         public override void AutoScrollByMouse() {
             return;
+        }
+
+        public bool IsProcessNeedFileDrop(string processPath) {
+            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
+                return false;
+            }
+
+            try {
+                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
+                if (processName == null) {
+                    return false;
+                }
+                switch (processName) {
+                    case "explorer":
+                    case "mspaint":
+                    case "notepad":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            catch (Exception ex) {
+                MonkeyPaste.MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
+                return false;
+            }
+        }
+
+        public bool IsProcessLikeNotepad(string processPath) {
+            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
+                return false;
+            }
+
+            try {
+                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
+                if (processName == null) {
+                    return false;
+                }
+                switch (processName) {
+                    case "notepad":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            catch (Exception ex) {
+                MonkeyPaste.MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
+                return false;
+            }
         }
     }
 

@@ -766,54 +766,6 @@ namespace MpWpfApp {
             return null;
         }
 
-        public bool IsProcessLikeNotepad(string processPath) {
-            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
-
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
-                return false;
-            }
-        }
-
-        public bool IsProcessNeedFileDrop(string processPath) {
-            if(string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
-
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "explorer":
-                    case "mspaint":
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
-                return false;
-            }
-        }
-
         public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f,precision);
         }
@@ -867,14 +819,14 @@ namespace MpWpfApp {
             return ConvertBytesToMegabytes(total);
         }
 
-        public string GetUniqueFileName(MpCopyItemType fileType,string baseName = "", string baseDir = "") {
+        public string GetUniqueFileName(MpExternalDropFileType fileType,string baseName = "", string baseDir = "") {
             //only support Image and RichText fileTypes
             string fp = string.IsNullOrEmpty(baseDir) ? Path.GetTempPath() : baseDir;
             string fn = string.IsNullOrEmpty(baseName) ? Path.GetRandomFileName() : MpHelpers.Instance.RemoveSpecialCharacters(baseName.Trim());
             if (string.IsNullOrEmpty(fn)) {
                 fn = Path.GetRandomFileName();
             }
-            string fe = fileType == MpCopyItemType.RichText ? ".txt" : ".png";
+            string fe = "." + Enum.GetName(typeof(MpExternalDropFileType), fileType).ToLower(); //fileType == MpCopyItemType.RichText ? ".txt" : ".png";
 
             int count = 1;
 
@@ -921,7 +873,7 @@ namespace MpWpfApp {
                 of.Write(text);
                 of.Close();
                 if(isTemporary) {
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+                    MpMainWindowViewModel.Instance.AddTempFile(filePath);
                 }
                 return filePath;
             }

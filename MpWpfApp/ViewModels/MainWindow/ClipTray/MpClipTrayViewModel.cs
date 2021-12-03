@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
 using System.Collections.Concurrent;
+using static OpenTK.Graphics.OpenGL.GL;
 
 
 namespace MpWpfApp {
@@ -44,8 +45,8 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
-        public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
+        //public string SelectedClipTilesMergedPlainText, SelectedClipTilesCsv;
+        //public string[] SelectedClipTilesFileList, SelectedClipTilesMergedPlainTextFileList, SelectedClipTilesMergedRtfFileList;
 
         #region View Models
 
@@ -332,7 +333,7 @@ namespace MpWpfApp {
         public MpClipTrayViewModel() : base() { }
 
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync((Action)(() => {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
                 MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
@@ -346,7 +347,7 @@ namespace MpWpfApp {
                 DefaultLoadCount = MpMeasurements.Instance.TotalVisibleClipTiles * 1 + 2;
 
                 MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
-            }));
+            });
         }
 
         #endregion
@@ -700,75 +701,108 @@ namespace MpWpfApp {
             IDataObject d = new DataObject();
 
             //selection (if all subitems are dragging select host if no subitems are selected select all)
-            SelectedItems.ForEach(x => x.DoCommandSelection());
+            List<MpCopyItem> selectedModels = new List<MpCopyItem>();
+            if(SelectedItems.Count == 0) {
+                selectedModels = PersistentSelectedModels;
+            } else {
+                SelectedItems.ForEach(x => x.DoCommandSelection());
+                foreach(var sctvm in SelectedItems) {
+                    foreach(var scivm in sctvm.SelectedItems) {
+                        selectedModels.Add(scivm.CopyItem);
+                    }
+                }
+            }
+            if(selectedModels.Count == 0) {
+                return d;
+            }
+
+            selectedModels.Reverse();
 
             string rtf = string.Empty.ToRichText();
+            string pt = string.Empty;
+
             if (isToExternalApp) {
                 //gather rtf and text NOT setdata it needs file drop first
                 foreach (var sctvm in SelectedItems) {
                     string sctrtf = await sctvm.GetSubSelectedPastableRichText(isToExternalApp);
                     rtf = MpHelpers.Instance.CombineRichText(sctrtf, rtf);
                 }
+                pt = rtf.ToPlainText();
             }
 
             //set file drop (always must set so when dragged out of application user doesn't get no-drop cursor)
-            if (MpHelpers.Instance.IsProcessNeedFileDrop(MpRunningApplicationManager.Instance.ActiveProcessPath) &&
+            if (MpExternalDropBehavior.Instance.IsProcessNeedFileDrop(MpRunningApplicationManager.Instance.ActiveProcessPath) &&
                 isDragDrop) {
                 //only when pasting into explorer or notepad must have file drop
-                var sctfl = SelectedClipTilesFileList;
-                if (sctfl != null) {
-                    if (MpHelpers.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
-                        d.SetData(DataFormats.FileDrop, SelectedClipTilesMergedPlainTextFileList);
-                    } else if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                        d.SetData(DataFormats.FileDrop, SelectedClipTilesMergedRtfFileList);
+                var sctfl = new List<string>();
+                if (selectedModels.All(x=>x.ItemType != MpCopyItemType.FileList) &&
+                    (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
+                    //external drop w/ ctrl down merges all selected items (unless file list)
+                    // TODO maybe for multiple files w/ ctrl down compress into zip?
+                    if (MpExternalDropBehavior.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
+                        //merge as plain text
+                        string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Txt, selectedModels[0].Title);
+                        sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, pt, true));
                     } else {
-                        d.SetData(DataFormats.FileDrop, sctfl);
+                        //merge as rich text
+                        string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Rtf, selectedModels[0].Title);
+                        sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, rtf, true));
+                    }
+                } else {
+                    foreach (var sci in selectedModels) {
+                        if (sci.ItemType == MpCopyItemType.FileList) {
+                            sctfl.AddRange(sci.ItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                        } else if (sci.ItemType == MpCopyItemType.Image) {
+                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Png, sci.Title);
+                            sctfl.Add(MpHelpers.Instance.WriteBitmapSourceToFile(fp, sci.ItemData.ToBitmapSource(), true));
+                        } else if (MpExternalDropBehavior.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
+                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Txt, sci.Title);
+                            sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, sci.ItemData.ToPlainText(), true));
+                        } else {
+                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Rtf, sci.Title);
+                            sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, sci.ItemData.ToRichText(), true));
+                        }
                     }
                 }
+
+                (d as DataObject).SetFileDropList(sctfl.ToStringCollection());
+               // d.SetData(DataFormats.FileDrop, sctfl.ToStringCollection());
             }
 
             if (isToExternalApp) {
                 //set rtf and text
                 if (!string.IsNullOrEmpty(rtf)) {
-                    d.SetData(DataFormats.Rtf, rtf);
-                    string pt = rtf.ToPlainText();
+                    d.SetData(DataFormats.Rtf, rtf);                    
+                }
+                if(!string.IsNullOrEmpty(pt)) {
                     d.SetData(DataFormats.Text, rtf.ToPlainText());
                 }
-
                 //set image
                 if (SelectedItems.Count == 1 && SelectedItems[0].HeadItem.CopyItem.ItemType == MpCopyItemType.Image) {
                     d.SetData(DataFormats.Bitmap, SelectedItems[0].HeadItem.CopyItem.ItemData.ToBitmapSource());
                 }
 
                 //set csv
-                var sctcsv = SelectedClipTilesCsv;
-                if (sctcsv != null) {
+                string sctcsv = string.Join(Environment.NewLine, selectedModels.Select(x => x.ItemData.ToCsv()));
+                if (!string.IsNullOrWhiteSpace(sctcsv)) {
                     d.SetData(DataFormats.CommaSeparatedValue, sctcsv);
                 }
 
                 //update metrics
-                foreach (var ctvm in SelectedItems) {
-                    if (ctvm.SelectedItems.Count == 0) {
-                        ctvm.HeadItem.CopyItem.PasteCount++;
-                    } else {
-                        foreach (var rtbvm in ctvm.SelectedItems) {
-                            rtbvm.CopyItem.PasteCount++;
-                        }
-                    }
-                }
+                selectedModels.ForEach(x => x.PasteCount++);
             }
 
             //set resorting
-            if (isDragDrop && SelectedItems != null && SelectedItems.Count > 0) {
-                foreach (var dctvm in SelectedItems) {
-                    if (dctvm.Count == 0 ||
-                        dctvm.SelectedItems.Count == dctvm.Count ||
-                        dctvm.SelectedItems.Count == 0) {
-                        //dctvm.IsClipDragging = true;
-                    }
-                }
-                d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedItems.ToList());
-            }
+            //if (isDragDrop && SelectedItems != null && SelectedItems.Count > 0) {
+            //    foreach (var dctvm in SelectedItems) {
+            //        if (dctvm.Count == 0 ||
+            //            dctvm.SelectedItems.Count == dctvm.Count ||
+            //            dctvm.SelectedItems.Count == 0) {
+            //            //dctvm.IsClipDragging = true;
+            //        }
+            //    }
+            //    //d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedItems.ToList());
+            //}
 
             return d;
             //awaited in MpMainWindowViewModel.Instance.HideWindow
@@ -1360,7 +1394,8 @@ namespace MpWpfApp {
             if (args == null || args.GetType() != typeof(string)) {
                 return;
             }
-            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(SelectedClipTilesMergedPlainText));
+            string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(pt));
         }
 
         public ICommand ScrollToHomeCommand => new RelayCommand(
@@ -1742,7 +1777,11 @@ namespace MpWpfApp {
 
         public ICommand SendSelectedClipsToEmailCommand => new RelayCommand(
             () => {
-                MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, SelectedItems[0].HeadItem.CopyItem.Title, SelectedClipTilesMergedPlainText));
+                string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                MpHelpers.Instance.OpenUrl(
+                    string.Format("mailto:{0}?subject={1}&body={2}", 
+                    string.Empty, SelectedItems[0].HeadItem.CopyItem.Title, 
+                    pt));
                 //MpClipTrayViewModel.Instance.ClearClipSelection();
                 //IsSelected = true;
                 //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
@@ -1796,13 +1835,15 @@ namespace MpWpfApp {
             async () => {
                 BitmapSource bmpSrc = null;
                 await Task.Run(() => {
-                    bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(SelectedClipTilesMergedPlainText);
+                    string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                    bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(pt);
                 });
                 MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
             },
             () => {
+                string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 return (GetSelectedClipsType() == MpCopyItemType.RichText) &&
-                    SelectedClipTilesMergedPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+                    pt.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
             });
 
         public ICommand SpeakSelectedClipsCommand => new RelayCommand(

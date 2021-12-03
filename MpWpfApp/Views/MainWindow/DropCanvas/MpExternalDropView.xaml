@@ -12,5 +12,6 @@
     <i:Interaction.Behaviors>
         <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
     </i:Interaction.Behaviors>
-    <Grid MouseDown="UserControl_MouseDown" />
+    <Grid Width="0" 
+          Height="0" />
 </UserControl>
