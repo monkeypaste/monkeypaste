@@ -114,7 +114,7 @@ namespace MpWpfApp {
                 }
             } else {
                 if (MpClipTrayViewModel.Instance.IsBusy || 
-                   !MpContentDropManager.Instance.IsDragAndDrop || 
+                   !MpDragDropManager.Instance.IsDragAndDrop || 
                    !_dropBehavior.IsEnabled ||
                    DropRects == null) {
                     Visibility = Visibility.Hidden;

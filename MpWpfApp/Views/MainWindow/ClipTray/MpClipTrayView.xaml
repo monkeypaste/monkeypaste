@@ -54,7 +54,7 @@
                              Loaded="ClipTray_Loaded"
                              IsSynchronizedWithCurrentItem="True"
                              Margin="0,0,0,0"
-                             Focusable="False"
+                             Focusable="True"
                              BorderThickness="0"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
@@ -115,22 +115,6 @@
                                 <Canvas IsItemsHost="True"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch" />
-                                <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                        Orientation="Horizontal"
-                                                        SnapsToDevicePixels="True"
-                                                        HorizontalAlignment="Left"
-                                                        IsItemsHost="True" />-->
-                                <!--<local:MpVirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                            ChildWidth="{local:MpMeasurementsBinding ClipTileBorderMinSize}"
-                                                            ChildHeight="{local:MpMeasurementsBinding ClipTileMinSize}"
-                                                            ChildCount="{Binding TotalItemsInQuery, Source={StaticResource ClipTrayViewModel}}"
-                                                            SnapsToDevicePixels="True"
-                                                            HorizontalAlignment="Left"
-                                                            IsItemsHost="True" />-->
-                                <!--<VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
-                                                    HorizontalAlignment="Left"
-                                                    IsItemsHost="True"
-                                                    Orientation="Horizontal" />-->
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>

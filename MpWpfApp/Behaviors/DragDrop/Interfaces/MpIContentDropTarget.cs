@@ -10,7 +10,7 @@ namespace MpWpfApp {
         bool IsEnabled { get; set; }
 
         int DropIdx { get; set; }
-        int DropPriority { get; }
+        MpDropType DropType { get; }
 
         MpCursorType MoveCursor { get; }
         MpCursorType CopyCursor { get; }

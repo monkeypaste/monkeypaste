@@ -18,12 +18,15 @@
                         BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
+                        IsHitTestVisible="{Binding HasScrollVelocity,
+                                                   Source={StaticResource ClipTrayViewModel},
+                                                   Converter={StaticResource BoolFlipConverter}}"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
-                        Focusable="False"
+                        Focusable="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor,

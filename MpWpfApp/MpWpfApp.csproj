@@ -112,6 +112,9 @@
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
+    <Compile Include="AttachedProperties\Selection\IMultiSelectCollectionView.cs" />
+    <Compile Include="AttachedProperties\Selection\MultiSelect.cs" />
+    <Compile Include="AttachedProperties\Selection\MultiSelectCollectionView.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
@@ -126,8 +129,7 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDragSource.cs" />
-    <Compile Include="Behaviors\DragDrop\MpContentDragBehavior.cs" />
-    <Compile Include="Behaviors\DragDrop\MpContentDropManager.cs" />
+    <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />

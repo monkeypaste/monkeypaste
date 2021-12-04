@@ -113,6 +113,7 @@
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"
               Grid.Column="0"
+              IsHitTestVisible="{Binding HasScrollVelocity, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolFlipConverter}}"
               MouseEnter="ClipTileTitleTextGrid_MouseEnter"
               MouseLeave="ClipTileTitleTextGrid_MouseLeave"
               PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
@@ -170,6 +171,7 @@
         <!--  Clip Title Icon Image  -->
         <Grid Grid.Column="1">
             <Button x:Name="ClipTileAppIconImageButton"
+                    IsHitTestVisible="{Binding HasScrollVelocity, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolFlipConverter}}"
                     MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                     MouseLeave="ClipTileAppIconImageButton_MouseLeave"
                     PreviewMouseLeftButtonDown="ClipTileAppIconImageButton_PreviewMouseLeftButtonDown"

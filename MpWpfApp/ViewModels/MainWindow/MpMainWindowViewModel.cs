@@ -256,7 +256,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            
+            MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
 
             await MpSystemTrayViewModel.Instance.Init();
             Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;

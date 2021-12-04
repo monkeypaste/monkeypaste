@@ -373,8 +373,8 @@ using System.Speech.Synthesis;
         public Size TotalUnexpandedSize {
             get {
                 return new Size(
-                MpMeasurements.Instance.ClipTileContentMinWidth,
-                MpMeasurements.Instance.ClipTileContentHeight);
+                    MpMeasurements.Instance.ClipTileContentMinWidth,
+                    MpMeasurements.Instance.ClipTileContentHeight);
             }
         }
 
@@ -491,16 +491,15 @@ using System.Speech.Synthesis;
         [MpDependsOnSibling("IsSelected")]
         public Brush TileBorderBrush {
             get {
-                if(Parent.IsScrolling || Parent.HasScrollVelocity) {
-                    return Brushes.Transparent;
-                }
-
                 if (Parent.PrimaryItem == this &&
                     Parent.SelectedItems.Count > 1) {
                     return Brushes.Blue;
                 }
                 if (IsSelected) {
                     return Brushes.Red;
+                }
+                if (Parent.IsScrolling || Parent.HasScrollVelocity) {
+                    return Brushes.Transparent;
                 }
                 if (IsHovering) {
                     return Brushes.Yellow;
@@ -556,6 +555,10 @@ using System.Speech.Synthesis;
 
         public bool IsDetailGridVisibile {
             get {
+                if(Parent.HasScrollVelocity) {
+                    return false;
+                }
+
                 if (IsExpanded) {
                     if (IsAnyEditingTemplate ||
                         IsAnyPastingTemplate) {
@@ -658,6 +661,7 @@ using System.Speech.Synthesis;
                 OnPropertyChanged(nameof(TileBorderBrush));
             }
         }
+                
 
         private bool _isHovering = false;
         [MpDependsOnParent("IsScrolling")]
@@ -675,6 +679,7 @@ using System.Speech.Synthesis;
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged(nameof(IsDetailGridVisibile));
                 }
             }
         }
@@ -769,6 +774,8 @@ using System.Speech.Synthesis;
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.Count; i++) {
+                    ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
+                    ccil[i].CompositeSortOrderIdx = i;
                     var civm = await CreateContentItemViewModel(ccil[i]);
                     ItemViewModels.Add(civm);
                 }
@@ -1046,9 +1053,9 @@ using System.Speech.Synthesis;
                 // 1. Item Resorted
 
                 //var civm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                //if(civm != null) {
-                //    if(civm.CompositeParentCopyItemId != ci.CompositeParentCopyItemId) {
-
+                //if (civm != null) {
+                //    if(ci.CompositeParentCopyItemId == 0) {
+                //        if(civm)
                 //    }
                 //}
             }

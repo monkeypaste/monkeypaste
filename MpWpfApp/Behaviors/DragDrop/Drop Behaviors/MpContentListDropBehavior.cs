@@ -25,7 +25,7 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override int DropPriority => 2;
+        public override MpDropType DropType => MpDropType.Tile;
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
@@ -169,7 +169,7 @@ namespace MpWpfApp {
                     if (dragModels[i].CompositeParentCopyItemId == 0 &&
                         !AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
                         //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-                        await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
+                        await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
                     }
                     if (AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
                         //if drag item is part of this tile
@@ -200,9 +200,10 @@ namespace MpWpfApp {
                 await dropModels[i].WriteToDatabaseAsync();
             }
 
-            await AssociatedObject.BindingContext.InitializeAsync(dropModels[0],AssociatedObject.BindingContext.QueryOffsetIdx);
 
-            if(!AssociatedObject.BindingContext.IsExpanded && !isCopy) {
+            await AssociatedObject.BindingContext.InitializeAsync(dropModels[0], AssociatedObject.BindingContext.QueryOffsetIdx);
+
+            if (!AssociatedObject.BindingContext.IsExpanded && !isCopy) {
                 bool needsRequery = false;
                 foreach (var dctvm in dragTiles) {
                     if (dropModels.Any(x => x.Id == dctvm.HeadItem.CopyItemId)) {
@@ -219,10 +220,10 @@ namespace MpWpfApp {
                 }
 
                 if (needsRequery) {
-                    MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
+                    //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
                 }
             }
-
         }
 
         public override void AutoScrollByMouse() {

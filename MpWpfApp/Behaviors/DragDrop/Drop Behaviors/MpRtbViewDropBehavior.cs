@@ -11,12 +11,11 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpRtbViewDropBehavior : MpDropBehaviorBase<MpRtbView> {
-
         private object _dataContext;
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override int DropPriority => 3;
+        public override MpDropType DropType => MpDropType.Content;
 
         public override UIElement RelativeToElement => AssociatedObject.Rtb;
 
@@ -106,7 +105,7 @@ namespace MpWpfApp {
             if(!base.IsDragDataValid(dragData)) {
                 return false;
             }
-            if(dragData is List<MpCopyItem> ddl) {
+            if(AssociatedObject != null && dragData is List<MpCopyItem> ddl) {
                 if(ddl.Count == 1 && ddl[0].Id == AssociatedObject.BindingContext.CopyItemId) {
                     return false;
                 }
@@ -115,7 +114,7 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            if (!IsDragDataValid(dragData)) {
+            if ( !IsDragDataValid(dragData)) {
                 MpConsole.WriteTraceLine("Invalid drop data: " + dragData?.ToString());
                 return;
             }
@@ -135,7 +134,7 @@ namespace MpWpfApp {
                     if (dragModels[i].CompositeParentCopyItemId == 0 &&
                         !AssociatedObject.BindingContext.Parent.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
                         //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-                        await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
+                        await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
                     }
                     var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
                     if (dcivm != null) {
@@ -153,6 +152,7 @@ namespace MpWpfApp {
             foreach (var dragModel in dragModels) {
                 await MergeContentItem(dragModel, isCopy);
             }
+
             //clean up all tiles with content dragged
             //if tile has no items recycle it
             //if it still has items sync sort order from its visuals
@@ -174,7 +174,8 @@ namespace MpWpfApp {
                 }
 
                 if (needsRequery) {
-                    MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                    //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
                 }
             }
 

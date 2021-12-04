@@ -96,10 +96,6 @@ namespace MpWpfApp {
                 MpMessenger.Instance.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance, 
                     ReceivedClipTrayViewModelMessage);
-
-                //MpMessenger.Instance.Register<MpMessageType>(
-                //    AssociatedObject.GetVisualAncestor<MpClipTrayView>().ClipTrayDropBehavior, 
-                //    ReceivedClipTrayViewModelMessage);
             });
             
             _timer = new DispatcherTimer(DispatcherPriority.Normal);
@@ -127,7 +123,7 @@ namespace MpWpfApp {
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
             MpClipTrayViewModel.Instance.ScrollOffset += _velocity;
             _velocity *= Friction;
-            MpClipTrayViewModel.Instance.HasScrollVelocity = Math.Abs(_velocity) >= 0.01;
+            MpClipTrayViewModel.Instance.HasScrollVelocity = Math.Abs(_velocity) >= 0.1;
         }
 
         private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {

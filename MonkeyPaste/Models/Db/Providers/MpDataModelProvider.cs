@@ -32,6 +32,8 @@ namespace MonkeyPaste {
 
         public void Init(MpIQueryInfo queryInfo) {
             QueryInfo = queryInfo;
+            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
         }
 
         public void ResetQuery() {
@@ -39,45 +41,6 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
-        public async Task UpdateQuery(int copyItemId, int newIdx, int newHeadId = -1) {
-            if(newIdx < 0) {
-                if(_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                    int newParentId = 0;
-                    var ccil = await GetCompositeChildrenAsync(copyItemId);
-                    for (int i = 0; i < ccil.Count; i++) {
-                        if(i == 0) {
-                            newParentId = ccil[i].Id;
-                            ccil[i].CompositeParentCopyItemId = 0;
-                        }  else {
-                            ccil[i].CompositeParentCopyItemId = newParentId;
-                        }
-                        ccil[i].CompositeSortOrderIdx = i;
-                        await ccil[i].WriteToDatabaseAsync();
-                    }
-                    if(newParentId > 0) {
-                        _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(copyItemId)] = newParentId;
-                    } else {
-                        _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
-                    }                    
-                }
-                return;
-            }
-
-            if(_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                int oldIdx = _allFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-                if(newIdx > oldIdx) {
-                    newIdx--;
-                }
-                _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
-
-            } 
-
-            if (newIdx >= _allFetchedAndSortedCopyItemIds.Count) {
-                _allFetchedAndSortedCopyItemIds.Add(newIdx);
-            } else {
-                _allFetchedAndSortedCopyItemIds.Insert(newIdx, copyItemId);
-            }
-        }
 
         #region MpQueryInfo Fetch Methods
 
@@ -95,7 +58,6 @@ namespace MonkeyPaste {
         }
 
         #endregion
-
 
         #region View Queries
 
@@ -743,6 +705,73 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task RemoveQueryItem(int copyItemId) {
+            if (_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                int newParentId = 0;
+                var ccil = await GetCompositeChildrenAsync(copyItemId);
+                for (int i = 0; i < ccil.Count; i++) {
+                    if (i == 0) {
+                        newParentId = ccil[i].Id;
+                        ccil[i].CompositeParentCopyItemId = 0;
+                    } else {
+                        ccil[i].CompositeParentCopyItemId = newParentId;
+                    }
+                    ccil[i].CompositeSortOrderIdx = i;
+                    await ccil[i].WriteToDatabaseAsync();
+                }
+                if (newParentId > 0) {
+                    _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(copyItemId)] = newParentId;
+                } else {
+                    _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
+                }
+            }
+        }
+        public void MoveOrInsertQueryItem(int copyItemId, int newIdx) {
+            if (_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                int oldIdx = _allFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
+                if (newIdx > oldIdx) {
+                    newIdx--;
+                }
+                _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
 
+            }
+
+            if (newIdx >= _allFetchedAndSortedCopyItemIds.Count) {
+                _allFetchedAndSortedCopyItemIds.Add(newIdx);
+            } else {
+                _allFetchedAndSortedCopyItemIds.Insert(newIdx, copyItemId);
+            }
+        }
+
+        private  void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem ci) {
+                //if(_allFetchedAndSortedCopyItemIds.Contains(ci.Id)) {
+                //    int newParentId = 0;
+                //    var ccil = await GetCompositeChildrenAsync(ci.Id);
+                //    for (int i = 0; i < ccil.Count; i++) {
+                //        if (i == 0) {
+                //            newParentId = ccil[i].Id;
+                //            ccil[i].CompositeParentCopyItemId = 0;
+                //        } else {
+                //            ccil[i].CompositeParentCopyItemId = newParentId;
+                //        }
+                //        ccil[i].CompositeSortOrderIdx = i;
+                //        await ccil[i].WriteToDatabaseAsync();
+                //    }
+                //    if (newParentId > 0) {
+                //        _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(ci.Id)] = newParentId;
+                //    } else {
+                //        _allFetchedAndSortedCopyItemIds.Remove(ci.Id);
+                //    }
+
+                //    QueryInfo.NotifyQueryChanged(false);
+                //}
+            }
+        }
+
+        private  void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpCopyItem ci) {
+            }
+        }
     }
 }

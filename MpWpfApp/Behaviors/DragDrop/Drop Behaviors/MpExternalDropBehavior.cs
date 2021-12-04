@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
         private IDataObject _ido;
 
-        public override int DropPriority => int.MaxValue;
+        public override MpDropType DropType => MpDropType.External;
 
         public override FrameworkElement AdornedElement => AssociatedObject;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
@@ -76,28 +76,12 @@ namespace MpWpfApp {
 
             //Application.Current.MainWindow.IsEnabled = false;
 
-            MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp += GlobalHook_MouseUp;
-            _ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
-            DragDrop.DoDragDrop(AssociatedObject, _ido, DragDropEffects.Copy);
-        }
-
-        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
-            MpContentDropManager.Instance.StopDrag();
-
-            Application.Current.MainWindow.Activate();
-            Application.Current.MainWindow.Focus();
-            Application.Current.MainWindow.Topmost = true;
-            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-
-            MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp -= GlobalHook_MouseUp;
+            var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
+            DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            // TODO when templates present trigger w/ HideWindow command
-            await Task.Delay(300);
-                        
-            
-            //Application.Current.MainWindow.IsEnabled = true;
+            await Task.Delay(1);
         }
 
         public override void AutoScrollByMouse() {

@@ -39,6 +39,10 @@ namespace MpWpfApp {
             //Keyboard.Focus(sender as FrameworkElement);
             //bool result = Focus();
             //MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
+            var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
+            if(ctcv != null) {
+                ctcv.Focus();
+            }
         }
 
         #region Selection

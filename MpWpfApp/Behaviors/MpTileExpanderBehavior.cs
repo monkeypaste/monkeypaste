@@ -158,7 +158,7 @@ namespace MpWpfApp {
 
         public void Resize(double deltaHeight) {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            if (!ctvm.IsExpanded || MpContentDropManager.Instance.IsDragAndDrop) {
+            if (!ctvm.IsExpanded || MpDragDropManager.Instance.IsDragAndDrop) {
                 return;
             }
 

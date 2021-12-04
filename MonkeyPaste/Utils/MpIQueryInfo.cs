@@ -43,6 +43,6 @@ namespace MonkeyPaste {
 
         public string SearchText { get;  set; }
 
-        void NotifyQueryChanged();
+        void NotifyQueryChanged(bool isFilterSortOrSearch = true);
     }
 }

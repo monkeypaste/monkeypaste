@@ -91,9 +91,11 @@ namespace MpWpfApp {
                 ocivm.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
                 ocivm.OnSyncModels -= Rtbivm_OnSyncModels;
                 ocivm.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+                ocivm.OnMergeRequest -= Ncivm_OnMergeRequest;
             }
             if (e.NewValue != null && e.NewValue is MpContentItemViewModel ncivm) {
                 if (!ncivm.IsPlaceholder) {
+                    ncivm.OnMergeRequest += Ncivm_OnMergeRequest;
                     ncivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
                     ncivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
                     ncivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
@@ -108,6 +110,21 @@ namespace MpWpfApp {
             }
         }
 
+        private void Ncivm_OnMergeRequest(object sender, EventArgs e) {
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                RtbViewDropBehavior.Attach(this);
+
+                RtbViewDropBehavior.DropIdx = 1;
+
+                var mergeModels = MpClipTrayViewModel.Instance.PersistentSelectedModels;
+
+                mergeModels.Remove(BindingContext.CopyItem);
+
+                await RtbViewDropBehavior.Drop(false, mergeModels);
+
+                RtbViewDropBehavior.DropIdx = -1;
+            });
+        }
 
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;

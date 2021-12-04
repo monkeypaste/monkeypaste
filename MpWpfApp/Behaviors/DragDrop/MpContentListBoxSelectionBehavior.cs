@@ -12,21 +12,31 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MpWpfApp {    
-    public class MpContentDragBehavior : Behavior<MpContentItemView> {
-        private const double MINIMUM_DRAG_DISTANCE = 10;
+namespace MpWpfApp {    //MpContentDragBehavior
+    public class MpContentListBoxSelectionBehavior : Behavior<MpContentItemView> {
         private static MpContentContextMenuView _ContentContextMenu;
 
-        private bool _wasUnloaded = false;
+        #region Private Variables
+        private const double MINIMUM_DRAG_DISTANCE = 10;
 
-        private bool _isDropValid => _curDropTarget != null;
+        private bool IsDropValid => _curDropTarget != null;
 
-        private bool _isDragging => MpContentDropManager.Instance.IsDragAndDrop;
-        private bool _isDragCopy = false;
+        private bool IsDragging => MpDragDropManager.Instance.IsDragAndDrop;
+        private bool IsDragCopy = false;
 
         private Point _mouseStartPosition;
 
         private MpIContentDropTarget _curDropTarget;
+
+        private bool _wasUnloaded = false;
+
+        private MpContentItemViewModel _persistentContentItemViewModel;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
 
         protected override void OnAttached() {
             AssociatedObject.Loaded += AssociatedObject_Loaded;
@@ -49,7 +59,7 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
-            if(_isDragging) {
+            if(IsDragging) {
                 _wasUnloaded = true;
             } else if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 //Detach();
@@ -74,13 +84,14 @@ namespace MpWpfApp {
             }
             AssociatedObject.BindingContext.IsSelected = true;
 
-            _mouseStartPosition = e.GetPosition(Application.Current.MainWindow);
+            MpDragDropManager.Instance.StartDragCheck(e.GetPosition(Application.Current.MainWindow));
 
-            Mouse.AddMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
-            Mouse.AddMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
 
-            Keyboard.AddKeyDownHandler(Application.Current.MainWindow, MainWindow_KeyDown);
-            Keyboard.AddKeyUpHandler(Application.Current.MainWindow, MainWindow_KeyUp);
+            //Mouse.AddMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
+            //Mouse.AddMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
+
+            //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, MainWindow_KeyDown);
+            //Keyboard.AddKeyUpHandler(Application.Current.MainWindow, MainWindow_KeyUp);
             e.Handled = true;
         }
 
@@ -106,12 +117,12 @@ namespace MpWpfApp {
         private void MainWindow_MouseUp(object sender, RoutedEventArgs e) {
             bool handleMouseUp = !(_curDropTarget is MpExternalDropBehavior);
 
-            if (_isDragging) {
+            if (IsDragging) {
                 EndDrop();
                 ResetCursor();
-            } else if(MpContentDropManager.Instance.IsDragAndDrop) {
+            } else if(MpDragDropManager.Instance.IsDragAndDrop) {
                 //this maynot be necessary but this is to fix if drop wasn't handled
-                MpContentDropManager.Instance.StopDrag();
+                MpDragDropManager.Instance.StopDrag();
             }
             if(e.RoutedEvent != null && handleMouseUp) {
                 e.Handled = true;
@@ -126,12 +137,12 @@ namespace MpWpfApp {
             }
             Vector diff = e.GetPosition(Application.Current.MainWindow) - _mouseStartPosition;
             
-            if (diff.Length >= MINIMUM_DRAG_DISTANCE || _isDragging) {
-                if(!_isDragging) {                    
+            if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragging) {
+                if(!IsDragging) {                    
                     //_isDragging = true; 
                     Mouse.Capture(Application.Current.MainWindow);
                     CheckKeys();
-                    MpContentDropManager.Instance.StartDrag();
+                    MpDragDropManager.Instance.StartDrag();
                 }
                 Drag();
             }
@@ -141,17 +152,17 @@ namespace MpWpfApp {
 
         #region Key Up/Down Events
         private void MainWindow_KeyUp(object sender, KeyEventArgs e) {
-            if (_isDragging) {
+            if (IsDragging) {
                 if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) {
-                    _isDragCopy = false;
+                    IsDragCopy = false;
                 }
             }
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e) {
-            if (_isDragging) {
+            if (IsDragging) {
                 if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) {
-                    _isDragCopy = true;
+                    IsDragCopy = true;
                 }
 
                 if (e.Key == Key.Escape) {
@@ -161,8 +172,8 @@ namespace MpWpfApp {
         }
 
         private void CheckKeys() {
-            if (_isDragging) {
-                _isDragCopy = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            if (IsDragging) {
+                IsDragCopy = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
             }
         }
         #endregion
@@ -170,7 +181,7 @@ namespace MpWpfApp {
         #region State Changes
 
         private void Drag() {
-            var dropTarget = MpContentDropManager.Instance.Select(MpClipTrayViewModel.Instance.PersistentSelectedModels);
+            var dropTarget = MpDragDropManager.Instance.SelectDropTarget(MpClipTrayViewModel.Instance.PersistentSelectedModels);
 
             if (dropTarget != _curDropTarget) {
                 _curDropTarget?.CancelDrop();
@@ -195,7 +206,7 @@ namespace MpWpfApp {
         }
 
         private void Reset() {
-            MpContentDropManager.Instance.StopDrag();
+            MpDragDropManager.Instance.StopDrag();
 
             Mouse.RemoveMouseMoveHandler(Application.Current.MainWindow, MainWindow_MouseMove);
             Mouse.RemoveMouseUpHandler(Application.Current.MainWindow, MainWindow_MouseUp);
@@ -204,18 +215,18 @@ namespace MpWpfApp {
             Keyboard.RemoveKeyUpHandler(Application.Current.MainWindow, MainWindow_KeyUp);
 
             _curDropTarget = null;
-            _isDragCopy = false;
+            IsDragCopy = false;
 
             UpdateCursor();
         }
 
         private void EndDrop() {
             MpHelpers.Instance.RunOnMainThread(async () => {                
-                if (!_isDragging) {
+                if (!IsDragging) {
                     return;
                 }
                 if (_curDropTarget != null) {
-                    await _curDropTarget.Drop(_isDragCopy,MpClipTrayViewModel.Instance.PersistentSelectedModels);
+                    await _curDropTarget.Drop(IsDragCopy,MpClipTrayViewModel.Instance.PersistentSelectedModels);
                 } 
                 
                 //_isDragging = false;
@@ -235,13 +246,13 @@ namespace MpWpfApp {
         private void UpdateCursor() {
             MpCursorType currentCursor = MpCursorType.Default;
 
-            if (!_isDragging) {
+            if (!IsDragging) {
                 currentCursor = MpCursorType.Default;
-            } else if (!_isDropValid) {
+            } else if (!IsDropValid) {
                 currentCursor = MpCursorType.Invalid;
-            } else if (_isDragCopy) {
+            } else if (IsDragCopy) {
                 currentCursor = _curDropTarget.CopyCursor;
-            } else if (_isDragging) {
+            } else if (IsDragging) {
                 currentCursor = _curDropTarget.MoveCursor;
             }
 

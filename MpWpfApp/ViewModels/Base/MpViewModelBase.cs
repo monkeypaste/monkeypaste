@@ -15,21 +15,12 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {    
-
-    public abstract class MpViewModelBase<P> : INotifyPropertyChanged, IDisposable where P: class {
-        #region Private Variables
-        #endregion
-
+    public abstract class MpViewModelBase : INotifyPropertyChanged, IDisposable {
         #region Properties
 
-        private P _parent;
-        public virtual P Parent {
-            get => _parent;
-            private set => SetProperty(ref _parent, value);
-        }
+        public virtual object ParentObj { get; protected set; }
 
         private bool _isBusy = false;
-
         public bool IsBusy {
             get => _isBusy;
             set {
@@ -37,16 +28,12 @@ namespace MpWpfApp {
                 MpMouseViewModel.Instance.NotifyAppBusy(_isBusy);
             }
         }
-
-        #endregion
-
-        #region Events
         #endregion
 
         #region Constructors
 
-        protected MpViewModelBase(P parent) {
-            Parent = parent;
+        protected MpViewModelBase(object parent) {
+            ParentObj = parent;
 
             MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
             MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
@@ -61,7 +48,7 @@ namespace MpWpfApp {
         #region IDisposable Implementation
         // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/
         // and https://web.archive.org/web/20200720045029/https://docs.microsoft.com/en-us/archive/blogs/jgoldb/finding-memory-leaks-in-wpf-based-applications
-        
+
         public virtual void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -94,10 +81,10 @@ namespace MpWpfApp {
         #region Db Events
 
         protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) {
-            
+
         }
 
-        protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) {  }
+        protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) { }
 
         protected virtual void Instance_SyncAdd(object sender, MpDbSyncEventArgs e) { }
 
@@ -156,5 +143,37 @@ namespace MpWpfApp {
 
 
         #endregion
+    }
+
+    public abstract class MpViewModelBase<P> : MpViewModelBase where P: class {
+        #region Private Variables
+        #endregion
+
+        #region Properties
+
+        public P Parent {
+            get {
+                if (ParentObj == null) {
+                    return null;
+                }
+                return (P)ParentObj;
+            }
+            private set {
+                if(Parent != value) {
+                    ParentObj = value;
+                    OnPropertyChanged(nameof(Parent));
+                }
+            }
+        }
+        #endregion
+
+        #region Constructors
+
+        protected MpViewModelBase(P parent) : base(parent) {
+            Parent = parent;
+        }
+
+        #endregion
+
     }
 }

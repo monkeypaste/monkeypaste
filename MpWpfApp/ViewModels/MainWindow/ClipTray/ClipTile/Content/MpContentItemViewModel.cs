@@ -95,7 +95,7 @@ namespace MpWpfApp {
         private Brush _itemBackgroundBrush;
         public Brush ItemBackgroundBrush {
             get {
-                if (MpContentDropManager.Instance.IsDragAndDrop) {
+                if (MpDragDropManager.Instance.IsDragAndDrop) {
                     return Brushes.White;
                 }
                 if (IsHovering &&
@@ -566,7 +566,7 @@ namespace MpWpfApp {
         public event EventHandler OnFitContentRequest;
         //public event EventHandler OnSubSelected;
 
-
+        public event EventHandler OnMergeRequest;
         public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
         public event EventHandler OnCreateTemplatesRequest;
@@ -666,7 +666,10 @@ namespace MpWpfApp {
         public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
         }
-
+        
+        public void RequestMerge() {
+            OnMergeRequest?.Invoke(this, null);
+        }
         public void RequestUiReset() {
             OnUiResetRequest?.Invoke(this, IsSelected);
         }
@@ -827,16 +830,20 @@ namespace MpWpfApp {
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSelected):
+                case nameof(IsSelected):                    
                     if (IsSelected) {
                         LastSubSelectedDateTime = DateTime.Now;
                         Parent.IsSelected = true;
                         if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown &&
                             !Parent.IsDroppingOnTile && !Parent.AllowMultiSelect) {
+                            //isolate selection to this tile/item
+
+                            //deselect other tiles
                             MpClipTrayViewModel.Instance.Items
                                 .Where(x => x != Parent)
                                 .ForEach(y => y.IsSelected = false);
 
+                            //deselect other items
                             Parent.ItemViewModels
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
@@ -848,9 +855,9 @@ namespace MpWpfApp {
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
-                    
+
                     if (!Parent.Parent.IsRestoringSelection &&
-                        Parent.IsSelected &&
+                        Parent.IsSelected && IsSelected &&
                         !Parent.Parent.IsAnyTileExpanded) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }

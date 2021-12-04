@@ -14,6 +14,14 @@ using System.Windows.Threading;
 using System.Diagnostics;
 
 namespace MpWpfApp {
+    public enum MpDropType {
+        None,
+        Content,
+        Tile,
+        Tray,
+        External
+    }
+
     public abstract class MpDropBehaviorBase<T> : Behavior<T>, MpIContentDropTarget where T : FrameworkElement {
         #region Private Variables
         
@@ -32,7 +40,7 @@ namespace MpWpfApp {
         public object DataContext => AssociatedObject?.DataContext;
 
         public abstract bool IsEnabled { get; set; }
-        public abstract int DropPriority { get; }
+        public abstract MpDropType DropType { get; }
 
         public abstract UIElement RelativeToElement { get; }
 

@@ -24,7 +24,7 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override int DropPriority => 1;
+        public override MpDropType DropType => MpDropType.Tray;
 
         public override UIElement RelativeToElement => AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>();
 
@@ -131,7 +131,8 @@ namespace MpWpfApp {
             for (int i = 0; i < dragModels.Count; i++) {
                 if(dragModels[i].CompositeParentCopyItemId == 0 && 
                    i > 0 && !isCopy) {
-                    await MpDataModelProvider.Instance.UpdateQuery(dragModels[i].Id, -1);
+                    //if dropping a former composite parent into non-parent idx
+                    await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
                 }
                 dragModels[i].CompositeSortOrderIdx = i;
                 if (i == 0) {
@@ -143,9 +144,9 @@ namespace MpWpfApp {
             }
 
             int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + DropIdx;
-            await MpDataModelProvider.Instance.UpdateQuery(dragModels[0].Id, queryDropIdx);
+            MpDataModelProvider.Instance.MoveOrInsertQueryItem(dragModels[0].Id, queryDropIdx);
 
-            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
         }
     }
 

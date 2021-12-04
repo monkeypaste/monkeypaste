@@ -322,7 +322,7 @@ namespace MpWpfApp {
                             shortcutCommand = MpClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
                             break;
                         case 23:
-                            shortcutCommand = MpClipTrayViewModel.Instance.SendSelectedClipsToEmailCommand;
+                            shortcutCommand = MpClipTrayViewModel.Instance.SendToEmailCommand;
                             break;
                         case 24:
                             shortcutCommand = MpClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;

@@ -19,6 +19,8 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentItemView.xaml
     /// </summary>
     public partial class MpContentItemView : MpUserControl<MpContentItemViewModel> {
+        private static MpContentContextMenuView _ContentContextMenu;
+
         public MpContentItemView() : base() {
             InitializeComponent();            
         }
@@ -51,7 +53,7 @@ namespace MpWpfApp {
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = true;
-            if(!MpContentDropManager.Instance.IsDragAndDrop &&
+            if(!MpDragDropManager.Instance.IsDragAndDrop &&
                 (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
                 MpMouseViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
             }
@@ -60,7 +62,7 @@ namespace MpWpfApp {
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
-            if (!MpContentDropManager.Instance.IsDragAndDrop) {
+            if (!MpDragDropManager.Instance.IsDragAndDrop) {
                 MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
         }
@@ -89,6 +91,38 @@ namespace MpWpfApp {
                 BindingContext.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
                 BindingContext.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
             }
+        }
+
+        private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (BindingContext.IsSelected &&
+                BindingContext.Parent.IsExpanded) {
+                e.Handled = false;
+                return;
+            }
+            BindingContext.IsSelected = true;
+
+            MpDragDropManager.Instance.StartDragCheck(e.GetPosition(Application.Current.MainWindow));
+
+            e.Handled = true;
+        }
+
+        private void Border_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                return;
+            }
+            if (_ContentContextMenu == null) {
+                _ContentContextMenu = new MpContentContextMenuView();
+            }
+
+            if (!BindingContext.IsSelected) {
+                BindingContext.IsSelected = true;
+            }
+
+            e.Handled = true;
+
+            ContextMenu = _ContentContextMenu;
+            ContextMenu.PlacementTarget = this;
+            ContextMenu.IsOpen = true;
         }
     }
 }

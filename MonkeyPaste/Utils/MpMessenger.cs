@@ -9,7 +9,8 @@ namespace MonkeyPaste {
     public enum MpMessageType {
         None,
         RequeryCompleted,
-        QueryChanged,        
+        QueryChanged,
+        SubQueryChanged, //sent when composite parent is moved or tile deleted
         JumpToIdxCompleted,
         TotalQueryCountChanged,
         Expand, //has context (tile)

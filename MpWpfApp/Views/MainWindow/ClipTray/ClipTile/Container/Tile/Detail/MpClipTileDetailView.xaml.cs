@@ -28,25 +28,27 @@ namespace MpWpfApp {
         }
 
         private void ClipTileDetailTextBlock_MouseLeave(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            civm.CycleDetailCommand.Execute(null);                       
+            if(BindingContext == null) {
+                return;
+            }
+            BindingContext.CycleDetailCommand.Execute(null);                       
 
-            if (civm.CurDetailType == MpCopyItemDetailType.AppInfo || 
-                civm.CurDetailType == MpCopyItemDetailType.UrlInfo) {
-                string linkText = civm.DetailText;
-                string linkPath = civm.DetailText;
+            if (BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo || 
+                BindingContext.CurDetailType == MpCopyItemDetailType.UrlInfo) {
+                string linkText = BindingContext.DetailText;
+                string linkPath = BindingContext.DetailText;
                 string toolTip = string.Empty;
                 h = new Hyperlink();
-                if(civm.CurDetailType == MpCopyItemDetailType.AppInfo) {
-                    if(File.Exists(civm.DetailText)) {
+                if(BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo) {
+                    if(File.Exists(BindingContext.DetailText)) {
                         linkText = "Source Folder";
-                        linkPath = Path.GetDirectoryName(civm.DetailText);
+                        linkPath = Path.GetDirectoryName(BindingContext.DetailText);
                     }
-                    toolTip = civm.CopyItem.Source.App.AppName;
+                    toolTip = BindingContext.CopyItem.Source.App.AppName;
                 } else {
                     linkText = "Source Url";
-                    linkPath = civm.DetailText;
-                    toolTip = civm.CopyItem.Source.Url.UrlTitle;
+                    linkPath = BindingContext.DetailText;
+                    toolTip = BindingContext.CopyItem.Source.Url.UrlTitle;
                 }
                 h.Inlines.Add(linkText);
                 h.NavigateUri = new Uri(linkPath);
@@ -57,13 +59,12 @@ namespace MpWpfApp {
                 ClipTileDetailTextBlock.ToolTip = toolTip;
             } else {
                 ClipTileDetailTextBlock.Inlines.Clear();
-                ClipTileDetailTextBlock.Inlines.Add(new Run(civm.DetailText));
+                ClipTileDetailTextBlock.Inlines.Add(new Run(BindingContext.DetailText));
                 ClipTileDetailTextBlock.ToolTip = Enum.GetName(typeof(MpCopyItemDetailType),BindingContext.CurDetailType);
             }
         }
 
         private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
             if(h != null) {
                 h.Click -= H_Click;
                 h = null;
