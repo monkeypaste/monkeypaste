@@ -34,10 +34,8 @@
     <local:MpClipBorder Margin="{local:MpMeasurementsBinding ClipTileMargin}"
                         BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
                         BorderBrush="{Binding Parent.TileBorderBrush}"
-                        Width="{local:MpMeasurementsBinding ClipTileBorderMinSize}"
-                        MaxWidth="{local:MpMeasurementsBinding ClipTileBorderMinSize}"
-                        Height="{local:MpMeasurementsBinding ClipTileMinSize}"
-                        MaxHeight="{local:MpMeasurementsBinding ClipTileMinSize}"
+                        Width="{Binding Parent.TileBorderWidth}"
+                        Height="{Binding Parent.TileBorderHeight}"
                         Background="{local:MpSettingBinding Path=ThemeClipTileBackgroundColor,
                                                             Converter={StaticResource StringToBrushConverter},
                                                             Mode=OneWay}"

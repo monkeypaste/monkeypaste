@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using WPFSpark;
 using static MpWpfApp.WinApi;
+using static Standard.NtDll;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
@@ -33,9 +34,9 @@ namespace MpWpfApp {
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
+            //EnableBlur();
+            
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
-
-            // MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
 
             var mwvm = DataContext as MpMainWindowViewModel;
 
@@ -49,11 +50,6 @@ namespace MpWpfApp {
 
             sw.Stop();
 
-            //while(mwvm.IsMainWindowLoading) {
-            //    await Task.Delay(100);
-            //}
-
-           // Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
             MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
         }
 
@@ -75,7 +71,7 @@ namespace MpWpfApp {
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
             var mwvm = DataContext as MpMainWindowViewModel;
-            if(mwvm.IsResizing) {
+            if(mwvm.IsResizing || MpDragDropManager.Instance.IsDragAndDrop) {
                 return;
             }
             mwvm.HideWindowCommand.Execute(null);
@@ -93,54 +89,41 @@ namespace MpWpfApp {
             //mwvm.HideWindowCommand.Execute(null);
         }
 
-        private uint _blurOpacity;
-        public double BlurOpacity {
-            get { return _blurOpacity; }
-            set { _blurOpacity = (uint)value; EnableBlur(); }
-        }
-
         void EnableBlur() {
+            SetAccentPolicy(WinApi.AccentState.ACCENT_ENABLE_BLURBEHIND);
+        }
+
+        private void SetAccentPolicy(AccentState accentState) {
             var windowHelper = new WindowInteropHelper(this);
 
-            var accent = new AccentPolicy();
-            accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
-            accent.GradientColor = 0x80804000;//(_blurOpacity << 24) | (_blurBackgroundColor & 0xFFFFFF);
+            var accent = new WinApi.AccentPolicy {
+                AccentState = accentState,
+                AccentFlags = GetAccentFlagsForTaskbarPosition()
+            };
 
             var accentStructSize = Marshal.SizeOf(accent);
 
             var accentPtr = Marshal.AllocHGlobal(accentStructSize);
             Marshal.StructureToPtr(accent, accentPtr, false);
 
-            var data = new WindowCompositionAttributeData();
-            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-            data.SizeOfData = accentStructSize;
-            data.Data = accentPtr;
 
-            SetWindowCompositionAttribute(windowHelper.Handle, ref data);
+            var data = new WinApi.WindowCompositionAttributeData {
+                Attribute = WinApi.WindowCompositionAttribute.WCA_ACCENT_POLICY,
+                SizeOfData = accentStructSize,
+                Data = accentPtr
+            };
+
+            WinApi.SetWindowCompositionAttribute(windowHelper.Handle, ref data);
 
             Marshal.FreeHGlobal(accentPtr);
         }
 
-        void DisableBlur() {
-            var windowHelper = new WindowInteropHelper(this);
+        private WinApi.AccentFlags GetAccentFlagsForTaskbarPosition() {
+            return WinApi.AccentFlags.DrawAllBorders;
+        }
 
-            var accent = new AccentPolicy();
-            accent.AccentState = AccentState.ACCENT_ENABLE_TRANSPARENTGRADIENT;
-            accent.GradientColor = 0;//(_blurOpacity << 24) | (_blurBackgroundColor & 0xFFFFFF);
-
-            var accentStructSize = Marshal.SizeOf(accent);
-
-            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
-            Marshal.StructureToPtr(accent, accentPtr, false);
-
-            var data = new WindowCompositionAttributeData();
-            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-            data.SizeOfData = accentStructSize;
-            data.Data = accentPtr;
-            
-            SetWindowCompositionAttribute(windowHelper.Handle, ref data);
-
-            Marshal.FreeHGlobal(accentPtr);
+        public void DisableBlur() {
+            SetAccentPolicy(WinApi.AccentState.ACCENT_DISABLED);
         }
     }
 }

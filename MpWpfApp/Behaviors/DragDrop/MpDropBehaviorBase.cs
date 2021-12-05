@@ -90,6 +90,9 @@ namespace MpWpfApp {
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
+            if(DropType == MpDropType.External) {
+                return;
+            }
             Reset();
         }
 

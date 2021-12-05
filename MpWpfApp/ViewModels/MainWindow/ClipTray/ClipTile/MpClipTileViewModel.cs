@@ -174,44 +174,6 @@ using System.Speech.Synthesis;
 
         #region Layout
 
-        public double TrayX {
-            get {
-                if(IsExpanded) {
-                    return MpMeasurements.Instance.ClipTileExpandedMargin;
-                }
-
-                return QueryOffsetIdx * MpMeasurements.Instance.ClipTileMinSize;
-            }
-        }
-
-        public double PasteTemplateToolbarHeight {
-            get {
-                return MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-            }
-        }
-
-        public double TileBorderMaxWidth {
-            get {
-                var ds = TotalExpandedContentSize;
-                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
-            }
-        }
-
-
-        private double _tileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
-        public double TileBorderWidth {
-            get {
-                return _tileBorderWidth;
-            }
-            set {
-                if (_tileBorderWidth != value) {
-                    _tileBorderWidth = Math.Max(0,value);
-                    OnPropertyChanged(nameof(TileBorderWidth));
-                }
-            }
-        }
-
-
         private double _tileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
         public double TileBorderHeight {
             get {
@@ -219,80 +181,55 @@ using System.Speech.Synthesis;
             }
             set {
                 if (_tileBorderHeight != value) {
-                    _tileBorderHeight = Math.Max(0,value);
+                    _tileBorderHeight = Math.Max(0, value);
                     OnPropertyChanged(nameof(TileBorderHeight));
-                }
-            }
-        }
-
-        private double _tileTitleHeight = MpMeasurements.Instance.ClipTileTitleHeight;
-        public double TileTitleHeight {
-            get {
-                return _tileTitleHeight;
-            }
-            set {
-                if (_tileTitleHeight != value) {
-                    _tileTitleHeight = value;
-                    OnPropertyChanged(nameof(TileTitleHeight));
-                }
-            }
-        }
-
-        private double _tileTitleTextGridWidth;
-        public double TileTitleTextGridWidth {
-            get {
-                return _tileTitleTextGridWidth;
-            }
-            set {
-                if (_tileTitleTextGridWidth != value) {
-                    _tileTitleTextGridWidth = value;
-                    OnPropertyChanged(nameof(TileTitleTextGridWidth));
-                }
-            }
-        }
-
-        
-        public double TileContentHeight { get; set; }= MpMeasurements.Instance.ClipTileContentHeight;
-
-        public double TileDetailHeight {
-            get {
-                //if(DetailGridVisibility != Visibility.Visible) {
-                //    return 0;
-                //}
-                return MpMeasurements.Instance.ClipTileDetailHeight;
-            }
-        }
-
-        public double TileContentMaxWidth {
-            get {
-                return TileBorderMaxWidth - MpMeasurements.Instance.ClipTileContentMargin;
-            }
-        }
-
-        private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
-        public double TileContentWidth {
-            get {
-                return _tileContentWidth;
-            }
-            set {
-                if (_tileContentWidth != value) {
-                    _tileContentWidth = Math.Max(0,value);
+                    OnPropertyChanged(nameof(TileBorderWidth));
                     OnPropertyChanged(nameof(TileContentWidth));
+                    OnPropertyChanged(nameof(TileContentHeight));
+                    OnPropertyChanged(nameof(TrayX));
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
                 }
             }
         }
 
-        public double LoadingSpinnerSize {
+        public double TrayX {
             get {
-                return MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
+                if(IsExpanded) {
+                    return MpMeasurements.Instance.ClipTileExpandedMargin;
+                }
+
+                return QueryOffsetIdx * TileBorderHeight;
             }
         }
 
-        public double TileWidthMax {
+        public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
+
+        public double TileBorderMaxWidth {
             get {
-                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, TotalExpandedContentSize.Width);
+                //var ds = TotalExpandedContentSize;
+                return MpMeasurements.Instance.ScreenWidth - (MpMeasurements.Instance.ClipTileExpandedMargin * 2);// Math.Max(MpMeasurements.Instance.ScreenWidth - (MpMeasurements.Instance.ClipTileExpandedMargin*2), ds.Width);
             }
         }
+
+        public double TileBorderWidth => IsExpanded ? 
+                            700://TileBorderMaxWidth :
+                            TileBorderHeight - (MpMeasurements.Instance.ClipTileMargin * 2);
+
+        public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
+
+        public double TileContentWidth => TileBorderHeight - MpMeasurements.Instance.ClipTileContentMinWidth;
+
+        public double TileContentHeight => TileBorderHeight - TileTitleHeight - MpMeasurements.Instance.ClipTileMargin - MpMeasurements.Instance.ClipTileBorderThickness - TileDetailHeight;
+
+        public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
+
+        public double TileContentMaxWidth => TileBorderMaxWidth - MpMeasurements.Instance.ClipTileContentMargin;
+
+        public double LoadingSpinnerSize => MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
+
+        public double TileWidthMax => Math.Max(
+            MpMeasurements.Instance.ClipTileEditModeMinWidth, 
+            TotalExpandedContentSize.Width);
 
 
         //content container
@@ -872,8 +809,13 @@ using System.Speech.Synthesis;
                     } else {
                         MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
                     }
+                    MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
+                    OnPropertyChanged(nameof(TileBorderWidth));
+                    OnPropertyChanged(nameof(FlipButtonVisibility));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridWidth));
+                    OnPropertyChanged(nameof(TrayX));
                     break;
                 case nameof(IsFlipping):
                     if(IsFlipping) {

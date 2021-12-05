@@ -221,6 +221,14 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public double SearchCriteriaListBoxHeight {
+            get {
+                return ((MpMeasurements.Instance.SearchDetailRowHeight * CriteriaItems.Count) +
+                       ((MpMeasurements.Instance.SearchDetailBorderThickness * 2) * CriteriaItems.Count));
+            }
+        }
+
         #endregion
 
         #region Business Logic Properties
@@ -534,7 +542,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(HasCriteriaItems));
 
             MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.ClipTrayAndCriteriaListHeight));
-            MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.SearchCriteriaListBoxHeight));
+            OnPropertyChanged(nameof(SearchCriteriaListBoxHeight));
 
             await UpdateCriteriaSortOrder();
         }

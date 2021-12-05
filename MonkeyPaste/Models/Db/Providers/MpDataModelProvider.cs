@@ -54,6 +54,9 @@ namespace MonkeyPaste {
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
             var fetchRange = _allFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
             var items = await GetCopyItemsByIdList(fetchRange);
+            if(items.Count == 0 && startIndex + count < _allFetchedAndSortedCopyItemIds.Count) {
+                MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
+            }
             return items;
         }
 

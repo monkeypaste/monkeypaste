@@ -17,24 +17,34 @@
         xmlns:local="clr-namespace:MpWpfApp"
         Title="MpMainWindow"
         WindowStyle="None"
-        
-        AllowsTransparency="True"
         Background="Transparent"
-        Top="{Binding MainWindowContainerTop}"
+        AllowsTransparency="True"
+        Top="0"
         Left="0"
         Visibility="Visible"
         Loaded="MainWindow_Loaded"
         Deactivated="MainWindow_Deactivated"
         ShowInTaskbar="False"
         ResizeMode="CanResize"
-        WindowState="Normal" 
-            MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
-        Height="{Binding MainWindowHeight}"
+        WindowState="Normal"
+        MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
+        Height="{local:MpMeasurementsBinding WorkAreaBottom}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                          IsDesignTimeCreatable=False}">
+    <!--<Window.OpacityMask>
+        <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+            <GradientStop Color="Black" Offset="0"/>
+            <GradientStop Color="Black" Offset="0.5"/>
+            <GradientStop Offset="0.5"/>
+            <GradientStop Offset="1"/>
+        </LinearGradientBrush>
+    </Window.OpacityMask>-->
+    <i:Interaction.Behaviors>
+        <local:MpMainWindowResizeBehavior x:Name="MainWindowResizeBehvior" />
+    </i:Interaction.Behaviors>
     <Canvas x:Name="MainWindowCanvas"
-            Height="{Binding MainWindowHeight}"
+            Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">
         <!--<Image Source="{Binding Ss}"
                PreviewMouseUp="Image_PreviewMouseUp"
@@ -55,13 +65,11 @@
               Height="{Binding MainWindowHeight}"
               Width="{Binding MainWindowWidth}"
               Canvas.Top="{Binding MainWindowTop}"
-              Canvas.Left="0"              
-              Background="Green">
+              Canvas.Left="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
                 <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
-                <!--<RowDefinition Height="{Binding ToolbarHeight, Source={StaticResource AnalyticItemCollectionViewModel}}" />-->
-                <RowDefinition Height="{Binding ClipTrayAndCriteriaListHeight}" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!--  System Tray  -->
@@ -72,14 +80,17 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Orientation="Horizontal"
-                        Background="DarkGreen">
+                        Background="{local:MpThemeColorsBinding Key=Title_Menu_Background_Color}">
                 <TextBlock Text="{Binding LogText}" />
             </StackPanel>
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
-                  Background="DarkViolet">
+                  Background="{local:MpThemeColorsBinding Key=Filter_Menu_Background_Color}">
+                <!--<Grid.Background>
+                    <SolidColorBrush Color="DarkViolet" Opacity="0.4"/>
+                </Grid.Background>-->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="1.15*" />
@@ -141,12 +152,10 @@
             </Grid>
 
             <!--  3rd row row for tray  -->
-            <Grid Grid.Row="2"
-                  Grid.Column="0"
-                  Background="{local:MpThemeColorsBinding Clip_Tray_Background_Color}">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="{Binding AppModeButtonGridWidth, Source={StaticResource AppModeViewModel}}" />
+                    <ColumnDefinition Width="{Binding ClipTrayScreenWidth, Source={StaticResource ClipTrayViewModel}}" />
                 </Grid.ColumnDefinitions>
                 <!--  Side bar AppState Buttons  -->
                 <local:MpAppModeButtonGridView Grid.Column="0"
@@ -155,10 +164,11 @@
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />
                 <Grid Grid.Column="1"
-                      HorizontalAlignment="Stretch">
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="{Binding SearchCriteriaListBoxHeight}" />
-                        <RowDefinition Height="{Binding ClipTrayHeight}" />
+                        <RowDefinition Height="{Binding SearchCriteriaListBoxHeight, Source={StaticResource SearchBoxViewModel}}" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <local:MpSearchCriteriaListView x:Name="SearchDetailView"
                                                     Grid.Row="0"

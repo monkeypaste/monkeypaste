@@ -40,7 +40,8 @@
                           VerticalContentAlignment="Center"
                           Background="Transparent"
                           FontSize="14"
-                          IsEnabled="{Binding IsAnyPastingTemplate, Source={StaticResource ClipTrayViewModel}}"
+                          IsEnabled="{Binding IsAnyPastingTemplate,
+                                              Source={StaticResource ClipTrayViewModel}}"
                           PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
                           ItemsSource="{Binding Templates}"
                           SelectedIndex="{Binding SelectedTemplateIdx,

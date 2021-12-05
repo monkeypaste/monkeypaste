@@ -122,8 +122,8 @@ namespace MpWpfApp {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     if (_curDropTarget != null) {
                         await _curDropTarget?.Drop(
-                        MpShortcutCollectionViewModel.Instance.IsCtrlDown,
-                        MpClipTrayViewModel.Instance.PersistentSelectedModels);
+                                MpShortcutCollectionViewModel.Instance.IsCtrlDown,
+                                MpClipTrayViewModel.Instance.PersistentSelectedModels);
 
                         bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
 
@@ -131,7 +131,9 @@ namespace MpWpfApp {
                             Application.Current.MainWindow.Activate();
                             Application.Current.MainWindow.Focus();
                             Application.Current.MainWindow.Topmost = true;
+                            
                             MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                            Application.Current.MainWindow.Top = 0;
                         }
                     }
 

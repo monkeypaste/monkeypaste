@@ -215,10 +215,10 @@ namespace MpWpfApp {
                 var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
                 double h = 0;
                 if(Parent.Count == 1) {
-                    h = MpMeasurements.Instance.ClipTileContentHeight;
+                    h = Parent.TileContentHeight; //MpMeasurements.Instance.ClipTileContentHeight;
                 } else {
                     h = Math.Max(
-                                        MpMeasurements.Instance.ClipTileContentHeight / Parent.VisibleItems.Count,
+                                        Parent.TileContentHeight / Parent.VisibleItems.Count,
                                         MpMeasurements.Instance.ClipTileContentItemMinHeight);
                 }
                 return new Size(

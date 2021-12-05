@@ -12,6 +12,6 @@
     <i:Interaction.Behaviors>
         <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
     </i:Interaction.Behaviors>
-    <Grid Width="0" 
+    <Grid Width="0"
           Height="0" />
 </UserControl>

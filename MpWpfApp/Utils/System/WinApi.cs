@@ -1,47 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
 //using HWND = System.IntPtr;
 
 namespace MpWpfApp {
     public static class WinApi {
-        #region Glass stuff
-        internal enum AccentState {
-            ACCENT_DISABLED = 0,
-            ACCENT_ENABLE_GRADIENT = 1,
-            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
-            ACCENT_ENABLE_BLURBEHIND = 3,
-            ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
-            ACCENT_INVALID_STATE = 5
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct AccentPolicy {
-            public AccentState AccentState;
-            public uint AccentFlags;
-            public uint GradientColor;
-            public uint AnimationId;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct WindowCompositionAttributeData {
-            public WindowCompositionAttribute Attribute;
-            public IntPtr Data;
-            public int SizeOfData;
-        }
-
-        internal enum WindowCompositionAttribute {
-            // ...
-            WCA_ACCENT_POLICY = 19
-            // ...
-        }
-
-        [DllImport("user32.dll")]
-        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
-        #endregion
+        
 
         [StructLayout(LayoutKind.Sequential)]
         public struct Win32Point {
@@ -429,5 +397,96 @@ namespace MpWpfApp {
         [DllImport("advapi32", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern bool CreateProcessWithTokenW(IntPtr hToken, int dwLogonFlags, string lpApplicationName, string lpCommandLine, int dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, [In] ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
 
+
+        //from https://web.archive.org/web/20160712234338/https://withinrafael.com/adding-the-aero-glass-blur-to-your-windows-10-apps/
+
+        [DllImport("user32.dll")]
+        public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WindowCompositionAttributeData {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        public enum WindowCompositionAttribute {
+            // ...
+            WCA_ACCENT_POLICY = 19
+            // ...
+        }
+
+        public enum AccentState {
+            ACCENT_DISABLED = 0,
+            ACCENT_ENABLE_GRADIENT = 1,
+            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+            ACCENT_ENABLE_BLURBEHIND = 3,
+            ACCENT_INVALID_STATE = 4
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct AccentPolicy {
+            public AccentState AccentState;
+            public AccentFlags AccentFlags;
+            public int GradientColor;
+            public int AnimationId;
+        }
+
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct AccentPolicy {
+        //    public AccentState AccentState;
+        //    public int AccentFlags;
+        //    public int GradientColor;
+        //    public int AnimationId;
+        //}
+
+        [Flags]
+        public enum AccentFlags {
+            // ... 
+            DrawLeftBorder = 0x20,
+            DrawTopBorder = 0x40,
+            DrawRightBorder = 0x80,
+            DrawBottomBorder = 0x100,
+            DrawAllBorders = (DrawLeftBorder | DrawTopBorder | DrawRightBorder | DrawBottomBorder)
+            // ... 
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MARGINS {
+            public MARGINS(Thickness t) {
+                Left = (int)t.Left;
+                Right = (int)t.Right;
+                Top = (int)t.Top;
+                Bottom = (int)t.Bottom;
+            }
+            public int Left;
+            public int Right;
+            public int Top;
+            public int Bottom;
+        }
+
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
+
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        static extern bool DwmIsCompositionEnabled();
+
+        public static bool ExtendGlassFrame(Window window, Thickness margin) {
+            if (!DwmIsCompositionEnabled())
+                return false;
+
+            IntPtr hwnd = new WindowInteropHelper(window).Handle;
+            if (hwnd == IntPtr.Zero)
+                throw new InvalidOperationException(
+                "The Window must be shown before extending glass.");
+
+            // Set the background to transparent from both the WPF and Win32 perspectives
+            window.Background = Brushes.Transparent;
+            HwndSource.FromHwnd(hwnd).CompositionTarget.BackgroundColor = Colors.Transparent;
+
+            MARGINS margins = new MARGINS(margin);
+            DwmExtendFrameIntoClientArea(hwnd, ref margins);
+            return true;
+        }
     }
 }

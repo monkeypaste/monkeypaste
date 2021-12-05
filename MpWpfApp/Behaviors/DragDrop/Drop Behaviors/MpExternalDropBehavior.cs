@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override UIElement RelativeToElement => Application.Current.MainWindow as MpMainWindow;
+        public override UIElement RelativeToElement => (Application.Current.MainWindow as MpMainWindow).TitleMenu;
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
@@ -64,7 +64,11 @@ namespace MpWpfApp {
         public override int GetDropTargetRectIdx() {
             Point mp = Mouse.GetPosition(RelativeToElement);
             MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
-            if(mp.Y < 0) {
+            if(mp.Y < 5) {
+                //Application.Current.MainWindow.Top = 20000;
+                IntPtr lastHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
+                WinApi.SetForegroundWindow(lastHandle);
+                WinApi.SetActiveWindow(lastHandle);
                 return 0;
             }
             return -1;
@@ -78,6 +82,8 @@ namespace MpWpfApp {
 
             var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
+
+            
         }
 
         public override async Task Drop(bool isCopy, object dragData) {

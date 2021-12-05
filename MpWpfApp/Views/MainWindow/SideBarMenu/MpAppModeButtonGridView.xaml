@@ -10,7 +10,7 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <Grid Loaded="Grid_Loaded"
-          Background="DimGray">
+          Background="{local:MpThemeColorsBinding Key=App_Mode_Grid_Background_Color}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -20,10 +20,8 @@
         </Grid.RowDefinitions>
         <ToggleButton Grid.Row="0"
                       Grid.Column="0"
-                      Width="{Binding AppModeButtonGridWidth,
-                                      Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth,
-                                       Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth}"
+                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       ToolTipService.InitialShowDelay="0"
@@ -41,10 +39,8 @@
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
                       ToolTip="{Binding IsAutoCopyModeTooltip}"
-                      Width="{Binding AppModeButtonGridWidth,
-                                      Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth,
-                                       Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth}"
+                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -59,10 +55,8 @@
         <ToggleButton Grid.Row="2"
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth,
-                                      Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth,
-                                       Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth}"
+                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -79,10 +73,8 @@
                       Grid.Column="0"
                       Padding="10"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth,
-                                      Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth,
-                                       Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth}"
+                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -97,10 +89,8 @@
         <ToggleButton Grid.Row="4"
                       Grid.Column="0"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth,
-                                      Source={StaticResource MainWindowViewModel}}"
-                      Height="{Binding AppModeButtonGridWidth,
-                                       Source={StaticResource MainWindowViewModel}}"
+                      Width="{Binding AppModeButtonGridWidth}"
+                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"

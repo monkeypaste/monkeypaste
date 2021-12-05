@@ -131,7 +131,10 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double ClipTrayScreenHeight => MpMainWindowViewModel.Instance.ClipTrayHeight;
+        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight;
+                
+
+        //public double ClipTrayScreenHeight => ClipTrayHeight;
 
         public double ClipTrayScreenWidth {
             get {

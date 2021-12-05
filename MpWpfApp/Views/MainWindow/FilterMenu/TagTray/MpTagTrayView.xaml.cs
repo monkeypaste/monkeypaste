@@ -28,8 +28,13 @@ namespace MpWpfApp {
             }
         }
 
-        private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (TagTray.GetScrollViewer().ExtentWidth >= TagTray.MaxWidth) {
+        private async void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            var sv = TagTray.GetScrollViewer();
+            while(sv == null) {
+                await Task.Delay(50);
+                sv = TagTray.GetScrollViewer();
+            }
+            if (sv.ExtentWidth >= TagTray.MaxWidth) {
                 TagTrayNavLeftButton.Visibility = Visibility.Visible;
                 TagTrayNavRightButton.Visibility = Visibility.Visible;
             } else {

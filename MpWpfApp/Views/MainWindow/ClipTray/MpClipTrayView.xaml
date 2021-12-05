@@ -14,20 +14,8 @@
     <i:Interaction.Behaviors>
         <local:MpClipTrayDropBehavior x:Name="ClipTrayDropBehavior" />
     </i:Interaction.Behaviors>
-    <Grid x:Name="ClipTrayGrid">
-        <Grid.Resources>
-            <ResourceDictionary Source="/Styles/MpPagingListBoxResourceDictionary.xaml" />
-        </Grid.Resources>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0"
-                                 Opacity="0.0"
-                                 EndPoint="0,1">
-                <GradientStop Offset="0"
-                              Color="LightGray" />
-                <GradientStop Offset=".1"
-                              Color="Transparent" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid x:Name="ClipTrayGrid"
+          Background="{local:MpThemeColorsBinding Key=Clip_Tray_Background_Color}">
         <Grid>
             <AdornerDecorator>
                 <ScrollViewer x:Name="PagingScrollViewer"

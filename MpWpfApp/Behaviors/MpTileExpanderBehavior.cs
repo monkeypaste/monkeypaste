@@ -119,7 +119,6 @@ namespace MpWpfApp {
 
         private void ReceiveClipTileMessage(MpMessageType msg) {
             switch(msg) {
-
                 case MpMessageType.Expand:
                     Expand();
                     _mainWindowTitlePanel.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
@@ -141,11 +140,10 @@ namespace MpWpfApp {
         }
 
         private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
-            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
-            if(ctvm.IsAnyPastingTemplate) {
+            if(AssociatedObject.BindingContext.IsAnyPastingTemplate) {
                 return;
             }
-            ctvm.IsExpanded = false;
+            AssociatedObject.BindingContext.IsExpanded = false;
         }
 
         private void Ctvm_OnUnExpandRequest(object sender, EventArgs e) {
@@ -157,7 +155,7 @@ namespace MpWpfApp {
         }
 
         public void Resize(double deltaHeight) {
-            var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            var ctvm = AssociatedObject.BindingContext;
             if (!ctvm.IsExpanded || MpDragDropManager.Instance.IsDragAndDrop) {
                 return;
             }
@@ -166,9 +164,11 @@ namespace MpWpfApp {
             mwvm.IsResizing = true;
 
             mwvm.MainWindowTop -= deltaHeight;
-            mwvm.ClipTrayHeight += deltaHeight;
-            ctvm.TileBorderHeight += deltaHeight;
-            ctvm.TileContentHeight += deltaHeight;
+            mwvm.MainWindowHeight += deltaHeight;
+
+            //mwvm.ClipTrayHeight += deltaHeight;
+            //ctvm.TileBorderHeight += deltaHeight;
+            //ctvm.TileContentHeight += deltaHeight;
 
             double boundAdjust = 0;
             if (mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
@@ -178,15 +178,34 @@ namespace MpWpfApp {
             }
 
             mwvm.MainWindowTop -= boundAdjust;
-            mwvm.ClipTrayHeight += boundAdjust;
-            ctvm.TileBorderHeight += boundAdjust;
-            ctvm.TileContentHeight += boundAdjust;
+            mwvm.MainWindowHeight += boundAdjust;
+            //mwvm.ClipTrayHeight += boundAdjust;
+            //ctvm.TileBorderHeight += boundAdjust;
+            //ctvm.TileContentHeight += boundAdjust;
 
             MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
             mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
             mwvm.IsResizing = false;
 
             Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
+        }
+
+        public void Expand2() {
+            IsAnyExpandingOrUnexpanding = true;
+            MpMainWindowViewModel.Instance.IsResizing = true;
+            
+
+            IsAnyExpandingOrUnexpanding = false;
+            MpMainWindowViewModel.Instance.IsResizing = false;
+        }
+
+        public void Unexpand2() {
+            IsAnyExpandingOrUnexpanding = true;
+            MpMainWindowViewModel.Instance.IsResizing = true;
+
+
+            IsAnyExpandingOrUnexpanding = false;
+            MpMainWindowViewModel.Instance.IsResizing = false;
         }
 
         private void Expand() {
@@ -216,7 +235,7 @@ namespace MpWpfApp {
             //trigger app mode column to hide
             ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
-            mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
+            //mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
             //
 
@@ -241,18 +260,18 @@ namespace MpWpfApp {
             //make change in height so window doesn't get smaller but also doesn't extend past top of screen
             //_deltaSize.Height = Math.Min(maxDeltaHeight, deltaContentHeight);
             //sanity check so heights are the same after all that
-            _deltaSize.X =  mwvm.ClipTrayWidth - MpMeasurements.Instance.ClipTileMinSize - (MpMeasurements.Instance.ClipTileExpandedMargin*2);
+            _deltaSize.X = MpClipTrayViewModel.Instance.ClipTrayScreenWidth - MpMeasurements.Instance.ClipTileMinSize - (MpMeasurements.Instance.ClipTileExpandedMargin*2);
 
             mwvm.MainWindowTop -= _deltaSize.Y;
             _initialExpandedMainWindowTop = mwvm.MainWindowTop;
 
-            mwvm.ClipTrayHeight += _deltaSize.Y;
+            //mwvm.ClipTrayHeight += _deltaSize.Y;
 
-            ctvm.TileBorderWidth += _deltaSize.X;
+            //ctvm.TileBorderWidth += _deltaSize.X;
             ctvm.TileBorderHeight += _deltaSize.Y;
 
-            ctvm.TileContentWidth += _deltaSize.X;
-            ctvm.TileContentHeight += _deltaSize.Y;
+            //ctvm.TileContentWidth += _deltaSize.X;
+            //ctvm.TileContentHeight += _deltaSize.Y;
 
             ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
             MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
@@ -306,7 +325,7 @@ namespace MpWpfApp {
             //trigger app mode column to hide
             ctvm.OnPropertyChanged(nameof(ctvm.FlipButtonVisibility));
             ctvm.Parent.OnPropertyChanged(nameof(ctvm.Parent.IsAnyTileExpanded));
-            mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
+            //mwvm.OnPropertyChanged(nameof(mwvm.AppModeButtonGridWidth));
 
             double temp = mwvm.MainWindowTop;
             //this resets window top to standard 
@@ -314,15 +333,17 @@ namespace MpWpfApp {
             double deltaHeight = _originalMainWindowTop - temp;
 
             mwvm.MainWindowTop = _originalMainWindowTop;
-            mwvm.ClipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
+            mwvm.MainWindowHeight += deltaHeight;
+
+            //MpClipTrayViewModel.Instance.ClipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
 
             var ctrvm = MpClipTrayViewModel.Instance;
 
-            ctvm.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
+            //ctvm.TileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
             ctvm.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
 
-            ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
-            ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
+            //ctvm.TileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
+            //ctvm.TileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
 
             ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
             MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));

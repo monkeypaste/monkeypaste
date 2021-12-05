@@ -2,9 +2,10 @@
 using WPFSpark;
 
 namespace MpWpfApp {
-
-    public class MpWindow : SparkWindow {
-        public MpWindow() : base() { }
+    public class MpWindow : Window {
+        public MpWindow() : base() {
+            DataContext = MpMainWindowViewModel.Instance;
+        }
     }
 
     public class MpWindow<T> : MpWindow where T: class {

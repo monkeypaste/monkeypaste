@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using MonkeyPaste;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +25,8 @@ namespace MpWpfApp {
                 return MpClipTrayViewModel.Instance.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
             }
         }
+
+        #region State
 
         public bool IsAutoAnalysisModeEnabled {
             get {
@@ -171,6 +174,24 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        #endregion
+
+        #region Layout
+
+        public double AppModeButtonGridWidth {
+            get {
+                if (MpMainWindowViewModel.Instance.IsMainWindowLoading ||
+                   MpClipTrayViewModel.Instance == null ||
+                   !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                    return MpMeasurements.Instance.AppStateButtonPanelWidth;
+                }
+                return 0;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -178,6 +199,7 @@ namespace MpWpfApp {
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpAppModeViewModel_PropertyChanged;
+                MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
             });
         }
 
@@ -207,6 +229,9 @@ namespace MpWpfApp {
                 case nameof(IsInAutoAnalyzeMode):
                     ShowNotifcation("Auto-Analyze Mode", IsInAutoAnalyzeMode ? "ON" : "OFF", IsAutoCopyMode);
                     break;
+                case nameof(AppModeButtonGridWidth):
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
+                    break;
             }
         }
 
@@ -221,6 +246,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.UnexpandComplete:
+                case MpMessageType.ExpandComplete:
+                    OnPropertyChanged(nameof(AppModeButtonGridWidth));
+                    break;
+            }
+        }
+
         private void ShowNotifcation(string modeType, string status, bool isOn) {
             if (Properties.Settings.Default.NotificationShowModeChangeToast) {
                 MpStandardBalloonViewModel.ShowBalloon("Monkey Paste", modeType + " is " + status);

@@ -15,7 +15,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {    
-    public abstract class MpViewModelBase : INotifyPropertyChanged, IDisposable {
+    public abstract class MpViewModelBase : INotifyPropertyChanged {//, IDisposable {
         #region Properties
 
         public virtual object ParentObj { get; protected set; }

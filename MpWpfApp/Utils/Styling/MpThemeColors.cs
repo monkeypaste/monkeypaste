@@ -10,18 +10,21 @@ using System.Windows.Media;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace MpWpfApp {
     public enum MpThemeItemType {
-        None = 0,
+        Title_Menu_Background_Color,
         Filter_Menu_Background_Color,
         Clip_Tray_Background_Color,
-        Clip_Tile_Title_Text_Foreground_Color,
-        Clip_Tile_Title_Text_Background_Color,
         Clip_Tile_Content_Item_Background_Color,
         Clip_Tile_Selected_Tile_Border_Color,
         Clip_Tile_Primary_Selected_Tile_Border_Color,
-        Clip_Tile_Unselected_Hovering_Tile_Border_Color        
+        Clip_Tile_Unselected_Hovering_Tile_Border_Color,
+        App_Mode_Grid_Background_Color,
+        SearchBox_Background_Color
     }
 
     public enum MpThemeType {
@@ -32,20 +35,28 @@ namespace MpWpfApp {
         Custom
     }
 
-    public class MpThemeColors {
-        #region Singleton
-        private static readonly Lazy<MpThemeColors> _Lazy = new Lazy<MpThemeColors>(() => new MpThemeColors());
-        public static MpThemeColors Instance { get { return _Lazy.Value; } }
-        #endregion
+    public class MpThemeColors : MpSingletonViewModel<MpThemeColors> {
 
         #region Private Variables
 
-        private List<Brush> _currentThemeColors;
-        private List<Brush> _lightThemeColors;
+        private static double _defaultOpacity = 0.6;
+
+        private Dictionary<MpThemeItemType, Brush> _lightThemeColors = new Dictionary<MpThemeItemType, Brush> {
+            {MpThemeItemType.Title_Menu_Background_Color, new SolidColorBrush(Colors.DimGray){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Filter_Menu_Background_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Clip_Tray_Background_Color, new SolidColorBrush(Colors.MediumPurple){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Clip_Tile_Content_Item_Background_Color, new SolidColorBrush(Colors.White){ Opacity=1 } },
+            {MpThemeItemType.Clip_Tile_Selected_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Clip_Tile_Primary_Selected_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Clip_Tile_Unselected_Hovering_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.App_Mode_Grid_Background_Color, new SolidColorBrush(Colors.DimGray){ Opacity=_defaultOpacity } }
+        };
 
         #endregion
 
         #region Properties
+
+        public Dictionary<MpThemeItemType, Brush> CurrentTheme { get; set; }
 
         public List<List<Brush>> ContentColors {
             get {
@@ -155,108 +166,65 @@ namespace MpWpfApp {
         #endregion
 
         public MpThemeType CurrentThemeType { get; private set; }
-                
+
 
         public void Init() {
             InitDefaultThemes();
-            LoadTheme(MpThemeType.Light);            
+            LoadTheme(MpThemeType.Light);
         }
 
         private void InitDefaultThemes() {
-            _lightThemeColors = new List<Brush> {
-                Brushes.Transparent, //None = 0,
-                Brushes.DarkViolet, //Filter_Menu_Background_Color,
-                Brushes.MediumPurple,//Clip_Tray_Background_Color,
-                Brushes.White,//Clip_Tile_Title_Text_Foreground_Color,
-                Brushes.Black,//Clip_Tile_Title_Text_Background_Color,
-                Brushes.White,//Clip_Tile_Content_Item_Background_Color,
-                Brushes.Red,//Clip_Tile_Selected_Tile_Border_Color,
-                Brushes.Blue,//Clip_Tile_Primary_Selected_Tile_Border_Color,
-                Brushes.Yellow//Clip_Tile_Unselected_Hovering_Tile_Border_Color
-            };
         }
 
         public void LoadTheme(MpThemeType themeType) {
-            _currentThemeColors = new List<Brush>();
+            CurrentTheme = _lightThemeColors;
 
-            switch(themeType) {
+            switch (themeType) {
                 case MpThemeType.Light:
-                    _currentThemeColors = _lightThemeColors;
+                    CurrentTheme = _lightThemeColors;
                     break;
             }
             CurrentThemeType = themeType;
         }
-        public Brush Filter_Menu_Background_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Filter_Menu_Background_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Filter_Menu_Background_Color] = value;
-            }
+    }
+
+    public abstract class MpBindingExtension : Binding, IValueConverter {
+        protected MpBindingExtension() {
+            Source = Converter = this;
         }
 
-        public Brush Clip_Tray_Background_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tray_Background_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tray_Background_Color] = value;
-            }
+        protected MpBindingExtension(object source) // Source, RelativeSource, null for DataContext
+        {
+            var relativeSource = source as RelativeSource;
+            if (relativeSource == null && source != null) Source = source;
+            else RelativeSource = relativeSource;
+            Converter = this;
         }
 
-        public Brush Clip_Tile_Title_Text_Foreground_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Title_Text_Foreground_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Title_Text_Foreground_Color] = value;
-            }
+        public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
+
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            throw new NotImplementedException();
+        }
+    }
+
+    //https://thomaslevesque.com/2008/11/18/wpf-binding-to-application-settings-using-a-markup-extension/
+    public class MpThemeColorsBindingExtension : MpBindingExtension {
+        public MpThemeColorsBindingExtension() {
+            Source = MpThemeColors.Instance;
         }
 
-        public Brush Clip_Tile_Title_Text_Background_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Title_Text_Background_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Title_Text_Background_Color] = value;
-            }
+        public MpThemeColorsBindingExtension(string path) : this() {
+            Key = path;
         }
 
-        public Brush Clip_Tile_Content_Item_Background_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color] = value;
-            }
-        }
+        public string Key { get; set; }
 
-        public Brush Clip_Tile_Selected_Tile_Border_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Selected_Tile_Border_Color];
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (Enum.TryParse<MpThemeItemType>(Key, out MpThemeItemType itemType)) {
+                return MpThemeColors.Instance.CurrentTheme[itemType];
             }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Selected_Tile_Border_Color] = value;
-            }
-        }
-        
-
-        public Brush Clip_Tile_Primary_Selected_Tile_Border_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Primary_Selected_Tile_Border_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Primary_Selected_Tile_Border_Color] = value;
-            }
-        }
-
-        public Brush Clip_Tile_Unselected_Hovering_Tile_Border_Color {
-            get {
-                return _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Unselected_Hovering_Tile_Border_Color];
-            }
-            set {
-                _currentThemeColors[(int)MpThemeItemType.Clip_Tile_Unselected_Hovering_Tile_Border_Color] = value;
-            }
+            return Brushes.Red;
         }
     }
 }
