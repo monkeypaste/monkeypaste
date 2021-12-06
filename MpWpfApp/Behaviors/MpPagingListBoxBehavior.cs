@@ -77,7 +77,8 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                hScrollBar.Track.PreviewMouseDown += Sv_PreviewMouseDown;
+                hScrollBar.Track.PreviewMouseDown += Track_PreviewMouseDown;
+                hScrollBar.Track.MouseMove += Track_MouseMove;
                 MpHelpers.Instance.CreateBinding(
                    MpClipTrayViewModel.Instance,
                    new PropertyPath(
@@ -96,12 +97,27 @@ namespace MpWpfApp {
                 MpMessenger.Instance.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance, 
                     ReceivedClipTrayViewModelMessage);
+
+                MpMessenger.Instance.Register<MpMessageType>(
+                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
+                    ReceivedClipTrayViewModelMessage);
             });
             
             _timer = new DispatcherTimer(DispatcherPriority.Normal);
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             _timer.Tick += HandleWorldTimerTick;
             _timer.Start();
+        }
+
+
+        private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ResizeCompleted:
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ScrollOffset));
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayTotalWidth));
+                    break;
+            }
         }
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
@@ -121,29 +137,51 @@ namespace MpWpfApp {
                 return;
             }
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
-            MpClipTrayViewModel.Instance.ScrollOffset += _velocity;
-            _velocity *= Friction;
-            MpClipTrayViewModel.Instance.HasScrollVelocity = Math.Abs(_velocity) >= 0.1;
+            if(Math.Abs(_velocity) < 0.001) {
+                _velocity = 0;
+                MpClipTrayViewModel.Instance.HasScrollVelocity = false;
+            } else {
+                MpClipTrayViewModel.Instance.ScrollOffset += _velocity;
+                _velocity *= Friction;
+                MpClipTrayViewModel.Instance.HasScrollVelocity = true;
+            }
         }
 
-        private void Sv_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
+        private void Track_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            e.Handled = PerformPageJump();
+        }
 
-            var htrack_mp = e.GetPosition(htrack);
-            if (htrack_mp.Y < 0) {
+        private void Track_MouseMove(object sender, MouseEventArgs e) {
+            if(!MpDragDropManager.Instance.IsDragAndDrop || MpClipTrayViewModel.Instance.IsScrollJumping) {
                 return;
             }
+            PerformPageJump();
+        }
 
-            e.Handled = true;
-            if (htrack.Thumb.Bounds().Contains(e.GetPosition(htrack.Thumb))) {
-                return;
+        private bool PerformPageJump() {
+            Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
+
+            var htrack_mp = Mouse.GetPosition(htrack);
+            if (htrack_mp.Y < 0) {
+                return false;
+            }
+
+            if (htrack.Thumb.Bounds().Contains(Mouse.GetPosition(htrack.Thumb))) {
+                return true;
             }
 
             _velocity = _lastWheelDelta = 0;
 
-            int targetTileIdx = (int)(htrack.ValueFromPoint(htrack_mp) / MpMeasurements.Instance.ClipTileMinSize);
+            double tileSize = MpMeasurements.Instance.ClipTileMinSize;
+            if (MpClipTrayViewModel.Instance.Items.Count > 0) {
+                //in case tiles have been resized get current size from one of em
+                tileSize = MpClipTrayViewModel.Instance.Items[0].TileBorderHeight;
+            }
+            int targetTileIdx = (int)(htrack.ValueFromPoint(htrack_mp) / tileSize);
 
             MpClipTrayViewModel.Instance.JumpToPageIdxCommand.Execute(targetTileIdx);
+
+            return true;
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {

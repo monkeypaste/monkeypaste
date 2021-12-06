@@ -31,6 +31,9 @@ namespace MpWpfApp {
         }
 
         private void Tb_MouseEnter(object sender, MouseEventArgs e) {
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppendModeTooltip));
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppPausedTooltip));
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsRighClickPasteModeTooltip));

@@ -12,11 +12,12 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpClipTrayDropBehavior : MpDropBehaviorBase<MpClipTrayView> {
-        #region Private Variables
-
+        #region Private Variables               
         private double _minScrollDist = 30;
-        private double _autoScrollVelocity = 25;
 
+        private double _autoScrollAccumulator = 5;
+        private double _baseAutoScrollVelocity = 25;
+        private double _autoScrollVelocity;
         #endregion
 
         public override Orientation AdornerOrientation => Orientation.Vertical;
@@ -35,6 +36,7 @@ namespace MpWpfApp {
             base.OnLoaded();
         }
         protected override void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            base.ReceivedClipTrayViewModelMessage(msg);
             switch (msg) {
                 case MpMessageType.TrayScrollChanged:
                     RefreshDropRects();
@@ -56,17 +58,23 @@ namespace MpWpfApp {
         }
 
         public override void AutoScrollByMouse() {
-            var ctr_mp = Mouse.GetPosition(RelativeToElement);
-            Rect ctr_sv_rect = new Rect(0, 0, RelativeToElement.RenderSize.Width, RelativeToElement.RenderSize.Height);
+            var ctr_mp = Mouse.GetPosition(AssociatedObject);
+            Rect ctr_sv_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
             if(!ctr_sv_rect.Contains(ctr_mp)) {
                 return;
             }
+
+            double origScrollOfset = MpClipTrayViewModel.Instance.ScrollOffset;
 
             if (Math.Abs(ctr_sv_rect.Right - ctr_mp.X) <= _minScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset += _autoScrollVelocity;
             } else if (Math.Abs(ctr_sv_rect.Left - ctr_mp.X) <= _minScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset -= _autoScrollVelocity;
-            } 
+            }
+
+            if(origScrollOfset != MpClipTrayViewModel.Instance.ScrollOffset) {
+                _autoScrollVelocity += _autoScrollAccumulator;
+            }
         }
 
         public override List<Rect> GetDropTargetRects() {
@@ -114,37 +122,25 @@ namespace MpWpfApp {
             return targetRects;
         }
 
-        public override async Task StartDrop() { await Task.Delay(1); }
+        public override async Task StartDrop() { 
+            await Task.Delay(1);
+            _autoScrollVelocity = _baseAutoScrollVelocity;
+        }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            if(dragData == null || dragData.GetType() != typeof(List<MpCopyItem>)) {
-                MpConsole.WriteTraceLine("Invalid drop data: " + dragData?.ToString());
-                return;
-            }
+            await base.Drop(isCopy, dragData);
+
             MpClipTileSortViewModel.Instance.SetToManualSort();            
 
-            List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
-            if(isCopy) {
-                var clones = await Task.WhenAll(dragModels.Select(x => x.Clone(true)).ToArray());
-                dragModels = clones.Cast<MpCopyItem>().ToList();
-            }
-            for (int i = 0; i < dragModels.Count; i++) {
-                if(dragModels[i].CompositeParentCopyItemId == 0 && 
-                   i > 0 && !isCopy) {
-                    //if dropping a former composite parent into non-parent idx
-                    await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
-                }
-                dragModels[i].CompositeSortOrderIdx = i;
-                if (i == 0) {
-                    dragModels[i].CompositeParentCopyItemId = 0;
-                } else {
-                    dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
-                }
-                await dragModels[i].WriteToDatabaseAsync();
+            List<MpCopyItem> dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
+            
+            if(!isCopy) {
+                dragModels = await Detach(dragModels);
             }
 
             int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + DropIdx;
-            MpDataModelProvider.Instance.MoveOrInsertQueryItem(dragModels[0].Id, queryDropIdx);
+
+            MpDataModelProvider.Instance.InsertQueryItem(dragModels[0].Id, queryDropIdx);
 
             MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
         }

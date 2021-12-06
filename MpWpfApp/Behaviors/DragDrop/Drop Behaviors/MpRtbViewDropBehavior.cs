@@ -101,12 +101,12 @@ namespace MpWpfApp {
             }
         }
 
-        public override bool IsDragDataValid(object dragData) {
-            if(!base.IsDragDataValid(dragData)) {
+        public override bool IsDragDataValid(bool isCopy,object dragData) {
+            if(!base.IsDragDataValid(isCopy,dragData)) {
                 return false;
             }
             if(AssociatedObject != null && dragData is List<MpCopyItem> ddl) {
-                if(ddl.Count == 1 && ddl[0].Id == AssociatedObject.BindingContext.CopyItemId) {
+                if(!isCopy && ddl.Any(x=>x.Id ==AssociatedObject.BindingContext.CopyItemId)) {
                     return false;
                 }
             }
@@ -114,20 +114,16 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            if ( !IsDragDataValid(dragData)) {
-                MpConsole.WriteTraceLine("Invalid drop data: " + dragData?.ToString());
-                return;
-            }
+            await base.Drop(isCopy, dragData);
+
+            List<MpCopyItem> dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
 
             List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
-            List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
+            
             if(dragModels.Count == 1 && dragModels[0].Id == AssociatedObject.BindingContext.CopyItem.Id) {
                 return;
             }
-            if (isCopy) {
-                var clones = await Task.WhenAll(dragModels.Select(x => x.Clone(true)).ToArray());
-                dragModels = clones.Cast<MpCopyItem>().ToList();
-            }
+            
 
             if (!isCopy) {
                 for (int i = 0; i < dragModels.Count; i++) {

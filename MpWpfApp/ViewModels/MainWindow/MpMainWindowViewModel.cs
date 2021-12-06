@@ -17,7 +17,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase<object>, IDisposable {
+    public class MpMainWindowViewModel : MpViewModelBase<object> {
         #region Singleton Definition
         private static readonly Lazy<MpMainWindowViewModel> _Lazy = new Lazy<MpMainWindowViewModel>(() => new MpMainWindowViewModel());
         public static MpMainWindowViewModel Instance { get { return _Lazy.Value; } }

@@ -189,7 +189,7 @@ namespace MpWpfApp {
         public bool IsRestoringSelection { get; private set; } = false;
 
         //public Dictionary<int, List<int>> SelectionLookup { get; set; } = new Dictionary<int, List<int>>();
-        public List<MpCopyItem> PersistentSelectedModels { get; private set; } = new List<MpCopyItem>();
+        public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
 
         public double LastScrollOfset { get; set; } = 0;
 
@@ -266,11 +266,7 @@ namespace MpWpfApp {
 
         public bool IsAnyContextMenuOpened => Items.Any(x => x.IsAnyContextMenuOpened);
 
-        public bool IsTrayDropping { get; set; } = false;
-
         public bool IsAnyTileItemDragging => Items.Any(x => x.IsAnyItemDragging);
-
-        public bool IsAnyDropOnTile => Items.Any(x => x.IsDroppingOnTile);
 
         public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
 
@@ -341,7 +337,7 @@ namespace MpWpfApp {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
-
+                MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
                 MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
                 MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
                 MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
@@ -356,6 +352,21 @@ namespace MpWpfApp {
             });
         }
 
+        private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if(IsRequery || IsLoadingMore || IsScrollJumping) {
+                return;
+            }
+            switch(e.Action) {
+                case NotifyCollectionChangedAction.Remove:
+                    if(e.OldItems != null) {
+                        foreach(int removedQueryItemId in e.OldItems) {
+
+                        }
+                    }
+                    break;
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -366,7 +377,7 @@ namespace MpWpfApp {
             if (IsAnyTileExpanded) {
                 return;
             }
-            if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
+            if(e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
                 foreach (MpClipTileViewModel octvm in e.OldItems) {
                     octvm.Dispose();
                 }
@@ -912,16 +923,12 @@ namespace MpWpfApp {
             return null;
         }
 
-        public MpContentItemViewModel GetCopyItemViewModelByCopyItem(MpCopyItem ci) {
-            foreach (var ctvm in Items) {
-                foreach (var civm in ctvm.ItemViewModels) {
-                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItem == ci).FirstOrDefault();
-                    if (ortbvm != null) {
-                        return ortbvm;
-                    }
-                }
+        public MpClipTileViewModel GetClipTileViewModelById(int ciid) {
+            var civm = GetContentItemViewModelById(ciid);
+            if(civm == null) {
+                return null;
             }
-            return null;
+            return civm.Parent;
         }
 
         public int GetSelectionOrderIdxForItem(object vm) {
@@ -992,7 +999,7 @@ namespace MpWpfApp {
 
             IsRestoringSelection = true;
 
-            tile.ItemViewModels.ForEach(x => x.IsSelected = prevSelectedItems.Contains(x));
+            tile.ItemViewModels.ForEach(x => x.IsSelected = PersistentSelectedModels.Any(y=>y.Id == x.CopyItemId));
 
             IsRestoringSelection = false;
         }
@@ -1187,9 +1194,9 @@ namespace MpWpfApp {
 
                 IsBusy = true;
 
-                ScrollOffset = LastScrollOfset = offsetIdx * MpMeasurements.Instance.ClipTileMinSize;
-
                 if (offsetIdxArg == null) {
+                    ScrollOffset = LastScrollOfset = offsetIdx * MpMeasurements.Instance.ClipTileMinSize;
+
                     MpDataModelProvider.Instance.ResetQuery();
 
                     await MpDataModelProvider.Instance.QueryForTotalCount();
@@ -1403,11 +1410,12 @@ namespace MpWpfApp {
 
         public ICommand ScrollToHomeCommand => new RelayCommand(
             async () => {
-                JumpToPageIdxCommand.Execute(0);
-                await Task.Delay(100);
-                while (IsScrollJumping) { await Task.Delay(10); }
-                ScrollOffset = LastScrollOfset = 0;
-                Items[0].IsSelected = true;
+                RequeryCommand.Execute(null);
+                //JumpToPageIdxCommand.Execute(0);
+                //await Task.Delay(100);
+                //while (IsScrollJumping) { await Task.Delay(10); }
+                //ScrollOffset = LastScrollOfset = 0;
+                //Items[0].IsSelected = true;
             });
 
         public ICommand ScrollToEndCommand => new RelayCommand(

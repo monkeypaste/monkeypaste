@@ -17,7 +17,7 @@ using MonkeyPaste;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpHighlightTextRangeViewModelCollection : MpViewModelBase<MpClipTileViewModel>, IDisposable {
+    public class MpHighlightTextRangeViewModelCollection : MpViewModelBase<MpClipTileViewModel> {
         #region Private Variables
 
         #endregion

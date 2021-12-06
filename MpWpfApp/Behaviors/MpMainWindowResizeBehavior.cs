@@ -2,6 +2,7 @@
 using MonkeyPaste;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
@@ -14,11 +15,17 @@ namespace MpWpfApp {
             base.OnLoad();
 
             _mainWindowTitlePanel = (Application.Current.MainWindow as MpMainWindow).TitleMenu;
+            (_mainWindowTitlePanel as Button).PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
             _mainWindowTitlePanel.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             _mainWindowTitlePanel.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             _mainWindowTitlePanel.PreviewMouseMove += AssociatedObject_MouseMove;
             _mainWindowTitlePanel.MouseEnter += AssociatedObject_MouseEnter;
             _mainWindowTitlePanel.MouseLeave += AssociatedObject_MouseLeave;
+        }
+
+        private void MpMainWindowResizeBehavior_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            double deltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.MainWindowDefaultHeight;
+            Resize(-deltaHeight);
         }
 
         #region Manual Resize Event Handlers
@@ -39,6 +46,8 @@ namespace MpWpfApp {
 
             var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
             rtbvl.ForEach(x => x.Rtb.FitDocToRtb());
+
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
@@ -73,9 +82,16 @@ namespace MpWpfApp {
             var mwvm = MpMainWindowViewModel.Instance;
             mwvm.IsResizing = true;
 
+            if(mwvm.MainWindowHeight + deltaHeight < MpMeasurements.Instance.MainWindowMinHeight) {
+                deltaHeight = mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight;
+            } else if (mwvm.MainWindowHeight + deltaHeight > MpMeasurements.Instance.MainWindowMaxHeight) {
+                deltaHeight = MpMeasurements.Instance.MainWindowMaxHeight - mwvm.MainWindowHeight;
+            }
             mwvm.MainWindowTop -= deltaHeight;
             mwvm.MainWindowHeight += deltaHeight;
-            MpClipTrayViewModel.Instance.Items.ForEach(x => x.TileBorderHeight += deltaHeight);
+
+            MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
+            MpClipTrayViewModel.Instance.Items.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
             //mwvm.ClipTrayHeight += deltaHeight;
             //ctvm.TileBorderHeight += deltaHeight;
             //ctvm.TileContentHeight += deltaHeight;

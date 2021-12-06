@@ -17,7 +17,7 @@ namespace MpWpfApp {
 
         void AutoScrollByMouse();
         
-        bool IsDragDataValid(object dragData);
+        bool IsDragDataValid(bool isCopy, object dragData);
         
         Task StartDrop();
         Task Drop(bool isCopy, object dragData);

@@ -12,16 +12,14 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid Unloaded="Grid_Unloaded">
+    <Grid x:Name="TileTitleGrid" Unloaded="Grid_Unloaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
             <ColumnDefinition Width="0.25*" />
         </Grid.ColumnDefinitions>
-        <Viewbox Grid.ColumnSpan="2"
-                 Stretch="Fill">
-            <Canvas x:Name="TitleSwirlCanvas"
-                    Visibility="Visible"
-                    Width="{local:MpMeasurementsBinding ClipTileBorderMinSize,
+        <Viewbox Stretch="Fill" Grid.ColumnSpan="2">
+            <Canvas x:Name="TitleSwirlCanvas" 
+                    Width="{local:MpMeasurementsBinding ClipTileDefaultMinSize,
                                                         Mode=OneWay}"
                     Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
                                                          Mode=OneWay}"
@@ -113,7 +111,9 @@
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"
               Grid.Column="0"
-              IsHitTestVisible="{Binding HasScrollVelocity, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolFlipConverter}}"
+              IsHitTestVisible="{Binding HasScrollVelocity,
+                                         Source={StaticResource ClipTrayViewModel},
+                                         Converter={StaticResource BoolFlipConverter}}"
               MouseEnter="ClipTileTitleTextGrid_MouseEnter"
               MouseLeave="ClipTileTitleTextGrid_MouseLeave"
               PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
@@ -171,7 +171,9 @@
         <!--  Clip Title Icon Image  -->
         <Grid Grid.Column="1">
             <Button x:Name="ClipTileAppIconImageButton"
-                    IsHitTestVisible="{Binding HasScrollVelocity, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolFlipConverter}}"
+                    IsHitTestVisible="{Binding HasScrollVelocity,
+                                               Source={StaticResource ClipTrayViewModel},
+                                               Converter={StaticResource BoolFlipConverter}}"
                     MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                     MouseLeave="ClipTileAppIconImageButton_MouseLeave"
                     PreviewMouseLeftButtonDown="ClipTileAppIconImageButton_PreviewMouseLeftButtonDown"
@@ -197,9 +199,9 @@
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"
                            Visibility="Hidden"
-                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                           MaxWidth="{local:MpMeasurementsBinding ClipTileTitleIconSize,
                                                                Mode=OneWay}"
-                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                           MaxHeight="{local:MpMeasurementsBinding ClipTileTitleIconSize,
                                                                 Mode=OneWay}">
                         <Image.RenderTransform>
                             <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />

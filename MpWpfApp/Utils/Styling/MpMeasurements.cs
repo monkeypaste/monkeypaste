@@ -11,7 +11,7 @@ namespace MpWpfApp {
         Left
     }
 
-    public class MpMeasurements : MpSingleton<MpMeasurements> {
+    public class MpMeasurements : MpSingletonViewModel<MpMeasurements> {
         public readonly double PHI = 1.618033988749894;
 
         public MpMeasurements() {
@@ -195,9 +195,25 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileDefaultMinSize {
+            get {
+                return ClipTrayDefaultWidth / TotalVisibleClipTiles; 
+            }
+        }
+
+        private double _clipTileMinSize = 0;
         public double ClipTileMinSize {
             get {
-                return ClipTrayDefaultWidth / TotalVisibleClipTiles; //ClipTrayMinHeight - (ClipTileMargin * 2);// - (ClipTilePadding);
+                if(_clipTileMinSize == 0) {
+                    _clipTileMinSize = ClipTileDefaultMinSize;
+                }
+                return _clipTileMinSize;
+            }
+            set {
+                if(_clipTileMinSize != value) {
+                    _clipTileMinSize = value;
+                    OnPropertyChanged(nameof(ClipTileMinSize));
+                }
             }
         }
 
@@ -240,7 +256,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleHeight {
             get {
-                return ClipTileMinSize / 5;
+                return ClipTileDefaultMinSize / 5;
             }
         }
 

@@ -76,13 +76,13 @@
             <local:MpSystemTrayView DataContext="{StaticResource SystemTrayViewModel}" />
 
             <!--  Main Menu  -->
-            <StackPanel x:Name="TitleMenu"
+            <Button x:Name="TitleMenu"
                         Grid.Row="0"
                         Grid.Column="0"
-                        Orientation="Horizontal"
+                    Style="{StaticResource SemiTransparentButton}"
                         Background="{local:MpThemeColorsBinding Key=Title_Menu_Background_Color}">
                 <TextBlock Text="{Binding LogText}" />
-            </StackPanel>
+            </Button>
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"

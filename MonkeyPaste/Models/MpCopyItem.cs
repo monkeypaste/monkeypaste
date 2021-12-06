@@ -179,7 +179,7 @@ namespace MonkeyPaste {
         public MpCopyItem() : base() { }
 
         public override string ToString() {
-            return $"Id:{Id} Text:{ItemData}" + Environment.NewLine;
+            return $"{Title} Id:{Id}";
         }
 
         public override async Task WriteToDatabaseAsync() {

@@ -27,29 +27,36 @@ namespace MpWpfApp {
         
         private AdornerLayer adornerLayer;
 
-        private bool _hasRegistered = false;
-
         #endregion
 
         #region Properties
-                
+
         public MpDropLineAdorner DropLineAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
 
         public object DataContext => AssociatedObject?.DataContext;
 
+        public List<Rect> DropRects => GetDropTargetRects();
+
+        #endregion
+
+        #region Abstracts
+
         public abstract bool IsEnabled { get; set; }
         public abstract MpDropType DropType { get; }
 
         public abstract UIElement RelativeToElement { get; }
 
-        public List<Rect> DropRects => GetDropTargetRects();
-
         public abstract FrameworkElement AdornedElement { get; }
         public abstract Orientation AdornerOrientation { get; }
-        #endregion
 
+        public abstract MpCursorType MoveCursor { get; }
+        public abstract MpCursorType CopyCursor { get; }
+        public abstract List<Rect> GetDropTargetRects();
+        public abstract void AutoScrollByMouse();
+
+        #endregion
 
         public MpDropBehaviorBase() { }
 
@@ -62,7 +69,6 @@ namespace MpWpfApp {
             AssociatedObject.Unloaded += AssociatedObject_Unloaded;
 
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
-            //MpContentDropManager.Instance.Register(this);
         }
 
         private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -82,7 +88,6 @@ namespace MpWpfApp {
                 AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
             }
             OnUnloaded();
-            //MpContentDropManager.Instance.Unregister(this);
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {            
@@ -96,7 +101,14 @@ namespace MpWpfApp {
             Reset();
         }
 
-        protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) { }
+        protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.JumpToIdxCompleted:
+                    DropIdx = -1;
+                    RefreshDropRects();
+                    break;
+            }
+        }
         protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
 
         public virtual void OnLoaded() {
@@ -111,13 +123,18 @@ namespace MpWpfApp {
             MpMessenger.Instance.Unregister<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
         }
+
+        #region MpIDropTarget Implementation
+
         
-        public abstract MpCursorType MoveCursor { get; }
-        public abstract MpCursorType CopyCursor { get; }
-        public abstract List<Rect> GetDropTargetRects();
-        public abstract Task Drop(bool isCopy, object dragData);
-        public abstract void AutoScrollByMouse();
-                
+
+        public virtual async Task Drop(bool isCopy, object dragData) {
+            if(DropIdx < 0) {
+                throw new Exception($"DropIdx {DropIdx} must be >= 0");
+            }
+            MpClipTrayViewModel.Instance.PersistentSelectedModels = dragData as List<MpCopyItem>;
+            await Task.Delay(1);
+        }
 
         public void CancelDrop() {
             Reset();
@@ -126,20 +143,24 @@ namespace MpWpfApp {
         public void Reset() {
             DropIdx = -1;
             UpdateAdorner();
-
-            //MpRtbView.ClearCaretAdorner();
-
-            //if (!isTrayDrop) {
-            //    if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
-            //        ctvm.DropIdx = -1;
-            //    } else if (AssociatedObject.DataContext is MpContentItemViewModel civm) {
-            //        civm.Parent.DropIdx = -1;
-            //    }
-            //}
-            //AssociatedObject.GetScrollViewer()?.ScrollToHome();
         }
 
-        public virtual bool IsDragDataValid(object dragData) {
+        public abstract Task StartDrop();
+
+        public void ContinueDragOverTarget() {
+            int newDropIdx = GetDropTargetRectIdx();
+            if(newDropIdx != DropIdx) {
+                MpConsole.WriteLine("New dropIdx: " + newDropIdx);
+            }
+            DropIdx = newDropIdx;
+            UpdateAdorner();
+        }
+
+        public void EnableDebugMode() {
+            DropLineAdorner.IsDebugMode = true;
+        }
+
+        public virtual bool IsDragDataValid(bool isCopy,object dragData) {
             if (dragData == null) {
                 return false;
             }
@@ -157,8 +178,6 @@ namespace MpWpfApp {
             return false;
         }
 
-        public abstract Task StartDrop();
-
         public virtual int GetDropTargetRectIdx() {
             Point trayMp = Mouse.GetPosition(RelativeToElement);
 
@@ -169,42 +188,66 @@ namespace MpWpfApp {
             return DropRects.IndexOf(targetRect);
         }
 
-        public void ContinueDragOverTarget() {
-            DropIdx = GetDropTargetRectIdx();
-            if(DropIdx >= 0) {
-                MpConsole.WriteLine("DropIdx: " + DropIdx);
-            }
-            UpdateAdorner();
-        }
-
         public void InitAdorner() {
             DropLineAdorner = new MpDropLineAdorner(AdornedElement,this);
             adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
             adornerLayer.Add(DropLineAdorner);
 
-            if(GetType() != typeof(MpExternalDropBehavior)) {
+            //if(GetType() != typeof(MpExternalDropBehavior)) {
                 //EnableDebugMode();
-            }
+            //}
 
             RefreshDropRects();
         }
 
-        public void RefreshDropRects() {
-            UpdateAdorner();
-        }
-
         public void UpdateAdorner() {
-            if(adornerLayer == null) {
+            if (adornerLayer == null) {
                 InitAdorner();
             }
             adornerLayer?.Update();
         }
 
-        public void EnableDebugMode() {
-            DropLineAdorner.IsDebugMode = true;
+        #endregion
+
+        protected void RefreshDropRects() {
+            UpdateAdorner();
         }
 
+        protected async Task<List<MpCopyItem>> GetDragDataCopy(object dragData) {
+            var clones = (await Task.WhenAll((dragData as List<MpCopyItem>).Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
+            MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
+            return clones;
+        }
 
+        protected async Task<List<MpCopyItem>> Detach(List<MpCopyItem> dragModels, bool ignoreOffset = false) {
+            for (int i = 0; i < dragModels.Count; i++) {
+                if (dragModels[i].CompositeParentCopyItemId == 0) {
+                    //if dropping a former composite parent into non-parent idx
+                    var oldTile = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModels[i].Id);
+                    int oldIdx = oldTile == null ? -1 : MpClipTrayViewModel.Instance.Items.IndexOf(oldTile);
+
+                    var newHead = await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
+                    bool wasRemoved = newHead == null;
+                    if (!wasRemoved && dragModels.Any(x => x.Id == newHead.Id)) {
+                        //if first child was substituted as parent and drag contains
+                        //new parent update dragModels
+                        dragModels[dragModels.IndexOf(dragModels.FirstOrDefault(x => x.Id == newHead.Id))] = newHead;
+                    }
+                    bool needToOffset = !ignoreOffset && wasRemoved && oldIdx < DropIdx;
+                    if (needToOffset) {
+                        DropIdx--;
+                    }
+                }
+                dragModels[i].CompositeSortOrderIdx = i;
+                if (i == 0) {
+                    dragModels[i].CompositeParentCopyItemId = 0;
+                } else {
+                    dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
+                }
+                await dragModels[i].WriteToDatabaseAsync();
+            }
+            return dragModels;
+        }
 
         //public void Drop(bool isCopy = false) {
         //    MpHelpers.Instance.RunOnMainThreadAsync((Func<Task>)(async () => {

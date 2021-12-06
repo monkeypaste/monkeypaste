@@ -98,7 +98,7 @@ namespace MpWpfApp {
 
         private MpIContentDropTarget SelectDropTarget(object dragData) {
             foreach (var dt in _dropTargets.Where(x => x.IsEnabled)) {
-                if (!dt.IsDragDataValid(dragData)) {
+                if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.IsCtrlDown,dragData)) {
                     continue;
                 }
                 dt.DropIdx = dt.GetDropTargetRectIdx();
@@ -109,7 +109,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+        private async void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (e.Button != System.Windows.Forms.MouseButtons.Left) {
                 return;
             }
@@ -119,27 +119,7 @@ namespace MpWpfApp {
                 return;
             }
             if (IsDragAndDrop) {
-                MpHelpers.Instance.RunOnMainThread(async () => {
-                    if (_curDropTarget != null) {
-                        await _curDropTarget?.Drop(
-                                MpShortcutCollectionViewModel.Instance.IsCtrlDown,
-                                MpClipTrayViewModel.Instance.PersistentSelectedModels);
-
-                        bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
-
-                        if (wasExternalDrop) {
-                            Application.Current.MainWindow.Activate();
-                            Application.Current.MainWindow.Focus();
-                            Application.Current.MainWindow.Topmost = true;
-                            
-                            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                            Application.Current.MainWindow.Top = 0;
-                        }
-                    }
-
-                    Reset();
-                });
-                
+                await PerformDrop();
             }
         }
 
@@ -167,6 +147,26 @@ namespace MpWpfApp {
             }
         }
 
+        private async Task PerformDrop() {
+            if (_curDropTarget != null) {
+                await _curDropTarget?.Drop(
+                        MpShortcutCollectionViewModel.Instance.IsCtrlDown,
+                        MpClipTrayViewModel.Instance.PersistentSelectedModels);
+
+                bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
+
+                if (wasExternalDrop) {
+                    Application.Current.MainWindow.Activate();
+                    Application.Current.MainWindow.Focus();
+                    Application.Current.MainWindow.Topmost = true;
+
+                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                    Application.Current.MainWindow.Top = 0;
+                }
+            }
+
+            Reset();
+        }
         private void Reset() {
             IsCheckingForDrag = IsDragAndDrop = false;
             _curDropTarget = null;

@@ -84,10 +84,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\MpWpfApp\Behaviors\DragDrop\Interfaces\MpIContentDragSource.cs" Link="Utils\DragDrop\MpIContentDragSource.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />

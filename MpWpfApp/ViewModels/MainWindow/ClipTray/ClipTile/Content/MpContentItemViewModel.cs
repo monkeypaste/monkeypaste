@@ -96,7 +96,7 @@ namespace MpWpfApp {
         public Brush ItemBackgroundBrush {
             get {
                 if (MpDragDropManager.Instance.IsDragAndDrop) {
-                    return Brushes.White;
+                    return MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
                 }
                 if (IsHovering &&
                     ((Parent.IsExpanded && !IsSelected) || !Parent.IsExpanded) &&
@@ -111,7 +111,7 @@ namespace MpWpfApp {
                     return MpHelpers.Instance.GetLighterBrush(_itemBackgroundBrush, 0.75);
                 }
 
-                return Brushes.White;
+                return MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
 
             }
         }
@@ -835,7 +835,8 @@ namespace MpWpfApp {
                         LastSubSelectedDateTime = DateTime.Now;
                         Parent.IsSelected = true;
                         if (!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown &&
-                            !Parent.IsDroppingOnTile && !Parent.AllowMultiSelect) {
+                            !Parent.Parent.IsRestoringSelection &&
+                            !Parent.AllowMultiSelect) {
                             //isolate selection to this tile/item
 
                             //deselect other tiles
@@ -857,7 +858,8 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
 
                     if (!Parent.Parent.IsRestoringSelection &&
-                        Parent.IsSelected && IsSelected &&
+                        Parent.IsSelected && 
+                        IsSelected &&
                         !Parent.Parent.IsAnyTileExpanded) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }

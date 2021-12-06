@@ -28,7 +28,7 @@
                      VerticalContentAlignment="Stretch"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
                      AutoWordSelection="False"
-                     Background="{local:MpThemeColorsBinding Key=Clip_Tile_Content_Item_Background_Color}"
+                     Background="{Binding ItemBackgroundBrush}"
                      Foreground="{Binding ElementName=Rtb, Path=Background,
                                                              Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
                      BorderThickness="0"

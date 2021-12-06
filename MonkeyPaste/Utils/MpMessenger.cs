@@ -26,7 +26,8 @@ namespace MonkeyPaste {
         ItemDragEnd,
         TrayScrollChanged,
         ContentListScrollChanged, //has context (tile)
-        ContentListItemsChanged //has context (tile)
+        ContentListItemsChanged, //has context (tile)
+        ResizeCompleted
     }
 
     public class MpMessenger : MpSingleton<MpMessenger> {

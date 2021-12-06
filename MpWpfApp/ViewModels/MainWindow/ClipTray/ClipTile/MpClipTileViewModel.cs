@@ -29,7 +29,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpIContentDragSource, IDisposable {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -217,7 +217,7 @@ using System.Speech.Synthesis;
 
         public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
 
-        public double TileContentWidth => TileBorderHeight - MpMeasurements.Instance.ClipTileContentMinWidth;
+        public double TileContentWidth => TileBorderHeight - MpMeasurements.Instance.ClipTileContentMargin;
 
         public double TileContentHeight => TileBorderHeight - TileTitleHeight - MpMeasurements.Instance.ClipTileMargin - MpMeasurements.Instance.ClipTileBorderThickness - TileDetailHeight;
 
@@ -482,8 +482,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        public int DropIdx { get; set; } = -1;
-
         public bool IsAnyBusy => ItemViewModels.Any(x => x.IsBusy) || IsBusy;
 
         public bool IsFlipping { get; set; } = false;
@@ -533,7 +531,6 @@ using System.Speech.Synthesis;
         [MpDependsOnChild("IsItemDragging")]
         public bool IsAnyItemDragging => ItemViewModels.Any(x => x.IsItemDragging);
 
-        public bool IsDroppingOnTile => DropIdx >= 0;
 
         [MpDependsOnChild("IsContextMenuOpen")]
         public bool IsAnyContextMenuOpened => ItemViewModels.Any(x => x.IsContextMenuOpen);
@@ -731,6 +728,7 @@ using System.Speech.Synthesis;
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(PrimaryItem));
             OnPropertyChanged(nameof(TrayX));
+            OnPropertyChanged(nameof(TileBorderBrush));
 
             IsBusy = false;
         }
@@ -826,11 +824,6 @@ using System.Speech.Synthesis;
                 case nameof(IsFlipped):
                     FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
                     BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
-                    break;
-                case nameof(DropIdx):
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
-                    OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))
@@ -1654,34 +1647,5 @@ using System.Speech.Synthesis;
 
         #endregion
 
-
-        #region MpIDragSource Implementation
-
-        public void StartDrag() {
-            DoCommandSelection();
-            ItemViewModels.ForEach(x => x.IsItemDragging = x.IsSelected);
-        }
-
-        public void CancelDrag() {
-            ItemViewModels.ForEach(x => x.IsItemDragging = false);
-        }
-
-        public object GetDragData() {
-            return ItemViewModels.Where(x => x.IsItemDragging).ToList();
-        }
-
-        public async Task<object> PrepareForDrop() {
-            var dropItems = ItemViewModels.Where(x => x.IsItemDragging);
-            foreach(var dcivm in dropItems) {
-                ItemViewModels.Remove(dcivm);
-            }
-            await UpdateSortOrderAsync(false);
-
-            dropItems.ForEach(x => x.IsItemDragging = false);
-            
-            return dropItems;
-        }
-
-        #endregion
     }
 }

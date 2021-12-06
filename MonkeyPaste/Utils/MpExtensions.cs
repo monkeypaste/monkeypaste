@@ -13,6 +13,26 @@ namespace MonkeyPaste {
     public static class MpExtensions {
         #region Collections
 
+        public static List<T> GetRange<T>(this ObservableCollection<T> collection, int startIdx, int count) {
+            if (count == 0 && startIdx + count > 0) {
+                throw new Exception("Collection empty");
+            }
+            if (startIdx < 0 || startIdx >= collection.Count()) { 
+                throw new Exception($"startIdx {startIdx} is greater than collection {collection.Count()}");
+            }
+            if (startIdx + count >= collection.Count()) {
+                count = collection.Count() - startIdx;
+            }
+            int i = 0;
+            var outList = new List<T>();
+            while (count > 0) {
+                outList.Add(collection.ElementAt(startIdx + i));
+                i++;
+                count--;
+            }
+            return outList;
+        }
+
         public static IOrderedEnumerable<TSource> OrderByDynamic<TSource, TKey>(this IEnumerable<TSource> source, bool isDescending, Func<TSource, TKey> keySelector) {
             if (isDescending) {
                 return source.OrderByDescending<TSource, TKey>(keySelector);

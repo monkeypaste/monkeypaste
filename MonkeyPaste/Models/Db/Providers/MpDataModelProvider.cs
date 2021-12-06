@@ -1,6 +1,7 @@
 ﻿using FFImageLoading.Helpers.Exif;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,14 +12,16 @@ namespace MonkeyPaste {
         #region Private Variables
         private IList<MpCopyItem> _lastResult;
 
-        private List<int> _allFetchedAndSortedCopyItemIds = new List<int>();
+        
         #endregion
 
         #region Properties
 
         public MpIQueryInfo QueryInfo { get; set; }
 
-        public int TotalItems => _allFetchedAndSortedCopyItemIds.Count;
+        public ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
+
+        public int TotalItems => AllFetchedAndSortedCopyItemIds.Count;
 
         #endregion
 
@@ -37,7 +40,7 @@ namespace MonkeyPaste {
         }
 
         public void ResetQuery() {
-            _allFetchedAndSortedCopyItemIds.Clear();
+            AllFetchedAndSortedCopyItemIds.Clear();
             _lastResult = new List<MpCopyItem>();
         }
 
@@ -46,15 +49,15 @@ namespace MonkeyPaste {
 
         public async Task QueryForTotalCount() {
             string allRootIdQuery = GetQueryForCount();
-            _allFetchedAndSortedCopyItemIds = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
-            _allFetchedAndSortedCopyItemIds = _allFetchedAndSortedCopyItemIds.Distinct().ToList();
-            QueryInfo.TotalItemsInQuery = _allFetchedAndSortedCopyItemIds.Count;
+            var idl = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
+            AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
+            QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
         }
 
         public async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
-            var fetchRange = _allFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-            var items = await GetCopyItemsByIdList(fetchRange);
-            if(items.Count == 0 && startIndex + count < _allFetchedAndSortedCopyItemIds.Count) {
+            var fetchRange = AllFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
+            var items = await GetCopyItemsByIdList(fetchRange); 
+            if(items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
                 MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
             }
             return items;
@@ -708,42 +711,61 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task RemoveQueryItem(int copyItemId) {
-            if (_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                int newParentId = 0;
-                var ccil = await GetCompositeChildrenAsync(copyItemId);
+        public async Task<MpCopyItem> RemoveQueryItem(int copyItemId) {
+            //returns first child or null
+            //return value is used to adjust dropIdx in ClipTrayDrop
+
+            if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                //throw new Exception("Query does not contain item " + copyItemId);
+                return null;
+            }
+            int itemIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
+            var ccil = await GetCompositeChildrenAsync(copyItemId);
+            if(ccil.Count > 0) {
                 for (int i = 0; i < ccil.Count; i++) {
                     if (i == 0) {
-                        newParentId = ccil[i].Id;
                         ccil[i].CompositeParentCopyItemId = 0;
+                        AllFetchedAndSortedCopyItemIds[itemIdx] = ccil[i].Id;
+                        MpConsole.WriteLine($"QueryItem {copyItemId} at [{itemIdx}] replaced with first child {ccil[i].Id}");
                     } else {
-                        ccil[i].CompositeParentCopyItemId = newParentId;
+                        ccil[i].CompositeParentCopyItemId = ccil[0].Id;
                     }
                     ccil[i].CompositeSortOrderIdx = i;
                     await ccil[i].WriteToDatabaseAsync();
                 }
-                if (newParentId > 0) {
-                    _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(copyItemId)] = newParentId;
-                } else {
-                    _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
-                }
-            }
-        }
-        public void MoveOrInsertQueryItem(int copyItemId, int newIdx) {
-            if (_allFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                int oldIdx = _allFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-                if (newIdx > oldIdx) {
-                    newIdx--;
-                }
-                _allFetchedAndSortedCopyItemIds.Remove(copyItemId);
-
-            }
-
-            if (newIdx >= _allFetchedAndSortedCopyItemIds.Count) {
-                _allFetchedAndSortedCopyItemIds.Add(newIdx);
             } else {
-                _allFetchedAndSortedCopyItemIds.Insert(newIdx, copyItemId);
+                AllFetchedAndSortedCopyItemIds.Remove(copyItemId);
             }
+
+            MpConsole.WriteLine($"QueryItem {copyItemId} was removed from [{itemIdx}]");
+
+            return ccil.Count == 0 ? null : ccil[0];
+        }
+        public void MoveQueryItem(int copyItemId, int newIdx) {
+            if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                throw new Exception("Query does not contain item " + copyItemId);
+            }
+            int oldIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
+            AllFetchedAndSortedCopyItemIds.Move(oldIdx, newIdx);
+            MpConsole.WriteLine($"QueryItem {copyItemId} moved from [{oldIdx}] to [{newIdx}]");
+        }
+
+        public void InsertQueryItem(int copyItemId, int newIdx) {
+            if (AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+                throw new Exception("Query already contains item " + copyItemId);
+            }
+            if(newIdx < 0) {
+                throw new Exception($"Idx must be >= 0, was [{newIdx}]");
+            }
+            if (newIdx > AllFetchedAndSortedCopyItemIds.Count) {
+                throw new Exception($"Idx must be < item count ({AllFetchedAndSortedCopyItemIds.Count}), idx was [{newIdx}]");
+            }
+            if (newIdx == AllFetchedAndSortedCopyItemIds.Count) {
+                AllFetchedAndSortedCopyItemIds.Add(copyItemId);
+            } else {
+                AllFetchedAndSortedCopyItemIds.Insert(newIdx,copyItemId);
+            }
+            MpConsole.WriteLine($"QueryItem {copyItemId} was inserted at idx [{newIdx}]");            
         }
 
         private  void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
