@@ -20,6 +20,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+        public bool IsSyncEnabled { get; set; } = false;
         public bool UseWAL { get; set; } = true;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
@@ -145,13 +146,15 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
                 return;
             }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
-                    (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
+            if(IsSyncEnabled) {
+                if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+                    if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
+                        (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
+                    }
+                    if (!ignoreTracking) {
+                        await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
+                    }
                 }
-                if (!ignoreTracking) {
-                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
-                }                
             }
             if(item is MpCopyItemTag cit) {
                 if(cit.CopyItemId == 0 && cit.TagId == 0) {
@@ -160,8 +163,11 @@ namespace MonkeyPaste {
             }
             await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+           
+            if(IsSyncEnabled) {
+                if (!ignoreSyncing && item is MpISyncableDbObject) {
+                    OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -176,17 +182,21 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
                 return;
             }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {   
-                if(!ignoreTracking) {
-                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
+            if(IsSyncEnabled) {
+                if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+                    if (!ignoreTracking) {
+                        await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
+                    }
                 }
             }
 
             await _connectionAsync.UpdateWithChildrenAsync(item);
 
-            OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-            if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+           if(IsSyncEnabled) {
+                OnItemUpdated?.Invoke(this, item as MpDbModelBase);
+                if (!ignoreSyncing && item is MpISyncableDbObject) {
+                    OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
+                }
             }
         }
 
@@ -344,21 +354,7 @@ namespace MonkeyPaste {
             }
             CreateConnection();
 
-            if (isNewDb) {
-                foreach (var c in GetCreateString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries)) {
-                    if (string.IsNullOrEmpty(c.Trim().Replace(Environment.NewLine, string.Empty))) {
-                        continue;
-                    }
-                    //ExecuteWrite(c + ";", null);
-                }
-            }
-
             if (UseWAL) {
-                // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                //if (_connection != null) {
-                //    _connection.EnableWriteAheadLogging();
-                //}
-
                 if (_connectionAsync != null) {
                     await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
                 }
@@ -367,6 +363,7 @@ namespace MonkeyPaste {
             await InitTables();
             
             if (isNewDb) {
+                await CreateViews();
                 await InitDefaultData();
             }
 
@@ -405,6 +402,44 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
         }
 
+        private async Task CreateViews() {
+            await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
+                                                    SELECT 
+	                                                    case fk_ParentCopyItemId
+		                                                    when 0
+			                                                    then pk_MpCopyItemId
+		                                                    ELSE
+			                                                    fk_ParentCopyItemId
+	                                                    end as RootId,
+	                                                    pk_MpCopyItemId,
+	                                                    fk_MpCopyItemTypeId,
+	                                                    CompositeSortOrderIdx,
+	                                                    Title,
+	                                                    ItemData,
+	                                                    ItemDescription,
+	                                                    CopyDateTime,
+	                                                    CopyCount,
+	                                                    PasteCount,
+	                                                    CopyCount + PasteCount as UsageScore,
+	                                                    MpSource.pk_MpSourceId AS SourceId,
+	                                                    case MpSource.fk_MpUrlId
+		                                                    when 0
+			                                                    then MpApp.SourcePath
+		                                                    ELSE
+			                                                    MpUrl.UrlPath
+	                                                    end as SourcePath,
+	                                                    MpApp.AppName,
+	                                                    MpApp.SourcePath as AppPath,
+	                                                    MpApp.pk_MpAppId AS AppId,
+	                                                    MpUrl.pk_MpUrlId AS UrlId,
+	                                                    MpUrl.UrlPath,
+	                                                    MpUrl.UrlTitle
+                                                    FROM
+	                                                    MpCopyItem
+                                                    INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
+                                                    INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
+                                                    LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
+        }
         private async Task InitDefaultData() {
             // create record for this device
             MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
@@ -451,6 +486,251 @@ namespace MonkeyPaste {
                 TagSortIdx = 3
             };
             await AddItemAsync<MpTag>(helpTag, "", true, true);
+
+
+            var sh1 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("5dff238e-770e-4665-93f5-419e48326f01"),
+                ShortcutName = "Show Window",
+                RouteType = 2,
+                KeyString = "Control+Shift+D",
+                DefaultKeyString = "Control+Shift+D"
+            };
+            await AddItemAsync<MpShortcut>(sh1);
+
+            var sh2 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("cb807500-9121-4e41-80d3-8c3682ce90d9"),
+                ShortcutName = "Hide Window",
+                RouteType = 1,
+                KeyString = "Escape",
+                DefaultKeyString = "Escape"
+            };
+            await AddItemAsync<MpShortcut>(sh2);
+
+            var sh3 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("a41aeed8-d4f3-47de-86c5-f9ca296fb103"),
+                ShortcutName = "Append Mode",
+                RouteType = 2,
+                KeyString = "Control+Shift+A",
+                DefaultKeyString = "Control+Shift+A"
+            };
+            await AddItemAsync<MpShortcut>(sh3);
+
+            var sh4 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("892bf7d7-ba8e-4db1-b2ca-62b41ff6614c"),
+                ShortcutName = "Auto-Copy Mode",
+                RouteType = 2,
+                KeyString = "Control+Shift+C",
+                DefaultKeyString = "Control+Shift+C"
+            };
+            await AddItemAsync<MpShortcut>(sh4);
+
+            var sh5 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("a12c4211-ab1f-4b97-98ff-fbeb514e9a1c"),
+                ShortcutName = "Right-Click Paste Mode",
+                RouteType = 2,
+                KeyString = "Control+Shift+R",
+                DefaultKeyString = "Control+Shift+R"
+            };
+            await AddItemAsync<MpShortcut>(sh5);
+
+            var sh6 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("1d212ca5-fb2a-4962-8f58-24ed9a5d007d"),
+                ShortcutName = "Paste Selected Clip",
+                RouteType = 1,
+                KeyString = "Enter",
+                DefaultKeyString = "Enter"
+            };
+            await AddItemAsync<MpShortcut>(sh6);
+
+            var sh7 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("e94ca4f3-4c6e-40dc-8941-c476a81543c7"),
+                ShortcutName = "Delete Selected Clip",
+                RouteType = 1,
+                KeyString = "Delete",
+                DefaultKeyString = "Delete"
+            };
+            await AddItemAsync<MpShortcut>(sh7);
+
+            var sh8 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("7fe24929-6c9e-49c0-a880-2f49780dfb3a"),
+                ShortcutName = "Select Next",
+                RouteType = 1,
+                KeyString = "Right",
+                DefaultKeyString = "Right"
+            };
+            await AddItemAsync<MpShortcut>(sh8);
+
+            var sh9 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("ee657845-f1dc-40cf-848d-6768c0081670"),
+                ShortcutName = "Select Previous",
+                RouteType = 1,
+                KeyString = "Left",
+                DefaultKeyString = "Left"
+            };
+            await AddItemAsync<MpShortcut>(sh9);
+
+            var sh10 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("5480f103-eabd-4e40-983c-ebae81645a10"),
+                ShortcutName = "Select All",
+                RouteType = 1,
+                KeyString = "Control+A",
+                DefaultKeyString = "Control+A"
+            };
+            await AddItemAsync<MpShortcut>(sh10);
+
+            var sh11 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("39a6b8b5-a585-455b-af83-015fd97ac3fa"),
+                ShortcutName = "Invert Selection",
+                RouteType = 1,
+                KeyString = "Control+Shift+Alt+A",
+                DefaultKeyString = "Control+Shift+Alt+A"
+            };
+            await AddItemAsync<MpShortcut>(sh11);
+
+            var sh12 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("166abd7e-7295-47f2-bbae-c96c03aa6082"),
+                ShortcutName = "Bring to front",
+                RouteType = 1,
+                KeyString = "Control+Home",
+                DefaultKeyString = "Control+Home"
+            };
+            await AddItemAsync<MpShortcut>(sh12);
+
+            var sh13 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("84c11b86-3acc-4d22-b8e9-3bd785446f72"),
+                ShortcutName = "Send to back",
+                RouteType = 1,
+                KeyString = "Control+End",
+                DefaultKeyString = "Control+End"
+            };
+            await AddItemAsync<MpShortcut>(sh13);
+
+            var sh14 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("6487f6ff-da0c-475b-a2ae-ef1484233de0"),
+                ShortcutName = "Assign Hotkey",
+                RouteType = 1,
+                KeyString = "Control+Shift+H",
+                DefaultKeyString = "Control+Shift+H"
+            };
+            await AddItemAsync<MpShortcut>(sh14);
+
+            var sh15 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("837e0c20-04b8-4211-ada0-3b4236da0821"),
+                ShortcutName = "Change Color",
+                RouteType = 1,
+                KeyString = "Control+Shift+Alt+C",
+                DefaultKeyString = "Control+Shift+Alt+C"
+            };
+            await AddItemAsync<MpShortcut>(sh15);
+
+            var sh16 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("4a567aff-33a8-4a1f-8484-038196812849"),
+                ShortcutName = "Say",
+                RouteType = 1,
+                KeyString = "Control+Shift+S",
+                DefaultKeyString = "Control+Shift+S"
+            };
+            await AddItemAsync<MpShortcut>(sh16);
+
+            var sh17 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("330afa20-25c3-425c-8e18-f1423eda9066"),
+                ShortcutName = "Merge",
+                RouteType = 1,
+                KeyString = "Control+Shift+M",
+                DefaultKeyString = "Control+Shift+M"
+            };
+            await AddItemAsync<MpShortcut>(sh17);
+
+            var sh18 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("118a2ca6-7021-47a0-8458-7ebc31094329"),
+                ShortcutName = "Undo",
+                RouteType = 1,
+                KeyString = "Control+Z",
+                DefaultKeyString = "Control+Z"
+            };
+            await AddItemAsync<MpShortcut>(sh18);
+
+            var sh19 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("3980efcc-933b-423f-9cad-09e455c6824a"),
+                ShortcutName = "Redo",
+                RouteType = 1,
+                KeyString = "Control+Y",
+                DefaultKeyString = "Control+Y"
+            };
+            await AddItemAsync<MpShortcut>(sh19);
+
+            var sh20 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("7a7580d1-4129-432d-a623-2fff0dc21408"),
+                ShortcutName = "Edit",
+                RouteType = 1,
+                KeyString = "Control+E",
+                DefaultKeyString = "Control+E"
+            };
+            await AddItemAsync<MpShortcut>(sh20);
+
+            var sh21 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("085338fb-f297-497a-abb7-eeb7310dc6f3"),
+                ShortcutName = "Rename",
+                RouteType = 1,
+                KeyString = "F2",
+                DefaultKeyString = "F2"
+            };
+            await AddItemAsync<MpShortcut>(sh21);
+
+            var sh22 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("e22faafd-4313-441a-b361-16910fc7e9d3"),
+                ShortcutName = "Duplicate",
+                RouteType = 1,
+                KeyString = "Control+D",
+                DefaultKeyString = "Control+D"
+            };
+            await AddItemAsync<MpShortcut>(sh22);
+
+            var sh23 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("4906a01e-b2f7-43f0-af1e-fb99d55c9778"),
+                ShortcutName = "Email",
+                RouteType = 1,
+                KeyString = "Control+E",
+                DefaultKeyString = "Control+E"
+            };
+            await AddItemAsync<MpShortcut>(sh23);
+
+            var sh24 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("c7248087-2031-406d-b4ab-a9007fbd4bc4"),
+                ShortcutName = "Qr Code",
+                RouteType = 1,
+                KeyString = "Control+Shift+Q",
+                DefaultKeyString = "Control+Shift+Q"
+            };
+            await AddItemAsync<MpShortcut>(sh24);
+
+            var sh25 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("777367e6-c161-4e93-93e0-9bf12221f7ff"),
+                ShortcutName = "Toggle Auto-Analyze Mode",
+                RouteType = 2,
+                KeyString = "Control+Shift+B",
+                DefaultKeyString = "Control+Shift+B"
+            };
+            await AddItemAsync<MpShortcut>(sh25);
+
+            var sh26 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("97e29b06-0ec4-4c55-a393-8442d7695038"),
+                ShortcutName = "Toggle Is App Paused",
+                RouteType = 2,
+                KeyString = "Control+Shift+P",
+                DefaultKeyString = "Control+Shift+P"
+            };
+            await AddItemAsync<MpShortcut>(sh26);
+
+            var sh27 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("ee74dd92-d18b-46cf-91b7-3946ab55427c"),
+                ShortcutName = "Copy Selection",
+                RouteType = 1,
+                KeyString = "Control+C",
+                DefaultKeyString = "Control+C"
+            };
+            await AddItemAsync<MpShortcut>(sh27);
+
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }

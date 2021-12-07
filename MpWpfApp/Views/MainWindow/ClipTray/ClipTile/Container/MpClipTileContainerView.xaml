@@ -9,11 +9,7 @@
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <i:Interaction.Behaviors>
-        <local:MpTileExpanderBehavior x:Name="ExpandBehavior" />
-    </i:Interaction.Behaviors>
-    <Grid Loaded="Grid_Loaded"
-          Unloaded="Grid_Unloaded">
+    <Grid>
         <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
                                             DataContext="{Binding PrimaryItem}"
                                             Visibility="{Binding Parent.BackVisibility}" />

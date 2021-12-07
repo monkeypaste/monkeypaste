@@ -140,7 +140,6 @@
     <Compile Include="Behaviors\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
-    <Compile Include="Behaviors\MpTileExpanderBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
@@ -404,9 +403,6 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\DropCanvas\MpExternalDropView.xaml.cs">
-      <DependentUpon>MpExternalDropView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml.cs">
       <DependentUpon>MpSearchCriteriaListView.xaml</DependentUpon>
     </Compile>
@@ -433,6 +429,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
       <DependentUpon>MpAppModeButtonGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\TitleBar\MpTitleBarView.xaml.cs">
+      <DependentUpon>MpTitleBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
@@ -617,10 +616,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\DropCanvas\MpExternalDropView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -654,6 +649,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\TitleBar\MpTitleBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2323,6 +2322,9 @@
     <EmbeddedResource Include="Resources\Cursors\hand_closed.cur">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Resource Include="Resources\Images\frame_grip.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -38,7 +38,7 @@ namespace MonkeyPaste {
         }
 
         public MpIIconBuilder GetIconBuilder() {
-            return _niw.GetIconBuilder();
+            return _niw?.GetIconBuilder();
         }
         #endregion
     }

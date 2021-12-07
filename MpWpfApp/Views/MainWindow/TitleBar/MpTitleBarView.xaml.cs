@@ -15,15 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpDropCanvasView.xaml
+    /// Interaction logic for MpTitleBarView.xaml
     /// </summary>
-    public partial class MpExternalDropView : UserControl {
-        public MpExternalDropView() {
+    public partial class MpTitleBarView : MpUserControl<MpMainWindowViewModel> {
+        public MpTitleBarView() {
             InitializeComponent();
-        }
-
-        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e) {
-            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
     }
 }

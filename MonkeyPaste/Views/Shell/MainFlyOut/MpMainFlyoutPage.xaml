@@ -16,7 +16,8 @@
                    VerticalOptions="Center"
                    WidthRequest="100" />
         </Grid>
-        <local:MpTagCollectionView x:Name="TagCollectionView" BindingContext="{Binding TagCollectionViewModel}" />
+        <local:MpTagCollectionView x:Name="TagCollectionView"
+                                   BindingContext="{Binding TagCollectionViewModel}" />
         <StackLayout Orientation="Horizontal">
             <Image Margin="20,0,0,0"
                    HeightRequest="45"

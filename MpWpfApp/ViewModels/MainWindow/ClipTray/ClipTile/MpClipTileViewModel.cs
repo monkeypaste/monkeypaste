@@ -32,6 +32,7 @@ using System.Speech.Synthesis;
     public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
         #region Private Variables
 
+        private double _unexpandedHeight = 0;
         private List<string> _tempFileList = new List<string>();
         //container
 
@@ -212,7 +213,7 @@ using System.Speech.Synthesis;
         }
 
         public double TileBorderWidth => IsExpanded ? 
-                            700://TileBorderMaxWidth :
+                            MpMainWindowViewModel.Instance.MainWindowWidth - (MpMeasurements.Instance.AppStateButtonPanelWidth * 2) :
                             TileBorderHeight - (MpMeasurements.Instance.ClipTileMargin * 2);
 
         public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
@@ -325,7 +326,42 @@ using System.Speech.Synthesis;
 
         #endregion
 
-        #region Visibility    
+
+        #region Visibility
+
+        public Visibility FrontVisibility { get; set; } = Visibility.Visible;
+
+        public Visibility BackVisibility { get; set; } = Visibility.Collapsed;
+
+        public Visibility SideVisibility { get; set; } = Visibility.Collapsed;
+
+        public ScrollBarVisibility HorizontalScrollbarVisibility {
+            get {
+                if (Parent == null) {
+                    return ScrollBarVisibility.Hidden;
+                }
+                if (IsExpanded) {
+                    if (TotalExpandedContentSize.Width > ContentWidth) {
+                        return ScrollBarVisibility.Visible;
+                    }
+                }
+                return ScrollBarVisibility.Hidden;
+            }
+        }
+
+        public ScrollBarVisibility VerticalScrollbarVisibility {
+            get {
+                if (Parent == null) {
+                    return ScrollBarVisibility.Hidden;
+                }
+                if (IsExpanded) {
+                    if (TotalExpandedContentSize.Height > ContainerSize.Height) {
+                        return ScrollBarVisibility.Visible;
+                    }
+                }
+                return ScrollBarVisibility.Hidden;
+            }
+        }
 
         public Visibility FlipButtonVisibility {
             get {
@@ -707,7 +743,7 @@ using System.Speech.Synthesis;
                 var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
 
-                for (int i = 0; i < ccil.Count; i++) {
+                for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
                     ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
                     ccil[i].CompositeSortOrderIdx = i;
                     var civm = await CreateContentItemViewModel(ccil[i]);
@@ -737,6 +773,115 @@ using System.Speech.Synthesis;
             var civm = new MpContentItemViewModel(this);
             await civm.InitializeAsync(ci);
             return civm;
+        }
+
+        public async Task UserPreparingDynamicPaste() {
+            await Task.Delay(1);
+        }
+
+        public void ResetSubSelection(bool clearEditing = true) {
+            ClearSelection(clearEditing);
+            Parent.IsSelectionReset = true;
+            IsSelected = true;
+            Parent.IsSelectionReset = false;
+        }
+
+        public void ClearSubHovering() {
+            foreach (var ivm in ItemViewModels) {
+                ivm.IsHovering = false;
+            }
+        }
+
+        public void SubSelectAll() {
+            AllowMultiSelect = true;
+            foreach (var ivm in ItemViewModels) {
+                ivm.IsSelected = true;
+            }
+            AllowMultiSelect = false;
+        }
+
+        public void DoCommandSelection() {
+            //called before all commands (assuming passes CanExecute checks)
+            //to select all items if none are selected for tile based commands
+            if (!IsSelected) {
+                IsSelected = true;
+            }
+            if (SelectedItems.Count == 0) {
+                SubSelectAll();
+            }
+        }
+
+        public MpContentItemViewModel GetItemByCopyItemId(int copyItemId) {
+            foreach (var rtbvm in ItemViewModels) {
+                if (rtbvm.CopyItem.Id == copyItemId) {
+                    return rtbvm;
+                }
+            }
+            return null;
+        }
+
+        public MpContentItemViewModel GetContentItemByCopyItemId(int ciid) {
+            return ItemViewModels.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
+        }
+
+        public string GetDetailText(MpCopyItemDetailType detailType) {
+            return HeadItem.GetDetailText(detailType);
+        }
+
+        public async Task InsertRange(int idx, List<MpCopyItem> models) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                var curModels = ItemViewModels.Where(x => x.CopyItem != null).Select(x => x.CopyItem).ToList();
+
+                idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
+
+                curModels.InsertRange(idx, models);
+                for (int i = 0; i < curModels.Count; i++) {
+                    curModels[i].CompositeSortOrderIdx = i;
+                    if (i == 0) {
+                        curModels[i].CompositeParentCopyItemId = 0;
+                    } else {
+                        curModels[i].CompositeParentCopyItemId = curModels[0].Id;
+                    }
+                    await curModels[i].WriteToDatabaseAsync();
+                }
+
+                //only will occur during drag & drop
+                await InitializeAsync(curModels[0]);
+            });
+        }
+
+        public async Task RemoveRange(List<MpCopyItem> models) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                for (int i = 0; i < models.Count; i++) {
+                    var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
+                    if (ivm != null) {
+                        ItemViewModels.Remove(ivm);
+                    }
+                }
+                //if (ItemViewModels.Count == 0) {
+                //    IsPlaceholder = true;
+                //    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
+                //} else {
+                //    UpdateSortOrder();
+                //}
+            });
+        }
+
+        public async Task UpdateSortOrderAsync(bool fromModel = false) {
+            if (fromModel) {
+                ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
+            } else {
+                foreach (var ivm in ItemViewModels) {
+                    ivm.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
+                    if (ivm.CompositeSortOrderIdx == 0) {
+                        ivm.CompositeParentCopyItemId = 0;
+                    } else {
+                        ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
+                    }
+                    await ivm.CopyItem.WriteToDatabaseAsync();
+                }
+            }
+            RequestUiUpdate();
         }
 
         public async Task ClearContent() {
@@ -777,59 +922,6 @@ using System.Speech.Synthesis;
         }
 
         #endregion
-
-        private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
-            switch (e1.PropertyName) {
-                case nameof(IsAnyBusy):
-                    if (Parent != null) {
-                        Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
-                    }
-                    break;
-                case nameof(IsBusy):
-                    OnPropertyChanged(nameof(IsAnyBusy));
-                    break;
-                case nameof(IsSelected):
-                    if(!IsSelected) {
-                        if (IsFlipped) {
-                            Parent.FlipTileCommand.Execute(this);
-                        }
-                        //ClearSelection();
-                    } else {
-                        LastSelectedDateTime = DateTime.Now;
-                        RequestFocus();
-                    }
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    break;
-                case nameof(IsExpanded):
-                    if(IsExpanded) {
-                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Expand, this);
-                    } else {
-                        MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Unexpand, this);
-                    }
-                    MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
-                    OnPropertyChanged(nameof(TileBorderWidth));
-                    OnPropertyChanged(nameof(FlipButtonVisibility));
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
-                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridWidth));
-                    OnPropertyChanged(nameof(TrayX));
-                    break;
-                case nameof(IsFlipping):
-                    if(IsFlipping) {
-                        FrontVisibility = Visibility.Collapsed;
-                        BackVisibility = Visibility.Collapsed;
-                    }
-                    break;
-                case nameof(IsFlipped):
-                    FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
-                    BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
-                    break;
-                case nameof(IsAnyEditingTemplate):
-                    //OnPropertyChanged(nameof(De))
-                    break;
-            }
-        }
 
 
         public async Task GatherAnalytics() {
@@ -900,7 +992,6 @@ using System.Speech.Synthesis;
             return string.Empty;
             //both return to ClipTray.GetDataObjectFromSelectedClips
         }
-
 
         public async Task FillAllTemplates() {
             bool hasExpanded = false;
@@ -982,6 +1073,7 @@ using System.Speech.Synthesis;
 
             }
         }
+
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 //DragDrop Cases
@@ -1000,197 +1092,104 @@ using System.Speech.Synthesis;
             //throw new NotImplementedException();
         }
 
-        
 
         #endregion
 
         #endregion
-
-        #region Private Methods           
-
-
-
-        #endregion
-
-        #region Content Container stuff
-
-        #region Private Variables
-        #endregion
-
-        #region Properties
-
-        #region Visibility
-        public Visibility FrontVisibility { get; set; } = Visibility.Visible;
-
-        public Visibility BackVisibility { get; set; } = Visibility.Collapsed;
-
-        public Visibility SideVisibility { get; set; } = Visibility.Collapsed;
-
-        public ScrollBarVisibility HorizontalScrollbarVisibility {
-            get {
-                if (Parent == null) {
-                    return ScrollBarVisibility.Hidden;
-                }
-                if (IsExpanded) {
-                    if (TotalExpandedContentSize.Width > ContentWidth) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
-            }
-        }
-
-        public ScrollBarVisibility VerticalScrollbarVisibility {
-            get {
-                if (Parent == null) {
-                    return ScrollBarVisibility.Hidden;
-                }
-                if (IsExpanded) {
-                    if (TotalExpandedContentSize.Height > ContainerSize.Height) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
-            }
-        }
-        #endregion
-
-        #region Layout
-
-        #endregion
-
-        #region State
-
-
-        #endregion
-
-        #endregion
-
-       
-
-        #region Public Methods       
-        public async Task UserPreparingDynamicPaste() {
-            await Task.Delay(1);
-        }
-
-        public void ResetSubSelection(bool clearEditing = true) {
-            ClearSelection(clearEditing);
-            Parent.IsSelectionReset = true;
-            IsSelected = true;
-            Parent.IsSelectionReset = false;
-        }
-
-        public void ClearSubHovering() {
-            foreach (var ivm in ItemViewModels) {
-                ivm.IsHovering = false;
-            }
-        }
-
-        public void SubSelectAll() {
-            AllowMultiSelect = true;
-            foreach (var ivm in ItemViewModels) {
-                ivm.IsSelected = true;
-            }
-            AllowMultiSelect = false;
-        }
-
-        public void DoCommandSelection() {
-            //called before all commands (assuming passes CanExecute checks)
-            //to select all items if none are selected for tile based commands
-            if (!IsSelected) {
-                IsSelected = true;
-            }
-            if(SelectedItems.Count == 0) {
-                SubSelectAll();
-            }
-        }
-
-        public MpContentItemViewModel GetItemByCopyItemId(int copyItemId) {
-            foreach (var rtbvm in ItemViewModels) {
-                if (rtbvm.CopyItem.Id == copyItemId) {
-                    return rtbvm;
-                }
-            }
-            return null;
-        }
-
-        public MpContentItemViewModel GetContentItemByCopyItemId(int ciid) {
-            return ItemViewModels.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
-        }
-
-        public string GetDetailText(MpCopyItemDetailType detailType) {
-            return HeadItem.GetDetailText(detailType);
-        }
-
-        public async Task InsertRange(int idx, List<MpCopyItem> models) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
-                var curModels = ItemViewModels.Where(x=>x.CopyItem != null).Select(x => x.CopyItem).ToList();
-
-                idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
-
-                curModels.InsertRange(idx, models);
-                for (int i = 0; i < curModels.Count; i++) {
-                    curModels[i].CompositeSortOrderIdx = i;
-                    if (i == 0) {
-                        curModels[i].CompositeParentCopyItemId = 0;
-                    } else {
-                        curModels[i].CompositeParentCopyItemId = curModels[0].Id;
-                    }
-                    await curModels[i].WriteToDatabaseAsync();
-                }
-
-                //only will occur during drag & drop
-                await InitializeAsync(curModels[0]);
-            });
-        }
-
-        public async Task RemoveRange(List<MpCopyItem> models) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                for (int i = 0; i < models.Count; i++) {
-                    var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
-                    if (ivm != null) {
-                        ItemViewModels.Remove(ivm);
-                    }
-                }
-                //if (ItemViewModels.Count == 0) {
-                //    IsPlaceholder = true;
-                //    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
-                //} else {
-                //    UpdateSortOrder();
-                //}
-            });
-        }
-
-        public async Task UpdateSortOrderAsync(bool fromModel = false) {
-            if (fromModel) {
-                ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
-            } else {
-                foreach (var ivm in ItemViewModels) {
-                    ivm.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
-                    if(ivm.CompositeSortOrderIdx == 0) {
-                        ivm.CompositeParentCopyItemId = 0;
-                    } else {
-                        ivm.CompositeParentCopyItemId = ItemViewModels[0].CopyItemId;
-                    }
-                    await ivm.CopyItem.WriteToDatabaseAsync();
-                }
-            }
-            RequestUiUpdate();
-        }
-
-        
-
-        #endregion
-        //public abstract string GetItemRtf();
-        //public abstract string GetItemPlainText();
-        //public abstract string GetItemQuillHtml();
-        //public abstract string[] GetItemFileList();
-
 
         #region Private Methods
+
+        private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
+            switch (e1.PropertyName) {
+                case nameof(IsAnyBusy):
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    }
+                    break;
+                case nameof(IsBusy):
+                    OnPropertyChanged(nameof(IsAnyBusy));
+                    break;
+                case nameof(IsSelected):
+                    if (!IsSelected) {
+                        if (IsFlipped) {
+                            Parent.FlipTileCommand.Execute(this);
+                        }
+                        //ClearSelection();
+                    } else {
+                        LastSelectedDateTime = DateTime.Now;
+                        RequestFocus();
+                    }
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                    break;
+                case nameof(IsExpanded):
+                    MpMessenger.Instance.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
+                    MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
+                    OnPropertyChanged(nameof(TileBorderWidth));
+                    OnPropertyChanged(nameof(FlipButtonVisibility));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
+                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
+                    Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridWidth));
+
+                    if (IsExpanded) {
+                        Parent.ScrollOffset = Parent.LastScrollOfset = 0;
+
+                        if (SelectedItems.Count == 0) {
+                            PrimaryItem.IsSelected = true;
+                        }
+
+                        _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+                        MpMainWindowResizeBehavior.Instance.Resize(Math.Max(TileBorderHeight, TotalExpandedContentSize.Height - TileBorderHeight));
+
+                        Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                    } else {
+                        Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                        MpMainWindowResizeBehavior.Instance.Resize(_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
+                    }
+                    OnPropertyChanged(nameof(TrayX));
+
+                    MpMessenger.Instance.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
+                    break;
+                case nameof(IsFlipping):
+                    if (IsFlipping) {
+                        FrontVisibility = Visibility.Collapsed;
+                        BackVisibility = Visibility.Collapsed;
+                    }
+                    break;
+                case nameof(IsFlipped):
+                    FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
+                    BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
+                    break;
+                case nameof(IsAnyEditingTemplate):
+                    //OnPropertyChanged(nameof(De))
+                    break;
+            }
+        }
+
+        private void ExpandedKeyDown_Handler(object sender, KeyEventArgs e) {
+            if(MpDragDropManager.Instance.IsDragAndDrop) {
+                return;
+            }
+            if(e.Key == Key.Escape) {
+                ToggleExpandedCommand.Execute(null);
+            }
+        }
         #endregion
 
         #region Commands
+
+        public ICommand ToggleExpandedCommand => new RelayCommand(
+            () => {
+                if(!IsSelected && !IsExpanded) {
+                    ResetSubSelection(false);
+                }
+                IsExpanded = !IsExpanded;
+            });
+
         //private RelayCommand _createQrCodeFromClipCommand;
         //public ICommand CreateQrCodeFromClipCommand {
         //    get {
@@ -1277,9 +1276,7 @@ using System.Speech.Synthesis;
         //        ShortcutKeyString,
         //        Parent.HotkeyPasteCommand, CopyItemId);
         //}
-        #endregion
 
-        #region Commands - From Content Container
         private RelayCommand _editTitleCommand;
         public ICommand EditTitleCommand {
             get {
@@ -1442,7 +1439,6 @@ using System.Speech.Synthesis;
                 return canSendBack;
             });
 
-
         private RelayCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {
             get {
@@ -1530,27 +1526,17 @@ using System.Speech.Synthesis;
             },
             () => SelectedItems.Count == 1);
 
-        private RelayCommand _invertSubSelectionCommand;
-        public ICommand InvertSubSelectionCommand {
-            get {
-                if (_invertSubSelectionCommand == null) {
-                    _invertSubSelectionCommand = new RelayCommand(InvertSubSelection, CanSubInvertSelection);
+        public ICommand InvertSubSelectionCommand => new RelayCommand(
+            () => {
+                var sctvml = SelectedItems;
+                ClearSelection();
+                foreach (var vctvm in VisibleItems) {
+                    if (!sctvml.Contains(vctvm)) {
+                        vctvm.IsSelected = true;
+                    }
                 }
-                return _invertSubSelectionCommand;
-            }
-        }
-        private bool CanSubInvertSelection() {
-            return SelectedItems.Count != VisibleItems.Count;
-        }
-        private void InvertSubSelection() {
-            var sctvml = SelectedItems;
-            ClearSelection();
-            foreach (var vctvm in VisibleItems) {
-                if (!sctvml.Contains(vctvm)) {
-                    vctvm.IsSelected = true;
-                }
-            }
-        }
+            },
+            SelectedItems.Count != VisibleItems.Count);
 
         public ICommand SpeakSubSelectedClipsAsyncCommand => new RelayCommand(
             async () => {
@@ -1603,9 +1589,7 @@ using System.Speech.Synthesis;
                     rtbvm.IsSelected = true;
                 }
             });
-        #endregion
 
-        #region MpIContentCommands 
         public ICommand SelectAllCommand {
             get {
                 return new RelayCommand(
@@ -1636,16 +1620,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        //public int CompareTo(object obj) {
-        //    if(obj == null || obj.GetType() != typeof(MpClipTileViewModel)) {
-        //        return 1;
-        //    }
-        //    return HeadId.CompareTo((obj as MpClipTileViewModel).HeadId);
-        //}
-
         #endregion
-
-        #endregion
-
     }
 }

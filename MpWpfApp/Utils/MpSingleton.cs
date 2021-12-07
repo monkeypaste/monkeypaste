@@ -12,8 +12,7 @@ namespace MpWpfApp {
         #endregion
     }
 
-    public abstract class MpSingletonViewModel<T> : MpViewModelBase<object>
-        where T : new() {
+    public abstract class MpSingletonViewModel<T> : MpViewModelBase<object> where T : new() {
 
         #region Singleton Definition
         private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
@@ -23,8 +22,7 @@ namespace MpWpfApp {
         protected MpSingletonViewModel() : base(null) { }
     }
 
-    public abstract class MpThreadSafeSingletonViewModel<T> : MpViewModelBase<object>
-        where T : new() {
+    public abstract class MpThreadSafeSingletonViewModel<T> : MpViewModelBase<object> where T : new() {
 
         #region Singleton Definition
         private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T(),true);

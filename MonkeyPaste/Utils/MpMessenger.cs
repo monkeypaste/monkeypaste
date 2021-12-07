@@ -27,6 +27,7 @@ namespace MonkeyPaste {
         TrayScrollChanged,
         ContentListScrollChanged, //has context (tile)
         ContentListItemsChanged, //has context (tile)
+        Resizing,
         ResizeCompleted
     }
 

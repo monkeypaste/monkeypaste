@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xamarin.Forms.Internals;
 
 namespace MpWpfApp {
     public class MpContentListDropBehavior : MpDropBehaviorBase<MpContentListView> {
@@ -159,6 +160,17 @@ namespace MpWpfApp {
             List<MpCopyItem> dropModels = AssociatedObject.BindingContext.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
 
             if(!isCopy) {
+                bool isResort = dragModels.All(x => dropModels.Any(y => y.Id == x.Id));
+                if (isResort) {
+                    DropIdx = Math.Min(AssociatedObject.BindingContext.ItemViewModels.Count - 1, DropIdx);
+                    //dragModels.Reverse();
+                    foreach (var dragModel in dragModels) {
+                        int dragIdx = AssociatedObject.BindingContext.ItemViewModels.IndexOf(AssociatedObject.BindingContext.ItemViewModels.FirstOrDefault(x => x.CopyItemId == dragModel.Id));
+                        AssociatedObject.BindingContext.ItemViewModels.Move(dragIdx, DropIdx);
+                    }
+                    await AssociatedObject.BindingContext.UpdateSortOrderAsync();
+                    return;
+                }
                 List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
                 foreach (var dragModel in dragModels) {
                     var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModel.Id);
@@ -194,71 +206,17 @@ namespace MpWpfApp {
             dropModels.InsertRange(DropIdx, dragModels.OrderBy(x=>x.CompositeSortOrderIdx));
 
             dropModels = await Detach(dropModels, true);
-            int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
-            MpDataModelProvider.Instance.InsertQueryItem(dropModels[0].Id, queryDropIdx);
-            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
-            return;
 
-            //int actualDropIdx = DropIdx;
-            //for (int i = 0; i < dragModels.Count; i++) {
-            //    if (dragModels[i].CompositeParentCopyItemId == 0 &&
-            //        !AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id &&
-            //        !isCopy)) {
-            //        //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-            //        await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
-            //    }
-            //    if (AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
-            //        //if drag item is part of this tile
-            //        if (actualDropIdx > dragModels[i].CompositeSortOrderIdx) {
-            //            actualDropIdx--;
-            //        }
-            //        dropModels.Remove(dragModels[i]);
-            //    } else {
-            //        var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
-            //        if (dcivm != null) {
-            //            //will be null if virtualized
-            //            if (!dragTiles.Contains(dcivm.Parent) && dcivm.Parent != AssociatedObject.DataContext) {
-            //                dragTiles.Add(dcivm.Parent);
-            //            }
-            //        }
-            //    }
-            //}
-            //dragModels.Reverse();
-            //dropModels.InsertRange(actualDropIdx, dragModels);
-            //for (int i = 0; i < dropModels.Count; i++) {
-            //    dropModels[i].CompositeSortOrderIdx = i;
-            //    if (i == 0) {
-            //        dropModels[i].CompositeParentCopyItemId = 0;
-            //    } else {
-            //        dropModels[i].CompositeParentCopyItemId = dropModels[0].Id;
-            //    }
-            //    await dropModels[i].WriteToDatabaseAsync();
-            //}
+            if (AssociatedObject.BindingContext.IsExpanded) {
+                await AssociatedObject.BindingContext.InitializeAsync(
+                    dropModels[0],
+                    AssociatedObject.BindingContext.QueryOffsetIdx);
+            } else {
+                int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
+                MpDataModelProvider.Instance.InsertQueryItem(dropModels[0].Id, queryDropIdx);
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+            }
 
-
-            //await AssociatedObject.BindingContext.InitializeAsync(dropModels[0], AssociatedObject.BindingContext.QueryOffsetIdx);
-
-            //if (!AssociatedObject.BindingContext.IsExpanded && !isCopy) {
-            //    bool needsRequery = false;
-            //    foreach (var dctvm in dragTiles) {
-            //        if (dropModels.Any(x => x.Id == dctvm.HeadItem.CopyItemId)) {
-            //            if (dctvm.ItemViewModels.Count == 1) {
-            //                //this tile needs to be removed and instead of shifting all the query idx's 
-            //                //just requery at current offset
-            //                needsRequery = true;
-            //                break;
-            //            }
-            //            await dctvm.InitializeAsync(dctvm.ItemViewModels[1].CopyItem, dctvm.QueryOffsetIdx);
-            //        } else {
-            //            await dctvm.InitializeAsync(dctvm.ItemViewModels[0].CopyItem, dctvm.QueryOffsetIdx);
-            //        }
-            //    }
-
-            //    if (needsRequery) {
-            //        //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
-            //        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
-            //    }
-            //}
         }
 
         public override void AutoScrollByMouse() {
@@ -266,7 +224,6 @@ namespace MpWpfApp {
             var ctr_mp = Mouse.GetPosition(RelativeToElement);
             Rect clb_rect = new Rect(0,0,lb.ActualWidth,lb.ActualHeight);
             if (!clb_rect.Contains(ctr_mp)) {
-                //MpConsole.WriteLine($"Mouse point ({ctr_mp.X},{ctr_mp.Y}) not in rect ({clb_rect})");
                 return;
             }
             var sv = lb.GetScrollViewer();
@@ -281,7 +238,6 @@ namespace MpWpfApp {
 
         public override async Task StartDrop() { 
             await Task.Delay(1);
-            MpConsole.WriteLine("New DropTarget, dropIdx: " + DropIdx);
         }
     }
 }

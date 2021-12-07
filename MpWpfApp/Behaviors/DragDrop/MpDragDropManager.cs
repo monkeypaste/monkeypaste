@@ -29,7 +29,7 @@ namespace MpWpfApp {
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
-                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpExternalDropView>().ExternalDropBehavior);
+                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpTitleBarView>().ExternalDropBehavior);
 
                 return dtl;
             }
@@ -108,7 +108,14 @@ namespace MpWpfApp {
             }
             return null;
         }
-
+        private  void Application_KeyDown(object sender, KeyEventArgs e) {
+            if(!IsDragAndDrop) {
+                return;
+            }
+            if(e.Key == Key.Escape) {
+                Reset();
+            }
+        }
         private async void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (e.Button != System.Windows.Forms.MouseButtons.Left) {
                 return;
@@ -134,6 +141,7 @@ namespace MpWpfApp {
                 if (!IsDragAndDrop) {
                     IsDragAndDrop = true;
                     _autoScrollTimer.Start();
+                    Keyboard.AddKeyDownHandler(Application.Current.MainWindow, Application_KeyDown);
                 }
 
                 var dropTarget = SelectDropTarget(MpClipTrayViewModel.Instance.PersistentSelectedModels);
@@ -177,6 +185,8 @@ namespace MpWpfApp {
             MpShortcutCollectionViewModel.Instance.GlobalHook.MouseMove -= GlobalHook_MouseMove;
             MpShortcutCollectionViewModel.Instance.GlobalHook.MouseUp -= GlobalHook_MouseUp;
 
+            Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, Application_KeyDown);
+
             UpdateCursor();
         }
 
@@ -201,6 +211,7 @@ namespace MpWpfApp {
         }
 
         private void _autoScrollTimer_Tick(object sender, EventArgs e) {
+            
             _dropTargets.ForEach(x => x.UpdateAdorner());
             _dropTargets.ForEach(x => x.AutoScrollByMouse());
 

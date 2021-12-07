@@ -2556,6 +2556,8 @@ namespace MpWpfApp {
                         var ps = flowDocument.GetDocumentSize();
                         flowDocument.PageWidth = ps.Width;
                         flowDocument.PageHeight = ps.Height;
+                        flowDocument.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                        flowDocument.ConfigureLineHeight();
                         return flowDocument;
                     }
                     catch(Exception ex) {

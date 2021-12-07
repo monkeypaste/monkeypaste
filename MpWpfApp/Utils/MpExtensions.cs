@@ -735,8 +735,21 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            rtb.Document.PageWidth = Math.Max(0,rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
-            rtb.Document.PageHeight = Math.Max(0,rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
+            bool isExpanded = false;
+            if(rtb.DataContext is MpContentItemViewModel civm) {
+                isExpanded = civm.Parent.IsExpanded;
+            }
+            if(isExpanded) {
+                var clv = rtb.GetVisualAncestor<MpContentListView>();
+                double w = clv == null ? rtb.ActualWidth : clv.ActualWidth;
+                double h = clv == null ? rtb.ActualHeight : clv.ActualHeight;
+                rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+                rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
+            } else {
+                rtb.Document.PageWidth = Math.Max(0, rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+                rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
+            }
+            
             rtb.UpdateLayout();
         }
 
@@ -837,6 +850,21 @@ namespace MpWpfApp {
                 reader.Position = 0;
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Xaml);
+            }
+        }
+
+        public static IEnumerable<TextElement> GetTextElementsOfTypes(this FlowDocument doc, params object[] types) {
+            for (TextPointer position = doc.ContentStart;
+              position != null && position.CompareTo(doc.ContentEnd) <= 0;
+              position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    foreach(var type in types.Cast<Type>()) {
+                        dynamic elm = Convert.ChangeType(position.Parent, type);
+                        if (elm != null) {
+                            yield return elm;
+                        }
+                    }
+                }
             }
         }
 
@@ -1075,11 +1103,9 @@ namespace MpWpfApp {
             //if (docTable != null) {
             //    // TODO may need to uniquely find table dimensions
             //}
-            var ft = doc.GetFormattedText();
+            var ft = doc.GetFormattedText(); 
             var ds = new Size(ft.Width, ft.Height);
-            if(ds.Width + ds.Height == 0) {
-                Debugger.Break();
-            }
+            
             return ds;
         }
 
@@ -1120,6 +1146,17 @@ namespace MpWpfApp {
             }
             return matchRangeList;
         }
+        public static void ConfigureLineHeight(this FlowDocument doc) {
+            if (doc == null) {
+                throw new ArgumentNullException("doc");
+            }
+            
+            foreach(var b in doc.Blocks) {
+                if(b is Paragraph p) {
+                    p.LineHeight = p.FontSize + (p.FontSize * 0.333);
+                }
+            }
+        }
 
         public static FormattedText GetFormattedText(this FlowDocument doc) {
             if (doc == null) {
@@ -1152,7 +1189,7 @@ namespace MpWpfApp {
                     output.SetForegroundBrush(run.Foreground, offset, count);
                     output.SetFontStretch(run.FontStretch, offset, count);
                     output.SetTextDecorations(run.TextDecorations, offset, count);
-
+                    
                     offset += count;
                 } else {                    
                     offset += Environment.NewLine.Length;

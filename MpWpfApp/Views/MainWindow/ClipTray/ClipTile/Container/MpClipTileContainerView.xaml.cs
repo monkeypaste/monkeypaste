@@ -23,19 +23,5 @@ namespace MpWpfApp {
         public MpClipTileContainerView() {
             InitializeComponent();
         }
-
-        private void Grid_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
-            e.Handled = true;
-        }
-
-        private void Grid_Unloaded(object sender, RoutedEventArgs e) {
-            //this.ClearBindings();
-            //BindingContext.Dispose();
-            ExpandBehavior.Detach();
-        }
-
-        private void Grid_Loaded(object sender, RoutedEventArgs e) {
-            ExpandBehavior.Attach(this);
-        }
     }
 }

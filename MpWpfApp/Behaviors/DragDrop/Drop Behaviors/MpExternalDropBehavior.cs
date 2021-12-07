@@ -18,7 +18,7 @@ namespace MpWpfApp {
         File
     }
 
-    public class MpExternalDropBehavior : MpDropBehaviorBase<MpExternalDropView> {
+    public class MpExternalDropBehavior : MpDropBehaviorBase<MpTitleBarView> {
         #region Singleton Definition
         private static readonly Lazy<MpExternalDropBehavior> _Lazy = new Lazy<MpExternalDropBehavior>(() => new MpExternalDropBehavior());
         public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override UIElement RelativeToElement => (Application.Current.MainWindow as MpMainWindow).TitleMenu;
+        public override UIElement RelativeToElement => AssociatedObject;
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
@@ -75,10 +75,6 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-            // TODO create IDataObject and call DoDragDrop here, ignoring templates
-            //await Task.Delay(1);
-
-            //Application.Current.MainWindow.IsEnabled = false;
 
             var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);

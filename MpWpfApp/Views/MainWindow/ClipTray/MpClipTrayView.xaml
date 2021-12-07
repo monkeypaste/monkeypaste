@@ -18,7 +18,7 @@
           Background="{local:MpThemeColorsBinding Key=Clip_Tray_Background_Color}">
         <Grid>
             <AdornerDecorator>
-                <ScrollViewer x:Name="PagingScrollViewer"
+                <ScrollViewer x:Name="PagingScrollViewer" 
                               Width="{Binding ClipTrayScreenWidth}"
                               HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
                                                                       Converter={StaticResource BoolToScrollBarVisibilityConverter}}"

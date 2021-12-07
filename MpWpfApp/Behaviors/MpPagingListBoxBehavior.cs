@@ -98,26 +98,15 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance, 
                     ReceivedClipTrayViewModelMessage);
 
-                MpMessenger.Instance.Register<MpMessageType>(
-                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
-                    ReceivedClipTrayViewModelMessage);
+                //MpMessenger.Instance.Register<MpMessageType>(
+                //    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
+                //    ReceivedClipTrayViewModelMessage);
             });
             
             _timer = new DispatcherTimer(DispatcherPriority.Normal);
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             _timer.Tick += HandleWorldTimerTick;
             _timer.Start();
-        }
-
-
-        private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ResizeCompleted:
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ScrollOffset));
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayTotalWidth));
-                    break;
-            }
         }
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
@@ -185,7 +174,7 @@ namespace MpWpfApp {
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if (MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
+            if (//MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
                 MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
                 MpMainWindowViewModel.Instance.IsMainWindowOpening) {
                 return;
@@ -216,10 +205,6 @@ namespace MpWpfApp {
 
             double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
             
-            if(Math.Abs(horizontalChange) > 0 && MpClipTrayViewModel.Instance.IsScrollJumping) {
-                Debugger.Break();
-            }
-
             Rect svr = AssociatedObject.Bounds();
             ListBox lb = AssociatedObject.GetVisualDescendent<ListBox>();
 

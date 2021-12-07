@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,13 +41,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private double _lastMainWindowTop;
-        private double _lastMainWindowHeight;
 
         private double _startMainWindowTop;
         private double _endMainWindowTop;
-
-        private bool _isExpanded = false;
 
         private List<string> _tempFilePathList { get; set; } = new List<string>();
         #endregion
@@ -439,13 +436,79 @@ namespace MpWpfApp {
 
         public ICommand HideWindowCommand => new RelayCommand<object>(
             async (args) => {
-                await MpHelpers.Instance.RunOnMainThreadAsync(async()=> { await HideWindow(args); });
+                if (IsMainWindowLocked || IsResizing || IsMainWindowClosing) {
+                    return;
+                }
+                IsMainWindowClosing = true;
+
+                IDataObject pasteDataObject = null;
+                bool pasteSelected = false;
+                if (args != null) {
+                    if (args is bool) {
+                        pasteSelected = (bool)args;
+                    } else if (args is IDataObject) {
+                        pasteDataObject = (IDataObject)args;
+                    }
+                }
+                string test;
+                bool wasMainWindowLocked = IsMainWindowLocked;
+                if (pasteSelected) {
+                    if (MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {
+                        IsMainWindowLocked = true;
+                    }
+                    pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
+                    test = pasteDataObject.GetData(DataFormats.Text).ToString();
+                    MpConsole.WriteLine("Cb Text: " + test);
+                }
+
+                var mw = (MpMainWindow)Application.Current.MainWindow;
+
+                if (IsMainWindowOpen) {
+                    double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
+                    double fps = 30;
+                    double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+
+                    var timer = new DispatcherTimer(DispatcherPriority.Render);
+                    timer.Interval = TimeSpan.FromMilliseconds(fps);
+
+                    timer.Tick += async (s, e32) => {
+                        if (MainWindowTop < _startMainWindowTop) {
+                            MainWindowTop -= dt;
+                        } else {
+                            MainWindowTop = _startMainWindowTop;
+                            timer.Stop();
+
+
+                            //MpClipTrayViewModel.Instance.ResetClipSelection();
+                            mw.Visibility = Visibility.Collapsed;
+                            if (pasteDataObject != null) {
+                                await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
+                            } else if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                                MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsExpanded).IsExpanded = false;
+                            }
+
+                            IsMainWindowLocked = false;
+                            if (wasMainWindowLocked) {
+                                ShowWindowCommand.Execute(null);
+                                IsMainWindowLocked = true;
+                            } else {
+                                MpSearchBoxViewModel.Instance.IsTextBoxFocused = false;
+                            }
+                            IsMainWindowOpen = false;
+                            IsMainWindowClosing = false;
+
+                            OnMainWindowHide?.Invoke(this, null);
+                        }
+                    };
+                    timer.Start();
+                } else if (pasteDataObject != null) {
+                    await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject, true);
+                }
             },
             (args) => {
                 return ((Application.Current.MainWindow != null &&
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsShowingDialog &&
-                      !_isExpanded &&
                       !IsResizing &&
                       !IsShowingDialog &&
                       //!MpContentDropManager.Instance.IsDragAndDrop &&
@@ -453,74 +516,6 @@ namespace MpWpfApp {
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);
             });
-
-        private async Task HideWindow(object args) {
-            if(IsMainWindowLocked || IsResizing || IsMainWindowClosing) {
-                return;
-            }
-            IsMainWindowClosing = true;
-
-            IDataObject pasteDataObject = null;
-            bool pasteSelected = false;
-            if(args != null) {
-                if(args is bool) {
-                    pasteSelected = (bool)args;
-                } else if(args is IDataObject) {
-                    pasteDataObject = (IDataObject)args;
-                }
-            }
-            string test;
-            bool wasMainWindowLocked = IsMainWindowLocked;
-            if (pasteSelected) {
-                if(MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {
-                    IsMainWindowLocked = true;
-                }
-                pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false,true);
-                test = pasteDataObject.GetData(DataFormats.Text).ToString();
-                MpConsole.WriteLine("Cb Text: " + test);
-            }
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-
-            if(IsMainWindowOpen) {
-                double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
-                double fps = 30;
-                double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
-
-                var timer = new DispatcherTimer(DispatcherPriority.Render);
-                timer.Interval = TimeSpan.FromMilliseconds(fps);
-
-                timer.Tick += async (s, e32) => {
-                    if (MainWindowTop < _startMainWindowTop) {
-                        MainWindowTop -= dt;
-                    } else {
-                        MainWindowTop = _startMainWindowTop;
-                        timer.Stop();
-
-                        //MpClipTrayViewModel.Instance.ResetClipSelection();
-                        mw.Visibility = Visibility.Collapsed;
-                        if (pasteDataObject != null) {
-                            await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
-                        }
-
-                        IsMainWindowLocked = false;
-                        if(wasMainWindowLocked) {
-                            ShowWindowCommand.Execute(null);
-                            IsMainWindowLocked = true;
-                        } else {
-                            MpSearchBoxViewModel.Instance.IsTextBoxFocused = false;
-                        }
-                        IsMainWindowOpen = false;
-                        IsMainWindowClosing = false;
-
-                        OnMainWindowHide?.Invoke(this, null);
-                    }
-                };
-                timer.Start();
-            } else if(pasteDataObject != null) {
-               await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject,true);
-            }
-        }
 
         private RelayCommand<object> _toggleMainWindowLockCommand;
         public ICommand ToggleMainWindowLockCommand {

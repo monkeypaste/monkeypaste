@@ -45,19 +45,19 @@
                        MouseEnter="ClipTileDetailTextBlock_MouseEnter"
                        MouseLeave="ClipTileDetailTextBlock_MouseLeave"
                        Text="{Binding DetailText}" />
-            <ToggleButton x:Name="ClipTileToggleEditButton"
+            <Button x:Name="ClipTileToggleEditButton"
                           Grid.Column="2"
                           Width="16"
                           Height="16"
                           HorizontalAlignment="Right"
-                          PreviewMouseLeftButtonDown="ClipTileToggleEditButton_PreviewMouseLeftButtonDown"
+                          Command="{Binding Parent.ToggleExpandedCommand}"
                           MouseEnter="ClipTileToggleEditButton_MouseEnter"
                           MouseLeave="ClipTileToggleEditButton_MouseLeave"
                           Visibility="{Binding Parent.IsTextItem,
                                                Converter={StaticResource BoolToVisibilityConverter}}"
-                          Template="{StaticResource LockToggleButtonControlTemplate}">
+                          Style="{StaticResource RoundedButton}">
                 <Image Source="/Resources/Images/edit.png" />
-            </ToggleButton>
+            </Button>
         </Grid>
     </Border>
 </local:MpUserControl>

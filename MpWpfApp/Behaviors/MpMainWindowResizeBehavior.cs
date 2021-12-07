@@ -7,20 +7,26 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
 
-    public class MpMainWindowResizeBehavior : MpBehavior<MpMainWindow> {
+    public class MpMainWindowResizeBehavior : MpSingletonBehavior<MpTitleBarView, MpMainWindowResizeBehavior> {
+        #region Private Variables
+
         private Point _lastMousePosition;
-        private FrameworkElement _mainWindowTitlePanel;
+
+        #endregion
+
+        #region Properties
+
+        #endregion
 
         protected override void OnLoad() {
             base.OnLoad();
 
-            _mainWindowTitlePanel = (Application.Current.MainWindow as MpMainWindow).TitleMenu;
-            (_mainWindowTitlePanel as Button).PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
-            _mainWindowTitlePanel.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
-            _mainWindowTitlePanel.MouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
-            _mainWindowTitlePanel.PreviewMouseMove += AssociatedObject_MouseMove;
-            _mainWindowTitlePanel.MouseEnter += AssociatedObject_MouseEnter;
-            _mainWindowTitlePanel.MouseLeave += AssociatedObject_MouseLeave;
+            AssociatedObject.FrameGripButton.PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
+            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
+            AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
+            AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
+            AssociatedObject.MouseEnter += AssociatedObject_MouseEnter;
+            AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
         }
 
         private void MpMainWindowResizeBehavior_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -39,26 +45,23 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            _mainWindowTitlePanel.ReleaseMouseCapture();
+            AssociatedObject.ReleaseMouseCapture();
             MpMainWindowViewModel.Instance.IsResizing = false;
 
             MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
-
-            var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
-            rtbvl.ForEach(x => x.Rtb.FitDocToRtb());
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
-            _mainWindowTitlePanel.CaptureMouse();
+            AssociatedObject.CaptureMouse();
             MpMainWindowViewModel.Instance.IsResizing = true;
             e.Handled = true;
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (!_mainWindowTitlePanel.IsMouseCaptured) {
+            if (!AssociatedObject.IsMouseCaptured) {
                 e.Handled = false;
                 return;
             }
@@ -92,33 +95,19 @@ namespace MpWpfApp {
 
             MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
             MpClipTrayViewModel.Instance.Items.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
-            //mwvm.ClipTrayHeight += deltaHeight;
-            //ctvm.TileBorderHeight += deltaHeight;
-            //ctvm.TileContentHeight += deltaHeight;
-
+            
             double boundAdjust = 0;
-            //if (mwvm.MainWindowTop < MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding) {
-            //    boundAdjust = mwvm.MainWindowContainerTop - MpMeasurements.Instance.ClipTileExpandedMaxHeightPadding;
-            //} else if (mwvm.MainWindowTop > mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight) {
-            //    boundAdjust = mwvm.MainWindowContainerTop - (mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight);
-            //}
 
             mwvm.MainWindowHeight += boundAdjust;
-            //mwvm.ClipTrayHeight += boundAdjust;
-            //ctvm.TileBorderHeight += boundAdjust;
-            //ctvm.TileContentHeight += boundAdjust;
 
             MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
             mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
             mwvm.IsResizing = false;
 
+            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Resizing);
 
             Application.Current.MainWindow.UpdateLayout();
             Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
-
-            //MpConsole.WriteLine($"MainWindowContainerTop: {mwvm.MainWindowContainerTop}");
-            MpConsole.WriteLine($"MainWindowTop: {mwvm.MainWindowTop}");
-            MpConsole.WriteLine($"MainWindowHeight: {mwvm.MainWindowHeight}");
         }
     }
 }

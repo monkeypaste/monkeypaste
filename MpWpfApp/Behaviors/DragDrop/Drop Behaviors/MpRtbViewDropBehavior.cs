@@ -178,6 +178,9 @@ namespace MpWpfApp {
         }
 
         public async Task MergeContentItem(MpCopyItem mci, bool isDuplicating) {
+            if(AssociatedObject == null) {
+                return;
+            }
             bool isHomeMerge = DropIdx == 0;
 
             AssociatedObject.BindingContext.IsBusy = true;

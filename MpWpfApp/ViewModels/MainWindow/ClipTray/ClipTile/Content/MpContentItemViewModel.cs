@@ -859,8 +859,7 @@ namespace MpWpfApp {
 
                     if (!Parent.Parent.IsRestoringSelection &&
                         Parent.IsSelected && 
-                        IsSelected &&
-                        !Parent.Parent.IsAnyTileExpanded) {
+                        IsSelected) {
                         Parent.Parent.StoreSelectionState(Parent);
                     }
 

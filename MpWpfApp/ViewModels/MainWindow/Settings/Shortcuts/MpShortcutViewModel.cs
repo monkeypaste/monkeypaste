@@ -555,36 +555,29 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _performShortcutCommand = null;
-        public ICommand PerformShortcutCommand {
-            get {
-                if(_performShortcutCommand == null) {
-                    _performShortcutCommand = new RelayCommand(PeformShortcut, CanPerformShortcut);
+        public ICommand PerformShortcutCommand => new RelayCommand(
+            () => {
+                Command?.Execute(CommandParameter);
+            },
+            () => {
+                //never perform shortcuts in the following states
+                if (MpAssignShortcutModalWindowViewModel.IsOpen ||
+                   MpSettingsWindowViewModel.IsOpen ||
+                   MpClipTrayViewModel.Instance.IsAnyPastingTemplate ||
+                   MpClipTrayViewModel.Instance.IsAnyEditingClipTile ||
+                   MpClipTrayViewModel.Instance.IsAnyEditingClipTitle ||
+                   MpTagTrayViewModel.Instance.IsEditingTagName ||
+                   MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
+                    return false;
                 }
-                return _performShortcutCommand;
-            }
-        }
-        private bool CanPerformShortcut() {
-            //never perform shortcuts in the following states
-            if(MpAssignShortcutModalWindowViewModel.IsOpen ||
-               MpSettingsWindowViewModel.IsOpen ||
-               MpClipTrayViewModel.Instance.IsAnyPastingTemplate ||
-               MpClipTrayViewModel.Instance.IsAnyEditingClipTile ||
-               MpClipTrayViewModel.Instance.IsAnyEditingClipTitle ||
-               MpTagTrayViewModel.Instance.IsEditingTagName ||
-               MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
-                return false;
-            }
-            //otherwise check basic type routing for validity
-            if(RoutingType == MpRoutingType.Internal) {
-                return MpMainWindowViewModel.Instance.IsMainWindowOpen;
-            } else {
-                return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
-            }
-        }
-        private void PeformShortcut() {
-            Command?.Execute(CommandParameter);
-        }
+                //otherwise check basic type routing for validity
+                if (RoutingType == MpRoutingType.Internal) {
+                    return MpMainWindowViewModel.Instance.IsMainWindowOpen;
+                } else {
+                    return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
+                }
+            });
+        
         #endregion
     }
 }

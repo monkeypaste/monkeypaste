@@ -52,7 +52,9 @@ namespace MpWpfApp {
                 double x1 = dropRect.Left;
                 double x2 = dropRect.Right;
                 double y = dropRect.Bottom - MpContentListDropBehavior.TargetMargin;
-                
+                if(DropIdx == DropRects.Count - 1) {
+                    y = dropRect.Top;
+                }
                 return new MpLine(x1, y, x2, y);
             }        
         }

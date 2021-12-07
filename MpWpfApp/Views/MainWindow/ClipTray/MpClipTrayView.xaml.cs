@@ -24,7 +24,7 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpClipTrayView : MpUserControl<MpClipTrayViewModel> {
         public VirtualizingStackPanel TrayItemsPanel;
-        public static ScrollViewer ScrollViewer;
+        //public static ScrollViewer ScrollViewer;
 
         public MpClipTrayView() : base() {
             InitializeComponent();
@@ -44,7 +44,8 @@ namespace MpWpfApp {
             BindingContext.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             BindingContext.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
 
-            MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+            MpMessenger.Instance.Register<MpMessageType>(
+                MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
             MpHelpers.Instance.RunOnMainThread(async () => {
                 var sv = ClipTray.GetScrollViewer();
@@ -52,8 +53,7 @@ namespace MpWpfApp {
                     await Task.Delay(10);
                     sv = ClipTray.GetScrollViewer();
                 }
-                ScrollViewer = sv;
-                ScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
+                PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
             });
         }
 
@@ -67,6 +67,9 @@ namespace MpWpfApp {
                     var sv = ClipTray.GetScrollViewer();
                     sv.ScrollToHorizontalOffset(0);
                     sv.ScrollToLeftEnd();
+                    break;
+                case MpMessageType.Expand:
+
                     break;
             }
         }
@@ -103,21 +106,13 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            if(ScrollViewer == null) {
-                return;
-            }
-            ScrollViewer.ScrollToLeftEnd();
+            PagingScrollViewer.ScrollToLeftEnd();
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
             ClipTray?.ScrollIntoView(e);
         }
         #endregion
-
-        private void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            var vsp = sender as MpVirtualizingStackPanel;
-            vsp.ScrollOwner = ScrollViewer;
-        }
 
         private void ClipTray_CleanUpVirtualizedItem(object sender, CleanUpVirtualizedItemEventArgs e) {
             return;

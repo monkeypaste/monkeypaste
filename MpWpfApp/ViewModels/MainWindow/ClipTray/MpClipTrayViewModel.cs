@@ -139,7 +139,7 @@ namespace MpWpfApp {
         public double ClipTrayScreenWidth {
             get {
                 if (IsAnyTileExpanded) {
-                    return MpMeasurements.Instance.ClipTrayDefaultWidth + MpMeasurements.Instance.AppStateButtonPanelWidth;
+                    return MpMainWindowViewModel.Instance.MainWindowWidth;
                 }
                 return MpMeasurements.Instance.ClipTrayDefaultWidth;
             }
@@ -254,7 +254,7 @@ namespace MpWpfApp {
 
         public bool IsRequery { get; private set; } = false;
 
-        public bool IsTrayEmpty => Items.Count == 0 && !IsRequery;// || Items.All(x => x.IsPlaceholder);
+        public bool IsTrayEmpty => Items.Count == 0 && !IsRequery && !MpMainWindowViewModel.Instance.IsMainWindowLoading;// || Items.All(x => x.IsPlaceholder);
 
         public bool IsSelectionReset { get; set; } = false;
 
@@ -327,6 +327,7 @@ namespace MpWpfApp {
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler<double> OnScrollToXRequest;
         public event EventHandler OnScrollToHomeRequest;
+
         #endregion
 
         #region Constructors
@@ -347,7 +348,8 @@ namespace MpWpfApp {
 
                 DefaultLoadCount = MpMeasurements.Instance.TotalVisibleClipTiles * 1 + 2;
 
-                MpMessenger.Instance.Register<MpMessageType>(MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
+                MpMessenger.Instance.Register<MpMessageType>(
+                    MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
 
             });
         }
@@ -1258,6 +1260,10 @@ namespace MpWpfApp {
                     async () => {
                         IsBusy = IsLoadingMore = true;
 
+                        if(IsAnyTileFlipped) {
+                            UnFlipAllTiles();
+                        }
+
                         bool isLeft = ((int)isLoadMore) >= 0;
                         if (isLeft && TailQueryIdx < TotalItemsInQuery - 1) {
                             int offsetIdx = TailQueryIdx + 1;
@@ -1304,10 +1310,7 @@ namespace MpWpfApp {
                        !IsBusy &&
                        !IsLoadingMore &&
                        !IsScrollJumping &&
-                       !IsAnyTileFlipped &&
                        !IsAnyTileExpanded &&
-                       !MpTileExpanderBehavior.IsAnyExpandingOrUnexpanding &&
-                       //!IsAnyTileItemDragging &&
                        !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             });
 
@@ -1409,7 +1412,7 @@ namespace MpWpfApp {
         }
 
         public ICommand ScrollToHomeCommand => new RelayCommand(
-            async () => {
+             () => {
                 RequeryCommand.Execute(null);
                 //JumpToPageIdxCommand.Execute(0);
                 //await Task.Delay(100);
@@ -1476,7 +1479,8 @@ namespace MpWpfApp {
                     }
 
                     ClearClipSelection();
-                    Items[prevSelectIdx].IsSelected = true;
+                    // NOTE need to check idx here for some reason when holding key down
+                    Items[Math.Max(0,prevSelectIdx)].IsSelected = true;
                     StoreSelectionState(Items[prevSelectIdx]);
                 }
             });

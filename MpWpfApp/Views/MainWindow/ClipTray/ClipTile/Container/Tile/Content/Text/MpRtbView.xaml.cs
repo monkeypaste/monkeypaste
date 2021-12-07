@@ -28,18 +28,6 @@ namespace MpWpfApp {
     /// Interaction logic for Mpxaml
     /// </summary>
     public partial class MpRtbView : MpUserControl<MpContentItemViewModel> {
-        public static int DropOverHomeItemId = -1;
-        public static int DropOverEndItemId = -1;
-        public static MpRtbView CurDropOverRtbView = null;
-
-        //protected MpContentItemCaretAdorner CaretAdorner;
-        //protected AdornerLayer CaretAdornerLayer;
-
-        //public MpLine HomeCaretLine = new MpLine();
-        //public MpLine EndCaretLine = new MpLine();
-
-        //public Rect HomeRect, EndRect;
-
         public TextRange NewStartRange;
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
@@ -51,6 +39,16 @@ namespace MpWpfApp {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
         }
+        
+        private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Expand:
+                case MpMessageType.Unexpand:
+                    Rtb.FitDocToRtb();
+                    break;
+            }
+        }
+
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
@@ -59,6 +57,15 @@ namespace MpWpfApp {
                     break;
             }
         }
+        private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Resizing:
+                case MpMessageType.ResizeCompleted:
+                    Rtb.FitDocToRtb();
+                    break;
+            }
+        }
+        
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
@@ -78,7 +85,18 @@ namespace MpWpfApp {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });
-                MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+                MpMessenger.Instance.Register<MpMessageType>(
+                    MpClipTrayViewModel.Instance, 
+                    ReceivedClipTrayViewModelMessage);
+
+                MpMessenger.Instance.Register<MpMessageType>(
+                    BindingContext.Parent,
+                    ReceivedClipTileViewModelMessage,
+                    BindingContext.Parent);
+
+                MpMessenger.Instance.Register<MpMessageType>(
+                    (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
+                    ReceivedMainWindowResizeBehviorMessage);
 
                 RtbViewDropBehavior.Attach(this);
             }
@@ -127,11 +145,14 @@ namespace MpWpfApp {
         }
 
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if (civm != null && civm.Parent.IsExpanded) {
-                var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
-                if (ctcv != null && e.HeightChanged && !MpTileExpanderBehavior.IsAnyExpandingOrUnexpanding) {
-                    ctcv.ExpandBehavior.Resize(e.NewSize.Height - e.PreviousSize.Height);
+            if (BindingContext != null && BindingContext.Parent.IsExpanded) {
+                if (e.HeightChanged && 
+                    !Rtb.IsReadOnly) {
+                    //MpMainWindowResizeBehavior.Instance.Resize(e.NewSize.Height - e.PreviousSize.Height);
+                }
+                if(e.WidthChanged) {
+                    //during expand/unexpand
+                    Rtb.FitDocToRtb();
                 }
 
                 if(BindingContext.IsSelected) {

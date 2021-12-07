@@ -125,7 +125,37 @@ namespace MonkeyPaste {
                 newIcon.HexColor3 = colorList[2];
                 newIcon.HexColor4 = colorList[3];
                 newIcon.HexColor5 = colorList[4];
+            } else {
+                var iconBorderImage = new MpDbImage() {
+                    DbImageGuid = System.Guid.NewGuid(),
+                    ImageBase64 = iconImgBase64
+                };
+                var iconBorderHighlightImage = new MpDbImage() {
+                    DbImageGuid = System.Guid.NewGuid(),
+                    ImageBase64 = iconImgBase64
+                };
+                var iconBorderHighlightSelectedImage = new MpDbImage() {
+                    DbImageGuid = System.Guid.NewGuid(),
+                    ImageBase64 = iconImgBase64
+                };
 
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderImage);
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightImage);
+                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightSelectedImage);
+
+                //var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
+
+                newIcon.IconBorderImageId = iconBorderImage.Id;
+                newIcon.IconBorderImage = iconBorderImage;
+                newIcon.IconBorderHighlightImageId = iconBorderHighlightImage.Id;
+                newIcon.IconBorderHighlightImage = iconBorderHighlightImage;
+                newIcon.IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.Id;
+                newIcon.IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage;
+                newIcon.HexColor1 = MpHelpers.Instance.GetRandomColor().ToHex();
+                newIcon.HexColor2 = MpHelpers.Instance.GetRandomColor().ToHex();
+                newIcon.HexColor3 = MpHelpers.Instance.GetRandomColor().ToHex();
+                newIcon.HexColor4 = MpHelpers.Instance.GetRandomColor().ToHex();
+                newIcon.HexColor5 = MpHelpers.Instance.GetRandomColor().ToHex();
             }
             
             await MpDb.Instance.AddOrUpdateAsync<MpIcon>(newIcon);

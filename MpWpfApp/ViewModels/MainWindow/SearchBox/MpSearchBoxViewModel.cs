@@ -603,7 +603,7 @@ namespace MpWpfApp {
                     //LastSearchText = SearchText;
                 }
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
-            });
+            },!MpMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new RelayCommand(
             () => {

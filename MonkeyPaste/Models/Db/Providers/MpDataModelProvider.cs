@@ -722,7 +722,7 @@ namespace MonkeyPaste {
             int itemIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
             var ccil = await GetCompositeChildrenAsync(copyItemId);
             if(ccil.Count > 0) {
-                for (int i = 0; i < ccil.Count; i++) {
+                for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
                     if (i == 0) {
                         ccil[i].CompositeParentCopyItemId = 0;
                         AllFetchedAndSortedCopyItemIds[itemIdx] = ccil[i].Id;

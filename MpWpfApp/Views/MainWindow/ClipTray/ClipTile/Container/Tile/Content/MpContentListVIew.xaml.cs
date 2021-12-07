@@ -73,6 +73,24 @@ namespace MpWpfApp {
             ContentListDropBehavior.Attach(this);
             
             UpdateUi();
+
+            MpMessenger.Instance.Register<MpMessageType>(
+                    BindingContext,
+                    ReceivedClipTileViewModelMessage,
+                    BindingContext);
+        }
+
+        private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Expand:
+                    ContentListBox.GetVisualDescendent<ScrollViewer>().HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    break;
+                case MpMessageType.Unexpand:
+                    ContentListBox.GetVisualDescendent<ScrollViewer>().HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    break;
+            }
         }
 
         private void ContentListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
