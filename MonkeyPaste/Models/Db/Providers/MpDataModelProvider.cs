@@ -49,6 +49,7 @@ namespace MonkeyPaste {
 
         public async Task QueryForTotalCount() {
             string allRootIdQuery = GetQueryForCount();
+            MpConsole.WriteTraceLine("Current DataModel Query: " + allRootIdQuery);
             var idl = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
             AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
             QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
@@ -376,6 +377,16 @@ namespace MonkeyPaste {
         }
 
         #endregion MpCopyItemTag        
+
+        #region MpTagProperty
+
+        public async Task<List<MpTagProperty>> GetTagPropertiesById(int tagId) {
+            string query = "select * from MpTagProperty where fk_MpTagId=?";
+            var result = await MpDb.Instance.QueryAsync<MpTagProperty>(query,tagId);
+            return result;
+        }
+
+        #endregion
 
         #region MpShortcut
 

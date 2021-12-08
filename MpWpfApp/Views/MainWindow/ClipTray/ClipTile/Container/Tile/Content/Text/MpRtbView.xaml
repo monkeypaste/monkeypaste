@@ -29,8 +29,9 @@
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
                      AutoWordSelection="False"
                      Background="{Binding ItemBackgroundBrush}"
-                     Foreground="{Binding ElementName=Rtb, Path=Background,
-                                                             Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
+                     Foreground="{Binding ElementName=Rtb,
+                                          Path=Background,
+                                          Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
                      BorderThickness="0"
                      Focusable="{Binding IsEditingContent}"
                      GotFocus="Rtb_GotFocus"

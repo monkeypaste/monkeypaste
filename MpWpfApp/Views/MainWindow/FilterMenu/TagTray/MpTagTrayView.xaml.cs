@@ -22,16 +22,9 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void TagTray_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(DataContext != null && DataContext is MpTagTrayViewModel ttrvm) {
-                ttrvm.TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
-            }
-        }
-
-        private async void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+        public void RefreshTray() {
             var sv = TagTray.GetScrollViewer();
-            while(sv == null) {
-                await Task.Delay(50);
+            while (sv == null) {
                 sv = TagTray.GetScrollViewer();
             }
             if (sv.ExtentWidth >= TagTray.MaxWidth) {
@@ -42,6 +35,24 @@ namespace MpWpfApp {
                 TagTrayNavRightButton.Visibility = Visibility.Collapsed;
             }
         }
+
+
+        private void TagTray_Loaded(object sender, RoutedEventArgs e) {
+            TagTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                while (BindingContext == null || BindingContext.IsBusy) {
+                    await Task.Delay(100);
+                }
+
+                //BindingContext.TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+                RefreshTray();
+            });
+        }
+
+        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
+            RefreshTray();
+        }
+
 
         private void TagTrayContainerGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             MpClipTrayViewModel.Instance.ResetClipSelection();
@@ -63,5 +74,6 @@ namespace MpWpfApp {
             var sttvm = e.AddedItems[0] as MpTagTileViewModel;
             BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
+
     }
 }

@@ -49,6 +49,7 @@ namespace MonkeyPaste {
         public string HexColor { get; set; }
 
         public string TagName { get; set; } = string.Empty;
+
         #endregion
 
         #region Fk Models
@@ -62,7 +63,8 @@ namespace MonkeyPaste {
         #region Statics
         #endregion
 
-        public MpTag() { }
+        public MpTag() {            
+        }
 
 
         public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

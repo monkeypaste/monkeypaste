@@ -17,7 +17,9 @@
             Loaded="ContentListItemView_Loaded"
             Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
-            IsHitTestVisible="{Binding HasScrollVelocity, Source={StaticResource ClipTrayViewModel}, Converter={StaticResource BoolFlipConverter}}"
+            IsHitTestVisible="{Binding HasScrollVelocity,
+                                       Source={StaticResource ClipTrayViewModel},
+                                       Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
             MouseEnter="ContentListItemView_MouseEnter"

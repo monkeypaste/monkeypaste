@@ -165,48 +165,11 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpContextMenuItemViewModel() : base(null)  {
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(IconSource):
-                        if (!string.IsNullOrEmpty(IconSource)) {
-                            var icon = new Image();
-                            if (IconSource.Length <= MpPreferences.Instance.MaxFilePathCharCount && File.Exists(IconSource)) {
-                                icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
-                                
-                            } else {
-                                icon.Source = IconSource.ToBitmapSource();
-                                //icon.Height = icon.Width = 20;
-                            }
-                            Icon = icon;
-                            Icon.Stretch = Stretch.Fill;
-                        }
-                        break;
-                    case nameof(IconBackgroundBrush):
-                        if (IconBackgroundBrush != null) {
-                            var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                            bgBmp = MpHelpers.Instance.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
-                            var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                            if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                                borderBmp = MpHelpers.Instance.TintBitmapSource(borderBmp, Colors.White, false);
-                            }
-                            var icon = new Image();
-                            icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
-                            if (!IsChecked.HasValue || IsChecked.Value) {
-                                string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
-                                var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
-                                if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                                    checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
-                                }
-                                icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
-                            }
-                            Icon = icon;
-                        }
-                        break;
-                }
-            };
+            PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
             IsSeparator = true;
         }
 
+        
         public MpContextMenuItemViewModel(
             string header, 
             ICommand command,
@@ -217,6 +180,7 @@ namespace MpWpfApp {
             string inputGestureText = "",
             Brush bgBrush = null) : this() {
             IsSeparator = false;
+
             Header = header;
             Command = command;
             CommandParameter = commandParameter;
@@ -226,6 +190,51 @@ namespace MpWpfApp {
             InputGestureText = inputGestureText;
             IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
         }
+        #endregion
+
+        #region Private Methods
+
+        private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IconSource):
+                    if (!string.IsNullOrEmpty(IconSource)) {
+                        var icon = new Image();
+                        if (IconSource.Length <= MpPreferences.Instance.MaxFilePathCharCount && File.Exists(IconSource)) {
+                            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+
+                        } else {
+                            icon.Source = IconSource.ToBitmapSource();
+                            //icon.Height = icon.Width = 20;
+                        }
+                        Icon = icon;
+                        Icon.Stretch = Stretch.Fill;
+                    }
+                    break;
+                case nameof(IconBackgroundBrush):
+                    if (IconBackgroundBrush != null) {
+                        var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
+                        bgBmp = MpHelpers.Instance.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
+                        var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
+                        if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                            borderBmp = MpHelpers.Instance.TintBitmapSource(borderBmp, Colors.White, false);
+                        }
+                        var icon = new Image();
+                        icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
+                        if (!IsChecked.HasValue || IsChecked.Value) {
+                            string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
+                            var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
+                            if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                                checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
+                            }
+                            icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
+                        }
+                        Icon = icon;
+                    }
+                    break;
+            }
+        }
+
+
         #endregion
     }
 }

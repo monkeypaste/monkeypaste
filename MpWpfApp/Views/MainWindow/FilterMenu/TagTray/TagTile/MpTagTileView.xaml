@@ -30,6 +30,10 @@
                                       RelativeSource={RelativeSource Mode=Self}}"
                         BorderThickness="1.5"
                         Height="{Binding TagHeight}">
+        <local:MpClipBorder.Resources>
+            <local:MpBindingProxy x:Key="TagTileVmProxy"
+                                  Data="{Binding}" />
+        </local:MpClipBorder.Resources>
         <local:MpClipBorder.ContextMenu>
             <ContextMenu Loaded="TagTile_ContextMenu_Loaded"
                          Opened="TagTile_ContextMenu_Opened"
@@ -53,6 +57,39 @@
                 <MenuItem x:Name="ClipTileColorContextMenuItem"
                           Style="{StaticResource ColorPalleteMenuItemStyle}" />
                 <Separator />
+                <MenuItem Header="Link"
+                          Visibility="{Binding Data.IsUserTag,
+                                               Converter={StaticResource BoolToVisibilityConverter},
+                                               Source={StaticResource TagTileVmProxy}}">
+                    <MenuItem.Resources>
+                        <Style x:Key="TagExpressionMenuItemStyle"
+                               TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header"
+                                    Value="{Binding Header}" />
+                            <Setter Property="Icon"
+                                    Value="{Binding Header,
+                                                    Converter={StaticResource FilePathStringToIconConverter}}" />
+                            <Setter Property="Command"
+                                    Value="{Binding Command}" />
+                            <Setter Property="CommandParameter"
+                                    Value="{Binding CommandParameter}" />
+                            <Setter Property="ItemsSource"
+                                    Value="{Binding SubItems}" />
+                        </Style>
+
+                    </MenuItem.Resources>
+                    <!--<local:MpContextMenuView Header="Directory"
+                              ItemContainerStyle="{StaticResource TagExpressionMenuItemStyle}"
+                              ItemsSource="{Binding Data,
+                                                    Converter={StaticResource TagExpressionToDirectoryMenuItemViewModelCollectionConverter},
+                                                    Source={StaticResource TagTileVmProxy}}" />
+                    <MenuItem Header="Expression"
+                              ItemsSource="{Binding Data,
+                                                    Converter={StaticResource TagExpressionToDataFilterMenuItemViewModelCollectionConverter},
+                                                   Source={StaticResource TagTileVmProxy}}" />-->
+
+                </MenuItem>
+                <Separator Visibility="{Binding Data.IsUserTag, Converter={StaticResource BoolToVisibilityConverter}, Source={StaticResource TagTileVmProxy}}" />
                 <MenuItem Header="Delete"
                           Icon="{Binding Source={StaticResource DeleteIcon},
                                          Converter={StaticResource StringToIconConverter},
@@ -110,6 +147,7 @@
                      IsVisibleChanged="TagTextBox_IsVisibleChanged"
                      LostFocus="TagTextBox_LostFocus"
                      PreviewKeyDown="TagTextBox_PreviewKeyDown"
+                     TextChanged="TagTextBox_TextChanged"
                      Grid.Row="0"
                      Grid.Column="1"
                      Margin="5,0,0,0"

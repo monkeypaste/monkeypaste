@@ -326,7 +326,6 @@ using System.Speech.Synthesis;
 
         #endregion
 
-
         #region Visibility
 
         public Visibility FrontVisibility { get; set; } = Visibility.Visible;
@@ -488,7 +487,8 @@ using System.Speech.Synthesis;
         }
         #endregion
 
-        #region State Properties 
+        #region State Properties
+
 
         public int QueryOffsetIdx { get; set; } = 0;
 
@@ -504,6 +504,15 @@ using System.Speech.Synthesis;
                     return -1;
                 }
                 return Parent.Items.IndexOf(this);
+            }
+        }
+
+        public bool IsFileListItem {
+            get {
+                if (HeadItem == null) {
+                    return false;
+                }
+                return HeadItem.CopyItemType == MpCopyItemType.FileList;
             }
         }
 

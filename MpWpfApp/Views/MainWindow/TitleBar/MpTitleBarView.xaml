@@ -18,7 +18,8 @@
     <DockPanel LastChildFill="True">
         <TextBlock DockPanel.Dock="Left"
                    Text="{Binding LogText}" />
-        <Button x:Name="FrameGripButton" Style="{StaticResource FrameGripButton}">
+        <Button x:Name="FrameGripButton"
+                Style="{StaticResource FrameGripButton}">
             <!--<Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch" Background="Pink">
                 <Grid.RowDefinitions>
@@ -31,7 +32,7 @@
                 <Border x:Name="FrameGripMiddle"
                         Grid.Row="1">
                     <Border.Background>
-                        
+
                     </Border.Background>
                 </Border>
                 <Border x:Name="FrameGripBottom"

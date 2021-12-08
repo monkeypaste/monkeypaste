@@ -176,6 +176,9 @@ namespace MonkeyPaste {
         [Ignore]
         public int ManualSortIdx { get; set; }
 
+        [Ignore]
+        public bool IgnoreDb { get; set; } = false;
+
         public MpCopyItem() : base() { }
 
         public override string ToString() {
@@ -183,6 +186,10 @@ namespace MonkeyPaste {
         }
 
         public override async Task WriteToDatabaseAsync() {
+            if(IgnoreDb) {
+                MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
+                return;
+            }
             if(Source == null) {
                 Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
             }
@@ -192,6 +199,15 @@ namespace MonkeyPaste {
             }
             await base.WriteToDatabaseAsync();
         }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            if (IgnoreDb) {
+                MpConsole.WriteLine($"Db delete for '{ToString()}' was ignored");
+                return;
+            }
+            await base.DeleteFromDatabaseAsync();
+        }
+
         #region Sync
 
         public async Task<object> DeserializeDbObject(string objStr) {

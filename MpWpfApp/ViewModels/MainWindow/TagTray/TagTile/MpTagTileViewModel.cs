@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -20,9 +22,13 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        public MpTagPropertyCollectionViewModel TagProperties { get; set; } = new MpTagPropertyCollectionViewModel();
         #endregion
 
         #region State
+
+        public bool HasProperties => TagProperties != null && TagProperties.TagProperties.Count > 0;
 
         public bool IsNew {
             get {
@@ -44,6 +50,8 @@ namespace MpWpfApp {
                 return Tag.Id == MpTag.AllTagId || Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.HelpTagId;
             }
         }
+
+        public bool IsUserTag => !IsSudoTag;
 
         public bool IsRecentTag {
             get {
@@ -202,6 +210,9 @@ namespace MpWpfApp {
 
         public int TagId {
             get {
+                if (Tag == null) {
+                    return 0;
+                }
                 return Tag.Id;
             }
             set {
@@ -217,6 +228,9 @@ namespace MpWpfApp {
 
         public int TagSortIdx {
             get {
+                if (Tag == null) {
+                    return 0;
+                }
                 return Tag.TagSortIdx;
             }
             set {
@@ -229,9 +243,11 @@ namespace MpWpfApp {
                 }
             }
         }
-
         public string TagName {
             get {
+                if (Tag == null) {
+                    return string.Empty;
+                }
                 return Tag.TagName;
             }
             set {
@@ -292,17 +308,28 @@ namespace MpWpfApp {
 
         public MpTagTileViewModel() : base(null) { }
 
-        public MpTagTileViewModel(MpTagTrayViewModel parent, MpTag tag) : base(parent) {
+        public MpTagTileViewModel(MpTagTrayViewModel parent) : base(parent) {
             MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
             MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
             MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
+        }
 
+        public virtual async Task InitializeAsync(MpTag tag) {
+            PropertyChanged -= MpTagTileViewModel_PropertyChanged;
+            PropertyChanged += MpTagTileViewModel_PropertyChanged;
             Tag = tag;
+
+            IsBusy = true;
+
+            TagProperties = new MpTagPropertyCollectionViewModel(this);
+            await TagProperties.InitializeAsync(Tag);
+
+            IsBusy = false;
         }
                 
-        private void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        protected virtual void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEditing):
                     if (IsEditing) {
@@ -386,6 +413,15 @@ namespace MpWpfApp {
             var result = await IsLinked(rtbvm.CopyItem);
             return result;
         }
+
+        public override void Dispose() {
+            base.Dispose();
+            MonkeyPaste.MpDb.Instance.SyncAdd -= MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.Instance.SyncUpdate -= MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.Instance.SyncDelete -= MpDbObject_SyncDelete;
+
+            PropertyChanged -= MpTagTileViewModel_PropertyChanged;
+        }
         #endregion
 
         #region Protected Methods
@@ -396,7 +432,41 @@ namespace MpWpfApp {
                 if (sc.TagId == TagId) {
                     ShortcutKeyString = sc.KeyString;
                 }
-            }
+            } 
+            //else if(e is MpCopyItem ci && 
+            //          ci.ItemType == MpCopyItemType.FileList &&
+            //          TagId == MpTag.FavoritesTagId) {
+            //    string pinToDir = Path.Combine(
+            //        Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+            //        @"pintest");
+
+            //    foreach(var fli in ci.ItemData.Split(new string[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)) {
+            //        try {
+            //            bool isFile = File.Exists(fli);
+            //            string fname = Path.GetFileName(fli);
+
+            //            string pinToPath = Path.Combine(pinToDir, fname);
+            //            bool isNew = isFile ? File.Exists(pinToPath) : Directory.Exists(pinToPath);
+
+            //            if (isNew) {
+            //                File.Copy(fli, pinToPath, false);
+            //            } else {
+            //                string msgStr = isFile ? "File " : "Directory ";
+            //                msgStr += " already exists";
+            //                string result = MpMessageBox.ShowCustomMessageBox(
+            //                    "Warning", 
+            //                    msgStr, 
+            //                    "/Images/warning.png", 
+            //                    new string[]{ "Rename", "Overwrite", "Ignore"});
+            //                MpConsole.WriteLine(result);
+            //            }
+            //        } catch(Exception ex) {
+            //            MpConsole.WriteTraceLine(ex);
+            //            continue;
+            //        }
+            //    }
+                
+            //}
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -498,13 +568,14 @@ namespace MpWpfApp {
         public ICommand RenameTagCommand => new RelayCommand(
             () => {
                 _originalTagName = TagName;
-                MpTagTrayViewModel.Instance.ClearTagSelection();
-                IsSelected = true;
+                //MpTagTrayViewModel.Instance.ClearTagSelection();
+                //IsSelected = true;
                 IsEditing = true;
             },
             () => {
                 return !IsTagReadOnly;
             });
+
         #endregion
     }
 }

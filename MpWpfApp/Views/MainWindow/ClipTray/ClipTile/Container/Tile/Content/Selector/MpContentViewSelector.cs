@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+
     public class MpContentViewSelector : DataTemplateSelector {
         private DataTemplate _textContentTemplate;
         public DataTemplate TextContentTemplate {

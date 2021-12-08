@@ -17,6 +17,9 @@
             <Setter Property="VerticalAlignment"
                     Value="Top" />
         </Style>-->
+
+        
+
         <Style TargetType="{x:Type ItemsControl}">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
@@ -137,7 +140,7 @@
                             <Border.Background>
                                 <ImageBrush ImageSource="/Resources/Images/frame_grip.png"
                                             TileMode="Tile"
-                                            Stretch="None" 
+                                            Stretch="None"
                                             AlignmentX="Left"
                                             AlignmentY="Center" />
                             </Border.Background>

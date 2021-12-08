@@ -1,0 +1,150 @@
+﻿<Window x:Class="MpWpfApp.MpManageTagExpressionModalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MpWpfApp"
+        mc:Ignorable="d"
+        Title="{Binding TagName}"
+        d:DesignWidth="600"
+        Loaded="Window_Loaded"
+        SizeToContent="WidthAndHeight"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Activated="Window_Activated"
+        d:DataContext="{d:DesignInstance Type=local:MpPathTagViewModel,
+                                         IsDesignTimeCreatable=False}">
+    <StackPanel Margin="10">
+        <DataGrid x:Name="AnalyticItemDatagrid"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True"
+                  ItemsSource="{Binding PresetViewModels}"
+                  SelectionMode="Single"
+                  Margin="10,0,10,5"
+                  Width="Auto"
+                  Height="Auto"
+                  CanUserAddRows="False"
+                  IsReadOnly="False"
+                  AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                 Color="Transparent" />
+                <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                 Color="#FF0000" />-->
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="PresetIcon"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Background="Transparent"
+                                    Template="{StaticResource SearchButtonControlTemplate}"
+                                    Command="{Binding ChangeIconCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                <Image Width="20"
+                                       Height="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Source="{Binding PresetIcon,
+                                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Label"
+                                        Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox IsReadOnly="{Binding IsReadOnly}"
+                                     Margin="3"
+                                     Background="White"
+                                     BorderThickness="0"
+                                     Text="{Binding Label,
+                                                    Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Quick Action?"
+                                        Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding IsQuickAction,
+                                                          Mode=TwoWay,
+                                                          UpdateSourceTrigger=PropertyChanged,
+                                                          NotifyOnTargetUpdated=True,
+                                                          NotifyOnSourceUpdated=True}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTextColumn Header="Shortcut"
+                                    Width="Auto"
+                                    IsReadOnly="True"
+                                    Binding="{Binding ShortcutKeyString}" />-->
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:MpShortcutGestureView Background="White"
+                                                         DataContext="{Binding ShortcutViewModel}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="40">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Background="White"
+                                    BorderThickness="0"
+                                    ToolTip="Reassign"
+                                    Command="{Binding AssignHotkeyCommand}">
+                                <Image Width="20"
+                                       Height="20"
+                                       Source="/MpWpfApp;component/Resources/Icons/Silk/icons/anchor.png" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="40">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Background="White"
+                                    BorderThickness="0"
+                                    ToolTip="Delete"
+                                    Command="{Binding Parent.DeletePresetCommand}"
+                                    CommandParameter="{Binding}">
+                                <Image Width="20"
+                                       Height="20"
+                                       Visibility="{Binding IsReadOnly,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                       Source="/MpWpfApp;component/Resources/Images/delete.png" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,10,15,0"
+                    HorizontalAlignment="Right">
+            <Button x:Name="OkButton"
+                    TabIndex="2"
+                    Width="100"
+                    Height="25"
+                    Margin="0,0,7,0"
+                    Content="_Save"
+                    Click="OKButton_Click" />
+            <Button Content="_Cancel"
+                    TabIndex="3"
+                    Width="100"
+                    Height="25"
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>

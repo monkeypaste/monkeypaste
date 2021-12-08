@@ -218,6 +218,12 @@ namespace MpWpfApp {
             Key = path;
         }
 
+        public List<List<Brush>> ContentColors {
+            get {
+                return MpThemeColors.Instance.ContentColors;
+            }
+        }
+
         public string Key { get; set; }
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {

@@ -1267,6 +1267,14 @@ namespace MpWpfApp {
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
+        public string GetResourcesDirectory() {
+            return Path.Combine(GetApplicationDirectory(), "Resources");
+        }
+
+        public string GetImagesDirectory() {
+            return Path.Combine(GetResourcesDirectory(), "Images");
+        }
+
         public string GetApplicationProcessPath() {
             try {
                 var process = Process.GetCurrentProcess();

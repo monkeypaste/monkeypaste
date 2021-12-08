@@ -76,8 +76,12 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        public MpTagTrayViewModel() : base() { }
+
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                IsBusy = true;
+
                 MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
                 MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
                 MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
@@ -85,7 +89,8 @@ namespace MpWpfApp {
                 List<MpTag> allTags = await MpDb.Instance.GetItemsAsync<MpTag>();
                 //create tiles for all the tags
                 foreach (MpTag t in allTags) {
-                    TagTileViewModels.Add(CreateTagTileViewModel(t));
+                    var ttvm = await CreateTagTileViewModel(t);
+                    TagTileViewModels.Add(ttvm);
                 }
 
                 OnPropertyChanged(nameof(TagTileViewModels));
@@ -97,19 +102,22 @@ namespace MpWpfApp {
                 TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
 
                 await RefreshAllCounts();
+
+                IsBusy = false;
             });
         }
         #endregion
+
         #region Public Methods
 
-        public MpTagTrayViewModel() : base() { }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
         }
 
-        public MpTagTileViewModel CreateTagTileViewModel(MpTag tag) {
-            var ttvm = new MpTagTileViewModel(this, tag);
+        public async Task<MpTagTileViewModel> CreateTagTileViewModel(MpTag tag) {
+            MpTagTileViewModel ttvm = new MpTagTileViewModel(this);
+            await ttvm.InitializeAsync(tag);
             return ttvm;
         }
 
@@ -228,19 +236,20 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.Instance.RunOnMainThread(async() => {
                 if (sender is MpTag t) {
                     t.StartSync(e.SourceGuid);
                     var dupCheck = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (dupCheck == null) {
-                        TagTileViewModels.Add(CreateTagTileViewModel(t));
+                        var ttvm = await CreateTagTileViewModel(t);
+                        TagTileViewModels.Add(ttvm);
                     } else {
                         MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
                         dupCheck.Tag = t;
                     }
                     t.EndSync();
                 }
-            }));
+            });
         }
 
         #endregion
@@ -283,7 +292,8 @@ namespace MpWpfApp {
                     TagSortIdx = TagTileViewModels.Count
                 };
                 await newTag.WriteToDatabaseAsync();
-                TagTileViewModels.Add(CreateTagTileViewModel(newTag));
+                var ttvm = await CreateTagTileViewModel(newTag);
+                TagTileViewModels.Add(ttvm);
             });
 
         public ICommand SelectTagCommand => new RelayCommand<object>(
