@@ -718,7 +718,7 @@ namespace MpWpfApp {
             return Thread.CurrentThread == System.Windows.Threading.Dispatcher.CurrentDispatcher.Thread;
         }
         
-        public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {            
+        public void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) {
             Application.Current.Dispatcher.Invoke(action, priority);
         }
         

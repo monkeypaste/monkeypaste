@@ -20,14 +20,22 @@ namespace MpWpfApp {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
                 MpThemeColors.Instance.Init();
+                
                 MpPreferences.Instance.Init(new MpWpfPreferences());
                 MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+
+                MpDb.Instance.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;
                 await MpDb.Instance.Init(new MpWpfDbInfo());
 
                 await MpMainWindowViewModel.Instance.Init();
                 
                 base.OnStartup(e);
             });
+        }
+
+        private void MpDb_OnInitDefaultNativeData(object sender, EventArgs e) {
+            //only occurs on initial load
+            //MpPreferences.Instance.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {

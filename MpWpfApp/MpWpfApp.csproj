@@ -126,6 +126,7 @@
     <Compile Include="Attributes\MpChildViewModelAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
+    <Compile Include="Behaviors\Base\MpBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
@@ -133,18 +134,12 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
-    <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
-    <Compile Include="Behaviors\MpBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
-    <Compile Include="Behaviors\MpKinematicScrollWheelBehavior.cs" />
-    <Compile Include="Behaviors\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
-    <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
+    <Compile Include="Behaviors\Resizers\MpMainWindowResizeBehavior.cs" />
+    <Compile Include="Behaviors\Resizers\MpTileResizeBehavior.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedListView.cs" />
-    <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpListBox.cs" />
@@ -277,6 +272,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
@@ -289,8 +286,6 @@
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
     <Compile Include="ViewModels\Reusable\MessageBox\MpMessageBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
@@ -2373,6 +2368,7 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
+    <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

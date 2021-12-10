@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,7 +22,7 @@ namespace MpWpfApp {
         protected override void OnLoad() {
             base.OnLoad();
 
-            AssociatedObject.FrameGripButton.PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
+            AssociatedObject.PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
@@ -78,36 +79,65 @@ namespace MpWpfApp {
 
         #endregion
 
+        public async Task ResizeForInitialLoad() {
+            while(MpClipTrayViewModel.Instance.HeadItem == null) {
+                await Task.Delay(10);
+            }
+            double deltaHeight = MpPreferences.Instance.MainWindowInitialHeight - MpMainWindowViewModel.Instance.MainWindowHeight;
+            Resize(deltaHeight);
+        }
+
         public void Resize(double deltaHeight) {
             if(Math.Abs(deltaHeight) == 0) {
                 return;
             }
+
+            var ctrvm = MpClipTrayViewModel.Instance;
+            var msrmvm = MpMeasurements.Instance;
+
+            double oldHeadTrayX = ctrvm.HeadItem.TrayX;
+            double oldScrollOffsetDiffWithHead = ctrvm.ScrollOffset - oldHeadTrayX;
+            
             var mwvm = MpMainWindowViewModel.Instance;
             mwvm.IsResizing = true;
 
-            if(mwvm.MainWindowHeight + deltaHeight < MpMeasurements.Instance.MainWindowMinHeight) {
-                deltaHeight = mwvm.MainWindowHeight - MpMeasurements.Instance.MainWindowMinHeight;
-            } else if (mwvm.MainWindowHeight + deltaHeight > MpMeasurements.Instance.MainWindowMaxHeight) {
-                deltaHeight = MpMeasurements.Instance.MainWindowMaxHeight - mwvm.MainWindowHeight;
+            if(mwvm.MainWindowHeight + deltaHeight < msrmvm.MainWindowMinHeight) {
+                deltaHeight = mwvm.MainWindowHeight - msrmvm.MainWindowMinHeight;
+            } else if (mwvm.MainWindowHeight + deltaHeight > msrmvm.MainWindowMaxHeight) {
+                deltaHeight = msrmvm.MainWindowMaxHeight - mwvm.MainWindowHeight;
             }
             mwvm.MainWindowTop -= deltaHeight;
             mwvm.MainWindowHeight += deltaHeight;
 
-            MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
-            MpClipTrayViewModel.Instance.Items.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
-            
-            double boundAdjust = 0;
+            msrmvm.ClipTileMinSize += deltaHeight;
+            MpClipTileViewModel.DefaultBorderWidth += deltaHeight;
+            MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
+            ctrvm.Items.ForEach(x => x.TileBorderHeight = msrmvm.ClipTileMinSize);
+            ctrvm.Items.ForEach(x => x.TileBorderWidth += deltaHeight);
+            ctrvm.PersistentUniqueWidthTileLookup.Values.ForEach(x => x += deltaHeight);
 
-            mwvm.MainWindowHeight += boundAdjust;
+            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalTileWidth));
+            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayScreenWidth));
+            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalWidth));
+            ctrvm.OnPropertyChanged(nameof(ctrvm.MaximumScrollOfset));
+            ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
-            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
-            mwvm.OnPropertyChanged(nameof(mwvm.ClipTrayAndCriteriaListHeight));
+            //adjust the scroll offset using the head items origin and size change as a ratio to update offset
+            double newHeadTrayX = ctrvm.HeadItem.TrayX;
+            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
+            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
+            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
+            double newScrollOfset = MpPagingListBoxBehavior.Instance.FindTileOffsetX(ctrvm.HeadQueryIdx) + newScrollOfsetDiffWithHead;
+
+            ctrvm.ScrollOffset = ctrvm.LastScrollOfset = newScrollOfset;
+
             mwvm.IsResizing = false;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Resizing);
 
-            Application.Current.MainWindow.UpdateLayout();
-            Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
+            MpPreferences.Instance.MainWindowInitialHeight = mwvm.MainWindowHeight;
+            //Application.Current.MainWindow.UpdateLayout();
+            //Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
         }
     }
 }

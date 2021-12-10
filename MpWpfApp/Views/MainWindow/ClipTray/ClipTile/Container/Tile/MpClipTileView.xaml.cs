@@ -36,9 +36,6 @@ namespace MpWpfApp {
         }
 
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
-            //Keyboard.Focus(sender as FrameworkElement);
-            //bool result = Focus();
-            //MpConsole.WriteLine($"{BindingContext.PrimaryItem.CopyItemTitle} Got Focus: {(result ? "TRUE" : "FALSE")}");
             var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
             if(ctcv != null) {
                 ctcv.Focus();
@@ -47,20 +44,16 @@ namespace MpWpfApp {
 
         #region Selection
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            ctvm.IsHovering = true;
+            BindingContext.IsHovering = true;
         }
 
         private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            ctvm.IsHovering = false;
+            BindingContext.IsHovering = false;
         }
 
         private void ClipTileClipBorder_LostFocus(object sender, RoutedEventArgs e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-
-            if (!ctvm.IsSelected) {
-                ctvm.ClearEditing();
+            if (!BindingContext.IsSelected) {
+                BindingContext.ClearEditing();
             }
         }
         #endregion

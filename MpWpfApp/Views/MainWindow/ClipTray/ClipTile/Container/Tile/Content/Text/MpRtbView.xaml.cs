@@ -49,14 +49,15 @@ namespace MpWpfApp {
             }
         }
 
-        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ItemDragBegin:
-                case MpMessageType.ItemDragEnd:
-                    //CaretAdornerLayer.Update();
-                    break;
-            }
-        }
+        //private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+        //    switch (msg) {
+        //        case MpMessageType.ItemDragBegin:
+        //        case MpMessageType.ItemDragEnd:
+        //            //CaretAdornerLayer.Update();
+        //            break;
+        //    }
+        //}
+
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.Resizing:
@@ -85,9 +86,10 @@ namespace MpWpfApp {
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync();
                 });
-                MpMessenger.Instance.Register<MpMessageType>(
-                    MpClipTrayViewModel.Instance, 
-                    ReceivedClipTrayViewModelMessage);
+                
+                //MpMessenger.Instance.Register<MpMessageType>(
+                //    MpClipTrayViewModel.Instance, 
+                //    ReceivedClipTrayViewModelMessage);
 
                 MpMessenger.Instance.Register<MpMessageType>(
                     BindingContext.Parent,

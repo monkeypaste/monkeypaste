@@ -8,6 +8,7 @@ namespace MpWpfApp {
     public interface MpIContentDropTarget {
         object DataContext { get; }
         bool IsEnabled { get; set; }
+        bool IsDebugEnabled { get; set; }
 
         int DropIdx { get; set; }
         MpDropType DropType { get; }
@@ -33,8 +34,6 @@ namespace MpWpfApp {
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();
-        void EnableDebugMode();
-
 
         void Reset();
     }

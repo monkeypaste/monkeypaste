@@ -82,7 +82,7 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True"
+                    <VirtualizingStackPanel IsItemsHost="True" 
                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                             Orientation="Horizontal" />
                 </ItemsPanelTemplate>

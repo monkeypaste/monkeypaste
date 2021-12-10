@@ -253,28 +253,64 @@ namespace MpWpfApp {
         }
 
         private Dictionary<string, string> ConvertManagedFormats(IDataObject ido, int retryCount = 5) {
+            /*
+            from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
+            Special considerations may be necessary when using the metafile format with the Clipboard. 
+            Due to a limitation in the current implementation of the DataObject class, the metafile format 
+            used by the .NET Framework may not be recognized by applications that use an older metafile format.
+            In this case, you must interoperate with the Win32 Clipboard application programming interfaces (APIs).
+
+            An object must be serializable for it to be put on the Clipboard. 
+            See System.Runtime.Serialization for more information on serialization. 
+            If your target application requires a very specific data format, the headers 
+            added to the data in the serialization process may prevent the application from 
+            recognizing your data. To preserve your data format, add your data as a Byte array 
+            to a MemoryStream and pass the MemoryStream to the SetData method.
+            */
             var cbDict = new Dictionary<string, string>();
             if(retryCount == 0) {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return cbDict;
             }
             try {
-                if(ido == null) {
+                if(ido==null) {
                     ido = Clipboard.GetDataObject();
                 }
+                DataObject dobj = (DataObject)ido;
+                if(dobj == null) {
+                    return cbDict;
+                }
                 foreach (var af in _managedDataFormats) {
-                    if (ido.GetDataPresent(af)) {
-                        object data = ido.GetData(af, false);
+                    object data = null;
+                    if (dobj.GetDataPresent(af)) {
+                        switch(af) {
+                            case nameof(DataFormats.Text):
+                                data = dobj.GetText(TextDataFormat.Text);
+                                break;
+                            case nameof(DataFormats.UnicodeText):
+                                data = dobj.GetText(TextDataFormat.UnicodeText);
+                                break;
+                            case nameof(DataFormats.Rtf):
+                                data = dobj.GetText(TextDataFormat.Rtf);
+                                break;
+                            case nameof(DataFormats.CommaSeparatedValue):
+                                data = dobj.GetText(TextDataFormat.CommaSeparatedValue);
+                                break;
+                            case nameof(DataFormats.Html):
+                                data = dobj.GetText(TextDataFormat.Html);
+                                break;
+                            case nameof(DataFormats.Bitmap):
+                                data = dobj.GetImage().ToBase64String();
+                                break;
+                            case nameof(DataFormats.FileDrop):
+                                StringCollection sc =dobj.GetFileDropList();
+                                data = string.Join(Environment.NewLine, sc.ToArray());
+                                break;
+                        }
                         if (data == null) {
-                            data = ido.GetData(af, true);
+                            data = dobj.GetData(af, true);
                         }
                         if (data != null) {
-                            if (af == DataFormats.FileDrop) {
-                                var sa = data as string[];
-                                data = string.Join(Environment.NewLine, sa);
-                            } else if (af == DataFormats.Bitmap && data is BitmapSource bmpSrc) {
-                                data = bmpSrc.ToBase64String();
-                            }
                             cbDict.Add(af, data.ToString());
                         }
                     }

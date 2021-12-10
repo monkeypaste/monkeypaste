@@ -61,7 +61,14 @@ namespace MpWpfApp {
 
         public bool IsShowing => DropIdx >= 0;
 
-        public bool IsDebugMode { get; set; } = false;
+        public bool IsDebugMode {
+            get {
+                if(_dropBehavior == null) {
+                    return false;
+                }
+                return _dropBehavior.IsDebugEnabled;
+            }
+        }
 
         public List<Rect> DropRects { 
             get {

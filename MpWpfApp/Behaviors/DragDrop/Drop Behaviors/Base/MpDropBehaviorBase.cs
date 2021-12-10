@@ -22,7 +22,7 @@ namespace MpWpfApp {
         External
     }
 
-    public abstract class MpDropBehaviorBase<T> : Behavior<T>, MpIContentDropTarget where T : FrameworkElement {
+    public abstract class MpDropBehaviorBase<T> : MpBehavior<T>, MpIContentDropTarget where T : FrameworkElement {
         #region Private Variables
         
         private AdornerLayer adornerLayer;
@@ -39,6 +39,20 @@ namespace MpWpfApp {
 
         public List<Rect> DropRects => GetDropTargetRects();
 
+        private bool _isDebugEnabled = false;
+        public bool IsDebugEnabled {
+            get => _isDebugEnabled;
+            set {
+                if(_isDebugEnabled != value) {
+                    _isDebugEnabled = value;
+                    Task.Run(async () => {
+                        while (!_isLoaded) { await Task.Delay(100); }
+
+                        MpHelpers.Instance.RunOnMainThread(UpdateAdorner);
+                    });                    
+                }
+            }
+        }
         #endregion
 
         #region Abstracts
@@ -154,10 +168,6 @@ namespace MpWpfApp {
             }
             DropIdx = newDropIdx;
             UpdateAdorner();
-        }
-
-        public void EnableDebugMode() {
-            DropLineAdorner.IsDebugMode = true;
         }
 
         public virtual bool IsDragDataValid(bool isCopy,object dragData) {

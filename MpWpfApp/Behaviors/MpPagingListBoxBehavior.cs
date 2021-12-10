@@ -11,7 +11,7 @@ using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPagingListBoxBehavior : Behavior<ScrollViewer> {
+    public class MpPagingListBoxBehavior : MpSingletonBehavior<ScrollViewer,MpPagingListBoxBehavior> {
         private static readonly Lazy<MpPagingListBoxBehavior> _Lazy = new Lazy<MpPagingListBoxBehavior>(() => new MpPagingListBoxBehavior());
         public static MpPagingListBoxBehavior Instance { get { return _Lazy.Value; } }
         
@@ -22,11 +22,6 @@ namespace MpWpfApp {
 
         private DispatcherTimer _timer;
 
-        //private Thumb _hthumb;
-        //private Track _htrack;
-        //private ScrollBar _hsb;
-        //private ScrollViewer _sv;
-
         #endregion
 
         #region Properties
@@ -34,17 +29,25 @@ namespace MpWpfApp {
         public double Friction { get; set; } = 0;
 
         public double WheelDampening { get; set; } = 0;
+        
+
+        #region RemainingItemsThresholdProperty
 
         public int RemainingItemsThreshold {
             get { return (int)GetValue(RemainingItemsThresholdProperty); }
             set { SetValue(RemainingItemsThresholdProperty, value); }
         }
+
         public static readonly DependencyProperty RemainingItemsThresholdProperty =
             DependencyProperty.Register(
                 nameof(RemainingItemsThreshold),
                 typeof(int),
                 typeof(MpPagingListBoxBehavior),
                 new PropertyMetadata(default(int)));
+
+        #endregion
+
+        #region LoadMoreCommandProperty
 
         public ICommand LoadMoreCommand {
             get { return (ICommand)GetValue(LoadMoreCommandProperty); }
@@ -59,16 +62,17 @@ namespace MpWpfApp {
 
         #endregion
 
-        protected override void OnAttached() {
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
-        }
+        #endregion
 
-        private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+        #region Constructors
+
+        protected override void OnLoad() {
+            base.OnLoad();
             MpHelpers.Instance.RunOnMainThread(async () => {
                 AssociatedObject.PreviewMouseWheel += Sv_PreviewMouseWheel;
 
                 var hScrollBar = AssociatedObject.GetScrollBar(Orientation.Horizontal);
-                while(hScrollBar == null) {
+                while (hScrollBar == null) {
                     hScrollBar = AssociatedObject.GetScrollBar(Orientation.Horizontal);
                     await Task.Delay(100);
                 }
@@ -95,18 +99,29 @@ namespace MpWpfApp {
                 hScrollBar.Track.Minimum = 0;
 
                 MpMessenger.Instance.Register<MpMessageType>(
-                    MpClipTrayViewModel.Instance, 
+                    MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
-                //MpMessenger.Instance.Register<MpMessageType>(
-                //    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
-                //    ReceivedClipTrayViewModelMessage);
+                MpMessenger.Instance.Register<MpMessageType>(
+                    MpMainWindowResizeBehavior.Instance,
+                    ReceivedMainWindowResizeBehaviorMessage);
+
+                _timer = new DispatcherTimer(DispatcherPriority.Normal);
+                _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+                _timer.Tick += HandleWorldTimerTick;
+                _timer.Start();
             });
             
-            _timer = new DispatcherTimer(DispatcherPriority.Normal);
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            _timer.Tick += HandleWorldTimerTick;
-            _timer.Start();
+        }
+        #endregion
+
+        private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Resizing:
+                case MpMessageType.ResizeCompleted:
+                    
+                    break;
+            }
         }
 
         private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
@@ -126,7 +141,7 @@ namespace MpWpfApp {
                 return;
             }
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
-            if(Math.Abs(_velocity) < 0.001) {
+            if(Math.Abs(_velocity) < 0.1) {
                 _velocity = 0;
                 MpClipTrayViewModel.Instance.HasScrollVelocity = false;
             } else {
@@ -166,11 +181,62 @@ namespace MpWpfApp {
                 //in case tiles have been resized get current size from one of em
                 tileSize = MpClipTrayViewModel.Instance.Items[0].TileBorderHeight;
             }
-            int targetTileIdx = (int)(htrack.ValueFromPoint(htrack_mp) / tileSize);
+            //int targetTileIdx = (int)(htrack.ValueFromPoint(htrack_mp) / tileSize);
+            int targetTileIdx = FindJumpTileIdx(htrack.ValueFromPoint(htrack_mp));
 
-            MpClipTrayViewModel.Instance.JumpToPageIdxCommand.Execute(targetTileIdx);
+            MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
 
             return true;
+        }
+
+        public double FindTileOffsetX(int queryOffsetIdx) {
+            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
+            if(queryOffsetIdx < 0 || queryOffsetIdx >= totalTileCount) {
+                throw new Exception($"HeadItemId {queryOffsetIdx} is out of item bounds of {totalTileCount}");
+            }
+
+            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
+            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
+
+            double offsetX = 0;// MpMeasurements.Instance.ClipTileMargin;
+            for (int i = 1; i <= queryOffsetIdx; i++) {
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
+                int tileHeadId = headItemIds[i-1];
+
+                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
+                    offsetX += uniqueWidthLookup[tileHeadId];
+                    offsetX -= MpMeasurements.Instance.ClipTileMargin;
+                } else {
+                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
+                }
+            }
+
+            return offsetX;
+        }
+
+        public int FindJumpTileIdx(double trackValue) {
+            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
+            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
+            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
+
+            double offsetX = 0;
+            for (int i = 0; i < totalTileCount; i++) {
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
+                int tileHeadId = headItemIds[i];
+
+                if(offsetX >= trackValue) {
+                    return i;
+                }
+
+                if(uniqueWidthLookup.ContainsKey(tileHeadId)) {
+                    offsetX += uniqueWidthLookup[tileHeadId];
+                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
+                } else {
+                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
+                }
+            }
+
+            return totalTileCount - 1;
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
@@ -220,9 +286,9 @@ namespace MpWpfApp {
                     r_target_idx = lb.Items.Count - 1;
                 }
                 //when last visible item's right edge is past the listboxes edge
-                int itemsRemainingOnRight = lb.Items.Count - r_target_idx - 1;
+                int remainingItemsOnRight = lb.Items.Count - r_target_idx - 1;
 
-                if (itemsRemainingOnRight < RemainingItemsThreshold) {
+                if (remainingItemsOnRight < RemainingItemsThreshold) {
                     LoadMoreCommand.Execute(1);
                 }
             } else if (horizontalChange < 0) {
@@ -232,11 +298,12 @@ namespace MpWpfApp {
                 if (l_lbi_idx < 0) {
                     l_lbi_idx = 0;
                 }
+
                 //when last visible item's right edge is past the listboxes edge
-                int itemsRemainingOnLeft = l_lbi_idx;
+                int remainingItemsOnLeft = l_lbi_idx;
                 //MpConsole.WriteLine($"Scrolling left, right most idx: {l_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
-                if (itemsRemainingOnLeft < RemainingItemsThreshold) {
+                if (remainingItemsOnLeft < RemainingItemsThreshold) {
                     LoadMoreCommand.Execute(-1);
                 }
             }

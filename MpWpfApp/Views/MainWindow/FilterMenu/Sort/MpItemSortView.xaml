@@ -29,7 +29,7 @@
         <local:MpClipBorder CornerRadius="15"
                             Margin="5"
                             Grid.Column="1">
-            <ComboBox FontSize="16"
+            <ComboBox FontSize="16" Focusable="False"
                       Background="Transparent"
                       HorizontalContentAlignment="Left"
                       VerticalContentAlignment="Center"

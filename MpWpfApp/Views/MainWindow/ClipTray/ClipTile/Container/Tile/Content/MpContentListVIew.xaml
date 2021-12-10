@@ -13,7 +13,8 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <local:MpContentListDropBehavior x:Name="ContentListDropBehavior" />
+        <local:MpContentListDropBehavior IsDebugEnabled="False" 
+                                         x:Name="ContentListDropBehavior" />
     </i:Interaction.Behaviors>
     <DockPanel x:Name="ContentListDockPanel"
                DataContextChanged="UserControl_DataContextChanged"

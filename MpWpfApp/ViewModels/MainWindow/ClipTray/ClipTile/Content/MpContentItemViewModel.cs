@@ -145,7 +145,7 @@ namespace MpWpfApp {
 
         public Rect ItemBorderBrushRect {
             get {
-                if (IsItemDragging) {
+                if (IsContextMenuOpen) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -334,14 +334,14 @@ namespace MpWpfApp {
         public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
-        [MpAffectsParent]
+        //[MpAffectsParent]
         public bool IsItemDragging { get; set; } = false;
 
 
-        public bool IsDragOverItem { get; set; } = false;
+        //public bool IsDragOverItem { get; set; } = false;
 
-        public Point MouseDownPosition { get; set; }
-        public IDataObject DragDataObject { get; set; }
+        //public Point MouseDownPosition { get; set; }
+        //public IDataObject DragDataObject { get; set; }
         #endregion
 
         #endregion
@@ -886,10 +886,17 @@ namespace MpWpfApp {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
-                case nameof(IsItemDragging):
-                    Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                case nameof(IsContextMenuOpen):
+                    OnPropertyChanged(nameof(ItemBorderBrushRect));
+                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     Parent.OnPropertyChanged(nameof(Parent.TileBorderBrushRect));
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnyTileItemDragging));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyItemContextMenuOpened));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnyTileContextMenuOpened));
+                    break;
+                case nameof(IsItemDragging):
+                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                    Parent.OnPropertyChanged(nameof(Parent.TileBorderBrushRect));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyItemDragging));
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));

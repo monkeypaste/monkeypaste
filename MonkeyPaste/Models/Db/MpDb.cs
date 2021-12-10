@@ -29,6 +29,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Events
+        public event EventHandler OnInitDefaultNativeData;
+
         public event EventHandler<MpDbModelBase> OnItemAdded;
         public event EventHandler<MpDbModelBase> OnItemUpdated;
         public event EventHandler<MpDbModelBase> OnItemDeleted;
@@ -364,12 +366,18 @@ namespace MonkeyPaste {
             
             if (isNewDb) {
                 await CreateViews();
-                await InitDefaultData();
+                await InitDefaultPortableData();
+
+                OnInitDefaultNativeData?.Invoke(this, null);
             }
 
             MpPreferences.Instance.ThisUserDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
 
             MpPreferences.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+
+            if(isNewDb) {
+                OnInitDefaultNativeData?.Invoke(this, null);
+            }
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
@@ -441,8 +449,9 @@ namespace MonkeyPaste {
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
-        private async Task InitDefaultData() {
-            // create record for this device
+        private async Task InitDefaultPortableData() {
+            #region User Device
+
             MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
@@ -451,7 +460,10 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
 
-            // create source for this app
+            #endregion
+
+            #region Source
+
             var process = Process.GetCurrentProcess();
             string appPath = process.MainModule.FileName;
             string appName = MpPreferences.Instance.ApplicationName;
@@ -459,6 +471,10 @@ namespace MonkeyPaste {
             var app = await MpApp.Create(appPath, appName, icon);
             var source = await MpSource.Create(app, null);
             MpPreferences.Instance.ThisDeviceSourceId = source.Id;
+
+            #endregion
+
+            #region Tags
 
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
@@ -488,6 +504,9 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpTag>(helpTag, "", true, true);
 
+            #endregion
+
+            #region Shortcuts
 
             var sh1 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("5dff238e-770e-4665-93f5-419e48326f01"),
@@ -732,6 +751,7 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpShortcut>(sh27);
 
+            #endregion
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }

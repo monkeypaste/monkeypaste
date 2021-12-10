@@ -12,15 +12,11 @@ namespace MpWpfApp {
     }
 
     public class MpMeasurements : MpSingletonViewModel<MpMeasurements> {
-        public readonly double PHI = 1.618033988749894;
-
         public MpMeasurements() {
-            MpConsole.WriteLine($"Old screen height: {SystemParameters.PrimaryScreenHeight * 0.35} New Height: {MainWindowDefaultHeight}");
+            
         }
 
         #region Public Methods
-
-        public void Measure() { }
 
 
         #endregion
@@ -183,6 +179,11 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileBorderMinWidth {
+            get {
+                return ClipTileDefaultMinSize / 2;
+            }
+        }
         //public double ClipTilePadding {
         //    get {
         //        return 17;

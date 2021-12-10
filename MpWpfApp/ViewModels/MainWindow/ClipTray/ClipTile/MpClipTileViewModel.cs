@@ -39,6 +39,14 @@ using System.Speech.Synthesis;
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
+
+        #endregion
+
+        #region Statics
+
+        public static  double DefaultBorderWidth = MpMeasurements.Instance.ClipTileMinSize - (MpMeasurements.Instance.ClipTileMargin * 2);
+        public static  double DefaultBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
+
         #endregion
 
         #region Properties
@@ -175,7 +183,29 @@ using System.Speech.Synthesis;
 
         #region Layout
 
-        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
+        //public double TileBorderWidth => IsExpanded ? 
+        //                    MpMainWindowViewModel.Instance.MainWindowWidth - (MpMeasurements.Instance.AppStateButtonPanelWidth * 2) :
+        //                    TileBorderHeight - (MpMeasurements.Instance.ClipTileMargin * 2);
+        private double _tileBorderWidth = DefaultBorderWidth;
+        public double TileBorderWidth {
+            get {
+                return _tileBorderWidth;
+            }
+            set {
+                if (_tileBorderWidth != value) {
+                    _tileBorderWidth = Math.Max(0, value);
+                    OnPropertyChanged(nameof(TileContentWidth));
+                    OnPropertyChanged(nameof(TileBorderWidth));
+                    //OnPropertyChanged(nameof(TrayX));
+                    //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
+                }
+            }
+        }
+
+        public double TileContentWidth => TileBorderWidth - MpMeasurements.Instance.ClipTileContentMargin - (MpMeasurements.Instance.ClipTileMargin * 2);
+
+
+        private double _tileBorderHeight = DefaultBorderHeight;
         public double TileBorderHeight {
             get {
                 return _tileBorderHeight;
@@ -184,53 +214,43 @@ using System.Speech.Synthesis;
                 if (_tileBorderHeight != value) {
                     _tileBorderHeight = Math.Max(0, value);
                     OnPropertyChanged(nameof(TileBorderHeight));
-                    OnPropertyChanged(nameof(TileBorderWidth));
-                    OnPropertyChanged(nameof(TileContentWidth));
+                    //OnPropertyChanged(nameof(TileBorderWidth));
+                    //OnPropertyChanged(nameof(TileContentWidth));
                     OnPropertyChanged(nameof(TileContentHeight));
-                    OnPropertyChanged(nameof(TrayX));
+                    //OnPropertyChanged(nameof(TrayX));
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
                 }
             }
-        }
+        }        
+
+        public double TileContentHeight => TileBorderHeight - TileTitleHeight - MpMeasurements.Instance.ClipTileMargin - MpMeasurements.Instance.ClipTileBorderThickness - TileDetailHeight;
+
 
         public double TrayX {
             get {
                 if(IsExpanded) {
                     return MpMeasurements.Instance.ClipTileExpandedMargin;
                 }
+                if(HeadItem == null) {
+                    return 0;
+                }
+                return MpPagingListBoxBehavior.Instance.FindTileOffsetX(QueryOffsetIdx);
 
-                return QueryOffsetIdx * TileBorderHeight;
+                //return QueryOffsetIdx* TileBorderHeight;
             }
         }
 
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-
-        public double TileBorderMaxWidth {
-            get {
-                //var ds = TotalExpandedContentSize;
-                return MpMeasurements.Instance.ScreenWidth - (MpMeasurements.Instance.ClipTileExpandedMargin * 2);// Math.Max(MpMeasurements.Instance.ScreenWidth - (MpMeasurements.Instance.ClipTileExpandedMargin*2), ds.Width);
-            }
-        }
-
-        public double TileBorderWidth => IsExpanded ? 
-                            MpMainWindowViewModel.Instance.MainWindowWidth - (MpMeasurements.Instance.AppStateButtonPanelWidth * 2) :
-                            TileBorderHeight - (MpMeasurements.Instance.ClipTileMargin * 2);
+               
+        
 
         public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
 
-        public double TileContentWidth => TileBorderHeight - MpMeasurements.Instance.ClipTileContentMargin;
-
-        public double TileContentHeight => TileBorderHeight - TileTitleHeight - MpMeasurements.Instance.ClipTileMargin - MpMeasurements.Instance.ClipTileBorderThickness - TileDetailHeight;
-
+        
         public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
-
-        public double TileContentMaxWidth => TileBorderMaxWidth - MpMeasurements.Instance.ClipTileContentMargin;
 
         public double LoadingSpinnerSize => MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
 
-        public double TileWidthMax => Math.Max(
-            MpMeasurements.Instance.ClipTileEditModeMinWidth, 
-            TotalExpandedContentSize.Width);
 
 
         //content container
@@ -452,7 +472,7 @@ using System.Speech.Synthesis;
 
         public Rect TileBorderBrushRect {
             get {
-                if (IsAnyItemDragging || IsAnyContextMenuOpened) {
+                if (IsAnyItemDragging || IsAnyItemContextMenuOpened) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -463,6 +483,12 @@ using System.Speech.Synthesis;
         [MpDependsOnSibling("IsSelected")]
         public Brush TileBorderBrush {
             get {
+                if(IsResizing) {
+                    return Brushes.MediumVioletRed;
+                }
+                if(CanResize) {
+                    return Brushes.Orange;
+                }
                 if (Parent.PrimaryItem == this &&
                     Parent.SelectedItems.Count > 1) {
                     return Brushes.Blue;
@@ -489,6 +515,9 @@ using System.Speech.Synthesis;
 
         #region State Properties
 
+        public bool CanResize { get; set; } = false;
+
+        public bool IsResizing { get; set; } = false;
 
         public int QueryOffsetIdx { get; set; } = 0;
 
@@ -573,12 +602,12 @@ using System.Speech.Synthesis;
 
         public IDataObject DragDataObject { get; set; }
 
-        [MpDependsOnChild("IsItemDragging")]
+        //[MpDependsOnChild("IsItemDragging")]
         public bool IsAnyItemDragging => ItemViewModels.Any(x => x.IsItemDragging);
 
 
         [MpDependsOnChild("IsContextMenuOpen")]
-        public bool IsAnyContextMenuOpened => ItemViewModels.Any(x => x.IsContextMenuOpen);
+        public bool IsAnyItemContextMenuOpened => ItemViewModels.Any(x => x.IsContextMenuOpen);
 
         public bool IsAnySelected => ItemViewModels.Any(x => x.IsSelected);
 
@@ -748,6 +777,12 @@ using System.Speech.Synthesis;
             IsBusy = true;
 
             ItemViewModels.Clear();
+            if(headItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(headItem.Id, out double uniqueWidth)) {
+                TileBorderWidth = uniqueWidth;
+            } else {
+                TileBorderWidth = DefaultBorderHeight;
+            }
+
             if (headItem != null) {
                 var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
@@ -765,6 +800,8 @@ using System.Speech.Synthesis;
 
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
             }
+
+            
 
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));

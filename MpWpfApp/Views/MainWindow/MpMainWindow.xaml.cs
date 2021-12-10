@@ -34,8 +34,6 @@ namespace MpWpfApp {
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
-            //EnableBlur();
-            
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
             var mwvm = DataContext as MpMainWindowViewModel;
@@ -89,41 +87,5 @@ namespace MpWpfApp {
             //mwvm.HideWindowCommand.Execute(null);
         }
 
-        void EnableBlur() {
-            SetAccentPolicy(WinApi.AccentState.ACCENT_ENABLE_BLURBEHIND);
-        }
-
-        private void SetAccentPolicy(AccentState accentState) {
-            var windowHelper = new WindowInteropHelper(this);
-
-            var accent = new WinApi.AccentPolicy {
-                AccentState = accentState,
-                AccentFlags = GetAccentFlagsForTaskbarPosition()
-            };
-
-            var accentStructSize = Marshal.SizeOf(accent);
-
-            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
-            Marshal.StructureToPtr(accent, accentPtr, false);
-
-
-            var data = new WinApi.WindowCompositionAttributeData {
-                Attribute = WinApi.WindowCompositionAttribute.WCA_ACCENT_POLICY,
-                SizeOfData = accentStructSize,
-                Data = accentPtr
-            };
-
-            WinApi.SetWindowCompositionAttribute(windowHelper.Handle, ref data);
-
-            Marshal.FreeHGlobal(accentPtr);
-        }
-
-        private WinApi.AccentFlags GetAccentFlagsForTaskbarPosition() {
-            return WinApi.AccentFlags.DrawAllBorders;
-        }
-
-        public void DisableBlur() {
-            SetAccentPolicy(WinApi.AccentState.ACCENT_DISABLED);
-        }
     }
 }

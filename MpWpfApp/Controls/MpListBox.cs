@@ -489,13 +489,13 @@ namespace MpWpfApp {
         /// <param name="availableSize">Size available</param>
         /// <returns></returns>
         private int CalculateChildrenPerRow(Size availableSize) {
-            return MpClipTrayViewModel.Instance.TotalItemsInQuery;
+            return MpClipTrayViewModel.Instance.TotalTilesInQuery;
             // Figure out how many children fit on each row
             int childrenPerRow;
             if (availableSize.Width == Double.PositiveInfinity) {
                 childrenPerRow = this.Children.Count;
             } else {
-                childrenPerRow = Math.Max(1, MpClipTrayViewModel.Instance.TotalItemsInQuery); //(int)Math.Ceiling(availableSize.Width / this.ChildWidth));
+                childrenPerRow = Math.Max(1, MpClipTrayViewModel.Instance.TotalTilesInQuery); //(int)Math.Ceiling(availableSize.Width / this.ChildWidth));
             }
             return childrenPerRow;
         }

@@ -22,7 +22,7 @@
                         CornerRadius="10"
                         Margin="5,3,0,0"
                         Padding="7,5,7,5"
-                        Focusable="True"
+                        Focusable="False"
                         VerticalAlignment="Stretch"
                         Background="{Binding TagBorderBackgroundBrush}"
                         BorderBrush="{Binding TagBorderBrush}"

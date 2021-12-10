@@ -100,7 +100,7 @@ namespace MpWpfApp {
                 targetRects.Add(targetRect);
 
                 if (i == tileRects.Count - 1 &&
-                   MpClipTrayViewModel.Instance.TailQueryIdx == MpClipTrayViewModel.Instance.TotalItemsInQuery - 1) {
+                   MpClipTrayViewModel.Instance.TailQueryIdx == MpClipTrayViewModel.Instance.TotalTilesInQuery - 1) {
                     Rect tailRect = tileRects[i];
 
                     tailRect.Location = new Point(

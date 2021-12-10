@@ -6,6 +6,7 @@ namespace MpWpfApp {
     public abstract class MpBehavior<T> : Behavior<T> where T: FrameworkElement {
         protected bool _wasUnloaded;
         protected object _dataContext;
+        protected bool _isLoaded = false;
 
         protected override void OnAttached() {
             base.OnAttached();
@@ -18,11 +19,14 @@ namespace MpWpfApp {
         }
 
         protected virtual void OnLoad() {
-            MpMainWindowViewModel.Instance.OnMainWindowShow += OnMainWindowShow; ;
+            MpMainWindowViewModel.Instance.OnMainWindowShow += OnMainWindowShow; 
             MpMainWindowViewModel.Instance.OnMainWindowHide += OnMainWindowHide;
+
+            _isLoaded = true;
         }
         protected virtual void OnUnload() {
             _wasUnloaded = true;
+            _isLoaded = false;
         }
 
         protected virtual void OnMainWindowHide(object sender, EventArgs e) { }

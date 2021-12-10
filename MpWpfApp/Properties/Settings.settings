@@ -403,5 +403,8 @@
     <Setting Name="AzureBingSearchApiKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">e3d9b46346be488293df636abb7b8f9d</Value>
     </Setting>
+    <Setting Name="MainWindowInitialHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

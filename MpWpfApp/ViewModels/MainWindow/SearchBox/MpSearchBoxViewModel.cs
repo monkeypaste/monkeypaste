@@ -541,7 +541,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
             OnPropertyChanged(nameof(HasCriteriaItems));
 
-            MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.ClipTrayAndCriteriaListHeight));
             OnPropertyChanged(nameof(SearchCriteriaListBoxHeight));
 
             await UpdateCriteriaSortOrder();
@@ -571,7 +570,7 @@ namespace MpWpfApp {
             if (!HasText) {
                 IsTextValid = true;
             } else {
-                if(MpClipTrayViewModel.Instance.TotalItemsInQuery == 0) {
+                if(MpClipTrayViewModel.Instance.TotalTilesInQuery == 0) {
                     IsTextValid = false;
                 }
             }

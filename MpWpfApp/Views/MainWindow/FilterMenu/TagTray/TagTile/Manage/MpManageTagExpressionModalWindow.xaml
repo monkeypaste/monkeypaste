@@ -16,13 +16,13 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Activated="Window_Activated"
-        d:DataContext="{d:DesignInstance Type=local:MpPathTagViewModel,
+        d:DataContext="{d:DesignInstance Type=local:MpTagPropertyCollectionViewModel,
                                          IsDesignTimeCreatable=False}">
     <StackPanel Margin="10">
         <DataGrid x:Name="AnalyticItemDatagrid"
                   dd:DragDrop.IsDragSource="True"
                   dd:DragDrop.IsDropTarget="True"
-                  ItemsSource="{Binding PresetViewModels}"
+                  ItemsSource="{Binding TagProperties}"
                   SelectionMode="Single"
                   Margin="10,0,10,5"
                   Width="Auto"

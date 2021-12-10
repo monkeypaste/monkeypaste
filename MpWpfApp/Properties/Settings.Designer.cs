@@ -1455,5 +1455,17 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["AzureBingSearchApiKey"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double MainWindowInitialHeight {
+            get {
+                return ((double)(this["MainWindowInitialHeight"]));
+            }
+            set {
+                this["MainWindowInitialHeight"] = value;
+            }
+        }
     }
 }

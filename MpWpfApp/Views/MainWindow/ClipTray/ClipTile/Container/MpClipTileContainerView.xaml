@@ -9,6 +9,9 @@
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
+    <i:Interaction.Behaviors>
+        <local:MpTileResizeBehavior x:Name="TileResizeBehavior" />
+    </i:Interaction.Behaviors>
     <Grid>
         <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
                                             DataContext="{Binding PrimaryItem}"

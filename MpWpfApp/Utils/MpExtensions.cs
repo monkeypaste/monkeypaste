@@ -726,6 +726,20 @@ namespace MpWpfApp {
 
         #region Documents
 
+        public static string[] ToArray(this StringCollection sc) {
+            if(sc == null || sc.Count == 0) {
+                return new string[0];
+            }
+            string[] strArray = new string[sc.Count];
+            try {
+                sc.CopyTo(strArray, 0);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                return new string[0];
+            }
+            return strArray;
+        }
+
         public static bool HasTable(this RichTextBox rtb) {
             return MpHelpers.Instance.HasTable(rtb);
         }

@@ -22,6 +22,7 @@ namespace MpWpfApp {
         Waiting,
         IBeam,
         ResizeNS,
+        ResizeWE,
         Link
     }
 
@@ -41,6 +42,7 @@ namespace MpWpfApp {
                 {MpCursorType.Waiting, Cursors.Wait },
                 {MpCursorType.IBeam, Cursors.IBeam },
                 {MpCursorType.ResizeNS, Cursors.SizeNS },
+                {MpCursorType.ResizeWE, Cursors.SizeWE },
                 {MpCursorType.Link, Cursors.Hand },
             };
 

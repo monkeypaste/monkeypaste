@@ -74,6 +74,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsMainWindowInitiallyOpening { get; set; } = true;
+
         public bool IsMainWindowOpening { get; set; } = false;
 
         public bool IsMainWindowClosing { get; set; } = false;
@@ -136,17 +138,6 @@ namespace MpWpfApp {
         public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
                         
         public double MainWindowTop { get; set; } = SystemParameters.WorkArea.Bottom;
-
-        public double ClipTrayAndCriteriaListHeight {
-            get {
-                return MpClipTrayViewModel.Instance.ClipTrayHeight + MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
-            }
-        }
-        //public double ClipTrayWidth {
-        //    get {
-        //        return MainWindowWidth - AppModeButtonGridWidth;
-        //    }
-        //}
 
         #endregion
 
@@ -280,31 +271,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(MainWindowHeight):
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
-                    //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenHeight));
-                    OnPropertyChanged(nameof(ClipTrayAndCriteriaListHeight));
-                    break;
-                case nameof(ClipTrayAndCriteriaListHeight):
-                    //if(!IsResizing) {
-                    //    MainWindowHeight = MpMeasurements.Instance.TitleMenuHeight +
-                    //                    MpMeasurements.Instance.FilterMenuHeight +
-                    //                    ClipTrayAndCriteriaListHeight;
-
-                    //    MainWindowTop -= MainWindowHeight - _lastMainWindowHeight;
-                    //    OnPropertyChanged(nameof(ClipTrayHeight));
-                    //}
-                    break;
-                case nameof(MainWindowTop):
-                    if(IsResizing) {
-                        //double topDelta = MainWindowTop - _lastMainWindowTop;
-                        //MpConsole.WriteLine("-----------------------");
-                        //MpConsole.WriteLine($"Last Tray Height: {ClipTrayHeight}");
-                        //ClipTrayHeight -= topDelta;
-                        //ClipTrayViewModel.ExpandedTile.TileBorderHeight -= topDelta;
-                        //ClipTrayViewModel.ExpandedTile.TileContentHeight -= topDelta;
-                        //OnPropertyChanged(nameof())
-                    }
-                    //OnPropertyChanged(nameof(MainWindowVisibleHeight));
-                    
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
@@ -315,11 +281,6 @@ namespace MpWpfApp {
                         }
                     }
                     break;
-                //case nameof(MainWindowRect):
-                //    OnPropertyChanged(nameof(MainWindowTop));
-                //    OnPropertyChanged(nameof(MainWindowHeight));
-                //    OnPropertyChanged(nameof(MainWindowWidth));
-                //    break;
             }
         }
 
@@ -382,15 +343,11 @@ namespace MpWpfApp {
                    !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
-        private void ShowWindow() {
+        private async Task ShowWindow() {
             //Ss = MpHelpers.Instance.CopyScreen();
             //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
-            //if (Application.Current.MainWindow == null) {
-            //    Application.Current.MainWindow = new MpMainWindow();
-            //}            
-
-            SetupMainWindowRect();
+            
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.MainWindowOpening);
 
@@ -400,16 +357,14 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            //MainWindowTop = _endMainWindowTop;
-            //IsMainWindowLoading = false;
-            //IsMainWindowOpening = false;
-            //IsMainWindowOpen = true;
-            //OnMainWindowShow?.Invoke(this, null);
+            if(IsMainWindowInitiallyOpening) {
+                //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
+                IsMainWindowInitiallyOpening = false;
+            }
+            
+            SetupMainWindowRect();
 
-            //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
-
-            //return;
-            double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            double tt = MpPreferences.Instance.ShowMainWindowAnimationMilliseconds;
             double fps = 30;
             double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
 

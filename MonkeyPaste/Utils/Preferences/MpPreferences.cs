@@ -31,7 +31,6 @@ namespace MonkeyPaste {
 
         #region Properties
 
-
         #region Application Properties
 
         #region Encyption
@@ -311,6 +310,15 @@ namespace MonkeyPaste {
         public MpSource ThisAppSource { get; set; }
 
         public MpUserDevice ThisUserDevice { get; set; }
+
+        public double MainWindowInitialHeight {
+            get {
+                return _prefIo.Get(nameof(MainWindowInitialHeight), default(double));
+            }
+            set {
+                _prefIo.Set(nameof(MainWindowInitialHeight), value);
+            }
+        }
 
         public bool SearchByDescription {
             get {
@@ -1005,8 +1013,6 @@ namespace MonkeyPaste {
 
 
         #endregion
-
-
 
         #region MpIPreferences Implementation
         public object GetPreferenceValue(string preferenceName) {
