@@ -414,15 +414,15 @@ namespace MpWpfApp {
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(KeyString):
-                    if (IsCustom()) {
-                        if (Shortcut.CopyItemId > 0) {
-                            var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
-                            ctvm.ShortcutKeyString = Shortcut.KeyString;
-                        } else {
-                            var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
-                            ttvm.ShortcutKeyString = Shortcut.KeyString;
-                        }
-                    }
+                    //if (IsCustom()) {
+                    //    if (Shortcut.CopyItemId > 0) {
+                    //        var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
+                    //        ctvm.ShortcutKeyString = Shortcut.KeyString;
+                    //    } else {
+                    //        var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                    //        ttvm.ShortcutKeyString = Shortcut.KeyString;
+                    //    }
+                    //}
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(IsEmpty));
                     break;

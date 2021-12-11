@@ -114,7 +114,7 @@ namespace MpWpfApp {
             MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
             ctrvm.Items.ForEach(x => x.TileBorderHeight = msrmvm.ClipTileMinSize);
             ctrvm.Items.ForEach(x => x.TileBorderWidth += deltaHeight);
-            ctrvm.PersistentUniqueWidthTileLookup.Values.ForEach(x => x += deltaHeight);
+            //ctrvm.PersistentUniqueWidthTileLookup.Values.ForEach(x => x += deltaHeight);
 
             ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalTileWidth));
             ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayScreenWidth));

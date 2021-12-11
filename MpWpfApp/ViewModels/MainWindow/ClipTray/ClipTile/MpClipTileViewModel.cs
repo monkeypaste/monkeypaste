@@ -44,8 +44,8 @@ using System.Speech.Synthesis;
 
         #region Statics
 
-        public static  double DefaultBorderWidth = MpMeasurements.Instance.ClipTileMinSize - (MpMeasurements.Instance.ClipTileMargin * 2);
-        public static  double DefaultBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
+        public static double DefaultBorderWidth = MpMeasurements.Instance.ClipTileMinSize - MpMeasurements.Instance.ClipTileMargin;
+        public static double DefaultBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
 
         #endregion
 
@@ -252,7 +252,6 @@ using System.Speech.Synthesis;
         public double LoadingSpinnerSize => MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
 
 
-
         //content container
         public Size ContainerSize {
             get {
@@ -273,7 +272,7 @@ using System.Speech.Synthesis;
                 if (Count == 1) {
                     cs.Height = ch;
                 } else {
-                    double h = IsExpanded ? TotalExpandedContentSize.Height : TotalUnexpandedSize.Height;
+                    double h = IsExpanded ? ExpandedContentSize.Height : UnexpandedSize.Height;
                     cs.Height = Math.Max(MpMeasurements.Instance.ClipTileScrollViewerWidth, Math.Max(ch, h));
                 }
                 return cs;
@@ -312,7 +311,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Size TotalExpandedContentSize {
+        public Size ExpandedContentSize {
             get {
                 var ts = new Size(
                 MpMeasurements.Instance.ClipTileEditModeMinWidth,
@@ -327,22 +326,13 @@ using System.Speech.Synthesis;
             }
         }
 
-
-        public Size TotalUnexpandedSize {
+        public Size UnexpandedSize {
             get {
                 return new Size(
                     MpMeasurements.Instance.ClipTileContentMinWidth,
                     MpMeasurements.Instance.ClipTileContentHeight);
             }
         }
-
-        //public double DetailGridVisibility {
-        //    get {
-        //        return DetailGridVisibility == Visibility.Visible ?
-        //                MpMeasurements.Instance.ClipTileDetailHeight :
-        //                0;
-        //    }
-        //}
 
         #endregion
 
@@ -360,7 +350,7 @@ using System.Speech.Synthesis;
                     return ScrollBarVisibility.Hidden;
                 }
                 if (IsExpanded) {
-                    if (TotalExpandedContentSize.Width > ContentWidth) {
+                    if (ExpandedContentSize.Width > ContentWidth) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -374,7 +364,7 @@ using System.Speech.Synthesis;
                     return ScrollBarVisibility.Hidden;
                 }
                 if (IsExpanded) {
-                    if (TotalExpandedContentSize.Height > ContainerSize.Height) {
+                    if (ExpandedContentSize.Height > ContainerSize.Height) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -514,6 +504,10 @@ using System.Speech.Synthesis;
         #endregion
 
         #region State Properties
+
+        public bool CanVerticallyScroll => IsExpanded ?
+                                                ExpandedContentSize.Height > TileContentHeight :
+                                                ItemViewModels.Sum(x => x.UnformattedContentSize.Height) > TileContentHeight;
 
         public bool CanResize { get; set; } = false;
 
@@ -811,6 +805,7 @@ using System.Speech.Synthesis;
             OnPropertyChanged(nameof(PrimaryItem));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(CanVerticallyScroll));
 
             IsBusy = false;
         }
@@ -1175,6 +1170,7 @@ using System.Speech.Synthesis;
                     MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
                     OnPropertyChanged(nameof(TileBorderWidth));
                     OnPropertyChanged(nameof(FlipButtonVisibility));
+
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
                     Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
@@ -1188,7 +1184,7 @@ using System.Speech.Synthesis;
                         }
 
                         _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                        MpMainWindowResizeBehavior.Instance.Resize(Math.Max(TileBorderHeight, TotalExpandedContentSize.Height - TileBorderHeight));
+                        MpMainWindowResizeBehavior.Instance.Resize(Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
 
                         Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
                     } else {
@@ -1199,6 +1195,8 @@ using System.Speech.Synthesis;
 
                     MpMessenger.Instance.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
+                    
+                    OnPropertyChanged(nameof(CanVerticallyScroll));
                     break;
                 case nameof(IsFlipping):
                     if (IsFlipping) {
@@ -1212,6 +1210,12 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))
+                    break;
+                case nameof(TileBorderWidth):
+                    if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(HeadItem.CopyItemId, out double uniqueWidth)) {
+                        //this occurs when mainwindow is resized and user gives tile unique width
+                        Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] = TileBorderWidth;
+                    } 
                     break;
             }
         }
@@ -1227,6 +1231,53 @@ using System.Speech.Synthesis;
         #endregion
 
         #region Commands
+
+        public ICommand ScrollUpCommand => new RelayCommand(
+             () => {
+                 if(SelectedItems.Count == 0) {
+                     ResetSubSelection(false);
+                 }
+                 int selectedIdx = ItemViewModels.IndexOf(SelectedItems[0]);
+                 while(selectedIdx >= 0) {
+                     if (ItemViewModels[selectedIdx].IsScrolledToHome) {
+                         selectedIdx--;
+                         if(selectedIdx < 0) {
+                             break;
+                         }
+                         ItemViewModels[selectedIdx].IsSelected = true;
+                         ItemViewModels[selectedIdx].ScrollToEndCommand.Execute(null);
+                     } else {
+                         break;
+                     }
+                 }
+                 if(selectedIdx >= 0) {
+                     ItemViewModels[selectedIdx].ScrollUpCommand.Execute(null);
+                 }
+             },
+             ()=>IsSelected);
+
+        public ICommand ScrollDownCommand => new RelayCommand(
+            async () => {
+                if (SelectedItems.Count == 0) {
+                    ResetSubSelection(false);
+                }
+                int selectedIdx = ItemViewModels.IndexOf(SelectedItems[0]);
+                while (selectedIdx >= ItemViewModels.Count - 1) {
+                    if (ItemViewModels[selectedIdx].IsScrolledToEnd) {
+                        selectedIdx++;
+                        if (selectedIdx >= ItemViewModels.Count) {
+                            break;
+                        }
+                        ItemViewModels[selectedIdx].IsSelected = true;
+                        ItemViewModels[selectedIdx].ScrollToHomeCommand.Execute(null);
+                    } else {
+                        break;
+                    }
+                }
+                if (selectedIdx < ItemViewModels.Count) {
+                    ItemViewModels[selectedIdx].ScrollDownCommand.Execute(null);
+                }
+            }, () => IsSelected);
 
         public ICommand ToggleExpandedCommand => new RelayCommand(
             () => {

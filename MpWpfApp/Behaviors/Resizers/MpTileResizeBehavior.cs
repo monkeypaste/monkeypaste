@@ -103,6 +103,9 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
+            if(MpDragDropManager.Instance.IsDragAndDrop) {
+                return;
+            }
             if(_isResizing && 
                 Mouse.LeftButton == MouseButtonState.Released) {
                 //resize complete so reset
@@ -112,10 +115,14 @@ namespace MpWpfApp {
                 }
 
                 MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
-
-                //MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
+                
                 _isResizing = _canResize = false;
                 _lastMousePosition = new Point();
+
+                //send resize as mainwindow resize so all drop handlers update rects
+                MpMessenger.Instance.Send<MpMessageType>(
+                    MpMessageType.ResizeCompleted,
+                    (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior);
             }
             var mp = e.GetPosition(AssociatedObject);
             

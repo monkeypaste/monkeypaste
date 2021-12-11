@@ -123,11 +123,31 @@ namespace MpWpfApp {
                     break;
             }
         }
+        
+        protected virtual void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.ResizeCompleted:
+                    //comes from BOTH mainwindow resize and tile resize
+                    RefreshDropRects();
+                    break;
+            }
+        }
+
         protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
 
         public virtual void OnLoaded() {
-            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
-            MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+            MpMessenger.Instance.Register<MpMessageType>(
+                MpClipTrayViewModel.Instance, 
+                ReceivedClipTrayViewModelMessage);
+
+
+            MpMessenger.Instance.Register<MpMessageType>(
+                MpMainWindowViewModel.Instance, 
+                ReceivedMainWindowViewModelMessage);
+
+            MpMessenger.Instance.Register<MpMessageType>(
+                (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
+                ReceivedMainWindowResizeBehviorMessage);
 
             InitAdorner();
         }
@@ -138,9 +158,7 @@ namespace MpWpfApp {
 
         }
 
-        #region MpIDropTarget Implementation
-
-        
+        #region MpIDropTarget Implementation        
 
         public virtual async Task Drop(bool isCopy, object dragData) {
             if(DropIdx < 0) {

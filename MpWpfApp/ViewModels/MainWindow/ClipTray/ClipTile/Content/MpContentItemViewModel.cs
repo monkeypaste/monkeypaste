@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
 using PropertyChanged;
 
@@ -24,6 +26,7 @@ namespace MpWpfApp {
         double ds = 0;
 
         private int _detailIdx = 0;
+                
         #endregion
 
         #region Properties
@@ -180,9 +183,6 @@ namespace MpWpfApp {
                     return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
                 }
                 return UnexpandedSize.Height;
-                //return Parent.IsExpanded && Parent.Count > 1 ? 
-                //            Double.NaN : Parent.IsExpanded ? 
-                //                Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15 : UnexpandedSize.Height;
             }
         }
 
@@ -239,6 +239,8 @@ namespace MpWpfApp {
             }
         }
 
+        public Size UnformattedContentSize { get; set; }
+
         #endregion
 
         #region State
@@ -268,6 +270,17 @@ namespace MpWpfApp {
             }
         }
 
+        #region Scroll
+
+        public double NormalizedVerticalScrollOffset { get; set; } = 0;
+
+        public bool IsScrolledToHome => Math.Abs(NormalizedVerticalScrollOffset) <= 0.1;
+
+        public bool IsScrolledToEnd => Math.Abs(NormalizedVerticalScrollOffset) >= 0.9;
+
+        public double KeyboardScrollAmount { get; set; } = 0.2;
+
+        #endregion
 
         public DateTime LastSubSelectedDateTime { get; set; }
 
@@ -424,18 +437,13 @@ namespace MpWpfApp {
             }
         }
 
-        private string _shortcutKeyString = string.Empty;
         public string ShortcutKeyString {
             get {
-                return _shortcutKeyString;
-            }
-            set {
-                if (_shortcutKeyString != value) {
-                    _shortcutKeyString = value;
-                    OnPropertyChanged(nameof(ShortcutKeyString));
-                    OnPropertyChanged(nameof(HotkeyIconSource));
-                    OnPropertyChanged(nameof(HotkeyIconTooltip));
+                if(MpShortcutCollectionViewModel.Instance == null ||
+                   MpShortcutCollectionViewModel.Instance.IsBusy) {
+                    return string.Empty;
                 }
+                return MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CopyItemId == CopyItemId)?.KeyString;
             }
         }
 
@@ -561,7 +569,7 @@ namespace MpWpfApp {
 
         #region Events
 
-        public event EventHandler<int> OnScrollWheelRequest;
+        public event EventHandler<double> OnScrollWheelRequest;
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler OnFitContentRequest;
         //public event EventHandler OnSubSelected;
@@ -606,10 +614,7 @@ namespace MpWpfApp {
             RequestUiUpdate();
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
-
-            if (ci != null) {
-               // MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ItemInitialized);
-            }
+            OnPropertyChanged(nameof(ShortcutKeyString));
 
             IsBusy = false;
         }
@@ -682,7 +687,7 @@ namespace MpWpfApp {
             OnCreateTemplatesRequest?.Invoke(this, null);
         }
 
-        public void RequestScrollWheelChange(int delta) {
+        public void RequestScrollWheelChange(double delta) {
             OnScrollWheelRequest?.Invoke(this, delta);
         }
 
@@ -778,7 +783,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpShortcut sc) {
                 if(sc.CopyItemId == CopyItemId) {
-                    ShortcutKeyString = sc.KeyString;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -786,7 +791,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CopyItemId == CopyItemId) {
-                    ShortcutKeyString = sc.KeyString;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if(e is MpCopyItem ci) {
                 if(ci.Id == CopyItemId) {
@@ -798,7 +803,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CopyItemId == CopyItemId) {
-                    ShortcutKeyString = string.Empty;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -849,6 +854,7 @@ namespace MpWpfApp {
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
                         }
+                        Parent.RequestScrollIntoView(this);
                     }
                     if (ItemIdx > 0) {
                         //trigger so prev item shows/hides separator line
@@ -901,12 +907,45 @@ namespace MpWpfApp {
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     break;
+                case nameof(ShortcutKeyString):
+                    OnPropertyChanged(nameof(HotkeyIconSource));
+                    OnPropertyChanged(nameof(HotkeyIconTooltip));
+                    break;
             }
         }
 
         #endregion
 
         #region Commands
+
+        public ICommand ScrollUpCommand => new RelayCommand(
+             () => {
+                 NormalizedVerticalScrollOffset = Math.Min(0, NormalizedVerticalScrollOffset - KeyboardScrollAmount);
+                 RequestScrollWheelChange(NormalizedVerticalScrollOffset);
+             },
+             ()=>IsSelected);
+
+        public ICommand ScrollDownCommand => new RelayCommand(
+            async () => {
+                NormalizedVerticalScrollOffset = Math.Min(0, NormalizedVerticalScrollOffset + KeyboardScrollAmount);
+                RequestScrollWheelChange(NormalizedVerticalScrollOffset);
+            },
+            () => IsSelected);
+
+
+        public ICommand ScrollToHomeCommand => new RelayCommand(
+             () => {
+                 NormalizedVerticalScrollOffset = 0;
+                 RequestScrollWheelChange(NormalizedVerticalScrollOffset);
+             },
+             () => IsSelected);
+
+        public ICommand ScrollToEndCommand => new RelayCommand(
+            async () => {
+                NormalizedVerticalScrollOffset = 1;
+                RequestScrollWheelChange(NormalizedVerticalScrollOffset);
+            },
+            () => IsSelected);
 
         public ICommand UnexpandItemCommand => new RelayCommand(
             () => {
@@ -996,11 +1035,12 @@ namespace MpWpfApp {
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
-                ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     this,
                     "Paste " + CopyItem.Title,
                     ShortcutKeyString,
                      MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand, CopyItem.Id);
+                OnPropertyChanged(nameof(ShortcutKeyString));
             });
 
         public ICommand RefreshDocumentCommand {

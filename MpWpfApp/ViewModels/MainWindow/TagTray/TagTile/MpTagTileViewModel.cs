@@ -167,16 +167,13 @@ namespace MpWpfApp {
             }
         }
 
-        private string _shortcutKeyString = string.Empty;
         public string ShortcutKeyString {
             get {
-                return _shortcutKeyString;
-            }
-            set {
-                if (_shortcutKeyString != value) {
-                    _shortcutKeyString = value;
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                if (MpShortcutCollectionViewModel.Instance == null ||
+                   MpShortcutCollectionViewModel.Instance.IsBusy) {
+                    return string.Empty;
                 }
+                return MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.TagId == TagId).KeyString;
             }
         }
 
@@ -430,7 +427,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.TagId == TagId) {
-                    ShortcutKeyString = sc.KeyString;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } 
             //else if(e is MpCopyItem ci && 
@@ -472,7 +469,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.TagId == TagId) {
-                    ShortcutKeyString = sc.KeyString;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -480,7 +477,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.TagId == TagId) {
-                    ShortcutKeyString = string.Empty;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -536,12 +533,13 @@ namespace MpWpfApp {
         #region Commands
         public ICommand AssignHotkeyCommand => new RelayCommand<object>(
             async (args) => {
-                ShortcutKeyString = await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                this,
-                "Select " + TagName,
-                ShortcutKeyString,
-                Parent.SelectTagCommand, 
-                TagId);
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                            this,
+                            "Select " + TagName,
+                            ShortcutKeyString,
+                            Parent.SelectTagCommand, 
+                            TagId);
+                OnPropertyChanged(nameof(ShortcutKeyString));
             });
 
         public ICommand ChangeColorCommand => new RelayCommand<object>(

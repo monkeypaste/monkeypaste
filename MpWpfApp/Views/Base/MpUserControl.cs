@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace MpWpfApp {
-
     public class MpUserControl : UserControl {
         public MpUserControl() : base() { }
 

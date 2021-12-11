@@ -411,14 +411,14 @@ namespace MpWpfApp {
         public ICommand OkCommand => new RelayCommand(
             async () => {
                 if (DuplicatedShortcutViewModel != null) {
-                    if (DuplicatedShortcutViewModel.IsCustom()) {
-                        if (DuplicatedShortcutViewModel.CopyItemId > 0) {
-                            //clear input gesture text
-                            MpClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
-                        } else {
-                            MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
-                        }
-                    }
+                    //if (DuplicatedShortcutViewModel.IsCustom()) {
+                    //    if (DuplicatedShortcutViewModel.CopyItemId > 0) {
+                    //        //clear input gesture text
+                    //        MpClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
+                    //    } else {
+                    //        MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
+                    //    }
+                    //}
                     DuplicatedShortcutViewModel.KeyString = string.Empty;
                     await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
                     DuplicatedShortcutViewModel.Unregister();

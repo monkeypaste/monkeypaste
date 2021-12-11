@@ -23,6 +23,7 @@ using System.Windows.Threading;
 using MonkeyPaste;
 using System.Collections.Concurrent;
 using static OpenTK.Graphics.OpenGL.GL;
+using GongSolutions.Wpf.DragDrop;
 
 
 namespace MpWpfApp {
@@ -431,6 +432,9 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(ScrollOffset):
+                    if(MpPagingListBoxBehavior.Instance.IsThumbDragging) {
+                        break;
+                    }
                     foreach (MpClipTileViewModel nctvm in Items) {
                         nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
                     }
@@ -718,29 +722,12 @@ namespace MpWpfApp {
             return nctvm;
         }
 
-        public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false, bool isToExternalApp = false) {
+        public async Task<IDataObject> GetDataObjectByCopyItemIds(int[] ciidArray, bool isDragDrop, bool isToExternalApp) {
             IDataObject d = new DataObject();
-
-            //selection (if all subitems are dragging select host if no subitems are selected select all)
-            List<MpCopyItem> selectedModels = new List<MpCopyItem>();
-            if (SelectedItems.Count == 0) {
-                selectedModels = PersistentSelectedModels;
-            } else {
-                SelectedItems.ForEach(x => x.DoCommandSelection());
-                foreach (var sctvm in SelectedItems) {
-                    foreach (var scivm in sctvm.SelectedItems) {
-                        selectedModels.Add(scivm.CopyItem);
-                    }
-                }
-            }
-            if (selectedModels.Count == 0) {
-                return d;
-            }
-
-            selectedModels.Reverse();
-
             string rtf = string.Empty.ToRichText();
             string pt = string.Empty;
+
+            var selectedModels = await MpDataModelProvider.Instance.GetCopyItemsByIdList(ciidArray.ToList());                       
 
             if (isToExternalApp) {
                 //gather rtf and text NOT setdata it needs file drop first
@@ -827,6 +814,29 @@ namespace MpWpfApp {
 
             return d;
             //awaited in MpMainWindowViewModel.Instance.HideWindow
+        }
+
+        public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false, bool isToExternalApp = false) {
+            //selection (if all subitems are dragging select host if no subitems are selected select all)
+            List<MpCopyItem> selectedModels = new List<MpCopyItem>();
+            if (SelectedItems.Count == 0) {
+                selectedModels = PersistentSelectedModels;
+            } else {
+                SelectedItems.ForEach(x => x.DoCommandSelection());
+                foreach (var sctvm in SelectedItems) {
+                    foreach (var scivm in sctvm.SelectedItems) {
+                        selectedModels.Add(scivm.CopyItem);
+                    }
+                }
+            }
+            if (selectedModels.Count == 0) {
+                return new DataObject();
+            }
+
+            selectedModels.Reverse();
+
+            var result = await GetDataObjectByCopyItemIds(selectedModels.Select(x => x.Id).ToArray(), isDragDrop, isToExternalApp);
+            return result;
         }
 
         public async Task PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
@@ -1155,6 +1165,13 @@ namespace MpWpfApp {
 
         #region Commands
 
+        public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
+            async (args) => {
+                var pasteDataObject = await GetDataObjectByCopyItemIds((args as int[]), false, true);
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
+            },
+            (args) => args != null && args is int[]);
+
         public ICommand AddNewItemsCommand => new RelayCommand<bool?>(
             async (addToCurrentTag) => {
                 IsBusy = true;
@@ -1170,6 +1187,11 @@ namespace MpWpfApp {
                     }
                 }
 
+                for(int i = 0;i < _newModels.Count;i++) {
+                    var ctvm = await CreateClipTileViewModel(null);
+                    Items.Insert(0, ctvm);
+                }
+                     
                 RequeryCommand.Execute(null);
 
                 _newModels.Clear();
@@ -1428,6 +1450,16 @@ namespace MpWpfApp {
                 ScrollOffset = LastScrollOfset = ClipTrayTotalWidth;
                 Items[Items.Count - 1].IsSelected = true;
             });
+
+        public ICommand ScrollUpCommand => new RelayCommand(
+             () => {
+                 PrimaryItem.ScrollUpCommand.Execute(null);
+             },()=>SelectedItems.Count == 1);
+
+        public ICommand ScrollDownCommand => new RelayCommand(
+            async () => {
+                PrimaryItem.ScrollDownCommand.Execute(null);
+            }, () => SelectedItems.Count == 1);
 
         public ICommand SelectNextItemCommand => new RelayCommand(
             async () => {

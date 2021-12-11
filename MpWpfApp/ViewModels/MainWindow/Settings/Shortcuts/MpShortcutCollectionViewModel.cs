@@ -29,8 +29,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Input Hooks
+
         public IKeyboardMouseEvents GlobalHook { get; set; }
         public IKeyboardMouseEvents ApplicationHook { get; set; }
+
         #endregion
 
         #region State
@@ -44,6 +46,7 @@ namespace MpWpfApp {
         public bool IsMultiSelectKeyDown => IsCtrlDown || IsAltDown || IsShiftDown;
 
         public int SelectedShortcutIndex { get; set; }
+
         #endregion
 
         #endregion
@@ -342,36 +345,20 @@ namespace MpWpfApp {
                         case 29:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToEndCommand;
                             break;
+                        case 30:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollUpCommand;
+                            break;
+                        case 31:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollDownCommand;
+                            break;
                         default:
-                            try {
+                            try {                                
                                 if (sc.CopyItemId > 0) {
-                                    var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sc.CopyItemId);
-                                    if (ctvm == null) {
-                                        var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(sc.CopyItemId);
-                                        if (ci == null) {
-                                            MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find copy item w/ id: " + sc.CopyItemId);
-                                            break;
-                                        }
-                                        //ctvm = MpClipTrayViewModel.Instance.GetCopyItemViewModelById(ci.CompositeParentCopyItemId);
-                                        if (ctvm == null) {
-                                            MonkeyPaste.MpConsole.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
-                                            break;
-                                        }
-                                        //var rtbvm = ctvm.GetContentItemByCopyItemId(ci.Id);
-                                        //rtbvm.ShortcutKeyString = sc.KeyString;
-                                        // shortcutCommand = MpClipTrayViewModel.Instance.HotkeyPasteCommand;
-                                        // commandParameter = rtbvm.CopyItem.Id;
-                                    } else {
-                                        ctvm.ShortcutKeyString = sc.KeyString;
-                                        shortcutCommand = ctvm.PasteSubItemCommand;
-                                        shortcutCommand = MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand;
-                                        commandParameter = ctvm.CopyItem.Id;
-                                    }
+                                    shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
+                                    commandParameter = sc.CopyItemId;
                                 } else if (sc.TagId > 0) {
-                                    var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == sc.TagId).Single();
-                                    ttvm.ShortcutKeyString = sc.KeyString;
-                                    shortcutCommand = ttvm.Parent.SelectTagCommand;
-                                    commandParameter = ttvm.TagId;
+                                    shortcutCommand = MpTagTrayViewModel.Instance.SelectTagCommand;
+                                    commandParameter = sc.TagId;
                                 } else if(sc.AnalyticItemPresetId > 0) {
                                     shortcutCommand = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
                                     commandParameter = sc.AnalyticItemPresetId;

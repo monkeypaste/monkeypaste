@@ -606,16 +606,21 @@ namespace MpWpfApp {
         }
 
         public static Rect Bounds(this FrameworkElement fe, Visual rv = null) {
-            if(fe == rv || rv == null) {
-                return fe.TransformToVisual(fe).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            //if(fe == rv || rv == null) {
+            //    return fe.TransformToVisual(fe).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            //}
+            //if(fe.IsDescendantOf(rv)) {
+            //    return fe.TransformToAncestor(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            //}
+            //if(fe.IsAncestorOf(rv)) {
+            //    return fe.TransformToDescendant(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            //}
+            //return fe.TransformToVisual(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            Point origin = new Point();
+            if(rv != null) {
+                origin = fe.TranslatePoint(origin, (UIElement)rv);
             }
-            if(fe.IsDescendantOf(rv)) {
-                return fe.TransformToAncestor(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
-            }
-            if(fe.IsAncestorOf(rv)) {
-                return fe.TransformToDescendant(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
-            }
-            return fe.TransformToVisual(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
+            return new Rect(origin, new Size(fe.ActualWidth, fe.ActualHeight));
         }        
 
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
@@ -1090,6 +1095,12 @@ namespace MpWpfApp {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(str);
             }
             throw new Exception("ToFlowDocument exception string must be plain or rich text. Its content is: " + str);
+        }
+
+        public static MpEventEnabledFlowDocument ToFlowDocument(this string str, out Size docSize) {
+            MpEventEnabledFlowDocument fd = str.ToFlowDocument();
+            docSize = new Size(fd.PageWidth, fd.PageHeight);
+            return fd;
         }
 
         public static string ToXaml(this string str) {

@@ -109,12 +109,6 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
-    <Compile Include="AttachedProperties\MpSpanOperations.cs" />
-    <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
-    <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
-    <Compile Include="AttachedProperties\Selection\IMultiSelectCollectionView.cs" />
-    <Compile Include="AttachedProperties\Selection\MultiSelect.cs" />
-    <Compile Include="AttachedProperties\Selection\MultiSelectCollectionView.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
@@ -279,6 +273,7 @@
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml.cs">
       <DependentUpon>MpManageTagExpressionModalWindow.xaml</DependentUpon>
     </Compile>

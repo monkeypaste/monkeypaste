@@ -62,8 +62,20 @@ namespace MpWpfApp {
             PasteTemplateView.Visibility = Visibility.Collapsed;
         }
 
+        public void RegisterMouseWheel() {
+            //this needs to be called after content preseneter so content gets wheel priority
+            ContentListBox.PreviewMouseWheel += ContentListBox_PreviewMouseWheel;
+        }
+
+        public void UnregisterMouseWheel() {
+            //this needs to be called after content preseneter so content gets wheel priority
+            ContentListBox.PreviewMouseWheel -= ContentListBox_PreviewMouseWheel;
+        }
+
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
+            UnregisterMouseWheel();
+
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
             SeperatorAdornerLayer = AdornerLayer.GetAdornerLayer(ContentListBox);
             SeperatorAdornerLayer.Add(seperatorAdorner);
@@ -78,6 +90,34 @@ namespace MpWpfApp {
                     BindingContext,
                     ReceivedClipTileViewModelMessage,
                     BindingContext);
+
+        }
+
+        private void ContentListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            if (!BindingContext.IsSelected && !BindingContext.IsHovering) {
+                e.Handled = false;
+                return;
+            }
+            double origVertOffset = ContentListBox.GetScrollViewer().VerticalOffset;
+            if (e.Delta > 0) {
+                ContentListBox.GetScrollViewer().LineDown();
+            } else {
+                ContentListBox.GetScrollViewer().LineUp();
+            }
+            e.Handled = ContentListBox.GetScrollViewer().VerticalOffset != origVertOffset;
+        }
+
+        private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
+            ContentListDropBehavior.Detach();
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
+            BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
+            BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
+            BindingContext.PropertyChanged -= Rtbcvm_PropertyChanged;
+            BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
         }
 
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
@@ -91,10 +131,6 @@ namespace MpWpfApp {
                     ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     break;
             }
-        }
-
-        private void ContentListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
-            e.Handled = true; 
         }
                 
         #endregion
@@ -220,19 +256,6 @@ namespace MpWpfApp {
             fullDocument.PageWidth = ps.Width;
             fullDocument.PageHeight = ps.Height;
             return fullDocument;
-        }
-
-        private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
-            ContentListDropBehavior.Detach();
-
-            if(BindingContext == null) {
-                return;
-            }
-            BindingContext.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
-            BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
-            BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
-            BindingContext.PropertyChanged -= Rtbcvm_PropertyChanged;
-            BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
         }
     }
 }

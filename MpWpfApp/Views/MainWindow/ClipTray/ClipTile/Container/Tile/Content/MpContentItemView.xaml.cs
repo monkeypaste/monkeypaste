@@ -26,25 +26,14 @@ namespace MpWpfApp {
         }
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            var mwvm = Application.Current.MainWindow.DataContext as MpMainWindowViewModel;
-
-            var civm = DataContext as MpContentItemViewModel;
-            var scvml = MpShortcutCollectionViewModel.Instance.Shortcuts.Where(x => x.CopyItemId == civm.CopyItemId).ToList();
-            if (scvml.Count > 0) {
-                civm.ShortcutKeyString = scvml[0].KeyString;
-            } else {
-                civm.ShortcutKeyString = string.Empty;
-            }
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpContentItemViewModel ocivm) {
-                ocivm.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
                 ocivm.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
             }
             if (e.NewValue != null && e.NewValue is MpContentItemViewModel ncivm) {
                 if (!ncivm.IsPlaceholder) {
-                    ncivm.OnScrollWheelRequest += Civm_OnScrollWheelRequest;
                     ncivm.OnUiUpdateRequest += Civm_OnUiUpdateRequest;
                 }
             }
@@ -74,13 +63,6 @@ namespace MpWpfApp {
             this.UpdateLayout();            
         }
 
-        private void Civm_OnScrollWheelRequest(object sender, int e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if(civm.IsEditingContent) {
-                var sv = this.GetVisualAncestor<ScrollViewer>();
-                sv.ScrollToVerticalOffset(sv.VerticalOffset + e);
-            }            
-        }
 
         #endregion
 
@@ -88,7 +70,6 @@ namespace MpWpfApp {
 
         private void Border_Unloaded(object sender, RoutedEventArgs e) {
             if(BindingContext != null) {
-                BindingContext.OnScrollWheelRequest -= Civm_OnScrollWheelRequest;
                 BindingContext.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
             }
         }

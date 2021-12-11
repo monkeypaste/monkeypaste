@@ -17,9 +17,24 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpFileListItemView.xaml
     /// </summary>
-    public partial class MpFileListItemView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpFileListItemView : MpContentUserControl<MpContentItemViewModel> {
         public MpFileListItemView() {
             InitializeComponent();
+        }
+
+        private void FileListItemPanel_Loaded(object sender, RoutedEventArgs e) {
+            BindingContext.UnformattedContentSize = new Size(ActualWidth, ActualHeight);
+            
+            if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    var clv = this.GetVisualAncestor<MpContentListView>();
+                    while (clv == null) {
+                        clv = this.GetVisualAncestor<MpContentListView>();
+                        await Task.Delay(100);
+                    }
+                    clv.RegisterMouseWheel();
+                });
+            }
         }
     }
 }

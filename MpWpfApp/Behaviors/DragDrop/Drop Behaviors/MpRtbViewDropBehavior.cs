@@ -106,7 +106,12 @@ namespace MpWpfApp {
                 return false;
             }
             if(AssociatedObject != null && dragData is List<MpCopyItem> ddl) {
-                if(!isCopy && ddl.Any(x=>x.Id ==AssociatedObject.BindingContext.CopyItemId)) {
+                if(!isCopy && 
+                   ddl.Any(x=>x.Id ==AssociatedObject.BindingContext.CopyItemId)) {
+                    return false;
+                }
+
+                if(ddl[0].ItemType != MpCopyItemType.RichText) {
                     return false;
                 }
             }
@@ -174,8 +179,8 @@ namespace MpWpfApp {
                     //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
                 }
             }
-
         }
+
 
         public async Task MergeContentItem(MpCopyItem mci, bool isDuplicating) {
             if(AssociatedObject == null) {
@@ -232,9 +237,9 @@ namespace MpWpfApp {
 
         public override void AutoScrollByMouse() {
             if (DropIdx == 0) {
-                AssociatedObject.Rtb.ScrollToHome();
+                AssociatedObject.BindingContext.ScrollToHomeCommand.Execute(null);
             } else if(DropIdx == 1) {
-                AssociatedObject.Rtb.ScrollToEnd();
+                AssociatedObject.BindingContext.ScrollToEndCommand.Execute(null);
             }
         }
 

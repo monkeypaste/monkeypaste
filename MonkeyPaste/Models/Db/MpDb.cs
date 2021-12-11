@@ -751,6 +751,41 @@ namespace MonkeyPaste {
             };
             await AddItemAsync<MpShortcut>(sh27);
 
+            var sh28 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("ac8abe92-82c3-46fb-9bd5-39d74b100b23"),
+                ShortcutName = "Scroll Home",
+                RouteType = 1,
+                KeyString = "Home",
+                DefaultKeyString = "Home"
+            };
+            await AddItemAsync<MpShortcut>(sh28);
+
+            var sh29 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("ac8abe92-82c3-46fb-9bd5-39d74b100b23"),
+                ShortcutName = "Scroll End",
+                RouteType = 1,
+                KeyString = "End",
+                DefaultKeyString = "End"
+            };
+            await AddItemAsync<MpShortcut>(sh28);
+
+            var sh30 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("9b0ca09a-5724-4004-98d2-f5ef8ae02055"),
+                ShortcutName = "Scroll Up",
+                RouteType = 1,
+                KeyString = "Up",
+                DefaultKeyString = "Up"
+            };
+            await AddItemAsync<MpShortcut>(sh28);
+
+            var sh31 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("39a6194e-37e3-4d37-a9f4-254ed83157f2"),
+                ShortcutName = "Scroll Down",
+                RouteType = 1,
+                KeyString = "Down",
+                DefaultKeyString = "Down"
+            };
+            await AddItemAsync<MpShortcut>(sh28);
             #endregion
 
             MpConsole.WriteTraceLine(@"Created all default tables");

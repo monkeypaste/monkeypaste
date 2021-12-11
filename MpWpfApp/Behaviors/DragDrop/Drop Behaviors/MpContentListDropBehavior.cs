@@ -18,8 +18,6 @@ namespace MpWpfApp {
         private double _minScrollDist = 10;
         private double _autoScrollVelocity = 10;
 
-        private object _dataContext;
-
         #endregion
 
         public static double TargetMargin = 3;
@@ -91,20 +89,35 @@ namespace MpWpfApp {
                AssociatedObject.ContentListBox.Items.Count == 0) {
                 return new List<Rect>() { new Rect() };
             }
+
+            switch(AssociatedObject.BindingContext.ItemType) {
+                case MpCopyItemType.RichText:
+                    return GetRtbDropTargetRects();
+                case MpCopyItemType.FileList:
+                    return GetFileListDropTargetRects();
+                //case MpCopyItemType.Image:
+                //    return GetImageDropTargetRects();
+                default:
+                    return new List<Rect>();
+            }
+            
+        }
+
+        private List<Rect> GetRtbDropTargetRects() {
             double itemMargin = TargetMargin;
             List<Rect> targetRects = new List<Rect>();
-
             var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>().ToList();
             if (rtbvl.Count == 0) {
                 return new List<Rect>() { new Rect() };
             }
+
             var itemRects = AssociatedObject.ContentListBox.GetListBoxItemRects(RelativeToElement);
 
             for (int i = 0; i < itemRects.Count; i++) {
                 double x = itemRects[i].Location.X;
                 double y = itemRects[i].Location.Y - itemMargin;
                 double w = itemRects[i].Width;
-                double h = itemRects[i].Height;
+                double h;
 
                 if (i == 0) {
                     //for head drop make target from top of content all the way up to top of actual tile
@@ -126,16 +139,20 @@ namespace MpWpfApp {
             }
 
             int lastItemIdx = targetRects.Count - 1;
-            if(lastItemIdx < rtbvl.Count) {
+            if (lastItemIdx < rtbvl.Count) {
                 Rect lastItemRect = targetRects[lastItemIdx];
                 double listRectBottom = AssociatedObject.ActualHeight;
-                if (lastItemRect.Bottom <= listRectBottom) {
+                //if (lastItemRect.Bottom <= listRectBottom) 
+                {
                     //due to async loading sometimes the rtb view's are not always loaded in time (probably for larger or heavy tokened items)
                     //or this item is a different content type so don't expect item list to be populated
                     double tailX = lastItemRect.Location.X;
                     double tailY = rtbvl.Count != itemRects.Count ?
-                                         listRectBottom : 
-                                         rtbvl[lastItemIdx].Rtb.TranslatePoint(rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects[1].BottomRight, RelativeToElement).Y;
+                                         listRectBottom :
+                                         rtbvl[lastItemIdx].Rtb.TranslatePoint(
+                                             rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects[1].BottomRight, 
+                                             RelativeToElement)
+                                                .Y;
                     double tailW = lastItemRect.Width;
                     double tailH;
 
@@ -149,6 +166,58 @@ namespace MpWpfApp {
             }
 
             return targetRects;
+        }
+
+        private List<Rect> GetFileListDropTargetRects() {
+            double itemMargin = TargetMargin;
+            List<Rect> targetRects = new List<Rect>();
+            var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>().ToList();
+            if (flivl.Count == 0) {
+                return new List<Rect>() { new Rect() };
+            }
+
+            var itemRects = AssociatedObject.ContentListBox.GetListBoxItemRects(RelativeToElement);
+
+            for (int i = 0; i < itemRects.Count; i++) {
+                double x = itemRects[i].Location.X;
+                double y = itemRects[i].Location.Y - itemMargin;
+                double w = itemRects[i].Width;
+                double h = itemMargin * 2;
+
+                if (i == 0) {
+                    //for head drop make target from top of content all the way up to top of actual tile
+                    y = -MpMeasurements.Instance.ClipTileTitleHeight;
+                    h = MpMeasurements.Instance.ClipTileTitleHeight + itemMargin;
+                } 
+                targetRects.Add(new Rect(x, y, w, h));
+            }
+
+            int lastItemIdx = targetRects.Count - 1;
+            if (lastItemIdx < flivl.Count) {
+                Rect lastItemRect = targetRects[lastItemIdx];
+                double listRectBottom = AssociatedObject.ActualHeight;
+
+                double tailX = lastItemRect.Location.X;
+                double tailY = lastItemRect.Location.Y - itemMargin;
+                double tailW = lastItemRect.Width;
+                double tailH = Math.Max(lastItemRect.Bottom, listRectBottom);
+
+                targetRects.Add(new Rect(tailX, tailY, tailW, tailH));
+            }
+
+            return targetRects;
+        }
+
+        private List<Rect> GetImageDropTargetRects() {
+            return new List<Rect>();
+        }
+
+        public override bool IsDragDataValid(bool isCopy, object dragData) {
+            if(!base.IsDragDataValid(isCopy, dragData)) {
+                return false;
+            }
+            // TODO may make conversion scheme between 3 content types
+            return AssociatedObject.BindingContext.ItemType == (dragData as List<MpCopyItem>)[0].ItemType;
         }
 
         public override async Task Drop(bool isCopy, object dragData) {

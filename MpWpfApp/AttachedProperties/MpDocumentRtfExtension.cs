@@ -9,7 +9,6 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDocumentRtfExtension : DependencyObject {
-        
         public static string GetDocumentRtf(DependencyObject obj) {
             return (string)obj.GetValue(DocumentRtfProperty);
         }
@@ -30,7 +29,10 @@ namespace MpWpfApp {
                         rtf = (string)e.NewValue;
                     }
                     var rtb = (RichTextBox)obj;
-                    var fd = ((string)e.NewValue).ToFlowDocument();
+                    var fd = ((string)e.NewValue).ToFlowDocument(out Size docSize);
+
+                    (rtb.DataContext as MpContentItemViewModel).UnformattedContentSize = docSize;
+
                     rtb.Document = fd;
                     rtb.FitDocToRtb();
                 }

@@ -1,4 +1,4 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpRtbView"
+﻿<local:MpContentUserControl x:Class="MpWpfApp.MpRtbView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -59,4 +59,4 @@
             </RichTextBox.Resources>
         </RichTextBox>
     </AdornerDecorator>
-</local:MpUserControl>
+</local:MpContentUserControl>

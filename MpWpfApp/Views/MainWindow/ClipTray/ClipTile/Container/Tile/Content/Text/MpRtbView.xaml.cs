@@ -27,7 +27,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for Mpxaml
     /// </summary>
-    public partial class MpRtbView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpRtbView : MpContentUserControl<MpContentItemViewModel> {
         public TextRange NewStartRange;
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
@@ -101,7 +101,40 @@ namespace MpWpfApp {
                     ReceivedMainWindowResizeBehviorMessage);
 
                 RtbViewDropBehavior.Attach(this);
+
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    var clv = this.GetVisualAncestor<MpContentListView>();
+                    while (clv == null) {
+                        clv = this.GetVisualAncestor<MpContentListView>();
+                        await Task.Delay(100);
+                    }
+                    var sv = clv.GetVisualDescendent<ScrollViewer>();
+                    while (sv == null) {
+                        sv = this.GetVisualDescendent<ScrollViewer>();
+                        await Task.Delay(100);
+                    }
+                    Rtb.PreviewMouseWheel += Rtb_PreviewMouseWheel;
+                    sv.PreviewMouseWheel += Rtb_PreviewMouseWheel;
+
+                    if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
+                        clv.RegisterMouseWheel();
+                    }
+                });
             }
+        }
+
+        private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            if(!BindingContext.IsSelected && !BindingContext.IsHovering) {
+                e.Handled = false;
+                return;
+            }
+            double origVertOffset = Rtb.VerticalOffset;
+            if (e.Delta > 0) {
+                Rtb.LineDown();
+            } else {
+                Rtb.LineUp();
+            }
+            e.Handled = Rtb.VerticalOffset != origVertOffset;
         }
 
         private void Rtb_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -280,8 +313,9 @@ namespace MpWpfApp {
             Rtb.UpdateLayout();
         }
 
-        private void Rtbivm_OnScrollWheelRequest(object sender, int e) {
-            Rtb.ScrollToVerticalOffset(Rtb.VerticalOffset + e);
+        private void Rtbivm_OnScrollWheelRequest(object sender, double e) {
+            double vertScrollAmount = BindingContext.UnformattedContentSize.Height * e;
+            Rtb.ScrollToVerticalOffset(vertScrollAmount);
         }
 
         private void Rtbivm_OnRtbResetRequest(object sender, bool focusRtb) {
