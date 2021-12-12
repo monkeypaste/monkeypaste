@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,17 +24,17 @@ namespace MpWpfApp {
         }
 
         public void RefreshTray() {
-            var sv = TagTray.GetScrollViewer();
-            while (sv == null) {
-                sv = TagTray.GetScrollViewer();
-            }
-            if (sv.ExtentWidth >= TagTray.MaxWidth) {
-                TagTrayNavLeftButton.Visibility = Visibility.Visible;
-                TagTrayNavRightButton.Visibility = Visibility.Visible;
-            } else {
-                TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
-                TagTrayNavRightButton.Visibility = Visibility.Collapsed;
-            }
+            //var sv = TagTray.GetScrollViewer();
+            //while (sv == null) {
+            //    sv = TagTray.GetScrollViewer();
+            //}
+            //if (sv.ExtentWidth >= TagTray.MaxWidth) {
+            //    TagTrayNavLeftButton.Visibility = Visibility.Visible;
+            //    TagTrayNavRightButton.Visibility = Visibility.Visible;
+            //} else {
+            //    TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
+            //    TagTrayNavRightButton.Visibility = Visibility.Collapsed;
+            //}
         }
 
 
@@ -50,7 +51,6 @@ namespace MpWpfApp {
         }
 
         private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
-            RefreshTray();
         }
 
 
@@ -75,5 +75,10 @@ namespace MpWpfApp {
             BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
 
+        private void TagTray_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            if(BindingContext.SelectedTagTile.TagId != MpTag.RootTagId) {
+                BindingContext.SelectTagCommand.Execute(null);
+            }
+        }
     }
 }

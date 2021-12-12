@@ -36,9 +36,9 @@ namespace MpWpfApp {
         }
 
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
-            var ctcv = this.GetVisualAncestor<MpClipTileContainerView>();
-            if(ctcv != null) {
-                ctcv.Focus();
+            if(ContentListView != null && ContentListView.ContentListBox != null) {
+                bool result = ContentListView.ContentListBox.Focus();
+                MpConsole.WriteLine($"Tile {BindingContext.HeadItem.CopyItemTitle} {(result ? "SUCCESSFULLY" : "UNSUCESSFULLY")} received focus");
             }
         }
 

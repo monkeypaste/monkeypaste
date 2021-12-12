@@ -15,15 +15,15 @@ namespace MpWpfApp {
             } else {
                 var cl = parameter.ToString().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                 if ((bool)value) {
-                    ct = MpMouseViewModel.Instance.GetCursorFromString(cl[0]);
+                    ct = MpCursorViewModel.Instance.GetCursorFromString(cl[0]);
                 } else {
-                    ct = MpMouseViewModel.Instance.GetCursorFromString(cl[1]);
+                    ct = MpCursorViewModel.Instance.GetCursorFromString(cl[1]);
                 }
             }
             
-            MpMouseViewModel.Instance.CurrentCursor = ct;
+            MpCursorViewModel.Instance.CurrentCursor = ct;
 
-            return MpMouseViewModel.Instance.GetCurrentCursor();
+            return MpCursorViewModel.Instance.GetCurrentCursor();
         }
 
         

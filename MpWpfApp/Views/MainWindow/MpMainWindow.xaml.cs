@@ -87,5 +87,12 @@ namespace MpWpfApp {
             //mwvm.HideWindowCommand.Execute(null);
         }
 
+        private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
+        }
+
+        private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
     }
 }

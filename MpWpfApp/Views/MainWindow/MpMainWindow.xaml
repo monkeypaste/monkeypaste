@@ -108,13 +108,21 @@
                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
                 <!--  Tag Tray  -->
-                <local:MpTagTrayView x:Name="TagTrayView"
+                <!--<local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
                                      Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded,
                                                           Source={StaticResource MainWindowViewModel},
                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                      DataContext="{Binding TagTrayViewModel,
-                                                           IsAsync=True}" />
+                                                           IsAsync=True}" />-->
+                <local:MpAppModeButtonGridView Grid.Column="2"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,3"
+                                               Visibility="{Binding IsAnyTileExpanded,
+                                                                    Source={StaticResource ClipTrayViewModel},
+                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                               DataContext="{Binding AppModeViewModel}" />
+                
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
@@ -128,8 +136,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding AppModeButtonGridWidth, Source={StaticResource AppModeViewModel}}" />
-                    <ColumnDefinition Width="{Binding ClipTrayScreenWidth, Source={StaticResource ClipTrayViewModel}}" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <local:MpSearchCriteriaListView x:Name="SearchDetailView"
@@ -137,17 +145,34 @@
                                                 Grid.ColumnSpan="2"
                                                 DataContext="{Binding SearchBoxViewModel}" />
                 <!--  Side bar AppState Buttons  -->
-                <local:MpAppModeButtonGridView Grid.Row="1"
+                <!--<local:MpAppModeButtonGridView Grid.Row="1"
                                                Grid.Column="0"
                                                Visibility="{Binding IsAnyTileExpanded,
                                                                     Source={StaticResource ClipTrayViewModel},
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                               DataContext="{Binding AppModeViewModel}" />
-
-                <local:MpClipTrayView x:Name="ClipTrayView"
-                                      Grid.Row="1"
-                                      Grid.Column="1"
-                                      DataContext="{Binding ClipTrayViewModel}" />
+                                               DataContext="{Binding AppModeViewModel}" />-->
+                <local:MpTagTrayView x:Name="TagTrayView"
+                                     Grid.Row="1"
+                                     Grid.Column="0" 
+                                     
+                                  Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}"
+                                     Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded,
+                                                          Source={StaticResource MainWindowViewModel},
+                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     DataContext="{Binding TagTrayViewModel,
+                                                           IsAsync=True}" />
+                <GridSplitter Background="Black"
+                              Grid.Row="1"
+                              Grid.Column="0"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Stretch"
+                              Width="3"
+                              MouseEnter="GridSplitter_MouseEnter"
+                              MouseLeave="GridSplitter_MouseLeave"/>
+                <local:MpClipTrayContainerView x:Name="ClipTrayView"
+                                               Grid.Row="1"
+                                               Grid.Column="1"
+                                               DataContext="{Binding ClipTrayViewModel}" />
                 <Grid Background="DarkGray"
                       Opacity="0.3"
                       HorizontalAlignment="Stretch"

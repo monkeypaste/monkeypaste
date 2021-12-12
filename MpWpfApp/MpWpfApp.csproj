@@ -274,6 +274,9 @@
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
+      <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml.cs">
       <DependentUpon>MpManageTagExpressionModalWindow.xaml</DependentUpon>
     </Compile>
@@ -310,7 +313,7 @@
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\MpMouseViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpCursorViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\Base\MpWindow.cs" />
     <Compile Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml.cs">
@@ -617,6 +620,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Title\MpClipTileTitleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml">
       <SubType>Designer</SubType>

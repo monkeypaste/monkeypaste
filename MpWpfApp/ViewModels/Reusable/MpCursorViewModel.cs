@@ -26,7 +26,7 @@ namespace MpWpfApp {
         Link
     }
 
-    public class MpMouseViewModel : MpThreadSafeSingletonViewModel<MpMouseViewModel> {
+    public class MpCursorViewModel : MpThreadSafeSingletonViewModel<MpCursorViewModel> {
         #region Private Variables
 
         private Dictionary<MpCursorType, Cursor> _cursorLookup = 
@@ -64,7 +64,7 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpMouseViewModel() : base() { }
+        public MpCursorViewModel() : base() { }
 
         #endregion
 

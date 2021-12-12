@@ -231,7 +231,7 @@ using System.Speech.Synthesis;
                 if(IsExpanded) {
                     return MpMeasurements.Instance.ClipTileExpandedMargin;
                 }
-                if(HeadItem == null) {
+                if(HeadItem == null || IsPinned) {
                     return 0;
                 }
                 return MpPagingListBoxBehavior.Instance.FindTileOffsetX(QueryOffsetIdx);
@@ -505,6 +505,8 @@ using System.Speech.Synthesis;
 
         #region State Properties
 
+        public bool IsPinned => Parent != null && HeadItem != null && Parent.PinnedItems.Any(x => x.HeadItem.CopyItemId == HeadItem.CopyItemId);
+
         public bool CanVerticallyScroll => IsExpanded ?
                                                 ExpandedContentSize.Height > TileContentHeight :
                                                 ItemViewModels.Sum(x => x.UnformattedContentSize.Height) > TileContentHeight;
@@ -694,6 +696,9 @@ using System.Speech.Synthesis;
                 if(Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
+                if(IsPinned) {
+                    return true;
+                }
                 return Parent.IsAnyTileExpanded && !IsExpanded;
             }
         }
@@ -795,8 +800,6 @@ using System.Speech.Synthesis;
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
             }
 
-            
-
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
 
@@ -820,11 +823,14 @@ using System.Speech.Synthesis;
             await Task.Delay(1);
         }
 
-        public void ResetSubSelection(bool clearEditing = true) {
+        public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
             ClearSelection(clearEditing);
             Parent.IsSelectionReset = true;
             IsSelected = true;
             Parent.IsSelectionReset = false;
+            if(reqFocus) {
+                RequestFocus();
+            }
         }
 
         public void ClearSubHovering() {

@@ -10,6 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
@@ -24,6 +25,11 @@ namespace MpWpfApp {
         #region View Models
 
         public MpTagPropertyCollectionViewModel TagProperties { get; set; } = new MpTagPropertyCollectionViewModel();
+        
+        public MpTagTileViewModel ParentTagViewModel { get; set; }
+
+        public ObservableCollection<MpTagTileViewModel> ChildTagViewModels { get; set; } = new ObservableCollection<MpTagTileViewModel>();
+
         #endregion
 
         #region State
@@ -72,6 +78,8 @@ namespace MpWpfApp {
         }
 
         public bool IsSelected { get; set; }
+
+        public bool IsExpanded { get; set; }
 
         private bool _isEditing = false;
         public bool IsEditing {
@@ -173,7 +181,11 @@ namespace MpWpfApp {
                    MpShortcutCollectionViewModel.Instance.IsBusy) {
                     return string.Empty;
                 }
-                return MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.TagId == TagId).KeyString;
+                var svm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.TagId == TagId);
+                if (svm != null) {
+                    return svm.KeyString;
+                }
+                return string.Empty;
             }
         }
 
@@ -204,6 +216,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        public int ParentTagId {
+            get {
+                if (Tag == null) {
+                    return 0;
+                }
+                return Tag.ParentTagId;
+            }
+            set {
+                if (ParentTagId != value) {
+                    Tag.ParentTagId = value;
+                    Task.Run(async () => {
+                        await Tag.WriteToDatabaseAsync();
+                    });
+                    OnPropertyChanged(nameof(ParentTagId));
+                }
+            }
+        }
 
         public int TagId {
             get {
@@ -351,10 +381,23 @@ namespace MpWpfApp {
                     //        await MpClipTrayViewModel.Instance.RefreshTiles(); 
                     //    });
                     //}
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
+                    if(IsSelected) {
+                        if (!IsExpanded) {
+                            IsExpanded = true;
+                        }
+                        Parent.SelectTagCommand.Execute(TagId);
+                    }
+                    //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
             }
-        }        
+        }
+
+        public IEnumerable<MpTagTileViewModel> FindChildren() { 
+            foreach(var cttvm in ChildTagViewModels) {
+                yield return cttvm;
+                cttvm.FindChildren();
+            }
+        }
 
         public async Task AddContentItem(MpContentItemViewModel rtbvm) {
             var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(TagId,rtbvm.CopyItemId);

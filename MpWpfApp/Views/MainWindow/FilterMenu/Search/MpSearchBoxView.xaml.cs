@@ -166,11 +166,11 @@ namespace MpWpfApp {
         }
 
         private void SearchBox_MouseEnter(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
         }
 
         private void SearchBox_MouseLeave(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void SaveSearchButton_MouseEnter(object sender, MouseEventArgs e) {

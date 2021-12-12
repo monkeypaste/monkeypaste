@@ -25,7 +25,7 @@ namespace MpWpfApp {
             get => _isBusy;
             set {
                 SetProperty(ref _isBusy, value);
-                MpMouseViewModel.Instance.NotifyAppBusy(_isBusy);
+                MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
             }
         }
         #endregion

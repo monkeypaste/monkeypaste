@@ -203,7 +203,7 @@ namespace MpWpfApp {
                 currentCursor = _curDropTarget.MoveCursor;
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = currentCursor;
+            MpCursorViewModel.Instance.CurrentCursor = currentCursor;
         }
 
         private void Instance_OnMainWindowHide(object sender, EventArgs e) {

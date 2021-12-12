@@ -19,7 +19,7 @@
         <Grid>
             <AdornerDecorator>
                 <ScrollViewer x:Name="PagingScrollViewer" 
-                              Width="{Binding ClipTrayScreenWidth}"
+                              MaxWidth="{Binding ClipTrayScreenWidth}"
                               HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
                                                                       Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                               VerticalScrollBarVisibility="Hidden">

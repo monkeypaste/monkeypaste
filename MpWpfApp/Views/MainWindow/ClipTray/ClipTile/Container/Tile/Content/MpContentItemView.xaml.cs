@@ -44,7 +44,7 @@ namespace MpWpfApp {
             civm.IsHovering = true;
             if(!MpDragDropManager.Instance.IsDragAndDrop &&
                 (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
-                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
             }
         }
 
@@ -52,7 +52,7 @@ namespace MpWpfApp {
             var civm = DataContext as MpContentItemViewModel;
             civm.IsHovering = false;
             if (!MpDragDropManager.Instance.IsDragAndDrop) {
-                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
         }
         #region Event Handlers

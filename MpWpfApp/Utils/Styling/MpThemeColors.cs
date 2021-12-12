@@ -24,7 +24,8 @@ namespace MpWpfApp {
         Clip_Tile_Primary_Selected_Tile_Border_Color,
         Clip_Tile_Unselected_Hovering_Tile_Border_Color,
         App_Mode_Grid_Background_Color,
-        SearchBox_Background_Color
+        SearchBox_Background_Color,
+        Tag_Tree_Background_Color
     }
 
     public enum MpThemeType {
@@ -49,7 +50,8 @@ namespace MpWpfApp {
             {MpThemeItemType.Clip_Tile_Selected_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
             {MpThemeItemType.Clip_Tile_Primary_Selected_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
             {MpThemeItemType.Clip_Tile_Unselected_Hovering_Tile_Border_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
-            {MpThemeItemType.App_Mode_Grid_Background_Color, new SolidColorBrush(Colors.DimGray){ Opacity=_defaultOpacity } }
+            {MpThemeItemType.App_Mode_Grid_Background_Color, new SolidColorBrush(Colors.DimGray){ Opacity=_defaultOpacity } },
+            {MpThemeItemType.Tag_Tree_Background_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
         };
 
         #endregion

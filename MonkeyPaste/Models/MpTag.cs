@@ -16,6 +16,7 @@ namespace MonkeyPaste {
         public const int AllTagId = 2;
         public const int FavoritesTagId = 3;
         public const int HelpTagId = 4;
+        public const int RootTagId = 5;
 
         #region Columns
         [PrimaryKey, AutoIncrement]

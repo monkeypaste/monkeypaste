@@ -199,7 +199,7 @@ namespace MpWpfApp {
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
             if (BindingContext.Parent.IsExpanded) {
                 if (BindingContext.IsSelected) {
-                    MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
                     return;
                 }
             }
@@ -211,7 +211,7 @@ namespace MpWpfApp {
             e.Handled = false;
             if (BindingContext.Parent.IsExpanded) {
                 if (BindingContext.IsSelected) {
-                    MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
                     return;
                 }
             }
@@ -521,18 +521,18 @@ namespace MpWpfApp {
                                     // and they aren't holding ctrl until they see the message it will change cursor while
                                     // over link
                                     if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Link;
+                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Link;
                                     } else {
                                         if (rtbvm.IsEditingContent) {
-                                            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                                            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
                                         } else {
-                                            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                                            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                                         }
                                     }
                                 };
                                 MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
                                     if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Link;
+                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Link;
                                     }                                    
                                     hl.IsEnabled = true;
                                     //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
@@ -540,9 +540,9 @@ namespace MpWpfApp {
                                 };
                                 MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
                                     if (rtbvm.Parent.IsAnyEditingContent) {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;                                        
+                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;                                        
                                     } else {
-                                        MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                                     }
                                     hl.IsEnabled = false;
                                     //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);

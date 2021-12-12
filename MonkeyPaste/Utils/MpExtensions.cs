@@ -79,10 +79,12 @@ namespace MonkeyPaste {
         }
 
         public static void AddRange<TSource>(this IList<TSource> collection, int idx, IList<TSource> itemsToAdd) where TSource : class {
-            if (idx < 0 || idx >= collection.Count()) {
+            if (idx >= collection.Count()) {
                 throw new IndexOutOfRangeException($"Idx: {idx} out of range {collection.Count()}");
             }
-
+            if(idx < 0) {
+                idx = Math.Max(0,collection.Count - 1);
+            }
             itemsToAdd.Reverse();
             foreach(var item in itemsToAdd) {
                 collection.Insert(idx, item);

@@ -194,7 +194,7 @@ namespace MpWpfApp {
 
             //MpPluginManager.Instance.Init();
 
-            await MpMouseViewModel.Instance.Init();
+            await MpCursorViewModel.Instance.Init();
 
             await MpSearchBoxViewModel.Instance.Init();
             Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;

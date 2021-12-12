@@ -11,15 +11,14 @@
                      d:DesignWidth="800">
     <Grid Loaded="Grid_Loaded"
           Background="{local:MpThemeColorsBinding Key=App_Mode_Grid_Background_Color}">
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <ToggleButton Grid.Row="0"
-                      Grid.Column="0"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ToggleButton Grid.Column="0"
                       Width="{Binding AppModeButtonGridWidth}"
                       Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
@@ -35,8 +34,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="1"
-                      Grid.Column="0"
+        <ToggleButton Grid.Column="1"
                       ToolTipService.InitialShowDelay="0"
                       ToolTip="{Binding IsAutoCopyModeTooltip}"
                       Width="{Binding AppModeButtonGridWidth}"
@@ -52,8 +50,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="2"
-                      Grid.Column="0"
+        <ToggleButton Grid.Column="2"
                       ToolTipService.InitialShowDelay="0"
                       Width="{Binding AppModeButtonGridWidth}"
                       Height="{Binding AppModeButtonGridWidth}"
@@ -69,8 +66,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="3"
-                      Grid.Column="0"
+        <ToggleButton Grid.Column="3"
                       Padding="10"
                       ToolTipService.InitialShowDelay="0"
                       Width="{Binding AppModeButtonGridWidth}"
@@ -86,8 +82,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="4"
-                      Grid.Column="0"
+        <ToggleButton Grid.Column="4"
                       ToolTipService.InitialShowDelay="0"
                       Width="{Binding AppModeButtonGridWidth}"
                       Height="{Binding AppModeButtonGridWidth}"

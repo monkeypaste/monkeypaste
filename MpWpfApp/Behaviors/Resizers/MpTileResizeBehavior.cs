@@ -114,7 +114,7 @@ namespace MpWpfApp {
                     AssociatedObject.ReleaseMouseCapture();
                 }
 
-                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                 
                 _isResizing = _canResize = false;
                 _lastMousePosition = new Point();
@@ -136,7 +136,7 @@ namespace MpWpfApp {
             }
 
             if(_canResize) {
-                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
 
                 if(Mouse.LeftButton == MouseButtonState.Pressed && !_isResizing) {
                     if(!AssociatedObject.IsMouseCaptured) {
@@ -151,7 +151,7 @@ namespace MpWpfApp {
                     Resize(deltaX);
                 } 
             } else {
-                MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
 
             AssociatedObject.BindingContext.IsResizing = _isResizing;

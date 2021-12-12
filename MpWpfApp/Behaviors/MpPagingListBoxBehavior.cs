@@ -227,8 +227,11 @@ namespace MpWpfApp {
 
             double offsetX = 0;// MpMeasurements.Instance.ClipTileMargin;
             for (int i = 1; i <= queryOffsetIdx; i++) {
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
-                int tileHeadId = headItemIds[i-1];
+                int tileHeadId = headItemIds[i - 1];
+                if(MpClipTrayViewModel.Instance.PinnedItems.Any(x=>x.HeadItem?.CopyItemId == tileHeadId)) {
+                    continue;
+                }
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;                
 
                 if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
                     offsetX += uniqueWidthLookup[tileHeadId];

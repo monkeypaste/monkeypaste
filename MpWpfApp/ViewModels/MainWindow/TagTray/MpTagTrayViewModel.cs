@@ -20,8 +20,25 @@ namespace MpWpfApp {
         #endregion
 
         #region View Models
-        public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
+        public ObservableCollection<MpTagTileViewModel> RootTagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
 
+
+        //public MpTagTileViewModel RootTagTileViewModel { get; private set; }
+        
+        //public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
+        public List<MpTagTileViewModel> TagTileViewModels {
+            get {
+                var ttvml = new List<MpTagTileViewModel>();
+                if(RootTagTileViewModels == null) {
+                    return ttvml;
+                }
+                foreach(var rttvm in RootTagTileViewModels) {
+                    ttvml.Add(rttvm); 
+                    ttvml.AddRange(rttvm.FindChildren());                    
+                }
+                return ttvml;
+            }
+        }
         public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
 
         public MpTagTileViewModel AllTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.AllTagId).FirstOrDefault();
@@ -82,26 +99,46 @@ namespace MpWpfApp {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
                 IsBusy = true;
 
-                MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-                MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-                MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+                MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
+                MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
+                MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
 
                 List<MpTag> allTags = await MpDb.Instance.GetItemsAsync<MpTag>();
+
+                var rttvm = await CreateTagTileViewModel(allTags.FirstOrDefault(x => x.Id == MpTag.RootTagId));
+
+                RootTagTileViewModels.Add(rttvm);
                 //create tiles for all the tags
-                foreach (MpTag t in allTags) {
-                    var ttvm = await CreateTagTileViewModel(t);
-                    TagTileViewModels.Add(ttvm);
+                //foreach (MpTag t in allTags) {
+                //    var ttvm = await CreateTagTileViewModel(t);
+                //    TagTileViewModels.Add(ttvm);
+                //}
+
+                foreach(var srttvm in RootTagTileViewModels) {
+                    foreach (var t in allTags.Where(x => x.ParentTagId == srttvm.TagId)) {
+                        var ttvm = await CreateTagTileViewModel(t);
+
+                        ttvm.ParentTagViewModel = srttvm;
+                        srttvm.ChildTagViewModels.Add(ttvm);
+                        srttvm.OnPropertyChanged(nameof(srttvm.ChildTagViewModels));
+                    }
+
                 }
 
-                OnPropertyChanged(nameof(TagTileViewModels));
+                OnPropertyChanged(nameof(RootTagTileViewModels));
+                // OnPropertyChanged(nameof(TagTileViewModels));
 
-                TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+                //RootTagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
 
-                UpdateSortOrder(true);
+                //UpdateSortOrder(true);
 
-                TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
+                //TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
 
                 await RefreshAllCounts();
+
+                RootTagTileViewModels[0].IsExpanded = true;
+
+                SelectTagCommand.Execute(DefaultTagId);
 
                 IsBusy = false;
             });
@@ -123,7 +160,7 @@ namespace MpWpfApp {
 
         public void UpdateSortOrder(bool fromModel = false) {
             if (fromModel) {
-                TagTileViewModels.Sort(x => x.TagSortIdx);
+                //TagTileViewModels.Sort(x => x.TagSortIdx);
             } else {
                 foreach (var ttvm in TagTileViewModels) {
                     ttvm.TagSortIdx = TagTileViewModels.IndexOf(ttvm);
@@ -307,13 +344,17 @@ namespace MpWpfApp {
                     tagId = (int)args;
                 }
 
-                foreach(var ttvm in TagTileViewModels) {
+                //if (MpDataModelProvider.Instance.QueryInfo.TagId == tagId) {
+                //    return;
+                //}
+
+                foreach (var ttvm in TagTileViewModels) {
                     ttvm.IsSelected = ttvm.TagId == tagId;
                 }
 
                 if(MpClipTileSortViewModel.Instance.SelectedSortType.SortType == MpContentSortType.Manual) {
                     MpClipTileSortViewModel.Instance.ResetToDefault();
-                } else {
+                } else if (MpDataModelProvider.Instance.QueryInfo.TagId != tagId) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 }                
             });

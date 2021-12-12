@@ -21,9 +21,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
-using System.Collections.Concurrent;
-using static OpenTK.Graphics.OpenGL.GL;
-using GongSolutions.Wpf.DragDrop;
 
 
 namespace MpWpfApp {
@@ -51,10 +48,18 @@ namespace MpWpfApp {
         [MpChildViewModel(typeof(MpClipTileViewModel), true)]
         public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
+        public ObservableCollection<MpClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpClipTileViewModel>();
+
         [MpAffectsChild]
         public List<MpClipTileViewModel> SelectedItems {
             get {
                 return Items.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
+            }
+        }
+
+        public List<MpClipTileViewModel> PinnedSelectedItems {
+            get {
+                return PinnedItems.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
             }
         }
 
@@ -130,8 +135,10 @@ namespace MpWpfApp {
         #region Layout
 
         public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight;
-                
 
+        public double PinTrayScreenWidth { get; set; }
+
+        public double PinTrayTotalWidth { get; set; } = 0;
         //public double ClipTrayScreenHeight => ClipTrayHeight;
 
         public double ClipTrayScreenWidth {
@@ -139,9 +146,10 @@ namespace MpWpfApp {
                 if (IsAnyTileExpanded) {
                     return MpMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                return MpMeasurements.Instance.ClipTrayDefaultWidth;
+                return MpMeasurements.Instance.ClipTrayDefaultWidth - PinTrayTotalWidth;
             }
         }
+
 
         public double ClipTrayTotalTileWidth {
             get {
@@ -1165,6 +1173,25 @@ namespace MpWpfApp {
 
         #region Commands
 
+        public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
+            async(args) => {
+                var pctvm = args as MpClipTileViewModel;
+
+                if(pctvm.IsPinned) {
+                    PinnedItems.Remove(pctvm);
+                } else {
+                    var clonedTile = await CreateClipTileViewModel(pctvm.HeadItem.CopyItem);
+                    PinnedItems.Add(clonedTile);
+                }
+
+                //pctvm.IsPinned = !pctvm.IsPinned;
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+
+            },
+            (args) => args != null && 
+                      (args is MpClipTileViewModel || 
+                       args is List<MpClipTileViewModel>));
+
         public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
             async (args) => {
                 var pasteDataObject = await GetDataObjectByCopyItemIds((args as int[]), false, true);
@@ -1255,6 +1282,9 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, loadCount);
 
                     for (int i = 0; i < cil.Count; i++) {
+                        if(PinnedItems.Any(x=>x.HeadItem.CopyItemId == cil[i].Id)) {
+                            continue;
+                        }
                         await Items[i].InitializeAsync(cil[i], i + offsetIdx);
 
                         if (isDragDropRequery) {
@@ -1297,6 +1327,10 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = 0; i < cil.Count; i++) {
+                        if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                            continue;
+                        }
+
                         if (Items[0].IsSelected) {
                             StoreSelectionState(Items[0]);
                             Items[0].ClearSelection();
@@ -1315,6 +1349,10 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = cil.Count - 1; i >= 0; i--) {
+                        if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                            continue;
+                        }
+
                         if (Items[Items.Count - 1].IsSelected) {
                             StoreSelectionState(Items[Items.Count - 1]);
                             Items[Items.Count - 1].ClearSelection();
@@ -1357,6 +1395,9 @@ namespace MpWpfApp {
                 var cil = await MpDataModelProvider.Instance.FetchCopyItemRangeAsync(idx, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
+                    if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                        continue;
+                    }
                     if (Items[i].IsSelected) {
                         StoreSelectionState(Items[i]);
                         Items[i].ClearSelection();
@@ -1435,12 +1476,8 @@ namespace MpWpfApp {
         public ICommand ScrollToHomeCommand => new RelayCommand(
              () => {
                 RequeryCommand.Execute(null);
-                //JumpToPageIdxCommand.Execute(0);
-                //await Task.Delay(100);
-                //while (IsScrollJumping) { await Task.Delay(10); }
-                //ScrollOffset = LastScrollOfset = 0;
-                //Items[0].IsSelected = true;
-            });
+            },
+            () => !IsBusy);
 
         public ICommand ScrollToEndCommand => new RelayCommand(
             async () => {
@@ -1449,7 +1486,8 @@ namespace MpWpfApp {
                 while (IsScrollJumping) { await Task.Delay(10); }
                 ScrollOffset = LastScrollOfset = ClipTrayTotalWidth;
                 Items[Items.Count - 1].IsSelected = true;
-            });
+            },
+            () => !IsBusy);
 
         public ICommand ScrollUpCommand => new RelayCommand(
              () => {
@@ -1510,7 +1548,8 @@ namespace MpWpfApp {
                     Items[nextItemIdx].ResetSubSelection();
                     StoreSelectionState(Items[nextItemIdx]);
                 }
-            });
+            },
+            () => !IsBusy);
 
         public ICommand SelectPreviousItemCommand => new RelayCommand(
             async () => {
@@ -1561,7 +1600,8 @@ namespace MpWpfApp {
                     Items[prevItemIdx].ResetSubSelection();
                     StoreSelectionState(Items[prevItemIdx]);
                 }
-            });
+            },
+            ()=>!IsBusy);
 
         private RelayCommand _selectAllCommand;
         public ICommand SelectAllCommand {

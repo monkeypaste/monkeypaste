@@ -51,11 +51,11 @@ namespace MpWpfApp {
         }
 
         private void SearchCriteriaTextBox_MouseEnter(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
         }
 
         private void SearchCriteriaTextBox_MouseLeave(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void SearchCriteriaInputBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

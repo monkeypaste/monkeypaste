@@ -38,18 +38,18 @@ namespace MpWpfApp {
         #region Manual Resize Event Handlers
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             AssociatedObject.ReleaseMouseCapture();
             MpMainWindowViewModel.Instance.IsResizing = false;
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
         }
@@ -67,7 +67,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpMouseViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeNS;
 
             var mp = e.GetPosition(Application.Current.MainWindow);
             double deltaY = mp.Y - _lastMousePosition.Y;

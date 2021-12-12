@@ -443,7 +443,11 @@ namespace MpWpfApp {
                    MpShortcutCollectionViewModel.Instance.IsBusy) {
                     return string.Empty;
                 }
-                return MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CopyItemId == CopyItemId)?.KeyString;
+                var svm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CopyItemId == CopyItemId);
+                if(svm != null) {
+                    return svm.KeyString;
+                }
+                return string.Empty;
             }
         }
 

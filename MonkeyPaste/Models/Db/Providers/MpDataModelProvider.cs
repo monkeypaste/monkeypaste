@@ -378,6 +378,16 @@ namespace MonkeyPaste {
 
         #endregion MpCopyItemTag        
 
+        #region MpTag
+
+        public async Task<List<MpTag>> GetChildTagsAsync(int tagId) {
+            string query = "select * from MpTag where fk_ParentTagId=?";
+            var result = await MpDb.Instance.QueryAsync<MpTag>(query,tagId);
+            return result;
+        }
+
+        #endregion
+
         #region MpTagProperty
 
         public async Task<List<MpTagProperty>> GetTagPropertiesById(int tagId) {
