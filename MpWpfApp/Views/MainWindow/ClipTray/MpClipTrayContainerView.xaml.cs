@@ -29,5 +29,19 @@ namespace MpWpfApp {
         private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
             MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
+
+        private void ClipTraySplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            if(ClipTraySplitter.IsEnabled) {
+                //pin tray has items
+                GridLength pinColWidth = ClipTrayContainerGrid.ColumnDefinitions[0].Width;
+                if(pinColWidth.IsAuto) {
+                    //is default, collapsed so pop it out to show one item
+                    pinColWidth = new GridLength(MpClipTileViewModel.DefaultBorderWidth, GridUnitType.Pixel);
+                } else {
+                    pinColWidth = new GridLength(ClipTraySplitter.ActualWidth, GridUnitType.Pixel);
+                }
+                ClipTrayContainerGrid.ColumnDefinitions[0].Width = pinColWidth;
+            }
+        }
     }
 }

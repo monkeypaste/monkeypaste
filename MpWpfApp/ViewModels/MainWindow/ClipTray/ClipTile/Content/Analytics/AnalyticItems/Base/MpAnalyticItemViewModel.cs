@@ -150,17 +150,27 @@ namespace MpWpfApp {
 
         public string ManageLabel => $"{Title} Preset Manager";
 
-        public Brush ItemBackgroundBrush => IsHovering ? Brushes.Yellow : Brushes.Transparent;
+        public Brush ItemBackgroundBrush {
+            get {
+                if (IsSelected) {
+                    return Brushes.DimGray;
+                }
+                if (IsHovering) {
+                    return Brushes.LightGray;
+                }
+                return Brushes.Transparent;
+            }
+        }
 
         public Brush ItemTitleForegroundBrush {
             get {
-                if(IsHovering) {
-                    return Brushes.Red;
-                }
-                if(IsSelected) {
+                if (IsSelected) {
                     return Brushes.White;
                 }
-                return Brushes.Black;
+                if (IsHovering) {
+                    return Brushes.Black;
+                }
+                return Brushes.White;
             }
         }
         #endregion
@@ -435,6 +445,17 @@ namespace MpWpfApp {
                             await LoadChildren();
                         });
                     }
+                    break;
+                case nameof(IsSelected):
+                    Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+
+                    OnPropertyChanged(nameof(ItemBackgroundBrush));
+                    OnPropertyChanged(nameof(ItemTitleForegroundBrush));
+                    break;
+                case nameof(IsHovering):
+                    OnPropertyChanged(nameof(ItemBackgroundBrush));
+                    OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
             }
         }

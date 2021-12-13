@@ -17,6 +17,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+        
         public static async Task<MpCopyItem> CreateFromClipboard(Dictionary<string, string> iData) {
             try {
                 if (iData == null || iData.Count == 0) {

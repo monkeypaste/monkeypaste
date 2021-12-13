@@ -11,15 +11,15 @@
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Border Margin="5"
+            Padding="5"
+            HorizontalAlignment="Stretch"
             BorderThickness="0"
             BorderBrush="Black"
-            CornerRadius="3"
+            CornerRadius="10"
             Background="{Binding ItemBackgroundBrush}"
-            Width="{local:MpMeasurementsBinding AnalyticTreeViewItemWidth}"
-            MaxWidth="{local:MpMeasurementsBinding AnalyticTreeViewItemWidth}"
             MouseEnter="Border_MouseEnter"
             MouseLeave="Border_MouseLeave">
-        <DockPanel>
+        <DockPanel LastChildFill="False">
             <Image DockPanel.Dock="Left"
                    Source="{Binding ItemIconBase64,
                                     Converter={StaticResource Base64StringToBitmapSourceConverter}}"
@@ -110,7 +110,7 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontSize="16"
-                       Foreground="Black"
+                       Foreground="{Binding ItemTitleForegroundBrush}"
                        Background="Transparent">
                 <TextBlock.ToolTip>
                     <ToolTip>
@@ -129,5 +129,5 @@
                 </TextBlock.Inlines>
             </TextBlock>
         </DockPanel>
-    </Border>
+        </Border>
 </local:MpUserControl>

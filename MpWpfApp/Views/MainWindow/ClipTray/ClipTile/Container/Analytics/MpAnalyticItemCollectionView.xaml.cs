@@ -18,9 +18,17 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemCollectionView.xaml
     /// </summary>
-    public partial class MpAnalyticItemCollectionView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpAnalyticItemCollectionView : MpUserControl<MpAnalyticItemCollectionViewModel> {
         public MpAnalyticItemCollectionView() {
             InitializeComponent();
+        }
+
+        private void AnalyticRootItemBorder_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.IsHovering = true;
+        }
+
+        private void AnalyticRootItemBorder_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.IsHovering = false;
         }
     }
 }

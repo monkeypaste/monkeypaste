@@ -70,6 +70,8 @@ namespace MpWpfApp {
 
         public MpAppModeViewModel AppModeViewModel => MpAppModeViewModel.Instance;
 
+        public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel => MpAnalyticItemCollectionViewModel.Instance;
+
         #endregion
 
         #region State
@@ -219,7 +221,7 @@ namespace MpWpfApp {
 
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
-                        
+           
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
             MpClipTrayViewModel.Instance.RequeryCommand.Execute(null);

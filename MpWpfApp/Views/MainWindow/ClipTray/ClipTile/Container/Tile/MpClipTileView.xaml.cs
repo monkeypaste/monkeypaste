@@ -49,6 +49,7 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = false;
+            this.DropShadow.Direction = 270;
         }
 
         private void ClipTileClipBorder_LostFocus(object sender, RoutedEventArgs e) {
@@ -76,6 +77,23 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
             e.Handled = true;
+        }
+
+        private void ClipTileClipBorder_MouseMove(object sender, MouseEventArgs e) {
+            //0 = Left
+            //90 = Top
+            //180 = Right
+            //270 = Bottom
+
+            var mp = e.GetPosition(this);
+            Point center = new Point(ActualWidth / 2, ActualHeight / 2);
+
+            double xDiff = mp.X - center.X;
+            double yDiff = mp.Y - center.Y;
+
+            double angle =  Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+
+            this.DropShadow.Direction = 360.0 - angle + 180;
         }
     }
 }

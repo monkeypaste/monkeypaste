@@ -277,8 +277,14 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\MpPinTrayView.xaml.cs">
+      <DependentUpon>MpPinTrayView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml.cs">
       <DependentUpon>MpManageTagExpressionModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
+      <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpContextMenuItemTemplateViewSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
@@ -629,6 +635,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\MpPinTrayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -666,6 +676,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2371,6 +2385,7 @@
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
+    <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

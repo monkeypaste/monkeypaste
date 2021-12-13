@@ -112,6 +112,7 @@
                                 Margin="3,0,0,0"
                                 Padding="5,5,5,5"
                                 BorderThickness="0"
+                                Visibility="{Binding IsRootTagTile,Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                 Background="{Binding TagBrush,
                                                      Mode=TwoWay,
                                                      UpdateSourceTrigger=PropertyChanged,

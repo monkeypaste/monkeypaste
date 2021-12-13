@@ -122,7 +122,7 @@
                                                                     Source={StaticResource ClipTrayViewModel},
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />
-                
+
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
@@ -151,16 +151,10 @@
                                                                     Source={StaticResource ClipTrayViewModel},
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />-->
-                <local:MpTagTrayView x:Name="TagTrayView"
-                                     Grid.Row="1"
-                                     Grid.Column="0" 
-                                     
-                                  Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}"
-                                     Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded,
-                                                          Source={StaticResource MainWindowViewModel},
-                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                     DataContext="{Binding TagTrayViewModel,
-                                                           IsAsync=True}" />
+                <local:MpSidebarMenuView x:Name="SidebarMenuView"
+                                         Grid.Row="1"
+                                         Grid.Column="0"
+                                         Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
                 <GridSplitter Background="Black"
                               Grid.Row="1"
                               Grid.Column="0"
@@ -168,7 +162,7 @@
                               VerticalAlignment="Stretch"
                               Width="3"
                               MouseEnter="GridSplitter_MouseEnter"
-                              MouseLeave="GridSplitter_MouseLeave"/>
+                              MouseLeave="GridSplitter_MouseLeave" />
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
                                                Grid.Column="1"

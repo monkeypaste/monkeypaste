@@ -1,0 +1,21 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpSidebarMenuView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpMainWindowViewModel"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
+                                                      IsDesignTimeCreatable=False}">
+    <WrapPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <local:MpTagTrayView x:Name="TagTrayView"
+                             DataContext="{Binding TagTrayViewModel,
+                                                   IsAsync=True}" />
+        <local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
+                                            Grid.Row="1"
+                                            DataContext="{Binding AnalyticItemCollectionViewModel,IsAsync=True}"/>
+    </WrapPanel>
+</local:MpUserControl>

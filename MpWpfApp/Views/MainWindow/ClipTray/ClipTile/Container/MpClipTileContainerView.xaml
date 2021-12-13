@@ -13,14 +13,16 @@
         <local:MpTileResizeBehavior x:Name="TileResizeBehavior" />
     </i:Interaction.Behaviors>
     <Grid>
-        <local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
+        <!--<local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
                                             DataContext="{Binding PrimaryItem}"
-                                            Visibility="{Binding Parent.BackVisibility}" />
+                                            Visibility="{Binding Parent.BackVisibility}" />-->
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
-        <local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
+        
+       
+        <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
                                   Visibility="{Binding IsFlipping,
-                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                       Converter={StaticResource BoolToVisibilityConverter}}" />-->
     </Grid>
 </local:MpUserControl>

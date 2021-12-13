@@ -11,65 +11,28 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid>
+    <Grid x:Name="ClipTrayContainerGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0"
-                 Background="Salmon"
-                 ItemsSource="{Binding PinnedItems}"
-                 IsSynchronizedWithCurrentItem="True"
-                 Margin="0,0,0,0"
-                 Focusable="True"
-                 BorderThickness="0"
-                 VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Top"
-                 HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Left"
-                 SelectionMode="Single"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected}" />
-                    <Setter Property="FocusVisualStyle"
-                            Value="{x:Null}" />
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalContentAlignment"
-                            Value="Top" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:MpClipTileContainerView Visibility="{Binding IsPinned,
-                                                                        Converter={StaticResource BoolToVisibilityConverter}}"
-                                                   DataContext="{Binding}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <GridSplitter Grid.Column="0"
+        <local:MpPinTrayView x:Name="PinTrayView"
+                             Grid.Column="0"
+                             DataContext="{Binding}"
+                             Visibility="{Binding IsAnyTilePinned,
+                                                  Converter={StaticResource BoolToVisibilityConverter}}" />
+        <GridSplitter x:Name="ClipTraySplitter"
+                      Grid.Column="0"
+                      IsEnabled="{Binding IsAnyTilePinned}"
                       MouseEnter="GridSplitter_MouseEnter"
                       MouseLeave="GridSplitter_MouseLeave"
+                      MouseDoubleClick="ClipTraySplitter_MouseDoubleClick"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch"
                       Width="5"
                       Background="Orange" />
-        <local:MpClipTrayView Grid.Column="1"
+        <local:MpClipTrayView x:Name="ClipTrayView"
+                              Grid.Column="1"
                               DataContext="{Binding}" />
     </Grid>
 </local:MpUserControl>

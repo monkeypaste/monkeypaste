@@ -15,17 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemComponentView.xaml
+    /// Interaction logic for MpPinTrayView.xaml
     /// </summary>
-    public partial class MpAnalyticItemComponentView : MpUserControl<MpAnalyticItemComponentViewModel> {
-        public MpAnalyticItemComponentView() {
+    public partial class MpPinTrayView : MpUserControl<MpClipTrayViewModel> {
+        public MpPinTrayView() {
             InitializeComponent();
-        }
-
-        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            MpDragDropManager.Instance.StartDragCheck(
-                e.GetPosition(Application.Current.MainWindow),
-                BindingContext.Parent);
         }
     }
 }

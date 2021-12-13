@@ -218,6 +218,8 @@ namespace MpWpfApp {
         public Dictionary<int, double> PersistentUniqueWidthTileLookup { get; set; } = new Dictionary<int, double>();
         #endregion
 
+        public bool IsAnyTilePinned => PinnedItems.Count > 0;
+
         public bool HasScrollVelocity { get; set; }
 
         public bool IsRestoringSelection { get; private set; } = false;        
@@ -1046,7 +1048,8 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                MpHelpers.Instance.RunOnMainThread((Action)(async () => {
+                MpHelpers.Instance.RunOnMainThread(
+                    async () => {
                     var civm = GetContentItemViewModelById(ci.Id);
                     if (civm == null ||
                         civm.Parent == null) {
@@ -1095,7 +1098,7 @@ namespace MpWpfApp {
                     }
 
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
-                }));
+                });
             }
         }
 
@@ -1186,7 +1189,8 @@ namespace MpWpfApp {
 
                 //pctvm.IsPinned = !pctvm.IsPinned;
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-
+                
+                OnPropertyChanged(nameof(IsAnyTilePinned));
             },
             (args) => args != null && 
                       (args is MpClipTileViewModel || 

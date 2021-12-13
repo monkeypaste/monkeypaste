@@ -161,10 +161,12 @@ namespace MpWpfApp {
         #region MpIDropTarget Implementation        
 
         public virtual async Task Drop(bool isCopy, object dragData) {
-            if(DropIdx < 0) {
+            if (DropIdx < 0) {
                 throw new Exception($"DropIdx {DropIdx} must be >= 0");
             }
             MpClipTrayViewModel.Instance.PersistentSelectedModels = dragData as List<MpCopyItem>;
+            
+            
             await Task.Delay(1);
         }
 
@@ -188,7 +190,7 @@ namespace MpWpfApp {
             UpdateAdorner();
         }
 
-        public virtual bool IsDragDataValid(bool isCopy,object dragData) {
+        public virtual bool IsDragDataValid(bool isCopy, object dragData) {
             if (dragData == null) {
                 return false;
             }
@@ -197,11 +199,18 @@ namespace MpWpfApp {
                     return false;
                 }
                 return dcil.All(x => x.ItemType == dcil[0].ItemType);
-            } else if (dragData is List<MpContentItemViewModel> dcivml) {
+            } 
+
+            if (dragData is List<MpContentItemViewModel> dcivml) {
                 if (dcivml.Count == 0) {
                     return false;
                 }
                 return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType);
+            } 
+
+            if(dragData is MpAnalyticItemViewModel aivm) {
+                return aivm.ResultViewModel != null &&
+                       aivm.ResultViewModel.HasResult;
             }
             return false;
         }

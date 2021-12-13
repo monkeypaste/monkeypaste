@@ -217,6 +217,9 @@ namespace MpWpfApp {
                 return false;
             }
             // TODO may make conversion scheme between 3 content types
+            if(dragData is MpAnalyticItemViewModel aivm) {
+                return AssociatedObject.BindingContext.ItemType == aivm.ResultViewModel.ResultType;
+            }
             return AssociatedObject.BindingContext.ItemType == (dragData as List<MpCopyItem>)[0].ItemType;
         }
 

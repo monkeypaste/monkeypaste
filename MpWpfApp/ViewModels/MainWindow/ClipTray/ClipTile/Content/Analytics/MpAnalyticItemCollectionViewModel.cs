@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
@@ -64,10 +66,20 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Appearance
+
+
+        #endregion
+
         #region State
+
+        public bool IsSelected => SelectedItem != null;
+
+        public bool IsHovering { get; set; }
 
         public bool IsLoaded => Items.Count > 0;
 
+        public bool IsExpanded { get; set; }
         #endregion
 
         #region Model
@@ -157,10 +169,9 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(HostClipTileViewModel):
-                //    HostClipTileViewModel.DoCommandSelection();
-                //    break;
-
+                case nameof(IsHovering):
+                case nameof(IsSelected):
+                    break;
             }
         }
         #endregion

@@ -15,6 +15,16 @@ using MonkeyPaste;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
+    public interface MpITreeCollectionViewModel<T> where T:class {
+
+    }
+    public class MpSideBarTreeCollectionViewModel : MpSingletonViewModel<MpSideBarTreeCollectionViewModel> {
+        #region Private Variables
+        #endregion
+
+    }
+
+
     public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel> {
         #region Private Variables
         #endregion
@@ -357,7 +367,8 @@ namespace MpWpfApp {
                 } else if (MpDataModelProvider.Instance.QueryInfo.TagId != tagId) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 }                
-            });
+            },
+            (args)=>args != null && ((int)args) != MpTag.RootTagId);
         #endregion
     }
 }

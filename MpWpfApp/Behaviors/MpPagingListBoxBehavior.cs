@@ -218,6 +218,9 @@ namespace MpWpfApp {
 
         public double FindTileOffsetX(int queryOffsetIdx) {
             int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
+            if(totalTileCount <= 0) {
+                return 0;
+            }
             if(queryOffsetIdx < 0 || queryOffsetIdx >= totalTileCount) {
                 throw new Exception($"HeadItemId {queryOffsetIdx} is out of item bounds of {totalTileCount}");
             }

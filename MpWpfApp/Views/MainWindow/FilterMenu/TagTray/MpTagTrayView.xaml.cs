@@ -80,5 +80,11 @@ namespace MpWpfApp {
                 BindingContext.SelectTagCommand.Execute(null);
             }
         }
+
+        private void MpTagTileView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if((sender as FrameworkElement).DataContext is MpTagTileViewModel ttvm) {
+                e.Handled = ttvm.IsRootTagTile;
+            }
+        }
     }
 }

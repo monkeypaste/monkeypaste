@@ -82,7 +82,9 @@ namespace MpWpfApp {
             }
             BindingContext.IsSelected = true;
 
-            MpDragDropManager.Instance.StartDragCheck(e.GetPosition(Application.Current.MainWindow));
+            MpDragDropManager.Instance.StartDragCheck(
+                e.GetPosition(Application.Current.MainWindow),
+                MpClipTrayViewModel.Instance.PersistentSelectedModels);
 
             e.Handled = true;
         }

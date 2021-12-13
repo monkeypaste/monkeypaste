@@ -19,5 +19,12 @@
         public MpAnalyticItemComponentViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
 
         #endregion
+
+        #region Public Methods
+
+        public virtual void Reset() {
+            IsSelected = IsExpanded = false;
+        }
+        #endregion
     }
 }

@@ -34,6 +34,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsRootTagTile => TagId == MpTag.RootTagId;
+
         public bool HasProperties => TagProperties != null && TagProperties.TagProperties.Count > 0;
 
         public bool IsNew {
@@ -135,6 +137,9 @@ namespace MpWpfApp {
         #region Appearance
         public Brush TagBorderBackgroundBrush {
             get {
+                if(IsRootTagTile) {
+                    return Brushes.Transparent;
+                }
                 if (IsSelected) {
                     return Brushes.DimGray;
                 }
@@ -159,6 +164,9 @@ namespace MpWpfApp {
 
         public Brush TagTextColor {
             get {
+                if(IsRootTagTile) {
+                    return Brushes.White;
+                }
                 if(IsSelected) {
                     return Brushes.White;
                 }
