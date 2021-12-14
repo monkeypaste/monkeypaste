@@ -45,10 +45,10 @@
                           TileMode="Tile">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
-                        <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF'}">
+                        <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
                             <GeometryDrawing.Geometry>
                                 <GeometryGroup>
-                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50'}" />
+                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
                                     <RectangleGeometry Rect="50,50,50,50" />
                                 </GeometryGroup>
                             </GeometryDrawing.Geometry>

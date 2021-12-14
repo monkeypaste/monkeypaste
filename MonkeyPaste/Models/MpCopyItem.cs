@@ -148,7 +148,7 @@ namespace MonkeyPaste {
                     if(i > 0) {
                         curItem.CompositeParentCopyItemId = parentItem.Id;
                     }
-                    await MpDb.Instance.AddItemAsync<MpCopyItem>(curItem);
+                    await curItem.WriteToDatabaseAsync();
 
                     if (i == 0) {
                         parentItem = curItem;
@@ -167,7 +167,7 @@ namespace MonkeyPaste {
                 CopyCount = 1
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(newCopyItem);
+            await newCopyItem.WriteToDatabaseAsync();
             return newCopyItem;
         }
 

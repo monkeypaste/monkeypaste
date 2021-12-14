@@ -23,6 +23,10 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
+        [ForeignKey(typeof(MpShortcut))]
+        [Column("fk_MpShortcutId")]
+        public int ShortcutId { get; set; } = 0;
+
         [Column("Label")]
         public string Label { get; set; } = string.Empty;
 
@@ -36,20 +40,21 @@ namespace MonkeyPaste {
 
         [Column("IsReadOnly")]
         public int ReadOnly { get; set; } = 0;
+
         #endregion
 
         #region Fk Models
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        [ManyToOne]
         public MpAnalyticItem AnalyticItem { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        [OneToOne]
         public MpIcon Icon { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        [OneToOne]
         public MpShortcut Shortcut { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeDelete)]
+        [OneToMany]
         public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
         #endregion
 
@@ -111,14 +116,14 @@ namespace MonkeyPaste {
                 dupItem.SortOrderIdx = sortOrderIdx;
                 dupItem.IsReadOnly = isReadOnly;
                 dupItem.IsQuickAction = isQuickAction;
-                dupItem.IconId = icon == null ? 0 : icon.Id;
-                await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPreset>(dupItem);
+                dupItem.IconId = icon == null ? 0 : icon.Id;                
+                await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyticItem = analyticItem,
+               // AnalyticItem = analyticItem,
                 AnalyticItemId = analyticItem.Id,
                 Label = label,
                 Description = description,
@@ -126,10 +131,12 @@ namespace MonkeyPaste {
                 IsReadOnly = isReadOnly,
                 IsQuickAction = isQuickAction,
                 IconId = icon == null ? 0 : icon.Id,
-                Icon = icon
+                Icon = icon,
+                Shortcut = null,
+                ShortcutId = 0
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPreset>(newAnalyticItemPreset);
+            await newAnalyticItemPreset.WriteToDatabaseAsync();
 
             return newAnalyticItemPreset;
         }

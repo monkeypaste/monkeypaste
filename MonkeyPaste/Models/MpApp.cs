@@ -93,7 +93,7 @@ namespace MonkeyPaste {
                     UserDeviceGuid = System.Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
                     PlatformType = MpPreferences.Instance.ThisDeviceType
                 };
-                await MpDb.Instance.AddOrUpdateAsync<MpUserDevice>(thisDevice);
+                await thisDevice.WriteToDatabaseAsync();
             }
             var newApp = new MpApp() {
                 AppGuid = System.Guid.NewGuid(),
@@ -106,7 +106,7 @@ namespace MonkeyPaste {
                 ProcessName = Path.GetFileName(appPath)
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpApp>(newApp);
+            await newApp.WriteToDatabaseAsync();
 
             return newApp;
         }

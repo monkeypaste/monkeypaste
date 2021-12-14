@@ -8,19 +8,21 @@
                      x:TypeArguments="local:MpAppModeViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
-                     d:DesignWidth="800">
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpAppModeViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
+          ClipToBounds="False"
+          Width="{Binding AppModeButtonGridMinWidth}"
           Background="{local:MpThemeColorsBinding Key=App_Mode_Grid_Background_Color}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <ToggleButton Grid.Column="0"
-                      Width="{Binding AppModeButtonGridWidth}"
-                      Height="{Binding AppModeButtonGridWidth}"
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ToggleButton Grid.Row="0"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       ToolTipService.InitialShowDelay="0"
@@ -34,69 +36,143 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Column="1"
+        <ToggleButton Grid.Row="1"
                       ToolTipService.InitialShowDelay="0"
-                      ToolTip="{Binding IsAutoCopyModeTooltip}"
-                      Width="{Binding AppModeButtonGridWidth}"
-                      Height="{Binding AppModeButtonGridWidth}"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center"
-                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                      IsEnabled="{Binding IsAutoCopyModeEnabled}"
-                      IsChecked="{Binding IsAutoCopyMode}"
-                      Padding="10">
-            <Image Source="{Binding Source={StaticResource LeftClickIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-        </ToggleButton>
-        <ToggleButton Grid.Column="2"
-                      ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth}"
-                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="{Binding IsRighClickPasteModeTooltip}"
-                      IsEnabled="{Binding IsRighClickPasteModeEnabled}"
-                      IsChecked="{Binding IsRightClickPasteMode}"
+                      IsEnabled="True"
+                      IsChecked="{Binding IsVisible, Source={StaticResource TagTrayViewModel}}"
                       Padding="10">
-            <Image Source="{Binding Source={StaticResource RightClickIcon},
+            <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Column="3"
-                      Padding="10"
+        <ToggleButton Grid.Row="2"
                       ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth}"
-                      Height="{Binding AppModeButtonGridWidth}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                      ToolTip="{Binding IsAppendModeTooltip}"
-                      IsEnabled="{Binding IsAppendModeEnabled}"
-                      IsChecked="{Binding IsInAppendMode}">
-            <Image Source="{Binding Source={StaticResource AppendIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-        </ToggleButton>
-        <ToggleButton Grid.Column="4"
-                      ToolTipService.InitialShowDelay="0"
-                      Width="{Binding AppModeButtonGridWidth}"
-                      Height="{Binding AppModeButtonGridWidth}"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center"
-                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                      ToolTip="{Binding IsAutoAnalysisModeTooltip}"
-                      IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
-                      IsChecked="{Binding IsInAutoAnalyzeMode}"
+                      ToolTip="Analyze"
+                      IsEnabled="True"
+                      IsChecked="{Binding IsVisible, Source={StaticResource AnalyticItemCollectionViewModel}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
+        <ToggleButton x:Name="MouseModeToggleButton" 
+                      Grid.Row="3"
+                      ToolTipService.InitialShowDelay="0"
+                      ToolTip="Mouse Modes"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      IsEnabled="{Binding CanMouseModes}"
+                      PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                      Padding="10">
+            <ToggleButton.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Template>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              ToolTipService.InitialShowDelay="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                              ToolTip="{Binding IsAutoCopyModeTooltip, Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAutoCopyMode, Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAutoCopyMode, Source={StaticResource AppModeViewModel}}"
+                                              Padding="10">
+                                    <Image Source="{Binding Source={StaticResource LeftClickIcon},
+                                                            Converter={StaticResource StringToImageSourceConverter}}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                </ToggleButton>
+                                <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              ToolTipService.InitialShowDelay="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                              ToolTip="{Binding IsRighClickPasteModeTooltip, Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanRighClickPasteMode, Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsRightClickPasteMode, Source={StaticResource AppModeViewModel}}"
+                                              Padding="10">
+                                    <Image Source="{Binding Source={StaticResource RightClickIcon},
+                                                            Converter={StaticResource StringToImageSourceConverter}}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                </ToggleButton>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </ContextMenu.Template>
+                </ContextMenu>
+            </ToggleButton.ContextMenu>
+            <Image Source="{Binding MouseModeImageSourcePath,
+                                    Converter={StaticResource StringToImageSourceConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton x:Name="AppendModeToggleButton" 
+                      Grid.Row="4"
+                      Padding="10"
+                      ToolTipService.InitialShowDelay="0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="Append to Clipboard"
+                      IsEnabled="{Binding CanAppendMode}"
+                      PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown">
+            <ToggleButton.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Template>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              ToolTipService.InitialShowDelay="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                              ToolTip="{Binding IsAppendModeTooltip, Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAppendMode, Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAppendMode, Source={StaticResource AppModeViewModel}}"
+                                              Padding="10">
+                                    <Image Source="{Binding Source={StaticResource AppendRunIcon},
+                                                            Converter={StaticResource StringToImageSourceConverter}}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                </ToggleButton>
+                                <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                              ToolTipService.InitialShowDelay="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                              ToolTip="{Binding IsAppendLineModeTooltip, Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAppendMode, Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAppendLineMode, Source={StaticResource AppModeViewModel}}"
+                                              Padding="10">
+                                    <Image Source="{Binding Source={StaticResource AppendLineIcon},
+                                                            Converter={StaticResource StringToImageSourceConverter}}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                </ToggleButton>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </ContextMenu.Template>
+                </ContextMenu>
+            </ToggleButton.ContextMenu>
+            <Image Source="{Binding Source={StaticResource AppendIcon},
+                                    Converter={StaticResource StringToImageSourceConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>        
     </Grid>
 </local:MpUserControl>

@@ -20,7 +20,7 @@ namespace MonkeyPaste {
 
             if (actionType == MpDbLogActionType.Delete) {
                 var dbi = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
-                await MpDb.Instance.AddItemAsync(dbi, string.Empty, true, true);
+                await dbi.WriteToDatabaseAsync(string.Empty, true, true);
                 return;
             }
 
@@ -32,7 +32,7 @@ namespace MonkeyPaste {
 
             foreach (var kvp in alteredColumnNameValuePairs) {
                 var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
-                await MpDb.Instance.AddItemAsync(dbi, string.Empty, true, true);
+                await dbi.WriteToDatabaseAsync(string.Empty, true, true);
             }
         }
 

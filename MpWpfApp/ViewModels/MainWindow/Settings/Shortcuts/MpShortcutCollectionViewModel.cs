@@ -331,7 +331,7 @@ namespace MpWpfApp {
                             shortcutCommand = MpClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;
                             break;
                         case 25:
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleAutoAnalysisModeCommand;
+                            shortcutCommand = MpAppModeViewModel.Instance.ToggleAppendLineModeCommand;
                             break;
                         case 26:
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
@@ -578,7 +578,7 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
                 var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
                 //await MpShortcutCollectionViewModel.Instance.RemoveAsync(scvm);
-                await MpDb.Instance.DeleteItemAsync<MpShortcut>(scvm.Shortcut);
+                await scvm.Shortcut.DeleteFromDatabaseAsync();
             });
 
         public ICommand ResetShortcutCommand => new RelayCommand(

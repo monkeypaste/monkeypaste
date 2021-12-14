@@ -48,13 +48,13 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        [OneToOne]
         public MpIcon Icon { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        [OneToMany]
         public List<MpAnalyticItemParameter> Parameters { get; set; } = new List<MpAnalyticItemParameter>();
 
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeDelete)]
+        [OneToMany]
         public List<MpAnalyticItemPreset> Presets { get; set; } = new List<MpAnalyticItemPreset>();
         #endregion
 
@@ -121,7 +121,7 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItem>(newAnalyticItem);
+            await newAnalyticItem.WriteToDatabaseAsync();
 
             return newAnalyticItem;
         }

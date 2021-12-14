@@ -965,7 +965,7 @@ using System.Speech.Synthesis;
         }
 
         public void RequestFocus() {
-            OnFocusRequest?.Invoke(this, null);
+            //OnFocusRequest?.Invoke(this, null);
         }
 
         #endregion
@@ -1180,7 +1180,7 @@ using System.Speech.Synthesis;
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
                     Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridWidth));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
 
                     if (IsExpanded) {
                         Parent.ScrollOffset = Parent.LastScrollOfset = 0;

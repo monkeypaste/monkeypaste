@@ -43,5 +43,11 @@ namespace MpWpfApp {
                 ClipTrayContainerGrid.ColumnDefinitions[0].Width = pinColWidth;
             }
         }
+
+        private void ClipTraySplitter_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(!ClipTraySplitter.IsEnabled) {
+                ClipTrayContainerGrid.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Auto);
+            }
+        }
     }
 }

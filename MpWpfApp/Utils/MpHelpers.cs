@@ -3109,10 +3109,10 @@ namespace MpWpfApp {
         public BitmapSource ConvertUrlToQrCode(string url) {
             using (var qrGenerator = new QRCodeGenerator()) {
                 using (var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q)) {
-                    using (var qrCode = new XamlQRCode(qrCodeData)) {
+                    using (var qrCode = new QRCoder.PngByteQRCode(qrCodeData)) {
                         var qrCodeAsXaml = qrCode.GetGraphic(20);                        
-                        var bmpSrc= ConvertDrawingImageToBitmapSource(qrCodeAsXaml);
-                        return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, new Size(0.2, 0.2));
+                        //var bmpSrc= ConvertDrawingImageToBitmapSource(qrCodeAsXaml);
+                        return MpHelpers.Instance.ResizeBitmapSource(qrCodeAsXaml.ToBitmapSource(), new Size(0.2, 0.2));
                     }
                 }
             }

@@ -147,7 +147,8 @@
                      PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
                      Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
                      Foreground="Black"
-                     FontSize="20"
+                     FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
+                                                              Mode=OneWay}"
                      IsReadOnly="False"
                      Visibility="{Binding IsEditingTitle,
                                           Converter={StaticResource BoolToVisibilityConverter}}"

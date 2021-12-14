@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -42,14 +43,12 @@ namespace MpWpfApp {
             }
         }
 
-        #region Selection
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = true;
         }
 
         private void ClipTileClipBorder_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = false;
-            this.DropShadow.Direction = 270;
         }
 
         private void ClipTileClipBorder_LostFocus(object sender, RoutedEventArgs e) {
@@ -57,7 +56,6 @@ namespace MpWpfApp {
                 BindingContext.ClearEditing();
             }
         }
-        #endregion
 
 
         private void Ctvm_OnSearchRequest(object sender, string e) {
@@ -84,7 +82,10 @@ namespace MpWpfApp {
             //90 = Top
             //180 = Right
             //270 = Bottom
-
+            var dropShadow = this.GetVisualDescendent<DropShadowEffect>();
+            if (dropShadow == null) {
+                return;
+            }
             var mp = e.GetPosition(this);
             Point center = new Point(ActualWidth / 2, ActualHeight / 2);
 
@@ -93,7 +94,7 @@ namespace MpWpfApp {
 
             double angle =  Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
 
-            this.DropShadow.Direction = 360.0 - angle + 180;
+            dropShadow.Direction = 360.0 - angle + 180;
         }
     }
 }

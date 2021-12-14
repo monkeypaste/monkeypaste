@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -15,13 +16,16 @@ namespace MonkeyPaste {
     public class MpDb : MpSingleton<MpDb>, MpISync {
         #region Private Variables
         private MpIDbInfo _dbInfo;
-        private object _rdLock;
+        private object _rdLock = new object();
         private SQLiteAsyncConnection _connectionAsync;
+
+        //private readonly SemaphoreSlim mutex = new SemaphoreSlim(1, 1);
+
         #endregion
 
         #region Properties
-        public bool IsSyncEnabled { get; set; } = false;
-        public bool UseWAL { get; set; } = true;
+
+        public bool UseWAL { get; set; } = false;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
@@ -139,7 +143,27 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        //public async Task RunInMutex(Func<Task> action) {
+        //    try {
+        //        await mutex.WaitAsync();
+        //        await action.Invoke();
+        //    }
+        //    finally {
+        //        mutex.Release();
+        //    }
+        //}
+
+        //public async Task<T> RunInMutex<T>(Func<Task<T>> action) {
+        //    try {
+        //        await mutex.WaitAsync();
+        //        return await action.Invoke();
+        //    }
+        //    finally {
+        //        mutex.Release();
+        //    }
+        //}
+
+        private async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -148,33 +172,33 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
                 return;
             }
-            if(IsSyncEnabled) {
-                if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                    if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
-                        (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
-                    }
-                    if (!ignoreTracking) {
-                        await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
-                    }
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+                if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
+                    (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
+                }
+                if (!ignoreTracking) {
+                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
                 }
             }
-            if(item is MpCopyItemTag cit) {
+
+            if (item is MpCopyItemTag cit) {
                 if(cit.CopyItemId == 0 && cit.TagId == 0) {
                     return;
                 }
             }
-            await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
+
+            //await RunInMutex(async () => {
+                await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
+            //});            
+            
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
-           
-            if(IsSyncEnabled) {
-                if (!ignoreSyncing && item is MpISyncableDbObject) {
-                    OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-                }
+
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
-
-        public async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        private async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
             if (_connectionAsync == null) {
                 await InitDb();
@@ -184,45 +208,28 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
                 return;
             }
-            if(IsSyncEnabled) {
-                if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-                    if (!ignoreTracking) {
-                        await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
-                    }
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+                if (!ignoreTracking) {
+                    await MpDbLogTracker.TrackDbWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
                 }
             }
-
-            await _connectionAsync.UpdateWithChildrenAsync(item);
-
-           if(IsSyncEnabled) {
-                OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-                if (!ignoreSyncing && item is MpISyncableDbObject) {
-                    OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-                }
+            
+            //await RunInMutex(async () => {
+                await _connectionAsync.UpdateWithChildrenAsync(item);
+            //});
+            OnItemUpdated?.Invoke(this, item as MpDbModelBase);
+            if (!ignoreSyncing && item is MpISyncableDbObject) {
+                OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
 
-        //public void UpdateItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-        //    sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
-        //    if (_connection == null) {
-        //        CreateConnection();
-        //    }
-
-        //    if (item == null) {
-        //        MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
-        //        return;
-        //    }
-        //    if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-        //        if (!ignoreTracking) {
-        //            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
-        //        }
-        //    }
-        //    _connection.UpdateWithChildren(item);
-        //    OnItemUpdated?.Invoke(this, item as MpDbModelBase);
-        //    if (!ignoreSyncing && item is MpISyncableDbObject) {
-        //        OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-        //    }
-        //}
+        public async Task AddOrUpdateAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            if ((item as MpDbModelBase).Id == 0) {
+                await AddItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+            } else {
+                await UpdateItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
+            }
+        }
 
         public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
@@ -240,51 +247,16 @@ namespace MonkeyPaste {
                 }
             }
 
-            await _connectionAsync.DeleteAsync(item, true);
+            //await RunInMutex( async()=> {
+                await _connectionAsync.DeleteAsync(item, true);
+            //});
+
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
             if (!ignoreSyncing && item is MpISyncableDbObject) {
                 OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
             }
         }
-
-        //public void DeleteItem<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-        //    sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : sourceClientGuid;
-        //    if (_connection == null) {
-        //        CreateConnection();
-        //    }
-        //    if (item == null) {
-        //        MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
-        //        return;
-        //    }
-        //    if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
-        //        if (!ignoreTracking) {
-        //            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid);
-        //        }
-        //    }
-
-        //    _connection.Delete(item, true);
-        //    OnItemDeleted?.Invoke(this, item as MpDbModelBase);
-        //    if (!ignoreSyncing && item is MpISyncableDbObject) {
-        //        OnSyncableChange?.Invoke(item, (item as MpDbModelBase).Guid);
-        //    }
-        //}
-
-        public async Task AddOrUpdateAsync<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {                        
-            if ((item as MpDbModelBase).Id == 0) {
-                await AddItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
-            } else {
-                await UpdateItemAsync(item, sourceClientGuid,ignoreTracking,ignoreSyncing);
-            }
-        }
-
-        //public void AddOrUpdate<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
-        //    if ((item as MpDbModelBase).Id == 0) {
-        //        AddItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-        //    } else {
-        //        UpdateItem(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
-        //    }
-        //}
-
+                
         public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
@@ -726,7 +698,7 @@ namespace MonkeyPaste {
 
             var sh25 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("777367e6-c161-4e93-93e0-9bf12221f7ff"),
-                ShortcutName = "Toggle Auto-Analyze Mode",
+                ShortcutName = "Toggle Append Line Mode",
                 RouteType = 2,
                 KeyString = "Control+Shift+B",
                 DefaultKeyString = "Control+Shift+B"

@@ -1017,13 +1017,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM">
-      <Version>6.0.2</Version>
+      <Version>6.0.4</Version>
     </PackageReference>
     <PackageReference Include="Azure.AI.TextAnalytics">
-      <Version>5.1.0</Version>
+      <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
-      <Version>2.4.3</Version>
+      <Version>3.0.0</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis">
       <Version>1.55.0</Version>
@@ -1035,7 +1035,7 @@
       <Version>1.1.0</Version>
     </PackageReference>
     <PackageReference Include="HtmlAgilityPack">
-      <Version>1.11.38</Version>
+      <Version>1.11.39</Version>
     </PackageReference>
     <PackageReference Include="InputSimulatorPlus">
       <Version>1.0.7</Version>
@@ -1044,13 +1044,13 @@
       <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.ML.OnnxRuntime">
-      <Version>1.9.0</Version>
+      <Version>1.10.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.22000.196</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
-      <Version>1.1.37</Version>
+      <Version>1.1.39</Version>
     </PackageReference>
     <PackageReference Include="MouseKeyHook">
       <Version>5.6.0</Version>
@@ -1074,7 +1074,7 @@
       <Version>3.4.0</Version>
     </PackageReference>
     <PackageReference Include="QRCoder">
-      <Version>1.4.1</Version>
+      <Version>1.4.3</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-static">
       <Version>1.8.116</Version>
@@ -2364,6 +2364,11 @@
     <Resource Include="Resources\Images\frame_grip.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\bothclick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\noneclick.png" />
+    <Resource Include="Resources\Images\appendline.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

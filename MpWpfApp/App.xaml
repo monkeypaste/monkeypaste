@@ -1119,9 +1119,13 @@
         <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
         <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
         <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
+        <s:String x:Key="NoneClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noneclick.png</s:String>
         <s:String x:Key="LeftClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/leftclick.png</s:String>
         <s:String x:Key="RightClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rightclick.png</s:String>
+        <s:String x:Key="BothClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bothclick.png</s:String>
         <s:String x:Key="AppendIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/append.png</s:String>
+        <s:String x:Key="AppendLineIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/appendline.png</s:String>
+        <s:String x:Key="AppendRunIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
         <s:String x:Key="HelpIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/help.png</s:String>
         <s:String x:Key="PlayIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/play.png</s:String>
         <s:String x:Key="PauseIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pause.png</s:String>

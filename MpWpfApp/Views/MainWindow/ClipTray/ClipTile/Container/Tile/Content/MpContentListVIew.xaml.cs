@@ -64,12 +64,12 @@ namespace MpWpfApp {
 
         public void RegisterMouseWheel() {
             //this needs to be called after content preseneter so content gets wheel priority
-            ContentListBox.PreviewMouseWheel += ContentListBox_PreviewMouseWheel;
+            //ContentListBox.PreviewMouseWheel += ContentListBox_PreviewMouseWheel;
         }
 
         public void UnregisterMouseWheel() {
             //this needs to be called after content preseneter so content gets wheel priority
-            ContentListBox.PreviewMouseWheel -= ContentListBox_PreviewMouseWheel;
+            //ContentListBox.PreviewMouseWheel -= ContentListBox_PreviewMouseWheel;
         }
 
         #region Rtb ListBox Events

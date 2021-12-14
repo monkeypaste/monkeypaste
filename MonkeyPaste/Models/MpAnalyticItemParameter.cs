@@ -165,7 +165,7 @@ namespace MonkeyPaste {
                 dupItem.FormatInfo = formatInfo;
                 dupItem.IsReadOnly = isReadOnly;
                 dupItem.EnumId = enumId;
-                await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(dupItem);
+                await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
 
@@ -184,7 +184,7 @@ namespace MonkeyPaste {
                 ValueType = valueType
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameter>(newAnalyticItemParameter);
+            await newAnalyticItemParameter.WriteToDatabaseAsync();
 
             return newAnalyticItemParameter;
         }

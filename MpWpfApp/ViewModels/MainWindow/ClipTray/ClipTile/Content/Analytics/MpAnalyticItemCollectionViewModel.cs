@@ -80,6 +80,8 @@ namespace MpWpfApp {
         public bool IsLoaded => Items.Count > 0;
 
         public bool IsExpanded { get; set; }
+
+        public bool IsVisible { get; set; } = false;
         #endregion
 
         #region Model
@@ -171,6 +173,11 @@ namespace MpWpfApp {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
                 case nameof(IsSelected):
+                    break;
+                case nameof(IsVisible):
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
                     break;
             }
         }

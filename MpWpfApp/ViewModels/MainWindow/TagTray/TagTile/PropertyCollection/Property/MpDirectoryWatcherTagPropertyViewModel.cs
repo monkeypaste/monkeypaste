@@ -66,7 +66,7 @@ namespace MpWpfApp {
                 CompositeSortOrderIdx = parent == null ? 0 : parent.CompositeSortOrderIdx + 1
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(rootItem);
+            await rootItem.WriteToDatabaseAsync();
 
             await MpCopyItemTag.Create(Parent.Parent.TagId, rootItem.Id);                       
 

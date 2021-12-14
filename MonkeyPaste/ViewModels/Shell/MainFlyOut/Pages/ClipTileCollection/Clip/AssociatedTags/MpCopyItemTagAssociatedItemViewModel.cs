@@ -68,7 +68,7 @@ namespace MonkeyPaste {
                 if(IsAssociated) {
                     var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(CopyItem.Id, Tag.Id);
                     //triggers tagtileviewmodel to update other item's sort order
-                    await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
+                    await cit.DeleteFromDatabaseAsync();
                 } else {
                     var ncit = new MpCopyItemTag() {
                         CopyItemId = CopyItem.Id,
@@ -76,7 +76,7 @@ namespace MonkeyPaste {
                         CopyItemTagGuid = Guid.NewGuid()
                     };
                     //triggers TagTileViewModel to update sort order with new item
-                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
+                    await ncit.WriteToDatabaseAsync();
                     Tag.CopyItems.Add(CopyItem);
                 }
                 await UpdateAssocation();

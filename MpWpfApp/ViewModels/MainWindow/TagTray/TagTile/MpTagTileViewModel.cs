@@ -418,7 +418,7 @@ namespace MpWpfApp {
                 CopyItemId = rtbvm.CopyItemId,
                 CopyItemTagGuid = Guid.NewGuid()
             };
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
+            await ncit.WriteToDatabaseAsync();
         }
 
         public async Task RemoveContentItem(MpContentItemViewModel rtbvm) {
@@ -427,7 +427,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem {rtbvm.CopyItemTitle} so cannot remove");
                 return;
             }
-            await MpDb.Instance.DeleteItemAsync<MpCopyItemTag>(cit);
+            await cit.DeleteFromDatabaseAsync();
         }
 
         public async Task<bool> IsLinked(MpCopyItem ci) {

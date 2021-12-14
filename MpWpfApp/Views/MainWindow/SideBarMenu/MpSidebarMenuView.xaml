@@ -10,12 +10,35 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <WrapPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
-        <local:MpTagTrayView x:Name="TagTrayView"
-                             DataContext="{Binding TagTrayViewModel,
-                                                   IsAsync=True}" />
-        <local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
-                                            Grid.Row="1"
-                                            DataContext="{Binding AnalyticItemCollectionViewModel,IsAsync=True}"/>
-    </WrapPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="{Binding AppModeButtonGridMinWidth, Source={StaticResource AppModeViewModel}}" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <local:MpAppModeButtonGridView Grid.Column="0"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,3"
+                                       Visibility="{Binding IsAnyTileExpanded,
+                                                            Source={StaticResource ClipTrayViewModel},
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                       DataContext="{StaticResource AppModeViewModel}" />
+
+        <StackPanel Grid.Column="1">
+            <local:MpTagTrayView x:Name="TagTrayView"
+                                 MinWidth="100"
+                                 Visibility="{Binding IsVisible,
+                                                      Converter={StaticResource BoolToVisibilityConverter},
+                                                      Source={StaticResource TagTrayViewModel}}"
+                                 DataContext="{Binding TagTrayViewModel,
+                                                       IsAsync=True}" />
+            <local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
+                                                MinWidth="100"
+                                                Visibility="{Binding IsVisible,
+                                                                     Converter={StaticResource BoolToVisibilityConverter},
+                                                                     Source={StaticResource AnalyticItemCollectionViewModel}}"
+                                                DataContext="{Binding AnalyticItemCollectionViewModel,
+                                                                      IsAsync=True}" />
+        </StackPanel>
+    </Grid>
+
 </local:MpUserControl>

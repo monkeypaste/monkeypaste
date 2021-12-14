@@ -106,7 +106,7 @@ namespace MonkeyPaste {
                 citl = citl.OrderBy(x => x.CopyItemSortIdx).ToList();
                 for (int i = 0; i < citl.Count; i++) {
                     citl[i].CopyItemSortIdx = i;
-                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(citl[i]);
+                    await citl[i].WriteToDatabaseAsync();
                 }
             } else {
                 // TODO add logic to update copy items by order in collection
@@ -120,7 +120,7 @@ namespace MonkeyPaste {
                     case nameof(IsNameReadOnly):
                         if(IsNameReadOnly && (Tag.TagName != _orgTagName || Tag.Id == 0)) {
                             _orgTagName = Tag.TagName;
-                            await MpDb.Instance.AddOrUpdateAsync<MpTag>(Tag);
+                            await Tag.WriteToDatabaseAsync();
                         }
                         break;
                 }
@@ -134,7 +134,7 @@ namespace MonkeyPaste {
                         //occurs when copy item is linked to tag
                         if(ncit.CopyItemSortIdx < 0) {
                             ncit.CopyItemSortIdx = Tag.CopyItems.Count;
-                            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(ncit);
+                            await ncit.WriteToDatabaseAsync();
                         } else {
                             var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ncit.CopyItemId);
                             if(!Tag.CopyItems.Contains(nci)) {
@@ -212,13 +212,13 @@ namespace MonkeyPaste {
 
         public ICommand ChangeColorCommand => new Command(async () => {
             Tag.HexColor = MpHelpers.Instance.GetRandomColor().ToHex();
-            await MpDb.Instance.AddOrUpdateAsync<MpTag>(Tag);
+            await Tag.WriteToDatabaseAsync();
             OnPropertyChanged(nameof(Tag));
         });
 
         public ICommand DeleteTagCommand => new Command(
             async () => {
-                await MpDb.Instance.DeleteItemAsync<MpTag>(Tag);
+                await Tag.DeleteFromDatabaseAsync();
             },
             () => {
                 return Tag.Id > 4;

@@ -14,10 +14,6 @@
     <local:MpClipBorder BorderThickness="0,0,0,0"
                         BorderBrush="Black">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="30" />
-            </Grid.ColumnDefinitions>
             <TreeView x:Name="TagTray"
                       Loaded="TagTray_Loaded"
                       Background="Transparent"
@@ -28,9 +24,7 @@
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
                                               ItemsSource="{Binding ChildTagViewModels}">
-                        <local:MpTagTileView DataContext="{Binding}"
-                                             Background="Transparent"
-                                             PreviewMouseLeftButtonDown="MpTagTileView_PreviewMouseLeftButtonDown" />
+                        <local:MpTagTileView DataContext="{Binding}" />
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
                 <TreeView.ItemContainerStyle>
@@ -53,20 +47,6 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
             </TreeView>
-            <Button x:Name="AddTagButton"
-                    Height="30"
-                    Width="30"
-                    Grid.Column="1"                    
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center"
-                    BorderThickness="0"
-                    ToolTip="Add Collection"
-                    ToolTipService.InitialShowDelay="100"
-                    Template="{StaticResource SearchButtonControlTemplate}"
-                    Command="{Binding CreateTagCommand}">
-                <Image Stretch="Fill"
-                       Source="/MpWpfApp;component/Resources/Images/add2.png" />
-            </Button>
         </Grid>
     </local:MpClipBorder>
     <!--Grid x:Name="TagTrayContainerGrid"

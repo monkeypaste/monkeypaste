@@ -28,6 +28,26 @@ namespace MpWpfApp {
             foreach (var tb in toggleButtonList) {
                 tb.MouseEnter += Tb_MouseEnter;
             }
+
+            BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+        }
+
+        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(BindingContext.IsAppendMode):
+                case nameof(BindingContext.IsAppendLineMode):
+                    AppendModeToggleButton.ContextMenu.IsOpen = false;
+                    AppendModeToggleButton.IsChecked = BindingContext.IsAnyAppendMode;
+                    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyAppendMode));
+
+                    break;
+                case nameof(BindingContext.IsAutoCopyMode):
+                case nameof(BindingContext.IsRightClickPasteMode):
+                    MouseModeToggleButton.ContextMenu.IsOpen = false;
+                    MouseModeToggleButton.IsChecked = BindingContext.IsAnyMouseModeEnabled;
+                    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyMouseModeEnabled));
+                    break;
+            }
         }
 
         private void Tb_MouseEnter(object sender, MouseEventArgs e) {
@@ -39,6 +59,21 @@ namespace MpWpfApp {
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsRighClickPasteModeTooltip));
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoCopyModeTooltip));
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoAnalysisModeTooltip));
+        }
+
+        private void ToggleButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            e.Handled = true;
+
+            ToggleButton tb = sender as ToggleButton;
+
+            tb.ContextMenu.Placement = PlacementMode.AbsolutePoint;
+
+            Rect mouseModeRect = tb.Bounds(Application.Current.MainWindow);
+
+            tb.ContextMenu.HorizontalOffset = mouseModeRect.Right;
+            tb.ContextMenu.VerticalOffset = mouseModeRect.Top;
+
+            tb.ContextMenu.IsOpen = true;
         }
     }
 }

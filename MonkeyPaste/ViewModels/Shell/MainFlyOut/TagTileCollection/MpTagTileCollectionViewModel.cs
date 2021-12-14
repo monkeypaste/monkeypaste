@@ -95,7 +95,7 @@ namespace MonkeyPaste {
             } else {
                 foreach(var tvm in TagViewModels) {
                     tvm.Tag.TagSortIdx = TagViewModels.IndexOf(tvm);
-                    await MpDb.Instance.UpdateItemAsync<MpTag>(tvm.Tag);
+                    await tvm.Tag.WriteToDatabaseAsync();
                 }
             }
         }
@@ -192,8 +192,8 @@ namespace MonkeyPaste {
             itemToMove.Tag.TagSortIdx = TagViewModels.IndexOf(itemToMove);
             itemToInsertBefore.Tag.TagSortIdx = TagViewModels.IndexOf(itemToInsertBefore);
 
-            await MpDb.Instance.UpdateItemAsync<MpTag>(itemToMove.Tag);
-            await MpDb.Instance.UpdateItemAsync<MpTag>(itemToInsertBefore.Tag);
+            await itemToMove.Tag.WriteToDatabaseAsync();
+            await itemToInsertBefore.Tag.WriteToDatabaseAsync();
         });
         #endregion
 

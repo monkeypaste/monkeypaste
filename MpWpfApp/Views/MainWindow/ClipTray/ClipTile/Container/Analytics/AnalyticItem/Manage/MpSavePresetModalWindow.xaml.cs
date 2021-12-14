@@ -33,10 +33,12 @@ namespace MpWpfApp {
 
         private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {
             DialogResult = true;
+            Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
+            Close();
         }
 
         private void ResponseTextBox_TextChanged(object sender, TextChangedEventArgs e) {

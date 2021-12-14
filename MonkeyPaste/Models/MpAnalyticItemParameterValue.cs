@@ -125,7 +125,7 @@ namespace MonkeyPaste {
                 Label = string.IsNullOrEmpty(label) ? value : label
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemParameterValue>(newAnalyticItemParameter);
+            await newAnalyticItemParameter.WriteToDatabaseAsync();
 
             return newAnalyticItemParameter;
         }

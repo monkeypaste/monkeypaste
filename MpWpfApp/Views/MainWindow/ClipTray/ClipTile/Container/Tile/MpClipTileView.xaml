@@ -26,17 +26,17 @@
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
-                        Focusable="True"
+                        Focusable="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <!--<local:MpClipBorder.Effect>
+        <local:MpClipBorder.Effect>
             <DropShadowEffect x:Name="DropShadow" RenderingBias="Quality"
-                              Color="Black" Direction="270"
+                              Color="Black" Direction="315"
                               Opacity="0.3"
                               BlurRadius="5" />
-        </local:MpClipBorder.Effect>-->
+        </local:MpClipBorder.Effect>
         <local:MpClipBorder.BorderBrush>
             <DrawingBrush Viewport="0,0,8,8"
                           ViewportUnits="Absolute"

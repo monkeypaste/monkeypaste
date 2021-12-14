@@ -102,24 +102,24 @@ namespace MpWpfApp {
 
                 RtbViewDropBehavior.Attach(this);
 
-                MpHelpers.Instance.RunOnMainThread(async () => {
-                    var clv = this.GetVisualAncestor<MpContentListView>();
-                    while (clv == null) {
-                        clv = this.GetVisualAncestor<MpContentListView>();
-                        await Task.Delay(100);
-                    }
-                    var sv = clv.GetVisualDescendent<ScrollViewer>();
-                    while (sv == null) {
-                        sv = this.GetVisualDescendent<ScrollViewer>();
-                        await Task.Delay(100);
-                    }
-                    Rtb.PreviewMouseWheel += Rtb_PreviewMouseWheel;
-                    sv.PreviewMouseWheel += Rtb_PreviewMouseWheel;
+                //MpHelpers.Instance.RunOnMainThread(async () => {
+                //    var clv = this.GetVisualAncestor<MpContentListView>();
+                //    while (clv == null) {
+                //        clv = this.GetVisualAncestor<MpContentListView>();
+                //        await Task.Delay(100);
+                //    }
+                //    var sv = clv.GetVisualDescendent<ScrollViewer>();
+                //    while (sv == null) {
+                //        sv = this.GetVisualDescendent<ScrollViewer>();
+                //        await Task.Delay(100);
+                //    }
+                //    Rtb.PreviewMouseWheel += Rtb_PreviewMouseWheel;
+                //    sv.PreviewMouseWheel += Rtb_PreviewMouseWheel;
 
-                    if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
-                        clv.RegisterMouseWheel();
-                    }
-                });
+                //    if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
+                //        clv.RegisterMouseWheel();
+                //    }
+                //});
             }
         }
 

@@ -36,7 +36,7 @@ namespace MpWpfApp {
                 if(_defaultPresetViewModel == null) {
                     var defPreset = new MpAnalyticItemPreset() {
                         Id = -AnalyticItem.Id,
-                        AnalyticItem = AnalyticItem,
+                        //AnalyticItem = AnalyticItem,
                         AnalyticItemId = AnalyticItem.Id,
                         Icon = AnalyticItem.Icon,
                         IconId = AnalyticItem.IconId,
@@ -47,7 +47,7 @@ namespace MpWpfApp {
                     };
                     foreach (var paramVm in ParameterViewModels) {
                         var ppv = new MpAnalyticItemPresetParameterValue() {
-                            AnalyticItemPreset = defPreset,
+                            //AnalyticItemPreset = defPreset,
                             AnalyticItemPresetId = defPreset.Id,
                             ParameterEnumId = paramVm.ParamEnumId,
                             Value = paramVm.DefaultValue,
@@ -365,10 +365,15 @@ namespace MpWpfApp {
 
             // Init Presets
             PresetViewModels.Clear();
-            foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
+            var pl = await MpDataModelProvider.Instance.GetAnalyticItemPresetsById(AnalyticItemId);
+            foreach (var preset in pl.OrderBy(x => x.SortOrderIdx)) {
                 var naipvm = await CreatePresetViewModel(preset);
                 PresetViewModels.Add(naipvm);
             }
+
+            AnalyticItem.Icon = await MpDb.Instance.GetItemAsync<MpIcon>(AnalyticItem.IconId);
+
+            OnPropertyChanged(nameof(ItemIconBase64));
             OnPropertyChanged(nameof(PresetViewModels));
             OnPropertyChanged(nameof(HasPresets));
 
@@ -494,6 +499,12 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private void CreatePreset(string presetName) {
+            Task.Run(async () => {
+
+            });
+        }
         #endregion
 
         #region Commands
@@ -528,6 +539,8 @@ namespace MpWpfApp {
                 if (result.Value == false) {
                     return;
                 }
+
+
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         AnalyticItem,
                         dialog.ResponseText,
@@ -594,9 +607,9 @@ namespace MpWpfApp {
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {
                 foreach(var presetVal in presetVm.Preset.PresetParameterValues) {
-                    await MpDb.Instance.DeleteItemAsync<MpAnalyticItemPresetParameterValue>(presetVal);
+                    await presetVal.DeleteFromDatabaseAsync();
                 }
-                await MpDb.Instance.DeleteItemAsync<MpAnalyticItemPreset>(presetVm.Preset);
+                await presetVm.Preset.DeleteFromDatabaseAsync();
             },
             (presetVm) => presetVm != null && !presetVm.IsReadOnly);
 

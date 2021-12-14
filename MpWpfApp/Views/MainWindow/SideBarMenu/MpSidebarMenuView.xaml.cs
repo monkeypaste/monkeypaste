@@ -21,5 +21,7 @@ namespace MpWpfApp {
         public MpSidebarMenuView() {
             InitializeComponent();
         }
+
+
     }
 }

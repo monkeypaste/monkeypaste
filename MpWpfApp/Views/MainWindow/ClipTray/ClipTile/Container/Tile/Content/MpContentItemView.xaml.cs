@@ -75,8 +75,9 @@ namespace MpWpfApp {
         }
 
         private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext.IsSelected &&
-                BindingContext.Parent.IsExpanded) {
+            if (BindingContext.IsEditingTitle ||
+                (BindingContext.IsSelected &&
+                 BindingContext.Parent.IsExpanded)) {
                 e.Handled = false;
                 return;
             }

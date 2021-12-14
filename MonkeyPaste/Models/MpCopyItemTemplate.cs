@@ -82,7 +82,7 @@ namespace MonkeyPaste {
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.Instance.GetRandomColor().ToHex() : templateColor
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTemplate>(newCopyItemTemplate);
+            await newCopyItemTemplate.WriteToDatabaseAsync();
 
             return newCopyItemTemplate;
         }

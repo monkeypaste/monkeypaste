@@ -181,25 +181,25 @@ namespace MpWpfApp {
                     return;
                 }
 
-                IsThumbDragging = true;
+                //IsThumbDragging = true;
 
                 _velocity = _lastWheelDelta = 0;
 
-                double deltaX = htrack.ValueFromPoint(htrack_mp);
-                while (Mouse.LeftButton == MouseButtonState.Pressed) {
-                    await Task.Delay(10);
-                    var new_mp = Mouse.GetPosition(htrack);
-                    deltaX += new_mp.X - htrack_mp.X;
-                    htrack_mp = new_mp;
+                //double deltaX = htrack.ValueFromPoint(htrack_mp);
+                //while (Mouse.LeftButton == MouseButtonState.Pressed) {
+                //    await Task.Delay(10);
+                //    var new_mp = Mouse.GetPosition(htrack);
+                //    deltaX += new_mp.X - htrack_mp.X;
+                //    htrack_mp = new_mp;
 
-                    double newOffset = MpClipTrayViewModel.Instance.ScrollOffset + deltaX;
-                    MpClipTrayViewModel.Instance.ScrollOffset =
-                    MpClipTrayViewModel.Instance.LastScrollOfset =
-                        newOffset;
-                }
+                //    double newOffset = MpClipTrayViewModel.Instance.ScrollOffset + deltaX;
+                //    MpClipTrayViewModel.Instance.ScrollOffset =
+                //    MpClipTrayViewModel.Instance.LastScrollOfset =
+                //        newOffset;
+                //}
 
-                int targetTileIdx = FindJumpTileIdx(MpClipTrayViewModel.Instance.ScrollOffset);
-                IsThumbDragging = false;
+                //int targetTileIdx = FindJumpTileIdx(MpClipTrayViewModel.Instance.ScrollOffset);
+                //IsThumbDragging = false;
 
                 //if (htrack.Thumb.Bounds().Contains(Mouse.GetPosition(htrack.Thumb))) {
 
@@ -208,7 +208,7 @@ namespace MpWpfApp {
                 //    MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(dragTargetTileIdx);
                 //    return ;
                 //}
-                //int targetTileIdx = FindJumpTileIdx(htrack.ValueFromPoint(htrack_mp));
+                int targetTileIdx = FindJumpTileIdx(htrack.ValueFromPoint(htrack_mp));
 
                 MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
 

@@ -57,7 +57,7 @@ namespace MonkeyPaste {
             if(dupCheck != null) {
                 if(dupCheck.CopyItemSortIdx != sortIdx) {
                     dupCheck.CopyItemSortIdx = sortIdx;
-                    await MpDb.Instance.UpdateItemAsync<MpCopyItemTag>(dupCheck);
+                    await dupCheck.WriteToDatabaseAsync();
                 }
                 return dupCheck;
             }
@@ -69,7 +69,7 @@ namespace MonkeyPaste {
                 CopyItemSortIdx = sortIdx
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpCopyItemTag>(newCopyItemTag);
+            await newCopyItemTag.WriteToDatabaseAsync();
 
             return newCopyItemTag;
         }

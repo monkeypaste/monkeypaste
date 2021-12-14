@@ -271,7 +271,7 @@ namespace MonkeyPaste {
         #region Commands
         public ICommand DeleteCopyItemCommand => new Command(
             async () => {
-                await MpDb.Instance.DeleteItemAsync<MpCopyItem>(CopyItem);
+                await CopyItem.DeleteFromDatabaseAsync();
             });
 
         public ICommand ShowTagAssociationsCommand => new Command(() => {
@@ -295,13 +295,13 @@ namespace MonkeyPaste {
                 } else if (e != _orgTitle) {
                     CopyItem.Title = e;
                     OnPropertyChanged(nameof(CopyItem));
-                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
+                    await CopyItem.WriteToDatabaseAsync();
                 }
 
                 if (string.IsNullOrEmpty(CopyItem.Title)) {
                     CopyItem.Title = "Untitled";
                     OnPropertyChanged(nameof(CopyItem));
-                    await MpDb.Instance.AddOrUpdateAsync<MpCopyItem>(CopyItem);
+                    await CopyItem.WriteToDatabaseAsync();
                 }
 
                 await PopupNavigation.Instance.PopAllAsync();

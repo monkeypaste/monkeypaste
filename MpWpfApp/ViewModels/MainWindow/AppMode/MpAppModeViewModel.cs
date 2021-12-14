@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpAppModeViewModel : MpSingletonViewModel<MpAppModeViewModel> {
@@ -28,29 +29,91 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsAutoAnalysisModeEnabled {
+        public bool CanRighClickPasteMode => !IsAppPaused;
+
+        public bool CanAutoCopyMode => !IsAppPaused;
+
+        public bool CanMouseModes => CanAutoCopyMode || CanRighClickPasteMode;
+
+        public bool IsAnyMouseModeEnabled => IsAutoCopyMode || IsRightClickPasteMode;
+
+        public bool CanAppendMode {
             get {
-                return ToggleAutoAnalysisModeCommand.CanExecute(null);
+                if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return false;
+                }
+                //only allow append mode to activate if app is not paused and only ONE clip is selected
+                return !IsAppPaused && MpClipTrayViewModel.Instance.SelectedItems.Count <= 1;
             }
         }
 
-        public bool IsRighClickPasteModeEnabled {
+        private bool _isAutoCopyMode = false;
+        public bool IsAutoCopyMode {
             get {
-                return ToggleRightClickPasteCommand.CanExecute(null);
+                return _isAutoCopyMode;
+            }
+            set {
+                if (_isAutoCopyMode != value) {
+                    _isAutoCopyMode = value;
+                    OnPropertyChanged(nameof(IsAutoCopyMode));
+                    OnPropertyChanged(nameof(MouseModeImageSourcePath));
+                    OnPropertyChanged(nameof(IsAnyMouseModeEnabled));
+                }
             }
         }
 
-        public bool IsAutoCopyModeEnabled {
+        private bool _isRightClickPasteMode = false;
+        public bool IsRightClickPasteMode {
             get {
-                return ToggleAutoCopyModeCommand.CanExecute(null);
+                return _isRightClickPasteMode;
+            }
+            set {
+                if (_isRightClickPasteMode != value) {
+                    _isRightClickPasteMode = value;
+                    OnPropertyChanged(nameof(IsRightClickPasteMode));
+                    OnPropertyChanged(nameof(MouseModeImageSourcePath));
+                    OnPropertyChanged(nameof(IsAnyMouseModeEnabled));
+                }
             }
         }
 
-        public bool IsAppendModeEnabled {
+        public bool IsAppendMode { get; set; }
+
+        public bool IsAppendLineMode { get; set; }
+
+        public bool IsAnyAppendMode => IsAppendMode || IsAppendLineMode;
+
+        public bool IsGridSplitterEnabled {
             get {
-                return ToggleAppendModeCommand.CanExecute(null);
+                if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return false;
+                }
+                return MpTagTrayViewModel.Instance.IsVisible ||
+                       MpAnalyticItemCollectionViewModel.Instance.IsVisible;
             }
         }
+
+        private bool _isAppPaused = false;
+        public bool IsAppPaused {
+            get {
+                return _isAppPaused;
+            }
+            set { 
+                if (_isAppPaused != value) {
+                    _isAppPaused = value;
+                    OnPropertyChanged(nameof(IsAppPaused));
+                    OnPropertyChanged(nameof(CanAutoCopyMode));
+                    OnPropertyChanged(nameof(CanRighClickPasteMode));
+                    OnPropertyChanged(nameof(CanAppendMode));
+                }
+            }
+        }
+
+        #endregion
+
+        #region Appearance
+
+        #region Tool Tips
 
         public string IsAutoAnalysisModeTooltip {
             get {
@@ -92,86 +155,40 @@ namespace MpWpfApp {
             }
         }
 
-        public string IsAppPausedTooltip {
+        public string IsAppendLineModeTooltip {
             get {
-                string tt = IsAppPaused ? "Resume":"Pause";
+                string tt = @"Append Line Copy";
                 if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(26).KeyString;
-                }                
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(25).KeyString;
+                }
                 return tt;
             }
         }
 
-
-        private bool _isRightClickPasteMode = false;
-        public bool IsRightClickPasteMode {
+        public string IsAppPausedTooltip {
             get {
-                return _isRightClickPasteMode;
-            }
-            set {
-                if (_isRightClickPasteMode != value) {
-                    _isRightClickPasteMode = value;
-                    MonkeyPaste.MpConsole.WriteLine("IsRightClickPasteMode changed to: " + _isRightClickPasteMode);
-                    OnPropertyChanged(nameof(IsRightClickPasteMode));
+                string tt = IsAppPaused ? "Resume" : "Pause";
+                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(26).KeyString;
                 }
+                return tt;
             }
         }
 
-        private bool _isInAutoAnalyzeMode = false;
-        public bool IsInAutoAnalyzeMode {
-            get {
-                return _isInAutoAnalyzeMode;
-            }
-            set {
-                if (_isInAutoAnalyzeMode != value) {
-                    _isInAutoAnalyzeMode = value;
-                    MonkeyPaste.MpConsole.WriteLine("IsInAutoAnalyzeMode changed to: " + _isInAutoAnalyzeMode);
-                    OnPropertyChanged(nameof(IsInAutoAnalyzeMode));
-                }
-            }
-        }
+        #endregion
 
-        private bool _isInAppendMode = false;
-        public bool IsInAppendMode {
+        public string MouseModeImageSourcePath {
             get {
-                return _isInAppendMode;
-            }
-            set {
-                if (_isInAppendMode != value) {
-                    _isInAppendMode = value;
-                    MonkeyPaste.MpConsole.WriteLine("IsInAppendMode changed to: " + _isInAppendMode);
-                    OnPropertyChanged(nameof(IsInAppendMode));
+                if(IsRightClickPasteMode && IsAutoCopyMode) {
+                    return Application.Current.Resources["BothClickIcon"] as string;
                 }
-            }
-        }
-
-        private bool _isAutoCopyMode = false;
-        public bool IsAutoCopyMode {
-            get {
-                return _isAutoCopyMode;
-            }
-            set {
-                if (_isAutoCopyMode != value) {
-                    _isAutoCopyMode = value;
-                    OnPropertyChanged(nameof(IsAutoCopyMode));
+                if (IsRightClickPasteMode) {
+                    return Application.Current.Resources["RightClickIcon"] as string;
                 }
-            }
-        }
-
-        private bool _isAppPaused = false;
-        public bool IsAppPaused {
-            get {
-                return _isAppPaused;
-            }
-            set {
-                if (_isAppPaused != value) {
-                    _isAppPaused = value;
-                    OnPropertyChanged(nameof(IsAppPaused));
-                    OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
-                    OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
-                    OnPropertyChanged(nameof(IsAppendModeEnabled));
-                    OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
+                if (IsAutoCopyMode) {
+                    return Application.Current.Resources["LeftClickIcon"] as string;
                 }
+                return Application.Current.Resources["NoneClickIcon"] as string;
             }
         }
 
@@ -179,12 +196,23 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double AppModeButtonGridWidth {
+        public double DefaultTagTreeWidth => 100;
+
+        public double DefaultAnalyticTreeWidth => 100;
+
+        public double AppModeButtonGridMinWidth {
             get {
                 if (MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                    MpClipTrayViewModel.Instance == null ||
                    !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                    return MpMeasurements.Instance.AppStateButtonPanelWidth;
+                    double ambgw = MpMeasurements.Instance.AppStateButtonPanelWidth;
+                    if(MpTagTrayViewModel.Instance.IsVisible) {
+                        ambgw += DefaultTagTreeWidth;
+                    }
+                    if (MpAnalyticItemCollectionViewModel.Instance.IsVisible) {
+                        ambgw += DefaultAnalyticTreeWidth;
+                    }
+                    return ambgw;
                 }
                 return 0;
             }
@@ -199,7 +227,10 @@ namespace MpWpfApp {
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpAppModeViewModel_PropertyChanged;
-                MpMessenger.Instance.Register<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+                MpMessenger.Instance.Register<MpMessageType>(
+                    MpMainWindowViewModel.Instance, 
+                    ReceivedMainWindowViewModelMessage);
+                OnPropertyChanged(nameof(CanMouseModes));
             });
         }
 
@@ -219,27 +250,27 @@ namespace MpWpfApp {
                 case nameof(IsRightClickPasteMode):
                     ShowNotifcation("Right-Click Paste Mode", IsRightClickPasteMode ? "ON" : "OFF", IsRightClickPasteMode);
                     break;
-                case nameof(IsInAppendMode):
-                    ShowNotifcation("Append Mode", IsInAppendMode ? "ON" : "OFF", IsInAppendMode);
+                case nameof(IsAppendMode):
+                    ShowNotifcation("Append Mode", IsAppendMode ? "ON" : "OFF", IsAppendMode);
+                    UpdateAppendMode();
+                    break;
+                case nameof(IsAppendLineMode):
+                    ShowNotifcation("Append Line Mode", IsAppendLineMode ? "ON" : "OFF", IsAppendLineMode);
                     UpdateAppendMode();
                     break;
                 case nameof(IsAutoCopyMode):
                     ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
                     break;
-                case nameof(IsInAutoAnalyzeMode):
-                    ShowNotifcation("Auto-Analyze Mode", IsInAutoAnalyzeMode ? "ON" : "OFF", IsAutoCopyMode);
-                    break;
-                case nameof(AppModeButtonGridWidth):
+                case nameof(AppModeButtonGridMinWidth):
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
                     break;
             }
         }
 
         public void RefreshState() {
-            OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
-            OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
-            OnPropertyChanged(nameof(IsAppendModeEnabled));
-            OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
+            OnPropertyChanged(nameof(CanAutoCopyMode));
+            OnPropertyChanged(nameof(CanRighClickPasteMode));
+            OnPropertyChanged(nameof(CanAppendMode));
 
             UpdateAppendMode();
         }
@@ -250,7 +281,7 @@ namespace MpWpfApp {
             switch(msg) {
                 case MpMessageType.UnexpandComplete:
                 case MpMessageType.ExpandComplete:
-                    OnPropertyChanged(nameof(AppModeButtonGridWidth));
+                    OnPropertyChanged(nameof(AppModeButtonGridMinWidth));
                     break;
             }
         }
@@ -265,7 +296,7 @@ namespace MpWpfApp {
         }
 
         private void UpdateAppendMode() {
-            if (IsInAppendMode &&
+            if (IsAnyAppendMode &&
                MpClipTrayViewModel.Instance.SelectedItems.Count == 1 &&
                MpClipTrayViewModel.Instance.SelectedItems[0] != MpClipTrayViewModel.Instance.Items[0]) {
                 int selectedIdx = MpClipTrayViewModel.Instance.Items.IndexOf(MpClipTrayViewModel.Instance.SelectedItems[0]);
@@ -275,88 +306,40 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _toggleIsAppPausedCommand;
-        public ICommand ToggleIsAppPausedCommand {
-            get {
-                if (_toggleIsAppPausedCommand == null) {
-                    _toggleIsAppPausedCommand = new RelayCommand(ToggleIsAppPaused);
-                }
-                return _toggleIsAppPausedCommand;
-            }
-        }
-        private void ToggleIsAppPaused() {
-            IsAppPaused = !IsAppPaused;
-        }
 
-        private RelayCommand _toggleRightClickPasteCommand;
-        public ICommand ToggleRightClickPasteCommand {
-            get {
-                if (_toggleRightClickPasteCommand == null) {
-                    _toggleRightClickPasteCommand = new RelayCommand(ToggleRightClickPaste, CanToggleRightClickPaste);
-                }
-                return _toggleRightClickPasteCommand;
-            }
-        }
-        private bool CanToggleRightClickPaste() {
-            //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused;
-        }
-        private void ToggleRightClickPaste() {
-            IsRightClickPasteMode = !IsRightClickPasteMode;
-        }
+        public ICommand ToggleIsAppPausedCommand => new RelayCommand(
+            () => {
+                IsAppPaused = !IsAppPaused;
+            });
 
-        private RelayCommand _toggleAppendModeCommand;
-        public ICommand ToggleAppendModeCommand {
-            get {
-                if (_toggleAppendModeCommand == null) {
-                    _toggleAppendModeCommand = new RelayCommand(ToggleAppendMode, CanToggleAppendMode);
-                }
-                return _toggleAppendModeCommand;
-            }
-        }
-        private bool CanToggleAppendMode() {
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return false;
-            }
-            //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused && MpClipTrayViewModel.Instance.SelectedItems.Count <= 1;
-        }
-        private void ToggleAppendMode() {
-            IsInAppendMode = !IsInAppendMode;
-            UpdateAppendMode();
-        }
+        public ICommand ToggleRightClickPasteCommand => new RelayCommand(
+            () => {
+                IsRightClickPasteMode = !IsRightClickPasteMode;
+            }, CanRighClickPasteMode);
 
-        private RelayCommand _toggleAutoCopyModeCommand;
-        public ICommand ToggleAutoCopyModeCommand {
-            get {
-                if (_toggleAutoCopyModeCommand == null) {
-                    _toggleAutoCopyModeCommand = new RelayCommand(ToggleAutoCopyMode, CanToggleAutoCopyMode);
-                }
-                return _toggleAutoCopyModeCommand;
-            }
-        }
-        private bool CanToggleAutoCopyMode() {
-            return !IsAppPaused;
-        }
-        private void ToggleAutoCopyMode() {
-            IsAutoCopyMode = !IsAutoCopyMode;
-        }
+        public ICommand ToggleAutoCopyModeCommand => new RelayCommand(
+            () => {
+                IsAutoCopyMode = !IsAutoCopyMode;
+            }, CanAutoCopyMode);
 
-        private RelayCommand _toggleAutoAnalysisModeCommand;
-        public ICommand ToggleAutoAnalysisModeCommand {
-            get {
-                if (_toggleAutoAnalysisModeCommand == null) {
-                    _toggleAutoAnalysisModeCommand = new RelayCommand(ToggleAutoAnalysisMode, CanToggleAutoAnalysisMode);
+        public ICommand ToggleAppendModeCommand => new RelayCommand(
+            () => {
+                IsAppendMode = !IsAppendMode;
+                if (IsAppendMode && IsAppendLineMode) {
+                    IsAppendLineMode = false;
                 }
-                return _toggleAutoAnalysisModeCommand;
-            }
-        }
-        private bool CanToggleAutoAnalysisMode() {
-            return !IsAppPaused;
-        }
-        private void ToggleAutoAnalysisMode() {
-            IsInAutoAnalyzeMode = !IsInAutoAnalyzeMode;
-        }
+                UpdateAppendMode();
+            },CanAppendMode);
+
+        public ICommand ToggleAppendLineModeCommand => new RelayCommand(
+            () => {
+                IsAppendLineMode = !IsAppendLineMode;
+                if(IsAppendLineMode && IsAppendMode) {
+                    IsAppendMode = false;
+                }
+                UpdateAppendMode();
+            }, CanAppendMode);
+
         #endregion
     }
 }

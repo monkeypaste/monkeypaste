@@ -26,7 +26,7 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        [ManyToOne]
         public MpAnalyticItemPreset AnalyticItemPreset { get; set; }
 
         #endregion
@@ -65,20 +65,20 @@ namespace MonkeyPaste {
                 dupItem.ParameterEnumId = paramEnumId;
                 dupItem.Value = value;
                 dupItem.DefaultValue = string.IsNullOrEmpty(defaultValue) ? value : defaultValue;
-                await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPresetParameterValue>(dupItem);
+                await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
 
             var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                AnalyticItemPreset = parentItem,
+                //AnalyticItemPreset = parentItem,
                 AnalyticItemPresetId = parentItem.Id,
                 ParameterEnumId = paramEnumId,
                 Value = value,
                 DefaultValue = string.IsNullOrEmpty(defaultValue) ? value : defaultValue
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpAnalyticItemPresetParameterValue>(newAnalyticItemPresetParameterValue);
+            await newAnalyticItemPresetParameterValue.WriteToDatabaseAsync();
 
             return newAnalyticItemPresetParameterValue;
         }

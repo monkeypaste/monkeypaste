@@ -46,14 +46,15 @@ namespace MpWpfApp {
         }
 
         private void ClipTileTitleTextGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext == null) {
+            if (BindingContext == null || BindingContext.IsEditingTitle) {
                 return;
             }
             if (!BindingContext.IsEditingTitle) {
                 BindingContext.IsEditingTitle = true;
-                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+                //MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
+                e.Handled = true;
             }
-            e.Handled = true;
+            
         }
 
         private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -61,10 +62,12 @@ namespace MpWpfApp {
                 return;
             }
             if (BindingContext.IsEditingTitle) {
-                var tbr = new Rect(0, 0, ClipTileTitleTextBox.Width, ClipTileTitleTextBox.Height);
+                var tbr = new Rect(0, 0, ClipTileTitleTextBox.ActualWidth, ClipTileTitleTextBox.ActualHeight);
                 var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), ClipTileTitleTextBox);
                 if(!tbr.Contains(tb_mp)) {
                     BindingContext.IsEditingTitle = false;
+                } else { 
+                    ClipTileTitleTextBox.RaiseEvent(new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Left));
                 }
             }
         }
@@ -74,7 +77,7 @@ namespace MpWpfApp {
                 return;
             }
             if (ClipTileTitleTextBox.Visibility == Visibility.Collapsed) {
-                MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseClick -= ApplicationHook_MouseDown;
+                //MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseClick -= ApplicationHook_MouseDown;
                 return;
             }
             if(BindingContext != null) {

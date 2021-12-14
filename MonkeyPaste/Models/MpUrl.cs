@@ -100,7 +100,7 @@ namespace MonkeyPaste {
                 newUrl.IconId = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.Id;
             }
 
-            await MpDb.Instance.AddItemAsync<MpUrl>(newUrl);
+            await newUrl.WriteToDatabaseAsync();
             
             return newUrl;
         }

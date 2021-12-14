@@ -29,22 +29,25 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
+        #region Properties
+
+
         #region View Models
         public ObservableCollection<MpTagTileViewModel> RootTagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
 
 
         //public MpTagTileViewModel RootTagTileViewModel { get; private set; }
-        
+
         //public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
         public List<MpTagTileViewModel> TagTileViewModels {
             get {
                 var ttvml = new List<MpTagTileViewModel>();
-                if(RootTagTileViewModels == null) {
+                if (RootTagTileViewModels == null) {
                     return ttvml;
                 }
-                foreach(var rttvm in RootTagTileViewModels) {
-                    ttvml.Add(rttvm); 
-                    ttvml.AddRange(rttvm.FindChildren());                    
+                foreach (var rttvm in RootTagTileViewModels) {
+                    ttvml.Add(rttvm);
+                    ttvml.AddRange(rttvm.FindChildren());
                 }
                 return ttvml;
             }
@@ -57,9 +60,9 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Properties
-
         #region State
+
+        public bool IsVisible { get; set; }
 
         public bool IsEditingTagName {
             get {
@@ -103,7 +106,10 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpTagTrayViewModel() : base() { }
+        public MpTagTrayViewModel() : base() {
+            PropertyChanged += MpTagTrayViewModel_PropertyChanged;
+        }
+
 
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
@@ -243,6 +249,15 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private void MpTagTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsVisible):
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                    break;
+            }
+        }
+
         #region Db Events
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
@@ -310,12 +325,15 @@ namespace MpWpfApp {
                 //when removing a tag auto-select the history tag
 
                 var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
-                TagTileViewModels.Remove(ttvm);
+                ttvm.ParentTagViewModel.ChildTagViewModels.Remove(ttvm);
+                
 
                 if (!ttvm.Tag.IsSyncing) {
                     await ttvm.Tag.DeleteFromDatabaseAsync();
                 }
 
+                OnPropertyChanged(nameof(TagTileViewModels));
+                OnPropertyChanged(nameof(RootTagTileViewModels));
                 ResetTagSelection();
             },
             (tagId) => {
@@ -340,7 +358,10 @@ namespace MpWpfApp {
                 };
                 await newTag.WriteToDatabaseAsync();
                 var ttvm = await CreateTagTileViewModel(newTag);
-                TagTileViewModels.Add(ttvm);
+                ttvm.ParentTagViewModel = RootTagTileViewModels[0];
+                RootTagTileViewModels[0].ChildTagViewModels.Add(ttvm);
+
+                OnPropertyChanged(nameof(TagTileViewModels));
             });
 
         public ICommand SelectTagCommand => new RelayCommand<object>(

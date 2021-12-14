@@ -1,18 +1,9 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Threading;
-using WPFSpark;
-using static MpWpfApp.WinApi;
-using static Standard.NtDll;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {

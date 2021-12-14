@@ -44,10 +44,12 @@ namespace MonkeyPaste {
 
         [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpTag Tag { get; set; }
-        #endregion
+
 
         [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpAnalyticItemPreset Preset { get; set; }
+        #endregion
+
 
         #region Properties
 

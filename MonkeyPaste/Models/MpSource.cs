@@ -101,7 +101,7 @@ namespace MonkeyPaste {
                 UrlId = urlId
             };
 
-            await MpDb.Instance.AddItemAsync<MpSource>(source);
+            await source.WriteToDatabaseAsync();
             return source;
         }
         #endregion

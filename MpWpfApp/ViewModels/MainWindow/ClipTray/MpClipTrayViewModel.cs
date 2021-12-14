@@ -162,7 +162,7 @@ namespace MpWpfApp {
                 double totalUniqueWidth = PersistentUniqueWidthTileLookup.Sum(x => x.Value);
                 double totalTileWidth = totalUniqueWidth + (defaultWidthTileCount * defaultWidth);
 
-                return totalTileWidth;
+                return MpPagingListBoxBehavior.Instance.FindTileOffsetX(TotalTilesInQuery - 1) + defaultWidth;
             }
         }
 
@@ -663,7 +663,7 @@ namespace MpWpfApp {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
                 return;
-            } else if (MpAppModeViewModel.Instance.IsInAppendMode) {
+            } else if (MpAppModeViewModel.Instance.IsAppendMode) {
                 //when in append mode just append the new items text to selecteditem
                 if (_appendModeCopyItem == null) {
                     if (PrimaryItem == null) {
@@ -1546,7 +1546,7 @@ namespace MpWpfApp {
                 if (nextSelectQueryIdx < TotalTilesInQuery) {
                     int curItemIdx = curRightMostSelectQueryIdx < 0 ? -1 : Items.IndexOf(
                         Items.FirstOrDefault(x => x.QueryOffsetIdx == curRightMostSelectQueryIdx));
-                    int nextItemIdx = curItemIdx + 1;
+                    int nextItemIdx = Math.Min(TotalTilesInQuery-1, curItemIdx + 1);
 
                     ClearClipSelection();
                     Items[nextItemIdx].ResetSubSelection();
@@ -1598,7 +1598,7 @@ namespace MpWpfApp {
                 if (prevSelectQueryIdx >= 0) {
                     int curItemIdx = curLeftMostSelectQueryIdx < 0 ? 1 : Items.IndexOf(
                         Items.FirstOrDefault(x => x.QueryOffsetIdx == curLeftMostSelectQueryIdx));
-                    int prevItemIdx = curItemIdx - 1;
+                    int prevItemIdx = Math.Max(0,curItemIdx - 1);
 
                     ClearClipSelection();
                     Items[prevItemIdx].ResetSubSelection();

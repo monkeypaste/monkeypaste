@@ -85,7 +85,7 @@ namespace MonkeyPaste {
                 ImageBase64 = iconImgBase64
             };
 
-            await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconImage);
+            await iconImage.WriteToDatabaseAsync();
 
             var newIcon = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),
@@ -108,9 +108,9 @@ namespace MonkeyPaste {
                     ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Pink.ToHex())
                 };
 
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderImage);
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightImage);
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightSelectedImage);
+                await iconBorderImage.WriteToDatabaseAsync();
+                await iconBorderHighlightImage.WriteToDatabaseAsync();
+                await iconBorderHighlightSelectedImage.WriteToDatabaseAsync();
 
                 var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
 
@@ -139,9 +139,9 @@ namespace MonkeyPaste {
                     ImageBase64 = iconImgBase64
                 };
 
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderImage);
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightImage);
-                await MpDb.Instance.AddOrUpdateAsync<MpDbImage>(iconBorderHighlightSelectedImage);
+                await iconBorderImage.WriteToDatabaseAsync();
+                await iconBorderHighlightImage.WriteToDatabaseAsync();
+                await iconBorderHighlightSelectedImage.WriteToDatabaseAsync();
 
                 //var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
 
@@ -158,7 +158,7 @@ namespace MonkeyPaste {
                 newIcon.HexColor5 = MpHelpers.Instance.GetRandomColor().ToHex();
             }
             
-            await MpDb.Instance.AddOrUpdateAsync<MpIcon>(newIcon);
+            await newIcon.WriteToDatabaseAsync();
 
             return newIcon;
         }
