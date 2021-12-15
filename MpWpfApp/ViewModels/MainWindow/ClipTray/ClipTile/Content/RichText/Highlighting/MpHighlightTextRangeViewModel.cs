@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using MonkeyPaste;
+using System.Web.UI.WebControls;
 
 namespace MpWpfApp {
     public enum MpHighlightType {
@@ -27,54 +28,24 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private MpClipTileViewModel _hostClipTileViewModel;
-        public MpClipTileViewModel HostClipTileViewModel {
-            get {
-                return _hostClipTileViewModel;
-            }
-            set {
-                if (_hostClipTileViewModel != value) {
-                    _hostClipTileViewModel = value;
-                    OnPropertyChanged(nameof(HostClipTileViewModel));
-                }
-            }
-        }
 
-        private MpContentItemViewModel _rtbItemViewModel;
         public MpContentItemViewModel ContentItemViewModel {
             get {
-                return _rtbItemViewModel;
-            }
-            set {
-                if (_rtbItemViewModel != value) {
-                    _rtbItemViewModel = value;
-                    OnPropertyChanged(nameof(ContentItemViewModel));
+                if(Parent == null || 
+                   Parent.Parent == null || 
+                   ContentItemIdx < 0 ||
+                   ContentItemIdx >= Parent.Parent.Count) {
+                    return null;
                 }
+                return Parent.Parent.ItemViewModels[ContentItemIdx];
             }
         }
+
         #endregion
 
-        private MpHighlightType _highlightType = MpHighlightType.None;
-        public MpHighlightType HighlightType {
-            get {
-                return _highlightType;
-            }
-            set {
-                if(_highlightType != value) {
-                    _highlightType = value;
-                    OnPropertyChanged(nameof(HighlightType));
-                }
-            }
-        }
+        #region State
 
-        public Brush HighlightBrush {
-            get {
-                if(IsSelected) {
-                    return Brushes.Pink;
-                }
-                return Brushes.Yellow;
-            }
-        } 
+        public MpHighlightType HighlightType { get; set; } = MpHighlightType.None;
 
         private bool _isSelected = false;
         public bool IsSelected {
@@ -83,7 +54,7 @@ namespace MpWpfApp {
             }
             set {
                 //if(_isSelected != value)
-                    {
+                {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(HighlightBrush));
@@ -91,83 +62,83 @@ namespace MpWpfApp {
             }
         }
 
-        private int _sortOrderIdx = -5;
-        public int SortOrderIdx {
-            get {
-                return _sortOrderIdx;
-            }
-            set {
-                if (_sortOrderIdx != value) {
-                    _sortOrderIdx = value;
-                    OnPropertyChanged(nameof(SortOrderIdx));
-                }
-            }
-        }
+        #endregion
 
-        private TextRange _range = null;
-        public TextRange Range {
-            get {
-                return _range;
-            }
-            set {
-                if(_range != value) {
-                    _range = value;
-                    OnPropertyChanged(nameof(Range));
-                }
-            }
-        }
+        #region Appearance
+
+        public Brush HighlightBrush => IsSelected ? Brushes.Pink : Brushes.Yellow;
+
+        #endregion
+
+        #region Model
+
+        public int ContentItemIdx { get; set; } = -1;
+        
+        public int SortOrderIdx { get; set; } = -5;
+
+        public TextRange Range { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Public Methods
-        public MpHighlightTextRangeViewModel() : this(null,null,null,null,-1,MpHighlightType.None) { }
+        public MpHighlightTextRangeViewModel() : base(null) { }
 
-        public MpHighlightTextRangeViewModel(MpHighlightTextRangeViewModelCollection parent, MpClipTileViewModel ctvm, MpContentItemViewModel rtbvm, TextRange tr, int contentId, MpHighlightType ht) : base(parent) {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(IsSelected):
-                        if (IsSelected && HighlightType == MpHighlightType.Text) {
-                            Rect characterRect = Rect.Empty;
-                            var iuic = Range.End.Parent.FindParentOfType<InlineUIContainer>();
-                            if(iuic != null) {
-                                var rhl = iuic.Parent.FindParentOfType<Hyperlink>();
-                                if(rhl != null) {
-                                    characterRect = rhl.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
-                                }
-                            }
-                            if(characterRect == Rect.Empty) {
-                                characterRect = Range.End.GetCharacterRect(LogicalDirection.Forward);
-                            }
-                            HostClipTileViewModel.RequestScrollIntoView(characterRect);
-                            //switch (HostClipTileViewModel.CopyItemType) {
-                            //    case MpCopyItemType.RichText:
-                            //        //var rtb = ContentItemViewModel.Rtb;
+        public MpHighlightTextRangeViewModel(MpHighlightTextRangeViewModelCollection parent) : base(parent) {
+            PropertyChanged += MpHighlightTextRangeViewModel_PropertyChanged;            
+        }
 
-                            //        //rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
-                            //        //rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
-                            //        break;
-                            //    case MpCopyItemType.FileList:
-                            //        //var flivm = HostClipTileViewModel.FileListCollectionViewModel.FileItems[SortOrderIdx];
-                            //        //HostClipTileViewModel.FileListBox.ScrollIntoView(flivm);
-                            //        //HostClipTileViewModel.ContentContainerViewModel.RequestScrollIntoView(flivm);
-                            //        break;
-                            //}
-                        }
-                        //if(IsSelected && IsTitleRange && ctvm is MpRtbViewModel) {
-                        //    ((MpRtbViewModel)ctvm).IsSelected = false;
-                        //}
-                        break;
-                }
-            };
-            HostClipTileViewModel = ctvm;
-            ContentItemViewModel = rtbvm;
+        public async Task InitializeAsync(int contentItemIdx, TextRange tr, MpHighlightType ht, int sortOrderIdx) {
+            await Task.Delay(1);
+
+            ContentItemIdx = contentItemIdx;
             Range = tr;
-            SortOrderIdx = contentId;
             HighlightType = ht;
+            SortOrderIdx = sortOrderIdx;
+            OnPropertyChanged(nameof(ContentItemViewModel));
+        }
+
+        private void MpHighlightTextRangeViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected && HighlightType == MpHighlightType.Text) {
+                        Rect characterRect = Rect.Empty;
+                        var iuic = Range.End.Parent.FindParentOfType<InlineUIContainer>();
+                        if (iuic != null) {
+                            var rhl = iuic.Parent.FindParentOfType<Hyperlink>();
+                            if (rhl != null) {
+                                characterRect = rhl.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
+                            }
+                        }
+                        if (characterRect == Rect.Empty) {
+                            characterRect = Range.End.GetCharacterRect(LogicalDirection.Forward);
+                        }
+                        Parent.Parent.RequestScrollIntoView(characterRect);
+                        //switch (Parent.Parent.CopyItemType) {
+                        //    case MpCopyItemType.RichText:
+                        //        //var rtb = ContentItemViewModel.Rtb;
+
+                        //        //rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
+                        //        //rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+                        //        break;
+                        //    case MpCopyItemType.FileList:
+                        //        //var flivm = Parent.Parent.FileListCollectionViewModel.FileItems[SortOrderIdx];
+                        //        //Parent.Parent.FileListBox.ScrollIntoView(flivm);
+                        //        //Parent.Parent.ContentContainerViewModel.RequestScrollIntoView(flivm);
+                        //        break;
+                        //}
+                    }
+                    //if(IsSelected && IsTitleRange && ctvm is MpRtbViewModel) {
+                    //    ((MpRtbViewModel)ctvm).IsSelected = false;
+                    //}
+                    break;
+            }
         }
 
         public void HighlightRange() {
-           // HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
-            foreach (var rtbvm in HostClipTileViewModel.ItemViewModels) {
+           // Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.CopyItemAppIconHighlightBorder));
+            foreach (var rtbvm in Parent.Parent.ItemViewModels) {
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
             }

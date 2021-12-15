@@ -35,17 +35,7 @@ namespace MpWpfApp {
 
         public bool CanMouseModes => CanAutoCopyMode || CanRighClickPasteMode;
 
-        public bool IsAnyMouseModeEnabled => IsAutoCopyMode || IsRightClickPasteMode;
-
-        public bool CanAppendMode {
-            get {
-                if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    return false;
-                }
-                //only allow append mode to activate if app is not paused and only ONE clip is selected
-                return !IsAppPaused && MpClipTrayViewModel.Instance.SelectedItems.Count <= 1;
-            }
-        }
+        public bool CanAppendMode => !IsAppPaused;
 
         private bool _isAutoCopyMode = false;
         public bool IsAutoCopyMode {
@@ -76,6 +66,8 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public bool IsAnyMouseModeEnabled => IsAutoCopyMode || IsRightClickPasteMode;
 
         public bool IsAppendMode { get; set; }
 
@@ -227,9 +219,15 @@ namespace MpWpfApp {
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpAppModeViewModel_PropertyChanged;
+
                 MpMessenger.Instance.Register<MpMessageType>(
                     MpMainWindowViewModel.Instance, 
                     ReceivedMainWindowViewModelMessage);
+
+                MpMessenger.Instance.Register(
+                    MpClipTrayViewModel.Instance,
+                    ReceivedClipTrayViewModelMessage);
+
                 OnPropertyChanged(nameof(CanMouseModes));
             });
         }
@@ -239,6 +237,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        public void RefreshState() {
+            OnPropertyChanged(nameof(CanAutoCopyMode));
+            OnPropertyChanged(nameof(CanRighClickPasteMode));
+            OnPropertyChanged(nameof(CanAppendMode));
+
+            UpdateAppendMode();
+        }
+        #endregion
+
+        #region Private Methods
+
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.TraySelectionChanged:
+                    OnPropertyChanged(nameof(CanAppendMode));
+                    break;
+            }
+        }
+        
+        private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.UnexpandComplete:
+                case MpMessageType.ExpandComplete:
+                    OnPropertyChanged(nameof(AppModeButtonGridMinWidth));
+                    break;
+            }
+        }
+
 
         private void MpAppModeViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -263,25 +290,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(AppModeButtonGridMinWidth):
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
-                    break;
-            }
-        }
-
-        public void RefreshState() {
-            OnPropertyChanged(nameof(CanAutoCopyMode));
-            OnPropertyChanged(nameof(CanRighClickPasteMode));
-            OnPropertyChanged(nameof(CanAppendMode));
-
-            UpdateAppendMode();
-        }
-        #endregion
-
-        #region Private Methods
-        private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
-            switch(msg) {
-                case MpMessageType.UnexpandComplete:
-                case MpMessageType.ExpandComplete:
-                    OnPropertyChanged(nameof(AppModeButtonGridMinWidth));
                     break;
             }
         }

@@ -403,55 +403,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
-
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(IsTrayEmpty));
-            //return;
-            if (IsAnyTileExpanded) {
-                return;
-            }
-            if(e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
-                foreach (MpClipTileViewModel octvm in e.OldItems) {
-                    octvm.Dispose();
-                }
-            }
-        }
-
-        private void ReceivedQueryInfoMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.QueryChanged:
-                    IsRequery = true;
-                    RequeryCommand.Execute(null);
-                    break;
-                case MpMessageType.SubQueryChanged:
-                    IsRequery = true;
-                    RequeryCommand.Execute(HeadQueryIdx);
-                    break;
-            }
-        }
-
-        private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(HasScrollVelocity):
-                    if (!HasScrollVelocity) {
-                        var hctvm = Items.FirstOrDefault(x => x.IsHovering);
-                        if (hctvm != null) {
-                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderBrush));
-                        }
-                    }
-                    break;
-                case nameof(ScrollOffset):
-                    if(MpPagingListBoxBehavior.Instance.IsThumbDragging) {
-                        break;
-                    }
-                    foreach (MpClipTileViewModel nctvm in Items) {
-                        nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
-                    }
-                    MpMessenger.Instance.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
-                    break;
-            }
-        }
+        #region Public Methods        
 
         public async Task<ObservableCollection<MpContextMenuItemViewModel>> GetTagMenuItemsForSelectedItems() {
             var tmil = new ObservableCollection<MpContextMenuItemViewModel>();
@@ -649,76 +601,7 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task AddItemFromClipboard(Dictionary<string, string> cd) {
-            var totalAddSw = new Stopwatch();
-            totalAddSw.Start();
-
-            var createItemSw = new Stopwatch();
-            createItemSw.Start();
-            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd);
-
-            MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
-
-            if (newCopyItem == null) {
-                //this occurs if the copy item is not a known format or app init
-                MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
-                return;
-            } else if (MpAppModeViewModel.Instance.IsAppendMode) {
-                //when in append mode just append the new items text to selecteditem
-                if (_appendModeCopyItem == null) {
-                    if (PrimaryItem == null) {
-                        _appendModeCopyItem = newCopyItem;
-                    } else {
-                        _appendModeCopyItem = PrimaryItem.HeadItem.CopyItem;
-                    }
-                }
-
-                if (_appendModeCopyItem != newCopyItem) {
-                    int compositeChildCount = await MpDataModelProvider.Instance.GetCompositeChildCountAsync(_appendModeCopyItem.Id);
-                    newCopyItem.CompositeParentCopyItemId = _appendModeCopyItem.Id;
-                    newCopyItem.CompositeSortOrderIdx = compositeChildCount + 1;
-                    await newCopyItem.WriteToDatabaseAsync();
-
-                    if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
-                        // TODO now composite item doesn't roll up children so the buffer needs to be created here
-                        // if I use this at all
-                        MpStandardBalloonViewModel.ShowBalloon(
-                            "Append Buffer",
-                            SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
-                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                    }
-
-                    if (Properties.Settings.Default.NotificationDoCopySound) {
-                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                    }
-                }
-
-            } else {
-                _appendModeCopyItem = null;
-                if (newCopyItem.Id < 0) {
-                    //item is a duplicate
-                    newCopyItem.Id *= -1;
-                    MpConsole.WriteLine("Ignoring duplicate copy item");
-                    newCopyItem.CopyCount++;
-                    // reseting CopyDateTime will move item to top of recent list
-                    newCopyItem.CopyDateTime = DateTime.Now;
-                } else {
-                    if (MpPreferences.Instance.NotificationDoCopySound) {
-                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                    }
-                    if (MpPreferences.Instance.IsTrialExpired) {
-                        MpStandardBalloonViewModel.ShowBalloon(
-                            "Trial Expired",
-                            "Please update your membership to use Monkey Paste",
-                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                    }
-                }
-            }
-            totalAddSw.Stop();
-            MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
-
-            _newModels.Add(newCopyItem);
-        }
+        
 
         public void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
             MpHelpers.Instance.RunOnMainThread(async () => {
@@ -1002,6 +885,10 @@ namespace MpWpfApp {
             //Properties.Settings.Default.Save();
         }
 
+        public void NotifySelectionChanged() {
+            MpMessenger.Instance.Send(MpMessageType.TraySelectionChanged);
+        }
+
         public void StoreSelectionState(MpClipTileViewModel tile) {
             if (!tile.IsSelected) {
                 return;
@@ -1167,6 +1054,125 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(IsTrayEmpty));
+            //return;
+            if (IsAnyTileExpanded) {
+                return;
+            }
+            if (e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
+                foreach (MpClipTileViewModel octvm in e.OldItems) {
+                    octvm.Dispose();
+                }
+            }
+        }
+
+        private void ReceivedQueryInfoMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.QueryChanged:
+                    IsRequery = true;
+                    RequeryCommand.Execute(null);
+                    break;
+                case MpMessageType.SubQueryChanged:
+                    IsRequery = true;
+                    RequeryCommand.Execute(HeadQueryIdx);
+                    break;
+            }
+        }
+
+        private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(HasScrollVelocity):
+                    if (!HasScrollVelocity) {
+                        var hctvm = Items.FirstOrDefault(x => x.IsHovering);
+                        if (hctvm != null) {
+                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderBrush));
+                        }
+                    }
+                    break;
+                case nameof(ScrollOffset):
+                    if (MpPagingListBoxBehavior.Instance.IsThumbDragging) {
+                        break;
+                    }
+                    foreach (MpClipTileViewModel nctvm in Items) {
+                        nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
+                    }
+                    MpMessenger.Instance.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
+                    break;
+            }
+        }
+
+        private async Task AddItemFromClipboard(Dictionary<string, string> cd) {
+            var totalAddSw = new Stopwatch();
+            totalAddSw.Start();
+
+            var createItemSw = new Stopwatch();
+            createItemSw.Start();
+            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd);
+
+            MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
+
+            if (newCopyItem == null) {
+                //this occurs if the copy item is not a known format or app init
+                MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
+                return;
+            } else if (MpAppModeViewModel.Instance.IsAppendMode) {
+                //when in append mode just append the new items text to selecteditem
+                if (_appendModeCopyItem == null) {
+                    if (PrimaryItem == null) {
+                        _appendModeCopyItem = newCopyItem;
+                    } else {
+                        _appendModeCopyItem = PrimaryItem.HeadItem.CopyItem;
+                    }
+                }
+
+                if (_appendModeCopyItem != newCopyItem) {
+                    int compositeChildCount = await MpDataModelProvider.Instance.GetCompositeChildCountAsync(_appendModeCopyItem.Id);
+                    newCopyItem.CompositeParentCopyItemId = _appendModeCopyItem.Id;
+                    newCopyItem.CompositeSortOrderIdx = compositeChildCount + 1;
+                    await newCopyItem.WriteToDatabaseAsync();
+
+                    if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                        // TODO now composite item doesn't roll up children so the buffer needs to be created here
+                        // if I use this at all
+                        MpStandardBalloonViewModel.ShowBalloon(
+                            "Append Buffer",
+                            SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
+                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    }
+
+                    if (Properties.Settings.Default.NotificationDoCopySound) {
+                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                    }
+                }
+
+            } else {
+                _appendModeCopyItem = null;
+                if (newCopyItem.Id < 0) {
+                    //item is a duplicate
+                    newCopyItem.Id *= -1;
+                    MpConsole.WriteLine("Ignoring duplicate copy item");
+                    newCopyItem.CopyCount++;
+                    // reseting CopyDateTime will move item to top of recent list
+                    newCopyItem.CopyDateTime = DateTime.Now;
+                } else {
+                    if (MpPreferences.Instance.NotificationDoCopySound) {
+                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                    }
+                    if (MpPreferences.Instance.IsTrialExpired) {
+                        MpStandardBalloonViewModel.ShowBalloon(
+                            "Trial Expired",
+                            "Please update your membership to use Monkey Paste",
+                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    }
+                }
+            }
+            totalAddSw.Stop();
+            MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
+
+            _newModels.Add(newCopyItem);
+        }
 
         #region Sync Events
 

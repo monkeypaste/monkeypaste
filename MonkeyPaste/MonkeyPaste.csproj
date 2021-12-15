@@ -235,5 +235,6 @@
   <ItemGroup>
     <Folder Include="Models\Json\" />
     <Folder Include="Utils\DragDrop\" />
+    <Folder Include="Utils\Messenger\" />
   </ItemGroup>
 </Project>

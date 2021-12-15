@@ -243,13 +243,15 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsMultipleMatches { get; private set; } = false;
+
         public bool HasCriteriaItems => CriteriaItems.Count > 0;
 
         public bool IsSaved => UserSearch != null && UserSearch.Id > 0;
 
         public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText) && !IsSearching;
 
-        public string LastSearchText /*{ get; private set; } =*/ => string.Empty;
+        public string LastSearchText { get; private set; } = string.Empty;
 
         public bool IsTextBoxFocused { get; set; }
 
@@ -257,19 +259,7 @@ namespace MpWpfApp {
 
         public bool IsSearchEnabled { get; set; }
 
-        private bool _isTextValid = true;
-        public bool IsTextValid {
-            get {
-                return _isTextValid;
-            }
-            set {
-                if (_isTextValid != value) {
-                    _isTextValid = value;
-                    OnPropertyChanged(nameof(IsTextValid));
-                    OnPropertyChanged(nameof(TextBoxBorderBrush));
-                }
-            }
-        }
+        public bool IsTextValid { get; private set; }
 
         private bool _isSearching = false;
         public bool IsSearching {
@@ -314,23 +304,7 @@ namespace MpWpfApp {
                 return Brushes.LightGray;
             }
         }
-        public int SearchBorderColumnSpan {
-            get {
-                if (SearchNavigationButtonPanelVisibility == Visibility.Visible) {
-                    return 1;
-                }
-                return 2;
-            }
-        }
 
-        public Brush TextBoxBorderBrush {
-            get {
-                if (IsTextValid) {
-                    return Brushes.Transparent;
-                }
-                return Brushes.Red;
-            }
-        }
 
         public Brush CaretBrush => IsTextBoxFocused ? Brushes.Black : Brushes.Transparent;
 
@@ -385,19 +359,6 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _searchNavigationButtonPanelVisibility = Visibility.Collapsed;
-        public Visibility SearchNavigationButtonPanelVisibility {
-            get {
-                return _searchNavigationButtonPanelVisibility;
-            }
-            set {
-                if (_searchNavigationButtonPanelVisibility != value) {
-                    _searchNavigationButtonPanelVisibility = value;
-                    OnPropertyChanged(nameof(SearchNavigationButtonPanelVisibility));
-                    OnPropertyChanged(nameof(SearchBorderColumnSpan));
-                }
-            }
-        }
         #endregion
 
         #region Model
@@ -415,7 +376,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(HasText));
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
                     OnPropertyChanged(nameof(TextBoxFontStyle));
-                    OnPropertyChanged(nameof(TextBoxBorderBrush));
                 }
             }
         }
@@ -471,6 +431,10 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(HasCriteriaItems));
 
             IsBusy = false;
+        }
+
+        public void NotifyHasMultipleMatches() {
+            IsMultipleMatches = true;
         }
 
         #region View Method Invokers
@@ -586,7 +550,7 @@ namespace MpWpfApp {
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 }
-                //LastSearchText = string.Empty;
+                LastSearchText = string.Empty;
             },
             () => {
                 return SearchText.Length > 0;
@@ -596,26 +560,24 @@ namespace MpWpfApp {
             () => {
                 if (!HasText) {
                     IsTextValid = true;
-                    //LastSearchText = string.Empty;
+                    LastSearchText = string.Empty;
                 } else {
                     IsSearching = true;
-                    //LastSearchText = SearchText;
+                    LastSearchText = SearchText;
                 }
+                IsMultipleMatches = false;
+
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             },!MpMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new RelayCommand(
             () => {
-                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
-                    ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
-                }
+                MpMessenger.Instance.Send(MpMessageType.SelectNextMatch);
             });
 
         public ICommand PrevMatchCommand => new RelayCommand(
             () => {
-                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
-                    ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
-                }
+                MpMessenger.Instance.Send(MpMessageType.SelectPreviousMatch);
             });
 
         public ICommand CreateOrClearSearchCriteriaItemsCommand => new RelayCommand(

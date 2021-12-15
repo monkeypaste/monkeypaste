@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,28 +16,25 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpTagTrayView.xaml
+    /// Interaction logic for MpTagTreeView.xaml
     /// </summary>
-    public partial class MpTagTrayView : MpUserControl<MpTagTrayViewModel> {
-        public MpTagTrayView() {
+    public partial class MpTagTreeView : MpUserControl<MpTagTrayViewModel> {
+        public MpTagTreeView() {
             InitializeComponent();
         }
 
         public void RefreshTray() {
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                var sv = TagTray.GetScrollViewer();
-                while (sv == null) {
-                    await Task.Delay(100);
-                    sv = TagTray.GetScrollViewer();
-                }
-                if (sv.ExtentWidth >= TagTray.MaxWidth) {
-                    TagTrayNavLeftButton.Visibility = Visibility.Visible;
-                    TagTrayNavRightButton.Visibility = Visibility.Visible;
-                } else {
-                    TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
-                    TagTrayNavRightButton.Visibility = Visibility.Collapsed;
-                }
-            });
+            //var sv = TagTray.GetScrollViewer();
+            //while (sv == null) {
+            //    sv = TagTray.GetScrollViewer();
+            //}
+            //if (sv.ExtentWidth >= TagTray.MaxWidth) {
+            //    TagTrayNavLeftButton.Visibility = Visibility.Visible;
+            //    TagTrayNavRightButton.Visibility = Visibility.Visible;
+            //} else {
+            //    TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
+            //    TagTrayNavRightButton.Visibility = Visibility.Collapsed;
+            //}
         }
 
 
@@ -53,7 +51,6 @@ namespace MpWpfApp {
         }
 
         private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
-            RefreshTray();
         }
 
 
@@ -70,7 +67,7 @@ namespace MpWpfApp {
         }
 
         private void TagTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (e.AddedItems == null || e.AddedItems.Count == 0) {
+            if(e.AddedItems == null || e.AddedItems.Count == 0) {
                 BindingContext.SelectTagCommand.Execute(null);
                 return;
             }
@@ -78,5 +75,16 @@ namespace MpWpfApp {
             BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
 
+        private void TagTray_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            if(BindingContext.SelectedTagTile.TagId != MpTag.RootTagId) {
+                BindingContext.SelectTagCommand.Execute(null);
+            }
+        }
+
+        private void MpTagTileView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if((sender as FrameworkElement).DataContext is MpTagTileViewModel ttvm) {
+                e.Handled = ttvm.IsRootTagTile;
+            }
+        }
     }
 }

@@ -45,7 +45,9 @@
                             Margin="8"
                             Width="280"
                             CornerRadius="10"
-                            BorderBrush="{Binding TextBoxBorderBrush}"
+                            BorderBrush="{Binding IsTextValid,
+                                                  Converter={StaticResource BoolToBrushConverter},
+                                                  ConverterParameter='#FFFF0000|#00FFFF'}"
                             Background="White"
                             BorderThickness="0">
             <Grid>
@@ -126,14 +128,17 @@
                         </Button.Background>
                     </Button>
                     <!--  Add Or Clear Search Criteria Button  -->
+                    <!--
+                        Visibility="{Binding CanAddCriteriaItem,
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    -->
                     <Button x:Name="AddOrClearSearchCriteriaButton"
                             BorderThickness="0"
                             Width="40"
                             Margin="5,0,0,0"
                             Padding="5"
                             Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
-                            Visibility="{Binding CanAddCriteriaItem,
-                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                            Visibility="Collapsed"
                             Style="{StaticResource SemiTransparentButton}">
                         <Button.Background>
                             <RadialGradientBrush GradientOrigin="0.5,0.5"
@@ -153,33 +158,39 @@
                                Width="30"
                                Stretch="Uniform" />
                     </Button>
+
+                    <!--  Search Navigation Border  -->
+                    <Border Grid.Column="1"
+                            CornerRadius="10"
+                            Visibility="{Binding IsMultipleMatches,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="PreviousTemplateButton"
+                                    TabIndex="2"
+                                    Command="{Binding PrevMatchCommand}"
+                                    Width="10"
+                                    Height="10"
+                                    Style="{StaticResource SemiTransparentButton}"
+                                    Padding="5">
+                                <Image Source="/Resources/Images/back_black.png" />
+                            </Button>
+                            <Button x:Name="NextTemplateButton"
+                                    TabIndex="3"
+                                    Command="{Binding NextMatchCommand}"
+                                    Width="10"
+                                    Height="10"
+                                    Style="{StaticResource SemiTransparentButton}"
+                                    Margin="3,0,0,0"
+                                    Padding="5">
+                                <Image Source="/Resources/Images/forward_black.png" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </Grid>
         </local:MpClipBorder>
-        <!--  Search Navigation Border  -->
-        <Border Grid.Column="1"
-                CornerRadius="10"
-                Visibility="{Binding SearchNavigationButtonPanelVisibility}"
-                HorizontalAlignment="Center"
-                Margin="3,0,10,0">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="PreviousTemplateButton"
-                        TabIndex="2"
-                        Command="{Binding PrevMatchCommand}"
-                        Width="20"
-                        Height="20"
-                        Padding="5">
-                    <Image Source="/Resources/Images/back_black.png" />
-                </Button>
-                <Button x:Name="NextTemplateButton"
-                        TabIndex="3"
-                        Command="{Binding NextMatchCommand}"
-                        Width="20"
-                        Height="20"
-                        Padding="5">
-                    <Image Source="/Resources/Images/forward_black.png" />
-                </Button>
-            </StackPanel>
-        </Border>
+
     </StackPanel>
 </local:MpUserControl>

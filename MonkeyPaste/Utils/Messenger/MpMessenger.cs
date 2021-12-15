@@ -25,10 +25,13 @@ namespace MonkeyPaste {
         //ItemDragBegin,
         //ItemDragEnd,
         TrayScrollChanged,
+        TraySelectionChanged,
         ContentListScrollChanged, //has context (tile)
         ContentListItemsChanged, //has context (tile)
         Resizing,
-        ResizeCompleted
+        ResizeCompleted,
+        SelectNextMatch,
+        SelectPreviousMatch
     }
 
     public class MpMessenger : MpSingleton<MpMessenger> {
@@ -37,6 +40,10 @@ namespace MonkeyPaste {
         private readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
         public MpMessenger() { }
+        
+        public void Register(object sender, Action<MpMessageType> callback, object context = null) {
+            Register<MpMessageType>(sender, callback, context);
+        }
 
         public void Register<T>(object sender, Action<T> callback) {
             Register(sender, callback, null);
@@ -49,6 +56,10 @@ namespace MonkeyPaste {
             } else {
                 _recipientDictionary.TryAdd(key, new List<object> { action });
             }            
+        }
+
+        public void Unegister(object sender, Action<MpMessageType> callback, object context = null) {
+            Unregister<MpMessageType>(sender, callback, context);
         }
 
         public void Unregister<T>(object sender, Action<T> callback) {
@@ -65,6 +76,10 @@ namespace MonkeyPaste {
 
         public void UnregisterAll() {
             _recipientDictionary.Clear();
+        }
+
+        public void Send(MpMessageType message, object context = null) {
+            Send(message, context);
         }
 
         public void Send<T>(T message) {

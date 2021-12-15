@@ -4,8 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
+
     public class MpStringToImageSourceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string valueStr) {

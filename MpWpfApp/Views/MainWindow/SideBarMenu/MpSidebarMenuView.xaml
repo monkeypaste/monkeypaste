@@ -24,7 +24,7 @@
                                        DataContext="{StaticResource AppModeViewModel}" />
 
         <StackPanel Grid.Column="1">
-            <local:MpTagTrayView x:Name="TagTrayView"
+           <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,
                                                       Converter={StaticResource BoolToVisibilityConverter},

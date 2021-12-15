@@ -31,9 +31,10 @@
                 <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader,
                                            RelativeSource={RelativeSource Mode=FindAncestor,
                                                                           AncestorType=ContextMenu}}"
-                          Icon="{Binding PauseOrPlayIconSource,
-                                         Converter={StaticResource StringToIconConverter},
-                                         Source={StaticResource SystemTrayViewModel}}"
+                          Icon="{Binding IsAppPaused,
+                                         Converter={StaticResource BoolToIconSourceConverter},
+                                         ConverterParameter='PlayIcon|PauseIcon',
+                                         Source={StaticResource AppModeViewModel}}"
                           Command="{Binding ToggleIsAppPausedCommand,
                                             Source={StaticResource AppModeViewModel}}" />
                 <MenuItem Header="Help"

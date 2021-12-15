@@ -11,8 +11,12 @@
                             d:DesignWidth="800"
                             d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
                                                              IsDesignTimeCreatable=False}">
+    <i:Interaction.Behaviors>
+        <local:MpFileListItemHighlightBehavior x:Name="FileListItemHighlightBehavior" />
+    </i:Interaction.Behaviors>
     <StackPanel x:Name="FileListItemPanel"
                 Loaded="FileListItemPanel_Loaded"
+                Unloaded="FileListItemPanel_Unloaded"
                 Orientation="Horizontal"
                 MinHeight="22"
                 HorizontalAlignment="Stretch"

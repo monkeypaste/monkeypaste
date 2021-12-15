@@ -11,6 +11,9 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
+    <i:Interaction.Behaviors>
+        <local:MpHighlightSelectorBehavior x:Name="HighlightSelectorBehavior" />
+    </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding .,
                                               IsAsync=True}"
@@ -31,12 +34,15 @@
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <local:MpClipBorder.Effect>
-            <DropShadowEffect x:Name="DropShadow" RenderingBias="Quality"
-                              Color="Black" Direction="315"
+        <!--<local:MpClipBorder.Effect>
+            <DropShadowEffect x:Name="DropShadow"
+                              
+                              RenderingBias="Quality"
+                              Color="Black"
+                              Direction="315"
                               Opacity="0.3"
                               BlurRadius="5" />
-        </local:MpClipBorder.Effect>
+        </local:MpClipBorder.Effect>-->
         <local:MpClipBorder.BorderBrush>
             <DrawingBrush Viewport="0,0,8,8"
                           ViewportUnits="Absolute"

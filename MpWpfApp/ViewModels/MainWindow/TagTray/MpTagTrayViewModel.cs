@@ -39,17 +39,16 @@ namespace MpWpfApp {
         //public MpTagTileViewModel RootTagTileViewModel { get; private set; }
 
         //public ObservableCollection<MpTagTileViewModel> TagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
-        public List<MpTagTileViewModel> TagTileViewModels {
+        public ObservableCollection<MpTagTileViewModel> TagTileViewModels {
             get {
                 var ttvml = new List<MpTagTileViewModel>();
-                if (RootTagTileViewModels == null) {
-                    return ttvml;
+                if (RootTagTileViewModels != null) {
+                    foreach (var rttvm in RootTagTileViewModels) {
+                        ttvml.Add(rttvm);
+                        ttvml.AddRange(rttvm.FindChildren());
+                    }
                 }
-                foreach (var rttvm in RootTagTileViewModels) {
-                    ttvml.Add(rttvm);
-                    ttvml.AddRange(rttvm.FindChildren());
-                }
-                return ttvml;
+                return new ObservableCollection<MpTagTileViewModel>(ttvml);
             }
         }
         public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
@@ -142,9 +141,9 @@ namespace MpWpfApp {
                 }
 
                 OnPropertyChanged(nameof(RootTagTileViewModels));
-                // OnPropertyChanged(nameof(TagTileViewModels));
+                OnPropertyChanged(nameof(TagTileViewModels));
 
-                //RootTagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+                TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
 
                 //UpdateSortOrder(true);
 

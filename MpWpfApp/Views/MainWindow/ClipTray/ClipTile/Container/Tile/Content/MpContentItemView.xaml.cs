@@ -26,6 +26,9 @@ namespace MpWpfApp {
         }
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
+            if (_ContentContextMenu == null) {
+                _ContentContextMenu = new MpContentContextMenuView();
+            }
         }
 
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -93,9 +96,6 @@ namespace MpWpfApp {
         private void Border_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
             if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                 return;
-            }
-            if (_ContentContextMenu == null) {
-                _ContentContextMenu = new MpContentContextMenuView();
             }
 
             if (!BindingContext.IsSelected) {

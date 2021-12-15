@@ -18,14 +18,15 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileTitleView.xaml
     /// </summary>
-    public partial class MpClipTileTitleView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpClipTileTitleView : MpContentUserControl<MpContentItemViewModel> {
         private bool _isAnimating = false;
 
-        public MpClipTileTitleView() {
+        public MpClipTileTitleView() : base() {
             InitializeComponent();
         }
 
         private void ClipTileAppIconBorderImage_Loaded(object sender, RoutedEventArgs e) {
+            base.OnLoad();
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
         }
 

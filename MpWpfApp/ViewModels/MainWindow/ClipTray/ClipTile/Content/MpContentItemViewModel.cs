@@ -874,6 +874,8 @@ namespace MpWpfApp {
                     }
 
                     Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+
+                    Parent.Parent.NotifySelectionChanged();
                     break;
                 case nameof(CopyItem):
                     if(CopyItem == null) {

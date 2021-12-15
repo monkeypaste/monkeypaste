@@ -161,7 +161,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="TreeViewItemFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -177,7 +177,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="{x:Type TreeViewItem}"
            TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background"
@@ -405,7 +405,7 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TreeViewLikeExpanderStyle" 
+    <Style x:Key="TreeViewLikeExpanderStyle"
            TargetType="{x:Type Expander}">
         <Setter Property="Template">
             <Setter.Value>
@@ -450,7 +450,7 @@
                                     <ColumnDefinition Width="20" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <!-- Template="{StaticResource ExpanderToggleButton}"-->
+                                <!--  Template="{StaticResource ExpanderToggleButton}"  -->
                                 <ToggleButton OverridesDefaultStyle="True"
                                               Style="{StaticResource ExpandCollapseToggleStyle}"
                                               IsChecked="{Binding IsExpanded,

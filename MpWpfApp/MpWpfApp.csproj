@@ -128,7 +128,12 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\Selector\MpHighlightSelectorBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
+    <Compile Include="Behaviors\Highlighting\MpFileListItemHighlightBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\MpRtbHighlightBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpTileResizeBehavior.cs" />
@@ -144,8 +149,11 @@
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
+    <Compile Include="Converters\MpBoolToBrushConverter.cs" />
     <Compile Include="Converters\MpBoolToCursorConverter.cs" />
     <Compile Include="Converters\MpBoolToHAlignmentConverter.cs" />
+    <Compile Include="Converters\MpBoolToIconSourceConverter.cs" />
+    <Compile Include="Converters\MpBoolToImageSourceConverter.cs" />
     <Compile Include="Converters\MpBoolToScrollBarVisibilityConverter.cs" />
     <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
@@ -261,8 +269,6 @@
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
@@ -279,6 +285,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\MpPinTrayView.xaml.cs">
       <DependentUpon>MpPinTrayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
+      <DependentUpon>MpTagTrayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml.cs">
       <DependentUpon>MpManageTagExpressionModalWindow.xaml</DependentUpon>
@@ -433,8 +442,8 @@
     <Compile Include="Views\MainWindow\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
-      <DependentUpon>MpTagTrayView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTreeView.xaml.cs">
+      <DependentUpon>MpTagTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
       <DependentUpon>MpAppModeButtonGridView.xaml</DependentUpon>
@@ -655,6 +664,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -671,7 +684,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

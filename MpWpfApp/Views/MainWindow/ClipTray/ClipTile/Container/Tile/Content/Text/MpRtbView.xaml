@@ -14,6 +14,7 @@
     <i:Interaction.Behaviors>
         <!--<local:MpDropBehavior x:Name="DropBehavior" />-->
         <local:MpRtbViewDropBehavior x:Name="RtbViewDropBehavior" />
+        <local:MpRtbHighlightBehavior x:Name="RtbHighlightBehavior" />
     </i:Interaction.Behaviors>
     <AdornerDecorator>
         <RichTextBox x:Name="Rtb"

@@ -30,9 +30,9 @@
                       ToolTip="{Binding IsAppPausedTooltip}"
                       Padding="10"
                       IsChecked="{Binding IsAppPaused}">
-            <Image Source="{Binding PauseOrPlayIconSource,
-                                    Converter={StaticResource StringToImageSourceConverter},
-                                    Source={StaticResource SystemTrayViewModel}}"
+            <Image Source="{Binding IsAppPaused,
+                                    Converter={StaticResource BoolToImageSourceConverter},
+                                    ConverterParameter='PlayIcon|PauseIcon'}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>

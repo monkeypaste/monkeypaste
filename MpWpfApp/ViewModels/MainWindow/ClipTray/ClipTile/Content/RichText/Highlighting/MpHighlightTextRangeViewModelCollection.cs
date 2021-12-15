@@ -25,18 +25,10 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpClipTileViewModel HostClipTileViewModel {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent;
-            }
-        }
 
-        public MpHighlightTextRangeViewModel SelectedHighlightTextRangeViewModel {
+        public MpHighlightTextRangeViewModel SelectedItem {
             get {
-                foreach (var hltrvm in HighlightRangeViewModels) {
+                foreach (var hltrvm in Items) {
                     if (hltrvm.IsSelected) {
                         return hltrvm;
                     }
@@ -45,93 +37,63 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpHighlightTextRangeViewModel> HighlightRangeViewModels { get; private set; } = new ObservableCollection<MpHighlightTextRangeViewModel>();
+        public ObservableCollection<MpHighlightTextRangeViewModel> Items { get; private set; } = new ObservableCollection<MpHighlightTextRangeViewModel>();
         #endregion
 
         public int Count {
             get {
-                return HighlightRangeViewModels.Count;
+                return Items.Count;
             }
         }
 
         public List<KeyValuePair<TextRange, Brush>> NonTransparentDocumentBackgroundRangeList { get; set; } = new List<KeyValuePair<TextRange, Brush>>();
         
         private int _highlightTaskCount = 0;
-        public int HighlightTaskCount {
-            get {
-                return _highlightTaskCount;
-            }
-            set {
-                if (_highlightTaskCount != value) {
-                    _highlightTaskCount = value;
-                    OnPropertyChanged(nameof(HighlightTaskCount));
-                }
-            }
-        }
+        public int HighlightTaskCount { get; set; }
 
-        public bool HasAppMatch {
-            get {
-                foreach (var htrvm in HighlightRangeViewModels) {
-                    if (htrvm.HighlightType == MpHighlightType.App) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        public bool HasAppMatch => Items.Any(x => x.HighlightType == MpHighlightType.App);
 
-        public List<MpContentItemViewModel> AppMatchRtbvmList {
-            get {
-                var appMatchRtbvmList = new List<MpContentItemViewModel>();
-                foreach (var htrvm in HighlightRangeViewModels) {
-                    if (htrvm.HighlightType == MpHighlightType.App && 
-                        htrvm.ContentItemViewModel != null) {
-                        appMatchRtbvmList.Add(htrvm.ContentItemViewModel);
-                    }
-                }
-                return appMatchRtbvmList;
-            }
-        }
+        public List<MpContentItemViewModel> AppItems => Items.Where(x => x.HighlightType == MpHighlightType.App).Select(x => x.ContentItemViewModel).ToList();
 
-        public Dictionary<object,Visibility> VisibilityDictionary {
-            get {
-                var vdict = new Dictionary<object, Visibility>();
-                if (HighlightRangeViewModels.Count == 0) {
-                    if(MpSearchBoxViewModel.Instance.HasText) {
-                        vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
-                    } else {
-                        vdict.Add(HostClipTileViewModel, Visibility.Visible);
-                        foreach(var rtbvm in Parent.ItemViewModels) {
-                            vdict.Add(rtbvm, Visibility.Visible);
-                        }
-                    }
-                } else {
-                    foreach(var hltrvm in HighlightRangeViewModels) {
-                        if(hltrvm.ContentItemViewModel == null) {
-                            if(!vdict.ContainsKey(HostClipTileViewModel)) {
-                                vdict.Add(HostClipTileViewModel, Visibility.Visible);
-                            }                            
-                        } else {
-                            if(!vdict.ContainsKey(hltrvm.ContentItemViewModel)) {
-                                vdict.Add(hltrvm.ContentItemViewModel, Visibility.Visible);
-                            }                            
-                        }
-                    }
-                    if(vdict.Count > 0 && !vdict.ContainsKey(HostClipTileViewModel)) {
-                        vdict.Add(HostClipTileViewModel, Visibility.Visible);
-                    } else if(!vdict.ContainsKey(HostClipTileViewModel)) {
-                        vdict.Add(HostClipTileViewModel, Visibility.Collapsed);
-                    }
-                    foreach(var rtbvm in Parent.ItemViewModels) {
-                        //this loop adds any unmatched rtbvm's to the dictionary so they are collapsed
-                        if(!vdict.ContainsKey(rtbvm)) {
-                            vdict.Add(rtbvm, Visibility.Collapsed);
-                        }
-                    }
-                }
-                return vdict;
-            }
-        }
+        //public Dictionary<object,Visibility> VisibilityDictionary {
+        //    get {
+        //        var vdict = new Dictionary<object, Visibility>();
+        //        if (Items.Count == 0) {
+        //            if(MpSearchBoxViewModel.Instance.HasText) {
+        //                vdict.Add(Parent, Visibility.Collapsed);
+        //            } else {
+        //                vdict.Add(Parent, Visibility.Visible);
+        //                foreach(var rtbvm in base.Parent.ItemViewModels) {
+        //                    vdict.Add(rtbvm, Visibility.Visible);
+        //                }
+        //            }
+        //        } else {
+        //            foreach(var hltrvm in Items) {
+        //                if(hltrvm.ContentItemViewModel == null) {
+        //                    if(!vdict.ContainsKey(Parent)) {
+        //                        vdict.Add(Parent, Visibility.Visible);
+        //                    }                            
+        //                } else {
+        //                    if(!vdict.ContainsKey(hltrvm.ContentItemViewModel)) {
+        //                        vdict.Add(hltrvm.ContentItemViewModel, Visibility.Visible);
+        //                    }                            
+        //                }
+        //            }
+        //            if(vdict.Count > 0 && !vdict.ContainsKey(Parent)) {
+        //                vdict.Add(Parent, Visibility.Visible);
+        //            } else if(!vdict.ContainsKey(Parent)) {
+        //                vdict.Add(Parent, Visibility.Collapsed);
+        //            }
+        //            foreach(var rtbvm in base.Parent.ItemViewModels) {
+        //                //this loop adds any unmatched rtbvm's to the dictionary so they are collapsed
+        //                if(!vdict.ContainsKey(rtbvm)) {
+        //                    vdict.Add(rtbvm, Visibility.Collapsed);
+        //                }
+        //            }
+        //        }
+        //        return vdict;
+        //    }
+        //}
         #endregion
 
         #region Events
@@ -144,8 +106,8 @@ namespace MpWpfApp {
         public MpHighlightTextRangeViewModelCollection(MpClipTileViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(SelectedHighlightTextRangeViewModel):
-                        OnHighlightItemSelectionChanged?.Invoke(this, SelectedHighlightTextRangeViewModel);
+                    case nameof(SelectedItem):
+                        OnHighlightItemSelectionChanged?.Invoke(this, SelectedItem);
                         ApplyHighlightingCommand.Execute(null);
                         break;
                     case nameof(HighlightTaskCount):
@@ -178,22 +140,22 @@ namespace MpWpfApp {
 
             ClearHighlightingCommand.Execute(null);
 
-            if (MpMainWindowViewModel.Instance.IsMainWindowLoading || HostClipTileViewModel.IsLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading || Parent.IsLoading) {
                 HighlightTaskCount--;
                 return VisibilityDictionary;
             }
             
-            if(MpClipTrayViewModel.Instance.IsAnyTileExpanded && !HostClipTileViewModel.IsExpanded) {
+            if(MpClipTrayViewModel.Instance.IsAnyTileExpanded && !Parent.IsExpanded) {
                 HighlightTaskCount--;
-                return new Dictionary<object, Visibility> { { HostClipTileViewModel, Visibility.Collapsed } };
+                return new Dictionary<object, Visibility> { { Parent, Visibility.Collapsed } };
             }
 
             var sttvm = MpTagTrayViewModel.Instance.SelectedTagTile;
-            bool isLinked = await sttvm.IsLinked(HostClipTileViewModel);
+            bool isLinked = await sttvm.IsLinked(Parent);
             if (!isLinked) {
                 //MonkeyPaste.MpConsole.WriteLine("Clip tile w/ title " + HostClipTileViewModel.CopyItemTitle + " is not linked with current tag");
                 HighlightTaskCount--;
-                return new Dictionary<object, Visibility> { { HostClipTileViewModel, Visibility.Collapsed } };
+                return new Dictionary<object, Visibility> { { Parent, Visibility.Collapsed } };
             }
 
             if (string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText) {
@@ -201,7 +163,7 @@ namespace MpWpfApp {
                 ClearHighlightingCommand.Execute(null);
                 HighlightTaskCount--;
 
-                HostClipTileViewModel.ResetContentScroll();
+                Parent.ResetContentScroll();
                 return VisibilityDictionary;
             }
 
@@ -221,41 +183,41 @@ namespace MpWpfApp {
                     bool tc = false, cc = false, anc = false, apc = false, uc = false;
 
                     if(Properties.Settings.Default.SearchByTitle) {
-                        foreach (var rtbvm in Parent.ItemViewModels) {
+                        foreach (var rtbvm in base.Parent.ItemViewModels) {
                             tc = rtbvm.CopyItem.Title.ContainsByCaseSetting(hlt) ? true : tc;
                         }
                     }                    
                     if(Properties.Settings.Default.SearchByRichText) {
-                        foreach (var rtbvm in Parent.ItemViewModels) {
+                        foreach (var rtbvm in base.Parent.ItemViewModels) {
                             cc = rtbvm.CopyItem.ItemData.ContainsByCaseSetting(hlt) ? true : cc;
                         }
                     }
 
                     if (Properties.Settings.Default.SearchByApplicationName) {
-                        foreach (var rtbvm in Parent.ItemViewModels) {
+                        foreach (var rtbvm in base.Parent.ItemViewModels) {
                             bool ranc = rtbvm.CopyItem.Source.App.AppName.ContainsByCaseSetting(hlt);
                             anc = ranc ? true : anc;
                             if (ranc) {
-                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
+                                this.Add(new MpHighlightTextRangeViewModel(this, Parent, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
                     if (Properties.Settings.Default.SearchByProcessName) {
-                        foreach (var rtbvm in Parent.ItemViewModels) {
+                        foreach (var rtbvm in base.Parent.ItemViewModels) {
                             bool rapc = rtbvm.CopyItem.Source.App.SourcePath.ContainsByCaseSetting(hlt);
                             apc = rapc ? true : apc;
                             if (rapc) {
-                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
+                                this.Add(new MpHighlightTextRangeViewModel(this, Parent, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
 
-                    if (Properties.Settings.Default.SearchBySourceUrl && Parent.ItemViewModels.Any(x=>x.CopyItem.Source.Url != null)) {
-                        foreach (var rtbvm in Parent.ItemViewModels) {
+                    if (Properties.Settings.Default.SearchBySourceUrl && base.Parent.ItemViewModels.Any(x => x.CopyItem.Source.Url != null)) {
+                        foreach (var rtbvm in base.Parent.ItemViewModels) {
                             bool ruc = rtbvm.CopyItem.Source.Url.UrlPath.ContainsByCaseSetting(hlt);
                             uc = ruc ? true : uc;
                             if (ruc) {
-                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));
+                                this.Add(new MpHighlightTextRangeViewModel(this, Parent, rtbvm, null, sortIdx++, MpHighlightType.App));
                             }
                         }
                     }
@@ -277,11 +239,11 @@ namespace MpWpfApp {
                             var rtbvm = t.Item2.DataContext as MpContentItemViewModel;
                             var strl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                             foreach (var mr in strl) {
-                                this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Title));
+                                this.Add(new MpHighlightTextRangeViewModel(this, Parent, rtbvm, mr, sortIdx++, MpHighlightType.Title));
                             }
                         }
                     }
-                    foreach(var civm in Parent.ItemViewModels) {
+                    foreach(var civm in base.Parent.ItemViewModels) {
                         switch (civm.CopyItem.ItemType) {
                             case MpCopyItemType.RichText:
                                 if (cc) {
@@ -290,7 +252,7 @@ namespace MpWpfApp {
                                         var rtbvm = rtb.DataContext as MpContentItemViewModel;
                                         var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                         foreach (var mr in rtbvmtrl) {
-                                            this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, rtbvm, mr, sortIdx++, MpHighlightType.Text));
+                                            this.Add(new MpHighlightTextRangeViewModel(this, Parent, rtbvm, mr, sortIdx++, MpHighlightType.Text));
                                         }
                                     }
                                 }
@@ -298,7 +260,7 @@ namespace MpWpfApp {
                             case MpCopyItemType.Image:
                                 if (Properties.Settings.Default.SearchByImage && cc) {
                                     //already found in pre-pass
-                                    this.Add(new MpHighlightTextRangeViewModel(this, HostClipTileViewModel, null, null, -1, MpHighlightType.Image));
+                                    this.Add(new MpHighlightTextRangeViewModel(this, Parent, null, null, -1, MpHighlightType.Image));
                                 }
                                 break;
                                 //case MpCopyItemType.FileList:
@@ -324,7 +286,7 @@ namespace MpWpfApp {
                     }
                    // MonkeyPaste.MpConsole.WriteLine("Ending highlighting clip with title: " + HostClipTileViewModel.CopyItemTitle);
                     ResetSelection();
-                    result = HighlightRangeViewModels.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
+                    result = Items.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
                 }),
                 DispatcherPriority.Background);
 
@@ -332,32 +294,32 @@ namespace MpWpfApp {
         }
 
         public void ClearSelection() {
-            foreach(var htrvm in HighlightRangeViewModels) {
+            foreach(var htrvm in Items) {
                 htrvm.IsSelected = false;
             }
         }
 
         public void ResetSelection() {
             ClearSelection();
-            if(HighlightRangeViewModels.Count > 0) {
-                HighlightRangeViewModels[0].IsSelected = true;
-                OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            if(Items.Count > 0) {
+                Items[0].IsSelected = true;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
         public override void Dispose() {
             base.Dispose();
-            HighlightRangeViewModels.Clear();
+            Items.Clear();
         }
 
         public void Add(MpHighlightTextRangeViewModel htrvm) {
             if(htrvm.HighlightType != MpHighlightType.App) {
-                HighlightRangeViewModels.Add(htrvm);
+                Items.Add(htrvm);
                 return;
             }
-            bool alreadyHasAppHighlight = HighlightRangeViewModels.Any(x => x.HighlightType == MpHighlightType.App && x.ContentItemViewModel == htrvm.ContentItemViewModel);
+            bool alreadyHasAppHighlight = Items.Any(x => x.HighlightType == MpHighlightType.App && x.ContentItemViewModel == htrvm.ContentItemViewModel);
             if(!alreadyHasAppHighlight) {
-                HighlightRangeViewModels.Add(htrvm);
+                Items.Add(htrvm);
             }
         }
         #endregion
@@ -429,15 +391,15 @@ namespace MpWpfApp {
             return this.Count > 0;
         }
         private void SelectNextMatch() {
-            int curIdx = HighlightRangeViewModels.IndexOf(SelectedHighlightTextRangeViewModel);
+            int curIdx = Items.IndexOf(SelectedItem);
             int nextIdx = curIdx + 1;
             if (nextIdx >= this.Count) {
                 nextIdx = 0;
             }
             MonkeyPaste.MpConsole.WriteLine("CurIdx: " + curIdx + " NextIdx: " + nextIdx);
             ClearSelection();
-            HighlightRangeViewModels[nextIdx].IsSelected = true;
-            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            Items[nextIdx].IsSelected = true;
+            OnPropertyChanged(nameof(SelectedItem));
         }
 
         private RelayCommand _selectPreviousMatchCommand;
@@ -453,13 +415,13 @@ namespace MpWpfApp {
             return this.Count > 0;
         }
         private void SelectPreviousMatch() {
-            int prevIdx = HighlightRangeViewModels.IndexOf(SelectedHighlightTextRangeViewModel) - 1;
+            int prevIdx = Items.IndexOf(SelectedItem) - 1;
             if (prevIdx < 0) {
                 prevIdx = this.Count - 1;
             }
             ClearSelection();
-            HighlightRangeViewModels[prevIdx].IsSelected = true;
-            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            Items[prevIdx].IsSelected = true;
+            OnPropertyChanged(nameof(SelectedItem));
         }
 
         private RelayCommand<object> _applyHighlightingCommand;
@@ -472,7 +434,7 @@ namespace MpWpfApp {
             }
         }
         private void ApplyHighlighting(object args) {
-            foreach(var hltrvm in HighlightRangeViewModels) {
+            foreach(var hltrvm in Items) {
                 if (args == null || hltrvm == args) {
                     hltrvm.HighlightRange();
                 }
@@ -489,7 +451,7 @@ namespace MpWpfApp {
             }
         }
         private void HideHighlighting(object args) {
-            foreach (var hltrvm in HighlightRangeViewModels) {
+            foreach (var hltrvm in Items) {
                 if (args == null || hltrvm == args) {
                     hltrvm.ClearHighlighting();
                 }                
@@ -508,8 +470,8 @@ namespace MpWpfApp {
         }
         private void ClearHighlighting() {
             HideHighlightingCommand.Execute(null);
-            HighlightRangeViewModels.Clear();
-            HostClipTileViewModel?.OnPropertyChanged(nameof(HostClipTileViewModel.AppIconHighlightBorderVisibility));
+            Items.Clear();
+            Parent?.OnPropertyChanged(nameof(Parent.AppIconHighlightBorderVisibility));
         }        
         #endregion
     }

@@ -60,6 +60,7 @@ namespace MonkeyPaste {
 
         public DateTime CopyDateTime { get; set; }
 
+        [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
         [ForeignKey(typeof(MpDbImage))]

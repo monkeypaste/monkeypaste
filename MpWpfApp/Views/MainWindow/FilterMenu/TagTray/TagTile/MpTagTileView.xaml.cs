@@ -77,8 +77,10 @@ namespace MpWpfApp {
             var ttvm = DataContext as MpTagTileViewModel;
             if (e.Key == Key.Enter) {
                 ttvm.FinishRenameTagCommand.Execute(null);
+                e.Handled = true;
             } else if (e.Key == Key.Escape) {
                 ttvm.CancelRenameTagCommand.Execute(null);
+                e.Handled = true;
             }
         }
 
@@ -188,7 +190,7 @@ namespace MpWpfApp {
         }
 
         private void TagTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-            this.GetVisualAncestor<MpTagTrayView>().RefreshTray();
+            this.GetVisualAncestor<MpTagTrayView>()?.RefreshTray();
         }
     }
 }

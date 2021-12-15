@@ -232,7 +232,7 @@ namespace MpWpfApp {
 
             AssociatedObject.BindingContext.OnPropertyChanged(nameof(AssociatedObject.BindingContext.CopyItemData));
 
-            await AssociatedObject.CreateHyperlinksAsync();
+            await AssociatedObject.CreateHyperlinksAsync(AssociatedObject.CTS.Token);
         }
 
         public override void AutoScrollByMouse() {

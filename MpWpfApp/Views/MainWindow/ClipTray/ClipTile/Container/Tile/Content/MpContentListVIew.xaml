@@ -13,7 +13,7 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <local:MpContentListDropBehavior IsDebugEnabled="False" 
+        <local:MpContentListDropBehavior IsDebugEnabled="False"
                                          x:Name="ContentListDropBehavior" />
     </i:Interaction.Behaviors>
     <DockPanel x:Name="ContentListDockPanel"
@@ -42,7 +42,7 @@
             <ListBox x:Name="ContentListBox"
                      Loaded="ContentListBox_Loaded"
                      Unloaded="ContentListDockPanel_Unloaded"
-                     SelectionChanged="ContentListBox_SelectionChanged"                     
+                     SelectionChanged="ContentListBox_SelectionChanged"
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"

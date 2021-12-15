@@ -12,22 +12,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Xml;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for Mpxaml
     /// </summary>
-    public partial class MpRtbView : MpContentUserControl<MpContentItemViewModel> {
+    public partial class MpRtbView : MpContentUserControl<MpContentItemViewModel> {      
+
         public TextRange NewStartRange;
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
@@ -35,7 +30,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
-        public MpRtbView() {
+        public MpRtbView() : base() {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
         }
@@ -43,20 +38,37 @@ namespace MpWpfApp {
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.Expand:
+                    Rtb.FitDocToRtb();
+                    break;
                 case MpMessageType.Unexpand:
                     Rtb.FitDocToRtb();
+                    MpHelpers.Instance.RunOnMainThread(async()=> {
+                        await SyncModelsAsync();
+                    });
                     break;
             }
         }
 
+        protected override void RegisterAllBehaviors() {
+            RegisterBehavior(RtbViewDropBehavior);
+            RegisterBehavior(RtbHighlightBehavior);
+        }
+
         //private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
         //    switch (msg) {
-        //        case MpMessageType.ItemDragBegin:
-        //        case MpMessageType.ItemDragEnd:
-        //            //CaretAdornerLayer.Update();
+        //        case MpMessageType.RequeryCompleted:
+        //            if(BindingContext.IsPlaceholder) {
+        //                break;
+        //            }
+        //            if(string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+        //                break;
+        //            }
+
         //            break;
         //    }
         //}
+
+
 
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
@@ -70,7 +82,9 @@ namespace MpWpfApp {
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
+            base.OnLoad();
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
+
                 if(rtbivm.IsPlaceholder) {
                     return;
                 }
@@ -84,11 +98,11 @@ namespace MpWpfApp {
                 ScrollToHome();
 
                 MpHelpers.Instance.RunOnMainThread(async () => {
-                    await CreateHyperlinksAsync();
+                    await CreateHyperlinksAsync(CTS.Token);
                 });
-                
+
                 //MpMessenger.Instance.Register<MpMessageType>(
-                //    MpClipTrayViewModel.Instance, 
+                //    MpClipTrayViewModel.Instance,
                 //    ReceivedClipTrayViewModelMessage);
 
                 MpMessenger.Instance.Register<MpMessageType>(
@@ -156,7 +170,7 @@ namespace MpWpfApp {
                     ncivm.OnFitContentRequest += Ncivm_OnFitContentRequest;
                     if(e.OldValue != null) {
                         MpHelpers.Instance.RunOnMainThread(async () => {
-                            await CreateHyperlinksAsync();
+                            await CreateHyperlinksAsync(CTS.Token);
                         });
                     }
                 }
@@ -224,7 +238,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
-            RtbViewDropBehavior.Detach();
+            base.OnUnload();
 
             if(BindingContext == null) {
                 return;
@@ -397,6 +411,7 @@ namespace MpWpfApp {
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
             //Rtb.UpdateLayout();
             //string test = Rtb.Document.ToRichText();
+            //RtbHighlightBehavior.HideHighlighting();
 
             await ClearHyperlinks();
 
@@ -406,7 +421,7 @@ namespace MpWpfApp {
 
             rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemData));
 
-            await CreateHyperlinksAsync();
+            await CreateHyperlinksAsync(CTS.Token);
 
             //Rtb.UpdateLayout();
 
@@ -456,16 +471,12 @@ namespace MpWpfApp {
             //}
         }
 
-        public async Task CreateHyperlinksAsync(CancellationTokenSource cts = null, DispatcherPriority dp = DispatcherPriority.Normal) {
+        public async Task CreateHyperlinksAsync(CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal) {
             var rtbvm = BindingContext;
             rtbvm.IsBusy = true;
 
             if (Rtb == null || rtbvm.CopyItem == null) {
                 return;
-            }
-            if(cts == null) {
-                cts = new CancellationTokenSource();
-                //cts.CancelAfter(1000);
             }
             var rtbSelection = Rtb?.Selection;
             var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);
@@ -492,14 +503,14 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
-                            var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, cts.Token, dp, true);
+                            var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, ct, dp, true);
                             if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
                             }
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
-                                var thl = MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
+                                var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                             } else {
                                 var matchRun = new Run(matchRange.Text);
                                 matchRange.Text = "";

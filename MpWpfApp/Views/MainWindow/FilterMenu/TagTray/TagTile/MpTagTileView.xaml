@@ -172,16 +172,18 @@
 
             <Button x:Name="AddTagButton"
                     DockPanel.Dock="Right"
-                    Visibility="{Binding IsRootTagTile, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Height="30"                    
+                    Visibility="{Binding IsRootTagTile,
+                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                    Height="30"
                     Width="30"
-                    Grid.Column="1"        
+                    Grid.Column="1"
                     BorderThickness="0"
                     ToolTip="Add Collection"
                     ToolTipService.InitialShowDelay="100"
                     Template="{StaticResource SearchButtonControlTemplate}"
                     Command="{Binding Parent.CreateTagCommand}">
-                <Image Stretch="Fill" Margin="8,0,0,8"
+                <Image Stretch="Fill"
+                       Margin="8,0,0,8"
                        Source="/MpWpfApp;component/Resources/Images/add2.png" />
             </Button>
         </StackPanel>

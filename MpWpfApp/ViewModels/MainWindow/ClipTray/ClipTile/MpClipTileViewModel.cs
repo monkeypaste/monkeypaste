@@ -73,20 +73,6 @@ using System.Speech.Synthesis;
         #endregion
 
         #region View Models
-
-        private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection;
-        public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
-            get {
-                return _highlightTextRangeViewModelCollection;
-            }
-            set {
-                if (_highlightTextRangeViewModelCollection != value) {
-                    _highlightTextRangeViewModelCollection = value;
-                    OnPropertyChanged(nameof(HighlightTextRangeViewModelCollection));
-                }
-            }
-        }
-
         
         private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
         [MpChildViewModel(typeof(MpContentItemViewModel),true)]
@@ -381,11 +367,6 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Visibility AppIconHighlightBorderVisibility {
-            get {
-                return HighlightTextRangeViewModelCollection.HasAppMatch ? Visibility.Visible : Visibility.Hidden;
-            }
-        }
         public Visibility ToolTipVisibility {
             get {
                 if (HeadItem == null || !Properties.Settings.Default.ShowItemPreview) {
@@ -793,8 +774,6 @@ using System.Speech.Synthesis;
                     ItemViewModels.Add(civm);
                 }
 
-                HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
                 RequestUiUpdate();
 
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
@@ -918,7 +897,8 @@ using System.Speech.Synthesis;
             if (fromModel) {
                 ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
             } else {
-                foreach (var ivm in ItemViewModels) {
+                for(int i = 0;i < ItemViewModels.Count;i++) {
+                    var ivm = ItemViewModels[i];
                     ivm.CompositeSortOrderIdx = ItemViewModels.IndexOf(ivm);
                     if (ivm.CompositeSortOrderIdx == 0) {
                         ivm.CompositeParentCopyItemId = 0;

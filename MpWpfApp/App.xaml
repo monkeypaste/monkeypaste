@@ -1223,6 +1223,9 @@
         <local:MpBoolToScrollBarVisibilityFlipConverter x:Key="BoolToScrollBarVisibilityFlipConverter" />
         <local:MpNegateDoubleConverter x:Key="NegateDoubleConverter" />
         <local:MpBackgroundBrushToForegroundBrushConverter x:Key="BackgroundBrushToForegroundBrushConverter" />
+        <local:MpBoolToImageSourceConverter x:Key="BoolToImageSourceConverter" />
+        <local:MpBoolToIconSourceConverter x:Key="BoolToIconSourceConverter" />
+        <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

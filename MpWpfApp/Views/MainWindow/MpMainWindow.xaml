@@ -99,7 +99,13 @@
                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{Binding ClipTileSortViewModel}" />
                 <!--  Tag Tray  -->
-
+                <local:MpTagTrayView x:Name="TagTrayView"
+                                     Grid.Column="2"
+                                 Visibility="{Binding IsAnyTileExpanded,
+                                                      Converter={StaticResource BoolToVisibilityFlipConverter},
+                                                      Source={StaticResource ClipTrayViewModel}}"
+                                 DataContext="{Binding TagTrayViewModel,
+                                                       IsAsync=True}" />
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
