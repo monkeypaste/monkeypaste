@@ -16,14 +16,15 @@
     <StackPanel Margin="10,10,10,5">
         <TextBlock Text="Preset Name:"
                    FontSize="16"
-                   Margin="0,0,0,7"/>
+                   Margin="0,0,0,7" />
         <TextBox x:Name="ResponseTextBox"
                  TabIndex="1"
                  Loaded="ResponseTextBox_Loaded"
-                 TextChanged="ResponseTextBox_TextChanged" 
+                 TextChanged="ResponseTextBox_TextChanged"
                  FontSize="16"
-                 Margin="0,0,0,7"/>
-        <StackPanel Orientation="Horizontal" Margin="0,10"
+                 Margin="0,0,0,7" />
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,10"
                     HorizontalAlignment="Right">
             <Button x:Name="OkButton"
                     TabIndex="2"

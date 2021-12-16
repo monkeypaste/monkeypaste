@@ -19,9 +19,10 @@
         ShowInTaskbar="False"
         Topmost="True"
         WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance Type=local:MpSettingsWindowViewModel, IsDesignTimeCreatable=False}">
+        d:DataContext="{d:DesignInstance Type=local:MpSettingsWindowViewModel,
+                                         IsDesignTimeCreatable=False}">
     <Window.DataContext>
-        <local:MpSettingsWindowViewModel/>
+        <local:MpSettingsWindowViewModel />
     </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -46,7 +47,8 @@
             </Grid.ColumnDefinitions>
             <!--  Account Tab Button  -->
             <ToggleButton Grid.Column="0"
-                          IsChecked="{Binding SettingsPanel1Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
+                          IsChecked="{Binding SettingsPanel1Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabAccount}">
                 <StackPanel Orientation="Vertical">
@@ -62,7 +64,8 @@
             </ToggleButton>
             <!--  Prefs Tab Button  -->
             <ToggleButton Grid.Column="1"
-                          IsChecked="{Binding SettingsPanel2Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
+                          IsChecked="{Binding SettingsPanel2Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabPreferences}">
                 <StackPanel Orientation="Vertical">
@@ -78,7 +81,8 @@
             </ToggleButton>
             <!--  Security Tab Button  -->
             <ToggleButton Grid.Column="2"
-                          IsChecked="{Binding SettingsPanel3Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
+                          IsChecked="{Binding SettingsPanel3Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabSecurity}">
                 <StackPanel Orientation="Vertical">
@@ -94,7 +98,8 @@
             </ToggleButton>
             <!--  Shortcuts tab button  -->
             <ToggleButton Grid.Column="3"
-                          IsChecked="{Binding SettingsPanel4Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
+                          IsChecked="{Binding SettingsPanel4Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabShortcuts}">
                 <StackPanel Orientation="Vertical">
@@ -110,7 +115,8 @@
             </ToggleButton>
             <!--  Help tab Button  -->
             <ToggleButton Grid.Column="4"
-                          IsChecked="{Binding SettingsPanel5Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
+                          IsChecked="{Binding SettingsPanel5Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabHelp}">
                 <StackPanel Orientation="Vertical">

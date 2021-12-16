@@ -101,11 +101,11 @@
                 <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
-                                 Visibility="{Binding IsAnyTileExpanded,
-                                                      Converter={StaticResource BoolToVisibilityFlipConverter},
-                                                      Source={StaticResource ClipTrayViewModel}}"
-                                 DataContext="{Binding TagTrayViewModel,
-                                                       IsAsync=True}" />
+                                     Visibility="{Binding IsAnyTileExpanded,
+                                                          Converter={StaticResource BoolToVisibilityFlipConverter},
+                                                          Source={StaticResource ClipTrayViewModel}}"
+                                     DataContext="{Binding TagTrayViewModel,
+                                                           IsAsync=True}" />
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
@@ -138,7 +138,8 @@
                                          Grid.Row="1"
                                          Grid.Column="0"
                                          HorizontalAlignment="Left"
-                                         Height="{Binding ClipTrayHeight, Source={StaticResource ClipTrayViewModel}}"
+                                         Height="{Binding ClipTrayHeight,
+                                                          Source={StaticResource ClipTrayViewModel}}"
                                          Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
                 <!--<GridSplitter Background="Black"
                               Grid.Row="1"

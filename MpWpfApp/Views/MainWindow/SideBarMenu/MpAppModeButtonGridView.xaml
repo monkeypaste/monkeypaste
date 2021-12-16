@@ -43,7 +43,8 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="{Binding IsRighClickPasteModeTooltip}"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible, Source={StaticResource TagTrayViewModel}}"
+                      IsChecked="{Binding IsVisible,
+                                          Source={StaticResource TagTrayViewModel}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"
@@ -57,14 +58,15 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible, Source={StaticResource AnalyticItemCollectionViewModel}}"
+                      IsChecked="{Binding IsVisible,
+                                          Source={StaticResource AnalyticItemCollectionViewModel}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton x:Name="MouseModeToggleButton" 
+        <ToggleButton x:Name="MouseModeToggleButton"
                       Grid.Row="3"
                       ToolTipService.InitialShowDelay="0"
                       ToolTip="Mouse Modes"
@@ -85,9 +87,12 @@
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                              ToolTip="{Binding IsAutoCopyModeTooltip, Source={StaticResource AppModeViewModel}}"
-                                              IsEnabled="{Binding CanAutoCopyMode, Source={StaticResource AppModeViewModel}}"
-                                              IsChecked="{Binding IsAutoCopyMode, Source={StaticResource AppModeViewModel}}"
+                                              ToolTip="{Binding IsAutoCopyModeTooltip,
+                                                                Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAutoCopyMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAutoCopyMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
                                               Padding="10">
                                     <Image Source="{Binding Source={StaticResource LeftClickIcon},
                                                             Converter={StaticResource StringToImageSourceConverter}}"
@@ -100,9 +105,12 @@
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                              ToolTip="{Binding IsRighClickPasteModeTooltip, Source={StaticResource AppModeViewModel}}"
-                                              IsEnabled="{Binding CanRighClickPasteMode, Source={StaticResource AppModeViewModel}}"
-                                              IsChecked="{Binding IsRightClickPasteMode, Source={StaticResource AppModeViewModel}}"
+                                              ToolTip="{Binding IsRighClickPasteModeTooltip,
+                                                                Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanRighClickPasteMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsRightClickPasteMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
                                               Padding="10">
                                     <Image Source="{Binding Source={StaticResource RightClickIcon},
                                                             Converter={StaticResource StringToImageSourceConverter}}"
@@ -119,7 +127,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton x:Name="AppendModeToggleButton" 
+        <ToggleButton x:Name="AppendModeToggleButton"
                       Grid.Row="4"
                       Padding="10"
                       ToolTipService.InitialShowDelay="0"
@@ -140,9 +148,12 @@
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                              ToolTip="{Binding IsAppendModeTooltip, Source={StaticResource AppModeViewModel}}"
-                                              IsEnabled="{Binding CanAppendMode, Source={StaticResource AppModeViewModel}}"
-                                              IsChecked="{Binding IsAppendMode, Source={StaticResource AppModeViewModel}}"
+                                              ToolTip="{Binding IsAppendModeTooltip,
+                                                                Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAppendMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAppendMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
                                               Padding="10">
                                     <Image Source="{Binding Source={StaticResource AppendRunIcon},
                                                             Converter={StaticResource StringToImageSourceConverter}}"
@@ -155,9 +166,12 @@
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
                                               Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                              ToolTip="{Binding IsAppendLineModeTooltip, Source={StaticResource AppModeViewModel}}"
-                                              IsEnabled="{Binding CanAppendMode, Source={StaticResource AppModeViewModel}}"
-                                              IsChecked="{Binding IsAppendLineMode, Source={StaticResource AppModeViewModel}}"
+                                              ToolTip="{Binding IsAppendLineModeTooltip,
+                                                                Source={StaticResource AppModeViewModel}}"
+                                              IsEnabled="{Binding CanAppendMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
+                                              IsChecked="{Binding IsAppendLineMode,
+                                                                  Source={StaticResource AppModeViewModel}}"
                                               Padding="10">
                                     <Image Source="{Binding Source={StaticResource AppendLineIcon},
                                                             Converter={StaticResource StringToImageSourceConverter}}"
@@ -173,6 +187,6 @@
                                     Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
-        </ToggleButton>        
+        </ToggleButton>
     </Grid>
 </local:MpUserControl>

@@ -9,15 +9,19 @@
             <Grid.GestureRecognizers>
                 <DragGestureRecognizer x:Name="TagTileDragGestureRecognizer"
                                        CanDrag="True"
-                                       DragStartingCommand="{Binding BindingContext.ItemDragged, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragStartingCommand="{Binding BindingContext.ItemDragged,
+                                                                     Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                        DragStartingCommandParameter="{Binding}" />
                 <DropGestureRecognizer AllowDrop="True"
-                                       DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragLeaveCommand="{Binding BindingContext.ItemDragLeave,
+                                                                  Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                        DragLeaveCommandParameter="{Binding}"
-                                       DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DragOverCommand="{Binding BindingContext.ItemDraggedOver,
+                                                                 Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                        DragOverCommandParameter="{Binding}"
                                        Drop="DropGestureRecognizer_Drop"
-                                       DropCommand="{Binding BindingContext.ItemDropped, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                       DropCommand="{Binding BindingContext.ItemDropped,
+                                                             Source={RelativeSource AncestorType={x:Type CollectionView}}}"
                                        DropCommandParameter="{Binding}" />
             </Grid.GestureRecognizers>
             <Grid.Triggers>
@@ -44,7 +48,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <BoxView Margin="30,20,10,20"
-                         BackgroundColor="{Binding Tag.HexColor, Converter={StaticResource StringToColorConverter}}"
+                         BackgroundColor="{Binding Tag.HexColor,
+                                                   Converter={StaticResource StringToColorConverter}}"
                          HeightRequest="25"
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
@@ -61,7 +66,8 @@
                        FontSize="Micro"
                        HorizontalOptions="Center"
                        Text="{Binding CopyItemCount}"
-                       TextColor="{Binding Tag.HexColor, Converter={StaticResource TextColorFromBackgroundColorConverterFromString}}"
+                       TextColor="{Binding Tag.HexColor,
+                                           Converter={StaticResource TextColorFromBackgroundColorConverterFromString}}"
                        VerticalOptions="Center">
                     <!--<Label.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1"

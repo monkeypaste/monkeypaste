@@ -207,7 +207,11 @@
             <CheckBox x:Name="DoNotShowAgainCheckBox"
                       DockPanel.Dock="Left"
                       VerticalAlignment="Center"
-                      IsChecked="{Binding DoNotShowAgain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+                      IsChecked="{Binding DoNotShowAgain,
+                                          Mode=TwoWay,
+                                          UpdateSourceTrigger=PropertyChanged,
+                                          NotifyOnSourceUpdated=True,
+                                          NotifyOnTargetUpdated=True}" />
             <Label DockPanel.Dock="Right"
                    VerticalAlignment="Center"
                    FontSize="12"

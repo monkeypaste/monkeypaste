@@ -13,7 +13,8 @@
                      d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <local:MpClipTileTitleHighlightTBehavior x:Name="ClipTileTitleHighlightBehavior"/>
+        <local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior"/>
+        <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior"/>
     </i:Interaction.Behaviors>
     <Grid x:Name="TileTitleGrid"
           Unloaded="Grid_Unloaded">
@@ -173,7 +174,16 @@
                Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize,
                                                     Mode=OneWay}" />
         <!--  Clip Title Icon Image  -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" ClipToBounds="False">
+            <Ellipse x:Name="SourceMatchEllipse"
+                     Visibility="Hidden" 
+                     StrokeThickness="1"
+                    RenderTransformOrigin="0.5,0.5"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center"
+                     Margin="0,3,13,0"
+                     Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}"
+                     Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}"/>
             <Button x:Name="ClipTileAppIconImageButton"
                     IsHitTestVisible="{Binding HasScrollVelocity,
                                                Source={StaticResource ClipTrayViewModel},

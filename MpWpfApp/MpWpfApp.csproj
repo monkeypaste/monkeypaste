@@ -128,6 +128,8 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\MpClipTileTitleHighlightBehavior.cs" />
+    <Compile Include="Behaviors\Highlighting\MpSourceHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Selector\MpHighlightSelectorBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
     <Compile Include="Behaviors\Highlighting\MpFileListItemHighlightBehavior.cs" />
@@ -274,6 +276,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
@@ -1089,8 +1092,11 @@
     <PackageReference Include="QRCoder">
       <Version>1.4.3</Version>
     </PackageReference>
-    <PackageReference Include="sqlite-net-static">
+    <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>
+    </PackageReference>
+    <PackageReference Include="SQLitePCLRaw.bundle_green">
+      <Version>2.0.7</Version>
     </PackageReference>
     <PackageReference Include="System.Reactive">
       <Version>5.0.0</Version>

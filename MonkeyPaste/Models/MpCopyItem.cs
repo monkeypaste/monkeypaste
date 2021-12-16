@@ -114,7 +114,7 @@ namespace MonkeyPaste {
             var searchResult = (from ci in allCopyItems
                                 join cit in allCopyItemTags on
                                 tagId equals cit.TagId
-                                where ci.ItemData.ContainsByUserSensitivity(searchString)
+                                where ci.ItemData.ContainsByCaseOrRegexSetting(searchString)
                                 select ci);//.Skip(2).Take(2);
 
             return new ObservableCollection<MpCopyItem>(searchResult);

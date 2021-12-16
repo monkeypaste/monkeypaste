@@ -8,9 +8,11 @@
                     Margin="10"
                     SelectionMode="Single"
                     ItemsSource="{Binding TagViewModels}"
-                    SelectedItem="{Binding SelectedTagViewModel, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedTagViewModel,
+                                           Mode=TwoWay}"
                     SelectionChangedCommand="{Binding SelectionChangedCommand}"
-                    SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference TagCollectionView}}">
+                    SelectionChangedCommandParameter="{Binding SelectedItem,
+                                                               Source={x:Reference TagCollectionView}}">
         <CollectionView.Header>
             <Grid ColumnDefinitions="0.2*,0.6*,0.2*">
                 <Image Margin="5"

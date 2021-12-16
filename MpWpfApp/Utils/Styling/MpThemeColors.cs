@@ -40,9 +40,10 @@ namespace MpWpfApp {
 
         #region Private Variables
 
-        private static double _defaultOpacity = 0.6;
+        private static double _defaultOpacity = 0.73;
 
-        private Dictionary<MpThemeItemType, Brush> _lightThemeColors = new Dictionary<MpThemeItemType, Brush> {
+        private Dictionary<MpThemeItemType, Brush> _lightThemeColors =
+            new Dictionary<MpThemeItemType, Brush> {
             {MpThemeItemType.Title_Menu_Background_Color, new SolidColorBrush(Colors.DimGray){ Opacity=_defaultOpacity } },
             {MpThemeItemType.Filter_Menu_Background_Color, new SolidColorBrush(Colors.DarkViolet){ Opacity=_defaultOpacity } },
             {MpThemeItemType.Clip_Tray_Background_Color, new SolidColorBrush(Colors.MediumPurple){ Opacity=_defaultOpacity } },

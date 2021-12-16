@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MpWpfApp"        
+        xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
         Height="450"
         Width="800"
@@ -17,7 +17,7 @@
         d:DataContext="{d:DesignInstance Type=local:MpMessageBoxViewModel,
                                          IsDesignTimeCreatable=True}">
     <Window.DataContext>
-        <local:MpMessageBoxViewModel/>
+        <local:MpMessageBoxViewModel />
     </Window.DataContext>
     <Grid x:Name="grdMessageBox"
           Background="#33000B4B"
@@ -78,14 +78,15 @@
                            Text="{Binding Caption}"
                            VerticalAlignment="Top"
                            FontFamily="Poppins"
-                           FontSize="18"/>
+                           FontSize="18" />
                 <Image x:Name="imgMessageBoxCancel"
                        HorizontalAlignment="Right"
                        Height="103"
                        Margin="0,19,30,0"
                        VerticalAlignment="Top"
                        Width="100"
-                       Source="{Binding IconPath, Converter={StaticResource StringToImageSourceConverter}}"/>
+                       Source="{Binding IconPath,
+                                        Converter={StaticResource StringToImageSourceConverter}}" />
                 <Button x:Name="btnMessageBoxClose"
                         FontWeight="SemiBold"
                         Content="Fermer"

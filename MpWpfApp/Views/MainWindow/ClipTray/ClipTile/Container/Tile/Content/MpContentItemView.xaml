@@ -13,52 +13,54 @@
                                                       IsDesignTimeCreatable=False}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch">
-    <Border BorderThickness="1"
-            Loaded="ContentListItemView_Loaded"
-            Unloaded="Border_Unloaded"
-            DataContextChanged="ContentListItemView_DataContextChanged"
-            IsHitTestVisible="{Binding HasScrollVelocity,
-                                       Source={StaticResource ClipTrayViewModel},
-                                       Converter={StaticResource BoolFlipConverter}}"
-            PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
-            PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
-            MouseEnter="ContentListItemView_MouseEnter"
-            MouseLeave="ContentListItemView_MouseLeave">
-        <Border.Resources>
-            <DataTemplate x:Key="TextContent">
-                <local:MpRtbView DataContext="{Binding}" />
-            </DataTemplate>
-            <DataTemplate x:Key="ImageContent">
-                <local:MpImageItemView DataContext="{Binding}" />
-            </DataTemplate>
-            <DataTemplate x:Key="FileListContent">
-                <local:MpFileListItemView DataContext="{Binding}" />
-            </DataTemplate>
-            <local:MpContentViewSelector x:Key="ContentViewSelector"
-                                         TextContentTemplate="{StaticResource TextContent}"
-                                         FileContentTemplate="{StaticResource FileListContent}"
-                                         ImageContentTemplate="{StaticResource ImageContent}" />
-        </Border.Resources>
-        <Border.BorderBrush>
-            <DrawingBrush Viewport="0,0,7,7"
-                          ViewportUnits="Absolute"
-                          TileMode="Tile">
-                <DrawingBrush.Drawing>
-                    <DrawingGroup>
-                        <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
-                            <GeometryDrawing.Geometry>
-                                <GeometryGroup>
-                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
-                                    <RectangleGeometry Rect="50,50,50,50" />
-                                </GeometryGroup>
-                            </GeometryDrawing.Geometry>
-                        </GeometryDrawing>
-                    </DrawingGroup>
-                </DrawingBrush.Drawing>
-            </DrawingBrush>
-        </Border.BorderBrush>
-        <ContentControl x:Name="ContentView"
-                        Content="{Binding}"
-                        ContentTemplateSelector="{StaticResource ContentViewSelector}" />
-    </Border>
+        <Border BorderThickness="1"
+                Loaded="ContentListItemView_Loaded"
+                Unloaded="Border_Unloaded"
+                DataContextChanged="ContentListItemView_DataContextChanged"
+                IsHitTestVisible="{Binding HasScrollVelocity,
+                                           Source={StaticResource ClipTrayViewModel},
+                                           Converter={StaticResource BoolFlipConverter}}"
+                PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
+                PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
+                MouseEnter="ContentListItemView_MouseEnter"
+                MouseLeave="ContentListItemView_MouseLeave"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border.Resources>
+                <DataTemplate x:Key="TextContent">
+                    <local:MpRtbView DataContext="{Binding}" />
+                </DataTemplate>
+                <DataTemplate x:Key="ImageContent">
+                    <local:MpImageItemView DataContext="{Binding}" />
+                </DataTemplate>
+                <DataTemplate x:Key="FileListContent">
+                    <local:MpFileListItemView DataContext="{Binding}" />
+                </DataTemplate>
+                <local:MpContentViewSelector x:Key="ContentViewSelector"
+                                             TextContentTemplate="{StaticResource TextContent}"
+                                             FileContentTemplate="{StaticResource FileListContent}"
+                                             ImageContentTemplate="{StaticResource ImageContent}" />
+            </Border.Resources>
+            <Border.BorderBrush>
+                <DrawingBrush Viewport="0,0,7,7"
+                              ViewportUnits="Absolute"
+                              TileMode="Tile">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
+                                        <RectangleGeometry Rect="50,50,50,50" />
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Border.BorderBrush>
+            <ContentControl x:Name="ContentView"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource ContentViewSelector}" />
+        </Border>
 </local:MpUserControl>

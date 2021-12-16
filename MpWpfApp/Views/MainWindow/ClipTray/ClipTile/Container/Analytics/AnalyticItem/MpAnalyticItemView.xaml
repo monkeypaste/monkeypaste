@@ -129,5 +129,5 @@
                 </TextBlock.Inlines>
             </TextBlock>
         </DockPanel>
-        </Border>
+    </Border>
 </local:MpUserControl>

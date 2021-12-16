@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -37,7 +38,7 @@ namespace MpWpfApp {
 
         public int Priority => (int)HighlightType;
 
-        public int SelectedIdx { get; set; }
+        public int SelectedIdx { get; set; } = -1;
 
         public int MatchCount => _matches.Count;
 
@@ -102,12 +103,14 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public void Reset() {
+        public abstract void ScrollToSelectedItem();
+
+        public virtual void Reset() {
             ClearHighlighting();
             ReplaceDocumentsBgColors();
         }
 
-        public async Task FindHighlighting() {
+        public virtual async Task FindHighlighting() {
             await Task.Delay(5);
             string st = MpDataModelProvider.Instance.QueryInfo.SearchText;
             if(AssociatedObject.DataContext is MpContentItemViewModel civm && civm.CopyItemTitle == "Untitled650") {
@@ -120,12 +123,6 @@ namespace MpWpfApp {
 
             SelectedIdx = -1;
 
-            //_matches.Sort((x, y) => {
-            //    if(!x.Start.IsInSameDocument(y.Start)) {
-            //        return -1;
-            //    }
-            //    return x.Start.CompareTo(y.Start);
-            //});
             if (_matches.Count > 1) {
                 MpSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
             }
@@ -140,12 +137,13 @@ namespace MpWpfApp {
             ReplaceDocumentsBgColors();
         }
 
-        public void ApplyHighlighting() {
+        public virtual void ApplyHighlighting() {
             for (int i = 0; i < _matches.Count; i++) {
                 var match = _matches[i];
                 Brush b = i == SelectedIdx ? ActiveHighlightBrush : InactiveHighlightBrush;
                 match.ApplyPropertyValue(TextElement.BackgroundProperty, b);
             }
+            ScrollToSelectedItem();
         }
 
         public void UpdateUniqueBackgrounds() {
@@ -165,6 +163,9 @@ namespace MpWpfApp {
 
         private List<KeyValuePair<TextRange, Brush>> FindNonTransparentRangeList() {
             var matchRangeList = new List<KeyValuePair<TextRange, Brush>>();
+            if(HighlightType == MpHighlightType.Source) {
+                return matchRangeList;
+            }
 
             for (TextPointer position = ContentRange.Start;
               position != null && position.CompareTo(ContentRange.End) <= 0;

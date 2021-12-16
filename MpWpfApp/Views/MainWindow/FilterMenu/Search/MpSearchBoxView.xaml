@@ -47,9 +47,9 @@
                             CornerRadius="10"
                             BorderBrush="{Binding IsTextValid,
                                                   Converter={StaticResource BoolToBrushConverter},
-                                                  ConverterParameter='#FFFF0000|#00FFFF'}"
+                                                  ConverterParameter='#FFFFFFFF|#FFFF0000'}"
                             Background="White"
-                            BorderThickness="0">
+                            BorderThickness="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.15*" />
@@ -67,6 +67,18 @@
                         Height="25"
                         Template="{StaticResource SearchButtonControlTemplate}"
                         BorderThickness="0">
+                    <!--<Button.ContextMenu>
+                        <ContextMenu ItemsSource="{Binding Filters}">
+                            <ContextMenu.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{Binding Label}" />
+                                    <Setter Property="IsChecked" Value="{Binding IsChecked, Mode=TwoWay}" />
+                                    <Setter Property="IsCheckable" Value="True"/>
+                                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                                </Style>
+                            </ContextMenu.ItemContainerStyle>
+                        </ContextMenu>
+                    </Button.ContextMenu>-->
                     <Image Source="/MpWpfApp;component/Resources/Images/search.png"
                            Stretch="Fill"
                            SnapsToDevicePixels="True" />

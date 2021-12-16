@@ -72,6 +72,7 @@ namespace MonkeyPaste {
             string query = "select RootId from MpSortableCopyItem_View";
             string tagClause = string.Empty;
             string sortClause = string.Empty;
+            List<string> types = new List<string>();
             List<string> filters = new List<string>();
 
             if (QueryInfo.TagId != MpTag.AllTagId) {
@@ -89,35 +90,52 @@ namespace MonkeyPaste {
                     QueryInfo.TagId);
             }
             if (!string.IsNullOrEmpty(QueryInfo.SearchText)) {
+                string searchOp = "like";
+                string escapeStr = "";
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
-
+                    searchOp = "=";
+                } else if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
+                    searchOp = "REGEXP";
+                } else {
+                    escapeStr = "%";
                 }
                 string searchText = QueryInfo.SearchText;
 
-                string escapeStr = string.Empty;
-                if (searchText.Contains('%')) {
+                string escapeClause = string.Empty;
+                if (searchOp == "like" && searchText.Contains('%')) {
                     searchText = searchText.Replace("%", @"\%");
-                    escapeStr = @" ESCAPE '\'";
+                    escapeClause = @" ESCAPE '\'";
                 }
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Title)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("Title"), searchText, escapeStr));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Text) ||
-                    QueryInfo.FilterFlags.HasFlag(MpContentFilterType.File)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("ItemData"), searchText, escapeStr));
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Content)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
                 }
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Url)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("UrlPath"), searchText, escapeStr));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
+                }
+                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
                 }
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("AppName"), searchText, escapeStr));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
                 }
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("AppPath"), searchText, escapeStr));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
                 if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
-                    filters.Add(string.Format(@"{0} like '%{1}%'{2}", CaseFormat("ItemDescription"), searchText, escapeStr));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemDescription"), searchOp, escapeStr, searchText, escapeClause));
                 }
+            }
+            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
+                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.RichText));
+            }
+            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
+                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.FileList));
+            }
+            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
+                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Image));
             }
             switch (QueryInfo.SortType) {
                 case MpContentSortType.CopyDateTime:
@@ -145,17 +163,32 @@ namespace MonkeyPaste {
             if (QueryInfo.IsDescending) {
                 sortClause += " DESC";
             }
+
             if (!string.IsNullOrEmpty(tagClause)) {
                 query += " where " + tagClause;
                 if (filters.Count > 0) {
                     query += " and (";
                     query += string.Join(" or ", filters) + ")";
                 }
+                if (types.Count > 0) {
+                    query += " and (";
+                    query += string.Join(" or ", types) + ")";
+                }
             } else if (filters.Count > 0) {
                 query += " where ";
+                if(types.Count > 0) {
+                    query += "(";
+                }
                 query += string.Join(" or ", filters);
+                if (types.Count > 0) {
+                    query += " and (";
+                    query += string.Join(" or ", types) + ")";
+                }
+            } else if(types.Count > 0) {
+                query += " where ";
+                query += string.Join(" or ", types);
             }
-            //query += " group by RootId";
+            
             query += " " + sortClause;
             return query;
         }

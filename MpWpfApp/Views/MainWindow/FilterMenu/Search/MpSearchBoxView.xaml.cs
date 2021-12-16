@@ -18,11 +18,19 @@ namespace MpWpfApp {
     /// Interaction logic for MpSearchBoxView.xaml
     /// </summary>
     public partial class MpSearchBoxView : MpUserControl<MpSearchBoxViewModel> {
+        private ContextMenu searchByContextMenu;
+
         public MpSearchBoxView() {
             InitializeComponent();
         }
         private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
             SearchBox.Focus();
+
+            searchByContextMenu = new ContextMenu();
+
+            foreach (var sfvm in BindingContext.Filters) {
+                searchByContextMenu.Items.Add(CreateSearchByMenuItem(sfvm));
+            }
         }
 
         private void SearchTextBoxBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -65,82 +73,38 @@ namespace MpWpfApp {
         }
 
         private void SearchDropDownButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var sbvm = DataContext as MpSearchBoxViewModel;
-            var searchByContextMenu = new ContextMenu();
-
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Case Sensitive", sbvm.SearchByIsCaseSensitive));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Collection", sbvm.SearchByTag));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Title", sbvm.SearchByTitle));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Text", sbvm.SearchByRichText));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Source Url", sbvm.SearchByUrl));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("File List", sbvm.SearchByFileList));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Image", sbvm.SearchByImage));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Application Name", sbvm.SearchByApplicationName));
-            searchByContextMenu.Items.Add(
-                CreateSearchByMenuItem("Process Name", sbvm.SearchByProcessName));
-
-
-            ((MenuItem)searchByContextMenu.Items[1]).Visibility = Visibility.Collapsed;
-
-            searchByContextMenu.Closed += (s1, e3) => {
-                for (int i = 0; i < searchByContextMenu.Items.Count; i++) {
-                    var isChecked = ((CheckBox)((MenuItem)searchByContextMenu.Items[i]).Icon).IsChecked.Value;
-                    switch (i) {
-                        case 0:
-                            sbvm.SearchByIsCaseSensitive = isChecked;
-                            break;
-                        case 1:
-                            sbvm.SearchByTag = isChecked;
-                            break;
-                        case 2:
-                            sbvm.SearchByTitle = isChecked;
-                            break;
-                        case 3:
-                            sbvm.SearchByRichText = isChecked;
-                            break;
-                        case 4:
-                            sbvm.SearchByUrl = isChecked;
-                            break;
-                        case 5:
-                            sbvm.SearchByFileList = isChecked;
-                            break;
-                        case 6:
-                            sbvm.SearchByImage = isChecked;
-                            break;
-                        case 7:
-                            sbvm.SearchByApplicationName = isChecked;
-                            break;
-                        case 8:
-                            sbvm.SearchByProcessName = isChecked;
-                            break;
-                    }
-                }
-                Properties.Settings.Default.Save();
-            };
-
             SearchDropDownButton.ContextMenu = searchByContextMenu;
-            searchByContextMenu.PlacementTarget = SearchTextBoxBorder;
-            searchByContextMenu.IsOpen = true;
+            SearchDropDownButton.ContextMenu.PlacementTarget = SearchDropDownButton;
+            SearchDropDownButton.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Top;
+            SearchDropDownButton.ContextMenu.IsOpen = true;
         }
 
-        private MenuItem CreateSearchByMenuItem(string label, bool propertyValue) {
-            var cb = new CheckBox();
-            cb.IsChecked = propertyValue;
-
-            var l = new Label();
-            l.Content = label;
-
+        private object CreateSearchByMenuItem(MpSearchFilterViewModel sfvm) {
             var menuItem = new MenuItem();
-            menuItem.Icon = cb;
-            menuItem.Header = l;
+            if(sfvm.IsSeperator) {
+                return new Separator();
+            } else {
+                var cb = new CheckBox();
+                MpHelpers.Instance.CreateBinding(
+                    sfvm,
+                    new PropertyPath(nameof(sfvm.IsChecked)),
+                    cb, CheckBox.IsCheckedProperty, BindingMode.TwoWay);
+
+                MpHelpers.Instance.CreateBinding(
+                    sfvm,
+                    new PropertyPath(nameof(sfvm.IsEnabled)),
+                    cb, CheckBox.IsEnabledProperty);
+
+                var l = new Label();
+
+                MpHelpers.Instance.CreateBinding(
+                    sfvm,
+                    new PropertyPath(nameof(sfvm.Label)),
+                    l, Label.ContentProperty);
+
+                menuItem.Icon = cb;
+                menuItem.Header = l;
+            }
 
             return menuItem;
         }

@@ -256,13 +256,13 @@
     <Setting Name="SearchByApplicationName" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SearchByRichText" Type="System.Boolean" Scope="User">
+    <Setting Name="SearchByTextType" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SearchByImage" Type="System.Boolean" Scope="User">
+    <Setting Name="SearchByImageType" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SearchByFileList" Type="System.Boolean" Scope="User">
+    <Setting Name="SearchByFileType" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MaxQrCodeCharLength" Type="System.Int32" Scope="Application">
@@ -405,6 +405,15 @@
     </Setting>
     <Setting Name="MainWindowInitialHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SearchByContent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByUrlTitle" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByRegex" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

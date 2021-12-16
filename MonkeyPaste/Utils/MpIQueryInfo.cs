@@ -20,14 +20,17 @@ namespace MonkeyPaste {
         None = 0,
         CaseSensitive = 1,
         Title = 2,
-        Text = 4,
-        File = 8,
-        Image = 16,
+        TextType = 4,
+        FileType = 8,
+        ImageType = 16,
         Url = 32,
         AppName = 64,
         AppPath = 128,
         Meta = 256,
-        Tag = 512
+        Tag = 512,
+        Regex = 1024,
+        Content = 2048,
+        UrlTitle = 4096
     }
 
     public interface MpIQueryInfo {

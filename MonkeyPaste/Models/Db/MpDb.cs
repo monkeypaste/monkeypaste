@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
+using SQLitePCL;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -18,9 +20,6 @@ namespace MonkeyPaste {
         private MpIDbInfo _dbInfo;
         private object _rdLock = new object();
         private SQLiteAsyncConnection _connectionAsync;
-
-        //private readonly SemaphoreSlim mutex = new SemaphoreSlim(1, 1);
-
         #endregion
 
         #region Properties
@@ -300,23 +299,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods  
-        private void CreateConnection() {
-            SQLiteConnectionString connStr = null;
-            connStr = new SQLiteConnectionString(
-                    databasePath: _dbInfo.GetDbFilePath(),
-                    storeDateTimeAsTicks: true,
-                    openFlags: SQLiteOpenFlags.ReadWrite |
-                               SQLiteOpenFlags.Create |
-                               SQLiteOpenFlags.SharedCache |
-                               SQLiteOpenFlags.FullMutex
-                    );
-
-            if (_connectionAsync == null) {
-                _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
-            }            
-        }
 
         private async Task InitDb() {
+
+            //SQLitePCL.Batteries.Init();
+
             var dbPath = _dbInfo.GetDbFilePath();
             
             //File.Delete(dbPath);
@@ -326,7 +313,10 @@ namespace MonkeyPaste {
             if(isNewDb) {
                 using (File.Create(dbPath));
             }
+
             CreateConnection();
+
+            //CreateFunctions();
 
             if (UseWAL) {
                 if (_connectionAsync != null) {
@@ -354,6 +344,36 @@ namespace MonkeyPaste {
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
+        }
+
+        private void CreateConnection() {
+            if (_connectionAsync == null) {
+                SQLitePCL.Batteries.Init();
+                var _connStr = new SQLiteConnectionString(
+                                databasePath: _dbInfo.GetDbFilePath(),
+                                storeDateTimeAsTicks: true,
+                                openFlags: SQLiteOpenFlags.ReadWrite |
+                                           SQLiteOpenFlags.Create |
+                                           SQLiteOpenFlags.SharedCache |
+                                           SQLiteOpenFlags.FullMutex
+                                );
+                _connectionAsync = new SQLiteAsyncConnection(_connStr) { Trace = true };
+                SQLitePCL.raw.sqlite3_create_function(
+                    _connectionAsync.GetConnection().Handle, 
+                    "REGEXP", 2, null, MatchRegex);                
+            }
+        }
+
+        private void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
+            bool isMatched = System.Text.RegularExpressions.Regex.IsMatch(
+                SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string(),
+                SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string(),
+                RegexOptions.IgnoreCase);
+
+            if (isMatched)
+                SQLitePCL.raw.sqlite3_result_int(ctx, 1);
+            else
+                SQLitePCL.raw.sqlite3_result_int(ctx, 0);
         }
 
         private async Task InitTables() {

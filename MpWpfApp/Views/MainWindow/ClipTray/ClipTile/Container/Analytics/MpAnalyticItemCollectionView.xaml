@@ -10,13 +10,13 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
-   
-        <TreeView Name="AnalyticTreeView"
-                  BorderThickness="0"
-                  Background="Transparent"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-            <!--<TreeView.ItemContainerStyle>
+
+    <TreeView Name="AnalyticTreeView"
+              BorderThickness="0"
+              Background="Transparent"
+              ScrollViewer.VerticalScrollBarVisibility="Auto"
+              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+        <!--<TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded"
                             Value="{Binding IsExpanded,
@@ -27,61 +27,63 @@
                             Value="Top" />
                 </Style>
             </TreeView.ItemContainerStyle>-->
-            <TreeViewItem ItemsSource="{Binding Items}" IsExpanded="True">
-                <TreeViewItem.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                              ItemsSource="{Binding Children}">
-                        <local:MpAnalyticItemView MinWidth="250" DataContext="{Binding}" />
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemComponentViewModel}">
-                        <local:MpAnalyticItemComponentView DataContext="{Binding}" />
-                    </HierarchicalDataTemplate>
-                </TreeViewItem.Resources>
-                <TreeViewItem.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Style.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                             Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                             Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                                             Color="Transparent" />
-                        </Style.Resources>
-                        <Setter Property="IsExpanded"
+        <TreeViewItem ItemsSource="{Binding Items}"
+                      IsExpanded="True">
+            <TreeViewItem.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
+                                          ItemsSource="{Binding Children}">
+                    <local:MpAnalyticItemView MinWidth="250"
+                                              DataContext="{Binding}" />
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemComponentViewModel}">
+                    <local:MpAnalyticItemComponentView DataContext="{Binding}" />
+                </HierarchicalDataTemplate>
+            </TreeViewItem.Resources>
+            <TreeViewItem.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                         Color="Transparent" />
+                    </Style.Resources>
+                    <Setter Property="IsExpanded"
                             Value="{Binding IsExpanded,
                                             Mode=TwoWay}" />
-                        <Setter Property="HorizontalContentAlignment"
+                    <Setter Property="HorizontalContentAlignment"
                             Value="Left" />
-                        <Setter Property="VerticalContentAlignment"
+                    <Setter Property="VerticalContentAlignment"
                             Value="Top" />
-                        <Setter Property="Background"
-                                Value="Transparent"/>
-                    </Style>
-                </TreeViewItem.ItemContainerStyle>
-                <TreeViewItem.Header>
-                    <local:MpClipBorder x:Name="AnalyticRootItemBorder"
-                                        MouseEnter="AnalyticRootItemBorder_MouseEnter"
-                                        MouseLeave="AnalyticRootItemBorder_MouseLeave"
-                                        CornerRadius="10"
-                                        Focusable="False"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Left"
-                                        Background="Transparent"
-                                        BorderThickness="0">
-                        <TextBlock x:Name="TagTextBlock"
-                                   Grid.Column="1"
-                                   Grid.Row="0"
-                                   Margin="3,0,0,0"
-                                   Padding="5"
-                                   Background="Transparent"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontWeight="SemiBold"
-                                   Foreground="White"
-                                   Text="Analyzers"
-                                   FontSize="18" />
-                    </local:MpClipBorder>
-                </TreeViewItem.Header>
-            </TreeViewItem>
-        </TreeView>
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                </Style>
+            </TreeViewItem.ItemContainerStyle>
+            <TreeViewItem.Header>
+                <local:MpClipBorder x:Name="AnalyticRootItemBorder"
+                                    MouseEnter="AnalyticRootItemBorder_MouseEnter"
+                                    MouseLeave="AnalyticRootItemBorder_MouseLeave"
+                                    CornerRadius="10"
+                                    Focusable="False"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Left"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                    <TextBlock x:Name="TagTextBlock"
+                               Grid.Column="1"
+                               Grid.Row="0"
+                               Margin="3,0,0,0"
+                               Padding="5"
+                               Background="Transparent"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               Foreground="White"
+                               Text="Analyzers"
+                               FontSize="18" />
+                </local:MpClipBorder>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+    </TreeView>
 </local:MpUserControl>

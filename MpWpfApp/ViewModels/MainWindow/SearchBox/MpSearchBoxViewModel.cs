@@ -28,196 +28,98 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpSearchCriteriaItemViewModel>();
 
-        #endregion
 
-        #region SearchBy Property Settings
-        private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;
-        public bool SearchByIsCaseSensitive {
+        private ObservableCollection<MpSearchFilterViewModel> _filters;
+        public ObservableCollection<MpSearchFilterViewModel> Filters {
             get {
-                return _searchByIsCaseSensitive;
-            }
-            set {
-                if (_searchByIsCaseSensitive != value) {
-                    _searchByIsCaseSensitive = value;
-                    Properties.Settings.Default.SearchByIsCaseSensitive = _searchByIsCaseSensitive;
-                    OnPropertyChanged(nameof(SearchByIsCaseSensitive));
+                if (_filters == null) {
+                    _filters = new ObservableCollection<MpSearchFilterViewModel>() {
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Content",
+                            nameof(MpPreferences.Instance.SearchByContent),
+                            MpContentFilterType.Content),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Title",
+                            nameof(MpPreferences.Instance.SearchByTitle),
+                            MpContentFilterType.Title),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Url",
+                            nameof(MpPreferences.Instance.SearchBySourceUrl),
+                            MpContentFilterType.Url),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Url Title",
+                            nameof(MpPreferences.Instance.SearchByUrlTitle),
+                            MpContentFilterType.UrlTitle),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Application Path",
+                            nameof(MpPreferences.Instance.SearchByProcessName),
+                            MpContentFilterType.AppPath),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Application Name",
+                            nameof(MpPreferences.Instance.SearchByApplicationName),
+                            MpContentFilterType.AppName),
+                        //new MpSearchFilterViewModel(
+                        //    this,
+                        //    "Collections",
+                        //    nameof(MpPreferences.Instance.SearchByTag),
+                        //    MpContentFilterType.Tag),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Description",
+                            nameof(MpPreferences.Instance.SearchByDescription),
+                            MpContentFilterType.Meta),
+                        new MpSearchFilterViewModel(this,true),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Text Type",
+                            nameof(MpPreferences.Instance.SearchByTextType),
+                            MpContentFilterType.TextType),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "File Type",
+                            nameof(MpPreferences.Instance.SearchByFileType),
+                            MpContentFilterType.FileType),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Image Type",
+                            nameof(MpPreferences.Instance.SearchByImageType),
+                            MpContentFilterType.ImageType),
+                        new MpSearchFilterViewModel(this,true),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Case Sensitive",
+                            nameof(MpPreferences.Instance.SearchByIsCaseSensitive),
+                            MpContentFilterType.CaseSensitive),
+                        new MpSearchFilterViewModel(
+                            this,
+                            "Regular Expression",
+                            nameof(MpPreferences.Instance.SearchByRegex),
+                            MpContentFilterType.Regex)
+                    };
                 }
-            }
-        }
-
-        private bool _searchByTitle = Properties.Settings.Default.SearchByTitle;
-        public bool SearchByTitle {
-            get {
-                return _searchByTitle;
-            }
-            set {
-                if (_searchByTitle != value) {
-                    _searchByTitle = value;
-                    Properties.Settings.Default.SearchByTitle = _searchByTitle;
-                    OnPropertyChanged(nameof(SearchByTitle));
-                }
-            }
-        }
-
-        private bool _searchByRichText = Properties.Settings.Default.SearchByRichText;
-        public bool SearchByRichText {
-            get {
-                return _searchByRichText;
-            }
-            set {
-                if (_searchByRichText != value) {
-                    _searchByRichText = value;
-                    Properties.Settings.Default.SearchByRichText = _searchByRichText;
-                    OnPropertyChanged(nameof(SearchByRichText));
-                }
-            }
-        }
-
-        private bool _searchByUrl = Properties.Settings.Default.SearchBySourceUrl;
-        public bool SearchByUrl {
-            get {
-                return _searchByUrl;
-            }
-            set {
-                if (_searchByUrl != value) {
-                    _searchByUrl = value;
-                    Properties.Settings.Default.SearchBySourceUrl = _searchByUrl;
-                    OnPropertyChanged(nameof(SearchByUrl));
-                }
-            }
-        }
-
-        private bool _searchByFileList = Properties.Settings.Default.SearchByFileList;
-        public bool SearchByFileList {
-            get {
-                return _searchByFileList;
-            }
-            set {
-                if (_searchByFileList != value) {
-                    _searchByFileList = value;
-                    Properties.Settings.Default.SearchByFileList = _searchByFileList;
-                    OnPropertyChanged(nameof(SearchByFileList));
-                }
-            }
-        }
-
-        private bool _searchByImage = Properties.Settings.Default.SearchByImage;
-        public bool SearchByImage {
-            get {
-                return _searchByImage;
-            }
-            set {
-                if (_searchByImage != value) {
-                    _searchByImage = value;
-                    Properties.Settings.Default.SearchByImage = _searchByImage;
-                    OnPropertyChanged(nameof(SearchByImage));
-                }
-            }
-        }
-
-        private bool _searchByApplicationName = Properties.Settings.Default.SearchByApplicationName;
-        public bool SearchByApplicationName {
-            get {
-                return _searchByApplicationName;
-            }
-            set {
-                if (_searchByApplicationName != value) {
-                    _searchByApplicationName = value;
-                    Properties.Settings.Default.SearchByApplicationName = _searchByApplicationName;
-                    OnPropertyChanged(nameof(SearchByApplicationName));
-                }
-            }
-        }
-
-        private bool _searchByTag = Properties.Settings.Default.SearchByTag;
-        public bool SearchByTag {
-            get {
-                return _searchByTag;
-            }
-            set {
-                if (_searchByTag != value) {
-                    _searchByTag = value;
-                    Properties.Settings.Default.SearchByTag = _searchByTitle;
-                    OnPropertyChanged(nameof(SearchByTag));
-                }
-            }
-        }
-
-        private bool _searchByProcessName = Properties.Settings.Default.SearchByProcessName;
-        public bool SearchByProcessName {
-            get {
-                return _searchByProcessName;
-            }
-            set {
-                if (_searchByProcessName != value) {
-                    _searchByProcessName = value;
-                    Properties.Settings.Default.SearchByProcessName = _searchByProcessName;
-                    OnPropertyChanged(nameof(SearchByProcessName));
-                }
-            }
-        }
-
-        private bool _searchByDescription = Properties.Settings.Default.SearchByDescription;
-        public bool SearchByDescription {
-            get {
-                return _searchByDescription;
-            }
-            set {
-                if (_searchByDescription != value) {
-                    _searchByDescription = value;
-                    Properties.Settings.Default.SearchByDescription = _searchByDescription;
-                    OnPropertyChanged(nameof(SearchByDescription));
-                }
-            }
-        }
-
-        public MpContentFilterType FilterType {
-            get {
-                MpContentFilterType ft = MpContentFilterType.None;
-                if(SearchByIsCaseSensitive) {
-                    ft |= MpContentFilterType.CaseSensitive;
-                }
-                if(SearchByTitle) {
-                    ft |= MpContentFilterType.Title;
-                }
-                if(SearchByRichText) {
-                    ft |= MpContentFilterType.Text;
-                }
-                if(SearchByFileList) {
-                    ft |= MpContentFilterType.File;
-                }
-                if(SearchByImage) {
-                    ft |= MpContentFilterType.Image;
-                }
-                if(SearchByUrl) {
-                    ft |= MpContentFilterType.Url;
-                }
-                if(SearchByApplicationName) {
-                    ft |= MpContentFilterType.AppName;
-                }
-                if(SearchByProcessName) {
-                    ft |= MpContentFilterType.AppPath;
-                }
-                if(SearchByTag) {
-                    ft |= MpContentFilterType.Tag;
-                }
-                if(SearchByDescription) {
-                    ft |= MpContentFilterType.Meta;
-                }
-                return ft;
+                return _filters;
             }
         }
 
         #endregion
+
 
         #region Layout
 
         public GridLength ClearAndAddCriteriaColumnWidth {
             get {
-                if(string.IsNullOrEmpty(LastSearchText) || IsSearching) {
+                if (IsMultipleMatches) {
+                    return new GridLength(0.3, GridUnitType.Star);
+                } else if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
                     return new GridLength(0.1, GridUnitType.Star);
                 } else {
-                    return new GridLength(0.3, GridUnitType.Star);
+                    return new GridLength(0, GridUnitType.Star);
                 }
             }
         }
@@ -382,6 +284,16 @@ namespace MpWpfApp {
 
         public MpUserSearch UserSearch { get; set; }
 
+        public MpContentFilterType FilterType {
+            get {
+                MpContentFilterType ft = MpContentFilterType.None;
+                foreach (var sfvm in Filters) {
+                    ft |= sfvm.FilterValue;
+                }
+                return ft;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -398,6 +310,13 @@ namespace MpWpfApp {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
                 CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
+
+
+                ValidateFilters();
+                foreach (var sfvm in Filters.Where(x=>!x.IsSeperator)) {
+                    sfvm.PropertyChanged += Sfvm_PropertyChanged;
+                }
+
 
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
             });
@@ -433,8 +352,32 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
+        private void Sfvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var sfvm = sender as MpSearchFilterViewModel;
+            switch(e.PropertyName) {
+                case nameof(sfvm.IsChecked):
+                    if(sfvm.PreferenceName == nameof(MpPreferences.Instance.SearchByRegex)) {
+                        ValidateFilters();
+                    }
+                    break;
+            }
+        }
+
+        private void ValidateFilters() {
+            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByRegex));
+            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByIsCaseSensitive));
+            if (resfvm.IsChecked) {
+                cssfvm.IsChecked = false;
+                cssfvm.IsEnabled = false;
+            } else {
+                cssfvm.IsEnabled = true;
+            }
+        }
+
         public void NotifyHasMultipleMatches() {
             IsMultipleMatches = true;
+
+            OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
         }
 
         #region View Method Invokers
@@ -460,6 +403,8 @@ namespace MpWpfApp {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     Validate();
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
                     break;
             }
         }
@@ -469,6 +414,7 @@ namespace MpWpfApp {
                 case nameof(SearchText):
                     Validate();
                     OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
                     break;
                 case nameof(IsSearching):
                     OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
@@ -531,6 +477,8 @@ namespace MpWpfApp {
         }
 
         private bool Validate() {
+            MpConsole.WriteLine("RED: " + Brushes.Red.ToHex());
+            MpConsole.WriteLine("TRANSPARENT: " + Brushes.Transparent.ToHex());
             if (!HasText) {
                 IsTextValid = true;
             } else {
@@ -546,6 +494,7 @@ namespace MpWpfApp {
 
         public ICommand ClearTextCommand => new RelayCommand(
             () => {
+                IsMultipleMatches = false;
                 SearchText = string.Empty;
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
@@ -566,6 +515,7 @@ namespace MpWpfApp {
                     LastSearchText = SearchText;
                 }
                 IsMultipleMatches = false;
+                MpDataModelProvider.Instance.QueryInfo.FilterFlags = FilterType;
 
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             },!MpMainWindowViewModel.Instance.IsMainWindowLoading);

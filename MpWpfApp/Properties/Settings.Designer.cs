@@ -915,36 +915,36 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SearchByRichText {
+        public bool SearchByTextType {
             get {
-                return ((bool)(this["SearchByRichText"]));
+                return ((bool)(this["SearchByTextType"]));
             }
             set {
-                this["SearchByRichText"] = value;
+                this["SearchByTextType"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SearchByImage {
+        public bool SearchByImageType {
             get {
-                return ((bool)(this["SearchByImage"]));
+                return ((bool)(this["SearchByImageType"]));
             }
             set {
-                this["SearchByImage"] = value;
+                this["SearchByImageType"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SearchByFileList {
+        public bool SearchByFileType {
             get {
-                return ((bool)(this["SearchByFileList"]));
+                return ((bool)(this["SearchByFileType"]));
             }
             set {
-                this["SearchByFileList"] = value;
+                this["SearchByFileType"] = value;
             }
         }
         
@@ -1465,6 +1465,42 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["MainWindowInitialHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByContent {
+            get {
+                return ((bool)(this["SearchByContent"]));
+            }
+            set {
+                this["SearchByContent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByUrlTitle {
+            get {
+                return ((bool)(this["SearchByUrlTitle"]));
+            }
+            set {
+                this["SearchByUrlTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByRegex {
+            get {
+                return ((bool)(this["SearchByRegex"]));
+            }
+            set {
+                this["SearchByRegex"] = value;
             }
         }
     }

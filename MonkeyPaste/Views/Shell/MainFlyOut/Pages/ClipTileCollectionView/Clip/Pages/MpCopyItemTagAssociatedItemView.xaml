@@ -32,7 +32,8 @@
                             <Setter Property="Source">
                                 <Setter.Value>
                                     <FontImageSource FontFamily="{StaticResource FontAwesomeRegular}"
-                                                     Color="{Binding Tag.HexColor, Converter={StaticResource StringToColorConverter}}"
+                                                     Color="{Binding Tag.HexColor,
+                                                                     Converter={StaticResource StringToColorConverter}}"
                                                      Glyph="&#xf14a;" />
                                 </Setter.Value>
                             </Setter>
@@ -43,7 +44,8 @@
                             <Setter Property="Source">
                                 <Setter.Value>
                                     <FontImageSource FontFamily="{StaticResource FontAwesomeRegular}"
-                                                     Color="{Binding Tag.HexColor, Converter={StaticResource StringToColorConverter}}"
+                                                     Color="{Binding Tag.HexColor,
+                                                                     Converter={StaticResource StringToColorConverter}}"
                                                      Glyph="&#xf0c8;" />
                                 </Setter.Value>
                             </Setter>

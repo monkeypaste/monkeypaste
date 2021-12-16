@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -7,13 +8,8 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpPreferences {
-        #region Singleton
-        private static readonly Lazy<MpPreferences> _Lazy = new Lazy<MpPreferences>(() => new MpPreferences());
-        public static MpPreferences Instance { get { return _Lazy.Value; } }
-
-        private MpPreferences() {
-        }
+    public class MpPreferences : MpSingleton<MpPreferences> {
+        #region Constructors
 
         public void Init(MpIPreferenceIO prefIo) {
             _prefIo = prefIo;
@@ -30,6 +26,29 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        #region Property Reflection Referencer
+
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpPreferences);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                if (myPropInfo == null) {
+                    throw new Exception("Unable to find property: " + propertyName);
+                }
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpPreferences);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+            }
+        }
+
+        #endregion
 
         #region Application Properties
 
@@ -320,15 +339,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public bool SearchByDescription {
-            get {
-                return _prefIo.Get(nameof(SearchByDescription), false);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByDescription), value);
-            }
-        }
-
         public DateTime StartupDateTime {
             get {
                 return _prefIo.Get(nameof(StartupDateTime), DateTime.MinValue);
@@ -408,11 +418,11 @@ namespace MonkeyPaste {
         public string DbPassword {
             get {
                 return _prefIo.Get(
-                    nameof(DbPassword), 
+                    nameof(DbPassword),
                     MpHelpers.Instance.GetRandomString(
                         MpHelpers.Instance.Rand.Next(
-                            MinDbPasswordLength, 
-                            MaxDbPasswordLength), 
+                            MinDbPasswordLength,
+                            MaxDbPasswordLength),
                         MpHelpers.Instance.PasswordChars));
             }
         }
@@ -540,7 +550,7 @@ namespace MonkeyPaste {
             }
         }
 
-        
+
 
         public string ThemeClipTileBackgroundColor {
             get {
@@ -787,10 +797,10 @@ namespace MonkeyPaste {
         #region Drag & Drop
         public string[] PasteAsImageDefaultProcessNameCollection {
             get {
-                return _prefIo.Get(nameof(PasteAsImageDefaultProcessNameCollection), "paint\r\nphotoshop\r\n").Split(new string[] { Environment.NewLine },StringSplitOptions.RemoveEmptyEntries);
+                return _prefIo.Get(nameof(PasteAsImageDefaultProcessNameCollection), "paint\r\nphotoshop\r\n").Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             }
             set {
-                _prefIo.Set(nameof(PasteAsImageDefaultProcessNameCollection), string.Join(Environment.NewLine,value));
+                _prefIo.Set(nameof(PasteAsImageDefaultProcessNameCollection), string.Join(Environment.NewLine, value));
             }
         }
         #endregion
@@ -820,78 +830,6 @@ namespace MonkeyPaste {
             }
             set {
                 _prefIo.Set(nameof(LoadOnLogin), value);
-            }
-        }
-
-        public bool SearchByApplicationName {
-            get {
-                return _prefIo.Get(nameof(SearchByApplicationName), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByApplicationName), value);
-            }
-        }
-
-        public bool SearchByTag {
-            get {
-                return _prefIo.Get(nameof(SearchByTag), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByTag), value);
-            }
-        }
-
-        public bool SearchByRichText {
-            get {
-                return _prefIo.Get(nameof(SearchByRichText), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByRichText), value);
-            }
-        }
-
-        public bool SearchByFileList {
-            get {
-                return _prefIo.Get(nameof(SearchByFileList), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByFileList), value);
-            }
-        }
-
-        public bool SearchByTitle {
-            get {
-                return _prefIo.Get(nameof(SearchByTitle), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByTitle), value);
-            }
-        }
-
-        public bool SearchByImage {
-            get {
-                return _prefIo.Get(nameof(SearchByImage), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByImage), value);
-            }
-        }
-
-        public bool SearchBySourceUrl {
-            get {
-                return _prefIo.Get(nameof(SearchBySourceUrl), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchBySourceUrl), value);
-            }
-        }
-
-        public bool SearchByProcessName {
-            get {
-                return _prefIo.Get(nameof(SearchByProcessName), true);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByProcessName), value);
             }
         }
 
@@ -997,20 +935,122 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        public bool IsSearchCaseSensitive {
+        #region Search Filters
+
+        public bool SearchByIsCaseSensitive {
             get {
-                return _prefIo.Get(nameof(IsSearchCaseSensitive), false);
+                return _prefIo.Get(nameof(SearchByIsCaseSensitive), false);
             }
             set {
-                _prefIo.Set(nameof(IsSearchCaseSensitive), value);
+                _prefIo.Set(nameof(SearchByIsCaseSensitive), value);
             }
         }
 
-        
+        public bool SearchByContent {
+            get {
+                return _prefIo.Get(nameof(SearchByContent), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByContent), value);
+            }
+        }
 
-        
+        public bool SearchByUrlTitle {
+            get {
+                return _prefIo.Get(nameof(SearchByUrlTitle), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByUrlTitle), value);
+            }
+        }
+
+        public bool SearchByApplicationName {
+            get {
+                return _prefIo.Get(nameof(SearchByApplicationName), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByApplicationName), value);
+            }
+        }
+        public bool SearchByFileType {
+            get {
+                return _prefIo.Get(nameof(SearchByFileType), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByFileType), value);
+            }
+        }
+        public bool SearchByImageType {
+            get {
+                return _prefIo.Get(nameof(SearchByImageType), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByImageType), value);
+            }
+        }
+        public bool SearchByProcessName {
+            get {
+                return _prefIo.Get(nameof(SearchByProcessName), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByProcessName), value);
+            }
+        }
+        public bool SearchByTextType {
+            get {
+                return _prefIo.Get(nameof(SearchByTextType), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByTextType), value);
+            }
+        }
+        public bool SearchBySourceUrl {
+            get {
+                return _prefIo.Get(nameof(SearchBySourceUrl), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchBySourceUrl), value);
+            }
+        }
+        public bool SearchByTag {
+            get {
+                return _prefIo.Get(nameof(SearchByTag), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByTag), value);
+            }
+        }
+        public bool SearchByTitle {
+            get {
+                return _prefIo.Get(nameof(SearchByTitle), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByTitle), value);
+            }
+        }
+
+        public bool SearchByDescription {
+            get {
+                return _prefIo.Get(nameof(SearchByDescription), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByDescription), value);
+            }
+        }
+
+        public bool SearchByRegex {
+            get {
+                return _prefIo.Get(nameof(SearchByRegex), false);
+            }
+            set {
+                _prefIo.Set(nameof(SearchByRegex), value);
+            }
+        }
+
         #endregion
 
+
+        #endregion
 
         #endregion
 

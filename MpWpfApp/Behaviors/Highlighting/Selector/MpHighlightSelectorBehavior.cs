@@ -17,6 +17,7 @@ namespace MpWpfApp {
                 dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
 
                 dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
+                dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
 
                 dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
                 return dtl;

@@ -15,6 +15,7 @@ namespace MpWpfApp {
         Task FindHighlighting();
         void ApplyHighlighting();
         void Reset();
+        void ScrollToSelectedItem();
         //void SelectNextMatch();
         //void SelectPreviousMatch();
     }

@@ -8,11 +8,11 @@
              x:DataType="local:MpCopyItemViewModel">
     <ContentView.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding SelectCopyItemCommand}"
-                                          NumberOfTapsRequired="1" />
+                              NumberOfTapsRequired="1" />
     </ContentView.GestureRecognizers>
     <ContentView.Content>
-        <Frame Padding="0"               
-               BackgroundColor="White"               
+        <Frame Padding="0"
+               BackgroundColor="White"
                HasShadow="True"
                HeightRequest="{Binding EditorHeight}"
                IsClippedToBounds="True">
@@ -26,8 +26,8 @@
                             Android="10"
                             iOS="10" />
             </Frame.Margin>
-            <StackLayout Orientation="Horizontal">                
-                <StackLayout Orientation="Vertical" 
+            <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Vertical"
                              IsVisible="{Binding ShowLeftMenu}">
                     <ff:CachedImage Aspect="AspectFit"
                                     Margin="0,0,0,0"
@@ -54,26 +54,27 @@
                       HorizontalOptions="FillAndExpand"
                       VerticalOptions="FillAndExpand">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <!-- Title Label -->
+                    <!--  Title Label  -->
                     <Label Grid.Row="0"
                            FontAttributes="Bold"
                            HeightRequest="25"
                            Padding="5,5,0,0"
-                           FontSize="16"                           
+                           FontSize="16"
                            IsVisible="{Binding IsTitleVisible}"
                            VerticalOptions="Start"
                            HorizontalTextAlignment="Start"
-                           Text="{Binding CopyItem.Title, Mode=TwoWay}"
+                           Text="{Binding CopyItem.Title,
+                                          Mode=TwoWay}"
                            TextColor="Black"
                            VerticalTextAlignment="End">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                  Command="{Binding RenameCopyItemCommand}" 
-                                                  CommandParameter="{Binding .}"/>
+                                                  Command="{Binding RenameCopyItemCommand}"
+                                                  CommandParameter="{Binding .}" />
                         </Label.GestureRecognizers>
                         <!--<Label.LineBreakMode>
                             <OnPlatform x:TypeArguments="LineBreakMode"
@@ -95,7 +96,8 @@
                                          MinimumHeightRequest="50"
                                          BackgroundColor="Pink"
                                          IsEnabled="{Binding IsExpanded}"
-                                         EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
+                                         EvaluateJavascript="{Binding EvaluateEditorJavaScript,
+                                                                      Mode=OneWayToSource}">
                             <local:MpWebView.Source>
                                 <HtmlWebViewSource x:Name="HtmlSource"
                                                    Html="{Binding EditorHtml}" />

@@ -91,7 +91,9 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpTagTileView Visibility="{Binding IsRootTagTile, Converter={StaticResource BoolToVisibilityFlipConverter}}" DataContext="{Binding}" />
+                    <local:MpTagTileView Visibility="{Binding IsRootTagTile,
+                                                              Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                         DataContext="{Binding}" />
 
                     <!--  Tag Tile Border  -->
 

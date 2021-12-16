@@ -5,28 +5,29 @@
              xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
              WidthRequest="1000"
              HeightRequest="1000"
-             BackgroundColor="Purple" 
+             BackgroundColor="Purple"
              Title="Monkey Paste"
              x:Name="CopyItemCollectionView"
              x:DataType="local:MpCopyItemTileCollectionPageViewModel">
     <NavigationPage.TitleView>
-        <StackLayout x:Name="NavStack" Orientation="Vertical">
+        <StackLayout x:Name="NavStack"
+                     Orientation="Vertical">
             <SearchBar x:Name="SearchBar"
                        IsVisible="False"
                        BackgroundColor="LightYellow"
                        PlaceholderColor="DimGray"
                        Placeholder="Search..."
                        Unfocused="SearchBar_Unfocused"
-                       TextChanged="SearchBar_TextChanged"/>
+                       TextChanged="SearchBar_TextChanged" />
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="SearchToolbarItem"                      
+        <ToolbarItem x:Name="SearchToolbarItem"
                      IconImageSource="{StaticResource SearchIcon}"
-                     Clicked="Search_Clicked"/>
-        <ToolbarItem x:Name="SetItemToClipboardToolbarItem" 
+                     Clicked="Search_Clicked" />
+        <ToolbarItem x:Name="SetItemToClipboardToolbarItem"
                      IconImageSource="{Binding ClipboardToolbarIcon}"
-                     Command="{Binding SetClipboardToSelectedCopyItemCommand}"/>
+                     Command="{Binding SetClipboardToSelectedCopyItemCommand}" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
@@ -36,10 +37,12 @@
                             RemainingItemsThreshold="5"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreCopyItemsCommand}"
                             SelectionChanged="CopyItemViewModels_SelectionChanged"
-                            SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
+                            SelectedItem="{Binding SelectedCopyItemViewModel,
+                                                   Mode=TwoWay}"
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding SelectionChangedCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference CopyItemViewModels}}">
+                            SelectionChangedCommandParameter="{Binding SelectedItem,
+                                                                       Source={x:Reference CopyItemViewModels}}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
                                        SnapPointsAlignment="Start"

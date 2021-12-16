@@ -8,7 +8,8 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel, IsDesignTimeCreatable=False}">
+                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
+                                                      IsDesignTimeCreatable=False}">
     <DockPanel>
         <ToggleButton x:Name="ExpandAnalyzerButton"
                       Height="10"
@@ -19,7 +20,8 @@
                       BorderThickness="0"
                       ToolTip="Add Analyzer"
                       ToolTipService.InitialShowDelay="100"
-                      IsChecked="{Binding IsExpanded, Mode=TwoWay}"
+                      IsChecked="{Binding IsExpanded,
+                                          Mode=TwoWay}"
                       Background="Transparent">
             <Image Stretch="Fill"
                    Source="/MpWpfApp;component/Resources/Images/forward_black.png" />
@@ -29,7 +31,8 @@
                 Background="Transparent"
                 Margin="0,0,5,0"
                 MinWidth="100"
-                Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}"
+                Visibility="{Binding IsExpanded,
+                                     Converter={StaticResource BoolToVisibilityConverter}}"
                 Template="{StaticResource SearchButtonControlTemplate}"
                 BorderThickness="0">
             <Border BorderBrush="Orange"
@@ -54,14 +57,16 @@
                                           HorizontalContentAlignment="Left"
                                           VerticalAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Visibility="{Binding SelectedItem.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                          Visibility="{Binding SelectedItem.IsBusy,
+                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
 
                 </DockPanel>
             </Border>
         </Button>
         <StackPanel Orientation="Horizontal"
                     Margin="3"
-                    Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Visibility="{Binding IsExpanded,
+                                         Converter={StaticResource BoolToVisibilityConverter}}"
                     HorizontalAlignment="Left">
             <ComboBox ItemsSource="{Binding Items}"
                       MinWidth="100"
@@ -100,7 +105,8 @@
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, Mode=TwoWay}" />
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>

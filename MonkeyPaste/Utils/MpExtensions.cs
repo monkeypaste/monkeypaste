@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -103,15 +104,27 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.IndexListOfAll(str, compareStr);
         }
 
-        public static bool ContainsByUserSensitivity(this string str, string ostr) {
-            if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {
+
+        public static bool ContainsByCaseOrRegexSetting(this string str, string compareStr) {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
                 return false;
             }
-            if(MpPreferences.Instance.IsSearchCaseSensitive) {
-                return str.ContainsByUserSensitivity(ostr);
+            if(MpPreferences.Instance.SearchByRegex) {
+                return Regex.IsMatch(str, compareStr);
             }
-            return str.ToLowerInvariant().Contains(ostr.ToLowerInvariant());
+            return str.ContainsByCase(compareStr, MpPreferences.Instance.SearchByIsCaseSensitive);
         }
+
+        public static bool ContainsByCase(this string str, string compareStr, bool isCaseSensitive) {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
+                return false;
+            }
+            if (isCaseSensitive) {
+                return str.Contains(compareStr);
+            }
+            return str.ToLowerInvariant().Contains(compareStr.ToLowerInvariant());
+        }
+
 
         public static async Task<string> CheckSum(this string str) {
             string result = await MpHelpers.Instance.GetCheckSum(str);

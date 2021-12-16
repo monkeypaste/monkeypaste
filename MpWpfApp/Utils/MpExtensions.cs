@@ -713,11 +713,13 @@ namespace MpWpfApp {
             return MpHelpers.Instance.ConvertColorToHex(c);
         }
 
-        public static Brush ToSolidColorBrush(this string hex) {
+        public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
             if (string.IsNullOrEmpty(hex)) {
                 return Brushes.Red;
             }
-            return (Brush)new SolidColorBrush(hex.ToWinMediaColor());
+            var br = (Brush)new SolidColorBrush(hex.ToWinMediaColor());
+            br.Opacity = opacity;
+            return br;
         }
 
         public static Color ToWinMediaColor(this string hex) {
@@ -1202,19 +1204,6 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        public static bool ContainsByCaseSetting(this string str, string compareStr) {
-            return str.ContainsByCase(compareStr, Properties.Settings.Default.SearchByIsCaseSensitive);
-        }
-
-        public static bool ContainsByCase(this string str, string compareStr, bool isCaseSensitive) {
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
-                return false;
-            }
-            if (isCaseSensitive) {
-                return str.Contains(compareStr);
-            }
-            return str.ToLower().Contains(compareStr.ToLower());
-        }
 
         public static List<int> IndexListOfAll(this string str, string compareStr) {
             return MpHelpers.Instance.IndexListOfAll(str, compareStr);
