@@ -26,8 +26,15 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconBorderImage_Loaded(object sender, RoutedEventArgs e) {
+            ClipTileTitleHighlightBehavior.Attach(this);
+            SourceHighlightBehavior.Attach(this);
             base.OnLoad();
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
+        }
+
+        private void Grid_Unloaded(object sender, RoutedEventArgs e) {
+            ClipTileTitleHighlightBehavior.Detach();
+            SourceHighlightBehavior.Detach();
         }
 
         private void ClipTileTitleTextGrid_MouseEnter(object sender, MouseEventArgs e) {
@@ -214,9 +221,7 @@ namespace MpWpfApp {
             e.Handled = true;
         }
 
-        private void Grid_Unloaded(object sender, RoutedEventArgs e) {
-
-        }
+        
 
         private void FlipButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             MpClipTrayViewModel.Instance.FlipTileCommand.Execute(BindingContext.Parent);

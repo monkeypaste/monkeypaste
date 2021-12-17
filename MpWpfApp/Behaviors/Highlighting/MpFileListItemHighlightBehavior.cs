@@ -4,9 +4,16 @@ using System.Windows.Documents;
 namespace MpWpfApp {
 
     public class MpFileListItemHighlightBehavior : MpHighlightBehaviorBase<MpFileListItemView> {
-        protected override TextRange ContentRange => new TextRange(
-            AssociatedObject.FileListItemTextBlock.ContentStart, 
-            AssociatedObject.FileListItemTextBlock.ContentEnd);
+        protected override TextRange ContentRange {
+            get {
+                if (AssociatedObject == null || AssociatedObject.FileListItemTextBlock == null) {
+                    return null;
+                }
+                return new TextRange(
+                        AssociatedObject.FileListItemTextBlock.ContentStart,
+                        AssociatedObject.FileListItemTextBlock.ContentEnd);
+            }
+        }
 
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;

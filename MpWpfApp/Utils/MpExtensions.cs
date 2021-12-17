@@ -585,6 +585,9 @@ namespace MpWpfApp {
         }
 
         public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName) where T : DependencyObject {
+            if(d == null) {
+                yield break;
+            }
             var childCount = VisualTreeHelper.GetChildrenCount(d);
 
             for (var n = 0; n < childCount; n++) {

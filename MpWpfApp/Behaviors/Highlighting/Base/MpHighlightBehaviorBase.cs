@@ -96,9 +96,20 @@ namespace MpWpfApp {
         protected override void OnLoad() {
             base.OnLoad();
 
-            UpdateUniqueBackgrounds();
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                while (AssociatedObject == null) {
+                    await Task.Delay(100);
+                }
+                if(_wasUnloaded) {
+                    Reset();
+                }
+                UpdateUniqueBackgrounds();
+            });
         }
 
+        //protected override void OnUnload() {
+        //    base.OnUnload();
+        //}
         #endregion
 
         #region Public Methods
@@ -143,6 +154,7 @@ namespace MpWpfApp {
                 Brush b = i == SelectedIdx ? ActiveHighlightBrush : InactiveHighlightBrush;
                 match.ApplyPropertyValue(TextElement.BackgroundProperty, b);
             }
+            AssociatedObject.UpdateLayout();
             ScrollToSelectedItem();
         }
 

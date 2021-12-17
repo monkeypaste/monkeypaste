@@ -181,7 +181,7 @@ namespace MonkeyPaste {
                 }
                 query += string.Join(" or ", filters);
                 if (types.Count > 0) {
-                    query += " and (";
+                    query += ") and (";
                     query += string.Join(" or ", types) + ")";
                 }
             } else if(types.Count > 0) {
@@ -432,6 +432,15 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpShortcut
+
+        public async Task<MpShortcut> GetShortcut(int ciid, int tagId, int aiid) {
+            string query = string.Format(@"select * from MpShortcut where fk_MpCopyItemId=? and fk_MpTagId=? and fk_MpAnalyticItemPresetId=?");
+            var result = await MpDb.Instance.QueryAsync<MpShortcut>(query,ciid,tagId,aiid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
 
         public async Task<List<MpShortcut>> GetAllShortcuts() {
             string query = @"select * from MpShortcut";

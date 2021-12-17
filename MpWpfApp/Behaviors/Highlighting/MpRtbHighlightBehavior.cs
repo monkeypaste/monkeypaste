@@ -6,20 +6,29 @@ using System.Windows.Documents;
 namespace MpWpfApp {
 
     public class MpRtbHighlightBehavior : MpHighlightBehaviorBase<MpRtbView> {
-
-        protected override TextRange ContentRange => new TextRange(
-            AssociatedObject.Rtb.Document.ContentStart, 
-            AssociatedObject.Rtb.Document.ContentEnd);
+        protected override TextRange ContentRange {
+            get {
+                if(AssociatedObject == null || 
+                   AssociatedObject.Rtb == null || 
+                   AssociatedObject.Rtb.Document == null) {
+                    return null;
+                }
+                return new TextRange(
+                            AssociatedObject.Rtb.Document.ContentStart,
+                            AssociatedObject.Rtb.Document.ContentEnd);
+            }
+        }
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
         public override void ScrollToSelectedItem() {
-            if(SelectedIdx < 0) {
+            if(AssociatedObject == null ||
+               _matches.Count == 0) {
                 AssociatedObject.Rtb.ScrollToHome();
                 return;
             }
-
-            TextRange tr = _matches[SelectedIdx];
+            int idx = Math.Max(0, SelectedIdx);
+            TextRange tr = _matches[idx];
             var iuic = tr.End.Parent.FindParentOfType<InlineUIContainer>();
             if (iuic != null) {
                 var rhl = iuic.Parent.FindParentOfType<Hyperlink>();

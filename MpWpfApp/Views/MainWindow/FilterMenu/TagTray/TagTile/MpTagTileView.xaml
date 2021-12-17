@@ -48,12 +48,10 @@
                           Icon="{Binding Source={StaticResource HotkeyIcon},
                                          Converter={StaticResource StringToIconConverter},
                                          Mode=OneWay}"
-                          InputGestureText="{Binding PlacementTarget.Tag.ShortcutKeyString,
-                                                     RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                    AncestorType=ContextMenu}}"
-                          Command="{Binding PlacementTarget.Tag.AssignHotkeyCommand,
-                                            RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                           AncestorType=ContextMenu}}" />
+                          InputGestureText="{Binding Data.ShortcutKeyString,
+                                               Source={StaticResource TagTileVmProxy}}"
+                          Command="{Binding Data.AssignHotkeyCommand,
+                                               Source={StaticResource TagTileVmProxy}}" />
                 <Separator />
                 <MenuItem x:Name="ClipTileColorContextMenuItem"
                           Style="{StaticResource ColorPalleteMenuItemStyle}" />

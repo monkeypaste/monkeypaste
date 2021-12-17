@@ -83,6 +83,7 @@ namespace MpWpfApp {
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             base.OnLoad();
+
             if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
 
                 if(rtbivm.IsPlaceholder) {
@@ -114,6 +115,8 @@ namespace MpWpfApp {
                     (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
                     ReceivedMainWindowResizeBehviorMessage);
 
+
+                RtbHighlightBehavior.Attach(this);
                 RtbViewDropBehavior.Attach(this);
 
                 //MpHelpers.Instance.RunOnMainThread(async () => {
@@ -137,9 +140,27 @@ namespace MpWpfApp {
             }
         }
 
+        private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            RtbHighlightBehavior.Detach();
+            RtbViewDropBehavior.Detach();
+
+            base.OnUnload();
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
+            BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
+            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
+            BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+
+            //BindingContext.Dispose();
+        }
+
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(!BindingContext.IsSelected && !BindingContext.IsHovering) {
-                e.Handled = false;
+            if(!BindingContext.Parent.IsExpanded) {
+                e.Handled = true;
                 return;
             }
             double origVertOffset = Rtb.VerticalOffset;
@@ -237,20 +258,7 @@ namespace MpWpfApp {
             //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
-        private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
-            base.OnUnload();
-
-            if(BindingContext == null) {
-                return;
-            }
-            BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-            BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
-            BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
-            BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
-
-            //BindingContext.Dispose();
-        }        
+        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;

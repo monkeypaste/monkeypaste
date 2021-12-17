@@ -24,6 +24,18 @@ namespace MpWpfApp {
        public MpClipTileView() {
             InitializeComponent();
         }
+
+        private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
+            HighlightSelectorBehavior.Attach(this);
+        }
+
+        private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
+            HighlightSelectorBehavior.Detach();
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;
+        }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
                 octvm.OnFocusRequest -= Nctvm_OnFocusRequest;
@@ -66,12 +78,7 @@ namespace MpWpfApp {
         }
 
 
-        private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;
-        }
+        
 
         private void ClipTileClipBorder_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
             e.Handled = true;
@@ -96,5 +103,6 @@ namespace MpWpfApp {
 
             dropShadow.Direction = 360.0 - angle + 180;
         }
+
     }
 }

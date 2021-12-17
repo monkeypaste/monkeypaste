@@ -24,6 +24,7 @@
                         IsHitTestVisible="{Binding HasScrollVelocity,
                                                    Source={StaticResource ClipTrayViewModel},
                                                    Converter={StaticResource BoolFlipConverter}}"
+                        Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"

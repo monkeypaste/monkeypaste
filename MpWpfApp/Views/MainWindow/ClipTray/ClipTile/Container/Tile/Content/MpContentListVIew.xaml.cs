@@ -94,6 +94,10 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            if(!BindingContext.IsExpanded) {
+                e.Handled = true;
+                return;
+            }
             if (!BindingContext.IsSelected && !BindingContext.IsHovering) {
                 e.Handled = false;
                 return;

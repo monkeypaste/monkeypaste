@@ -223,6 +223,8 @@ namespace MpWpfApp {
 
         public bool IsEmpty => KeyItems.Count == 0;
 
+        public bool HasChanged { get; set; } = false;
+
         #endregion
 
         #region Model
@@ -237,7 +239,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(DefaultKeyString));
                 }
             }
@@ -253,7 +255,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.CopyItemId != value) {
                     Shortcut.CopyItemId = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(CopyItemId));
                 }
             }
@@ -269,7 +271,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.TagId != value) {
                     Shortcut.TagId = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(TagId));
                 }
             }
@@ -285,7 +287,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.AnalyticItemPresetId != value) {
                     Shortcut.AnalyticItemPresetId = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
                 }
             }
@@ -301,7 +303,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutId != value) {
                     Shortcut.ShortcutId = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
                 }
             }
@@ -333,7 +335,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
                 }
@@ -350,7 +352,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
@@ -366,7 +368,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.RoutingType != value) {
                     Shortcut.RoutingType = value;
-                    //Shortcut.WriteToDatabase();
+                    HasChanged = true;
                     OnPropertyChanged(nameof(RoutingType));
                     OnPropertyChanged(nameof(SelectedRoutingType));
                 }
@@ -413,6 +415,14 @@ namespace MpWpfApp {
 
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(HasChanged):
+                    if(HasChanged) {
+                        Task.Run(async () => {
+                            await Shortcut.WriteToDatabaseAsync();
+                            HasChanged = false;
+                        });
+                    }
+                    break;
                 case nameof(KeyString):
                     //if (IsCustom()) {
                     //    if (Shortcut.CopyItemId > 0) {

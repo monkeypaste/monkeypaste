@@ -39,15 +39,15 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpCopyItem CopyItem { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpCopyItem CopyItem { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpTag Tag { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpTag Tag { get; set; }
 
 
-        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpAnalyticItemPreset Preset { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpAnalyticItemPreset Preset { get; set; }
         #endregion
 
 

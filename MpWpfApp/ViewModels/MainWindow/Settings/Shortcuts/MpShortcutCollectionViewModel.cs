@@ -418,7 +418,7 @@ namespace MpWpfApp {
                                 CopyItemId = ctvm.CopyItem.Id,
                                 TagId = 0,
                                 AnalyticItemPresetId = 0,
-                                CopyItem = ctvm.CopyItem,
+                                //CopyItem = ctvm.CopyItem,
                                 KeyString = keys,
                                 RoutingType = MpRoutingType.Direct,
                                 ShortcutName = "Paste " + ctvm.CopyItem.Title
@@ -431,7 +431,7 @@ namespace MpWpfApp {
                                 CopyItemId = 0,
                                 TagId = ttvm.Tag.Id,
                                 AnalyticItemPresetId = 0,
-                                Tag = ttvm.Tag,
+                                //Tag = ttvm.Tag,
                                 KeyString = keys,
                                 RoutingType = MpRoutingType.Internal,
                                 ShortcutName = "Select " + ttvm.TagName
@@ -444,7 +444,7 @@ namespace MpWpfApp {
                                 CopyItemId = 0,
                                 TagId = 0,
                                 AnalyticItemPresetId = aipvm.AnalyticItemPresetId,
-                                Preset = aipvm.Preset,
+                                //Preset = aipvm.Preset,
                                 RoutingType = MpRoutingType.Internal,
                                 KeyString = keys,
                                 ShortcutName = $"Use {aipvm.Label} Analyzer"

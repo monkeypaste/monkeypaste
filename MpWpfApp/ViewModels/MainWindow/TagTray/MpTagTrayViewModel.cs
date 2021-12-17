@@ -147,13 +147,13 @@ namespace MpWpfApp {
 
                 //UpdateSortOrder(true);
 
-                //TagTileViewModels.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
+                TagTileViewModels.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
                 await RefreshAllCounts();
 
                 RootTagTileViewModels[0].IsExpanded = true;
 
-                SelectTagCommand.Execute(DefaultTagId);
+                //SelectTagCommand.Execute(DefaultTagId);
 
                 IsBusy = false;
             });

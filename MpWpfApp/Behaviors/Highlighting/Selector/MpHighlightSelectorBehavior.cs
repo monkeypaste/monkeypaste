@@ -6,34 +6,35 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpHighlightSelectorBehavior : MpBehavior<MpClipTileView> {
-        private List<MpIHighlightRegion> _highlighters {
-            get {
-                List<MpIHighlightRegion> dtl = new List<MpIHighlightRegion>();
+        //private List<MpIHighlightRegion> _highlighters {
+        //    get {
+        //        List<MpIHighlightRegion> dtl = new List<MpIHighlightRegion>();
+        //        if(AssociatedObject == null) {
+        //            return dtl;
+        //        }
 
-                var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
-                dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
+        //        var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
+        //        dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
 
-                var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>();
-                dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
+        //        var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>();
+        //        dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
 
-                dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
-                dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
+        //        dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
+        //        dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
 
-                dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
-                return dtl;
-            }
-        }
+        //        dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
+        //        return dtl;
+        //    }
+        //}
 
         private int _selectedHighlighterIdx = 0;
 
-        protected override void OnLoad() {
+        protected override async void OnLoad() {
             if(_isLoaded) {
                 return;
             }
             base.OnLoad();
             
-            Reset();
-
             MpMessenger.Instance.Register<MpMessageType>(
                     MpSearchBoxViewModel.Instance,
                     ReceivedSearchBoxViewModelMessage);
@@ -41,9 +42,19 @@ namespace MpWpfApp {
             MpMessenger.Instance.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
+
+            if(!string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+                while (AssociatedObject == null) {
+                    await Task.Delay(10);
+                }
+                await PerformHighlighting();
+            } else {
+                var hll = await GetHighlighters();
+                Reset(hll);
+            }
         }
 
-        protected override void OnUnload() {
+        protected override async void OnUnload() {
             base.OnUnload();
 
             MpMessenger.Instance.Unregister<MpMessageType>(
@@ -54,19 +65,39 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
-            Reset();
+            var hll = await GetHighlighters();
+            Reset(hll);
         }
 
-        private void ReceivedSearchBoxViewModelMessage(MpMessageType msg) {
-            if (_highlighters.All(x => x.MatchCount == 0)) {
-                return;
+        private async Task<List<MpIHighlightRegion>> GetHighlighters() {
+            List<MpIHighlightRegion> dtl = new List<MpIHighlightRegion>();
+            while (AssociatedObject == null) {
+                await Task.Delay(50);
             }
+
+            var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
+            dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
+
+            var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>();
+            dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
+
+            dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
+            dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
+
+            dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
+            return dtl;
+        }
+
+        private async void ReceivedSearchBoxViewModelMessage(MpMessageType msg) {            
             switch (msg) {
                 case MpMessageType.SelectNextMatch:
-                    SelectNextMatch();
-                    break;
                 case MpMessageType.SelectPreviousMatch:
-                    SelectPreviousMatch();
+                    var hll = await GetHighlighters();
+                    if(msg == MpMessageType.SelectNextMatch) {
+                        SelectNextMatch(hll);
+                    } else {
+                        SelectPreviousMatch(hll);
+                    }
                     break;
             }
         }
@@ -74,55 +105,70 @@ namespace MpWpfApp {
         private async void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.RequeryCompleted:
-                    if (_highlighters.Count == 0 ||
-                        string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
-                        Reset();
-                        break;
-                    }
-
-                    await Task.WhenAll(_highlighters.Select(x => x.FindHighlighting()));
-                    _selectedHighlighterIdx = 0;
-                    if(_highlighters.All(x=>x.MatchCount == 0)) {
-                        return;
-                    }
-                    SelectNextMatch();
-                    _highlighters.ForEach(x => x.ApplyHighlighting());
+                    await PerformHighlighting();
+                    break;
+                case MpMessageType.JumpToIdxCompleted:
+                    await Task.Delay(500);
+                    await PerformHighlighting();
                     break;
             }
         }
 
-        public void SelectNextMatch() {
-            if(_highlighters[_selectedHighlighterIdx].SelectedIdx >= _highlighters[_selectedHighlighterIdx].MatchCount - 1) {
-                _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
+        private async Task PerformHighlighting() {
+            var hll = await GetHighlighters();
+
+            if (hll.Count == 0 ||
+                        string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+                Reset(hll);
+                return;
+            }
+
+            await Task.WhenAll(hll.Select(x => x.FindHighlighting()));
+            _selectedHighlighterIdx = 0;
+            if (hll.All(x => x.MatchCount == 0)) {
+                return;
+            }
+            SelectNextMatch(hll);
+            hll.ForEach(x => x.ApplyHighlighting());
+        }
+        public void SelectNextMatch(List<MpIHighlightRegion> hll) {
+            if (hll.All(x => x.MatchCount == 0)) {
+                return;
+            }
+            if (hll[_selectedHighlighterIdx].SelectedIdx >= hll[_selectedHighlighterIdx].MatchCount - 1) {
+                hll[_selectedHighlighterIdx].SelectedIdx = -1;
                 _selectedHighlighterIdx++;
             }
-            if(_selectedHighlighterIdx == _highlighters.Count) {
+            if(_selectedHighlighterIdx == hll.Count) {
                // _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
                 _selectedHighlighterIdx = 0;
-                _highlighters[_selectedHighlighterIdx].SelectedIdx = 0;
+                hll[_selectedHighlighterIdx].SelectedIdx = 0;
             } else {
-                _highlighters[_selectedHighlighterIdx].SelectedIdx++;
+                hll[_selectedHighlighterIdx].SelectedIdx++;
             }
             
 
-            if(_highlighters[_selectedHighlighterIdx].MatchCount == 0) {
-                SelectNextMatch();
+            if(hll[_selectedHighlighterIdx].MatchCount == 0) {
+                SelectNextMatch(hll);
                 return;
             }
-            _highlighters.ForEach(x => x.ApplyHighlighting());
+            hll.ForEach(x => x.ApplyHighlighting());
         }
 
-        public void SelectPreviousMatch() {
-            if (_highlighters[_selectedHighlighterIdx].SelectedIdx == 0){
-                _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
+        public void SelectPreviousMatch(List<MpIHighlightRegion> hll) {
+            if (hll.All(x => x.MatchCount == 0)) {
+                return;
+            }
+            if (hll[_selectedHighlighterIdx].SelectedIdx == 0){
+                hll[_selectedHighlighterIdx].SelectedIdx = -1;
                 if (_selectedHighlighterIdx == 0) {
-                    _selectedHighlighterIdx = _highlighters.Count - 1;
+                    _selectedHighlighterIdx = hll.Count - 1;
                 } else {
                     _selectedHighlighterIdx--;
                 }
-                _highlighters[_selectedHighlighterIdx].SelectedIdx = _highlighters[_selectedHighlighterIdx].MatchCount - 1;
+                hll[_selectedHighlighterIdx].SelectedIdx = hll[_selectedHighlighterIdx].MatchCount - 1;
             } else {
-                _highlighters[_selectedHighlighterIdx].SelectedIdx--;
+                hll[_selectedHighlighterIdx].SelectedIdx--;
             }
             //if (_selectedHighlighterIdx >= _highlighters.Count - 1) {
             //    _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
@@ -130,17 +176,17 @@ namespace MpWpfApp {
             //}
             
 
-            if (_highlighters[_selectedHighlighterIdx].MatchCount == 0) {
-                SelectPreviousMatch();
+            if (hll[_selectedHighlighterIdx].MatchCount == 0) {
+                SelectPreviousMatch(hll);
                 return;
             }
 
-            _highlighters.ForEach(x => x.ApplyHighlighting());
+            hll.ForEach(x => x.ApplyHighlighting());
         }
 
-        private void Reset() {
+        private void Reset(List<MpIHighlightRegion> hll) {
             _selectedHighlighterIdx = 0;
-            _highlighters.ForEach(x => x.Reset());
+            hll.ForEach(x => x.Reset());
         }
     }
 }
