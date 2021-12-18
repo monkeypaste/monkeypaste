@@ -25,36 +25,13 @@ namespace MpWpfApp {
         }
 
         private void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            //if(!MpLanguageTranslator.Instance.IsLoaded) {
-            //    MpLanguageTranslator.Instance.Init();
-            //    if(!MpLanguageTranslator.Instance)
-            //}
-            var miToRemove = new List<object>();
-            MenuItem cmi = null;
-            foreach (var mi in Items) {
-                if (mi == null || mi is Separator) {
-                    continue;
-                }
-                if(mi is MenuItem) {
-                    (mi as MenuItem).DataContext = DataContext;
-                    if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
-                        cmi = (MenuItem)mi;
-                    }
-                } else {
-                    miToRemove.Add(mi);
-                }
-            }
-            foreach(var mi2r in miToRemove) {
-                Items.Remove(mi2r);
-            }
-            UpdateLayout();
             MpHelpers.Instance.SetColorChooserMenuItem(
                     this,
-                    cmi,
+                    ClipTileColorContextMenuItem,
                     (s, e1) => {
                         MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
                     }
-                );
+                );        
         }
 
         private async void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -89,40 +66,18 @@ namespace MpWpfApp {
             Tag = DataContext;
             MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 
-            //Separator quickActionSep = null;
-            //var miToRemove = new List<MenuItem>();
-            foreach (var mi in Items) {
-                //if(quickActionSep != null) {
-                //    //this will only happen at the end of menu, remove so not readded
-                //    miToRemove.Add(mi as MenuItem);
-                //    continue;
-                //}
-                if (mi == null || mi is Separator) {
-                    //if(mi is Separator smi) {
-                    //    if(smi.Name == "QuickActionSeparator") {
-                    //        quickActionSep = smi;
-                    //    }
-                    //}
-                    continue;
-                }
-                if ((mi as MenuItem).Name == @"ToolsMenuItem") {
-                    foreach (var smi in (mi as MenuItem).Items) {
-                        if (smi == null || smi is Separator) {
-                            continue;
-                        }
-                        if ((smi as MenuItem).Name == "ExcludeApplication") {
-                            if (app == null) {
-                                //hide for multi-subselection
-                                (smi as MenuItem).Visibility = Visibility.Collapsed;
-                            } else {
-                                var eami = smi as MenuItem;
-                                eami.Header = @"Exclude Application '" + app.AppName + "'";
-                                eami.Icon = app.Icon.IconImage.ImageBase64.ToBitmapSource();
-                            }
-                        }
-                    }
-                }
-            }
+            string primarySourceName = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem.Source.PrimarySource.SourceName;
+            string primarySourceIcon64 = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64;
+            ExcludeApplication.Header = string.Format(@"Exclude '{0}'", primarySourceName);
+
+            ExcludeApplication.Icon = new Image() {
+                Source = MpHelpers.Instance.MergeImages(
+                            new List<BitmapSource>() {
+                                primarySourceIcon64.ToBitmapSource().Scale(new Size(0.75,0.75)),
+                                (Application.Current.Resources["NoEntryIcon"] as string).ToBitmapSource()
+                            })
+            };
+            //MpHelpers.Instance.CombineBitmap
             //int removeCount = miToRemove.Count;
             //while(removeCount > 0) {
             //    this.Items.RemoveAt(this.Items.Count - 1);

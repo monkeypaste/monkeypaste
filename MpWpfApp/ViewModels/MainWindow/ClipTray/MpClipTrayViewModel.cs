@@ -199,7 +199,7 @@ namespace MpWpfApp {
 
         public int RemainingItemsCountThreshold { get; private set; }
 
-        public int TotalTilesInQuery => MpDataModelProvider.Instance.TotalItems;
+        public int TotalTilesInQuery => MpDataModelProvider.Instance.TotalTilesInQuery;
 
         public int DefaultLoadCount { get; private set; } = 0;
 
@@ -1460,28 +1460,22 @@ namespace MpWpfApp {
 
         public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand<object>(
             async (args) => {
-                await MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(PrimaryItem.PrimaryItem.CopyItem.Source.AppId), true);
+                await MpAppCollectionViewModel.Instance.UpdateRejection(
+                        MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(
+                            PrimaryItem.PrimaryItem.CopyItem.Source.AppId), true);
             },
             (args) => {
-                return MpClipTrayViewModel.Instance.SelectedItems.Count == 1;
+                return SelectedItems.Count == 1;
             });
 
-        private RelayCommand<object> _searchWebCommand;
-        public ICommand SearchWebCommand {
-            get {
-                if (_searchWebCommand == null) {
-                    _searchWebCommand = new RelayCommand<object>(SearchWeb);
-                }
-                return _searchWebCommand;
-            }
-        }
-        private void SearchWeb(object args) {
-            if (args == null || args.GetType() != typeof(string)) {
-                return;
-            }
-            string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
-            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(pt));
-        }
+        public ICommand SearchWebCommand => new RelayCommand<object>(
+            (args) => {
+                string pt = string.Join(
+                            Environment.NewLine, 
+                            PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+
+                MpHelpers.Instance.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
+            }, (args) => args != null && args is string);
 
         public ICommand ScrollToHomeCommand => new RelayCommand(
              () => {

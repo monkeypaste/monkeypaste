@@ -38,6 +38,8 @@ namespace MpWpfApp {
 
         #region Model 
 
+        public bool IsDefault => AnalyticItemPresetId < 0;
+
         public string ShortcutKeyString {
             get {
                 if(ShortcutViewModel == null) {
@@ -92,14 +94,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsReadOnly {
-            get {
-                if (Preset == null) {
-                    return false;
-                }
-                return Preset.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => IsDefault;
 
         public bool IsQuickAction {
             get {
@@ -147,10 +142,6 @@ namespace MpWpfApp {
             PropertyChanged += MpPresetParameterViewModel_PropertyChanged;
         }
 
-        public MpAnalyticItemPresetViewModel(MpAnalyticItemViewModel parent, MpAnalyticItemPreset aip) : this(parent) {
-            Preset = aip;
-        }
-
         #endregion
 
         #region Public Methods
@@ -158,7 +149,7 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
-            Preset = aip;
+            Preset = aip;// await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
             OnPropertyChanged(nameof(ShortcutViewModel));
 
@@ -215,8 +206,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
         public ICommand ChangeIconCommand => new RelayCommand<object>(
-            (param) => {
+            (args) => {
                 var iconColorChooserMenuItem = new MenuItem();
                 var iconContextMenu = new ContextMenu();
                 iconContextMenu.Items.Add(iconColorChooserMenuItem);
@@ -255,10 +247,10 @@ namespace MpWpfApp {
                     }
                 };
                 iconContextMenu.Items.Add(iconImageChooserMenuItem);
-                ((Button)param).ContextMenu = iconContextMenu;
-                iconContextMenu.PlacementTarget = ((Button)param);
+                ((Button)args).ContextMenu = iconContextMenu;
+                iconContextMenu.PlacementTarget = ((Button)args);
                 iconContextMenu.IsOpen = true;
-            });
+            },(args)=>!IsDefault && args is Button);
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

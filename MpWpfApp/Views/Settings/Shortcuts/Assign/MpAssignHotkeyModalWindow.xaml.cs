@@ -20,5 +20,9 @@ namespace MpWpfApp {
         public MpAssignHotkeyModalWindow() {
             InitializeComponent();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            KeyGestureBehavior.StartListening(new MpKeyGestureViewModel());
+        }
     }
 }

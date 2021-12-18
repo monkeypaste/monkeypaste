@@ -81,11 +81,14 @@ namespace MpWpfApp {
             if (text.ToLower() == "wait") {
                 return MpCursorType.Waiting;
             }
-            if (text.ToLower() == "arrow") {
+            if (text.ToLower() == "arrow" || text.ToLower() == "default") {
                 return MpCursorType.Default;
             }
             if (text.ToLower() == "ibeam") {
                 return MpCursorType.IBeam;
+            }
+            if (text.ToLower() == "invalid") {
+                return MpCursorType.Invalid;
             }
             if (text.ToLower() == "hand") {
                 return MpCursorType.Link;

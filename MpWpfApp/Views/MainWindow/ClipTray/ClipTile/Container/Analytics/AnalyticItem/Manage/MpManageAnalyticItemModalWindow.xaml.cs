@@ -64,5 +64,19 @@ namespace MpWpfApp {
             var aivm = DataContext as MpAnalyticItemViewModel;
             aivm.PresetViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ShortcutViewModel)));
         }
+
+        private void Button_MouseEnter(object sender, MouseEventArgs e) {
+            var aivm = DataContext as MpAnalyticItemViewModel;
+            var pvm = aivm.SelectedPresetViewModel;
+            if(pvm.IsReadOnly) {
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
+            } else {
+                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            }
+        }
+
+        private void Button_MouseLeave(object sender, MouseEventArgs e) {
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
     }
 }

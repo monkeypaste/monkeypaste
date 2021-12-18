@@ -1,6 +1,7 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.Win32.TaskScheduler;
 using MonkeyPaste;
+using Newtonsoft.Json.Linq;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -135,6 +136,43 @@ namespace MpWpfApp {
                 return new Rect();
             }
             return new Rect(new Point(0, 0), new Size(tv.ActualWidth, tv.ActualHeight));
+        }
+
+        #endregion
+
+
+        #region Context Menus
+
+        public static bool IsMenuItem(this MenuItem mi, int idx) {
+            return mi.ItemContainerGenerator.ContainerFromItem(idx) is MenuItem;
+        }
+
+        public static bool IsMenuItem(this ContextMenu cm, int idx) {
+            return cm.ItemContainerGenerator.ContainerFromItem(idx) is MenuItem;
+        }
+
+        public static bool IsSeparator(this MenuItem mi, int idx) {
+            return !mi.IsMenuItem(idx);
+        }
+
+        public static bool IsSeparator(this ContextMenu cm, int idx) {
+            return !cm.IsMenuItem(idx);
+        }
+
+        public static MenuItem GetMenuItem(this MenuItem mi, int idx) {            
+            return mi.ItemContainerGenerator.ContainerFromItem(idx) as MenuItem;
+        }
+
+        public static MenuItem GetMenuItem(this ContextMenu cm, int idx) {
+            return cm.ItemContainerGenerator.ContainerFromItem(idx) as MenuItem;
+        }
+
+        public static Separator GetSeparator(this MenuItem mi, int idx) {
+            return mi.ItemContainerGenerator.ContainerFromItem(idx) as Separator;
+        }
+
+        public static Separator GetSeparator(this ContextMenu cm, int idx) {
+            return cm.ItemContainerGenerator.ContainerFromItem(idx) as Separator;
         }
 
         #endregion
@@ -784,8 +822,27 @@ namespace MpWpfApp {
                                 bgBrush);
         }
 
-        public static BitmapSource ToBitmapSource(this string str) {
-            return MpHelpers.Instance.ConvertStringToBitmapSource(str);
+        public static BitmapSource ToBitmapSource(this string resourcePathOrBase64Str) {
+            if (!resourcePathOrBase64Str.IsBase64String()) {
+                return new BitmapImage(new Uri(resourcePathOrBase64Str));
+            }
+            return MpHelpers.Instance.ConvertStringToBitmapSource(resourcePathOrBase64Str);
+        }
+
+        public static BitmapSource Scale(this BitmapSource bmpSrc, Size scale) {
+            return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, scale);
+        }
+
+        public static BitmapSource Resize(this BitmapSource bmpSrc, Size size) {
+            Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
+            return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, scale);
+        }
+
+        public static Image ToImage(this string resourcePathOrBase64Str) {
+            return new Image() {
+                Source = resourcePathOrBase64Str.ToBitmapSource(),
+                Stretch = Stretch.Fill
+            };
         }
 
         public static string ToBase64String(this BitmapSource bmpSrc) {

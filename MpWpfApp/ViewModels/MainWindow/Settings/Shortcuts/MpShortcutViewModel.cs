@@ -223,7 +223,6 @@ namespace MpWpfApp {
 
         public bool IsEmpty => KeyItems.Count == 0;
 
-        public bool HasChanged { get; set; } = false;
 
         #endregion
 

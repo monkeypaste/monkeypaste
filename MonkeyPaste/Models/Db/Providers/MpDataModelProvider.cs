@@ -21,7 +21,7 @@ namespace MonkeyPaste {
 
         public ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
-        public int TotalItems => AllFetchedAndSortedCopyItemIds.Count;
+        public int TotalTilesInQuery => AllFetchedAndSortedCopyItemIds.Count;
 
         #endregion
 

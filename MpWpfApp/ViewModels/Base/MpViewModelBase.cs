@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using SQLite;
 
 namespace MpWpfApp {    
     public abstract class MpViewModelBase : INotifyPropertyChanged {//, IDisposable {
@@ -165,6 +166,9 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public bool HasChanged { get; set; } = false;
+
         #endregion
 
         #region Constructors

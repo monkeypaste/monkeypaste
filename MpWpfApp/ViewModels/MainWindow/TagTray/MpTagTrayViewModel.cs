@@ -199,11 +199,11 @@ namespace MpWpfApp {
 
             foreach (var ct in countTasks) {
                 int count = await ct.Value;
-                var ttvm = TagTileViewModels.Where(x => x.TagId == ct.Key).FirstOrDefault();
+                var ttvm = TagTileViewModels.FirstOrDefault(x => x.TagId == ct.Key);
                 if (ttvm != null) {
                     ttvm.TagClipCount = count;
                 }
-            }
+            }           
         }
 
         public void ClearTagEditing() {

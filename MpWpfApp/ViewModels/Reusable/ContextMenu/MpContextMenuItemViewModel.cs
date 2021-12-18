@@ -28,6 +28,9 @@ namespace MpWpfApp {
         private bool? _isChecked = null;
         public bool? IsChecked {
             get {
+                if(!IsCheckable) {
+                    return false;
+                }
                 return _isChecked;
             }
             set {
@@ -40,7 +43,7 @@ namespace MpWpfApp {
 
         public bool IsCheckable {
             get {
-                return IsChecked.HasValue;
+                return _isChecked.HasValue;
             }
         }
 
@@ -199,7 +202,7 @@ namespace MpWpfApp {
                 case nameof(IconSource):
                     if (!string.IsNullOrEmpty(IconSource)) {
                         var icon = new Image();
-                        if (IconSource.Length <= MpPreferences.Instance.MaxFilePathCharCount && File.Exists(IconSource)) {
+                        if (!IconSource.IsBase64String()) {
                             icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
 
                         } else {

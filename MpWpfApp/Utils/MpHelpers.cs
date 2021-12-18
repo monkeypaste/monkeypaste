@@ -2084,29 +2084,60 @@ namespace MpWpfApp {
             return System.Drawing.Color.FromArgb(c[3], c[0], c[1], c[2]);
         }
 
-        public BitmapSource MergeImages(IList<BitmapSource> bmpSrcList) {
-            int width = 0;
-            int height = 0;
-            int dpiX = 0;
-            int dpiY = 0;
-            // Get max width and height of the image
-            foreach (var image in bmpSrcList) {
-                width = Math.Max(image.PixelWidth, width);
-                height = Math.Max(image.PixelHeight, height);
-                dpiX = Math.Max((int)image.DpiX, dpiX);
-                dpiY = Math.Max((int)image.DpiY, dpiY);
+        public BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList,bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
+            // if not scaled to smallest, will be scaled to largest
+            int w = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelWidth) : bmpSrcList.Max(x => x.PixelWidth);
+            int h = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelHeight) : bmpSrcList.Max(x => x.PixelHeight);
+
+            double dpiX = scaleToLargestDpi ? bmpSrcList.Max(x => x.DpiX) : bmpSrcList.Min(x => x.DpiX);
+            double dpiY = scaleToLargestDpi ? bmpSrcList.Max(x => x.DpiY) : bmpSrcList.Max(x=>x.DpiY);
+
+            for (int i = 0;i < bmpSrcList.Count;i++) {
+                BitmapSource bmp = bmpSrcList[i];
+                if(bmp.PixelWidth != w || bmp.PixelHeight != h) {
+                    bmpSrcList[i] = ResizeBitmapSource(bmp, new Size(w / bmp.PixelWidth, h / bmp.PixelHeight));
+                }
             }
-            var renderTargetBitmap = new RenderTargetBitmap(width, height, dpiX, dpiY, PixelFormats.Pbgra32);
+
+            var renderTargetBitmap = new RenderTargetBitmap(w, h, dpiX, dpiY, PixelFormats.Pbgra32);
             var drawingVisual = new DrawingVisual();
             using (var drawingContext = drawingVisual.RenderOpen()) {
                 foreach (var image in bmpSrcList) {
-                    drawingContext.DrawImage(image, new Rect(0, 0, width, height));
+                    drawingContext.DrawImage(image, new Rect(0, 0, w, h));
                 }
             }
             renderTargetBitmap.Render(drawingVisual);
 
+
+
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
+
+        public BitmapSource MergeImages(IList<BitmapSource> bmpSrcList, Size size = default) {
+            // from https://stackoverflow.com/a/14661969/105028
+            size = size == default ? new Size(32, 32) : size;
+
+            // Gets the size of the images (I assume each image has the same size)
+
+            // Draws the images into a DrawingVisual component
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen()) {
+                foreach(BitmapSource bmpSrc in bmpSrcList) {
+                    Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
+                    var rbmpSrc = ResizeBitmapSource(bmpSrc, scale);
+                    drawingContext.DrawImage(rbmpSrc,new Rect(0, 0, (int)size.Width, (int)size.Width));
+                }
+            }
+
+            // Converts the Visual (DrawingVisual) into a BitmapSource
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(drawingVisual);
+
+            return ConvertRenderTargetBitmapToBitmapSource(bmp);
+        }
+
+
+
 
         public async Task<BitmapSource> MergeImagesAsync(IList<BitmapSource> bmpSrcList, DispatcherPriority priority = DispatcherPriority.Background) {
             BitmapSource mergedImage = null;

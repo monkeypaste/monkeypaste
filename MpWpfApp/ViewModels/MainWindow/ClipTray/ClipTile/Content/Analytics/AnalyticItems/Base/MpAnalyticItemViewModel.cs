@@ -30,37 +30,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);
 
-        private MpAnalyticItemPresetViewModel _defaultPresetViewModel;
-        public MpAnalyticItemPresetViewModel DefaultPresetViewModel {
-            get {
-                if(_defaultPresetViewModel == null) {
-                    var defPreset = new MpAnalyticItemPreset() {
-                        Id = -AnalyticItem.Id,
-                        //AnalyticItem = AnalyticItem,
-                        AnalyticItemId = AnalyticItem.Id,
-                        Icon = AnalyticItem.Icon,
-                        IconId = AnalyticItem.IconId,
-                        Label = "Default",
-                        IsReadOnly = true,
-                        IsQuickAction = false,
-                        SortOrderIdx = -1
-                    };
-                    foreach (var paramVm in ParameterViewModels) {
-                        var ppv = new MpAnalyticItemPresetParameterValue() {
-                            //AnalyticItemPreset = defPreset,
-                            AnalyticItemPresetId = defPreset.Id,
-                            ParameterEnumId = paramVm.ParamEnumId,
-                            Value = paramVm.DefaultValue,
-                            DefaultValue = paramVm.DefaultValue
-                        };
-                        defPreset.PresetParameterValues.Add(ppv);
-                    }
-
-                    _defaultPresetViewModel = new MpAnalyticItemPresetViewModel(this, defPreset);
-                }
-                return _defaultPresetViewModel;
-            }
-        }
+        public MpAnalyticItemPresetViewModel DefaultPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsDefault);        
 
         public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
 
@@ -91,13 +61,11 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpContextMenuItemViewModel> PresetMenuItems {
+        public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
-                var children = new List<MpContextMenuItemViewModel>();
-                var presets = new List<MpAnalyticItemPresetViewModel> { DefaultPresetViewModel };
-                presets.AddRange(PresetViewModels);
+                var menuItems = new List<MpContextMenuItemViewModel>();
 
-                foreach(var p in presets) {
+                foreach(var p in PresetViewModels) {
                     var pmi = new MpContextMenuItemViewModel(
                         header: p.Label,
                         command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
@@ -107,10 +75,10 @@ namespace MpWpfApp {
                         subItems: null,
                         inputGestureText: p.ShortcutKeyString,
                         bgBrush: null);
-                    children.Add(pmi);
+                    menuItems.Add(pmi);
                 }
 
-                return new ObservableCollection<MpContextMenuItemViewModel>(children);
+                return new ObservableCollection<MpContextMenuItemViewModel>(menuItems);
             }
         }
 
@@ -294,6 +262,32 @@ namespace MpWpfApp {
             return naipvm;
         }
 
+        public async Task<MpAnalyticItemPresetViewModel> CreateDefaultPresetViewModel() {
+            var defPreset = new MpAnalyticItemPreset() {
+                Id = -AnalyticItem.Id,
+                AnalyticItem = AnalyticItem,
+                AnalyticItemId = AnalyticItem.Id,
+                Icon = AnalyticItem.Icon,
+                IconId = AnalyticItem.IconId,
+                Label = "Default",
+                IsReadOnly = true,
+                IsQuickAction = false,
+                SortOrderIdx = -1
+            };
+            foreach (var paramVm in ParameterViewModels) {
+                var ppv = new MpAnalyticItemPresetParameterValue() {
+                    AnalyticItemPreset = defPreset,
+                    AnalyticItemPresetId = defPreset.Id,
+                    ParameterEnumId = paramVm.ParamEnumId,
+                    Value = paramVm.DefaultValue,
+                    DefaultValue = paramVm.DefaultValue
+                };
+                defPreset.PresetParameterValues.Add(ppv);
+            }
+            var daipvm = await CreatePresetViewModel(defPreset);
+            return daipvm;            
+        }
+
         private void PresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var aipvm = sender as MpAnalyticItemPresetViewModel;
             switch(e.PropertyName) {
@@ -361,17 +355,24 @@ namespace MpWpfApp {
 
         protected async Task InitializeDefaultsAsync(MpAnalyticItem ai) {
             IsBusy = true;
-            AnalyticItem = ai;
+            AnalyticItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(ai.Id);
 
             // Init Presets
             PresetViewModels.Clear();
-            var pl = await MpDataModelProvider.Instance.GetAnalyticItemPresetsById(AnalyticItemId);
-            foreach (var preset in pl.OrderBy(x => x.SortOrderIdx)) {
+            
+            //var pl = await MpDataModelProvider.Instance.GetAnalyticItemPresetsById(AnalyticItemId);
+            
+            foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
                 var naipvm = await CreatePresetViewModel(preset);
                 PresetViewModels.Add(naipvm);
             }
 
-            AnalyticItem.Icon = await MpDb.Instance.GetItemAsync<MpIcon>(AnalyticItem.IconId);
+            var daipvm = await CreateDefaultPresetViewModel();
+            PresetViewModels.Add(daipvm);
+
+            DefaultPresetViewModel.SortOrderIdx = PresetViewModels.Count == 0 ? 0 : PresetViewModels.Max(x => x.SortOrderIdx) + 1;
+            PresetViewModels.OrderBy(x => x.SortOrderIdx);
+
 
             OnPropertyChanged(nameof(ItemIconBase64));
             OnPropertyChanged(nameof(PresetViewModels));
@@ -404,7 +405,7 @@ namespace MpWpfApp {
                         MpHelpers.Instance.RunOnMainThread(async () => {
                             aip = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
                             await presetVm.InitializeAsync(aip);
-                            OnPropertyChanged(nameof(PresetMenuItems));
+                            OnPropertyChanged(nameof(ContextMenuItems));
                             OnPropertyChanged(nameof(QuickActionPresetMenuItems));
                         });
                     }
@@ -423,7 +424,7 @@ namespace MpWpfApp {
                             OnPropertyChanged(nameof(HasPresets));
                             OnPropertyChanged(nameof(PresetViewModels));
                             OnPropertyChanged(nameof(SelectedPresetViewModel));
-                            OnPropertyChanged(nameof(PresetMenuItems));
+                            OnPropertyChanged(nameof(ContextMenuItems));
                             OnPropertyChanged(nameof(QuickActionPresetMenuItems));
                             OnPropertyChanged(nameof(ResetLabel));
                         }
@@ -601,8 +602,7 @@ namespace MpWpfApp {
                 foreach(var pvm in PresetViewModels) {
                     await pvm.Preset.WriteToDatabaseAsync();
                 }
-            },
-            ()=>PresetViewModels.Count > 0);
+            });
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {

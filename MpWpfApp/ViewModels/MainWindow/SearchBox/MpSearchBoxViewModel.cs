@@ -159,9 +159,7 @@ namespace MpWpfApp {
 
         public bool IsOverClearTextButton { get; set; } = false;
 
-        public bool IsSearchEnabled { get; set; }
-
-        public bool IsTextValid { get; private set; }
+        public bool IsTextValid { get; private set; } = true;
 
         private bool _isSearching = false;
         public bool IsSearching {

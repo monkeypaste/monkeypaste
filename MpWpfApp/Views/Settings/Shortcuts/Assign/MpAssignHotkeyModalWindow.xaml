@@ -12,7 +12,8 @@
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
     <Window.DataContext>
         <local:MpAssignShortcutModalWindowViewModel />
     </Window.DataContext>
@@ -30,6 +31,9 @@
                                 TargetObject="{Binding}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <i:Interaction.Behaviors>
+        <local:MpKeyGestureBehavior x:Name="KeyGestureBehavior" />
+    </i:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*" />

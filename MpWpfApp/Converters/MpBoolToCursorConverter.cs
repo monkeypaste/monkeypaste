@@ -13,7 +13,7 @@ namespace MpWpfApp {
             if (value == null || parameter == null) {
                 ct = MpCursorType.Default;
             } else {
-                var cl = parameter.ToString().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                var cl = parameter.ToString().Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 if ((bool)value) {
                     ct = MpCursorViewModel.Instance.GetCursorFromString(cl[0]);
                 } else {

@@ -21,7 +21,7 @@ namespace MpWpfApp {
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
-            TotalItemsInQuery = MpDataModelProvider.Instance.TotalItems;
+            TotalItemsInQuery = MpDataModelProvider.Instance.TotalTilesInQuery;
 
             if(isFilterSortOrSearch) {
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);

@@ -19,15 +19,16 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentItemView.xaml
     /// </summary>
     public partial class MpContentItemView : MpUserControl<MpContentItemViewModel> {
-        private static MpContentContextMenuView _ContentContextMenu;
+        private static MpContentContextMenuView _contentContextMenu;
 
         public MpContentItemView() : base() {
             InitializeComponent();            
         }
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            if (_ContentContextMenu == null) {
-                _ContentContextMenu = new MpContentContextMenuView();
+            if (_contentContextMenu == null) {
+                _contentContextMenu = new MpContentContextMenuView();
+                //_contentContextMenu.Items.Refresh();
             }
         }
 
@@ -43,8 +44,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            civm.IsHovering = true;
+            BindingContext.IsHovering = true;
             if(!MpDragDropManager.Instance.IsDragAndDrop &&
                 (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
@@ -52,8 +52,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            civm.IsHovering = false;
+            BindingContext.IsHovering = false;
             if (!MpDragDropManager.Instance.IsDragAndDrop) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
@@ -104,7 +103,7 @@ namespace MpWpfApp {
 
             e.Handled = true;
 
-            ContextMenu = _ContentContextMenu;
+            ContextMenu = _contentContextMenu;
             ContextMenu.PlacementTarget = this;
             ContextMenu.IsOpen = true;
         }

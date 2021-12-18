@@ -103,7 +103,7 @@
               Icon="{Binding Source={StaticResource BrainIcon},
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
-              ItemsSource="{Binding PresetMenuItems,
+              ItemsSource="{Binding ContextMenuItems,
                                     Source={StaticResource AnalyticItemCollectionViewModel}}"
               ItemContainerStyle="{StaticResource DefaultItemStyle}" />
     <MenuItem x:Name="ToolsMenuItem"

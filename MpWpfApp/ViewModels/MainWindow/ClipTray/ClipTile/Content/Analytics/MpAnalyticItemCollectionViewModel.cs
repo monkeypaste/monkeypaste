@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
 
-        public ObservableCollection<MpContextMenuItemViewModel> PresetMenuItems {
+        public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
                 var pmic = new List<MpContextMenuItemViewModel>();
 
@@ -33,11 +33,25 @@ namespace MpWpfApp {
                         commandParameter: null,
                         isChecked: null,
                         iconSource: item.ItemIconBase64,
-                        subItems: item.PresetMenuItems,
+                        subItems: item.ContextMenuItems,
                         inputGestureText: string.Empty,
                         bgBrush: null);
+
+
+                    imivm.SubItems.Add(
+                        new MpContextMenuItemViewModel(
+                                    header: "Manage...",
+                                    command: item.ManageAnalyticItemCommand,
+                                    commandParameter: null,
+                                    isChecked: null,
+                                    iconSource: null,//Application.Current.Resources["CogIcon"] as string,
+                                    subItems: null,
+                                    inputGestureText: string.Empty,
+                                    bgBrush: null));
+
                     pmic.Add(imivm);
                 }
+
                 if (pmic.Count == 0) {
                     return null;
                 }
@@ -60,6 +74,7 @@ namespace MpWpfApp {
                 return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
             }
         }
+
         #endregion
 
         #region Layout

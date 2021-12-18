@@ -224,8 +224,6 @@ namespace MpWpfApp {
            
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
-            MpClipTrayViewModel.Instance.RequeryCommand.Execute(null);
-
             while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
             int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();

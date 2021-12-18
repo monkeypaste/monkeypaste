@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
+
     public class MpAssignShortcutModalWindowViewModel : MpViewModelBase<object> {
         #region Static Variables
         public static bool IsOpen = false;

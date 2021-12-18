@@ -85,10 +85,10 @@
                         <Setter Property="FocusVisualStyle"
                                 Value="{x:Null}" />
                         <Setter Property="HorizontalContentAlignment"
-                                Value="Left" />
+                                Value="Stretch" />
                         <Setter Property="VerticalContentAlignment"
                                 Value="Stretch" />
-                        <Setter Property="Template">
+                        <!--<Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                     <StackPanel Orientation="Vertical">
@@ -101,10 +101,10 @@
                                                               TileMode="Tile">
                                                     <DrawingBrush.Drawing>
                                                         <DrawingGroup>
-                                                            <GeometryDrawing Brush="{Binding Content.ItemSeparatorBrush, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                                                            <GeometryDrawing Brush="{Binding ItemSeparatorBrush, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
                                                                 <GeometryDrawing.Geometry>
                                                                     <GeometryGroup>
-                                                                        <RectangleGeometry Rect="{Binding Content.ItemSeparatorBrushRect, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
+                                                                        <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
                                                                         <RectangleGeometry Rect="50,50,50,50" />
                                                                     </GeometryGroup>
                                                                 </GeometryDrawing.Geometry>
@@ -117,7 +117,7 @@
                                     </StackPanel>
                                 </ControlTemplate>
                             </Setter.Value>
-                        </Setter>
+                        </Setter>-->
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>

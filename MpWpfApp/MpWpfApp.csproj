@@ -134,6 +134,7 @@
     <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
     <Compile Include="Behaviors\Highlighting\MpFileListItemHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\MpRtbHighlightBehavior.cs" />
+    <Compile Include="Behaviors\Input\MpKeyGestureBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
+    <Compile Include="Utils\System\Input\MpKey.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\Gestures\Key\MpKeyViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\Gestures\Key\MpKeyGestureViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
@@ -2366,11 +2370,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Assets\test.jpg" />
-    <Resource Include="Resources\Images\ellipses.png" />
-    <Resource Include="Resources\Images\save.png" />
-    <Resource Include="Resources\Images\reset.png" />
-    <Resource Include="Resources\Images\desc_gray.png" />
-    <Resource Include="Resources\Images\asc_gray.png" />
+    <Resource Include="Resources\Images\ellipses.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\save.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\reset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\desc_gray.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\asc_gray.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <EmbeddedResource Include="Resources\Cursors\copy.cur">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -2386,8 +2400,15 @@
     <Resource Include="Resources\Images\bothclick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\noneclick.png" />
-    <Resource Include="Resources\Images\appendline.png" />
+    <Resource Include="Resources\Images\noneclick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\appendline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\trashcan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

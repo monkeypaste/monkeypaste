@@ -6,7 +6,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FFImageLoading.Helpers.Exif;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 using static SQLite.SQLite3;

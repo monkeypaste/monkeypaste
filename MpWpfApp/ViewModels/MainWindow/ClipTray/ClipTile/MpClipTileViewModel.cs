@@ -768,6 +768,10 @@ using System.Speech.Synthesis;
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
+                    if(ItemViewModels.Any(x=>x.CopyItemId == ccil[i].Id)) {
+                        //this prevents a strange bug i think from async loading that loads 2 of each item
+                        continue;
+                    }
                     ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
                     ccil[i].CompositeSortOrderIdx = i;
                     var civm = await CreateContentItemViewModel(ccil[i]);
