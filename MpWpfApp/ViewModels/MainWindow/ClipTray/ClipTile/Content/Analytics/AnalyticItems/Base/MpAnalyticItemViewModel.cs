@@ -28,9 +28,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemPresetViewModel> PresetViewModels { get; set; } = new ObservableCollection<MpAnalyticItemPresetViewModel>();
 
-        public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);
-
-        public MpAnalyticItemPresetViewModel DefaultPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsDefault);        
+        public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);     
 
         public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
 
@@ -147,6 +145,8 @@ namespace MpWpfApp {
 
         public virtual bool IsLoaded => Children.Count > 2;
 
+        public bool IsAnyEditing => PresetViewModels.Any(x => x.IsEditing);
+
         public bool HasPresets => PresetViewModels.Count > 0;
 
         public bool HasAnyChanged => ParameterViewModels.Any(x => x.HasChanged);
@@ -256,9 +256,7 @@ namespace MpWpfApp {
 
         public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyticItemPreset aip) {
             MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
-            naipvm.PropertyChanged += PresetViewModel_PropertyChanged;
             await naipvm.InitializeAsync(aip);
-
             return naipvm;
         }
 
@@ -267,10 +265,7 @@ namespace MpWpfApp {
                 Id = -AnalyticItem.Id,
                 AnalyticItem = AnalyticItem,
                 AnalyticItemId = AnalyticItem.Id,
-                Icon = AnalyticItem.Icon,
-                IconId = AnalyticItem.IconId,
                 Label = "Default",
-                IsReadOnly = true,
                 IsQuickAction = false,
                 SortOrderIdx = -1
             };
@@ -286,18 +281,6 @@ namespace MpWpfApp {
             }
             var daipvm = await CreatePresetViewModel(defPreset);
             return daipvm;            
-        }
-
-        private void PresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var aipvm = sender as MpAnalyticItemPresetViewModel;
-            switch(e.PropertyName) {
-                case nameof(aipvm.IsSelected):
-                    UpdateParameterValues();
-
-                    OnPropertyChanged(nameof(SelectedPresetViewModel));
-                    OnPropertyChanged(nameof(ResetLabel));
-                    break;
-            }
         }
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip) {
@@ -359,18 +342,17 @@ namespace MpWpfApp {
 
             // Init Presets
             PresetViewModels.Clear();
-            
-            //var pl = await MpDataModelProvider.Instance.GetAnalyticItemPresetsById(AnalyticItemId);
-            
+                        
             foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
                 var naipvm = await CreatePresetViewModel(preset);
                 PresetViewModels.Add(naipvm);
             }
 
-            var daipvm = await CreateDefaultPresetViewModel();
-            PresetViewModels.Add(daipvm);
-
-            DefaultPresetViewModel.SortOrderIdx = PresetViewModels.Count == 0 ? 0 : PresetViewModels.Max(x => x.SortOrderIdx) + 1;
+            if(PresetViewModels.Count == 0) {
+                var daipvm = await CreateDefaultPresetViewModel();
+                PresetViewModels.Add(daipvm);
+            }            
+            
             PresetViewModels.OrderBy(x => x.SortOrderIdx);
 
 
@@ -463,6 +445,9 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
+                case nameof(SelectedPresetViewModel):
+                    UpdateParameterValues();
+                    break;
             }
         }
 
@@ -541,11 +526,9 @@ namespace MpWpfApp {
                     return;
                 }
 
-
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         AnalyticItem,
-                        dialog.ResponseText,
-                        AnalyticItem.Icon);
+                        dialog.ResponseText);
 
                 foreach (var paramVm in ParameterViewModels.OrderBy(x => x.Parameter.SortOrderIdx)) {
                     var naippv = await MpAnalyticItemPresetParameterValue.Create(
@@ -611,7 +594,7 @@ namespace MpWpfApp {
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
             },
-            (presetVm) => presetVm != null && !presetVm.IsReadOnly);
+            (presetVm) => presetVm != null);
 
         public ICommand ShiftPresetCommand => new RelayCommand<object>(
             // [0] = shift dir [1] = presetvm
@@ -644,6 +627,7 @@ namespace MpWpfApp {
                 }
                 return false;
             });
+
         #endregion
     }
 }

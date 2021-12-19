@@ -202,10 +202,14 @@ namespace MonkeyPaste {
         }
 
         public override async Task DeleteFromDatabaseAsync() {
+            //
             if (IgnoreDb) {
                 MpConsole.WriteLine($"Db delete for '{ToString()}' was ignored");
                 return;
             }
+
+            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(Id);
+            await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
             await base.DeleteFromDatabaseAsync();
         }
 

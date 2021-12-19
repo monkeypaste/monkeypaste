@@ -1045,7 +1045,7 @@ namespace MpWpfApp {
                     this,
                     "Paste " + CopyItem.Title,
                     ShortcutKeyString,
-                     MpClipTrayViewModel.Instance.PerformHotkeyPasteCommand, CopyItem.Id);
+                    MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand, CopyItem.Id);
                 OnPropertyChanged(nameof(ShortcutKeyString));
             });
 

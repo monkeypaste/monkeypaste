@@ -19,10 +19,6 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemId")]
         public int AnalyticItemId { get; set; }
 
-        [ForeignKey(typeof(MpIcon))]
-        [Column("fk_MpIconId")]
-        public int IconId { get; set; }
-
         [ForeignKey(typeof(MpShortcut))]
         [Column("fk_MpShortcutId")]
         public int ShortcutId { get; set; } = 0;
@@ -38,18 +34,12 @@ namespace MonkeyPaste {
         [Column("IsQuickAction")]
         public int QuickAction { get; set; } = 0;
 
-        [Column("IsReadOnly")]
-        public int ReadOnly { get; set; } = 0;
-
         #endregion
 
         #region Fk Models
 
         [ManyToOne]
         public MpAnalyticItem AnalyticItem { get; set; }
-
-        [OneToOne]
-        public MpIcon Icon { get; set; }
 
         [OneToOne]
         public MpShortcut Shortcut { get; set; }
@@ -73,18 +63,6 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsReadOnly {
-            get {
-                return ReadOnly == 1;
-            }
-            set {
-                if (IsReadOnly != value) {
-                    ReadOnly = value ? 1 : 0;
-                }
-            }
-        }
-
-        [Ignore]
         public Guid AnalyticItemPresetGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
@@ -101,37 +79,20 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItemPreset> Create(
             MpAnalyticItem analyticItem, 
             string label,
-            MpIcon icon = null, bool isDefault = false, bool isReadOnly = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
+            bool isDefault = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
             if (analyticItem == null) {
                 throw new Exception("Preset must be associated with an item");
             }
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemPresetByLabel(analyticItem.Id, label);
-            if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset {label} for {analyticItem.Title}");
-
-                dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(dupItem.Id);
-                dupItem.AnalyticItemId = analyticItem.Id;
-                dupItem.Label = label;
-                dupItem.Description = description;
-                dupItem.SortOrderIdx = sortOrderIdx;
-                dupItem.IsReadOnly = isReadOnly;
-                dupItem.IsQuickAction = isQuickAction;
-                dupItem.IconId = icon == null ? 0 : icon.Id;                
-                await dupItem.WriteToDatabaseAsync();
-                return dupItem;
-            }
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
+                Id = 0,
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-               // AnalyticItem = analyticItem,
+                AnalyticItem = analyticItem,
                 AnalyticItemId = analyticItem.Id,
                 Label = label,
                 Description = description,
                 SortOrderIdx = sortOrderIdx,
-                IsReadOnly = isReadOnly,
                 IsQuickAction = isQuickAction,
-                IconId = icon == null ? 0 : icon.Id,
-                Icon = icon,
                 Shortcut = null,
                 ShortcutId = 0
             };
@@ -146,7 +107,6 @@ namespace MonkeyPaste {
         public object Clone() {
             var caip = new MpAnalyticItemPreset() {
                 AnalyticItemId = this.AnalyticItemId,
-                IconId = this.IconId,
                 Label = this.Label + " Clone",
                 Description = this.Description,
                 PresetParameterValues = this.PresetParameterValues.Select(x=>x.Clone() as MpAnalyticItemPresetParameterValue).ToList()

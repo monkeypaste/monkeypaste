@@ -17,6 +17,7 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
                 MpPreferences.Instance.ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
+            ResetClipboardAfterMonkeyPaste = false;
         }
         #endregion
 
@@ -844,7 +845,7 @@ namespace MonkeyPaste {
 
         public bool ResetClipboardAfterMonkeyPaste {
             get {
-                return _prefIo.Get(nameof(ResetClipboardAfterMonkeyPaste), true);
+                return _prefIo.Get(nameof(ResetClipboardAfterMonkeyPaste), false);
             }
             set {
                 _prefIo.Set(nameof(ResetClipboardAfterMonkeyPaste), value);

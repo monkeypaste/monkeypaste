@@ -392,7 +392,7 @@ namespace MpWpfApp {
             if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
                 return;
             }
-            if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
+            if (MpMainWindowViewModel.Instance.IsShowingDialog) {
                 return;
             }
             if (!char.IsControl(keyChar)) {

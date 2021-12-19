@@ -24,7 +24,7 @@ namespace MpWpfApp {
             InitializeComponent();
         }
         private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            SearchBox.Focus();
+            //SearchBox.Focus();
 
             searchByContextMenu = new ContextMenu();
 
@@ -40,7 +40,7 @@ namespace MpWpfApp {
         }
 
         private void Sbvm_OnSearchTextBoxFocusRequest(object sender, EventArgs e) {
-            SearchBox.Focus(); 
+            //SearchBox.Focus(); 
             SearchBox.CaretIndex = SearchBox.Text.Length - 1;
         }
 

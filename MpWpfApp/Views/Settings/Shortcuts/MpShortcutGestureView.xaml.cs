@@ -17,22 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpShortcutItemView.xaml
     /// </summary>
-    public partial class MpShortcutGestureView : MpUserControl<MpShortcutViewModel> {
-
-
-        public bool IsModalView {
-            get { return (bool)GetValue(IsModalViewProperty); }
-            set { SetValue(IsModalViewProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsModalViewProperty =
-            DependencyProperty.Register(
-                "IsModalView", 
-                typeof(bool), 
-                typeof(MpShortcutGestureView), 
-                new PropertyMetadata(true));
-
-
+    public partial class MpShortcutGestureView : MpUserControl<MpIShortcutCommand> {
         public MpShortcutGestureView() {
             InitializeComponent();
         }

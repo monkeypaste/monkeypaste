@@ -32,23 +32,9 @@ namespace MpWpfApp {
                 string processPath = MpHelpers.Instance.GetProcessPath(processHandle);
                 string appName = MpHelpers.Instance.GetProcessApplicationName(processHandle);
                 string processIconImg64 = MpHelpers.Instance.GetIconImage(processPath).ToBase64String();
-
-                MpApp app = await MpDataModelProvider.Instance.GetAppByPath(processPath);
-                if (app == null) {
-                    var icon = await MpDataModelProvider.Instance.GetIconByImageStr(processIconImg64);
-                    if (icon == null) {
-                        icon = await MpIcon.Create(processIconImg64);
-                    } else {
-                        icon = await MpDb.Instance.GetItemAsync<MpIcon>(icon.Id);
-                    }
-                    app = await MpApp.Create(processPath, appName, icon);
-                } else {
-                    app = await MpDb.Instance.GetItemAsync<MpApp>(app.Id);
-                }
-
-                MpUrl url = null;
-
+                
                 string itemData;
+                string htmlData = string.Empty;
                 MpCopyItemType itemType;
 
                 if (iData.ContainsKey(DataFormats.FileDrop)) {
@@ -68,18 +54,43 @@ namespace MpWpfApp {
                 } else if ((iData.ContainsKey(DataFormats.Html) || iData.ContainsKey(DataFormats.Text)) && !string.IsNullOrEmpty(iData[DataFormats.Text])) {
                     itemType = MpCopyItemType.RichText;
                     if (iData.ContainsKey(DataFormats.Html)) {
-                        var htmlData = iData[DataFormats.Html];
-                        try {
-                            url = await MpUrlBuilder.CreateFromHtmlData(htmlData,app);
-                        } catch(Exception ex) {
-                            MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
-                        }
+                        htmlData = iData[DataFormats.Html];                        
                     }
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText(iData[DataFormats.UnicodeText]);
                     //itemData = itemData.ToQuillText();
                 } else {
                     MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
                     return null;
+                }
+
+                var dupCheck = await MpDataModelProvider.Instance.GetCopyItemsByData(itemData);
+                if(dupCheck != null) {
+                    MpConsole.WriteLine("Duplicate item detected, ignoring");
+                    return null;
+                }
+
+                MpApp app = await MpDataModelProvider.Instance.GetAppByPath(processPath);
+                if (app == null) {
+                    var icon = await MpDataModelProvider.Instance.GetIconByImageStr(processIconImg64);
+                    if (icon == null) {
+                        icon = await MpIcon.Create(processIconImg64);
+                    } else {
+                        icon = await MpDb.Instance.GetItemAsync<MpIcon>(icon.Id);
+                    }
+                    app = await MpApp.Create(processPath, appName, icon);
+                } else {
+                    app = await MpDb.Instance.GetItemAsync<MpApp>(app.Id);
+                }
+
+                MpUrl url = null;
+
+                if(!string.IsNullOrEmpty(htmlData)) {
+                    try {
+                        url = await MpUrlBuilder.CreateFromHtmlData(htmlData, app);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
+                    }
                 }
 
                 if (itemType == MpCopyItemType.RichText && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {

@@ -161,6 +161,7 @@
     <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
+    <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
+    <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemComponentViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
@@ -278,9 +280,6 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
-    <Compile Include="Utils\System\Input\MpKey.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\Gestures\Key\MpKeyViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\Gestures\Key\MpKeyGestureViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />

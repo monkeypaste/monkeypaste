@@ -64,7 +64,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Variables
-        public static bool IsOpen = false;
         #endregion
 
         #region Properties
@@ -190,9 +189,9 @@ namespace MpWpfApp {
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
             _windowRef.Closed += (s, e2) => {
-                IsOpen = false;
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
             };
-            IsOpen = true;
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
             ClickSettingsPanelCommand.Execute(_tabToShow);
 
             if(_args != null) {

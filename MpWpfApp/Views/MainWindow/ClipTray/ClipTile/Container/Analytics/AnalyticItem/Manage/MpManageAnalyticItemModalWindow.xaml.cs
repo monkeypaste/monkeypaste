@@ -68,7 +68,7 @@ namespace MpWpfApp {
         private void Button_MouseEnter(object sender, MouseEventArgs e) {
             var aivm = DataContext as MpAnalyticItemViewModel;
             var pvm = aivm.SelectedPresetViewModel;
-            if(pvm.IsReadOnly) {
+            if(aivm.PresetViewModels.Count <= 1) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
             } else {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;

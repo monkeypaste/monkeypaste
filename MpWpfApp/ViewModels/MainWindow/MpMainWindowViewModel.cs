@@ -340,7 +340,7 @@ namespace MpWpfApp {
                 return (Application.Current.MainWindow == null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                    MpMainWindowViewModel.Instance.IsMainWindowLoading ||
-                   !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsMainWindowOpening;
+                   !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
         private async Task ShowWindow() {
@@ -394,7 +394,6 @@ namespace MpWpfApp {
                 if (IsMainWindowLocked || IsResizing || IsMainWindowClosing) {
                     return;
                 }
-                IsMainWindowClosing = true;
 
                 IDataObject pasteDataObject = null;
                 bool pasteSelected = false;
@@ -411,7 +410,9 @@ namespace MpWpfApp {
                     if (MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {
                         IsMainWindowLocked = true;
                     }
-                    pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
+                    if(pasteDataObject == null) {
+                        pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
+                    }
                     test = pasteDataObject.GetData(DataFormats.Text).ToString();
                     MpConsole.WriteLine("Cb Text: " + test);
                 }
@@ -419,6 +420,8 @@ namespace MpWpfApp {
                 var mw = (MpMainWindow)Application.Current.MainWindow;
 
                 if (IsMainWindowOpen) {
+                    IsMainWindowClosing = true;
+
                     double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
                     double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);

@@ -23,7 +23,7 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
                                FontSize="13"
-                               Foreground="White"
+                               Foreground="Black"
                                Text="{Binding Label}" />
                     <Border Grid.Column="1"
                             BorderThickness="2"
@@ -93,7 +93,7 @@
                         <TextBlock Text="{Binding Label}"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Center"
-                                   Foreground="White"
+                                   Foreground="Black"
                                    TextWrapping="Wrap" />
                         <TextBox Text="{Binding SliderValue,
                                                 Mode=TwoWay,
@@ -139,7 +139,7 @@
                            Visibility="{Binding HasResult,
                                                 Converter={StaticResource BoolToVisibilityConverter}}"
                            TextWrapping="Wrap"
-                           Background="White"
+                           Background="Black"
                            Foreground="Black"
                            HorizontalAlignment="Left"
                            MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
@@ -153,16 +153,11 @@
                                            ExecuteTemplate="{StaticResource ExecuteParameter}"
                                            ResultTemplate="{StaticResource ResultParameter}" />
         </StackPanel.Resources>
-        <Border Background="White"
-                Height="0.5"
-                Width="200"
-                HorizontalAlignment="Left" />
         <ContentControl Content="{Binding}"
                         Margin="0,5"
                         ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
-        <Border Background="White"
+        <Border Background="Black"
                 Height="0.5"
-                Width="200"
-                HorizontalAlignment="Left" />
+                HorizontalAlignment="Stretch" />
     </StackPanel>
 </local:MpUserControl>

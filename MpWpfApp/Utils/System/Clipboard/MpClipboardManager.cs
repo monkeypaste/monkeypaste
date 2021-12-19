@@ -175,7 +175,7 @@ namespace MpWpfApp {
             SetDataObject(ido);
         }
 
-        public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
+        public async Task PasteDataObject(IDataObject dataObject, IntPtr handle) {
             //to prevent cb listener thread from thinking there's a new item
             _lastCbo = ConvertManagedFormats(dataObject);
             //Mouse.OverrideCursor = Cursors.Wait;
@@ -188,6 +188,8 @@ namespace MpWpfApp {
                 SetDataObjectWrapper(dataObject);
                 WinApi.SetForegroundWindow(handle);
                 WinApi.SetActiveWindow(handle);
+
+                await Task.Delay(300);
                 System.Windows.Forms.SendKeys.SendWait("^v");
 
                 if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {

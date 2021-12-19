@@ -234,6 +234,42 @@ namespace MonkeyPaste {
             if (lks == "shift") {
                 return MpWindowsKey.LeftShift;
             }
+            if (lks == ";") {
+                return MpWindowsKey.Oem1;
+            }
+            if (lks == "`") {
+                return MpWindowsKey.Oem3;
+            }
+            if (lks == "'") {
+                return MpWindowsKey.OemQuotes;
+            }
+            if (lks == "-") {
+                return MpWindowsKey.OemMinus;
+            }
+            if (lks == "=") {
+                return MpWindowsKey.OemPlus;
+            }
+            if (lks == ",") {
+                return MpWindowsKey.OemComma;
+            }
+            if (lks == @"/") {
+                return MpWindowsKey.OemQuestion;
+            }
+            if (lks == ".") {
+                return MpWindowsKey.OemPeriod;
+            }
+            if (lks == "[") {
+                return MpWindowsKey.OemOpenBrackets;
+            }
+            if (lks == "]") {
+                return MpWindowsKey.Oem6;
+            }
+            if (lks == "|") {
+                return MpWindowsKey.Oem5;
+            }
+            if (lks == "PageDown") {
+                return MpWindowsKey.Next;
+            }
             return (MpWindowsKey)Enum.Parse(typeof(MpWindowsKey), keyStr, true);
         }
     }

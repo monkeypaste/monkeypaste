@@ -60,8 +60,8 @@ namespace MpWpfApp {
                     currentHandle != ThisAppHandle && 
                     ThisAppHandle != IntPtr.Zero && 
                     currentHandle != IntPtr.Zero &&
-                    !MpSettingsWindowViewModel.IsOpen &&
-                    !MpAssignShortcutModalWindowViewModel.IsOpen) {
+                    !MpMainWindowViewModel.Instance.IsShowingDialog &&
+                    !MpMainWindowViewModel.Instance.IsShowingDialog) {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.Instance.GetProcessMainWindowTitle(LastHandle);
 

@@ -13,6 +13,7 @@ using MouseKeyHook.Rx;
 using WindowsInput;
 using MonkeyPaste;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel> {
@@ -453,12 +454,19 @@ namespace MpWpfApp {
                     }
                     var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
                     
+                    var cl = MpHelpers.Instance.ConvertStringToKeySequence(KeyString);
+                    var wfcl = cl.Select(x =>x.Select(y=> MpHelpers.Instance.WpfKeyToWinformsKey(y)).ToList()).ToList();
+                    string keyValStr = string.Join(",", wfcl.Select(x =>
+                                                 string.Join("+", x.Select(y => 
+                                                    Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
+
+                    //keyValStr = KeyString;
                     if (IsSequence()) {
                         if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                             //only register sequences at startup
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
-                                    Sequence.FromString(KeyString),
+                                    Sequence.FromString(keyValStr),
                                     () => PerformShortcutCommand.Execute(null)
                                 }
                             });
@@ -466,7 +474,7 @@ namespace MpWpfApp {
                     } else {
                         //unregister if already exists
                         Unregister();
-                        var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyString) };
+                        var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
                         KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
                             (trigger) => PerformShortcutCommand.Execute(null)
                         );
@@ -569,15 +577,17 @@ namespace MpWpfApp {
                 Command?.Execute(CommandParameter);
             },
             () => {
+                var mwvm = MpMainWindowViewModel.Instance;
+                var ctrvm = MpClipTrayViewModel.Instance;
+                var ttrvm = MpTagTrayViewModel.Instance;
+                var sbvm = MpSearchBoxViewModel.Instance;
                 //never perform shortcuts in the following states
-                if (MpAssignShortcutModalWindowViewModel.IsOpen ||
-                   MpSettingsWindowViewModel.IsOpen ||
-                   MpMainWindowViewModel.Instance.IsShowingDialog ||
-                   MpClipTrayViewModel.Instance.IsAnyPastingTemplate ||
-                   MpClipTrayViewModel.Instance.IsAnyEditingClipTile ||
-                   MpClipTrayViewModel.Instance.IsAnyEditingClipTitle ||
-                   MpTagTrayViewModel.Instance.IsEditingTagName ||
-                   MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
+                if (mwvm.IsShowingDialog ||
+                   ctrvm.IsAnyPastingTemplate ||
+                   ctrvm.IsAnyEditingClipTile ||
+                   ctrvm.IsAnyEditingClipTitle ||
+                   ttrvm.IsEditingTagName ||
+                   (sbvm.IsTextBoxFocused && mwvm.IsMainWindowOpen)) {
                     return false;
                 }
                 //otherwise check basic type routing for validity

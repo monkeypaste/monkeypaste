@@ -31,6 +31,14 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+        #region Input
+
+        public static string ToString(this Key key) {
+            return MpHelpers.Instance.ConvertKeyToString(key);
+        }
+
+        #endregion
+
         #region System
 
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject dependencyObject) {
@@ -139,7 +147,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
 
         #region Context Menus
 

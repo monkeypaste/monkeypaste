@@ -530,6 +530,14 @@ namespace MpWpfApp {
                 if (sc.TagId == TagId) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
+            } else if(e is MpCopyItem ci) {
+                Task.Run(async () => {
+                    var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(ci.Id, TagId);
+                    if(cit != null) {
+                        await cit.DeleteFromDatabaseAsync();
+                        TagClipCount--;
+                    }
+                });
             }
         }
         #endregion

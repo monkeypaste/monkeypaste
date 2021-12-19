@@ -615,18 +615,23 @@ namespace MpWpfApp {
             return nctvm;
         }
 
-        public async Task<IDataObject> GetDataObjectByCopyItemIds(int[] ciidArray, bool isDragDrop, bool isToExternalApp) {
+        public async Task<IDataObject> GetDataObjectByCopyItems(List<MpCopyItem> selectedModels, bool isDragDrop, bool isToExternalApp) {
             IDataObject d = new DataObject();
             string rtf = string.Empty.ToRichText();
             string pt = string.Empty;
 
-            var selectedModels = await MpDataModelProvider.Instance.GetCopyItemsByIdList(ciidArray.ToList());                       
+            //var selectedModels = await MpDataModelProvider.Instance.GetCopyItemsByIdList(ciidArray.ToList());                       
 
             if (isToExternalApp) {
                 //gather rtf and text NOT setdata it needs file drop first
-                foreach (var sctvm in SelectedItems) {
-                    string sctrtf = await sctvm.GetSubSelectedPastableRichText(isToExternalApp);
-                    rtf = MpHelpers.Instance.CombineRichText(sctrtf, rtf);
+                foreach (var sctvm in selectedModels) {
+                    string itemData = sctvm.ItemData;
+                    if (sctvm.ItemType == MpCopyItemType.FileList) {
+                        itemData = itemData.ToRichText();
+                    } else if (sctvm.ItemType == MpCopyItemType.Image) {
+                        continue;
+                    }
+                    rtf = MpHelpers.Instance.CombineRichText(itemData, rtf);
                 }
                 pt = rtf.ToPlainText();
             }
@@ -679,8 +684,8 @@ namespace MpWpfApp {
                     d.SetData(DataFormats.Text, rtf.ToPlainText());
                 }
                 //set image
-                if (SelectedItems.Count == 1 && SelectedItems[0].HeadItem.CopyItem.ItemType == MpCopyItemType.Image) {
-                    d.SetData(DataFormats.Bitmap, SelectedItems[0].HeadItem.CopyItem.ItemData.ToBitmapSource());
+                if (selectedModels.Count == 1 && selectedModels[0].ItemType == MpCopyItemType.Image) {
+                    d.SetData(DataFormats.Bitmap, selectedModels[0].ItemData.ToBitmapSource());
                 }
 
                 //set csv
@@ -716,10 +721,14 @@ namespace MpWpfApp {
                 selectedModels = PersistentSelectedModels;
             } else {
                 SelectedItems.ForEach(x => x.DoCommandSelection());
+
                 foreach (var sctvm in SelectedItems) {
-                    foreach (var scivm in sctvm.SelectedItems) {
-                        selectedModels.Add(scivm.CopyItem);
-                    }
+                    string sctrtf = await sctvm.GetSubSelectedPastableRichText(isToExternalApp);
+                    selectedModels.Add(new MpCopyItem() {
+                        ItemType = sctvm.ItemType,
+                        ItemData = sctrtf,
+                        Title = sctvm.PrimaryItem.CopyItemTitle
+                    });
                 }
             }
             if (selectedModels.Count == 0) {
@@ -728,7 +737,7 @@ namespace MpWpfApp {
 
             selectedModels.Reverse();
 
-            var result = await GetDataObjectByCopyItemIds(selectedModels.Select(x => x.Id).ToArray(), isDragDrop, isToExternalApp);
+            var result = await GetDataObjectByCopyItems(selectedModels, isDragDrop, isToExternalApp);
             return result;
         }
 
@@ -760,7 +769,7 @@ namespace MpWpfApp {
                     pasteToWindowHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
                 }
 
-                MpClipboardManager.Instance.PasteDataObject(pasteDataObject, pasteToWindowHandle);
+                await MpClipboardManager.Instance.PasteDataObject(pasteDataObject, pasteToWindowHandle);
 
                 if (_selectedPasteToAppPathViewModel != null && _selectedPasteToAppPathViewModel.PressEnter) {
                     System.Windows.Forms.SendKeys.SendWait("{ENTER}");
@@ -768,30 +777,33 @@ namespace MpWpfApp {
 
                 if (!fromHotKey) {
                     //resort list so pasted items are in front and paste is tracked
+                    var phl = new List<MpPasteHistory>();
                     for (int i = SelectedItems.Count - 1; i >= 0; i--) {
                         var sctvm = SelectedItems[i];
 
                         var a = await MpDataModelProvider.Instance.GetAppByPath(MpHelpers.Instance.GetProcessPath(MpClipboardManager.Instance.LastWindowWatcher.LastHandle));
                         var aid = a == null ? 0 : a.Id;
                         foreach (var ivm in sctvm.ItemViewModels) {
-                            var ud = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
-                            await new MpPasteHistory() {
+                            //var ud = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+                            phl.Add(new MpPasteHistory() {
                                 AppId = aid,
                                 PasteHistoryGuid = Guid.NewGuid(),
                                 CopyItemId = ivm.CopyItem.Id,
-                                UserDeviceId = ud.Id,
+                                UserDeviceId = MpPreferences.Instance.ThisUserDevice.Id,
                                 PasteDateTime = DateTime.Now
-                            }.WriteToDatabaseAsync();
+                            });
+                            
                         }
                     }
+                    await Task.WhenAll(phl.Select(x=>x.WriteToDatabaseAsync()).ToArray());
                 }
             } else if (pasteDataObject == null) {
                 MpConsole.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
             }
             _selectedPasteToAppPathViewModel = null;
-            if (!fromHotKey) {
-                ResetClipSelection();
-            }
+            //if (!fromHotKey) {
+            //    ResetClipSelection();
+            //}
 
             IsPastingHotKey = IsPastingSelected = false;
             foreach (var sctvm in SelectedItems) {
@@ -935,6 +947,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
+                return;
                 MpHelpers.Instance.RunOnMainThread(
                     async () => {
                     var civm = GetContentItemViewModelById(ci.Id);
@@ -1204,10 +1217,13 @@ namespace MpWpfApp {
 
         public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
             async (args) => {
-                var pasteDataObject = await GetDataObjectByCopyItemIds((args as int[]), false, true);
+                int[] ciidl = args is int[]? args as int[] : new int[] { (int)args };
+
+                var cil = await MpDataModelProvider.Instance.GetCopyItemsByIdList(ciidl.ToList());
+                var pasteDataObject = await GetDataObjectByCopyItems(cil, false, true);
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
             },
-            (args) => args != null && args is int[]);
+            (args) => args != null && (args is int || args is int[]));
 
         public ICommand AddNewItemsCommand => new RelayCommand<bool?>(
             async (addToCurrentTag) => {
@@ -1303,11 +1319,9 @@ namespace MpWpfApp {
                     }
                 }
 
-                if (isDragDropRequery) {
-
-                } else {
+                if (SelectedItems.Count == 0 && PersistentSelectedModels.Count == 0 && TotalTilesInQuery > 0) {
                     ResetClipSelection();
-                }
+                } 
 
                 IsBusy = false;
                 IsRequery = false;
@@ -1635,56 +1649,6 @@ namespace MpWpfApp {
                 }
             });
 
-        public ICommand PerformHotkeyPasteCommand => new RelayCommand<object>(
-            async (args) => {
-                if (args == null) {
-                    return;
-                }
-                MpConsole.WriteLine("HotKey pasting copyitemid: " + (int)args);
-                IsPastingHotKey = true;
-                int copyItemId = (int)args;
-                IDataObject pasteDataObject = null;
-                var pctvm = GetContentItemViewModelById(copyItemId);
-                if (pctvm != null) {
-                    ClearClipSelection();
-                    pctvm.IsSelected = true;
-                    pctvm.Parent.SubSelectAll();
-                    pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
-                    ClearClipSelection();
-                } else {
-                    //otherwise check if it is a composite within a tile
-                    MpContentItemViewModel prtbvm = GetContentItemViewModelById(copyItemId) as MpContentItemViewModel;
-                    //foreach (var ctvm in MpClipTrayViewModel.Instance.ClipTileViewModels) {
-                    //    prtbvm = ctvm.ContentContainerViewModel.GetRtbItemByCopyItemId(copyItemId);
-                    //    if (prtbvm != null) {
-                    //        break;
-                    //    }
-                    //}
-                    if (prtbvm != null) {
-                        ClearClipSelection();
-                        prtbvm.Parent.IsSelected = true;
-                        prtbvm.Parent.ClearSelection();
-                        prtbvm.IsSelected = true;
-                        pasteDataObject = await GetDataObjectFromSelectedClips(false, true);
-                        prtbvm.Parent.ClearSelection();
-                        ClearClipSelection();
-                    }
-                }
-
-                if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    //occurs during hotkey paste and set in ctvm.GetPastableRichText
-                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
-                } else if (pasteDataObject != null) {
-                    //In order to paste the app must hide first 
-                    //this triggers hidewindow to paste selected items
-                    await PasteDataObject(pasteDataObject);
-                    ResetClipSelection();
-                }
-            },
-            (args) => {
-                return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
-            });
-
         public ICommand CopySelectedClipsCommand => new RelayCommand(
             async () => {
                 var ido = await GetDataObjectFromSelectedClips(false, false);
@@ -1693,7 +1657,6 @@ namespace MpWpfApp {
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             (args) => {
-
                 if (args != null && args.GetType() == typeof(int) && (int)args > 0) {
                     //when pasting to a user defined application
                     _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -1706,6 +1669,7 @@ namespace MpWpfApp {
                     _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
                     _selectedPasteToAppPathViewModel = null;
                 }
+                SelectedItems.ForEach(x => x.SubSelectAll());
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
                 IsPastingSelected = true;
@@ -1713,7 +1677,7 @@ namespace MpWpfApp {
                 IsPastingSelected = false;
             },
             (args) => {
-                return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
+                return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
                     !IsAnyTileExpanded &&
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
@@ -1784,11 +1748,16 @@ namespace MpWpfApp {
 
         public ICommand DeleteSelectedClipsCommand => new RelayCommand(
             async () => {
-                var deleteTasks = SelectedModels.Select(x => x.DeleteFromDatabaseAsync());
-                await Task.WhenAll(deleteTasks.ToArray());
+                await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()).ToArray());
+
+                foreach(var sm in SelectedModels) {
+                    var pm = PersistentSelectedModels.FirstOrDefault(x => x.Id == sm.Id);
+                    PersistentSelectedModels.Remove(pm);
+                }
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
             },
             () => {
-                return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
+                return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
                         SelectedModels.Count > 0 &&
                         !IsAnyEditingClipTile &&
                         !IsAnyEditingClipTitle &&
@@ -2008,23 +1977,16 @@ namespace MpWpfApp {
             async (presetId) => {
                 MpAnalyticItemViewModel analyticItemVm = null;
                 MpAnalyticItemPresetViewModel presetVm = null;
-                if (presetId > 0) {
-                    var preset = await MpDataModelProvider.Instance.GetAnalyzerPresetById(presetId);
-                    analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
-                    presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);
-                } else {
-                    //default preset is negated pk of analytic item
-                    presetId *= -1;
-                    analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == presetId);
-                    presetVm = analyticItemVm.DefaultPresetViewModel;
-                }
+
+                var preset = await MpDataModelProvider.Instance.GetAnalyzerPresetById(presetId);
+                analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
+                presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);                
 
                 var prevSelectedPresetVm = analyticItemVm.SelectedPresetViewModel;
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 analyticItemVm.ExecuteAnalysisCommand.Execute(PrimaryItem.PrimaryItem);
 
                 MessageBox.Show(analyticItemVm.ResultViewModel.Result);
-
             });
 
         #endregion

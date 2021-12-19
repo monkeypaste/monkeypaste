@@ -1071,7 +1071,6 @@ using System.Speech.Synthesis;
             }
 
             //(Parent.FlipTileCommand as RelayCommand<object>).NotifyCanExecuteChanged();
-            //(Parent.PerformHotkeyPasteCommand as RelayCommand<object>).NotifyCanExecuteChanged();
             //(Parent.BringSelectedClipTilesToFrontCommand as RelayCommand).NotifyCanExecuteChanged();
             //(Parent.SendSelectedClipTilesToBackCommand as RelayCommand).NotifyCanExecuteChanged();
             //(Parent.SpeakSelectedClipsCommand as RelayCommand).NotifyCanExecuteChanged();
@@ -1433,7 +1432,7 @@ using System.Speech.Synthesis;
             }
         }
         private bool CanPasteSubSelectedClips(object ptapId) {
-            return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
+            return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate &&
@@ -1552,7 +1551,7 @@ using System.Speech.Synthesis;
             }
         }
         private bool CanDeleteSubSelectedClips() {
-            return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
+            return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate;

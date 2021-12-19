@@ -13,14 +13,10 @@ using MonkeyPaste;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, ICloneable {
+    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIShortcutCommand, ICloneable {
         #region Properties
 
         #region View Models
-
-        public MpShortcutViewModel ShortcutViewModel => MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.AnalyticItemPresetId == Preset.Id);
-
-        #endregion
 
         #region Appearance
 
@@ -30,6 +26,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
         public bool IsSelected { get; set; }
 
         public bool IsEditing { get; set; }
@@ -37,8 +34,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Model 
-
-        public bool IsDefault => AnalyticItemPresetId < 0;
 
         public string ShortcutKeyString {
             get {
@@ -94,8 +89,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsReadOnly => IsDefault;
-
         public bool IsQuickAction {
             get {
                 if (Preset == null) {
@@ -113,10 +106,10 @@ namespace MpWpfApp {
 
         public string PresetIcon {
             get {
-                if (Preset == null || Preset.Icon == null) {
+                if (Parent == null) {
                     return null;
                 }
-                return Preset.Icon.IconImage.ImageBase64;
+                return Parent.ItemIconBase64;
             }
         }
 
@@ -130,6 +123,17 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
+        #endregion
+
+        #endregion
+
+
+        #region MpIShortcutCommand Implementation
+
+        public MpShortcutViewModel ShortcutViewModel => MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.AnalyticItemPresetId == Preset.Id);
+
+        public ICommand AssignCommand => AssignHotkeyCommand;
+
         #endregion
 
         #endregion
@@ -200,6 +204,15 @@ namespace MpWpfApp {
 
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    break;
+                case nameof(IsEditing):
+                    if(IsEditing) {
+                        ManagePresetCommand.Execute(null);
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditing));
+                    break;
             } 
         }
 
@@ -207,50 +220,14 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ChangeIconCommand => new RelayCommand<object>(
-            (args) => {
-                var iconColorChooserMenuItem = new MenuItem();
-                var iconContextMenu = new ContextMenu();
-                iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.Instance.SetColorChooserMenuItem(
-                    iconContextMenu,
-                    iconColorChooserMenuItem,
-                    async (s1, e1) => {
-                        var brush = (Brush)((Border)s1).Tag;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
-                        Preset.IconId = Preset.Icon.Id;
-                        //await Preset.WriteToDatabaseAsync();
-
-                        OnPropertyChanged(nameof(PresetIcon));
-                    }
-                );
-                var iconImageChooserMenuItem = new MenuItem();
-                iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
-                iconImageChooserMenuItem.Click += async (s, e) => {
-                    var openFileDialog = new OpenFileDialog() {
-                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                        Title = "Select Image for " + Label,
-                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    };
-                    bool? openResult = openFileDialog.ShowDialog();
-                    if (openResult != null && openResult.Value) {
-                        string imagePath = openFileDialog.FileName;
-                        var presetIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
-                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
-                        Preset.IconId = Preset.Icon.Id;
-                        //await Preset.WriteToDatabaseAsync();
-
-                        OnPropertyChanged(nameof(PresetIcon));
-                    }
-                };
-                iconContextMenu.Items.Add(iconImageChooserMenuItem);
-                ((Button)args).ContextMenu = iconContextMenu;
-                iconContextMenu.PlacementTarget = ((Button)args);
-                iconContextMenu.IsOpen = true;
-            },(args)=>!IsDefault && args is Button);
+        public ICommand ManagePresetCommand => new RelayCommand(
+            async() => {
+                if(!Parent.IsLoaded) {
+                    await Parent.LoadChildren();
+                }
+                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
+                Parent.PresetViewModels.ForEach(x => x.IsEditing = x == this);
+            });
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
@@ -260,9 +237,17 @@ namespace MpWpfApp {
                     ShortcutKeyString,
                     MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand, Preset.Id);
 
+                OnPropertyChanged(nameof(ShortcutViewModel));
+
                 OnPropertyChanged(nameof(ShortcutKeyString));
-                ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
+                
+
+                if(ShortcutViewModel != null) {
+                    ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
+                }
             });
+
+        
         #endregion
     }
 }

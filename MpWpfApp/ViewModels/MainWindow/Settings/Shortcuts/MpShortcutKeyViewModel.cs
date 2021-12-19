@@ -10,10 +10,6 @@ namespace MpWpfApp {
     public class MpShortcutKeyViewModel : MpViewModelBase<MpShortcutViewModel> {
         #region Properties
 
-        public ObservableCollection<DateTime> KeyDownInstances { get; set; } = new ObservableCollection<DateTime>();
-
-        public ObservableCollection<DateTime> KeyUpInstances { get; set; } = new ObservableCollection<DateTime>();
-
         private int _seqIdx = 0;
         public int SeqIdx {
             get {

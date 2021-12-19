@@ -4,15 +4,15 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpShortcutViewModel"
+                     x:TypeArguments="local:MpIShortcutCommand"
                      mc:Ignorable="d"
-                     d:DesignHeight="450"
+                     d:DesignHeight="50"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpShortcutViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpIShortcutCommand,
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <ListBox x:Name="ShortcutListBox"
-                 Grid.Row="2"
+                 DataContext="{Binding ShortcutViewModel}"
                  IsEnabled="False"
                  BorderThickness="0"
                  HorizontalAlignment="Center"
@@ -112,23 +112,33 @@
                 </GroupStyle>
             </ListBox.GroupStyle>
         </ListBox>
-        <StackPanel Orientation="Horizontal"
-                    Visibility="{Binding IsEmpty,
-                                         Converter={StaticResource BoolToVisibilityConverter}}">
-            <Ellipse Width="15"
-                     Height="15"
-                     Fill="Red"
-                     Margin="3"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center" />
-            <TextBlock x:Name="EmptyGestureTextBlock"
-                       Margin="3,0"
-                       VerticalAlignment="Center"
-                       Text="Double-Click To Set"
-                       FontStyle="Italic"
-                       Foreground="DimGray"
-                       Background="Transparent"
-                       FontSize="14" />
-        </StackPanel>
+        <Button Background="Transparent"
+                Command="{Binding AssignCommand}">
+            <Border CornerRadius="10"
+                    DataContext="{Binding ShortcutViewModel}"
+                    BorderThickness="1"
+                    BorderBrush="DimGray"
+                    Background="LightGray">
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding IsEmpty,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Ellipse Width="15"
+                             Height="15"
+                             Fill="Red"
+                             Margin="5,3"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
+                    <TextBlock x:Name="EmptyGestureTextBlock"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"
+                               Text="Click To Set"
+                               FontSize="12"
+                               FontStyle="Italic"
+                               Foreground="DimGray"
+                               Background="Transparent" />
+                </StackPanel>
+            </Border>
+        </Button>
+
     </Grid>
 </local:MpUserControl>

@@ -44,32 +44,11 @@
                                  Color="#FF0000" />-->
                     </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="50">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button x:Name="PresetIcon"
-                                            BorderThickness="0"
-                                            Cursor="Hand"
-                                            Background="Transparent"
-                                            Template="{StaticResource SearchButtonControlTemplate}"
-                                            Command="{Binding ChangeIconCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                                        <Image Width="20"
-                                               Height="20"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Source="{Binding PresetIcon,
-                                                                Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
-                                    </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Label"
                                                 Width="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox IsReadOnly="{Binding IsReadOnly}"
-                                             Margin="3"
+                                    <TextBox Margin="3"
                                              Background="White"
                                              BorderThickness="0"
                                              Text="{Binding Label,
@@ -100,21 +79,27 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <local:MpShortcutGestureView Background="White"
-                                                                 DataContext="{Binding ShortcutViewModel}" />
+                                                                 DataContext="{Binding}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Width="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Background="White"
-                                            BorderThickness="0"
-                                            ToolTip="Reassign"
-                                            Command="{Binding AssignHotkeyCommand}">
+                                    <ToggleButton Background="White"
+                                                  BorderThickness="0"
+                                                  ToolTip="Configure"
+                                                  IsChecked="{Binding IsEditing,
+                                                                      Mode=TwoWay,
+                                                                      NotifyOnTargetUpdated=True,
+                                                                      NotifyOnSourceUpdated=True,
+                                                                      UpdateSourceTrigger=PropertyChanged}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="{Binding ., Converter={StaticResource StringToImageSourceConverter}, Source={StaticResource HotkeyIcon}}" />
-                                    </Button>
+                                               Source="{Binding .,
+                                                                Converter={StaticResource StringToImageSourceConverter},
+                                                                Source={StaticResource CogIcon}}" />
+                                    </ToggleButton>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -130,7 +115,9 @@
                                             CommandParameter="{Binding}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="{Binding ., Converter={StaticResource StringToImageSourceConverter}, Source={StaticResource TrashCanIcon} }" />
+                                               Source="{Binding .,
+                                                                Converter={StaticResource StringToImageSourceConverter},
+                                                                Source={StaticResource TrashCanIcon}}" />
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -142,7 +129,9 @@
                         HorizontalAlignment="Left"
                         Command="{Binding CreateNewPresetCommand}">
                     <DockPanel>
-                        <Image Source="{Binding ., Converter={StaticResource StringToImageSourceConverter}, Source={StaticResource AddIcon} }"
+                        <Image Source="{Binding .,
+                                                Converter={StaticResource StringToImageSourceConverter},
+                                                Source={StaticResource AddIcon}}"
                                DockPanel.Dock="Left"
                                Width="20"
                                Height="20" />
@@ -151,6 +140,48 @@
                     </DockPanel>
                 </Button>
             </StackPanel>
+        </Border>
+        <Border HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderThickness="1"
+                BorderBrush="Black"
+                Margin="0,5,0,0"
+                Padding="20,0">
+            <ListBox x:Name="ConfigurePresetListBox"
+                     Visibility="{Binding IsAnyEditing,
+                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                     ItemsSource="{Binding Children}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}" />
+                        <Setter Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Stretch" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAnalyticItemComponentView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Border>
         <StackPanel Orientation="Horizontal"
                     Margin="0,10,15,0"

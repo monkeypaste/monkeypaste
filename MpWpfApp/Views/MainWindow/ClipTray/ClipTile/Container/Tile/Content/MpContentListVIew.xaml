@@ -88,36 +88,6 @@
                                 Value="Stretch" />
                         <Setter Property="VerticalContentAlignment"
                                 Value="Stretch" />
-                        <!--<Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <StackPanel Orientation="Vertical">
-                                        <ContentPresenter />
-                                        <Border BorderThickness="0.75"
-                                                HorizontalAlignment="Stretch">
-                                            <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8"
-                                                              ViewportUnits="Absolute"
-                                                              TileMode="Tile">
-                                                    <DrawingBrush.Drawing>
-                                                        <DrawingGroup>
-                                                            <GeometryDrawing Brush="{Binding ItemSeparatorBrush, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
-                                                                <GeometryDrawing.Geometry>
-                                                                    <GeometryGroup>
-                                                                        <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
-                                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                                    </GeometryGroup>
-                                                                </GeometryDrawing.Geometry>
-                                                            </GeometryDrawing>
-                                                        </DrawingGroup>
-                                                    </DrawingBrush.Drawing>
-                                                </DrawingBrush>
-                                            </Border.BorderBrush>
-                                        </Border>
-                                    </StackPanel>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>-->
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
