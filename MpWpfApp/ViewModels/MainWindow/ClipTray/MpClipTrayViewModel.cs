@@ -1657,13 +1657,13 @@ namespace MpWpfApp {
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             (args) => {
-                if (args != null && args.GetType() == typeof(int) && (int)args > 0) {
+                if (args != null && args is int appId && appId > 0) {
                     //when pasting to a user defined application
                     _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-                    _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.FindById((int)args);
-                } else if (args != null && args.GetType() == typeof(IntPtr) && (IntPtr)args != IntPtr.Zero) {
+                    _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.FindById(appId);
+                } else if (args != null && args is IntPtr handle && handle != IntPtr.Zero) {
                     //when pasting to a running application
-                    _selectedPasteToAppPathWindowHandle = (IntPtr)args;
+                    _selectedPasteToAppPathWindowHandle = handle;
                     _selectedPasteToAppPathViewModel = null;
                 } else {
                     _selectedPasteToAppPathWindowHandle = IntPtr.Zero;

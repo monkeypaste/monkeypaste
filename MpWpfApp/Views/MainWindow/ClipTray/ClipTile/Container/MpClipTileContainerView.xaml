@@ -18,8 +18,8 @@
                                             Visibility="{Binding Parent.BackVisibility}" />-->
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
-        
-       
+
+
         <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
                                   Visibility="{Binding IsFlipping,

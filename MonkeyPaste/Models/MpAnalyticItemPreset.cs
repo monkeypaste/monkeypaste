@@ -19,9 +19,15 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemId")]
         public int AnalyticItemId { get; set; }
 
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; }
+
         [ForeignKey(typeof(MpShortcut))]
         [Column("fk_MpShortcutId")]
         public int ShortcutId { get; set; } = 0;
+
+        public int Default { get; set; } = 0;
 
         [Column("Label")]
         public string Label { get; set; } = string.Empty;
@@ -42,6 +48,9 @@ namespace MonkeyPaste {
         public MpAnalyticItem AnalyticItem { get; set; }
 
         [OneToOne]
+        public MpIcon Icon { get; set; }
+
+        [OneToOne]
         public MpShortcut Shortcut { get; set; }
 
         [OneToMany]
@@ -49,6 +58,18 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        [Ignore]
+        public bool IsDefault {
+            get {
+                return Default == 1;
+            }
+            set {
+                if (IsDefault != value) {
+                    Default = value ? 1 : 0;
+                }
+            }
+        }
 
         [Ignore]
         public bool IsQuickAction {
@@ -79,16 +100,18 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItemPreset> Create(
             MpAnalyticItem analyticItem, 
             string label,
-            bool isDefault = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
-            if (analyticItem == null) {
+            MpIcon icon = null, bool isDefault = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
+            if (analyticItem == null || analyticItem.Icon == null) {
                 throw new Exception("Preset must be associated with an item");
             }
-
+            icon = icon == null ? analyticItem.Icon : icon;
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
                 Id = 0,
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
                 AnalyticItem = analyticItem,
                 AnalyticItemId = analyticItem.Id,
+                Icon = icon,
+                IconId = icon.Id,
                 Label = label,
                 Description = description,
                 SortOrderIdx = sortOrderIdx,

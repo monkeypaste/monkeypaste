@@ -20,14 +20,12 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentContextMenuView.xaml
     /// </summary>
     public partial class MpTagTileContextMenuView : ContextMenu {
-        public MpTagTileViewModel BindingContext;
-
         public MpTagTileContextMenuView() {
             InitializeComponent();
         }
 
         private void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
+            var ttvm = base.DataContext as MpTagTileViewModel;
             var cm = (ContextMenu)sender;
             cm.DataContext = ttvm;
             MenuItem cmi = null;
@@ -50,10 +48,10 @@ namespace MpWpfApp {
         }
 
         private void TagTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            if(BindingContext == null) {
+            if(DataContext == null) {
                 return;
             }
-            var ttvm = BindingContext as MpTagTileViewModel;
+            var ttvm = DataContext as MpTagTileViewModel;
             ttvm.IsContextMenuOpened = true;
 
             var cm = sender as ContextMenu;
@@ -62,10 +60,10 @@ namespace MpWpfApp {
         }
 
         private void TagTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
-            if (BindingContext == null) {
+            if (DataContext == null) {
                 return;
             }
-            var ttvm = BindingContext as MpTagTileViewModel;
+            var ttvm = DataContext as MpTagTileViewModel;
             ttvm.IsContextMenuOpened = false;
         }
     }

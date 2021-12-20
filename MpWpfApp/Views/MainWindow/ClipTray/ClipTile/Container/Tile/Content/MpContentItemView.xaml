@@ -13,7 +13,7 @@
                                                       IsDesignTimeCreatable=False}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch">
-        <Border BorderThickness="1"
+    <Border BorderThickness="1"
             Loaded="ContentListItemView_Loaded"
             Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
@@ -26,55 +26,56 @@
             MouseLeave="ContentListItemView_MouseLeave"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-            <Border.Resources>
-                <DataTemplate x:Key="TextContent">
-                    <local:MpRtbView DataContext="{Binding}" />
-                </DataTemplate>
-                <DataTemplate x:Key="ImageContent">
-                    <local:MpImageItemView DataContext="{Binding}" />
-                </DataTemplate>
-                <DataTemplate x:Key="FileListContent">
-                    <local:MpFileListItemView DataContext="{Binding}" />
-                </DataTemplate>
-                <local:MpContentViewSelector x:Key="ContentViewSelector"
+        <Border.Resources>
+            <DataTemplate x:Key="TextContent">
+                <local:MpRtbView DataContext="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="ImageContent">
+                <local:MpImageItemView DataContext="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="FileListContent">
+                <local:MpFileListItemView DataContext="{Binding}" />
+            </DataTemplate>
+            <local:MpContentViewSelector x:Key="ContentViewSelector"
                                          TextContentTemplate="{StaticResource TextContent}"
                                          FileContentTemplate="{StaticResource FileListContent}"
                                          ImageContentTemplate="{StaticResource ImageContent}" />
-            </Border.Resources>
-            <Border.BorderBrush>
-                <DrawingBrush Viewport="0,0,7,7"
+        </Border.Resources>
+        <Border.BorderBrush>
+            <DrawingBrush Viewport="0,0,7,7"
                           ViewportUnits="Absolute"
                           TileMode="Tile">
-                    <DrawingBrush.Drawing>
-                        <DrawingGroup>
-                            <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
-                                <GeometryDrawing.Geometry>
-                                    <GeometryGroup>
-                                        <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
-                                        <RectangleGeometry Rect="50,50,50,50" />
-                                    </GeometryGroup>
-                                </GeometryDrawing.Geometry>
-                            </GeometryDrawing>
-                        </DrawingGroup>
-                    </DrawingBrush.Drawing>
-                </DrawingBrush>
-            </Border.BorderBrush>
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
+                                    <RectangleGeometry Rect="50,50,50,50" />
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Border.BorderBrush>
         <Grid>
             <ContentControl x:Name="ContentView"
-                        Content="{Binding ., IsAsync=True}"
-                        ContentTemplateSelector="{StaticResource ContentViewSelector}" />
+                            Content="{Binding .,
+                                              IsAsync=True}"
+                            ContentTemplateSelector="{StaticResource ContentViewSelector}" />
             <Border BorderThickness="0.75"
-                HorizontalAlignment="Stretch">
+                    HorizontalAlignment="Stretch">
                 <Border.BorderBrush>
                     <DrawingBrush Viewport="0,0,8,8"
-                              ViewportUnits="Absolute"
-                              TileMode="Tile">
+                                  ViewportUnits="Absolute"
+                                  TileMode="Tile">
                         <DrawingBrush.Drawing>
                             <DrawingGroup>
-                                <GeometryDrawing Brush="{Binding ItemSeparatorBrush,IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                                <GeometryDrawing Brush="{Binding ItemSeparatorBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
                                     <GeometryDrawing.Geometry>
                                         <GeometryGroup>
-                                            <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect,IsAsync=True,  FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
+                                            <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect, IsAsync=True, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
                                             <RectangleGeometry Rect="50,50,50,50" />
                                         </GeometryGroup>
                                     </GeometryDrawing.Geometry>
@@ -85,5 +86,5 @@
                 </Border.BorderBrush>
             </Border>
         </Grid>
-    </Border>        
+    </Border>
 </local:MpUserControl>

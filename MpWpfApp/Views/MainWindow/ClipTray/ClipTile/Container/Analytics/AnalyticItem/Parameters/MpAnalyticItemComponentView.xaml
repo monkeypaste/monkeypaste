@@ -13,49 +13,7 @@
         <StackPanel.Resources>
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
-                <DockPanel LastChildFill="False">
-                    <!--<Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>-->
-                    <TextBlock Grid.Column="0"
-                               Margin="0,0,7,0"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               FontSize="13"
-                               Foreground="Black"
-                               Text="{Binding Label}" />
-                    <Border Grid.Column="1"
-                            BorderThickness="2"
-                            CornerRadius="2"
-                            Padding="1"
-                            ToolTipService.InitialShowDelay="2"
-                            ToolTip="{Binding ParameterTooltipText}"
-                            BorderBrush="{Binding ParameterBorderBrush}">
-                        <ComboBox ItemsSource="{Binding ValueViewModels}"
-                                  SelectedItem="{Binding CurrentValueViewModel,
-                                                         Mode=TwoWay,
-                                                         UpdateSourceTrigger=PropertyChanged,
-                                                         NotifyOnTargetUpdated=True}"
-                                  HorizontalAlignment="Right"
-                                  MinWidth="80">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Value}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                            <ComboBox.ItemContainerStyle>
-                                <Style TargetType="ComboBoxItem">
-                                    <Setter Property="IsSelected"
-                                            Value="{Binding IsSelected,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnTargetUpdated=True}" />
-                                </Style>
-                            </ComboBox.ItemContainerStyle>
-                        </ComboBox>
-                    </Border>
-                </DockPanel>
+                <local:MpComboBoxParameterView DataContext="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="TextBoxParameter"
                           DataType="local:MpTextBoxParameterViewModel">

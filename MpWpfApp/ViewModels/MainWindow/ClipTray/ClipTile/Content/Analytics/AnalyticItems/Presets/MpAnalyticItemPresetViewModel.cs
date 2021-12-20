@@ -35,12 +35,12 @@ namespace MpWpfApp {
 
         #region Model 
 
-        public string ShortcutKeyString {
+        public bool IsDefault {
             get {
-                if(ShortcutViewModel == null) {
-                    return string.Empty;
+                if(Preset == null) {
+                    return false;
                 }
-                return ShortcutViewModel.KeyString;
+                return Preset.IsDefault;
             }
         }
 
@@ -130,7 +130,24 @@ namespace MpWpfApp {
 
         #region MpIShortcutCommand Implementation
 
-        public MpShortcutViewModel ShortcutViewModel => MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.AnalyticItemPresetId == Preset.Id);
+        public MpShortcutType ShortcutType => MpShortcutType.AnalyzeCopyItemWithPreset;
+
+        public MpShortcutViewModel ShortcutViewModel {
+            get {
+                if(Parent == null || Preset == null) {
+                    return null;
+                }
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
+
+                if(scvm == null) {
+                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                }
+
+                return scvm;
+            }
+        }
+
+        public string ShortcutKeyString => ShortcutViewModel.KeyString;
 
         public ICommand AssignCommand => AssignHotkeyCommand;
 
@@ -175,7 +192,7 @@ namespace MpWpfApp {
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -183,7 +200,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -191,7 +208,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.AnalyticItemPresetId == AnalyticItemPresetId) {
+                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -232,10 +249,11 @@ namespace MpWpfApp {
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    this,
                     $"Use {Label} Analyzer",
-                    ShortcutKeyString,
-                    MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand, Preset.Id);
+                    MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                    MpShortcutType.AnalyzeCopyItemWithPreset,
+                    Preset.Id,
+                    ShortcutKeyString);
 
                 OnPropertyChanged(nameof(ShortcutViewModel));
 

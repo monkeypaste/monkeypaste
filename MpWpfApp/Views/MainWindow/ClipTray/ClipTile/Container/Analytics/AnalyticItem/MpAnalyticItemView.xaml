@@ -15,8 +15,8 @@
             HorizontalAlignment="Stretch"
             BorderThickness="0"
             BorderBrush="Black"
-            CornerRadius="10"
-            Background="{Binding ItemBackgroundBrush}"
+            CornerRadius="3"
+            Background="Transparent"
             MouseEnter="Border_MouseEnter"
             MouseLeave="Border_MouseLeave">
         <DockPanel LastChildFill="False">
@@ -41,8 +41,7 @@
                     Click="PresetOptionsButton_Click"
                     ToolTipService.InitialShowDelay="100"
                     Template="{StaticResource SearchButtonControlTemplate}"
-                    Visibility="{Binding IsBusy,
-                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                    Visibility="Collapsed"
                     Background="Transparent">
                 <Button.Resources>
                     <local:MpBindingProxy x:Key="AnalyticItemProxy"
@@ -110,7 +109,7 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontSize="16"
-                       Foreground="{Binding ItemTitleForegroundBrush}"
+                       Foreground="Black"
                        Background="Transparent">
                 <TextBlock.ToolTip>
                     <ToolTip>
@@ -121,7 +120,7 @@
                     <Hyperlink x:Name="AnalyticItemTextBlockLink"
                                IsEnabled="{Binding IsSelected}"
                                Background="Transparent"
-                               Foreground="{Binding ItemTitleForegroundBrush}">
+                               Foreground="Black">
                         <Hyperlink.Inlines>
                             <Run Text="{Binding Title}" />
                         </Hyperlink.Inlines>

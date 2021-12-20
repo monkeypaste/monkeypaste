@@ -10,20 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpSettingsWindow.xaml
+    /// Interaction logic for MpComboBox.xaml
     /// </summary>
-    public partial class MpSettingsWindow : MpWindow<MpSettingsWindowViewModel> {
-        public MpSettingsWindow() {
+    public partial class MpComboBoxParameterView : MpUserControl<MpComboBoxParameterViewModel> {
+        public MpComboBoxParameterView() {
             InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel();
-        }
-        public MpSettingsWindow(int tabToShow, object args = null) {
-            InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel(tabToShow, args);
         }
     }
 }

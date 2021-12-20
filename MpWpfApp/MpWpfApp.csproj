@@ -285,6 +285,9 @@
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\ComboBox\MpComboBoxParameterView.xaml.cs">
+      <DependentUpon>MpComboBoxParameterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
@@ -294,9 +297,6 @@
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
       <DependentUpon>MpTagTrayView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml.cs">
-      <DependentUpon>MpManageTagExpressionModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
       <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
@@ -349,10 +349,10 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\MpAnalyticItemComponentView.xaml.cs">
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\MpAnalyticItemComponentView.xaml.cs">
       <DependentUpon>MpAnalyticItemComponentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\Selectors\MpParameterViewSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Selectors\MpParameterViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>
@@ -530,6 +530,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\ComboBox\MpComboBoxParameterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpSavePresetModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -542,7 +546,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Components\MpAnalyticItemComponentView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\MpAnalyticItemComponentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -675,10 +679,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Manage\MpManageTagExpressionModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2429,7 +2429,12 @@
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Execute\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Result\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Slider\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\TextBox\" />
     <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
+    <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">

@@ -10,7 +10,8 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpIShortcutCommand,
                                                       IsDesignTimeCreatable=False}">
-    <Grid>
+    <Grid MouseEnter="Grid_MouseEnter"
+          MouseLeave="Grid_MouseLeave">
         <ListBox x:Name="ShortcutListBox"
                  DataContext="{Binding ShortcutViewModel}"
                  IsEnabled="False"
@@ -31,10 +32,21 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle"
+                                        Value="{x:Null}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <ContentPresenter />
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected"
+                                                         Value="True">
+                                        <Setter Property="BorderBrush"
+                                                            Value="Transparent" />
+                                        <Setter Property="Background"
+                                                            Value="Transparent" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -112,7 +124,8 @@
                 </GroupStyle>
             </ListBox.GroupStyle>
         </ListBox>
-        <Button Background="Transparent"
+        <Button x:Name="AssignButton"
+                Background="Transparent"
                 Command="{Binding AssignCommand}">
             <Border CornerRadius="10"
                     DataContext="{Binding ShortcutViewModel}"
@@ -122,7 +135,8 @@
                 <StackPanel Orientation="Horizontal"
                             Visibility="{Binding IsEmpty,
                                                  Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Ellipse Width="15"
+                    <Ellipse x:Name="RecordEllipse"
+                             Width="15"
                              Height="15"
                              Fill="Red"
                              Margin="5,3"

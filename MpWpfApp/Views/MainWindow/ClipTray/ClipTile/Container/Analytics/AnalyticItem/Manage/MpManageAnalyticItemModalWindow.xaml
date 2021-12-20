@@ -1,31 +1,53 @@
-﻿<Window x:Class="MpWpfApp.MpManageAnalyticItemModalWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MpWpfApp"
-        mc:Ignorable="d"
-        Title="{Binding ManageLabel}"
-        Icon="{Binding ItemIconBase64,
-                       Converter={StaticResource Base64StringToIconConverter}}"
-        d:DesignWidth="600"
-        Loaded="Window_Loaded"
-        SizeToContent="WidthAndHeight"
-        Topmost="True"
-        ShowInTaskbar="False"
-        ResizeMode="CanResize"
-        WindowStartupLocation="CenterScreen"
-        Activated="Window_Activated"
-        d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemViewModel,
-                                         IsDesignTimeCreatable=False}">
-    <StackPanel Margin="10">
+﻿<local:MpWindow x:Class="MpWpfApp.MpManageAnalyticItemModalWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+                xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:local="clr-namespace:MpWpfApp"
+                mc:Ignorable="d"
+                x:TypeArguments="local:MpAnalyticItemCollectionViewModel"
+                Title="{Binding ManageLabel}"
+                Icon="{Binding .,
+                               Source={StaticResource CogIcon},
+                               Converter={StaticResource StringToIconConverter}}"
+                d:DesignWidth="600"
+                SizeToContent="WidthAndHeight"
+                Topmost="True"
+                ShowInTaskbar="False"
+                ResizeMode="CanResize"
+                WindowStartupLocation="CenterScreen"
+                DataContext="{StaticResource AnalyticItemCollectionViewModel}"
+                d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
+                                                 IsDesignTimeCreatable=False}">
+    <StackPanel Margin="10"
+                Orientation="Vertical">
+        <!--  Analytic Item Chooser  -->
+        <Border CornerRadius="3"
+                BorderThickness="1"
+                BorderBrush="Black"
+                Background="Transparent"
+                Margin="10">
+            <ComboBox x:Name="AnalyticItemChooserComboBox"
+                      IsSynchronizedWithCurrentItem="True"
+                      Loaded="AnalyticItemChooserComboBox_Loaded"
+                      SelectionChanged="AnalyticItemChooserComboBox_SelectionChanged"
+                      ItemsSource="{Binding Items}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAnalyticItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Border>
+        <!--  Preset Grid and Add Row Button  -->
         <Border CornerRadius="3"
                 BorderThickness="1"
                 BorderBrush="Black"
                 Background="Transparent">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"
+                        DataContext="{Binding SelectedItem}">
                 <DataGrid x:Name="AnalyticItemDatagrid"
                           dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.IsDropTarget="True"
@@ -71,11 +93,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--<DataGridTextColumn Header="Shortcut"
-                                    Width="Auto"
-                                    IsReadOnly="True"
-                                    Binding="{Binding ShortcutKeyString}" />-->
-                        <DataGridTemplateColumn Width="Auto">
+                        <DataGridTemplateColumn Width="Auto"
+                                                Header="Hot Key">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <local:MpShortcutGestureView Background="White"
@@ -83,12 +102,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="40">
+                        <DataGridTemplateColumn MinWidth="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ToggleButton Background="White"
+                                    <ToggleButton Background="Transparent"
                                                   BorderThickness="0"
-                                                  ToolTip="Configure"
+                                                  HorizontalAlignment="Center"
+                                                  HorizontalContentAlignment="Center"
+                                                  ToolTip="Configure" 
+                                                  Template="{StaticResource LockToggleButtonControlTemplate}"
                                                   IsChecked="{Binding IsEditing,
                                                                       Mode=TwoWay,
                                                                       NotifyOnTargetUpdated=True,
@@ -103,10 +125,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="40">
+                        <DataGridTemplateColumn MinWidth="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Background="White"
+                                    <Button Background="Transparent"
                                             BorderThickness="0"
                                             ToolTip="Delete"
                                             MouseEnter="Button_MouseEnter"
@@ -141,12 +163,14 @@
                 </Button>
             </StackPanel>
         </Border>
+        <!--  Preset Parameter ListBox  -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 BorderThickness="1"
                 BorderBrush="Black"
                 Margin="0,5,0,0"
-                Padding="20,0">
+                Padding="20,0"
+                DataContext="{Binding SelectedItem}">
             <ListBox x:Name="ConfigurePresetListBox"
                      Visibility="{Binding IsAnyEditing,
                                           Converter={StaticResource BoolToVisibilityConverter}}"
@@ -183,6 +207,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
+
+        <!--  - OK Cancel Buttons  -->
         <StackPanel Orientation="Horizontal"
                     Margin="0,10,15,0"
                     HorizontalAlignment="Right">
@@ -200,4 +226,4 @@
                     Click="Cancel_Click" />
         </StackPanel>
     </StackPanel>
-</Window>
+</local:MpWindow>

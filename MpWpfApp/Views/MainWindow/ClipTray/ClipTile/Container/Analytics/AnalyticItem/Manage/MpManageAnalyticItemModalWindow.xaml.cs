@@ -13,17 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    /// <summary>
-    /// Interaction logic for MpAssignHotkeyModalWindow.xaml
-    /// </summary>
-    public partial class MpManageAnalyticItemModalWindow : Window {
+
+    public partial class MpManageAnalyticItemModalWindow : MpWindow<MpAnalyticItemCollectionViewModel> {
         public MpManageAnalyticItemModalWindow() {
             InitializeComponent();
         }
 
-        private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-            var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
-
+        private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {            
             DialogResult = true;
         }
 
@@ -31,44 +27,10 @@ namespace MpWpfApp {
             DialogResult = false;
         }
 
-
-        private void ShiftDownButton_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var btn = sender as Button;
-            if(btn.DataContext == null) {
-                return;
-            }
-            var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
-            btn.IsEnabled = pvm.Parent.ShiftPresetCommand.CanExecute(new object[] { 1, pvm });
-            btn.Command = pvm.Parent.ShiftPresetCommand;
-            btn.CommandParameter = new object[] { 1, pvm };
-        }
-
-        private void ShiftUpButton_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var btn = sender as Button;
-            if (btn.DataContext == null) {
-                return;
-            }
-            var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
-            btn.IsEnabled = pvm.Parent.ShiftPresetCommand.CanExecute(new object[] { -1, pvm }); 
-            btn.Command = pvm.Parent.ShiftPresetCommand;
-            btn.CommandParameter = new object[] { -1, pvm };
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e) {
-            var aivm = DataContext as MpAnalyticItemViewModel;
-            aivm.OnPropertyChanged(nameof(aivm.ItemIconBase64));
-        }
-
-        private void Window_Activated(object sender, EventArgs e) {
-            //this is to update the shortcut key cell after an edit
-            var aivm = DataContext as MpAnalyticItemViewModel;
-            aivm.PresetViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ShortcutViewModel)));
-        }
-
         private void Button_MouseEnter(object sender, MouseEventArgs e) {
-            var aivm = DataContext as MpAnalyticItemViewModel;
+            var aivm = BindingContext.SelectedItem;
             var pvm = aivm.SelectedPresetViewModel;
-            if(aivm.PresetViewModels.Count <= 1) {
+            if(pvm.IsDefault) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
             } else {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
@@ -77,6 +39,15 @@ namespace MpWpfApp {
 
         private void Button_MouseLeave(object sender, MouseEventArgs e) {
             MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
+        private void AnalyticItemChooserComboBox_Loaded(object sender, RoutedEventArgs e) {
+            AnalyticItemChooserComboBox.SelectedItem = BindingContext.SelectedItem;//.Items.IndexOf(BindingContext.SelectedItem);
+            return;
+        }
+
+        private void AnalyticItemChooserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            BindingContext.Items.ForEach(x => x.IsSelected = BindingContext.Items.IndexOf(x) == AnalyticItemChooserComboBox.SelectedIndex);
         }
     }
 }

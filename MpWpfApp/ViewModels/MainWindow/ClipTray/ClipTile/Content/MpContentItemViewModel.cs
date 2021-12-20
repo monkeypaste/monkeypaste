@@ -18,7 +18,7 @@ using MonkeyPaste;
 using PropertyChanged;
 
 namespace MpWpfApp {
-    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel> {
+    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIShortcutCommand {
         #region Private Variables
 
         Size itemSize;
@@ -60,6 +60,31 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        #endregion
+
+        #region MpIShortcutCommand Implementation
+
+        public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
+
+        public MpShortcutViewModel ShortcutViewModel {
+            get {
+                if (Parent == null || CopyItem == null) {
+                    return null;
+                }
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == CopyItemId && x.ShortcutType == ShortcutType);
+
+                if (scvm == null) {
+                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                }
+
+                return scvm;
+            }
+        }
+
+        public string ShortcutKeyString => ShortcutViewModel.KeyString;
+
+        public ICommand AssignCommand => AssignHotkeyCommand;
 
         #endregion
 
@@ -437,20 +462,6 @@ namespace MpWpfApp {
             }
         }
 
-        public string ShortcutKeyString {
-            get {
-                if(MpShortcutCollectionViewModel.Instance == null ||
-                   MpShortcutCollectionViewModel.Instance.IsBusy) {
-                    return string.Empty;
-                }
-                var svm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CopyItemId == CopyItemId);
-                if(svm != null) {
-                    return svm.KeyString;
-                }
-                return string.Empty;
-            }
-        }
-
         public int RelevanceScore {
             get {
                 if (CopyItem == null) {
@@ -786,7 +797,7 @@ namespace MpWpfApp {
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpShortcut sc) {
-                if(sc.CopyItemId == CopyItemId) {
+                if(sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -794,7 +805,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CopyItemId == CopyItemId) {
+                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if(e is MpCopyItem ci) {
@@ -806,7 +817,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CopyItemId == CopyItemId) {
+                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -1042,10 +1053,9 @@ namespace MpWpfApp {
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    this,
                     "Paste " + CopyItem.Title,
-                    ShortcutKeyString,
-                    MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand, CopyItem.Id);
+                    MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand,
+                    ShortcutType, CopyItem.Id, ShortcutKeyString);
                 OnPropertyChanged(nameof(ShortcutKeyString));
             });
 

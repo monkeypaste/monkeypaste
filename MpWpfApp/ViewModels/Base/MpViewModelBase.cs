@@ -167,7 +167,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool HasChanged { get; set; } = false;
+        public bool HasModelChanged { get; set; } = false;
 
         #endregion
 

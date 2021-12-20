@@ -261,22 +261,22 @@ namespace MpWpfApp {
         }
 
         public async Task<MpAnalyticItemPresetViewModel> CreateDefaultPresetViewModel() {
-            var defPreset = new MpAnalyticItemPreset() {
-                Id = -AnalyticItem.Id,
-                AnalyticItem = AnalyticItem,
-                AnalyticItemId = AnalyticItem.Id,
-                Label = "Default",
-                IsQuickAction = false,
-                SortOrderIdx = -1
-            };
+            var defPreset = await MpAnalyticItemPreset.Create(
+                analyticItem: AnalyticItem,
+                label: "Default",
+                icon: AnalyticItem.Icon,
+                isDefault: true,
+                isQuickAction: false,
+                sortOrderIdx: 0,
+                description: $"This is the default preset for '{AnalyticItem.Title}' and cannot be removed");
+
             foreach (var paramVm in ParameterViewModels) {
-                var ppv = new MpAnalyticItemPresetParameterValue() {
-                    AnalyticItemPreset = defPreset,
-                    AnalyticItemPresetId = defPreset.Id,
-                    ParameterEnumId = paramVm.ParamEnumId,
-                    Value = paramVm.DefaultValue,
-                    DefaultValue = paramVm.DefaultValue
-                };
+                var ppv = await MpAnalyticItemPresetParameterValue.Create(
+                    parentItem: defPreset,
+                    paramEnumId: paramVm.ParamEnumId,
+                    value: paramVm.DefaultValue,
+                    defaultValue: paramVm.DefaultValue);;
+
                 defPreset.PresetParameterValues.Add(ppv);
             }
             var daipvm = await CreatePresetViewModel(defPreset);
@@ -435,7 +435,7 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(IsSelected):
-                    Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
 
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
@@ -497,6 +497,7 @@ namespace MpWpfApp {
 
         public ICommand ExecuteAnalysisCommand => new RelayCommand(
             async () => {
+                //this is triggered from MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand w/ preset id
                 await ExecuteAnalysis(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemData.ToPlainText());
             },
             CanExecuteAnalysis);
@@ -516,19 +517,9 @@ namespace MpWpfApp {
                     await LoadChildren();
                 }
 
-                MpMainWindowViewModel.Instance.IsShowingDialog = true;
-
-                var dialog = new MpSavePresetModalWindow(GetUniquePresetName());
-                bool? result = dialog.ShowDialog();
-
-                MpMainWindowViewModel.Instance.IsShowingDialog = false;
-                if (result.Value == false) {
-                    return;
-                }
-
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         AnalyticItem,
-                        dialog.ResponseText);
+                        GetUniquePresetName());
 
                 foreach (var paramVm in ParameterViewModels.OrderBy(x => x.Parameter.SortOrderIdx)) {
                     var naippv = await MpAnalyticItemPresetParameterValue.Create(
@@ -566,9 +557,12 @@ namespace MpWpfApp {
             () => HasAnyChanged);
 
         public ICommand ManageAnalyticItemCommand => new RelayCommand(
-            async() => {
+            async () => {
                 if (!IsLoaded) {
                     await LoadChildren();
+                }
+                if(!IsSelected) {
+                    Parent.Items.ForEach(x => x.IsSelected = x == this);
                 }
                 if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
                     PresetViewModels.ForEach(x => x.IsSelected = false);
@@ -576,9 +570,9 @@ namespace MpWpfApp {
                 }
                 MpMainWindowViewModel.Instance.IsShowingDialog = true;
                 var manageWindow = new MpManageAnalyticItemModalWindow();
-                manageWindow.DataContext = this;
                 bool? result = manageWindow.ShowDialog();
                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
+                
                 if (result.Value == false) {
                     return;
                 }
@@ -594,7 +588,7 @@ namespace MpWpfApp {
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
             },
-            (presetVm) => presetVm != null);
+            (presetVm) => presetVm != null && presetVm is MpAnalyticItemPresetViewModel aipsvm && !aipsvm.IsDefault);
 
         public ICommand ShiftPresetCommand => new RelayCommand<object>(
             // [0] = shift dir [1] = presetvm

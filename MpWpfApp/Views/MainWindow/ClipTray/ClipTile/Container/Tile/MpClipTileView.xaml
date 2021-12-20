@@ -37,7 +37,7 @@
                         CornerRadius="10">
         <!--<local:MpClipBorder.Effect>
             <DropShadowEffect x:Name="DropShadow"
-                              
+
                               RenderingBias="Quality"
                               Color="Black"
                               Direction="315"

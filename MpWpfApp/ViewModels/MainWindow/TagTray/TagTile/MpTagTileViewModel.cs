@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel> {
+    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpIShortcutCommand {
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
@@ -29,6 +29,31 @@ namespace MpWpfApp {
         public MpTagTileViewModel ParentTagViewModel { get; set; }
 
         public ObservableCollection<MpTagTileViewModel> ChildTagViewModels { get; set; } = new ObservableCollection<MpTagTileViewModel>();
+
+        #endregion
+
+        #region MpIShortcutCommand Implementation
+
+        public MpShortcutType ShortcutType => MpShortcutType.SelectTag;
+
+        public MpShortcutViewModel ShortcutViewModel {
+            get {
+                if (Parent == null || Tag == null) {
+                    return null;
+                }
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
+
+                if (scvm == null) {
+                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                }
+
+                return scvm;
+            }
+        }
+
+        public string ShortcutKeyString => ShortcutViewModel.KeyString;
+
+        public ICommand AssignCommand => AssignHotkeyCommand;
 
         #endregion
 
@@ -180,20 +205,6 @@ namespace MpWpfApp {
         public Brush TagCountTextColor {
             get {
                 return MpHelpers.Instance.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
-            }
-        }
-
-        public string ShortcutKeyString {
-            get {
-                if (MpShortcutCollectionViewModel.Instance == null ||
-                   MpShortcutCollectionViewModel.Instance.IsBusy) {
-                    return string.Empty;
-                }
-                var svm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.TagId == TagId);
-                if (svm != null) {
-                    return svm.KeyString;
-                }
-                return string.Empty;
             }
         }
 
@@ -477,7 +488,7 @@ namespace MpWpfApp {
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.TagId == TagId) {
+                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } 
@@ -519,7 +530,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.TagId == TagId) {
+                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -527,7 +538,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.TagId == TagId) {
+                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if(e is MpCopyItem ci) {
@@ -593,11 +604,11 @@ namespace MpWpfApp {
         public ICommand AssignHotkeyCommand => new RelayCommand<object>(
             async (args) => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                            this,
                             "Select " + TagName,
-                            ShortcutKeyString,
                             Parent.SelectTagCommand, 
-                            TagId);
+                            ShortcutType,
+                            TagId,
+                            ShortcutKeyString);
                 OnPropertyChanged(nameof(ShortcutKeyString));
             });
 

@@ -1,16 +1,14 @@
-﻿using Gma.System.MouseKeyHook;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using Gma.System.MouseKeyHook;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using MonkeyPaste;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpViewModelBase<object> {
@@ -64,47 +62,48 @@ namespace MpWpfApp {
         }        
 
         public async Task<string> RegisterViewModelShortcutAsync(
-            object vm, 
-            string title, 
-            string keys, 
+            string title,
             ICommand command,
-            object commandParameter) {
+            MpShortcutType shortcutType,
+            int commandId,
+            string keys) {
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
-            var shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
+            string shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
+
+            MpShortcutViewModel scvm = null;
+            if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
+                scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
+            } else {
+                scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType);
+            }
 
             if (shortcutKeyString == null) {
                 //if assignment was canceled ignore but reset skl
                 shortcutKeyString = string.Empty;
             } else if (shortcutKeyString == string.Empty) {
                 //if an empty assignment was ok'd check if exists 
-                MpShortcutViewModel scvm = null;
-                if (vm is MpShortcutViewModel) {
-                    scvm = Shortcuts.FirstOrDefault(x => x.Command == command && x.CommandParameter == commandParameter);
-                } else if(vm is MpContentItemViewModel) {
-                    scvm = Shortcuts.FirstOrDefault(x => x.CopyItemId == (int)commandParameter);
-                } else if(vm is MpTagTileViewModel) {
-                    scvm = Shortcuts.FirstOrDefault(x => x.TagId == (int)commandParameter);
-                } else if(vm is MpAnalyticItemPresetViewModel) {
-                    scvm = Shortcuts.FirstOrDefault(x => x.AnalyticItemPresetId == (int)commandParameter);
-                } else {
-                    throw new Exception("Unknown vm, cannot register: " + vm.ToString());
-                }
+                
                 //if it does clear, save and unregister
                 if (scvm != null) {
                     scvm.ClearShortcutKeyString();
                     await scvm.Shortcut.WriteToDatabaseAsync();
                     scvm.Unregister();
 
-                    if (vm is MpShortcutViewModel) {
-
-                    } else {
+                    if (scvm.IsCustom())  {
                         Shortcuts.Remove(scvm);
                     }
                 } else {
                     //nothing to do since no shortcut created
                 }
+            } else if(scvm == null) {
+                //if new shortcut
+                MpRoutingType routingType = shortcutType == MpShortcutType.PasteCopyItem ? MpRoutingType.Direct : MpRoutingType.Internal;
+                //copyitem direct, tag internal, analyzer internal
+                var sc = await MpShortcut.Create(title, shortcutKeyString, shortcutKeyString, routingType, shortcutType, commandId);
+                scvm = await CreateShortcutViewModel(sc, command);
+                Shortcuts.Add(scvm);
             } else {
-                await AddAsync(vm, shortcutKeyString, command, commandParameter);                
+                //if shorcut updated
             }
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
             return shortcutKeyString;
@@ -151,23 +150,17 @@ namespace MpWpfApp {
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             await Task.Run(async () => {
-                var scvmToRemoveTasks = new List<Task>();
+                MpShortcutViewModel scvmToRemove = null;
                 if (e is MpCopyItem ci) {
-                    foreach (var scvmToRemove in Shortcuts.Where(x => x.CopyItemId == ci.Id).ToList()) {
-                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
-                    }
-
+                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == ci.Id && x.ShortcutType == MpShortcutType.PasteCopyItem);
                 } else if (e is MpTag t) {
-                    foreach (var scvmToRemove in Shortcuts.Where(x => x.TagId == t.Id).ToList()) {
-                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
-                    }
-                } else if (e is MpAnalyticItemPreset p) {
-                    foreach (var scvmToRemove in Shortcuts.Where(x => x.AnalyticItemPresetId == p.Id).ToList()) {
-                        scvmToRemoveTasks.Add(RemoveAsync(scvmToRemove));
-                    }
+                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == t.Id && x.ShortcutType == MpShortcutType.SelectTag);
+                } else if (e is MpAnalyticItemPreset aip) {
+                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == aip.Id && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
                 }
-
-                await Task.WhenAll(scvmToRemoveTasks.ToArray());
+                if(scvmToRemove != null) {
+                    await RemoveAsync(scvmToRemove);
+                }
             });
         }
 
@@ -209,7 +202,7 @@ namespace MpWpfApp {
                     //                }),System.Windows.Threading.DispatcherPriority.Background);
                     //            }
                     //        } catch(Exception ex) {
-                    //            MonkeyPaste.MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
+                    //            MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
                     //        }
                     //    }
                     //}
@@ -229,7 +222,7 @@ namespace MpWpfApp {
                     #endregion
                 }
                 catch (Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
+                    MpConsole.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
                 }
             });
         }
@@ -272,11 +265,9 @@ namespace MpWpfApp {
                             break;
                         case 6:
                             shortcutCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
-                            commandParameter = true;
                             break;
                         case 7:
                             shortcutCommand = MpClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
-                            commandParameter = true;
                             break;
                         case 8:
                             shortcutCommand = MpClipTrayViewModel.Instance.SelectNextItemCommand;
@@ -316,7 +307,6 @@ namespace MpWpfApp {
                             break;
                         case 20:
                             shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedContentCommand;
-                            commandParameter = "edit";
                             break;
                         case 21:
                             shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedTitleCommand;
@@ -352,26 +342,19 @@ namespace MpWpfApp {
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollDownCommand;
                             break;
                         default:
-                            try {                                
-                                if (sc.CopyItemId > 0) {
-                                    shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
-                                    commandParameter = sc.CopyItemId;
-                                } else if (sc.TagId > 0) {
-                                    shortcutCommand = MpTagTrayViewModel.Instance.SelectTagCommand;
-                                    commandParameter = sc.TagId;
-                                } else if(sc.AnalyticItemPresetId > 0) {
-                                    shortcutCommand = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
-                                    commandParameter = sc.AnalyticItemPresetId;
-                                }
-                            }
-                            catch (Exception ex) {
-                                MonkeyPaste.MpConsole.WriteLine("ShortcutCollection init error, unknown shortcut: " + sc.ToString());
-                                MonkeyPaste.MpConsole.WriteLine("With exception: " + ex.ToString());
+                            if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
+                                shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
+                                commandParameter = sc.CommandId;
+                            } else if (sc.ShortcutType == MpShortcutType.SelectTag) {
+                                shortcutCommand = MpTagTrayViewModel.Instance.SelectTagCommand;
+                                commandParameter = sc.CommandId;
+                            } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
+                                shortcutCommand = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
+                                commandParameter = sc.CommandId;
                             }
                             break;
                     }
-                    var scvm = new MpShortcutViewModel(this, sc, shortcutCommand, commandParameter);
-                    await scvm.RegisterAsync();
+                    var scvm = await CreateShortcutViewModel(sc,shortcutCommand);
                     Shortcuts.Add(scvm);
                 }
             });
@@ -396,7 +379,7 @@ namespace MpWpfApp {
                 return;
             }
             if (!char.IsControl(keyChar)) {
-                foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {
+                foreach (var scvm in Shortcuts) {
                 }
                 if (!sbvm.IsTextBoxFocused) {
                     if (sbvm.HasText) {
@@ -409,81 +392,10 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task AddAsync(object vm, string keys, ICommand command, object commandParameter) {
-            MpShortcutViewModel nscvm = null;
-            if (vm is MpContentItemViewModel ctvm) {
-                nscvm = new MpShortcutViewModel(
-                            this,
-                            new MpShortcut() {
-                                CopyItemId = ctvm.CopyItem.Id,
-                                TagId = 0,
-                                AnalyticItemPresetId = 0,
-                                //CopyItem = ctvm.CopyItem,
-                                KeyString = keys,
-                                RoutingType = MpRoutingType.Direct,
-                                ShortcutName = "Paste " + ctvm.CopyItem.Title
-                            },
-                            command, commandParameter);
-            } else if (vm is MpTagTileViewModel ttvm) {
-                nscvm = new MpShortcutViewModel(
-                            this,
-                            new MpShortcut() {
-                                CopyItemId = 0,
-                                TagId = ttvm.Tag.Id,
-                                AnalyticItemPresetId = 0,
-                                //Tag = ttvm.Tag,
-                                KeyString = keys,
-                                RoutingType = MpRoutingType.Internal,
-                                ShortcutName = "Select " + ttvm.TagName
-                            },
-                            command, commandParameter);
-            } else if (vm is MpAnalyticItemPresetViewModel aipvm) {
-                nscvm = new MpShortcutViewModel(
-                            this,
-                            new MpShortcut() {
-                                CopyItemId = 0,
-                                TagId = 0,
-                                AnalyticItemPresetId = aipvm.AnalyticItemPresetId,
-                                //Preset = aipvm.Preset,
-                                RoutingType = MpRoutingType.Internal,
-                                KeyString = keys,
-                                ShortcutName = $"Use {aipvm.Label} Analyzer"
-                            },
-                            command, commandParameter);
-            } else if (vm is MpShortcutViewModel) {
-                nscvm = (MpShortcutViewModel)vm;
-                nscvm.KeyString = keys;
-                nscvm.Command = command;
-                nscvm.CommandParameter = commandParameter;
-            }
-
-            if (nscvm != null) {
-                //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
-                MpShortcutViewModel scvm = null;
-                if (vm.GetType() == typeof(MpShortcutViewModel)) {
-                    scvm = Shortcuts.FirstOrDefault(x => 
-                            x.Command == nscvm.Command && 
-                            x.CommandParameter == commandParameter);
-                } else {
-                    scvm = Shortcuts.FirstOrDefault(x => 
-                                x.CopyItemId == nscvm.CopyItemId && 
-                                x.TagId == nscvm.TagId && 
-                                x.AnalyticItemPresetId == nscvm.AnalyticItemPresetId &&
-                                x.KeyString != nscvm.KeyString);
-                }
-                if (scvm != null) {
-                    int scvmIdx = Shortcuts.IndexOf(scvm);
-                    Shortcuts[scvmIdx].Unregister();
-                    Shortcuts[scvmIdx].KeyString = nscvm.KeyString;
-                    nscvm = Shortcuts[scvmIdx];
-                } else {
-                    Shortcuts.Add(nscvm);
-                }
-
-                await nscvm.RegisterAsync();
-
-                await nscvm.Shortcut.WriteToDatabaseAsync();
-            }
+        private async Task<MpShortcutViewModel> CreateShortcutViewModel(MpShortcut sc, ICommand comamnd) {
+            MpShortcutViewModel nscvm = new MpShortcutViewModel(this);
+            await nscvm.InitializeAsync(sc, comamnd);
+            return nscvm;
         }
 
         private async Task RemoveAsync(MpShortcutViewModel scvm) {
@@ -562,31 +474,31 @@ namespace MpWpfApp {
 
         public ICommand ReassignShortcutCommand => new RelayCommand(
             async () => {
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    scvm,
+                var scvm = Shortcuts[SelectedShortcutIndex];
+                await RegisterViewModelShortcutAsync(
                     scvm.ShortcutDisplayName,
-                    scvm.KeyString,
                     scvm.Command,
-                    scvm.CommandParameter
+                    scvm.ShortcutType,
+                    scvm.CommandId,
+                    scvm.KeyString
                 );
             });
 
 
         public ICommand DeleteShortcutCommand => new RelayCommand(
             async () => {
-                MonkeyPaste.MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
-                //await MpShortcutCollectionViewModel.Instance.RemoveAsync(scvm);
+                MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
+                var scvm = Shortcuts[SelectedShortcutIndex];
+                //await RemoveAsync(scvm);
                 await scvm.Shortcut.DeleteFromDatabaseAsync();
             });
 
         public ICommand ResetShortcutCommand => new RelayCommand(
             async () => {
-                MonkeyPaste.MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts[SelectedShortcutIndex];
+                MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
+                var scvm = Shortcuts[SelectedShortcutIndex];
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
-                await scvm.RegisterAsync();
+                await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             });
         #endregion

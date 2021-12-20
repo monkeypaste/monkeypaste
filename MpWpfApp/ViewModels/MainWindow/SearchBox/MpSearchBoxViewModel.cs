@@ -475,8 +475,6 @@ namespace MpWpfApp {
         }
 
         private bool Validate() {
-            MpConsole.WriteLine("RED: " + Brushes.Red.ToHex());
-            MpConsole.WriteLine("TRANSPARENT: " + Brushes.Transparent.ToHex());
             if (!HasText) {
                 IsTextValid = true;
             } else {

@@ -41,8 +41,8 @@ namespace MpWpfApp {
                     imivm.SubItems.Add(
                         new MpContextMenuItemViewModel(
                                     header: "Manage...",
-                                    command: item.ManageAnalyticItemCommand,
-                                    commandParameter: null,
+                                    command: ManageItemCommand,
+                                    commandParameter: item.AnalyticItemId,
                                     isChecked: null,
                                     iconSource: null,//Application.Current.Resources["CogIcon"] as string,
                                     subItems: null,
@@ -88,7 +88,7 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsSelected => SelectedItem != null;
+        public bool IsAnySelected => SelectedItem != null;
 
         public bool IsHovering { get; set; }
 
@@ -180,14 +180,13 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(Items));
 
-
             IsBusy = false;
         }
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
-                case nameof(IsSelected):
+                case nameof(IsAnySelected):
                     break;
                 case nameof(IsVisible):
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
@@ -199,6 +198,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand ManageItemCommand => new RelayCommand<int>(
+            (itemId) => {
+                Items.ForEach(x => x.IsSelected = x.AnalyticItemId == itemId);
+                SelectedItem.ManageAnalyticItemCommand.Execute(null);
+            }, (itemId) => itemId != null);
 
         public ICommand RegisterContentCommand => new RelayCommand<object>(
             (args) => {

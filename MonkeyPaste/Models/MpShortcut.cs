@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
@@ -11,22 +12,25 @@ namespace MonkeyPaste {
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpShortcutId")]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = 0;
 
         [Column("MpShortcutGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
-        public int CopyItemId { get; set; } = 0;
+        //[Column("fk_MpCopyItemId")]
+        //[ForeignKey(typeof(MpCopyItem))]
+        //public int CopyItemId { get; set; } = 0;
 
-        [Column("fk_MpAnalyticItemPresetId")]
-        [ForeignKey(typeof(MpAnalyticItemPreset))]
-        public int AnalyticItemPresetId { get; set; } = 0;
+        //[Column("fk_MpAnalyticItemPresetId")]
+        //[ForeignKey(typeof(MpAnalyticItemPreset))]
+        //public int AnalyticItemPresetId { get; set; } = 0;
 
-        [Column("fk_MpTagId")]
-        [ForeignKey(typeof(MpTag))]
-        public int TagId { get; set; } = 0;
+        //[Column("fk_MpTagId")]
+        //[ForeignKey(typeof(MpTag))]
+        //public int TagId { get; set; } = 0;
+
+        [Column("fk_MpCommandId")]
+        public int CommandId { get; set; } = 0;
 
         public string ShortcutName { get; set; } = string.Empty;
         public string KeyString { get; set; } = string.Empty;
@@ -35,19 +39,13 @@ namespace MonkeyPaste {
         [Column("RoutingType")]
         public int RouteType { get; set; } = 0;
 
+        [Column("e_ShortcutTypeId")]
+        public int ShortcutTypeId { get; set; } = 0;
+
         #endregion
 
         #region Fk Models
 
-        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        //public MpCopyItem CopyItem { get; set; }
-
-        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        //public MpTag Tag { get; set; }
-
-
-        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        //public MpAnalyticItemPreset Preset { get; set; }
         #endregion
 
 
@@ -73,6 +71,16 @@ namespace MonkeyPaste {
             }
             set {
                 Id = value;
+            }
+        }
+
+        [Ignore]
+        public MpShortcutType ShortcutType {
+            get {
+                return (MpShortcutType)ShortcutTypeId;
+            }
+            set {
+                ShortcutTypeId = (int)value;
             }
         }
 
@@ -108,100 +116,49 @@ namespace MonkeyPaste {
         #endregion
 
         #region Static Methods
-        //public static List<MpShortcut> GetAllShortcuts() {
-        //    //List<MpShortcut> commands = new List<MpShortcut>();
-        //    //DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
-        //    //if (dt != null && dt.Rows.Count > 0) {
-        //    //    foreach (DataRow dr in dt.Rows) {
-        //    //        commands.Add(new MpShortcut(dr));
-        //    //    }
-        //    //}
-        //    //return commands;
 
-        //    return MpDb.Instance.GetItems<MpShortcut>();
-        //}
-        //public static List<MpShortcut> GetShortcutByName(string shortcutName) {
-        //    return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();
-        //}
-        //public static List<MpShortcut> GetShortcutListByCopyItemId(int copyItemId) {
-        //    return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
-        //}
-        //public static List<MpShortcut> GetShortcutByTagId(int tagId) {
-        //    return GetAllShortcuts().Where(x => x.TagId == tagId).ToList();
-        //}
+        public static async Task<MpShortcut> Create(
+            string name,
+            string keyString,
+            string defKeyString,
+            MpRoutingType routeType,
+            MpShortcutType shortcutType,
+            int commandId) {
+            var dupShortcut = await MpDataModelProvider.Instance.GetShortcut(shortcutType,commandId);
+            if (dupShortcut != null) {
+                dupShortcut = await MpDb.Instance.GetItemAsync<MpShortcut>(dupShortcut.Id);
+                return dupShortcut;
+            }
+            var newShortcut = new MpShortcut() {
+                ShortcutGuid = System.Guid.NewGuid(),
+                ShortcutName = name,
+                KeyString = keyString,
+                DefaultKeyString = defKeyString,
+                RoutingType = routeType,
+                ShortcutType = shortcutType,
+                CommandId = commandId
+            };
+
+            await newShortcut.WriteToDatabaseAsync();
+
+            return newShortcut;
+        }
         #endregion
 
         #region Public Methods
-        public MpShortcut() {
-            ShortcutId = 0;
-            ShortcutName = string.Empty;
-            KeyString = string.Empty;
-            DefaultKeyString = string.Empty;
-            RoutingType = MpRoutingType.None;
-            CopyItemId = 0;
-            TagId = 0;
-        }
-        public MpShortcut(int copyItemId, int tagId, string keyString, string shortcutName) : this() {
-            ShortcutName = shortcutName;
-            CopyItemId = copyItemId;
-            TagId = tagId;
-            KeyString = keyString;
-            RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
-        }
+        public MpShortcut() { }
 
-        public MpShortcut(DataRow dr) {
-            LoadDataRow(dr);
-        }
+        //public MpShortcut(int comman, int tagId, string keyString, string shortcutName) : this() {
+        //    ShortcutName = shortcutName;
+        //    CopyItemId = copyItemId;
+        //    TagId = tagId;
+        //    KeyString = keyString;
+        //    RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
+        //}
+
         public void Reset() {
             KeyString = DefaultKeyString;
         }
-
-        public void LoadDataRow(DataRow dr) {
-            ShortcutId = Convert.ToInt32(dr["pk_MpShortcutId"].ToString());
-            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
-            TagId = Convert.ToInt32(dr["fk_MpTagId"].ToString());
-            ShortcutName = dr["ShortcutName"].ToString();
-            KeyString = dr["KeyString"].ToString();
-            DefaultKeyString = dr["DefaultKeyString"].ToString();
-            
-            RoutingType = (MpRoutingType)Convert.ToInt32(dr["RoutingType"].ToString());            
-        }
-
-        //public override void WriteToDatabase() {
-        //    if (ShortcutId == 0) {
-        //        MpDb.Instance.ExecuteWrite(
-        //            "insert into MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@ks,@dks,@ciid,@tid)",
-        //            new Dictionary<string, object> {
-        //                { "@sn", ShortcutName},
-        //                { "@rt", (int)RoutingType},
-        //                { "@ks", KeyString},
-        //                { "@dks", DefaultKeyString},
-        //                { "@ciid", CopyItemId},
-        //                { "@tid", TagId}
-        //            });
-        //        ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
-        //    } else {
-        //        MpDb.Instance.ExecuteWrite(
-        //            "update MpShortcut set ShortcutName=@sn, KeyString=@ks, DefaultKeyString=@dks, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
-        //            new Dictionary<string, object> {
-        //                { "@sn", ShortcutName},
-        //                { "@rtid", (int)RoutingType},
-        //                { "@ks", KeyString},
-        //                { "@dks", DefaultKeyString},
-        //                { "@ciid", CopyItemId},
-        //                { "@tid", TagId},
-        //                { "@sid", ShortcutId }
-        //            });
-        //    }
-        //}
-
-        //public override void DeleteFromDatabase() {
-        //    MpDb.Instance.ExecuteWrite(
-        //        "delete from MpShortcut where pk_MpShortcutId=@sid",
-        //        new Dictionary<string, object> {
-        //            { "@sid", ShortcutId }
-        //        });
-        //}
 
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
@@ -291,8 +248,10 @@ namespace MonkeyPaste {
         PasteSelectedClip,
         DeleteSelectedClip,
         Search,
-        PasteClip,
-        Custom
+        CustomMinimum, //used to differentiate type
+        PasteCopyItem, //10
+        SelectTag,
+        AnalyzeCopyItemWithPreset
     }
 
 

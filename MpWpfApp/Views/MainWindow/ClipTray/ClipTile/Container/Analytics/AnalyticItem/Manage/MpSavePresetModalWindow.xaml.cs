@@ -16,7 +16,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAssignHotkeyModalWindow.xaml
     /// </summary>
-    public partial class MpSavePresetModalWindow : Window {
+    public partial class MpSavePresetModalWindow : MpWindow<MpAnalyticItemPresetViewModel> {
         public MpSavePresetModalWindow() {
             InitializeComponent();
         }

@@ -1,17 +1,36 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using WPFSpark;
 
 namespace MpWpfApp {
-    public class MpWindow : Window {
-        public MpWindow() : base() {
-            DataContext = MpMainWindowViewModel.Instance;
+    public class MpWindow : Window {        
+        protected object BindingObj {
+            get {
+                if (DesignerProperties.GetIsInDesignMode(this)) {
+                    return null;
+                }
+
+                if (DataContext == null) {
+                    return null;
+                }
+                return GetValue(DataContextProperty);
+            }
+            set {
+                if (DesignerProperties.GetIsInDesignMode(this)) {
+                    return;
+                }
+                if (BindingObj != value) {
+                    SetValue(DataContextProperty, value);
+
+                }
+            }
         }
     }
 
     public class MpWindow<T> : MpWindow where T: class {
         public T BindingContext {
             get {
-                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
+                if (DesignerProperties.GetIsInDesignMode(this)) {
                     return null;
                 }
 
@@ -21,19 +40,14 @@ namespace MpWpfApp {
                 return (T)GetValue(DataContextProperty);
             }
             set {
-                if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) {
+                if (DesignerProperties.GetIsInDesignMode(this)) {
                     return;
                 }
                 if (BindingContext != value) {
                     SetValue(DataContextProperty, value);
+                    BindingObj = BindingContext;
                 }
             }
         }
-        public static readonly DependencyProperty BindingContextProperty =
-            DependencyProperty.Register(
-                "BindingContext",
-                typeof(T),
-                typeof(MpUserControl<T>),
-                new FrameworkPropertyMetadata(null));
     }
 }

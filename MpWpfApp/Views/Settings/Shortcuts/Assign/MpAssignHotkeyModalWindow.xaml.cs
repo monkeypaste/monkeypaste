@@ -22,11 +22,6 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        public MpAssignHotkeyModalWindow(MpAssignShortcutModalWindowViewModel vm) {
-
-        }
-
-
         private void Window_Closed(object sender, EventArgs e) {
             KeyGestureBehavior.StopListening();
         }
