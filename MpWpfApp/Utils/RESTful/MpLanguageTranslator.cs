@@ -22,7 +22,7 @@ namespace MpWpfApp {
         }
     }
 
-    public class MpLanguageTranslator : MpRestfulApi {
+    public class MpLanguageTranslator  {
         private static readonly Lazy<MpLanguageTranslator> _Lazy = new Lazy<MpLanguageTranslator>(() => new MpLanguageTranslator());
         public static MpLanguageTranslator Instance { get { return _Lazy.Value; } }
 
@@ -59,7 +59,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpLanguageTranslator() : base("Language Translation") { }
+        public MpLanguageTranslator() { }
 
         // ***** DETECT LANGUAGE OF TEXT TO BE TRANSLATED
         public async Task<string> DetectLanguage(string text) {
@@ -229,11 +229,6 @@ namespace MpWpfApp {
                 MpConsole.WriteTraceLine("Is not connected, ignoring translation");
                 return string.Empty;
             }
-            var apiStatus = CheckRestfulApiStatus();
-            if (apiStatus == null || apiStatus.Value == false) {
-                return string.Empty;
-            }
-
             try {
                 if(string.IsNullOrEmpty(fromLanguageCode)) {
                     fromLanguageCode = await DetectLanguage(textToTranslate);
@@ -272,16 +267,13 @@ namespace MpWpfApp {
                     var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
                     var translatedText = result[0]["translations"][0]["text"];
                     if (!string.IsNullOrEmpty(translatedText)) {
-                        IncrementCallCount();
                         return translatedText;
                     }
-                    ShowError();
                     return string.Empty;
                 }
             }
             catch (Exception ex) {
                 Console.WriteLine("LanguageTranslation exception: " + ex.ToString());
-                ShowError();
                 return string.Empty;
             }
         }
@@ -298,24 +290,6 @@ namespace MpWpfApp {
             return null;
         }
 
-        protected override int GetMaxCallCount() {
-            return Properties.Settings.Default.RestfulTranslationMaxCount;
-        }
-
-        protected override int GetCurCallCount() {
-            return Properties.Settings.Default.RestfulTranslationCount;
-        }
-
-        protected override void IncrementCallCount() {
-            Properties.Settings.Default.RestfulTranslationCount++;
-            Properties.Settings.Default.Save();
-        }
-
-        protected override void ClearCount() {
-            Properties.Settings.Default.RestfulTranslationCount = 0;
-            Properties.Settings.Default.Save();
-        }
-
         internal class Spellc {
             public string Offset {
                 get;
@@ -329,6 +303,19 @@ namespace MpWpfApp {
                 get;
                 set;
             }
+        }
+
+        
+        public void Save() {
+            throw new NotImplementedException();
+        }
+
+        public void Reset() {
+            throw new NotImplementedException();
+        }
+
+        public bool? GetServiceStatus() {
+            throw new NotImplementedException();
         }
 
         // ***** PERFORM TRANSLATION ON BUTTON CLICK

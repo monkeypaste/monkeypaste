@@ -77,6 +77,8 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsEmpty => string.IsNullOrEmpty(KeyString);
+
         public string KeyString {
             get {
                 KeyItems.Clear();
@@ -135,14 +137,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Visibility WarningVisibility {
-            get {
-                if (!string.IsNullOrEmpty(WarningString)) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
+        public bool HasWarning => !string.IsNullOrEmpty(WarningString);
 
         public Brush WarningBorderBrush {
             get {
@@ -225,7 +220,7 @@ namespace MpWpfApp {
             switch (e.PropertyName) {
                 case nameof(WarningString):
                     OnPropertyChanged(nameof(WarningBorderBrush));
-                    OnPropertyChanged(nameof(WarningVisibility));
+                    OnPropertyChanged(nameof(HasWarning));
                     OnPropertyChanged(nameof(WarningBmp));
                     OnPropertyChanged(nameof(WarningTextBrush));
                     break;

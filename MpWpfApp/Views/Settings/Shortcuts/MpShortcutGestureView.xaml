@@ -15,6 +15,7 @@
         <ListBox x:Name="ShortcutListBox"
                  DataContext="{Binding ShortcutViewModel}"
                  IsEnabled="False"
+                 IsHitTestVisible="False"
                  BorderThickness="0"
                  HorizontalAlignment="Center"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"

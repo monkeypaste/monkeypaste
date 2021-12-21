@@ -1152,8 +1152,8 @@
         <s:String x:Key="SendToBackIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sendToBack.png</s:String>
         <s:String x:Key="SelectAllIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selectall.png</s:String>
         <s:String x:Key="InvertSelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/invertSelection.png</s:String>
-        <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick.png</s:String>
-        <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive.png</s:String>
+        <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick2.png</s:String>
+        <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive2.png</s:String>
         <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
         <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
         <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
@@ -1172,6 +1172,11 @@
         <s:String x:Key="FrameGripTile">pack://application:,,,/MpWpfApp;component/Resources/Images/frame_grip.png</s:String>
         <s:String x:Key="TrashCanIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/trashcan.png</s:String>
         <s:String x:Key="AddIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add.png</s:String>
+        <s:String x:Key="PinIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pin.png</s:String>
+        <s:String x:Key="PinOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pinover.png</s:String>
+        <s:String x:Key="PinDownIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindown.png</s:String>
+        <s:String x:Key="PinDownOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindownover.png</s:String>
+        
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->

@@ -1204,9 +1204,12 @@ namespace MpWpfApp {
                 } else {
                     var clonedTile = await CreateClipTileViewModel(pctvm.HeadItem.CopyItem);
                     PinnedItems.Add(clonedTile);
+                    ClearClipSelection(false);
+                    clonedTile.IsSelected = true;
+                    clonedTile.OnPropertyChanged(nameof(clonedTile.IsPinned));
                 }
 
-                //pctvm.IsPinned = !pctvm.IsPinned;
+                pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                 
                 OnPropertyChanged(nameof(IsAnyTilePinned));

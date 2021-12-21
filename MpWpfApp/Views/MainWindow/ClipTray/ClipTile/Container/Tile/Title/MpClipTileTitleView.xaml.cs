@@ -227,5 +227,13 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.FlipTileCommand.Execute(BindingContext.Parent);
             e.Handled = true;
         }
+
+        private void PinButton_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.Parent.IsOverPinButton = true;
+        }
+
+        private void PinButton_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.Parent.IsOverPinButton = false;
+        }
     }
 }

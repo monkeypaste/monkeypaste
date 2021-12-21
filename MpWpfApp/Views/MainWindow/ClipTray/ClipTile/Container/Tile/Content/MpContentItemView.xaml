@@ -47,10 +47,10 @@
                           TileMode="Tile">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
-                        <GeometryDrawing Brush="{Binding ItemBorderBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                        <GeometryDrawing Brush="{Binding ItemBorderBrush}">
                             <GeometryDrawing.Geometry>
                                 <GeometryGroup>
-                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect, IsAsync=True, FallbackValue='50,50,50,50', TargetNullValue='50,50,50,50'}" />
+                                    <RectangleGeometry  Rect="{Binding ItemBorderBrushRect}" />
                                     <RectangleGeometry Rect="50,50,50,50" />
                                 </GeometryGroup>
                             </GeometryDrawing.Geometry>
@@ -72,10 +72,10 @@
                                   TileMode="Tile">
                         <DrawingBrush.Drawing>
                             <DrawingGroup>
-                                <GeometryDrawing Brush="{Binding ItemSeparatorBrush, IsAsync=True, FallbackValue='#FFFFFFFF', TargetNullValue='#FFFFFFFF'}">
+                                <GeometryDrawing Brush="{Binding ItemSeparatorBrush}">
                                     <GeometryDrawing.Geometry>
                                         <GeometryGroup>
-                                            <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect, IsAsync=True, FallbackValue='50,0,50,50', TargetNullValue='50,0,50,50'}" />
+                                            <RectangleGeometry Rect="{Binding ItemSeparatorBrushRect}" />
                                             <RectangleGeometry Rect="50,50,50,50" />
                                         </GeometryGroup>
                                     </GeometryDrawing.Geometry>

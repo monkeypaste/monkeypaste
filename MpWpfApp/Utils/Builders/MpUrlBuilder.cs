@@ -35,11 +35,14 @@ namespace MpWpfApp {
             return result;
         }
 
-        public static async Task<MpUrl> Create(string url, MpApp app) {
+        public static async Task<MpUrl> Create(string url, MpApp app, string title = "") {
             if (string.IsNullOrEmpty(url)) {
                 return null;
             }
-            string sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(url);
+            string sourceUrlTitle = title;
+            if(string.IsNullOrEmpty(sourceUrlTitle)) {
+                await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(url);
+            }
 
             var result = await MpUrl.Create(url, sourceUrlTitle, app);
 

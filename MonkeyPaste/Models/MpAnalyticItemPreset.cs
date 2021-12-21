@@ -117,7 +117,8 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx,
                 IsQuickAction = isQuickAction,
                 Shortcut = null,
-                ShortcutId = 0
+                ShortcutId = 0,
+                IsDefault = isDefault
             };
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();

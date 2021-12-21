@@ -32,6 +32,8 @@ namespace MpWpfApp {
             }
         }
 
+        
+
         private void ContentListItemView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpContentItemViewModel ocivm) {
                 ocivm.OnUiUpdateRequest -= Civm_OnUiUpdateRequest;
@@ -86,8 +88,7 @@ namespace MpWpfApp {
             BindingContext.IsSelected = true;
 
             MpDragDropManager.Instance.StartDragCheck(
-                e.GetPosition(Application.Current.MainWindow),
-                MpClipTrayViewModel.Instance.PersistentSelectedModels);
+                e.GetPosition(Application.Current.MainWindow));
 
             e.Handled = true;
         }

@@ -469,7 +469,6 @@ namespace MpWpfApp {
                       !IsShowingDialog &&
                       !IsResizing &&
                       !IsShowingDialog &&
-                      //!MpContentDropManager.Instance.IsDragAndDrop &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);

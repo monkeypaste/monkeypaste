@@ -17,7 +17,7 @@ namespace MpWpfApp {
         "finish_reason": "length"
     }]
      */
-    public class MpOpenAiResponse {
+    public class MpOpenAiResponse : MpHttpResponseBase {
         public string id { get; set; }
 
         public long created { get; set; }

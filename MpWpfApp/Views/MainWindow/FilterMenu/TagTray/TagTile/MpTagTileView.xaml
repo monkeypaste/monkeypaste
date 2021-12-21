@@ -49,9 +49,9 @@
                                          Converter={StaticResource StringToIconConverter},
                                          Mode=OneWay}"
                           InputGestureText="{Binding Data.ShortcutKeyString,
-                                               Source={StaticResource TagTileVmProxy}}"
+                                                     Source={StaticResource TagTileVmProxy}}"
                           Command="{Binding Data.AssignHotkeyCommand,
-                                               Source={StaticResource TagTileVmProxy}}" />
+                                            Source={StaticResource TagTileVmProxy}}" />
                 <Separator />
                 <MenuItem x:Name="ClipTileColorContextMenuItem"
                           Style="{StaticResource ColorPalleteMenuItemStyle}" />

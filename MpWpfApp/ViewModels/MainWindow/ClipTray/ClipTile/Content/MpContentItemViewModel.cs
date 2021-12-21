@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
@@ -20,6 +21,7 @@ using PropertyChanged;
 namespace MpWpfApp {
     public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIShortcutCommand {
         #region Private Variables
+        private DispatcherTimer _timer;
 
         Size itemSize;
         int fc = 0, lc = 0, cc = 0;
@@ -148,8 +150,8 @@ namespace MpWpfApp {
             get {
                 if(Parent == null || 
                    Parent.Count <= 1 || 
-                   !IsSelected/* || 
-                   Parent.IsAnyItemDragging*/) {
+                   !IsSelected || 
+                   IsItemDragging) {
                     return Brushes.Transparent;
                 }
                 return Brushes.Red;
@@ -173,7 +175,7 @@ namespace MpWpfApp {
 
         public Rect ItemBorderBrushRect {
             get {
-                if (IsContextMenuOpen) {
+                if (IsContextMenuOpen || IsItemDragging) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -611,6 +613,9 @@ namespace MpWpfApp {
 
         public async Task InitializeAsync(MpCopyItem ci) {
             IsBusy = true;
+
+            MpMessenger.Instance.Unregister<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
+
             if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
             }
@@ -630,6 +635,8 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
             OnPropertyChanged(nameof(ShortcutKeyString));
+
+            MpMessenger.Instance.Register<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
 
             IsBusy = false;
         }
@@ -827,6 +834,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemDragBegin:
+                    if(IsSelected) {
+                        IsItemDragging = true;
+                    }
+                    break;
+                case MpMessageType.ItemDragEnd:
+                    IsItemDragging = false;
+                    break;
+            }
+        }
+
         private void UpdateDetails() {
             MpHelpers.Instance.RunOnMainThread(async () => {
                 _detailIdx = 1;
@@ -918,6 +938,13 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsItemDragging):
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                    if(IsItemDragging) {
+                        StartAnimation();
+                    } else {
+                        StopAnimation();
+                    }
+                    OnPropertyChanged(nameof(ItemBorderBrushRect));
+                    OnPropertyChanged(nameof(ItemBorderBrush));
                     Parent.OnPropertyChanged(nameof(Parent.TileBorderBrushRect));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyItemDragging));
                     break;
@@ -931,6 +958,34 @@ namespace MpWpfApp {
             }
         }
 
+        private void StartAnimation() {
+            if(_timer == null) {
+                _timer = new DispatcherTimer();
+                _timer.Interval = TimeSpan.FromMilliseconds(300);
+                _timer.Tick += _timer_Tick;
+            }
+            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
+
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e) {
+            Rect dbr = MpMeasurements.Instance.DottedBorderRect;
+            dbr.Location = new Point(dbr.X + 5, dbr.Y);
+            if(dbr.Location.X >= dbr.Width) {
+                dbr.Location = new Point(0, dbr.Y);
+            }
+            MpMeasurements.Instance.DottedBorderRect = dbr;
+            OnPropertyChanged(nameof(ItemBorderBrushRect));
+            OnPropertyChanged(nameof(ItemBorderBrush));
+        }
+
+        private void StopAnimation() {
+            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
+            OnPropertyChanged(nameof(ItemBorderBrushRect));
+            OnPropertyChanged(nameof(ItemBorderBrush));
+            _timer.Stop();
+        }
         #endregion
 
         #region Commands

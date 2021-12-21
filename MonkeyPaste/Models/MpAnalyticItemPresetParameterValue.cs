@@ -71,7 +71,7 @@ namespace MonkeyPaste {
 
             var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                //AnalyticItemPreset = parentItem,
+                AnalyticItemPreset = parentItem,
                 AnalyticItemPresetId = parentItem.Id,
                 ParameterEnumId = paramEnumId,
                 Value = value,

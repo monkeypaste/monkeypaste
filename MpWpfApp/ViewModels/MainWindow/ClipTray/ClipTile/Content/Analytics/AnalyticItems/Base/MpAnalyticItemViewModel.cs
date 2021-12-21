@@ -15,6 +15,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.Windows.Data;
 using System.Collections;
 using Newtonsoft.Json;
+using static SQLite.SQLite3;
 
 namespace MpWpfApp {
     public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel> {
@@ -143,6 +144,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public int SourceCopyItemId { get; private set; } = 0;
+
         public virtual bool IsLoaded => Children.Count > 2;
 
         public bool IsAnyEditing => PresetViewModels.Any(x => x.IsEditing);
@@ -165,11 +168,138 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Model
+        #region Models
 
-        public string ItemIconBase64 { 
+        #region MpBillableItem
+
+        public string ApiName {
             get {
-                if(AnalyticItem == null || AnalyticItem.Icon == null) {
+                if (AnalyticItem == null) {
+                    return string.Empty;
+                }
+                return AnalyticItem.Title;
+            }
+        }
+
+        public DateTime NextPaymentDateTime {
+            get {
+                if (BillableItem == null) {
+                    return DateTime.MaxValue;
+                }
+                return BillableItem.NextPaymentDateTime;
+            }
+            set {
+                if (NextPaymentDateTime != value) {
+                    BillableItem.NextPaymentDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(NextPaymentDateTime));
+                }
+            }
+        }
+
+        public MpPeriodicCycleType CycleType {
+            get {
+                if (BillableItem == null) {
+                    return MpPeriodicCycleType.None;
+                }
+                return BillableItem.CycleType;
+            }
+        }
+
+        public int MaxRequestCountPerCycle {
+            get {
+                if (BillableItem == null) {
+                    return int.MaxValue;
+                }
+                return BillableItem.MaxRequestCountPerCycle;
+            }
+        }
+
+
+        public int MaxRequestByteCount {
+            get {
+                if (BillableItem == null) {
+                    return int.MaxValue;
+                }
+                return BillableItem.MaxRequestByteCount;
+            }
+        }
+
+        public int MaxRequestByteCountPerCycle {
+            get {
+                if (BillableItem == null) {
+                    return int.MaxValue;
+                }
+                return BillableItem.MaxRequestByteCountPerCycle;
+            }
+        }
+
+        public int MaxResponseBytesPerCycle {
+            get {
+                if (BillableItem == null) {
+                    return int.MaxValue;
+                }
+                return BillableItem.MaxRequestByteCountPerCycle;
+            }
+        }
+
+        public int CurrentCycleRequestByteCount {
+            get {
+                if (BillableItem == null) {
+                    return 0;
+                }
+                return BillableItem.CurrentCycleRequestByteCount;
+            }
+            set {
+                if (BillableItem.CurrentCycleRequestByteCount != value) {
+                    BillableItem.CurrentCycleRequestByteCount = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CurrentCycleRequestByteCount));
+                }
+            }
+        }
+
+
+        public int CurrentCycleResponseByteCount {
+            get {
+                if (BillableItem == null) {
+                    return 0;
+                }
+                return BillableItem.CurrentCycleResponseByteCount;
+            }
+            set {
+                if (BillableItem.CurrentCycleResponseByteCount != value) {
+                    BillableItem.CurrentCycleResponseByteCount = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CurrentCycleResponseByteCount));
+                }
+            }
+        }
+
+
+        public int CurrentCycleRequestCount {
+            get {
+                if (BillableItem == null) {
+                    return 0;
+                }
+                return BillableItem.CurrentCycleRequestByteCount;
+            }
+            set {
+                if (BillableItem.CurrentCycleRequestCount != value) {
+                    BillableItem.CurrentCycleRequestCount = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CurrentCycleRequestCount));
+                }
+            }
+        }
+
+        #endregion
+
+        #region MpAnalyticItem
+
+        public string ItemIconBase64 {
+            get {
+                if (AnalyticItem == null || AnalyticItem.Icon == null) {
                     return null;
                 }
                 return AnalyticItem.Icon.IconImage.ImageBase64;
@@ -209,9 +339,27 @@ namespace MpWpfApp {
             }
         }
 
+        public MpBillableItem BillableItem {
+            get {
+                if (AnalyticItem == null) {
+                    return null;
+                }
+                return AnalyticItem.BillableItem;
+            }
+        }
+
         public MpAnalyticItem AnalyticItem { get; set; }
 
         #endregion
+
+        #region Http
+
+        public abstract MpHttpResponseBase ResponseObj { get; }
+        
+        #endregion
+
+        #endregion
+
 
         #endregion
 
@@ -340,6 +488,7 @@ namespace MpWpfApp {
             IsBusy = true;
             AnalyticItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(ai.Id);
 
+            await LoadChildren();
             // Init Presets
             PresetViewModels.Clear();
                         
@@ -366,7 +515,18 @@ namespace MpWpfApp {
         }
 
         protected virtual void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            
+            var pvm = sender as MpAnalyticItemParameterViewModel;
+            switch(e.PropertyName) {
+                case nameof(pvm.CurrentValue):
+                    if(SelectedPresetViewModel == null) {
+                        return;
+                    }
+                    MpAnalyticItemPresetParameterValue ppv = SelectedPresetViewModel.Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == pvm.ParamEnumId);
+                    if(ppv != null) {
+                        ppv.Value = pvm.CurrentValue;
+                    }
+                    break;
+            }
         }
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAnalyticItemParameterViewModel;
@@ -497,7 +657,11 @@ namespace MpWpfApp {
 
         public ICommand ExecuteAnalysisCommand => new RelayCommand(
             async () => {
+                if (!IsLoaded) {
+                    await LoadChildren();
+                }
                 //this is triggered from MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand w/ preset id
+                SourceCopyItemId = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemId;
                 await ExecuteAnalysis(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemData.ToPlainText());
             },
             CanExecuteAnalysis);
@@ -557,29 +721,32 @@ namespace MpWpfApp {
             () => HasAnyChanged);
 
         public ICommand ManageAnalyticItemCommand => new RelayCommand(
-            async () => {
-                if (!IsLoaded) {
-                    await LoadChildren();
-                }
-                if(!IsSelected) {
-                    Parent.Items.ForEach(x => x.IsSelected = x == this);
-                }
-                if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
-                    PresetViewModels.ForEach(x => x.IsSelected = false);
-                    PresetViewModels[0].IsSelected = true;
-                }
-                MpMainWindowViewModel.Instance.IsShowingDialog = true;
-                var manageWindow = new MpManageAnalyticItemModalWindow();
-                bool? result = manageWindow.ShowDialog();
-                MpMainWindowViewModel.Instance.IsShowingDialog = false;
-                
-                if (result.Value == false) {
-                    return;
-                }
-                foreach(var pvm in PresetViewModels) {
-                    await pvm.Preset.WriteToDatabaseAsync();
-                }
-            });
+             async() => {
+                 if (!IsLoaded) {
+                     await LoadChildren();
+                 }
+                 if (!IsSelected) {
+                     Parent.Items.ForEach(x => x.IsSelected = x == this);
+                 }
+                 if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
+                     PresetViewModels.ForEach(x => x.IsSelected = false);
+                     PresetViewModels[0].IsSelected = true;
+                 }
+                 var manageWindow = new MpManageAnalyticItemModalWindow();
+
+                 MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
+                 var result = manageWindow.ShowDialog();
+                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
+
+                 if (result == false) {
+                     return;
+                 }
+                 foreach (var pvm in PresetViewModels) {
+                     await pvm.Preset.WriteToDatabaseAsync();
+                     await Task.WhenAll(pvm.Preset.PresetParameterValues.Select(x => x.WriteToDatabaseAsync()));
+                 }
+             });
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {

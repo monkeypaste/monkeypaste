@@ -20,7 +20,15 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemViewModel> Items { get; private set; } = new ObservableCollection<MpAnalyticItemViewModel>();
 
-        public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
+        public MpAnalyticItemViewModel SelectedItem {
+            get {
+                return Items.FirstOrDefault(x => x.IsSelected);
+            }
+            set {
+                Items.ForEach(x => x.IsSelected = x == value);
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
 
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {

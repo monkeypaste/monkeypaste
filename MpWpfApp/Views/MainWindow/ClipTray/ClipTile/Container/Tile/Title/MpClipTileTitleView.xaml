@@ -102,16 +102,22 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Button x:Name="FlipButton"
-                        Visibility="{Binding Parent.Parent.FlipButtonVisibility}"
-                        Background="Green"
-                        Width="12"
-                        Height="12"
+                <Button x:Name="PinButton"
+                        MouseEnter="PinButton_MouseEnter"
+                        MouseLeave="PinButton_MouseLeave"
+                        Background="Transparent"
+                        Style="{StaticResource Transparent_Button}"
+                        BorderThickness="0"
+                        Visibility="{Binding Parent.Parent.PinButtonVisibility}"
                         Canvas.Top="3"
                         Canvas.Right="3"
                         Command="{Binding ToggleTileIsPinnedCommand,
                                           Source={StaticResource ClipTrayViewModel}}"
-                        CommandParameter="{Binding Parent.Parent}" />
+                        CommandParameter="{Binding Parent.Parent}">
+                    <Image Width="15"
+                           Height="15"
+                           Source="{Binding Parent.Parent.PinIconSourcePath, Converter={StaticResource StringToImageSourceConverter}}"/>
+                </Button>
             </Canvas>
         </Viewbox>
         <Grid x:Name="ClipTileTitleTextGrid"

@@ -52,12 +52,13 @@ namespace MpWpfApp {
 
         public double MainWindowToScreenHeightRatio { get; set; } = 0.35;
 
-
-        public Rect DottedBorderRect {
+        public Rect DottedBorderDefaultRect {
             get {
                 return new Rect(0, 0, 50, 50);
             }
         }
+
+        public Rect DottedBorderRect { get; set; } = new Rect(0, 0, 50, 50);
 
         public Rect SolidBorderRect {
             get {

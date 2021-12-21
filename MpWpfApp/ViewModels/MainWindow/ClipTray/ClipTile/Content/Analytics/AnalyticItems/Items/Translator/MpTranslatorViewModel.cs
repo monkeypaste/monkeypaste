@@ -21,19 +21,19 @@ namespace MpWpfApp {
         ToLang
     }
     public class MpTranslatorViewModel : MpAnalyticItemViewModel {
-
         #region Properties
-
+        public override MpHttpResponseBase ResponseObj => new MpHttpResponseBase();
         #region State
 
         #endregion
 
         #region Model
 
-
         #endregion
 
         #endregion
+
+        
 
         #region Constructors
 
@@ -46,19 +46,21 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override async Task Initialize() {
-            MpAnalyticItem tai = await MpDataModelProvider.Instance.GetAnalyticItemByTitle("Language Translator");
-            if(tai == null) {
-                tai = await MpAnalyticItem.Create(
+            AnalyticItem = await MpDataModelProvider.Instance.GetAnalyticItemByTitle("Language Translator");
+            if(AnalyticItem == null) {
+                // TODO figure out scalable rest stuff
+
+                AnalyticItem = await MpAnalyticItem.Create(
                         "https://api.cognitive.microsofttranslator.com/{0}",
                         MpPreferences.Instance.AzureCognitiveServicesKey,
                         MpInputFormatType.Text,
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator");
             } else {
-                tai = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(tai.Id);
+                AnalyticItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(AnalyticItem.Id);
             }            
 
-            await InitializeDefaultsAsync(tai);
+            await InitializeDefaultsAsync(AnalyticItem);
         }
 
         public override async Task LoadChildren() {
@@ -173,6 +175,8 @@ namespace MpWpfApp {
                 
             }
         }
+
+        
         #endregion
     }
 }

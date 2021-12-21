@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
+
     [AttributeUsage(AttributeTargets.Property)]
     public class MpChildViewModelAttribute : Attribute {
         private bool _isCollection;

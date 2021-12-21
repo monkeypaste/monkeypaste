@@ -37,8 +37,6 @@ namespace MpWpfApp {
 
         private DispatcherTimer _autoScrollTimer;
 
-        private object dragData;
-
         #endregion
 
         #region Properties
@@ -90,8 +88,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public void StartDragCheck(Point mainWindowMouseDownPosition, object dragData) {
-            this.dragData = dragData;
+        public void StartDragCheck(Point mainWindowMouseDownPosition) {
             IsCheckingForDrag = true;
 
             _mouseStartPosition = mainWindowMouseDownPosition;
@@ -104,7 +101,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpIContentDropTarget SelectDropTarget() {
+        private MpIContentDropTarget SelectDropTarget(object dragData) {
             foreach (var dt in _dropTargets.Where(x => x.IsEnabled)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.IsCtrlDown, dragData)) {
                     continue;
@@ -135,7 +132,8 @@ namespace MpWpfApp {
                 return;
             }
             if (IsDragAndDrop) {
-                await PerformDrop();
+                await PerformDrop(MpClipTrayViewModel.Instance.PersistentSelectedModels);
+                MpMessenger.Instance.Send(MpMessageType.ItemDragEnd);
             }
         }
 
@@ -151,9 +149,11 @@ namespace MpWpfApp {
                     IsDragAndDrop = true;
                     _autoScrollTimer.Start();
                     Keyboard.AddKeyDownHandler(Application.Current.MainWindow, Application_KeyDown);
+
+                    MpMessenger.Instance.Send(MpMessageType.ItemDragBegin);
                 }
 
-                var dropTarget = SelectDropTarget();
+                var dropTarget = SelectDropTarget(MpClipTrayViewModel.Instance.PersistentSelectedModels);
 
                 if (dropTarget != _curDropTarget) {
                     _curDropTarget?.CancelDrop();
@@ -164,15 +164,8 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task PerformDrop() {
+        private async Task PerformDrop(object dragData) {
             if (_curDropTarget != null) {
-                if(dragData is MpAnalyticItemViewModel aivm) {
-                    var rci = await aivm.ResultViewModel.ConvertToCopyItem();
-                    MpClipTrayViewModel.Instance.PersistentSelectedModels.Clear();
-                    MpClipTrayViewModel.Instance.PersistentSelectedModels.Add(rci);
-                    dragData = MpClipTrayViewModel.Instance.PersistentSelectedModels;
-                }
-
                 await _curDropTarget?.Drop(
                         MpShortcutCollectionViewModel.Instance.IsCtrlDown,
                         dragData);
@@ -193,8 +186,8 @@ namespace MpWpfApp {
         }
         private void Reset() {
             IsCheckingForDrag = IsDragAndDrop = false;
+
             _curDropTarget = null;
-            dragData = null;
 
             _autoScrollTimer.Stop();
             _dropTargets.ForEach(x => x.Reset());

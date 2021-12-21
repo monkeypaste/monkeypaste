@@ -1,26 +1,25 @@
-﻿<local:MpWindow x:Class="MpWpfApp.MpManageAnalyticItemModalWindow"
-                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-                xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                xmlns:local="clr-namespace:MpWpfApp"
-                mc:Ignorable="d"
-                x:TypeArguments="local:MpAnalyticItemCollectionViewModel"
-                Title="{Binding ManageLabel}"
-                Icon="{Binding .,
-                               Source={StaticResource CogIcon},
-                               Converter={StaticResource StringToIconConverter}}"
-                d:DesignWidth="600"
-                SizeToContent="WidthAndHeight"
-                Topmost="True"
-                ShowInTaskbar="False"
-                ResizeMode="CanResize"
-                WindowStartupLocation="CenterScreen"
-                DataContext="{StaticResource AnalyticItemCollectionViewModel}"
-                d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
-                                                 IsDesignTimeCreatable=False}">
+﻿<Window x:Class="MpWpfApp.MpManageAnalyticItemModalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MpWpfApp"
+        mc:Ignorable="d"
+        Title="Analyzer Management"
+        Icon="{Binding .,
+                       Source={StaticResource CogIcon},
+                       Converter={StaticResource StringToIconConverter}}"
+        d:DesignWidth="600"
+        SizeToContent="WidthAndHeight"
+        Topmost="True"
+        ShowInTaskbar="True"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{StaticResource AnalyticItemCollectionViewModel}"
+        d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
+                                         IsDesignTimeCreatable=False}">
     <StackPanel Margin="10"
                 Orientation="Vertical">
         <!--  Analytic Item Chooser  -->
@@ -31,8 +30,8 @@
                 Margin="10">
             <ComboBox x:Name="AnalyticItemChooserComboBox"
                       IsSynchronizedWithCurrentItem="True"
-                      Loaded="AnalyticItemChooserComboBox_Loaded"
-                      SelectionChanged="AnalyticItemChooserComboBox_SelectionChanged"
+                      SelectedItem="{Binding SelectedItem,
+                                             Mode=TwoWay}"
                       ItemsSource="{Binding Items}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -97,7 +96,7 @@
                                                 Header="Hot Key">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <local:MpShortcutGestureView Background="White"
+                                    <local:MpShortcutGestureView Background="Transparent"
                                                                  DataContext="{Binding}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -109,7 +108,7 @@
                                                   BorderThickness="0"
                                                   HorizontalAlignment="Center"
                                                   HorizontalContentAlignment="Center"
-                                                  ToolTip="Configure" 
+                                                  ToolTip="Configure"
                                                   Template="{StaticResource LockToggleButtonControlTemplate}"
                                                   IsChecked="{Binding IsEditing,
                                                                       Mode=TwoWay,
@@ -174,7 +173,7 @@
             <ListBox x:Name="ConfigurePresetListBox"
                      Visibility="{Binding IsAnyEditing,
                                           Converter={StaticResource BoolToVisibilityConverter}}"
-                     ItemsSource="{Binding Children}"
+                     ItemsSource="{Binding ParameterViewModels}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      BorderThickness="0">
@@ -226,4 +225,4 @@
                     Click="Cancel_Click" />
         </StackPanel>
     </StackPanel>
-</local:MpWindow>
+</Window>

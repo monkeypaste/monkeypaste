@@ -121,11 +121,11 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpCopyItem> Create(MpSource source, string data, MpCopyItemType itemType) {
-            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemsByData(data);
-            if (MpPreferences.Instance.IgnoreNewDuplicates && dupCheck != null && dupCheck.Count > 0) {
+            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(data);
+            if (MpPreferences.Instance.IgnoreNewDuplicates && dupCheck != null) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
-                dupCheck[0].Id *= -1;
-                return dupCheck[0];
+                dupCheck.Id *= -1;
+                return dupCheck;
             }
 
             int count = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();

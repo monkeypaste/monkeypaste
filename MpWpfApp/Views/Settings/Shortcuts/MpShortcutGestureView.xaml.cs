@@ -26,13 +26,17 @@ namespace MpWpfApp {
         }
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            ShortcutListBox.Visibility = Visibility.Hidden;
             AssignButton.Visibility = Visibility.Visible;
             StartAnimation();
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e) {
             if (!BindingContext.ShortcutViewModel.IsEmpty) {
+                ShortcutListBox.Visibility = Visibility.Visible;
                 AssignButton.Visibility = Visibility.Hidden;
+            } else {
+                AssignButton.Visibility = Visibility.Visible;
             }
             StopAnimation();
         }

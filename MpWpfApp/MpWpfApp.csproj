@@ -117,6 +117,7 @@
     <Compile Include="Attributes\DependsOn\Base\MpDependsOnBase.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnThisAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnSiblingAttribute.cs" />
+    <Compile Include="Attributes\AnalyticParameter\MpAnalyticParameterAttribute.cs" />
     <Compile Include="Attributes\MpChildViewModelAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\MpLine.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\Base\MpHttpResponseBase.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpCurrency.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOpenAiRequest.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
@@ -248,7 +250,7 @@
     <Compile Include="Utils\System\Clipboard\MpCopyHelper.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
-    <Compile Include="Utils\RESTful\Base\MpRestfulApi.cs" />
+    <Compile Include="Utils\RESTful\Base\MpRestfulAction.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
     <Compile Include="Utils\RESTful\MpImageAnalyzer.cs" />
     <Compile Include="Utils\RESTful\MpImageOcr.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\ComboBox\MpComboBoxParameterView.xaml.cs">
       <DependentUpon>MpComboBoxParameterView.xaml</DependentUpon>
     </Compile>
@@ -2406,6 +2409,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\trashcan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\pin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\joystick2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\joystickactive2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\pindown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\pindownover.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\pinover.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Resources\Sounds\alert.wav">

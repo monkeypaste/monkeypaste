@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMinifyUrl : MpRestfulApi {
+    public class MpMinifyUrl : MpRestfulAction {
         private static readonly Lazy<MpMinifyUrl> _Lazy = new Lazy<MpMinifyUrl>(() => new MpMinifyUrl());
         public static MpMinifyUrl Instance { get { return _Lazy.Value; } }
 
-        private MpMinifyUrl() : base("Bit.ly Minifier") { }
+        private MpMinifyUrl() { }
 
         public async Task<string> ShortenUrl(string url) {
-            var result = CheckRestfulApiStatus();
+            var result = await CheckRestfulApiStatus(null,url);
             if(result == null || result.Value == false) {
                 return string.Empty;
             }

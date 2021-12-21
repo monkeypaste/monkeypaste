@@ -23,6 +23,7 @@ namespace MpWpfApp {
         public string ResetLabel => $"Reset {Label}";
 
         public string DeleteLabel => $"Delete {Label}";
+
         #endregion
 
         #region State
@@ -170,7 +171,7 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
-            Preset = aip;// await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
             OnPropertyChanged(nameof(ShortcutViewModel));
 

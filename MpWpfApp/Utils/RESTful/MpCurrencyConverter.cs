@@ -93,7 +93,7 @@ namespace MpWpfApp {
         }
     }
 
-    public class MpCurrencyConverter : MpRestfulApi {
+    public class MpCurrencyConverter : MpRestfulAction {
         private static readonly Lazy<MpCurrencyConverter> _Lazy = new Lazy<MpCurrencyConverter>(() => new MpCurrencyConverter());
         public static MpCurrencyConverter Instance { get { return _Lazy.Value; } }
 
@@ -102,7 +102,7 @@ namespace MpWpfApp {
 
         private string ApiKey { get; }
 
-        private MpCurrencyConverter() : base("Currency Conversion") {
+        private MpCurrencyConverter() {
             ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
         }
 

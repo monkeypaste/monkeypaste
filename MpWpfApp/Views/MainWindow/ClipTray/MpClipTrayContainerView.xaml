@@ -25,7 +25,8 @@
                       Grid.Column="0"
                       IsEnabledChanged="ClipTraySplitter_IsEnabledChanged"
                       IsEnabled="{Binding IsAnyTilePinned}"
-                      Visibility="{Binding IsAnyTilePinned,Converter={StaticResource BoolToVisibilityConverter}}"
+                      Visibility="{Binding IsAnyTilePinned,
+                                           Converter={StaticResource BoolToVisibilityConverter}}"
                       MouseEnter="GridSplitter_MouseEnter"
                       MouseLeave="GridSplitter_MouseLeave"
                       MouseDoubleClick="ClipTraySplitter_MouseDoubleClick"

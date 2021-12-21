@@ -3,6 +3,7 @@ using System.Windows;
 using WPFSpark;
 
 namespace MpWpfApp {
+
     public class MpWindow : Window {        
         protected object BindingObj {
             get {

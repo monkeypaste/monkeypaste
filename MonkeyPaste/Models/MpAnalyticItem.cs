@@ -2,6 +2,7 @@
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,18 @@ namespace MonkeyPaste {
         Text,
         Image,
         CustomFile
+    }
+
+    public enum MpHttpRequestType {
+        None = 0,
+        Get,
+        Post
+    }
+
+    public enum MpEncodingType { 
+        None = 0,
+        Ascii,
+        Utf8
     }
 
     public class MpAnalyticItem : MpDbModelBase {
@@ -38,12 +51,9 @@ namespace MonkeyPaste {
         [Column("SortOrderIdx")]
         public int SortOrderIdx { get; set; } = -1;
 
-        [Column("ApiKey")]
-        public string ApiKey { get; set; } = string.Empty;
+        public string EndPoint { get; set; }
 
-        [Column("EndPoint")]
-        public string EndPoint { get; set; } = string.Empty;
-
+        public string ApiKey { get; set; }
         #endregion
 
         #region Fk Models
@@ -56,6 +66,10 @@ namespace MonkeyPaste {
 
         [OneToMany]
         public List<MpAnalyticItemPreset> Presets { get; set; } = new List<MpAnalyticItemPreset>();
+        
+        [OneToOne]
+        public MpBillableItem BillableItem { get; set; }
+
         #endregion
 
         #region Properties
@@ -88,10 +102,10 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItem> Create(
-            string endPoint, 
-            string apiKey, 
-            MpInputFormatType format, 
-            string title, 
+            string endPoint,
+            string apiKey,
+            MpInputFormatType format,
+            string title,
             string description,
             int sortOrderIdx = -1) {
             var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemByEndpoint(endPoint);
@@ -100,13 +114,13 @@ namespace MonkeyPaste {
                 return dupItem;
             }
 
-            if(sortOrderIdx < 0) {
+            if (sortOrderIdx < 0) {
                 sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
             }
 
             var domainStr = MpHelpers.Instance.GetUrlDomain(endPoint);
             var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
-            
+
             var icon = await MpIcon.Create(favIconImg64);
 
             var newAnalyticItem = new MpAnalyticItem() {
@@ -122,6 +136,40 @@ namespace MonkeyPaste {
             };
 
             await newAnalyticItem.WriteToDatabaseAsync();
+
+            return newAnalyticItem;
+        }
+
+        public static async Task<MpAnalyticItem> Create2(
+            List<MpHttpRequest> requests,
+            MpInputFormatType format, 
+            string title, 
+            string description,
+            int sortOrderIdx = -1) {
+
+            if(sortOrderIdx < 0) {
+                sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
+            }
+
+            var domainStr = MpHelpers.Instance.GetUrlDomain(requests[0].EndPoint);
+            var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
+            
+            var icon = await MpIcon.Create(favIconImg64);
+
+            var newAnalyticItem = new MpAnalyticItem() {
+                AnalyticItemGuid = System.Guid.NewGuid(),
+                IconId = icon.Id,
+                Icon = icon,
+                InputFormatType = format,
+                Title = title,
+                Description = description,
+                SortOrderIdx = sortOrderIdx
+            };
+
+            await newAnalyticItem.WriteToDatabaseAsync();
+
+            requests.ForEach(x => x.AnalyticItemId = newAnalyticItem.Id);
+            await Task.WhenAll(requests.Select(x => x.WriteToDatabaseAsync()));
 
             return newAnalyticItem;
         }

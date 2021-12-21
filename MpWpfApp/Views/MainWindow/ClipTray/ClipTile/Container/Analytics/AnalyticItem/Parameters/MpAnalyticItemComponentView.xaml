@@ -100,7 +100,6 @@
                            Background="Black"
                            Foreground="Black"
                            HorizontalAlignment="Left"
-                           MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
                            Text="{Binding Result}" />
             </DataTemplate>
             <local:MpParameterViewSelector x:Key="ParameterViewSelector"

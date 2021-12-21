@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
@@ -26,22 +27,35 @@ namespace MpWpfApp {
 
         public MpAnalyticItemResultViewModel() : base(null) { }
 
-        public MpAnalyticItemResultViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+        public MpAnalyticItemResultViewModel(MpAnalyticItemViewModel parent) : base(parent) {
+        }
+
 
         #endregion
 
         #region Public Methods
 
-        public async Task<MpCopyItem> ConvertToCopyItem() {
-            if(!HasResult) {
-                return null;
-            }
+        public async Task ConvertToCopyItem(string reqStr, string resultData) {
             var app = MpPreferences.Instance.ThisAppSource.App;
-            var url = await MpUrlBuilder.Create(Parent.AnalyticItem.EndPoint,null);
+            var url = await MpUrlBuilder.Create(Parent.AnalyticItem.EndPoint,null,reqStr);
             var source = await MpSource.Create(app, url);
-            var ci = await MpCopyItem.Create(source, Result, MpCopyItemType.RichText);
+            var ci = await MpCopyItem.Create(source, resultData, MpCopyItemType.RichText);
 
-            return ci;
+            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Parent.SourceCopyItemId);
+
+            var sml = scivm.Parent.ItemViewModels.Select(x => x.CopyItem).OrderBy(x=>x.CompositeSortOrderIdx).ToList();
+            for (int i = 0; i < sml.Count; i++) {
+                if(i == scivm.CompositeSortOrderIdx) {
+                    ci.CompositeParentCopyItemId = sml[0].Id;
+                    ci.CompositeSortOrderIdx = i + 1;
+                } else if(i > scivm.CompositeSortOrderIdx) {
+                    sml[i].CompositeSortOrderIdx += 1;
+                }
+            }
+
+            await ci.WriteToDatabaseAsync();
+
+            await scivm.Parent.InitializeAsync(sml[0]);
         }
 
         public override void Reset() {
@@ -50,6 +64,9 @@ namespace MpWpfApp {
             Result = string.Empty;
             OnPropertyChanged(nameof(HasResult));
         }
+        #endregion
+
+        #region Private Methods
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -35,8 +36,6 @@ namespace MpWpfApp {
 
             // MpPasteToAppPathViewModelCollection.Instance.Init();
 
-            
-
             sw.Stop();
 
             MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
@@ -59,8 +58,12 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
+            PerformMainWindowHide();
+        }
+
+        private void PerformMainWindowHide() {
             var mwvm = DataContext as MpMainWindowViewModel;
-            if(mwvm.IsResizing || MpDragDropManager.Instance.IsDragAndDrop) {
+            if (mwvm.IsResizing || MpDragDropManager.Instance.IsDragAndDrop) {
                 return;
             }
             mwvm.HideWindowCommand.Execute(null);
@@ -68,8 +71,7 @@ namespace MpWpfApp {
 
         private void MainWindowCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (Mouse.GetPosition(this).Y < 0) {
-                var mwvm = DataContext as MpMainWindowViewModel;
-                mwvm.HideWindowCommand.Execute(null);
+                PerformMainWindowHide();
             }
         }
 

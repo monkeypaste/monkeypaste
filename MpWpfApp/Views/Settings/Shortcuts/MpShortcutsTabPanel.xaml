@@ -16,16 +16,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
-                    Visibility="Collapsed"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-            <Image Width="30"
-                   Source="/MpWpfApp;component/Resources/Images/info.png" />
-            <Label HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Content="Sequence changes will take affect upon application restart" />
-        </StackPanel>
-        <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
             <Label Content="Show Window With Mouse" />
             <ComboBox SelectedIndex="{local:MpSettingBinding DoShowMainWIndowWithMouseEdgeIndex}">
@@ -36,10 +26,20 @@
                 <ComboBoxItem Content="None" />
             </ComboBox>
         </StackPanel>
-        <StackPanel Grid.Row="2"
+        <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
             <Label Content="Only with Scrollwheel" />
             <CheckBox IsChecked="{local:MpSettingBinding Path=DoShowMainWindowWithMouseEdgeAndScrollDelta}" />
+        </StackPanel>
+        <StackPanel Grid.Row="2"
+                    Visibility="Collapsed"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Image Width="30"
+                   Source="/MpWpfApp;component/Resources/Images/info.png" />
+            <Label HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Content="Sequence changes will take affect upon application restart" />
         </StackPanel>
         <local:MpShortcutCollectionDataGridView Grid.Row="3"
                                                 DataContext="{StaticResource ShortcutCollectionViewModel}" />

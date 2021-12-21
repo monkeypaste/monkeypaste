@@ -13,17 +13,13 @@ using System.Web;
 using System.Web.UI.WebControls;
 
 namespace MpWpfApp {
-    public class MpOpenAi : MpRestfulApi {
+    public class MpOpenAi : MpRestfulAction {
         private static readonly Lazy<MpOpenAi> _Lazy = new Lazy<MpOpenAi>(() => new MpOpenAi());
         public static MpOpenAi Instance { get { return _Lazy.Value; } }
 
-        private MpOpenAi() : base("OpenAi") { }
+        private MpOpenAi() { }
 
         public async Task<string> Summarize(string text) {
-            var result = CheckRestfulApiStatus();
-            if(result == null || result.Value == false) {
-                return string.Empty;
-            }
             text = text.Replace(Environment.NewLine, " ");
             string openAiToken = MpPreferences.Instance.RestfulOpenAiApiKey;
             /*
@@ -62,10 +58,6 @@ namespace MpWpfApp {
         }
 
         public async Task<string> Request(string endpoint,string reqStr) {
-            var result = CheckRestfulApiStatus();
-            if (result == null || result.Value == false || string.IsNullOrEmpty((reqStr))) {
-                return string.Empty;
-            }
             /*
              curl https://api.openai.com/v1/engines/davinci/completions \
                   -H "Content-Type: application/json" \

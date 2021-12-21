@@ -22,10 +22,5 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            MpDragDropManager.Instance.StartDragCheck(
-                e.GetPosition(Application.Current.MainWindow),
-                BindingContext.Parent);
-        }
     }
 }

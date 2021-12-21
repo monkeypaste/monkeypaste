@@ -303,10 +303,13 @@ namespace MonkeyPaste {
             return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
         }
 
-        public async Task<List<MpCopyItem>> GetCopyItemsByData(string text) {
+        public async Task<MpCopyItem> GetCopyItemByData(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query, text);
-            return result;
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
 
         public async Task<int> GetTotalCopyItemCountAsync() {

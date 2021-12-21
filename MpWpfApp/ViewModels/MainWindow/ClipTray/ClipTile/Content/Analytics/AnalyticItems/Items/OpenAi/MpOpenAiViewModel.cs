@@ -28,6 +28,12 @@ namespace MpWpfApp {
     }
 
     public class MpOpenAiViewModel : MpAnalyticItemViewModel {
+        #region Private Variables
+
+        private MpOpenAiResponse _responseObj;
+
+        #endregion
+
         #region Properties
 
         #region State
@@ -35,6 +41,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        #endregion
+
+        #region Http
+
+        public override MpHttpResponseBase ResponseObj => _responseObj;
 
         #endregion
 
@@ -53,6 +65,21 @@ namespace MpWpfApp {
         public override async Task Initialize() {
             MpAnalyticItem oaai = await MpDataModelProvider.Instance.GetAnalyticItemByTitle("Open Ai");
             if (oaai == null) {
+                //var h1 = await MpHttpHeaderItem.Create(
+                //    "Authorization", 
+                //    $"Bearer {MpPreferences.Instance.RestfulOpenAiApiKey}");
+
+                //var req1 = await MpHttpRequest.Create(
+                //    new List<MpHttpHeaderItem>() { h1 },
+                //    "https://api.openai.com/v1/",
+                //     MpPreferences.Instance.RestfulOpenAiApiKey);
+
+                //oaai = await MpAnalyticItem.Create(
+                //        new List<MpHttpRequest> { req1},
+                //        MpInputFormatType.Text,
+                //        "Open Ai",
+                //        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.");
+
                 oaai = await MpAnalyticItem.Create(
                         "https://api.openai.com/v1/",
                         MpPreferences.Instance.RestfulOpenAiApiKey,
@@ -242,10 +269,13 @@ namespace MpWpfApp {
         protected override async Task ExecuteAnalysis(object obj) {
             IsBusy = true;
 
+            string engine = GetParam((int)MpOpenAiParamType.Engine).CurrentValue.ToLower();
+            string ep = GetParam((int)MpOpenAiParamType.EndPoint).CurrentValue.ToLower();
+
             string endpoint = string.Format(
                 @"https://api.openai.com/v1/engines/{0}/{1}",
-                GetParam((int)MpOpenAiParamType.Engine).CurrentValue.ToLower(),
-                GetParam((int)MpOpenAiParamType.EndPoint).CurrentValue.ToLower());
+                engine,
+                ep);
 
 
             MpOpenAiRequest jsonReq = new MpOpenAiRequest() {
@@ -257,14 +287,16 @@ namespace MpWpfApp {
                 PresencePenalty = GetParam((int)MpOpenAiParamType.PresPen).DoubleValue
             };
 
+            string jsonReqStr = JsonConvert.SerializeObject(jsonReq);
             string jsonRespStr = await MpOpenAi.Instance.Request(
                 endpoint,
-                JsonConvert.SerializeObject(jsonReq));
+                jsonReqStr);
 
             MpOpenAiResponse jsonResp = JsonConvert.DeserializeObject<MpOpenAiResponse>(jsonRespStr);
 
             if (jsonResp != null && jsonResp.choices != null && jsonResp.choices.Count > 0) {
-               ResultViewModel.Result = Regex.Unescape(jsonResp.choices[0].text);
+               string resultData = Regex.Unescape(jsonResp.choices[0].text);
+                await ResultViewModel.ConvertToCopyItem(jsonReqStr, resultData);
             } else {
                 Debugger.Break();
             }

@@ -14,13 +14,15 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
 
-    public partial class MpManageAnalyticItemModalWindow : MpWindow<MpAnalyticItemCollectionViewModel> {
+    public partial class MpManageAnalyticItemModalWindow : Window {
+
         public MpManageAnalyticItemModalWindow() {
             InitializeComponent();
         }
 
         private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {            
             DialogResult = true;
+            
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
@@ -28,9 +30,10 @@ namespace MpWpfApp {
         }
 
         private void Button_MouseEnter(object sender, MouseEventArgs e) {
-            var aivm = BindingContext.SelectedItem;
+            var aicvm = DataContext as MpAnalyticItemCollectionViewModel;
+            var aivm = aicvm.SelectedItem;
             var pvm = aivm.SelectedPresetViewModel;
-            if(pvm.IsDefault) {
+            if(pvm != null && pvm.IsDefault) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
             } else {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
@@ -39,15 +42,6 @@ namespace MpWpfApp {
 
         private void Button_MouseLeave(object sender, MouseEventArgs e) {
             MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-        }
-
-        private void AnalyticItemChooserComboBox_Loaded(object sender, RoutedEventArgs e) {
-            AnalyticItemChooserComboBox.SelectedItem = BindingContext.SelectedItem;//.Items.IndexOf(BindingContext.SelectedItem);
-            return;
-        }
-
-        private void AnalyticItemChooserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            BindingContext.Items.ForEach(x => x.IsSelected = BindingContext.Items.IndexOf(x) == AnalyticItemChooserComboBox.SelectedIndex);
         }
     }
 }

@@ -358,7 +358,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Visibility FlipButtonVisibility {
+        public Visibility PinButtonVisibility {
             get {
                 if(IsExpanded) {
                     return Visibility.Hidden;
@@ -441,6 +441,24 @@ using System.Speech.Synthesis;
 
         #region Appearance       
 
+        public string PinIconSourcePath {
+            get {
+                string path = "PinIcon";
+                if(IsPinned) {
+                    if(IsOverPinButton) {
+                        path = "PinDownOverIcon";
+                    } else {
+                        path = "PinDownIcon";
+                    }
+                } else {
+                    if(IsOverPinButton) {
+                        path = "PinOverIcon";
+                    }
+                }
+                return Application.Current.Resources[path] as string;
+            }
+        }
+
         public Rect TileBorderBrushRect {
             get {
                 if (IsAnyItemDragging || IsAnyItemContextMenuOpened) {
@@ -486,7 +504,11 @@ using System.Speech.Synthesis;
 
         #region State Properties
 
-        public bool IsPinned => Parent != null && HeadItem != null && Parent.PinnedItems.Any(x => x.HeadItem.CopyItemId == HeadItem.CopyItemId);
+        public bool IsOverPinButton { get; set; } = false;
+
+        public bool IsPinned => Parent != null && 
+                                HeadItem != null && 
+                                Parent.PinnedItems.Any(x => x.HeadItem.CopyItemId == HeadItem.CopyItemId);
 
         public bool CanVerticallyScroll => IsExpanded ?
                                                 ExpandedContentSize.Height > TileContentHeight :
@@ -753,7 +775,7 @@ using System.Speech.Synthesis;
         public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            QueryOffsetIdx = queryOffset;
+            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
             IsBusy = true;
 
             ItemViewModels.Clear();
@@ -1158,7 +1180,7 @@ using System.Speech.Synthesis;
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
                     MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
                     OnPropertyChanged(nameof(TileBorderWidth));
-                    OnPropertyChanged(nameof(FlipButtonVisibility));
+                    OnPropertyChanged(nameof(PinButtonVisibility));
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
@@ -1205,6 +1227,11 @@ using System.Speech.Synthesis;
                         //this occurs when mainwindow is resized and user gives tile unique width
                         Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] = TileBorderWidth;
                     } 
+                    break;
+                case nameof(IsOverPinButton):
+                case nameof(IsPinned):
+                    OnPropertyChanged(nameof(PinIconSourcePath));
+                    OnPropertyChanged(nameof(IsPlaceholder));
                     break;
             }
         }
