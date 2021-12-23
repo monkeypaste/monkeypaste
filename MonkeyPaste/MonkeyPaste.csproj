@@ -49,6 +49,8 @@
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <None Remove="Views\Shell\MainFlyOut\Popups\**" />
+    <Compile Remove="Models\MpAnalyticItemParameter.cs" />
+    <Compile Remove="Models\MpAnalyticItemParameterValue.cs" />
     <Compile Remove="Models\MpColor.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
@@ -61,6 +63,8 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
+    <None Remove="Resources\Data\Analytics\Formats\LanguageTranslator\azuretranslator.json" />
+    <None Remove="Resources\Data\Analytics\Formats\OpenAi\openai.json" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
@@ -84,6 +88,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\LanguageTranslator\azuretranslator.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\OpenAi\openai.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
@@ -233,7 +243,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Json\" />
     <Folder Include="Utils\DragDrop\" />
     <Folder Include="Utils\Messenger\" />
   </ItemGroup>

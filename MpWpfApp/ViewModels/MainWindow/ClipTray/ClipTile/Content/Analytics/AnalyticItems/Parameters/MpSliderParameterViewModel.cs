@@ -49,7 +49,7 @@ namespace MpWpfApp {
                 if(Parameter == null) {
                     return double.MinValue;
                 }
-                var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
+                var minCond = Parameter.Values.FirstOrDefault(x => x.IsMinimum);
                 if (minCond != null) {
                     try {
                         return Convert.ToDouble(minCond.Value);
@@ -67,7 +67,7 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return double.MaxValue;
                 }
-                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
+                var maxCond = Parameter.Values.FirstOrDefault(x => x.IsMaximum);
                 if (maxCond != null) {
                     try {
                         return Convert.ToDouble(maxCond.Value);
@@ -112,10 +112,10 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if (Parameter == null || Parameter.ValueSeeds == null) {
+            if (Parameter == null || Parameter.Values == null) {
                 ResetToDefault();
             } else {
-                MpAnalyticItemParameterValue defVal = Parameter.ValueSeeds.FirstOrDefault(x => x.IsDefault);
+                MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
                 if (defVal != null) {
                     _defaultValue = defVal.Value;
                 } else {

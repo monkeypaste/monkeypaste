@@ -53,6 +53,9 @@ namespace MpWpfApp {
         [MpAffectsChild]
         public List<MpClipTileViewModel> SelectedItems {
             get {
+                if(PinnedSelectedItems.Count > 0) {
+                    return PinnedSelectedItems;
+                }
                 return Items.Where(ct => ct.IsSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
             }
         }
@@ -123,8 +126,7 @@ namespace MpWpfApp {
         public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
 
         #region Context Menu Item View Models
-
-        public ObservableCollection<MpContextMenuItemViewModel> TranslateLanguageMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
+                
 
         public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
 
@@ -551,6 +553,16 @@ namespace MpWpfApp {
             }
         }
 
+        public void ClearPinnedEditing() {
+            foreach (var ctvm in PinnedItems) {
+                if (ctvm == null) {
+                    //occurs on first hide w/ async virtal items
+                    continue;
+                }
+                ctvm.ClearEditing();
+            }
+        }
+
         public void ClearClipSelection(bool clearEditing = true) {
             MpHelpers.Instance.RunOnMainThread((Action)(() => {
                 if (clearEditing) {
@@ -568,10 +580,26 @@ namespace MpWpfApp {
             }));
         }
 
+        public void ClearPinnedSelection(bool clearEditing = true) {
+            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+                if (clearEditing) {
+                    ClearPinnedEditing();
+                }
+                foreach (var ctvm in PinnedItems) {
+                    if (ctvm == null) {
+                        //occurs on first hide w/ async virtal items
+                        continue;
+                    }
+                    ctvm.ClearSelection();
+                }
+            }));
+        }
+
         public void ResetClipSelection(bool clearEditing = true) {
             IsSelectionReset = true;
             MpHelpers.Instance.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
+                ClearPinnedSelection(clearEditing);
 
                 if (Items.Count > 0 && Items[0] != null) {
 
@@ -833,6 +861,14 @@ namespace MpWpfApp {
         }
 
         public MpContentItemViewModel GetContentItemViewModelById(int ciid) {
+            foreach (var ctvm in PinnedItems) {
+                foreach (var civm in ctvm.ItemViewModels) {
+                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ciid).FirstOrDefault();
+                    if (ortbvm != null) {
+                        return ortbvm;
+                    }
+                }
+            }
             foreach (var ctvm in Items) {
                 foreach (var civm in ctvm.ItemViewModels) {
                     var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ciid).FirstOrDefault();
@@ -1185,6 +1221,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
             _newModels.Add(newCopyItem);
+            AddNewItemsCommand.Execute(null);
         }
 
         #region Sync Events
@@ -1198,15 +1235,21 @@ namespace MpWpfApp {
         public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
             async(args) => {
                 var pctvm = args as MpClipTileViewModel;
-
-                if(pctvm.IsPinned) {
+                MpClipTileViewModel resultTile = null;
+                if (pctvm.IsPinned) {
                     PinnedItems.Remove(pctvm);
+                    resultTile = Items.FirstOrDefault(x => x.QueryOffsetIdx == pctvm.QueryOffsetIdx);
                 } else {
-                    var clonedTile = await CreateClipTileViewModel(pctvm.HeadItem.CopyItem);
-                    PinnedItems.Add(clonedTile);
+                    resultTile = await CreateClipTileViewModel(pctvm.HeadItem.CopyItem);
+                    resultTile.QueryOffsetIdx = pctvm.QueryOffsetIdx;
+                    PinnedItems.Add(resultTile);
+                }
+                
+                if(resultTile != null) {
                     ClearClipSelection(false);
-                    clonedTile.IsSelected = true;
-                    clonedTile.OnPropertyChanged(nameof(clonedTile.IsPinned));
+                    resultTile.IsSelected = true;
+                    resultTile.OnPropertyChanged(nameof(resultTile.IsPinned));
+                    resultTile.OnPropertyChanged(nameof(resultTile.IsPlaceholder));
                 }
 
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
@@ -1241,14 +1284,13 @@ namespace MpWpfApp {
                                 nci.Id
                             );
                     }
+                } else if(MpDataModelProvider.Instance.QueryInfo.TagId != MpTag.AllTagId &&
+                          !MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    MpClipTileSortViewModel.Instance.ResetToDefault(true);
+                    MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == x.Parent.DefaultTagId).IsSelected = true;
+                } else {
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
                 }
-
-                for(int i = 0;i < _newModels.Count;i++) {
-                    var ctvm = await CreateClipTileViewModel(null);
-                    Items.Insert(0, ctvm);
-                }
-                     
-                RequeryCommand.Execute(null);
 
                 _newModels.Clear();
                 await MpTagTrayViewModel.Instance.RefreshAllCounts();
@@ -1867,17 +1909,6 @@ namespace MpWpfApp {
                        (SelectedItems[0].ItemType == MpCopyItemType.RichText);
             });
 
-        public ICommand TranslateSelectedClipTextAsyncCommand => new RelayCommand<string>(
-            async (toLanguage) => {
-                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(SelectedItems[0].HeadItem.CopyItem.ItemData.ToPlainText(), toLanguage, "", false);
-                if (!string.IsNullOrEmpty(translatedText)) {
-                    SelectedItems[0].HeadItem.CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
-                }
-            },
-            (args) => {
-                return SelectedItems.Count == 1 && SelectedItems[0].IsTextItem;
-            });
-
         public ICommand SummarizeCommand => new RelayCommand(
             async () => {
                 var result = await MpOpenAi.Instance.Summarize(SelectedModels[0].ItemData.ToPlainText());
@@ -1978,18 +2009,13 @@ namespace MpWpfApp {
 
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
             async (presetId) => {
-                MpAnalyticItemViewModel analyticItemVm = null;
-                MpAnalyticItemPresetViewModel presetVm = null;
-
                 var preset = await MpDataModelProvider.Instance.GetAnalyzerPresetById(presetId);
-                analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
-                presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);                
+                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
+                var presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);                
 
                 var prevSelectedPresetVm = analyticItemVm.SelectedPresetViewModel;
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 analyticItemVm.ExecuteAnalysisCommand.Execute(PrimaryItem.PrimaryItem);
-
-                MessageBox.Show(analyticItemVm.ResultViewModel.Result);
             });
 
         #endregion

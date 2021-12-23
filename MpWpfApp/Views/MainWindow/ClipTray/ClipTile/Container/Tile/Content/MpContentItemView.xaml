@@ -50,7 +50,7 @@
                         <GeometryDrawing Brush="{Binding ItemBorderBrush}">
                             <GeometryDrawing.Geometry>
                                 <GeometryGroup>
-                                    <RectangleGeometry  Rect="{Binding ItemBorderBrushRect}" />
+                                    <RectangleGeometry Rect="{Binding ItemBorderBrushRect}" />
                                     <RectangleGeometry Rect="50,50,50,50" />
                                 </GeometryGroup>
                             </GeometryDrawing.Geometry>

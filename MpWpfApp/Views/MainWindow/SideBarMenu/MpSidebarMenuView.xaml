@@ -31,8 +31,15 @@
                                                       Source={StaticResource TagTrayViewModel}}"
                                  DataContext="{Binding TagTrayViewModel,
                                                        IsAsync=True}" />
-            <local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
+            <!--<local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
                                                 MinWidth="100"
+                                                Visibility="{Binding IsVisible,
+                                                                     Converter={StaticResource BoolToVisibilityConverter},
+                                                                     Source={StaticResource AnalyticItemCollectionViewModel}}"
+                                                DataContext="{Binding AnalyticItemCollectionViewModel,
+                                                                      IsAsync=True}" />-->
+
+            <local:MpManageAnalyticItemsContainerView MinWidth="100"
                                                 Visibility="{Binding IsVisible,
                                                                      Converter={StaticResource BoolToVisibilityConverter},
                                                                      Source={StaticResource AnalyticItemCollectionViewModel}}"

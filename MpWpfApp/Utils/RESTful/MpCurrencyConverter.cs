@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json.Linq;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public enum CurrencyType {

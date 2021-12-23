@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel> {
+    public class MpAnalyticItemParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel>  {
         #region Private Variables
 
         #endregion
@@ -49,6 +49,15 @@ namespace MpWpfApp {
                     return false;
                 }
                 return AnalyticItemParameterValue.IsMinimum;
+            }
+        }
+
+        public string Label {
+            get {
+                if (AnalyticItemParameterValue == null) {
+                    return string.Empty;
+                }
+                return AnalyticItemParameterValue.Label;
             }
         }
 

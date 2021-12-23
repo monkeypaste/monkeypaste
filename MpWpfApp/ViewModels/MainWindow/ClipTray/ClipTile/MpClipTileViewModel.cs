@@ -691,11 +691,16 @@ using System.Speech.Synthesis;
             }
         }
 
+        public bool IsNew { get; set; } = false;
+
         [MpDependsOnParent("IsAnyTileExpanded")]
         [MpDependsOnChild("IsPlaceholder")]
         [MpDependsOnSibling("IsExpanded")]
         public bool IsPlaceholder {
             get {
+                if(IsNew) {
+                    return false;
+                }
                 if(Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
@@ -800,6 +805,7 @@ using System.Speech.Synthesis;
                     ItemViewModels.Add(civm);
                 }
 
+                IsNew = false;
                 RequestUiUpdate();
 
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
@@ -1170,6 +1176,11 @@ using System.Speech.Synthesis;
                     } else {
                         LastSelectedDateTime = DateTime.Now;
                         RequestFocus();
+                        if(IsPinned) {
+                            Parent.ClearClipSelection(false);
+                        } else {
+                            Parent.ClearPinnedSelection(false);
+                        }
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));

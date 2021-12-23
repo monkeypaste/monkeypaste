@@ -27,6 +27,7 @@ namespace MonkeyPaste {
         [Column("fk_MpShortcutId")]
         public int ShortcutId { get; set; } = 0;
 
+        [Column("b_IsDefault")]
         public int Default { get; set; } = 0;
 
         [Column("Label")]

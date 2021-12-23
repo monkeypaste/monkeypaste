@@ -1,0 +1,31 @@
+{
+  "parameters": [
+    {
+      "label": "From Language",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 1,
+      "sortOrderIdx": 0,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isValueDeferred": true,
+      "values": [
+        {
+          "label": "Auto-Detect",
+          "value": "",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "label": "To Language",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 2,
+      "sortOrderIdx": 1,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isValueDeferred": true
+    }
+  ]
+}

@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpTextAnalyzer {
@@ -21,13 +22,6 @@ namespace MpWpfApp {
 
         private static string _endpoint = Properties.Settings.Default.AzureTextAnalyticsEndpoint;
 
-
-
-        /// <summary>
-        /// Gets the text visible in the specified image file by using
-        /// the Computer Vision REST API.
-        /// </summary>
-        /// <param name="imageFilePath">The image file with printed text.</param>
         public async Task<string> AnalyzeTextAsync(string text) {
             try {
                 var client = new TextAnalyticsClient(new Uri(_endpoint), new AzureKeyCredential(_subscriptionKey));
@@ -36,25 +30,25 @@ namespace MpWpfApp {
                     Response<DocumentSentiment> response = await client.AnalyzeSentimentAsync(text);
                     DocumentSentiment docSentiment = response.Value;
 
-                    MonkeyPaste.MpConsole.WriteLine($"Sentiment was {docSentiment.Sentiment}, with confidence scores: ");
-                    MonkeyPaste.MpConsole.WriteLine($"  Positive confidence score: {docSentiment.ConfidenceScores.Positive}.");
-                    MonkeyPaste.MpConsole.WriteLine($"  Neutral confidence score: {docSentiment.ConfidenceScores.Neutral}.");
-                    MonkeyPaste.MpConsole.WriteLine($"  Negative confidence score: {docSentiment.ConfidenceScores.Negative}.");
+                    MpConsole.WriteLine($"Sentiment was {docSentiment.Sentiment}, with confidence scores: ");
+                    MpConsole.WriteLine($"  Positive confidence score: {docSentiment.ConfidenceScores.Positive}.");
+                    MpConsole.WriteLine($"  Neutral confidence score: {docSentiment.ConfidenceScores.Neutral}.");
+                    MpConsole.WriteLine($"  Negative confidence score: {docSentiment.ConfidenceScores.Negative}.");
 
                     foreach(var sentence in docSentiment.Sentences) {
-                        MonkeyPaste.MpConsole.WriteLine($"Sentence: {sentence.Text}");
-                        MonkeyPaste.MpConsole.WriteLine($"Sentiment: {sentence.Sentiment}");
+                        MpConsole.WriteLine($"Sentence: {sentence.Text}");
+                        MpConsole.WriteLine($"Sentiment: {sentence.Sentiment}");
                     }
 
                     return docSentiment.ToString();
                 }
                 catch (RequestFailedException exception) {
-                    MonkeyPaste.MpConsole.WriteLine($"Error Code: {exception.ErrorCode}");
-                    MonkeyPaste.MpConsole.WriteLine($"Message: {exception.Message}");
+                    MpConsole.WriteLine($"Error Code: {exception.ErrorCode}");
+                    MpConsole.WriteLine($"Message: {exception.Message}");
                 }
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
+                MpConsole.WriteLine("\n" + e.Message);
             }
 
             return null;

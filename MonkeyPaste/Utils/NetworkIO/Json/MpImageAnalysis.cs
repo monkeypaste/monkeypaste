@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpImageAnalysis {
         public List<MpImageCategory> categories { get; set; }
         public MpImageColor color { get; set; }

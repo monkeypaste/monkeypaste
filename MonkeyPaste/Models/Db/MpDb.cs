@@ -378,8 +378,6 @@ namespace MonkeyPaste {
 
         private async Task InitTables() {
             await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
-            await _connectionAsync.CreateTableAsync<MpAnalyticItemParameter>();
-            await _connectionAsync.CreateTableAsync<MpAnalyticItemParameterValue>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
@@ -779,6 +777,23 @@ namespace MonkeyPaste {
                 DefaultKeyString = "Down"
             };
             await AddItemAsync<MpShortcut>(sh28);
+            #endregion
+
+            #region Anayltic Items
+
+            var ai1 = await MpAnalyticItem.Create(
+                        "https://api.cognitive.microsofttranslator.com/{0}",
+                        MpPreferences.Instance.AzureCognitiveServicesKey,
+                        MpInputFormatType.Text,
+                        "Language Translator",
+                        "Azure Cognitive-Services Language Translator");
+
+            var ai2 = await MpAnalyticItem.Create(
+                        "https://api.openai.com/v1/",
+                        MpPreferences.Instance.RestfulOpenAiApiKey,
+                        MpInputFormatType.Text,
+                        "Open Ai",
+                        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.");
             #endregion
 
             MpConsole.WriteTraceLine(@"Created all default tables");

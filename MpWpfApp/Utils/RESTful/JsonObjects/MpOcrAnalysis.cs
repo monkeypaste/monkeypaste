@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpOcrAnalysis {
+    public class MpOcrAnalysis : MpJsonMessage {
         public string language { get; set; }
         public double textAngle { get; set; }
         public string orientation { get; set; }

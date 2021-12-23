@@ -36,18 +36,6 @@ namespace MpWpfApp {
             set { _sliderTemplate = value; }
         }
 
-        private DataTemplate _executeTemplate;
-        public DataTemplate ExecuteTemplate {
-            get { return _executeTemplate; }
-            set { _executeTemplate = value; }
-        }
-
-        private DataTemplate _resultTemplate;
-        public DataTemplate ResultTemplate {
-            get { return _resultTemplate; }
-            set { _resultTemplate = value; }
-        }
-
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
@@ -56,16 +44,6 @@ namespace MpWpfApp {
 
             var aipvm = (item as MpAnalyticItemParameterViewModel);
             
-            if(aipvm == null) {
-                if(item is MpAnalyticItemResultViewModel) {
-                    return ResultTemplate;
-                }
-                if(item is MpAnalyticItemExecuteButtonViewModel) {
-                    return ExecuteTemplate;
-                }
-                throw new Exception("Unknown item type: " + item.GetType().ToString());
-            }
-
             switch(aipvm.Parameter.ParameterType) {
                 case MpAnalyticItemParameterType.ComboBox:
                     return ComboBoxTemplate;

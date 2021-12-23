@@ -13,7 +13,7 @@
         <StackPanel.Resources>
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
-                <local:MpComboBoxParameterView DataContext="{Binding}"/>
+                <local:MpComboBoxParameterView DataContext="{Binding}" />
             </DataTemplate>
             <DataTemplate x:Key="TextBoxParameter"
                           DataType="local:MpTextBoxParameterViewModel">
@@ -76,39 +76,11 @@
                             IsSnapToTickEnabled="False" />
                 </DockPanel>
             </DataTemplate>
-            <DataTemplate x:Key="ExecuteParameter"
-                          DataType="local:MpAnalyticItemExecuteButtonViewModel">
-                <StackPanel>
-                    <Button HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Padding="10"
-                            BorderThickness="0"
-                            Visibility="{Binding Parent.IsBusy,
-                                                 Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                            Style="{StaticResource SemiTransparentButton}"
-                            Content="Execute"
-                            Command="{Binding Parent.ExecuteAnalysisCommand}" />
-                    <local:MpSpinnerApple Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
-                </StackPanel>
-            </DataTemplate>
-            <DataTemplate x:Key="ResultParameter"
-                          DataType="local:MpAnalyticItemResultViewModel">
-                <TextBlock MaxWidth="150"
-                           Visibility="{Binding HasResult,
-                                                Converter={StaticResource BoolToVisibilityConverter}}"
-                           TextWrapping="Wrap"
-                           Background="Black"
-                           Foreground="Black"
-                           HorizontalAlignment="Left"
-                           Text="{Binding Result}" />
-            </DataTemplate>
             <local:MpParameterViewSelector x:Key="ParameterViewSelector"
                                            ComboBoxTemplate="{StaticResource ComboBoxParameter}"
                                            TextBoxTemplate="{StaticResource TextBoxParameter}"
                                            CheckBoxTemplate="{StaticResource CheckBoxParameter}"
-                                           SliderTemplate="{StaticResource SliderParameter}"
-                                           ExecuteTemplate="{StaticResource ExecuteParameter}"
-                                           ResultTemplate="{StaticResource ResultParameter}" />
+                                           SliderTemplate="{StaticResource SliderParameter}" />
         </StackPanel.Resources>
         <ContentControl Content="{Binding}"
                         Margin="0,5"

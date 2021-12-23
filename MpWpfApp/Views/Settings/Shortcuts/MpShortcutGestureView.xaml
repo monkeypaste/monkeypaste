@@ -34,18 +34,18 @@
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="FocusVisualStyle"
-                                        Value="{x:Null}" />
+                            Value="{x:Null}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <ContentPresenter />
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected"
-                                                         Value="True">
+                                             Value="True">
                                         <Setter Property="BorderBrush"
-                                                            Value="Transparent" />
+                                                Value="Transparent" />
                                         <Setter Property="Background"
-                                                            Value="Transparent" />
+                                                Value="Transparent" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -126,6 +126,7 @@
             </ListBox.GroupStyle>
         </ListBox>
         <Button x:Name="AssignButton"
+                BorderThickness="0"
                 Background="Transparent"
                 Command="{Binding AssignCommand}">
             <Border CornerRadius="10"

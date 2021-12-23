@@ -101,8 +101,7 @@
                          Text="{Binding SearchText,
                                         Mode=TwoWay,
                                         NotifyOnTargetUpdated=True,
-                                        UpdateSourceTrigger=PropertyChanged}">                    
-                </TextBox>
+                                        UpdateSourceTrigger=PropertyChanged}" />
                 <!--  Placeholder TextBlock  -->
                 <TextBlock x:Name="SearchBoxPlaceholderBlock"
                            Grid.Column="1"

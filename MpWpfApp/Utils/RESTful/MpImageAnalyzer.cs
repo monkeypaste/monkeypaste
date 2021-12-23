@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
                 // Request headers.
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
-
+                
                 // Request parameters. A third optional parameter is "details".
                 // The Analyze Image method returns information about the following
                 // visual features:

@@ -74,29 +74,6 @@
                                  Mode=OneWay}"
                   Command="{Binding EditSelectedTitleCommand,
                                     Source={StaticResource ClipTrayViewModel}}" />
-        <Separator />
-        <MenuItem x:Name="TranslateMenuItem"
-                  Header="Translate"
-                  Icon="{Binding Source={StaticResource TranslateIcon},
-                                 Converter={StaticResource StringToIconConverter},
-                                 Mode=OneWay}"
-                  ItemsSource="{Binding TranslateLanguageMenuItems,
-                                        Source={StaticResource ClipTrayViewModel}}">
-            <MenuItem.ItemContainerStyle>
-                <Style TargetType="{x:Type MenuItem}">
-                    <Setter Property="Header"
-                            Value="{Binding Header}" />
-                    <Setter Property="Command"
-                            Value="{Binding Command}" />
-                    <Setter Property="CommandParameter"
-                            Value="{Binding CommandParameter}" />
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalContentAlignment"
-                            Value="Top" />
-                </Style>
-            </MenuItem.ItemContainerStyle>
-        </MenuItem>
     </MenuItem>
     <MenuItem x:Name="AnalyzeMenuItem"
               Header="_Analyze"

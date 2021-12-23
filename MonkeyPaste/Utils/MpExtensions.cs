@@ -282,10 +282,21 @@ namespace MonkeyPaste {
             dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dateTime;
         }
-                
+
         #endregion
 
         #region Reflection
+        public static TEnum ToEnum<TEnum>(this string value, TEnum defaultValue) {
+
+            if (string.IsNullOrEmpty(value)) return defaultValue;
+
+            return (TEnum)Enum.Parse(typeof(TEnum), value, true);
+        }
+
+        public static T ToEnum<T>(this object obj) where T:Enum {
+            var enumName = Enum.GetName(typeof(T), obj);
+            return (T)Enum.Parse(typeof(T), enumName);// Enum.GetNames(typeof(T)).ToList().IndexOf(enumName);
+        }
 
         public static async Task<T> InvokeAsync<T>(this MethodInfo @this, object obj, params object[] parameters) {
             dynamic awaitable = @this.Invoke(obj, parameters);

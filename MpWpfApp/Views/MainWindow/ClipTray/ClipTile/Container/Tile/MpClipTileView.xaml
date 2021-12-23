@@ -44,6 +44,39 @@
                               Opacity="0.3"
                               BlurRadius="5" />
         </local:MpClipBorder.Effect>-->
+        <local:MpClipBorder.Resources>
+            <DropShadowEffect x:Key="DropShadow"
+                              RenderingBias="Quality"
+                              Color="Black"
+                              Direction="315"
+                              Opacity="0.3"
+                              BlurRadius="5" />
+        </local:MpClipBorder.Resources>
+        <local:MpClipBorder.Style>
+            <Style TargetType="{x:Type local:MpClipBorder}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsPinned}"
+                                 Value="True">
+                        <Setter Property="Effect"
+                                Value="{StaticResource DropShadow}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsPinned}"
+                                 Value="False">
+                        <Setter Property="Effect"
+                                Value="{x:Null}" />
+                    </DataTrigger>
+                    <!--<Trigger Property="Perf:RenderCapabilityWrapper.Tier" Value="0">
+                        <Setter Property="Effect" Value="{x:Null}"/>
+                    </Trigger>
+                    <Trigger Property="Perf:RenderCapabilityWrapper.Tier" Value="1">
+                        <Setter Property="Effect" Value="{StaticResource performanceShadow}"/>
+                    </Trigger>
+                    <Trigger Property="Perf:RenderCapabilityWrapper.Tier" Value="2">
+                        <Setter Property="Effect" Value="{StaticResource qualityShadow}"/>
+                    </Trigger>-->
+                </Style.Triggers>
+            </Style>
+        </local:MpClipBorder.Style>
         <local:MpClipBorder.BorderBrush>
             <DrawingBrush Viewport="0,0,8,8"
                           ViewportUnits="Absolute"

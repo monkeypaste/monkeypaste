@@ -95,7 +95,7 @@ namespace MpWpfApp {
             SelectedSortType.IsVisible = true;
         }
 
-        public void ResetToDefault() {
+        public void ResetToDefault(bool suppressNotifyQueryChanged = false) {
             IsReseting = true;
 
             SelectedSortType = SortTypes[0];
@@ -103,7 +103,9 @@ namespace MpWpfApp {
 
             IsReseting = false;
 
-            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+            if(!suppressNotifyQueryChanged) {
+                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+            }
         }
         #endregion
 

@@ -14,17 +14,6 @@ namespace MonkeyPaste {
         CustomFile
     }
 
-    public enum MpHttpRequestType {
-        None = 0,
-        Get,
-        Post
-    }
-
-    public enum MpEncodingType { 
-        None = 0,
-        Ascii,
-        Utf8
-    }
 
     public class MpAnalyticItem : MpDbModelBase {
         #region Columns
@@ -61,8 +50,8 @@ namespace MonkeyPaste {
         [OneToOne]
         public MpIcon Icon { get; set; }
 
-        [OneToMany]
-        public List<MpAnalyticItemParameter> Parameters { get; set; } = new List<MpAnalyticItemParameter>();
+        //[OneToMany]
+        //public List<MpAnalyticItemParameter> Parameters { get; set; } = new List<MpAnalyticItemParameter>();
 
         [OneToMany]
         public List<MpAnalyticItemPreset> Presets { get; set; } = new List<MpAnalyticItemPreset>();
@@ -136,40 +125,6 @@ namespace MonkeyPaste {
             };
 
             await newAnalyticItem.WriteToDatabaseAsync();
-
-            return newAnalyticItem;
-        }
-
-        public static async Task<MpAnalyticItem> Create2(
-            List<MpHttpRequest> requests,
-            MpInputFormatType format, 
-            string title, 
-            string description,
-            int sortOrderIdx = -1) {
-
-            if(sortOrderIdx < 0) {
-                sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
-            }
-
-            var domainStr = MpHelpers.Instance.GetUrlDomain(requests[0].EndPoint);
-            var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
-            
-            var icon = await MpIcon.Create(favIconImg64);
-
-            var newAnalyticItem = new MpAnalyticItem() {
-                AnalyticItemGuid = System.Guid.NewGuid(),
-                IconId = icon.Id,
-                Icon = icon,
-                InputFormatType = format,
-                Title = title,
-                Description = description,
-                SortOrderIdx = sortOrderIdx
-            };
-
-            await newAnalyticItem.WriteToDatabaseAsync();
-
-            requests.ForEach(x => x.AnalyticItemId = newAnalyticItem.Id);
-            await Task.WhenAll(requests.Select(x => x.WriteToDatabaseAsync()));
 
             return newAnalyticItem;
         }

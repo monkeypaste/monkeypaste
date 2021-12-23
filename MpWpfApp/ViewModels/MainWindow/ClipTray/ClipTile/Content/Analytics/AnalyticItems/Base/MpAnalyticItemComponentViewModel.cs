@@ -1,4 +1,6 @@
-﻿namespace MpWpfApp {
+﻿using System;
+
+namespace MpWpfApp {
     public abstract class MpAnalyticItemComponentViewModel : MpViewModelBase<MpAnalyticItemViewModel> {
         #region Properties
 

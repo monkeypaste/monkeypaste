@@ -107,10 +107,13 @@ namespace MpWpfApp {
 
         public string PresetIcon {
             get {
-                if (Parent == null) {
-                    return null;
+                if (Preset == null || Preset.Icon == null) {
+                    if(Parent == null) {
+                        return null;
+                    }
+                    return Parent.ItemIconBase64;
                 }
-                return Parent.ItemIconBase64;
+                return Preset.Icon.IconImage.ImageBase64;
             }
         }
 
@@ -224,6 +227,7 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
                     break;
                 case nameof(IsEditing):
                     if(IsEditing) {
@@ -238,13 +242,59 @@ namespace MpWpfApp {
 
         #region Commands
 
+        public ICommand ChangeIconCommand => new RelayCommand<object>(
+            (args) => {
+                var iconColorChooserMenuItem = new MenuItem();
+                var iconContextMenu = new ContextMenu();
+                iconContextMenu.Items.Add(iconColorChooserMenuItem);
+                MpHelpers.Instance.SetColorChooserMenuItem(
+                    iconContextMenu,
+                    iconColorChooserMenuItem,
+                    async (s1, e1) => {
+                        var brush = (Brush)((Border)s1).Tag;
+                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
+                        var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
+                        Preset.IconId = Preset.Icon.Id;
+                        //await Preset.WriteToDatabaseAsync();
+
+                        OnPropertyChanged(nameof(PresetIcon));
+                    }
+                );
+                var iconImageChooserMenuItem = new MenuItem();
+                iconImageChooserMenuItem.Header = "Choose Image...";
+                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
+                iconImageChooserMenuItem.Click += async (s, e) => {
+                    var openFileDialog = new OpenFileDialog() {
+                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
+                        Title = "Select Image for " + Label,
+                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                    };
+                    bool? openResult = openFileDialog.ShowDialog();
+                    if (openResult != null && openResult.Value) {
+                        string imagePath = openFileDialog.FileName;
+                        var presetIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
+                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
+                        Preset.IconId = Preset.Icon.Id;
+                        //await Preset.WriteToDatabaseAsync();
+
+                        OnPropertyChanged(nameof(PresetIcon));
+                    }
+                };
+                iconContextMenu.Items.Add(iconImageChooserMenuItem);
+                ((Button)args).ContextMenu = iconContextMenu;
+                iconContextMenu.PlacementTarget = ((Button)args);
+                iconContextMenu.IsOpen = true;
+            }, (args) => !IsDefault && args is Button);
+
         public ICommand ManagePresetCommand => new RelayCommand(
             async() => {
                 if(!Parent.IsLoaded) {
-                    await Parent.LoadChildren();
+                    throw new Exception("Item should be loaded on startup");
                 }
                 Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
                 Parent.PresetViewModels.ForEach(x => x.IsEditing = x == this);
+                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
             });
 
         public ICommand AssignHotkeyCommand => new RelayCommand(

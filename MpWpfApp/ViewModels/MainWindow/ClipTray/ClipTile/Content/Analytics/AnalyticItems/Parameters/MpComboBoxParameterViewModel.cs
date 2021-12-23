@@ -71,12 +71,17 @@ namespace MpWpfApp {
 
         public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
             IsBusy = true;
-
+            
             Parameter = aip;
 
             ValueViewModels.Clear();
 
-            foreach(var valueSeed in Parameter.ValueSeeds) {
+            //if (Parameter.ValueFormats == null) {
+            //    await Parent.DeferredCreateParameterValueViewModels(this);
+            //} else {
+                
+            //}
+            foreach (var valueSeed in Parameter.Values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
                 ValueViewModels.Add(naipvvm);
             }

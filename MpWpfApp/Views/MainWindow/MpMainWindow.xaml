@@ -141,14 +141,14 @@
                                          Height="{Binding ClipTrayHeight,
                                                           Source={StaticResource ClipTrayViewModel}}"
                                          Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
-                <!--<GridSplitter Background="Black"
+                <GridSplitter Background="Black"
                               Grid.Row="1"
                               Grid.Column="0"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
                               MouseEnter="GridSplitter_MouseEnter"
-                              MouseLeave="GridSplitter_MouseLeave" />-->
+                              MouseLeave="GridSplitter_MouseLeave" />
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
                                                Grid.Column="1"

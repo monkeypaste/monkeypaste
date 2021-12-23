@@ -240,7 +240,7 @@ namespace MpWpfApp {
             foreach (SettingsProperty dsp in Properties.DefaultUiStrings.Default.Properties) {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {
-                        usp.DefaultValue = await MpLanguageTranslator.Instance.TranslateAsync((string)dsp.DefaultValue, newLanguage,"", false);
+                        usp.DefaultValue = await MpLanguageTranslator.Instance.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
                         MonkeyPaste.MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
                     }
                 }

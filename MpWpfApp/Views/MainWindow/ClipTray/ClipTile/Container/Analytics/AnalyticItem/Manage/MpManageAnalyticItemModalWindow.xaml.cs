@@ -15,33 +15,9 @@ using System.Windows.Shapes;
 namespace MpWpfApp {
 
     public partial class MpManageAnalyticItemModalWindow : Window {
-
         public MpManageAnalyticItemModalWindow() {
             InitializeComponent();
         }
 
-        private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {            
-            DialogResult = true;
-            
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e) {
-            DialogResult = false;
-        }
-
-        private void Button_MouseEnter(object sender, MouseEventArgs e) {
-            var aicvm = DataContext as MpAnalyticItemCollectionViewModel;
-            var aivm = aicvm.SelectedItem;
-            var pvm = aivm.SelectedPresetViewModel;
-            if(pvm != null && pvm.IsDefault) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
-            } else {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-            }
-        }
-
-        private void Button_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-        }
     }
 }

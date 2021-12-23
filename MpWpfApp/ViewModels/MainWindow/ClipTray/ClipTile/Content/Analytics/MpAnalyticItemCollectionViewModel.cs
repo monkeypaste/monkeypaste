@@ -13,12 +13,13 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel> { //
+
+    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel>  { //
         #region Properties
 
         #region View Models
 
-        public ObservableCollection<MpAnalyticItemViewModel> Items { get; private set; } = new ObservableCollection<MpAnalyticItemViewModel>();
+        public ObservableCollection<MpAnalyticItemViewModel> Items { get; set; } = new ObservableCollection<MpAnalyticItemViewModel>();
 
         public MpAnalyticItemViewModel SelectedItem {
             get {
@@ -128,7 +129,7 @@ namespace MpWpfApp {
         #region Public Methods
         public async Task Init() {
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
-            await InitDefaultItems();
+            await InitAsync();
 
             if (Items.Count > 0) {
                 Items[0].IsSelected = true;
@@ -173,18 +174,20 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task InitDefaultItems() {
+        private async Task InitAsync() {
             IsBusy = true;
 
             Items.Clear();
 
-            var translateVm = new MpTranslatorViewModel(this);
-            await translateVm.Initialize();
-            Items.Add(translateVm);
+            var ail = await MpDb.Instance.GetItemsAsync<MpAnalyticItem>();
 
-            var openAiVm = new MpOpenAiViewModel(this);
-            await openAiVm.Initialize();
-            Items.Add(openAiVm);
+            var aivm1 = new MpTranslatorViewModel(this);
+            await aivm1.InitializeAsync(ail[0]);
+            Items.Add(aivm1);
+
+            var aivm2 = new MpTranslatorViewModel(this);
+            await aivm2.InitializeAsync(ail[1]);
+            Items.Add(aivm2);
 
             OnPropertyChanged(nameof(Items));
 

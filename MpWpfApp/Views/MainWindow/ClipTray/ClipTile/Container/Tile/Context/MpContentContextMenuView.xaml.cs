@@ -44,22 +44,7 @@ namespace MpWpfApp {
                 app = MpClipTrayViewModel.Instance.SelectedModels[0].Source.App;
             }
 
-            if(!MpLanguageTranslator.Instance.IsLoaded) {
-                await MpLanguageTranslator.Instance.Init();
 
-                MpClipTrayViewModel.Instance.TranslateLanguageMenuItems.Clear();
-                foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
-                    var ltmivm = new MpContextMenuItemViewModel(
-                        languageName, 
-                        MpClipTrayViewModel.Instance.TranslateSelectedClipTextAsyncCommand, 
-                        languageName, 
-                        false);
-
-                    MpClipTrayViewModel.Instance.TranslateLanguageMenuItems.Add(ltmivm);
-                }
-
-                MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.TranslateLanguageMenuItems));
-            }
 
             MpClipTrayViewModel.Instance.TagMenuItems = await MpClipTrayViewModel.Instance.GetTagMenuItemsForSelectedItems();
 

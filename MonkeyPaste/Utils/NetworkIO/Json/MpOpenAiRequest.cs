@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using MonkeyPaste;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     /*
       "object": "text_completion",
     "created": 1586839808,
@@ -17,7 +18,7 @@ namespace MpWpfApp {
         "finish_reason": "length"
     }]
      */
-    public class MpOpenAiResponse : MpHttpResponseBase {
+    public class MpOpenAiResponse : MpJsonMessage {
         public string id { get; set; }
 
         public long created { get; set; }
@@ -27,7 +28,7 @@ namespace MpWpfApp {
         public List<MpOpenAiChoice> choices { get; set; }
     }
 
-    public class MpOpenAiChoice {
+    public class MpOpenAiChoice : MpJsonMessage {
         public string text { get; set; }
 
         public int index { get; set; }
@@ -37,25 +38,26 @@ namespace MpWpfApp {
         public string finish_reason { get; set; }
     }
 
-    public class MpOpenAiRequest {
+    public class MpOpenAiRequest : MpJsonMessage {
         //[JsonProperty("engine")]
         //public string Engine { get; set; }
-        [JsonProperty("prompt")]
+        [JsonProperty("prompt", Order = 0)]
         public string Prompt { get; set; }
 
-        [JsonProperty("temperature")]
+        [JsonProperty("temperature", Order = 1)]
         public double Temperature { get; set; }
 
-        [JsonProperty("max_tokens")]
+        [JsonProperty("max_tokens", Order = 2)]
         public int MaxTokens { get; set; }
 
-        [JsonProperty("top_p")]
+        [JsonProperty("top_p", Order = 3)]
         public double TopP { get; set; }
 
-        [JsonProperty("frequency_penalty")]
+        [JsonProperty("frequency_penalty", Order = 4)]
         public double FrequencyPenalty { get; set; }
 
-        [JsonProperty("presence_penalty")]
+        [JsonProperty("presence_penalty", Order = 5)]
         public double PresencePenalty { get; set; }
+
     }
 }

@@ -382,7 +382,7 @@ namespace MpWpfApp {
                     IsMainWindowOpen = true;
                     OnMainWindowShow?.Invoke(this, null);
 
-                    MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+                    //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                 }
             };
             

@@ -536,6 +536,15 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<MpAnalyticItemPreset> GetAnalyticItemDefaultPreset(int aiid) {
+            string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=? and b_IsDefault=1";
+            var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query, aiid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public async Task<List<MpAnalyticItemPreset>> GetAnalyticItemPresetsById(int aiid) {
             string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=?";
             var result = await MpDb.Instance.QueryAsync<MpAnalyticItemPreset>(query, aiid);
@@ -822,6 +831,7 @@ namespace MonkeyPaste {
 
             return ccil.Count == 0 ? null : ccil[0];
         }
+
         public void MoveQueryItem(int copyItemId, int newIdx) {
             if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
                 throw new Exception("Query does not contain item " + copyItemId);

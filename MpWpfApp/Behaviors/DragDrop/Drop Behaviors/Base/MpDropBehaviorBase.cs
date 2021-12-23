@@ -208,10 +208,6 @@ namespace MpWpfApp {
                 return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType);
             } 
 
-            if(dragData is MpAnalyticItemViewModel aivm) {
-                return aivm.ResultViewModel != null &&
-                       aivm.ResultViewModel.HasResult;
-            }
             return false;
         }
 

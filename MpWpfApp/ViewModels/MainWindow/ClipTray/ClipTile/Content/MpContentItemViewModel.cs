@@ -1075,35 +1075,6 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
-        public ICommand TranslateSubSelectedItemTextAsyncCommand => new RelayCommand<string>(
-            async (toLanguage) => {
-                var translatedText = await MpLanguageTranslator.Instance.TranslateAsync(CopyItem.ItemData.ToPlainText(), toLanguage,"", false);
-                if (!string.IsNullOrEmpty(translatedText)) {
-                    CopyItem.ItemData = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
-                }
-            },
-            (toLanguage) => {
-                return CopyItem.ItemType == MpCopyItemType.RichText;
-            });
-
-
-
-        private RelayCommand _pasteSubItemCommand;
-        public ICommand PasteSubItemCommand {
-            get {
-                if (_pasteSubItemCommand == null) {
-                    _pasteSubItemCommand = new RelayCommand(PasteSubItem);
-                }
-                return _pasteSubItemCommand;
-            }
-        }
-        private void PasteSubItem() {
-            MpClipTrayViewModel.Instance.ClearClipSelection();
-            base.Parent.IsSelected = true;
-            base.Parent.ClearSelection();
-            IsSelected = true;
-            MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(null);
-        }
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

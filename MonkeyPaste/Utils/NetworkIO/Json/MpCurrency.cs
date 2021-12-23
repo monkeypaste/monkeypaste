@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpCurrency {
         [JsonProperty("currencyName")]
         public string CurrencyName { get; set; }

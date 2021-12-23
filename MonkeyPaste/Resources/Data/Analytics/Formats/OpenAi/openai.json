@@ -1,0 +1,177 @@
+{
+  "parameters": [
+    {
+      "label": "Engine",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 1,
+      "sortOrderIdx": 0,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "label": "DaVinci",
+          "value": "DaVinci",
+          "isDefault": true
+        },
+        {
+          "label": "Curie",
+          "value": "Curie",
+          "isDefault": false
+        },
+        {
+          "label": "Babbage",
+          "value": "Babbage",
+          "isDefault": false
+        },
+        {
+          "label": "Ada",
+          "value": "Ada",
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "label": "End Point",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 2,
+      "sortOrderIdx": 1,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "label": "Completions",
+          "value": "Completions",
+          "isDefault": true
+        },
+        {
+          "label": "Searches",
+          "value": "Searches",
+          "isDefault": false
+        },
+        {
+          "label": "Classifications",
+          "value": "Classifications",
+          "isDefault": false
+        },
+        {
+          "label": "Answers",
+          "value": "Answers",
+          "isDefault": false
+        },
+        {
+          "label": "Files",
+          "value": "Files",
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "label": "Temperature",
+      "parameterType": "Slider",
+      "valueType": "Decimal",
+      "enumId": 3,
+      "sortOrderIdx": 2,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "value": "0",
+          "isMinimum": true
+        },
+        {
+          "value": "1",
+          "isMaximum": true
+        },
+        {
+          "value": "0.75",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "label": "Max Tokens",
+      "parameterType": "Slider",
+      "valueType": "Integer",
+      "enumId": 4,
+      "sortOrderIdx": 3,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "value": "1",
+          "isMinimum": true
+        },
+        {
+          "value": "2048",
+          "isMaximum": true
+        },
+        {
+          "value": "64",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "label": "Top P",
+      "parameterType": "Slider",
+      "valueType": "Decimal",
+      "enumId": 5,
+      "sortOrderIdx": 4,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "value": "0",
+          "isMinimum": true
+        },
+        {
+          "value": "1",
+          "isMaximum": true,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "label": "Frequency Penalty",
+      "parameterType": "Slider",
+      "valueType": "Decimal",
+      "enumId": 6,
+      "sortOrderIdx": 5,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "value": "0",
+          "isMinimum": true,
+          "isDefault": true
+        },
+        {
+          "value": "2",
+          "isMaximum": true
+        }
+      ]
+    },
+    {
+      "label": "Presence Penalty",
+      "parameterType": "Slider",
+      "valueType": "Decimal",
+      "enumId": 7,
+      "sortOrderIdx": 6,
+      "isReadOnly": false,
+      "isRequired": true,
+      "values": [
+        {
+          "value": "0",
+          "isMinimum": true,
+          "isDefault": true
+        },
+        {
+          "value": "2",
+          "isMaximum": true
+        }
+      ]
+    }
+  ]
+}

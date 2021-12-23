@@ -144,7 +144,7 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return false;
                 }
-                return Parameter.IsParameterRequired;
+                return Parameter.IsRequired;
            }
         }
 

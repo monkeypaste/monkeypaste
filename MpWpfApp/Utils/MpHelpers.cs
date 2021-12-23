@@ -857,12 +857,30 @@ namespace MpWpfApp {
             }
         }
 
+        public string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
+            try {
+                assembly = assembly == null ? Assembly.GetExecutingAssembly():assembly;
+                //var resourceName = "MyCompany.MyProduct.MyFile.txt";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+                using (StreamReader reader = new StreamReader(stream)) {
+                    string result = reader.ReadToEnd();
+                    return result;
+                }
+                
+            }
+            catch (Exception ex) {
+                MonkeyPaste.MpConsole.WriteTraceLine("error for resource path: " + resourcePath,ex);
+                return string.Empty;
+            }
+        }
+
         public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
             if (filePath.ToLower().Contains(@".tmp")) {
                 string extension = string.Empty;
-                if(MpHelpers.Instance.IsStringRichText(text)) {
+                if (MpHelpers.Instance.IsStringRichText(text)) {
                     extension = @".rtf";
-                } else if(MpHelpers.Instance.IsStringCsv(text)) {
+                } else if (MpHelpers.Instance.IsStringCsv(text)) {
                     extension = @".csv";
                 } else {
                     extension = @".txt";
@@ -872,13 +890,12 @@ namespace MpWpfApp {
             using (StreamWriter of = new StreamWriter(filePath)) {
                 of.Write(text);
                 of.Close();
-                if(isTemporary) {
+                if (isTemporary) {
                     MpMainWindowViewModel.Instance.AddTempFile(filePath);
                 }
                 return filePath;
             }
         }
-
         public string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.Instance.ConvertBitmapSourceToBitmap(bmpSrc))) {
                 if(filePath.ToLower().Contains(@".tmp")) {

@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemExecuteButtonViewModel : MpAnalyticItemComponentViewModel {
+    public class MpAnalyticItemExecuteButtonViewModel<T> : MpAnalyticItemComponentViewModel<T> where T:Enum{
         #region Properties
         #endregion
 
@@ -11,7 +11,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemExecuteButtonViewModel() : base(null) { }
 
-        public MpAnalyticItemExecuteButtonViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+        public MpAnalyticItemExecuteButtonViewModel(MpAnalyticItemViewModel<T> parent) : base(parent) { }
 
         #endregion
     }

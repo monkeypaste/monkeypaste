@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpAnalyticItemParameterType {
+    public enum MpAnalyticItemParameterType {        
         None = 0,
         Button,
         Text,
@@ -14,6 +14,7 @@ namespace MonkeyPaste {
         Slider,
         //RuntimeMinOffset,//below are only runtime types        
     }
+
     public class MpAnalyticItemParameter : MpDbModelBase {
         #region Columns
         [Column("pk_MpAnalyticItemParameterId")]

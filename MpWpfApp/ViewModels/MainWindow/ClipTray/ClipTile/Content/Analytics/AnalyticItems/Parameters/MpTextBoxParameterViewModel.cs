@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-    public class MpTextBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpTextBoxParameterViewModel : MpAnalyticItemParameterViewModel  {
         #region Private Variables
         
         private string _defaultValue;
@@ -44,10 +44,10 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if(Parameter == null || Parameter.ValueSeeds == null) {
+            if(Parameter == null || Parameter.Values == null) {
                 ResetToDefault();
             } else {
-                MpAnalyticItemParameterValue defVal = Parameter.ValueSeeds.FirstOrDefault(x => x.IsDefault);
+                MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
                 if (defVal != null) {
                     _defaultValue = defVal.Value;
                 } else {
@@ -74,7 +74,7 @@ namespace MpWpfApp {
             //    return false;
             //}
 
-            var minCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMinimum);
+            var minCond = Parameter.Values.FirstOrDefault(x => x.IsMinimum);
             if (minCond != null) {
                 int minLength = 0;
                 try {
@@ -90,7 +90,7 @@ namespace MpWpfApp {
                 }
             }
             if(IsValid) {
-                var maxCond = Parameter.ValueSeeds.FirstOrDefault(x => x.IsMaximum);
+                var maxCond = Parameter.Values.FirstOrDefault(x => x.IsMaximum);
                 if (maxCond != null) {
                     // TODO should cap all input string but especially here
                     int maxLength = int.MaxValue;
