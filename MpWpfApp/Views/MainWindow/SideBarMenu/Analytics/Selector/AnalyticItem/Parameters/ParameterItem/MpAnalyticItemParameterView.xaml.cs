@@ -10,12 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-
-    public partial class MpManageAnalyticItemModalWindow : Window {
-        public MpManageAnalyticItemModalWindow() {
+    /// <summary>
+    /// Interaction logic for MpAnalyticItemParameterView.xaml
+    /// </summary>
+    public partial class MpAnalyticItemParameterView : MpUserControl<MpAnalyticItemParameterViewModel> {
+        public MpAnalyticItemParameterView() {
             InitializeComponent();
         }
 

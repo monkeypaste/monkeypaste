@@ -234,6 +234,8 @@ namespace MpWpfApp {
 
             Application.Current.Resources["MainWindowViewModel"] = MpMainWindowViewModel.Instance;
 
+
+            
             IsMainWindowLoading = false;
         }
 

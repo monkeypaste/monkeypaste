@@ -145,7 +145,6 @@
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
-    <Compile Include="Controls\MpListBox.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -210,7 +209,6 @@
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemComponentViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
@@ -282,22 +280,20 @@
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\MpManageAnalyticItemsContainerView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\MpManageAnalyticItemsContainerView.xaml.cs">
       <DependentUpon>MpManageAnalyticItemsContainerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\MpAnalyticItemSelectorView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml.cs">
       <DependentUpon>MpAnalyticItemPresetParameterListBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\Presets\MpAnalyticItemPresetDataGridView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml.cs">
       <DependentUpon>MpAnalyticItemPresetDataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\ComboBox\MpComboBoxParameterView.xaml.cs">
-      <DependentUpon>MpComboBoxParameterView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\MpContextMenuItemSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
     </Compile>
@@ -346,34 +342,15 @@
     <Compile Include="ViewModels\Reusable\MpCursorViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\Base\MpWindow.cs" />
-    <Compile Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml.cs">
-      <DependentUpon>MpAnalyzerToolbarTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpManageAnalyticItemModalWindow.xaml.cs">
-      <DependentUpon>MpManageAnalyticItemModalWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\MpAnalyticItemComponentView.xaml.cs">
-      <DependentUpon>MpAnalyticItemComponentView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml.cs">
+      <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Selectors\MpParameterViewSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml.cs">
-      <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpTextAnalysisDocument.xaml.cs">
-      <DependentUpon>MpTextAnalysisDocument.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\MpAnalyticItemCollectionView.xaml.cs">
-      <DependentUpon>MpAnalyticItemCollectionView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Selector\MpAnalysisDocumentSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Selector\MpParameterViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
       <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Flipper\MpClipTileFlipView.xaml.cs">
-      <DependentUpon>MpClipTileFlipView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\MpFileListItemView.xaml.cs">
       <DependentUpon>MpFileListItemView.xaml</DependentUpon>
@@ -532,63 +509,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\AnalyzerMenu\MpAnalyzerToolbarTreeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\MpManageAnalyticItemsContainerView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\MpManageAnalyticItemsContainerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\MpAnalyticItemSelectorView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\Container\Selector\Presets\MpAnalyticItemPresetDataGridView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\ComboBox\MpComboBoxParameterView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Manage\MpManageAnalyticItemModalWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\MpAnalyticItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\MpAnalyticItemComponentView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpImageAnalysisDocument.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Documents\MpTextAnalysisDocument.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\MpAnalyticItemCollectionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\Styles\MpAnalyticTreeViewStyle.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Flipper\MpClipTileFlipView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2444,6 +2389,9 @@
     <Resource Include="Resources\Images\pinover.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\brainwhite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2465,10 +2413,6 @@
     <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Execute\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Result\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\Slider\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Analytics\AnalyticItem\Parameters\TextBox\" />
     <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

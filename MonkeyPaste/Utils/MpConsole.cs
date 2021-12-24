@@ -64,6 +64,10 @@ namespace MonkeyPaste {
                 WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
             }
         }
+        public static void Write(string str) {
+            str = str == null ? string.Empty : str;
+            Console.Write(str);
+        }
 
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;

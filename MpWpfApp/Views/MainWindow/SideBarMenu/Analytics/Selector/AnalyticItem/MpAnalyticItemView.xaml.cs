@@ -15,11 +15,19 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpImageDetectionDocument.xaml
+    /// Interaction logic for MpAnalyticItemView.xaml
     /// </summary>
-    public partial class MpTextAnalysisDocument : UserControl {
-        public MpTextAnalysisDocument() {
+    public partial class MpAnalyticItemView : MpUserControl<MpAnalyticItemViewModel> {
+        public MpAnalyticItemView() {
             InitializeComponent();
+        }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.IsHovering = true;
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.IsHovering = false;
         }
     }
 }

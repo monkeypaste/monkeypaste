@@ -9,6 +9,7 @@ namespace MpWpfApp {
         #region Private Variables
 
         #endregion
+
         #region Properties
 
         #region View Models
@@ -63,7 +64,7 @@ namespace MpWpfApp {
 
         public MpComboBoxParameterViewModel() : base () { }
 
-        public MpComboBoxParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+        public MpComboBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
         #endregion
 
@@ -79,20 +80,21 @@ namespace MpWpfApp {
             //if (Parameter.ValueFormats == null) {
             //    await Parent.DeferredCreateParameterValueViewModels(this);
             //} else {
-                
+
             //}
+            var presetVal = Parent.Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == Parameter.EnumId);
+            string selectedValue = presetVal == null ? string.Empty:presetVal.Value;
             foreach (var valueSeed in Parameter.Values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
+                if(naipvvm.Value == selectedValue) {
+                    naipvvm.IsSelected = true;
+                }
                 ValueViewModels.Add(naipvvm);
             }
 
-            MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            if (defVal != null) {
-                defVal.IsSelected = true;
-            } else if(ValueViewModels.Count > 0) {
+            if (ValueViewModels.All(x=>x.IsSelected == false) && ValueViewModels.Count > 0) {
                 ValueViewModels[0].IsSelected = true;
             }
-            DefaultValue = CurrentValueViewModel.Value;
 
             OnPropertyChanged(nameof(ValueViewModels));
             OnPropertyChanged(nameof(CurrentValue));

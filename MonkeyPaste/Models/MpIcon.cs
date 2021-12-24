@@ -34,14 +34,6 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_IconBorderDbImageId")]
         public int IconBorderImageId { get; set; }
-
-        [ForeignKey(typeof(MpDbImage))]
-        [Column("fk_IconHighlightBorderDbImageId")]
-        public int IconBorderHighlightImageId { get; set; }
-        
-        [ForeignKey(typeof(MpDbImage))]
-        [Column("fk_IconSelectedHighlightBorderDbImageId")]
-        public int IconBorderHighlightSelectedImageId { get; set; }
         #endregion
 
         #region Fk Models
@@ -51,13 +43,6 @@ namespace MonkeyPaste {
 
         [OneToOne(foreignKey: nameof(IconBorderImageId), CascadeOperations = CascadeOperation.All)]
         public MpDbImage IconBorderImage { get; set; }
-
-        [OneToOne(foreignKey: nameof(IconBorderHighlightImageId), CascadeOperations = CascadeOperation.All)]
-        public MpDbImage IconBorderHighlightImage { get; set; }
-
-        [OneToOne(foreignKey: nameof(IconBorderHighlightSelectedImageId), CascadeOperations = CascadeOperation.All)]
-        public MpDbImage IconBorderHighlightSelectedImage { get; set; }
-
         #endregion
 
         #region Properties
@@ -99,27 +84,10 @@ namespace MonkeyPaste {
                     DbImageGuid = System.Guid.NewGuid(),
                     ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.White.ToHex())
                 };
-                var iconBorderHighlightImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Yellow.ToHex())
-                };
-                var iconBorderHighlightSelectedImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.Pink.ToHex())
-                };
-
                 await iconBorderImage.WriteToDatabaseAsync();
-                await iconBorderHighlightImage.WriteToDatabaseAsync();
-                await iconBorderHighlightSelectedImage.WriteToDatabaseAsync();
-
                 var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
-
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
-                newIcon.IconBorderHighlightImageId = iconBorderHighlightImage.Id;
-                newIcon.IconBorderHighlightImage = iconBorderHighlightImage;
-                newIcon.IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.Id;
-                newIcon.IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage;
                 newIcon.HexColor1 = colorList[0];
                 newIcon.HexColor2 = colorList[1];
                 newIcon.HexColor3 = colorList[2];
@@ -130,27 +98,9 @@ namespace MonkeyPaste {
                     DbImageGuid = System.Guid.NewGuid(),
                     ImageBase64 = iconImgBase64
                 };
-                var iconBorderHighlightImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = iconImgBase64
-                };
-                var iconBorderHighlightSelectedImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = iconImgBase64
-                };
-
                 await iconBorderImage.WriteToDatabaseAsync();
-                await iconBorderHighlightImage.WriteToDatabaseAsync();
-                await iconBorderHighlightSelectedImage.WriteToDatabaseAsync();
-
-                //var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
-
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
-                newIcon.IconBorderHighlightImageId = iconBorderHighlightImage.Id;
-                newIcon.IconBorderHighlightImage = iconBorderHighlightImage;
-                newIcon.IconBorderHighlightSelectedImageId = iconBorderHighlightSelectedImage.Id;
-                newIcon.IconBorderHighlightSelectedImage = iconBorderHighlightSelectedImage;
                 newIcon.HexColor1 = MpHelpers.Instance.GetRandomColor().ToHex();
                 newIcon.HexColor2 = MpHelpers.Instance.GetRandomColor().ToHex();
                 newIcon.HexColor3 = MpHelpers.Instance.GetRandomColor().ToHex();
@@ -182,16 +132,8 @@ namespace MonkeyPaste {
                         icon.IconImageId = icon.IconImage.Id;
                         break;
                     case "fk_IconBorderDbImageId":
-                        icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
+                        icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
                         icon.IconBorderImageId = icon.IconBorderImage.Id;
-                        break;
-                    case "fk_IconSelectedHighlightBorderDbImageId":
-                        icon.IconBorderHighlightSelectedImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
-                        icon.IconBorderHighlightSelectedImageId = icon.IconBorderHighlightSelectedImage.Id;
-                        break;
-                    case "fk_IconHighlightBorderDbImageId":
-                        icon.IconBorderHighlightImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;                        
-                        icon.IconBorderHighlightImageId = icon.IconBorderHighlightImage.Id;
                         break;
                     case "HexColor1":
                         icon.HexColor1 = li.AffectedColumnValue;
@@ -224,16 +166,8 @@ namespace MonkeyPaste {
             };
             icon.IconImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[1]);
             icon.IconImageId = icon.IconImage.Id;
-
             icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[2]);
             icon.IconBorderImageId = icon.IconBorderImage.Id;
-
-            icon.IconBorderHighlightSelectedImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", objParts[3]) as MpDbImage;
-            icon.IconBorderHighlightSelectedImageId = icon.IconBorderHighlightSelectedImage.Id;
-
-            icon.IconBorderHighlightImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", objParts[4]) as MpDbImage;
-            icon.IconBorderHighlightImageId = icon.IconBorderHighlightImage.Id;
-
             icon.HexColor1 = objParts[5];
             icon.HexColor2 = objParts[6];
             icon.HexColor3 = objParts[7];
@@ -251,8 +185,6 @@ namespace MonkeyPaste {
                 IconGuid.ToString(),
                 IconImage.DbImageGuid.ToString(),
                 IconBorderImage.DbImageGuid.ToString(),
-                IconBorderHighlightSelectedImage.DbImageGuid.ToString(),
-                IconBorderHighlightImage.DbImageGuid.ToString(),
                 HexColor1,
                 HexColor2,
                 HexColor3,
@@ -288,14 +220,6 @@ namespace MonkeyPaste {
                 "fk_IconBorderDbImageId",
                 diffLookup,
                 IconBorderImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(IconBorderHighlightSelectedImageId, other.IconBorderHighlightSelectedImageId,
-                "fk_IconSelectedHighlightBorderDbImageId",
-                diffLookup,
-                IconBorderHighlightSelectedImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(IconBorderHighlightImageId, other.IconBorderHighlightImageId,
-                "fk_IconHighlightBorderDbImageId",
-                diffLookup,
-                IconBorderHighlightImage.DbImageGuid.ToString());
             diffLookup = CheckValue(HexColor1, other.HexColor1,
                 "HexColor1",
                 diffLookup);

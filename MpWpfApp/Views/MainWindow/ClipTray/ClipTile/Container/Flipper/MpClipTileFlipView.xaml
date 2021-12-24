@@ -12,7 +12,7 @@
                                                       IsDesignTimeCreatable=False}">
     <local:MpUserControl.Resources>
         <local:MpClipTileView x:Key="ClipTileFront" />
-        <local:MpAnalyticItemCollectionView x:Key="ClipTileBack" />
+        <local:MpManageAnalyticItemsContainerView x:Key="ClipTileBack" />
         <Storyboard x:Key="FrontToBack">
             <DoubleAnimation Storyboard.TargetName="front"
                              Storyboard.TargetProperty="Angle"

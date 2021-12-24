@@ -18,8 +18,8 @@
             <local:MpAnalyticItemSelectorView DataContext="{Binding}" />
             <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
         </StackPanel>
-        <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem}"
-                                                        Visibility="{Binding IsAnyEditing,
+        <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem.SelectedPresetViewModel}"
+                                                        Visibility="{Binding IsEditing,
                                                                              Converter={StaticResource BoolToVisibilityConverter}}" />
     </StackPanel>
 </local:MpUserControl>

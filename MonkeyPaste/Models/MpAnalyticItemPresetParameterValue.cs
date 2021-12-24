@@ -21,7 +21,6 @@ namespace MonkeyPaste {
 
         public string Value { get; set; } = string.Empty;
 
-        public string DefaultValue { get; set; } = string.Empty;
         #endregion
 
         #region Fk Models
@@ -51,8 +50,7 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItemPresetParameterValue> Create(
             MpAnalyticItemPreset parentItem, 
             int paramEnumId, 
-            string value, 
-            string defaultValue = "") {
+            string value) {
             if (parentItem == null) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
@@ -64,7 +62,6 @@ namespace MonkeyPaste {
                 dupItem.AnalyticItemPresetId = parentItem.Id;
                 dupItem.ParameterEnumId = paramEnumId;
                 dupItem.Value = value;
-                dupItem.DefaultValue = string.IsNullOrEmpty(defaultValue) ? value : defaultValue;
                 await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
@@ -74,8 +71,7 @@ namespace MonkeyPaste {
                 AnalyticItemPreset = parentItem,
                 AnalyticItemPresetId = parentItem.Id,
                 ParameterEnumId = paramEnumId,
-                Value = value,
-                DefaultValue = string.IsNullOrEmpty(defaultValue) ? value : defaultValue
+                Value = value
             };
 
             await newAnalyticItemPresetParameterValue.WriteToDatabaseAsync();
@@ -89,8 +85,7 @@ namespace MonkeyPaste {
             return new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetId = this.AnalyticItemPresetId,
                 ParameterEnumId = this.ParameterEnumId,
-                Value = this.Value,
-                DefaultValue = this.DefaultValue
+                Value = this.Value
             };
         }
     }

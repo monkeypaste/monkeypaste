@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         public MpTextBoxParameterViewModel() : base() { }
 
-        public MpTextBoxParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) { }
+        public MpTextBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
         #endregion
 

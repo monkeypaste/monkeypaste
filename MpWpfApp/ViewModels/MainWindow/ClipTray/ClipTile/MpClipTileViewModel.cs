@@ -1147,7 +1147,24 @@ using System.Speech.Synthesis;
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            //throw new NotImplementedException();
+            if(e is MpCopyItem ci && ItemViewModels.Any(x=>x.CopyItemId == ci.Id)) {
+                var rcivm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                ItemViewModels.Remove(rcivm);
+                if(Parent.PersistentSelectedModels.Any(x=>x.Id == ci.Id)) {
+                    Parent.PersistentSelectedModels.Remove(Parent.PersistentSelectedModels.FirstOrDefault(x => x.Id == ci.Id));                    
+                }
+                if (Parent.PersistentUniqueWidthTileLookup.Any(x => x.Key == ci.Id)) {
+                    Parent.PersistentUniqueWidthTileLookup.Remove(ci.Id);
+                }
+                if (Parent.PinnedItems.Any(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id))) {
+                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id));
+                    pctvm.ItemViewModels.Remove(pctvm.ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id));
+                }
+
+                if(ItemViewModels.Count == 0) {
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                }
+            }
         }
 
 

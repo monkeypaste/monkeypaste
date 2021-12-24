@@ -34,8 +34,12 @@ namespace MpWpfApp {
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
                 var pmic = new List<MpContextMenuItemViewModel>();
-
+                var qamivml = new List<MpContextMenuItemViewModel>();
                 foreach (var item in Items) {
+                    if(item.PresetViewModels.Any(x=>x.IsQuickAction)) {
+                        qamivml.AddRange(item.PresetViewModels.Where(x => x.IsQuickAction).Select(x=>x.ContextMenuItemViewModel));
+                    }
+
                     var imivm = new MpContextMenuItemViewModel(
                         header: item.Title,
                         command: null,
@@ -60,29 +64,15 @@ namespace MpWpfApp {
 
                     pmic.Add(imivm);
                 }
-
-                if (pmic.Count == 0) {
-                    return null;
+                if(qamivml.Count > 0) {
+                    //qamivml.Add(new MpContextMenuItemViewModel());
+                    pmic.InsertRange(0, qamivml);
                 }
+
                 return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
             }
         }
 
-        public ObservableCollection<MpContextMenuItemViewModel> QuickActionPresetMenuItems {
-            get {
-                var pmic = new List<MpContextMenuItemViewModel>();
-
-                foreach (var item in Items) {
-                    foreach (var qapmi in item.QuickActionPresetMenuItems) {
-                        pmic.Add(qapmi);
-                    }
-                }
-                if (pmic.Count == 0) {
-                    return null;
-                }
-                return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
-            }
-        }
 
         #endregion
 
@@ -136,40 +126,7 @@ namespace MpWpfApp {
             }
         }
 
-        public ContextMenu UpdateQuickActionMenuItem(ContextMenu cm) {
-            Separator quickSep = null;
-            foreach (var mi in cm.Items) {
-                if (mi == null) {
-                    continue;
-                }
-                if (mi is Separator s) {
-                    if (s.Name == "QuickActionSeparator") {
-                        quickSep = s;
-                        break;
-                    }
-                }
-            }
-            if (quickSep == null) {
-                return cm;
-            }
-            int quickSepIdx = cm.Items.IndexOf(quickSep);
-            int itemsToRemove = cm.Items.Count - quickSepIdx - 1;
-            while (itemsToRemove > 0) {
-                cm.Items.RemoveAt(quickSepIdx + 1);
-                itemsToRemove--;
-            }
-            var qapmic = QuickActionPresetMenuItems;
-            if (qapmic == null || qapmic.Count == 0) {
-                quickSep.Visibility = System.Windows.Visibility.Hidden;
-            } else {
-                quickSep.Visibility = System.Windows.Visibility.Visible;
-                foreach (var qami in qapmic) {
-                    //qami.ItemContainerStyle = cm.Resources["DefaultItemStyle"] as Style;
-                    cm.Items.Add(new MenuItem() { DataContext = qami, ItemContainerStyle = cm.Resources["DefaultItemStyle"] as Style});
-                }
-            }
-            return cm;
-        }
+        
         #endregion
 
         #region Private Methods

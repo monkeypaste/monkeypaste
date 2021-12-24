@@ -295,6 +295,24 @@ namespace MonkeyPaste {
             }
         }
 
+        public string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
+            try {
+                assembly = assembly == null ? Assembly.GetExecutingAssembly() : assembly;
+                //var resourceName = "MyCompany.MyProduct.MyFile.txt";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+                using (StreamReader reader = new StreamReader(stream)) {
+                    string result = reader.ReadToEnd();
+                    return result;
+                }
+
+            }
+            catch (Exception ex) {
+                MonkeyPaste.MpConsole.WriteTraceLine("error for resource path: " + resourcePath, ex);
+                return string.Empty;
+            }
+        }
+
         public async Task<byte[]> ReadBytesFromUriAsync(string url) {
             if(!Uri.IsWellFormedUriString(url,UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);

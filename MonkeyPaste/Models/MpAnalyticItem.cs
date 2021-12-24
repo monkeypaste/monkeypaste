@@ -43,6 +43,8 @@ namespace MonkeyPaste {
         public string EndPoint { get; set; }
 
         public string ApiKey { get; set; }
+
+        public string ParameterFormatJson { get; set; }
         #endregion
 
         #region Fk Models
@@ -96,6 +98,7 @@ namespace MonkeyPaste {
             MpInputFormatType format,
             string title,
             string description,
+            string parameterFormatResourcePath,
             int sortOrderIdx = -1) {
             var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
@@ -121,10 +124,23 @@ namespace MonkeyPaste {
                 InputFormatType = format,
                 Title = title,
                 Description = description,
+                ParameterFormatJson = parameterFormatResourcePath,
                 SortOrderIdx = sortOrderIdx
             };
 
             await newAnalyticItem.WriteToDatabaseAsync();
+
+            //create default preset
+            var defPreset = await MpAnalyticItemPreset.Create(
+                analyticItem: newAnalyticItem,
+                label: "Default",
+                icon: newAnalyticItem.Icon,
+                isDefault: true,
+                isQuickAction: false,
+                sortOrderIdx: 0,
+                description: $"This is the default preset for '{newAnalyticItem.Title}' and cannot be removed");
+
+            await defPreset.WriteToDatabaseAsync();
 
             return newAnalyticItem;
         }

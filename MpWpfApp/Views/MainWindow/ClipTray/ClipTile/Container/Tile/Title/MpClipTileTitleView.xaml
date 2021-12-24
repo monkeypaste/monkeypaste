@@ -17,6 +17,7 @@
         <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior"/>
     </i:Interaction.Behaviors>
     <Grid x:Name="TileTitleGrid"
+          Loaded="ClipTileAppIconBorderImage_Loaded"
           Unloaded="Grid_Unloaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.75*" />
@@ -168,19 +169,9 @@
                                     UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
-        <Image x:Name="ClipTileAppIconHighlightedBorderImage"
-               Grid.Column="1"
-               HorizontalAlignment="Left"
-               Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderHighlightImage.ImageBase64,
-                                Converter={StaticResource Base64StringToBitmapSourceConverter}}"
-               Stretch="Fill"
-               Visibility="Hidden"
-               Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize,
-                                                   Mode=OneWay}"
-               Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize,
-                                                    Mode=OneWay}" />
         <!--  Clip Title Icon Image  -->
-        <Grid Grid.Column="1" ClipToBounds="False">
+        <Grid Grid.Column="1" 
+              ClipToBounds="False">
             <Ellipse x:Name="SourceMatchEllipse"
                      Visibility="Hidden" 
                      StrokeThickness="1"

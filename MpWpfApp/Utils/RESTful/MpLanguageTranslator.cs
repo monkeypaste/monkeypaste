@@ -41,7 +41,7 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private async Task GetLanguagesForTranslate(int retryCount = 5) {
-            if(IsLoaded) {
+            if(IsLoaded || !MpHelpers.Instance.IsConnectedToInternet()) {
                 return;
             }
             if(retryCount <= 0) {
@@ -74,6 +74,7 @@ namespace MpWpfApp {
                 MpConsole.WriteTraceLine("Problem connecting to language server (" + ex.ToString() + ")");
                 MpConsole.WriteTraceLine($"Problem connecting to language server, re-attempt #{6 - retryCount} to connect..");
                 await GetLanguagesForTranslate(retryCount--);
+                return;
             }
         }
 
@@ -109,12 +110,12 @@ namespace MpWpfApp {
 
                     var response = await client.SendAsync(request); 
                     var responseBody = await response.Content.ReadAsStringAsync();
-
-                    dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responseBody);
+                    MpConsole.WriteLine(responseBody);
+                    //dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responseBody);
                     //var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
-                    //var result = JsonConvert.DeserializeObject<MpLangTranslateResponseFormat>(responseBody);
-                    string translatedText = (string)jsonResponse[0]["translations"][0]["text"];
-                    //string translatedText = result.Results[0].Translations.Text;
+                    var result = JsonConvert.DeserializeObject<List<MpLangTranslateResultFormat>>(responseBody);
+                    //string translatedText = (string)jsonResponse[0]["translations"][0]["text"];
+                    string translatedText = result[0].Translations[0].Text;
                     if (!string.IsNullOrEmpty(translatedText)) {
                         return translatedText;
                     }

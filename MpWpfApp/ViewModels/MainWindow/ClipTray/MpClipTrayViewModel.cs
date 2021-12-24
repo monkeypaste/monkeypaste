@@ -1070,9 +1070,6 @@ namespace MpWpfApp {
                     ci.Source.App.StartSync(e.SourceGuid);
                     ci.Source.App.Icon.StartSync(e.SourceGuid);
                     ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
-                    ci.Source.App.Icon.IconBorderImage.StartSync(e.SourceGuid);
-                    ci.Source.App.Icon.IconBorderHighlightImage.StartSync(e.SourceGuid);
-                    ci.Source.App.Icon.IconBorderHighlightSelectedImage.StartSync(e.SourceGuid);
 
                     var dupCheck = GetContentItemViewModelById(ci.Id);
                     if (dupCheck == null) {
@@ -1088,9 +1085,6 @@ namespace MpWpfApp {
                     ci.Source.App.EndSync();
                     ci.Source.App.Icon.EndSync();
                     ci.Source.App.Icon.IconImage.EndSync();
-                    ci.Source.App.Icon.IconBorderImage.EndSync();
-                    ci.Source.App.Icon.IconBorderHighlightImage.EndSync();
-                    ci.Source.App.Icon.IconBorderHighlightSelectedImage.EndSync();
                     ci.EndSync();
 
                     ResetClipSelection();
@@ -1795,11 +1789,7 @@ namespace MpWpfApp {
             async () => {
                 await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()).ToArray());
 
-                foreach(var sm in SelectedModels) {
-                    var pm = PersistentSelectedModels.FirstOrDefault(x => x.Id == sm.Id);
-                    PersistentSelectedModels.Remove(pm);
-                }
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                //db delete event is handled in clip tile
             },
             () => {
                 return MpMainWindowViewModel.Instance.IsShowingDialog == false &&

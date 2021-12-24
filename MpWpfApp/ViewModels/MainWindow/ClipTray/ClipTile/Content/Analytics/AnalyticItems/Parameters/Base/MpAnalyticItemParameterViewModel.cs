@@ -8,7 +8,7 @@ using SQLite;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemParameterViewModel : MpAnalyticItemComponentViewModel {
+    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemPresetViewModel> {
         #region Private Variables
 
         #endregion
@@ -58,6 +58,8 @@ namespace MpWpfApp {
         public bool IsHovering { get; set; } = false;
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
+
+        public bool IsSelected { get; set; } = false;
 
         #endregion
 
@@ -186,7 +188,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterViewModel() : base(null) { }
 
-        public MpAnalyticItemParameterViewModel(MpAnalyticItemViewModel parent) : base(parent) {
+        public MpAnalyticItemParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
         }
 
@@ -232,13 +234,13 @@ namespace MpWpfApp {
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(HasChanged):
-                    Parent.OnPropertyChanged(nameof(Parent.HasAnyChanged));
+                    Parent.OnPropertyChanged(nameof(Parent.HasAnyParamValueChanged));
                     break;
                 case nameof(ValidationMessage):
                     OnPropertyChanged(nameof(IsValid));
                     break;
             }
-            OnValidate?.Invoke(this, new EventArgs());
+            Validate();
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

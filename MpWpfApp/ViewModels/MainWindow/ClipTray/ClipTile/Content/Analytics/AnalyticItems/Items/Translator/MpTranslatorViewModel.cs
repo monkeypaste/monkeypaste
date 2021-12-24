@@ -23,7 +23,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-        protected override string FormatSourcePath => "MonkeyPaste.Resources.Data.Analytics.Formats.LanguageTranslator.azuretranslator.json";
         #endregion
 
         #endregion
@@ -57,41 +56,36 @@ namespace MpWpfApp {
             return aip;
         }
 
+
+        public override bool Validate() {
+            if (IsBusy || Parent.IsBusy) {
+                return true;
+            }
+
+            var paramLookup = SelectedPresetViewModel.ParamLookup;
+
+            var fromParam = paramLookup[(int)MpTranslatorParamType.FromLang] as MpComboBoxParameterViewModel;
+            var toParam = paramLookup[(int)MpTranslatorParamType.ToLang] as MpComboBoxParameterViewModel;
+
+            if (fromParam.CurrentValue == toParam.CurrentValue) {
+                toParam.ValidationMessage = "Cannot translate to same language";
+            } else {
+                toParam.ValidationMessage = string.Empty;
+            }
+            return string.IsNullOrEmpty(toParam.ValidationMessage);
+        }
+
         #endregion
 
         #region Protected Methods
 
-        protected override void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            if(IsBusy || Parent.IsBusy) {
-                return;
-            }
-
-            var fromParam = ParamLookup[(int)MpTranslatorParamType.FromLang] as MpComboBoxParameterViewModel;
-            var toParam = ParamLookup[(int)MpTranslatorParamType.ToLang] as MpComboBoxParameterViewModel;
-
-            if (fromParam.CurrentValue == toParam.CurrentValue) {
-                if(sender == fromParam) {
-                    fromParam.ValidationMessage = "Cannot translate to same language";
-                } else {
-                    toParam.ValidationMessage = "Cannot translate to same language";
-                }
-            } else {
-                if (sender == fromParam) {
-                    fromParam.ValidationMessage = string.Empty;
-                } else {
-                    toParam.ValidationMessage = string.Empty;
-                }
-            }
-        }
 
         protected override async Task<object> ExecuteAnalysis(object obj) {
             IsBusy = true;
+            var paramLookup = SelectedPresetViewModel.ParamLookup;
 
-            string fromCode = ParamLookup[(int)MpTranslatorParamType.FromLang].CurrentValue;
-            string toCode = ParamLookup[(int)MpTranslatorParamType.ToLang].CurrentValue;
-
-
-            //MpCheckBoxParameterViewModel useSpellCheckParam = (MpCheckBoxParameterViewModel)Parameters.Where(x => x.Key == "Use Spell Check").FirstOrDefault();
+            string fromCode = paramLookup[(int)MpTranslatorParamType.FromLang].CurrentValue;
+            string toCode = paramLookup[(int)MpTranslatorParamType.ToLang].CurrentValue;
 
             string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
                 obj.ToString(),

@@ -28,7 +28,6 @@ namespace MpWpfApp {
         private void ClipTileAppIconBorderImage_Loaded(object sender, RoutedEventArgs e) {
             ClipTileTitleHighlightBehavior.Attach(this);
             SourceHighlightBehavior.Attach(this);
-            base.OnLoad();
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
         }
 

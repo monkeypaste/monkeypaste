@@ -44,8 +44,6 @@ namespace MpWpfApp {
 
         #region Model
 
-        protected override string FormatSourcePath => "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json";
-
         #endregion
 
         #endregion
@@ -66,8 +64,9 @@ namespace MpWpfApp {
         protected override async Task<object> ExecuteAnalysis(object obj) {
             IsBusy = true;
 
-            string engine = ParamLookup[(int)MpOpenAiParamType.Engine].CurrentValue.ToLower();
-            string ep = ParamLookup[(int)MpOpenAiParamType.EndPoint].CurrentValue.ToLower();
+            var paramLookup = SelectedPresetViewModel.ParamLookup;
+            string engine = paramLookup[(int)MpOpenAiParamType.Engine].CurrentValue.ToLower();
+            string ep = paramLookup[(int)MpOpenAiParamType.EndPoint].CurrentValue.ToLower();
 
             string endpoint = string.Format(
                 @"https://api.openai.com/v1/engines/{0}/{1}",
@@ -77,11 +76,11 @@ namespace MpWpfApp {
 
             MpOpenAiRequest jsonReq = new MpOpenAiRequest() {
                 Prompt = Regex.Escape(obj.ToString()),
-                Temperature = ParamLookup[(int)MpOpenAiParamType.Temperature].DoubleValue,
-                MaxTokens = ParamLookup[(int)MpOpenAiParamType.MaxTokens].IntValue,
-                TopP = ParamLookup[(int)MpOpenAiParamType.TopP].DoubleValue,
-                FrequencyPenalty = ParamLookup[(int)MpOpenAiParamType.FreqPen].DoubleValue,
-                PresencePenalty = ParamLookup[(int)MpOpenAiParamType.PresPen].DoubleValue
+                Temperature = paramLookup[(int)MpOpenAiParamType.Temperature].DoubleValue,
+                MaxTokens = paramLookup[(int)MpOpenAiParamType.MaxTokens].IntValue,
+                TopP = paramLookup[(int)MpOpenAiParamType.TopP].DoubleValue,
+                FrequencyPenalty = paramLookup[(int)MpOpenAiParamType.FreqPen].DoubleValue,
+                PresencePenalty = paramLookup[(int)MpOpenAiParamType.PresPen].DoubleValue
             };
 
             string jsonReqStr = JsonConvert.SerializeObject(jsonReq);

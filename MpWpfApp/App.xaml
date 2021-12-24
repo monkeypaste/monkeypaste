@@ -43,6 +43,42 @@
                     Value="Top" />
         </Style>
 
+        <!--  Context Menu Item  -->
+        <DataTemplate x:Key="MenuItemContent">
+            <MenuItem ItemContainerStyle="{StaticResource DefaultItemStyle}" />
+        </DataTemplate>
+        <DataTemplate x:Key="SeparatorContent">
+            <Separator />
+        </DataTemplate>
+        <local:MpContextMenuItemSelector x:Key="MenuItemSelector"
+                                         SeparatorTempalte="{StaticResource SeparatorContent}"
+                                         MenuItemTemplate="{StaticResource MenuItemContent}" />
+
+
+        <!--<Style x:Key="DefaultItemStyle"
+               TargetType="{x:Type MenuItem}">
+            <Setter Property="Header"
+                    Value="{Binding Header}" />
+            <Setter Property="Command"
+                    Value="{Binding Command}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+            <Setter Property="Icon"
+                    Value="{Binding Icon}" />
+            <Setter Property="InputGestureText"
+                    Value="{Binding InputGestureText}" />
+            <Setter Property="IsCheckable"
+                    Value="{Binding IsCheckable}" />
+            <Setter Property="IsChecked"
+                    Value="{Binding IsChecked}" />
+            <Setter Property="ItemsSource"
+                    Value="{Binding SubItems}" />
+            --><!--<Setter Property="ItemContainerStyle"
+                    Value="{StaticResource DefaultItemStyle}"/>
+            <Setter Property="ItemTemplateSelector"
+                    Value="{StaticResource MenuItemSelector}"/>--><!--
+        </Style>-->
+
         <!--  Color Pallete Menu Item  -->
         <Style x:Key="ColorPalleteMenuItemStyle"
                TargetType="{x:Type MenuItem}">
@@ -1119,6 +1155,7 @@
         <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
         <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
         <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
+        <s:String x:Key="BrainWhiteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brainwhite.png</s:String>
         <s:String x:Key="NoneClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noneclick.png</s:String>
         <s:String x:Key="LeftClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/leftclick.png</s:String>
         <s:String x:Key="RightClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rightclick.png</s:String>

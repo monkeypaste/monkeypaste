@@ -17,20 +17,9 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
     /// </summary>
-    public partial class MpManageAnalyticItemsContainerView : MpUserControl<MpAnalyticItemCollectionViewModel> {
-        public bool IsWindowed { get; set; } = false;
-        public MpManageAnalyticItemsContainerView() {
+    public partial class MpAnalyticItemPresetParameterListBoxView : MpUserControl<MpAnalyticItemPresetViewModel> {
+        public MpAnalyticItemPresetParameterListBoxView() {
             InitializeComponent();
-        }
-
-        public void Close(bool isCancel) {
-            if (IsWindowed) {
-                this.GetVisualAncestor<Window>().DialogResult = !isCancel;
-                this.GetVisualAncestor<Window>().Close();
-            } else if(!isCancel) {
-
-            }
-
         }
     }
 }

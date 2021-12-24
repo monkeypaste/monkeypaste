@@ -85,15 +85,15 @@ namespace MpWpfApp {
         public static readonly DependencyProperty OwnerBackProperty =
             DependencyProperty.Register(
                 "OwnerBack",
-                typeof(MpAnalyticItemCollectionView),
+                typeof(MpManageAnalyticItemsContainerView),
                 typeof(MpClipTileFlipView),
                 new FrameworkPropertyMetadata(
                     null,
                     OnOwnerBackPropertyChanged));
 
         private static void OnOwnerBackPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
-            ((MpClipTileFlipView)source).OwnerBack = (MpAnalyticItemCollectionView)e.NewValue;
-            ((MpClipTileFlipView)source).Resources["ClipTileBack"] = (MpAnalyticItemCollectionView)e.NewValue;
+            ((MpClipTileFlipView)source).OwnerBack = (MpManageAnalyticItemsContainerView)e.NewValue;
+            ((MpClipTileFlipView)source).Resources["ClipTileBack"] = (MpManageAnalyticItemsContainerView)e.NewValue;
         }
 
         private void Viewport3D_Unloaded(object sender, RoutedEventArgs e) {
@@ -101,9 +101,9 @@ namespace MpWpfApp {
             backToFront.Completed -= BackToFront_Completed;
         }
 
-        public MpAnalyticItemCollectionView OwnerBack {
+        public MpManageAnalyticItemsContainerView OwnerBack {
             set { SetValue(OwnerBackProperty, value); }
-            get { return (MpAnalyticItemCollectionView)GetValue(OwnerBackProperty); }
+            get { return (MpManageAnalyticItemsContainerView)GetValue(OwnerBackProperty); }
         }
         #endregion
     }

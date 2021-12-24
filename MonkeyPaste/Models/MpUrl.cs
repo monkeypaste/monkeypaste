@@ -8,7 +8,6 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     public class MpUrl : MpDbModelBase, MpICopyItemSource {
-
         #region Columns
 
         [PrimaryKey, AutoIncrement]

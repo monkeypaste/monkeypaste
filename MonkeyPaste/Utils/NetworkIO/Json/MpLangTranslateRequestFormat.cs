@@ -29,10 +29,11 @@ namespace MonkeyPaste {
         [JsonProperty("to")]
         public string ToCode { get; set; } = string.Empty;
     }
+    // translate
 
     public class MpLangTranslation : MpJsonMessage {
         [JsonProperty("to")]
-        public string LangCode { get; set; } = string.Empty;
+        public string To { get; set; } = string.Empty;
 
         [JsonProperty("text")]
         public string Text { get; set; } = string.Empty;
@@ -43,18 +44,39 @@ namespace MonkeyPaste {
         public string Language { get; set; } = string.Empty;
 
         [JsonProperty("score")]
-        public float Score { get; set; } = 0.0f;
+        public double Score { get; set; } = 0;
     }
 
     public class MpLangTranslateResultFormat : MpJsonMessage  {
         [JsonProperty("translations")]
-        public MpLangTranslation Translations { get; set; }
+        public List<MpLangTranslation> Translations { get; set; }
 
         [JsonProperty("detectedLanguage")]
         public MpDetectedLanguageFormat DetectedLanguage { get; set; }
     }
 
-    public class MpLangTranslateResponseFormat : MpJsonMessage {
-        public List<MpLangTranslateResultFormat> Results { get; set; } = new List<MpLangTranslateResultFormat>();
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class DetectedLanguage {
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
+        [JsonProperty("score")]
+        public double Score { get; set; }
+    }
+
+    public class Translation {
+        [JsonProperty("text")]
+        public string Text { get; set; }
+
+        [JsonProperty("to")]
+        public string To { get; set; }
+    }
+
+    public class Root {
+        [JsonProperty("detectedLanguage")]
+        public DetectedLanguage DetectedLanguage { get; set; }
+
+        [JsonProperty("translations")]
+        public List<Translation> Translations { get; set; }
     }
 }

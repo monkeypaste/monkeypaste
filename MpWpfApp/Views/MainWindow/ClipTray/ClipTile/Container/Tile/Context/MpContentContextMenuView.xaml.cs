@@ -70,8 +70,9 @@ namespace MpWpfApp {
             //}
 
             MpShortcutCollectionViewModel.Instance.UpdateInputGestures(this);
+            MpAnalyticItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAnalyticItemCollectionViewModel.Instance.ContextMenuItems));
 
-            MpAnalyticItemCollectionViewModel.Instance.UpdateQuickActionMenuItem(this);
+            //MpAnalyticItemCollectionViewModel.Instance.UpdateQuickActionMenuItem(this);
             //if(quickActionSep != null) {
             //    var quickActions = MpQuickActionAnalyzerCollectionViewModel.Instance.GetQuickActionAnalyzerMenuItems();
             //    if(quickActions != null && quickActions.Count > 0) {
@@ -92,7 +93,7 @@ namespace MpWpfApp {
             //        quickActionSep.Visibility = Visibility.Collapsed;
             //    }
             //}
-            
+
         }
 
         private void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {

@@ -341,6 +341,8 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(this, null);
             }
 
+            
+
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -786,14 +788,20 @@ namespace MonkeyPaste {
                         MpPreferences.Instance.AzureCognitiveServicesKey,
                         MpInputFormatType.Text,
                         "Language Translator",
-                        "Azure Cognitive-Services Language Translator");
+                        "Azure Cognitive-Services Language Translator",
+                        MpHelpers.Instance.ReadTextFromResource(
+                            "MonkeyPaste.Resources.Data.Analytics.Formats.LanguageTranslator.azuretranslator.json", 
+                            GetType().Assembly));
 
             var ai2 = await MpAnalyticItem.Create(
                         "https://api.openai.com/v1/",
                         MpPreferences.Instance.RestfulOpenAiApiKey,
                         MpInputFormatType.Text,
                         "Open Ai",
-                        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.");
+                        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
+                        MpHelpers.Instance.ReadTextFromResource(
+                            "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
+                            GetType().Assembly));
             #endregion
 
             MpConsole.WriteTraceLine(@"Created all default tables");

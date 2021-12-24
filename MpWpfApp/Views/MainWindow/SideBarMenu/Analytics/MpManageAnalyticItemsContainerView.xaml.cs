@@ -17,17 +17,18 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
     /// </summary>
-    public partial class MpAnalyticItemPresetParameterListBoxView : MpUserControl<MpAnalyticItemViewModel> {
-        public MpAnalyticItemPresetParameterListBoxView() {
+    public partial class MpManageAnalyticItemsContainerView : MpUserControl<MpAnalyticItemCollectionViewModel> {
+        public bool IsWindowed { get; set; } = false;
+        public MpManageAnalyticItemsContainerView() {
             InitializeComponent();
         }
 
-        private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-            this.GetVisualAncestor<MpManageAnalyticItemsContainerView>().Close(false);
-        }
+        public void Close(bool isCancel) {
+            if (IsWindowed) {
+                this.GetVisualAncestor<Window>().DialogResult = !isCancel;
+                this.GetVisualAncestor<Window>().Close();
+            } 
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) {
-            this.GetVisualAncestor<MpManageAnalyticItemsContainerView>().Close(true);
         }
     }
 }

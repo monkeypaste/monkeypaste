@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using MonkeyPaste;
+using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
@@ -17,6 +19,35 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
+
+        public Dictionary<int, MpAnalyticItemParameterViewModel> ParamLookup {
+            get {
+                var paraDict = new Dictionary<int, MpAnalyticItemParameterViewModel>();
+                foreach (var pvm in ParameterViewModels) {
+                    paraDict.Add(pvm.ParamEnumId, pvm);
+                }
+                return paraDict;
+            }
+        }
+
+        public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
+
+        public MpContextMenuItemViewModel ContextMenuItemViewModel {
+            get {
+                return new MpContextMenuItemViewModel(
+                        header: Label,
+                        command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                        commandParameter: Preset.Id,
+                        isChecked: null,
+                        iconSource: PresetIcon,
+                        subItems: null,
+                        inputGestureText: ShortcutKeyString,
+                        bgBrush: null);
+            }
+        }
+        #endregion
 
         #region Appearance
 
@@ -27,6 +58,10 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool HasAnyParamValueChanged => ParameterViewModels.Any(x => x.HasChanged);
+
+        public bool IsAllValid => ParameterViewModels.All(x => x.IsValid);
 
         public bool IsSelected { get; set; }
 
@@ -58,6 +93,7 @@ namespace MpWpfApp {
             set {
                 if(Preset.Label != value) {
                     Preset.Label = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
                 }
             }
@@ -73,6 +109,13 @@ namespace MpWpfApp {
                 }
                 return Preset.Description;
             }
+            set {
+                if (Description != value) {
+                    Preset.Description = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Description));
+                }
+            }
         }
 
         public int SortOrderIdx {
@@ -85,6 +128,7 @@ namespace MpWpfApp {
             set {
                 if(Preset != null && SortOrderIdx != value) {
                     Preset.SortOrderIdx = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(SortOrderIdx));
                 }
             }
@@ -100,6 +144,7 @@ namespace MpWpfApp {
             set {
                 if(IsQuickAction != value) {
                     Preset.IsQuickAction = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsQuickAction));
                 }
             }
@@ -115,6 +160,13 @@ namespace MpWpfApp {
                 }
                 return Preset.Icon.IconImage.ImageBase64;
             }
+            set {
+                if (PresetIcon != value) {
+                    Preset.Icon.IconImage.ImageBase64 = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(PresetIcon));
+                }
+            }
         }
 
         public int AnalyticItemPresetId {
@@ -128,9 +180,6 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPreset Preset { get; protected set; }
         #endregion
-
-        #endregion
-
 
         #region MpIShortcutCommand Implementation
 
@@ -176,11 +225,55 @@ namespace MpWpfApp {
 
             Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            OnPropertyChanged(nameof(ShortcutViewModel));
+            var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
+                Preset.AnalyticItem.ParameterFormatJson, new MpJsonEnumConverter()).ParameterFormats;
 
-            await Task.Delay(1);
+            foreach (var param in paramlist.OrderBy(x => x.SortOrderIdx)) {
+                var naipvm = await CreateParameterViewModel(param);
+                ParameterViewModels.Add(naipvm);
+            }
+
+            OnPropertyChanged(nameof(ShortcutViewModel));
+            OnPropertyChanged(nameof(ParameterViewModels));
+            ParameterViewModels.ForEach(x => x.Validate());
+            HasModelChanged = false;
 
             IsBusy = false;
+        }
+
+        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip) {
+            MpAnalyticItemParameterViewModel naipvm = null;
+
+            switch (aip.ParameterType) {
+                case MpAnalyticItemParameterType.ComboBox:
+                    naipvm = new MpComboBoxParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterType.Text:
+                    naipvm = new MpTextBoxParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterType.CheckBox:
+                    naipvm = new MpCheckBoxParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterType.Slider:
+                    naipvm = new MpSliderParameterViewModel(this);
+                    break;
+                default:
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterType), aip.ParameterType));
+            }
+
+            naipvm.PropertyChanged += ParameterViewModels_PropertyChanged;
+            naipvm.OnValidate += ParameterViewModel_OnValidate;
+
+            if (aip.IsValueDeferred) {
+                aip = await Parent.DeferredCreateParameterModel(aip);
+            }
+            await naipvm.InitializeAsync(aip);
+
+            //if(Preset.PresetParameterValues.Any(x=>x.ParameterEnumId == aip.EnumId)) {
+            //    var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == aip.EnumId);
+            //    naipvm.CurrentValue = presetValue.Value;
+            //}
+            return naipvm;
         }
 
         public object Clone() {
@@ -193,7 +286,33 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
+        protected virtual void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var pvm = sender as MpAnalyticItemParameterViewModel;
+            switch (e.PropertyName) {
+                case nameof(pvm.CurrentValue):
+                    if (!IsSelected) {
+                        return;
+                    }
+                    MpAnalyticItemPresetParameterValue ppv = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == pvm.ParamEnumId);
+                    if (ppv != null) {
+                        ppv.Value = pvm.CurrentValue;
+                    }
+                    break;
+            }
+        }
+
+        protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
+            var aipvm = sender as MpAnalyticItemParameterViewModel;
+            if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
+                aipvm.ValidationMessage = $"{aipvm.Label} is required";
+            } else {
+                aipvm.ValidationMessage = string.Empty;
+            }
+            Parent.Validate();
+        }
+
         #region Db Events
+
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
@@ -287,8 +406,33 @@ namespace MpWpfApp {
                 iconContextMenu.IsOpen = true;
             }, (args) => !IsDefault && args is Button);
 
+        public ICommand CancelChangesCommand => new RelayCommand(
+            async () => {
+                var aip = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
+                HasModelChanged = false;
+                IsEditing = false;
+            },
+            HasModelChanged);
+
+        public ICommand SaveChangesCommand => new RelayCommand(
+            async () => {
+                foreach (var paramVm in ParameterViewModels) {
+                    var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
+                    if(presetValue == null) {
+                        presetValue = await MpAnalyticItemPresetParameterValue.Create(
+                            Preset, paramVm.ParamEnumId, paramVm.CurrentValue);
+                    } else {
+                        presetValue.Value = paramVm.CurrentValue;
+                        await presetValue.WriteToDatabaseAsync();
+                    }
+                }
+                HasModelChanged = false;
+                IsEditing = false;
+            },
+            HasModelChanged);
+
         public ICommand ManagePresetCommand => new RelayCommand(
-            async() => {
+            () => {
                 if(!Parent.IsLoaded) {
                     throw new Exception("Item should be loaded on startup");
                 }

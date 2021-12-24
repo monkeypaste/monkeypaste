@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,25 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
+
+            var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
+                analyticItem.ParameterFormatJson, new MpJsonEnumConverter()).ParameterFormats;
+
+            foreach(var param in paramlist.OrderBy(x=>x.SortOrderIdx)) {
+                string defValue = string.Empty;
+                if(param.Values != null && param.Values.Count > 0) {
+                    if(param.Values.Any(x=>x.IsDefault)) {
+                        defValue = param.Values.FirstOrDefault(x => x.IsDefault).Value;
+                    } else {
+                        defValue = param.Values[0].Value;
+                    }
+                }
+
+                var paramPreset = await MpAnalyticItemPresetParameterValue.Create(
+                    newAnalyticItemPreset,
+                    param.EnumId,
+                    defValue);
+            }
             return newAnalyticItemPreset;
         }
 
