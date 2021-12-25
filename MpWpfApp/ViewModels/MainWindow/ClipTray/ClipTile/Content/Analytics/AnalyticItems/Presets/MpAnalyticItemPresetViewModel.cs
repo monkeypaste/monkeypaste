@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -59,7 +60,9 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool HasAnyParamValueChanged => ParameterViewModels.Any(x => x.HasChanged);
+        public bool CanSave => HasAnyParamValueChanged || HasModelChanged;
+
+        public bool HasAnyParamValueChanged => ParameterViewModels.Any(x => x.HasValueChanged);
 
         public bool IsAllValid => ParameterViewModels.All(x => x.IsValid);
 
@@ -223,25 +226,29 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
+            ParameterViewModels.Clear();
+
             Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
                 Preset.AnalyticItem.ParameterFormatJson, new MpJsonEnumConverter()).ParameterFormats;
 
             foreach (var param in paramlist.OrderBy(x => x.SortOrderIdx)) {
-                var naipvm = await CreateParameterViewModel(param);
+                var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.EnumId);
+                var naipvm = await CreateParameterViewModel(param,presetVal);
                 ParameterViewModels.Add(naipvm);
             }
 
             OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(ParameterViewModels));
+            OnPropertyChanged(nameof(HasAnyParamValueChanged));
             ParameterViewModels.ForEach(x => x.Validate());
             HasModelChanged = false;
 
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip) {
+        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip, MpAnalyticItemPresetParameterValue aippv) {
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aip.ParameterType) {
@@ -267,12 +274,19 @@ namespace MpWpfApp {
             if (aip.IsValueDeferred) {
                 aip = await Parent.DeferredCreateParameterModel(aip);
             }
+
+            if(naipvm is MpSliderParameterViewModel) {
+                //Debugger.Break();
+            }
+            MpAnalyticItemParameterValue aipv = aippv == null ? null: aip.Values.FirstOrDefault(x => x.Value == aippv.Value);
+            if (aipv != null) {
+                aip.Values.ForEach(x => x.IsDefault = x.Value == aipv.Value);
+            } else if (aip.Values.Count > 0) {
+                aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
+            }
+
             await naipvm.InitializeAsync(aip);
 
-            //if(Preset.PresetParameterValues.Any(x=>x.ParameterEnumId == aip.EnumId)) {
-            //    var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == aip.EnumId);
-            //    naipvm.CurrentValue = presetValue.Value;
-            //}
             return naipvm;
         }
 
@@ -285,22 +299,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
-
-        protected virtual void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var pvm = sender as MpAnalyticItemParameterViewModel;
-            switch (e.PropertyName) {
-                case nameof(pvm.CurrentValue):
-                    if (!IsSelected) {
-                        return;
-                    }
-                    MpAnalyticItemPresetParameterValue ppv = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == pvm.ParamEnumId);
-                    if (ppv != null) {
-                        ppv.Value = pvm.CurrentValue;
-                    }
-                    break;
-            }
-        }
-
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAnalyticItemParameterViewModel;
             if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
@@ -353,8 +351,31 @@ namespace MpWpfApp {
                         ManagePresetCommand.Execute(null);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditing));
+                    OnPropertyChanged(nameof(HasAnyParamValueChanged));
+                    OnPropertyChanged(nameof(HasModelChanged));
+                    OnPropertyChanged(nameof(CanSave));
+                    break;
+                case nameof(HasModelChanged):
+                    OnPropertyChanged(nameof(CanSave));
                     break;
             } 
+        }
+
+
+        private void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var pvm = sender as MpAnalyticItemParameterViewModel;
+            switch (e.PropertyName) {
+                case nameof(pvm.CurrentValue):
+                    if (!IsSelected) {
+                        return;
+                    }
+                    MpAnalyticItemPresetParameterValue ppv = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == pvm.ParamEnumId);
+                    if (ppv != null) {
+                        ppv.Value = pvm.CurrentValue;
+                    }
+                    OnPropertyChanged(nameof(CanSave));
+                    break;
+            }
         }
 
         #endregion
@@ -409,10 +430,14 @@ namespace MpWpfApp {
         public ICommand CancelChangesCommand => new RelayCommand(
             async () => {
                 var aip = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
+                Preset = aip;
+
+                ParameterViewModels.ForEach(x => x.CurrentValue = x.DefaultValue);
+                OnPropertyChanged(nameof(HasAnyParamValueChanged));
                 HasModelChanged = false;
                 IsEditing = false;
             },
-            HasModelChanged);
+            CanSave);
 
         public ICommand SaveChangesCommand => new RelayCommand(
             async () => {
@@ -425,11 +450,19 @@ namespace MpWpfApp {
                         presetValue.Value = paramVm.CurrentValue;
                         await presetValue.WriteToDatabaseAsync();
                     }
+                    if(paramVm is MpComboBoxParameterViewModel cmbvm) {
+                        paramVm.Parameter.Values.ForEach(x => x.IsDefault = x.Value == paramVm.CurrentValue);
+                    } else {
+                        paramVm.Parameter.Values.FirstOrDefault(x => x.IsDefault).Value = paramVm.CurrentValue;
+                    }
                 }
-                HasModelChanged = false;
-                IsEditing = false;
+                if(HasModelChanged) {
+                    await Preset.WriteToDatabaseAsync();
+                    HasModelChanged = false;
+                }
+                OnPropertyChanged(nameof(CanSave));
             },
-            HasModelChanged);
+           CanSave);
 
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {
@@ -439,7 +472,7 @@ namespace MpWpfApp {
                 Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
                 Parent.PresetViewModels.ForEach(x => x.IsEditing = x == this);
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
-            });
+            }, !IsEditing && !Parent.IsAnyEditing);
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

@@ -13,7 +13,7 @@
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <local:MpMainWindowResizeBehavior x:Name="MainWindowResizeBehvior" />
-        <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
+        
     </i:Interaction.Behaviors>
     <DockPanel LastChildFill="True">
         <TextBlock DockPanel.Dock="Left"

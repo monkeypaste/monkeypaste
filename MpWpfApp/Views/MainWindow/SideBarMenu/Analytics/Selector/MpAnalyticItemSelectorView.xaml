@@ -9,24 +9,30 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     DataContext="{StaticResource AnalyticItemCollectionViewModel}"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Border CornerRadius="3"
-            BorderThickness="1"
-            BorderBrush="Black"
-            Background="Transparent"
-            Margin="10">
-        <ComboBox x:Name="AnalyticItemChooserComboBox"
-                  IsSynchronizedWithCurrentItem="True"
-                  SelectedItem="{Binding SelectedItem,
-                                         Mode=TwoWay}"
-                  ItemsSource="{Binding Items}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <local:MpAnalyticItemView DataContext="{Binding}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-    </Border>
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical">
+            <Border CornerRadius="3"
+                    BorderThickness="1"
+                    BorderBrush="Black"
+                    Background="Transparent"
+                    Margin="10">
+                <ComboBox x:Name="AnalyticItemChooserComboBox"
+                          IsSynchronizedWithCurrentItem="True"
+                          
+                          ItemsSource="{Binding Items}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:MpAnalyticItemView DataContext="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Border>
+            <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
+        </StackPanel>
+        <Grid Visibility="{Binding SelectedItem.IsAnyEditing, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue='False'}">
+            <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
+        </Grid>
+    </StackPanel>
 </local:MpUserControl>

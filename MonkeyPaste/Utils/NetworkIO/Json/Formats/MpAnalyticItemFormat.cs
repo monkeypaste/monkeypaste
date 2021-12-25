@@ -65,15 +65,6 @@ namespace MonkeyPaste {
     }
 
     public class MpAnalyticItemParameterValue  {
-        //[JsonProperty("analyticItemId")]
-        //public int AnalyticItemId { get; set; }
-
-        //[JsonProperty("enumId")]
-        //public int EnumId { get; set; }
-
-        //[JsonProperty("valueId")]
-        //public int AnalyticItemParameterValueId { get; set; }
-
         [JsonProperty("value")]
         public string Value { get; set; } = string.Empty;
 

@@ -22,8 +22,8 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void Button_MouseEnter(object sender, MouseEventArgs e) {            
-            var pvm = BindingContext.SelectedPresetViewModel;
+        private void Button_MouseEnter(object sender, MouseEventArgs e) {
+            var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
             if (pvm != null && pvm.IsDefault) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
             } else {

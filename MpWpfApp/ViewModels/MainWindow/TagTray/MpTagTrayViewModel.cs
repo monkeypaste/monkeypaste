@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using System.Windows.Forms;
+using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
     public interface MpITreeCollectionViewModel<T> where T:class {
@@ -31,10 +32,10 @@ namespace MpWpfApp {
 
         #region Properties
 
-
         #region View Models
         public ObservableCollection<MpTagTileViewModel> RootTagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
 
+        public ObservableCollection<MpTagTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpTagTileViewModel>();
 
         //public MpTagTileViewModel RootTagTileViewModel { get; private set; }
 
@@ -51,11 +52,15 @@ namespace MpWpfApp {
                 return new ObservableCollection<MpTagTileViewModel>(ttvml);
             }
         }
-        public MpTagTileViewModel SelectedTagTile => TagTileViewModels.Where(x => x.IsSelected).FirstOrDefault();
 
-        public MpTagTileViewModel AllTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.AllTagId).FirstOrDefault();
+        public MpTagTileViewModel SelectedTagTile => PinnedSelectedTagTile == null ? TagTileViewModels.FirstOrDefault(x => x.IsSelected) : PinnedSelectedTagTile;
 
-        public MpTagTileViewModel RecentTagViewModel => TagTileViewModels.Where(tt => tt.Tag.Id == MpTag.RecentTagId).FirstOrDefault();
+        public MpTagTileViewModel PinnedSelectedTagTile => PinnedItems.FirstOrDefault(x => x.IsSelected);
+
+
+        public MpTagTileViewModel AllTagViewModel => TagTileViewModels.FirstOrDefault(tt => tt.Tag.Id == MpTag.AllTagId);
+
+        public MpTagTileViewModel RecentTagViewModel => TagTileViewModels.FirstOrDefault(tt => tt.Tag.Id == MpTag.RecentTagId);
 
         #endregion
 
@@ -161,7 +166,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
@@ -279,7 +283,7 @@ namespace MpWpfApp {
 
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.Instance.RunOnMainThread(() => {
                 if (sender is MpTag t) {                    
                     var ttvmToRemove = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
@@ -288,12 +292,12 @@ namespace MpWpfApp {
                         ttvmToRemove.Tag.EndSync();
                     }
                 }
-            }));
+            });
         }
 
         private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
-            }));
+            MpHelpers.Instance.RunOnMainThread(() => {
+            });
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
@@ -318,6 +322,30 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
+            async (args) => {
+                var pctvm = args as MpTagTileViewModel;
+                MpTagTileViewModel resultTile = null;
+                if (pctvm.IsPinned) {
+                    PinnedItems.Remove(pctvm);
+                    resultTile = TagTileViewModels.FirstOrDefault(x => x.TagId == pctvm.TagId);
+                } else {
+                    resultTile = await CreateTagTileViewModel(pctvm.Tag);
+                    PinnedItems.Add(resultTile);
+                }
+
+                if (resultTile != null) {
+                    ClearTagSelection();
+                    resultTile.IsSelected = true;
+                    resultTile.OnPropertyChanged(nameof(resultTile.IsPinned));
+                }
+
+                pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
+            },
+            (args) => args != null &&
+                      (args is MpTagTileViewModel ||
+                       args is List<MpTagTileViewModel>));
 
         public ICommand DeleteTagCommand => new RelayCommand<object>(
             async (tagId) => {

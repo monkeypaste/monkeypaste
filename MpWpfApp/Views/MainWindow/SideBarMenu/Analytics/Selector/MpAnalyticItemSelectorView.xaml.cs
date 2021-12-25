@@ -21,5 +21,9 @@ namespace MpWpfApp {
         public MpAnalyticItemSelectorView() {
             InitializeComponent();
         }
+
+        private void AnalyticItemChooserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        }
     }
 }

@@ -3,6 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
@@ -26,6 +27,10 @@
     <Canvas x:Name="MainWindowCanvas"
             Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">
+
+        <i:Interaction.Behaviors>
+            <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
+        </i:Interaction.Behaviors>
         <Grid x:Name="MainWindowGrid"
               Height="{Binding MainWindowHeight}"
               Width="{Binding MainWindowWidth}"
@@ -138,6 +143,7 @@
                                          Grid.Row="1"
                                          Grid.Column="0"
                                          HorizontalAlignment="Left"
+                                         DataContext="{Binding}"
                                          Height="{Binding ClipTrayHeight,
                                                           Source={StaticResource ClipTrayViewModel}}"
                                          Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
@@ -147,6 +153,7 @@
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
+                              IsEnabled="False"
                               MouseEnter="GridSplitter_MouseEnter"
                               MouseLeave="GridSplitter_MouseLeave" />
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"

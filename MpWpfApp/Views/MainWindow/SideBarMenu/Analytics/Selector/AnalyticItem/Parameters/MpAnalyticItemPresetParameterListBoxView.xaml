@@ -12,113 +12,118 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemPresetViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <WrapPanel Orientation="Vertical"
-               Margin="0,10,10,0">
-        <Border HorizontalAlignment="Left"
-                VerticalAlignment="Stretch"
-                BorderThickness="1"
-                BorderBrush="Black"
-                Margin="0">
-            <StackPanel Orientation="Vertical">
-                <DockPanel HorizontalAlignment="Stretch"
-                           LastChildFill="False">
-                    <Button TabIndex="0"
-                            Width="50"
-                            DockPanel.Dock="Left"
-                            Command="{Binding CancelChangesCommand}">
-                        <StackPanel Orientation="Vertical">
-                            <Image Width="30"
-                                   Height="30"
-                                   VerticalAlignment="Top"
-                                   Source="{Binding .,
-                                                    Source={StaticResource DeleteIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}" />
-                            <TextBlock VerticalAlignment="Top"
-                                       Visibility="Visible"
-                                       Text="Cancel" />
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="OkButton"
-                            TabIndex="1"
-                            Width="50"
-                            DockPanel.Dock="Right"
-                            Command="{Binding SaveChangesCommand}">
-                        <StackPanel Orientation="Vertical">
-                            <Image Width="30"
-                                   Height="30"
-                                   VerticalAlignment="Top"
-                                   Source="{Binding .,
-                                                    Source={StaticResource SaveIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}" />
-                            <TextBlock VerticalAlignment="Top"
-                                       HorizontalAlignment="Center"
-                                       Visibility="Visible"
-                                       Text="Save" />
-                        </StackPanel>
-                    </Button>
-                </DockPanel>
-                <ListBox x:Name="ConfigurePresetListBox"
-                         Margin="5,10"
-                         ItemsSource="{Binding ParameterViewModels}"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Stretch"
-                         BorderThickness="0">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsSelected,
-                                                    Mode=TwoWay,
-                                                    NotifyOnTargetUpdated=True,
-                                                    NotifyOnSourceUpdated=True,
-                                                    UpdateSourceTrigger=PropertyChanged}" />
-                            <Setter Property="FocusVisualStyle"
-                                    Value="{x:Null}" />
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                            <Setter Property="VerticalContentAlignment"
-                                    Value="Stretch" />
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpAnalyticItemParameterView DataContext="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <Button x:Name="AnalyzeButton" 
-                        Width="150"
-                        BorderThickness="0"
-                        Background="DarkGreen"
-                        Style="{StaticResource RoundedButton}"
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Command="{Binding ExecuteAnalysisCommand}">
-                    <DockPanel Width="{Binding ActualWidth, ElementName=AnalyzeButton}" 
-                               LastChildFill="False">
-                        <Image Source="{Binding .,
-                                                Converter={StaticResource StringToImageSourceConverter},
-                                                Source={StaticResource BrainWhiteIcon}}"
-                               DockPanel.Dock="Left"
-                               Margin="10,0"
-                               HorizontalAlignment="Left"
-                               Width="15"
-                               Height="15" />
-                        <TextBlock DockPanel.Dock="Right"
-                                   Foreground="Yellow"
-                                   FontSize="14"
-                                   FontWeight="SemiBold"
-                                   Margin="10,0"
-                                   Padding="5"
-                                   Text="Analyze" />
-                    </DockPanel>
+    <Border HorizontalAlignment="Left" 
+            VerticalAlignment="Top"
+            BorderThickness="1"
+            BorderBrush="Black"
+            Margin="0,10,10,0">
+        <StackPanel Orientation="Vertical">
+            <DockPanel HorizontalAlignment="Stretch"
+                       Visibility="{Binding CanSave,
+                                            Converter={StaticResource BoolToVisibilityConverter}}"
+                       LastChildFill="False">
+                <Button TabIndex="0"
+                        Width="50"
+                        DockPanel.Dock="Left"
+                        Command="{Binding CancelChangesCommand}">
+                    <StackPanel Orientation="Vertical">
+                        <Image Width="30"
+                               Height="30"
+                               VerticalAlignment="Top"
+                               Source="{Binding .,
+                                                Source={StaticResource DeleteIcon},
+                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                        <TextBlock VerticalAlignment="Top"
+                                   Visibility="Visible"
+                                   Text="Cancel" />
+                    </StackPanel>
                 </Button>
-            </StackPanel>
-        </Border>
-    </WrapPanel>
+                <Button x:Name="OkButton"
+                        TabIndex="1"
+                        Width="50"
+                        DockPanel.Dock="Right"
+                        Command="{Binding SaveChangesCommand}">
+                    <StackPanel Orientation="Vertical">
+                        <Image Width="30"
+                               Height="30"
+                               VerticalAlignment="Top"
+                               Source="{Binding .,
+                                                Source={StaticResource SaveIcon},
+                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                        <TextBlock VerticalAlignment="Top"
+                                   HorizontalAlignment="Center"
+                                   Visibility="Visible"
+                                   Text="Save" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+            <ListBox x:Name="ConfigurePresetListBox"
+                     Background="Transparent"
+                     Margin="5,10"
+                     ItemsSource="{Binding ParameterViewModels}"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     MinWidth="200"
+                     MaxWidth="300"
+                     MaxHeight="150"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"
+                                   Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}" />
+                        <Setter Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Top" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAnalyticItemParameterView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button x:Name="AnalyzeButton"
+                    Width="150"
+                    BorderThickness="0"
+                    Background="DarkGreen"
+                    Style="{StaticResource RoundedButton}"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Command="{Binding Parent.ExecuteAnalysisCommand}">
+                <DockPanel Width="{Binding ActualWidth,
+                                           ElementName=AnalyzeButton}"
+                           LastChildFill="False">
+                    <Image Source="{Binding .,
+                                            Converter={StaticResource StringToImageSourceConverter},
+                                            Source={StaticResource BrainWhiteIcon}}"
+                           DockPanel.Dock="Left"
+                           Margin="10,0"
+                           HorizontalAlignment="Left"
+                           Width="15"
+                           Height="15" />
+                    <TextBlock DockPanel.Dock="Right"
+                               Foreground="Yellow"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="10,0"
+                               Padding="5"
+                               Text="Analyze" />
+                </DockPanel>
+            </Button>
+        </StackPanel>
+    </Border>
 </local:MpUserControl>

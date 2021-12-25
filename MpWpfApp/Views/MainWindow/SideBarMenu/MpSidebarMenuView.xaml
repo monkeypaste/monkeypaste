@@ -6,14 +6,15 @@
                      x:TypeArguments="local:MpMainWindowViewModel"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      mc:Ignorable="d"
+                     HorizontalAlignment="Stretch"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="{Binding AppModeButtonGridMinWidth, Source={StaticResource AppModeViewModel}}" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="{Binding AppModeButtonGridMinWidth, Source={StaticResource AppModeViewModel}}" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <local:MpAppModeButtonGridView Grid.Column="0"
                                        HorizontalAlignment="Center"
@@ -23,7 +24,7 @@
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        DataContext="{StaticResource AppModeViewModel}" />
 
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
             <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,
@@ -31,20 +32,11 @@
                                                       Source={StaticResource TagTrayViewModel}}"
                                  DataContext="{Binding TagTrayViewModel,
                                                        IsAsync=True}" />
-            <!--<local:MpAnalyticItemCollectionView x:Name="AnalyticsTreeView"
-                                                MinWidth="100"
-                                                Visibility="{Binding IsVisible,
-                                                                     Converter={StaticResource BoolToVisibilityConverter},
-                                                                     Source={StaticResource AnalyticItemCollectionViewModel}}"
-                                                DataContext="{Binding AnalyticItemCollectionViewModel,
-                                                                      IsAsync=True}" />-->
-
             <local:MpManageAnalyticItemsContainerView MinWidth="100"
-                                                Visibility="{Binding IsVisible,
-                                                                     Converter={StaticResource BoolToVisibilityConverter},
-                                                                     Source={StaticResource AnalyticItemCollectionViewModel}}"
-                                                DataContext="{Binding AnalyticItemCollectionViewModel,
-                                                                      IsAsync=True}" />
+                                                      Visibility="{Binding IsVisible,
+                                                                           Converter={StaticResource BoolToVisibilityConverter},
+                                                                           Source={StaticResource AnalyticItemCollectionViewModel}}"
+                                                      DataContext="{Binding AnalyticItemCollectionViewModel}" />
         </StackPanel>
     </Grid>
 

@@ -1163,6 +1163,8 @@ using System.Speech.Synthesis;
 
                 if(ItemViewModels.Count == 0) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                } else {
+                    RequestListRefresh();
                 }
             }
         }

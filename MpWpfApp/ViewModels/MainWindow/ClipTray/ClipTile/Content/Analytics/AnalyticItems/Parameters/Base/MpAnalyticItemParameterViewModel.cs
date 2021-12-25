@@ -53,21 +53,34 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool HasChanged => CurrentValue != DefaultValue && !IsBusy;//=> ValueViewModels.Any(x => x.HasChanged);
-
         public bool IsHovering { get; set; } = false;
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
         public bool IsSelected { get; set; } = false;
 
+        public bool HasValueChanged {
+            get {
+                if(CurrentValue != DefaultValue) {
+                    return true;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Model
 
-        public abstract string CurrentValue { get; set; }
+        public virtual string CurrentValue { get; set; }
 
-        public virtual string DefaultValue { get; set; }
+        public virtual string DefaultValue { 
+            get {
+                if (Parameter == null || Parameter.Values.All(x=>x.IsDefault == false)) {
+                    return string.Empty;
+                }
+                return Parameter.Values.FirstOrDefault(x => x.IsDefault).Value;
+            }
+        }
 
         public double DoubleValue {
             get {
@@ -173,7 +186,6 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameter Parameter { get; protected set; }
 
-
         #endregion
 
         #endregion
@@ -196,7 +208,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public abstract Task InitializeAsync(MpAnalyticItemParameter aip);// {
+        public abstract Task InitializeAsync(MpAnalyticItemParameter aip);
         
         public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
             var naipvvm = new MpAnalyticItemParameterValueViewModel(this);
@@ -206,17 +218,7 @@ namespace MpWpfApp {
         }
 
         public void ResetToDefault() {
-            //MpAnalyticItemParameterValueViewModel defVal = ValueViewModels.FirstOrDefault(x => x.IsDefault);
-            //if (defVal != null) {
-            //    defVal.IsSelected = true;
-            //} else if (ValueViewModels.Count > 0) {
-            //    ValueViewModels[0].IsSelected = true;
-            //}
             CurrentValue = DefaultValue;
-        }
-
-        public void SetValueFromPreset(string newValue) {
-            DefaultValue = CurrentValue = newValue;
         }
 
         public bool Validate() {
@@ -233,14 +235,11 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(HasChanged):
-                    Parent.OnPropertyChanged(nameof(Parent.HasAnyParamValueChanged));
-                    break;
                 case nameof(ValidationMessage):
                     OnPropertyChanged(nameof(IsValid));
                     break;
             }
-            Validate();
+            //Validate();
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

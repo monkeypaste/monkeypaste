@@ -59,6 +59,10 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsPinned => Parent != null &&
+                                Parent.PinnedItems.Any(x => x.TagId == TagId);
+
+
         public bool IsRootTagTile => TagId == MpTag.RootTagId;
 
         public bool HasProperties => TagProperties != null && TagProperties.TagProperties.Count > 0;

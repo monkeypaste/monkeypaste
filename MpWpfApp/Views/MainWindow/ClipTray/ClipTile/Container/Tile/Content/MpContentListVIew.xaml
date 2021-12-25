@@ -44,6 +44,7 @@
                      Unloaded="ContentListDockPanel_Unloaded"
                      SelectionChanged="ContentListBox_SelectionChanged"
                      PreviewMouseWheel="ContentListBox_PreviewMouseWheel"
+                     MouseDown="ContentListBox_MouseDown"
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"

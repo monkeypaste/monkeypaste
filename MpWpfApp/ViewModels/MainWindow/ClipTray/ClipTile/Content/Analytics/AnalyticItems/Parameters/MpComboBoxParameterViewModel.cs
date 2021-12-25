@@ -77,18 +77,9 @@ namespace MpWpfApp {
 
             ValueViewModels.Clear();
 
-            //if (Parameter.ValueFormats == null) {
-            //    await Parent.DeferredCreateParameterValueViewModels(this);
-            //} else {
-
-            //}
-            var presetVal = Parent.Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == Parameter.EnumId);
-            string selectedValue = presetVal == null ? string.Empty:presetVal.Value;
             foreach (var valueSeed in Parameter.Values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                if(naipvvm.Value == selectedValue) {
-                    naipvvm.IsSelected = true;
-                }
+                naipvvm.IsSelected = valueSeed.IsDefault;
                 ValueViewModels.Add(naipvvm);
             }
 
@@ -103,25 +94,9 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        //public override void SetValue(string newValue) {
-        //    var valueVm = ValueViewModels.FirstOrDefault(x => x.Value == newValue);
-        //    if(valueVm == null) {
-        //        throw new Exception($"Param {Label} does not have a '{newValue}' value");
-        //    }
-        //    ValueViewModels.ForEach(x => x.IsSelected = false);
-        //    valueVm.IsSelected = true;
-        //}
-
         #endregion
 
         #region Protected Methods
-
-        //protected override bool Validate() {
-        //    if (!IsRequired) {
-        //        return true;
-        //    }
-        //    return CurrentValueViewModel != null && !string.IsNullOrEmpty(CurrentValueViewModel.Value);
-        //}
         #endregion
     }
 }

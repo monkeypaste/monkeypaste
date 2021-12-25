@@ -29,7 +29,7 @@ namespace MpWpfApp {
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
-                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpTitleBarView>().ExternalDropBehavior);
+                dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
 
                 return dtl;
             }
@@ -102,16 +102,21 @@ namespace MpWpfApp {
         #region Private Methods
 
         private MpIContentDropTarget SelectDropTarget(object dragData) {
+            MpIContentDropTarget selectedTarget = null;
             foreach (var dt in _dropTargets.Where(x => x.IsEnabled)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.IsCtrlDown, dragData)) {
                     continue;
                 }
+
                 dt.DropIdx = dt.GetDropTargetRectIdx();
                 if (dt.DropIdx >= 0) {
-                    return dt;
+                    if(selectedTarget != null) {
+                        selectedTarget.DropIdx = -1;
+                    }
+                    selectedTarget = dt;
                 }
             }
-            return null;
+            return selectedTarget;
         }
 
         private  void Application_KeyDown(object sender, KeyEventArgs e) {

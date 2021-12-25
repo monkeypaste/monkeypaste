@@ -9,28 +9,25 @@
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
+                     HorizontalAlignment="Stretch"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <StackPanel>
-        <StackPanel.Resources>
+    <Grid Background="DarkViolet">
+        <Grid.Resources>
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
-                <DockPanel LastChildFill="False">
-                    <!--<Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>-->
+                <DockPanel  LastChildFill="False">
                     <TextBlock Grid.Column="0"
+                               DockPanel.Dock="Left"
                                Margin="0,0,7,0"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
                                FontSize="13"
                                Foreground="Black"
                                Text="{Binding Label}" />
-                    <Border Grid.Column="1"
-                            BorderThickness="2"
+                    <Border DockPanel.Dock="Right"
+                            BorderThickness="0"
                             CornerRadius="2"
-                            Padding="1"
                             ToolTipService.InitialShowDelay="2"
                             ToolTip="{Binding ParameterTooltipText}"
                             BorderBrush="{Binding ParameterBorderBrush}">
@@ -125,12 +122,9 @@
                                            TextBoxTemplate="{StaticResource TextBoxParameter}"
                                            CheckBoxTemplate="{StaticResource CheckBoxParameter}"
                                            SliderTemplate="{StaticResource SliderParameter}" />
-        </StackPanel.Resources>
+        </Grid.Resources>
         <ContentControl Content="{Binding}"
-                        Margin="0,5"
+                        Margin="5"
                         ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
-        <Border Background="Black"
-                Height="0.5"
-                HorizontalAlignment="Stretch" />
-    </StackPanel>
+    </Grid>
 </local:MpUserControl>

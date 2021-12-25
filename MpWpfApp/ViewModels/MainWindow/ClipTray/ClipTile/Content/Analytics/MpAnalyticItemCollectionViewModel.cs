@@ -13,7 +13,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-
     public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel>  { //
         #region Properties
 
@@ -21,15 +20,9 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemViewModel> Items { get; set; } = new ObservableCollection<MpAnalyticItemViewModel>();
 
-        public MpAnalyticItemViewModel SelectedItem {
-            get {
-                return Items.FirstOrDefault(x => x.IsSelected);
-            }
-            set {
-                Items.ForEach(x => x.IsSelected = x == value);
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
+        public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
+
+        public int SelectedItemIdx { get; set; } = 0;
 
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
@@ -137,18 +130,28 @@ namespace MpWpfApp {
             Items.Clear();
 
             var ail = await MpDb.Instance.GetItemsAsync<MpAnalyticItem>();
-
-            var aivm1 = new MpTranslatorViewModel(this);
-            await aivm1.InitializeAsync(ail[0]);
-            Items.Add(aivm1);
-
-            var aivm2 = new MpTranslatorViewModel(this);
-            await aivm2.InitializeAsync(ail[1]);
-            Items.Add(aivm2);
+            foreach(var ai in ail) {
+                var aivm = await CreateAnalyticItemViewModel(ai);
+                Items.Add(aivm);
+            }
 
             OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
+        }
+
+        private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
+            MpAnalyticItemViewModel aivm = null;
+            switch(ai.Title) {
+                case "Open Ai":
+                    aivm = new MpTranslatorViewModel(this);
+                    break;
+                case "Language Translator":
+                    aivm = new MpOpenAiViewModel(this);
+                    break;
+            }
+            await aivm.InitializeAsync(ai);
+            return aivm;
         }
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -160,6 +163,19 @@ namespace MpWpfApp {
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
+                    if(SelectedItem == null) {
+                        Items[0].IsSelected = true;
+                        SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = false);
+                    }
+                    if(!SelectedItem.IsAnyEditing) {
+                        SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
+                        //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
+                    }
+                    OnPropertyChanged(nameof(SelectedItem));
+                    break;
+                case nameof(SelectedItemIdx):
+                    Items.ForEach(x => x.IsSelected = Items.IndexOf(x) == SelectedItemIdx);
+                    OnPropertyChanged(nameof(SelectedItem));
                     break;
             }
         }

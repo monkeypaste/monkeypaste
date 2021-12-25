@@ -44,18 +44,18 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if(Parameter == null || Parameter.Values == null) {
-                ResetToDefault();
-            } else {
-                MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
-                if (defVal != null) {
-                    _defaultValue = defVal.Value;
-                } else {
-                    _defaultValue = string.Empty;
-                }
+            //if(Parameter == null || Parameter.Values == null) {
+            //    ResetToDefault();
+            //} else {
+            //    MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
+            //    if (defVal != null) {
+            //        _defaultValue = defVal.Value;
+            //    } else {
+            //        _defaultValue = string.Empty;
+            //    }
 
-                CurrentValue = _defaultValue;
-            }
+            //    CurrentValue = _defaultValue;
+            //}
 
             OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(CurrentValue));

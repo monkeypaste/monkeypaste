@@ -221,9 +221,7 @@ namespace MpWpfApp {
             if(totalTileCount <= 0) {
                 return 0;
             }
-            if(queryOffsetIdx < 0 || queryOffsetIdx >= totalTileCount) {
-                throw new Exception($"HeadItemId {queryOffsetIdx} is out of item bounds of {totalTileCount}");
-            }
+            queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
 
             var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
             var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;

@@ -68,7 +68,7 @@
                                          Background="White"
                                          BorderThickness="0"
                                          Text="{Binding Label,
-                                                        Mode=TwoWay}"
+                                                        Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                          VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

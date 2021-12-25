@@ -55,7 +55,7 @@
                                          MenuItemTemplate="{StaticResource MenuItemContent}" />
 
 
-        <!--<Style x:Key="DefaultItemStyle"
+        <Style x:Key="DefaultItemStyle"
                TargetType="{x:Type MenuItem}">
             <Setter Property="Header"
                     Value="{Binding Header}" />
@@ -73,11 +73,11 @@
                     Value="{Binding IsChecked}" />
             <Setter Property="ItemsSource"
                     Value="{Binding SubItems}" />
-            --><!--<Setter Property="ItemContainerStyle"
+            <!--<Setter Property="ItemContainerStyle"
                     Value="{StaticResource DefaultItemStyle}"/>
             <Setter Property="ItemTemplateSelector"
-                    Value="{StaticResource MenuItemSelector}"/>--><!--
-        </Style>-->
+                    Value="{StaticResource MenuItemSelector}"/>-->
+        </Style>
 
         <!--  Color Pallete Menu Item  -->
         <Style x:Key="ColorPalleteMenuItemStyle"

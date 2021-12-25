@@ -11,15 +11,5 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <StackPanel Orientation="Horizontal">
-        <StackPanel Margin="10"
-                Background="Tan"
-                Orientation="Vertical">
-            <local:MpAnalyticItemSelectorView DataContext="{Binding}" />
-            <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
-        </StackPanel>
-        <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem.SelectedPresetViewModel}"
-                                                        Visibility="{Binding IsEditing,
-                                                                             Converter={StaticResource BoolToVisibilityConverter}}" />
-    </StackPanel>
+    <local:MpAnalyticItemSelectorView DataContext="{Binding}" />    
 </local:MpUserControl>

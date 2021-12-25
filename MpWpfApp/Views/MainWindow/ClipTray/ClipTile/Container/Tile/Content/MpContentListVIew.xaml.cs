@@ -261,5 +261,18 @@ namespace MpWpfApp {
             fullDocument.PageHeight = ps.Height;
             return fullDocument;
         }
+
+        private void ContentListBox_MouseDown(object sender, MouseButtonEventArgs e) {
+            if (BindingContext.IsAnyEditingTitle) {
+                e.Handled = false;
+                return;
+            }
+            BindingContext.ItemViewModels[BindingContext.ItemViewModels.Count - 1].IsSelected = true;
+
+            MpDragDropManager.Instance.StartDragCheck(
+                e.GetPosition(Application.Current.MainWindow));
+
+            e.Handled = true;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace MpWpfApp {
         File
     }
 
-    public class MpExternalDropBehavior : MpDropBehaviorBase<MpTitleBarView> {
+    public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {
         #region Singleton Definition
         private static readonly Lazy<MpExternalDropBehavior> _Lazy = new Lazy<MpExternalDropBehavior>(() => new MpExternalDropBehavior());
         public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
@@ -33,7 +33,11 @@ namespace MpWpfApp {
 
         public override bool IsEnabled { get; set; } = true;
 
-        public override UIElement RelativeToElement => AssociatedObject;
+        public override UIElement RelativeToElement {
+            get {
+                return (Application.Current.MainWindow as MpMainWindow).MainWindowGrid;
+            }
+        }
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
@@ -53,18 +57,15 @@ namespace MpWpfApp {
 
         public override List<Rect> GetDropTargetRects() {
             Rect extRect = new Rect(
-                0, 
-                -(MpMeasurements.Instance.ScreenHeight - MpMainWindowViewModel.Instance.MainWindowTop), 
-                MpMeasurements.Instance.ScreenWidth, 
-                MpMeasurements.Instance.ScreenHeight - MpMainWindowViewModel.Instance.MainWindowTop);
-
-            return new List<Rect> { new Rect() };
+                0,0,
+                MpMeasurements.Instance.ScreenWidth,MpMainWindowViewModel.Instance.MainWindowTop + 20);
+            return new List<Rect> { extRect };
         }
 
         public override int GetDropTargetRectIdx() {
-            Point mp = Mouse.GetPosition(RelativeToElement);
+            Point mp = Mouse.GetPosition(Application.Current.MainWindow);
             MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
-            if(mp.Y < 5) {
+            if(GetDropTargetRects()[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
                 IntPtr lastHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
                 WinApi.SetForegroundWindow(lastHandle);
@@ -75,11 +76,8 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-
             var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
-
-            
         }
 
         public override async Task Drop(bool isCopy, object dragData) {

@@ -41,7 +41,7 @@
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                      ToolTip="{Binding IsRighClickPasteModeTooltip}"
+                      ToolTip="Collection Tree"
                       IsEnabled="True"
                       IsChecked="{Binding IsVisible,
                                           Source={StaticResource TagTrayViewModel}}"
@@ -59,7 +59,11 @@
                       ToolTip="Analyze"
                       IsEnabled="True"
                       IsChecked="{Binding IsVisible,
-                                          Source={StaticResource AnalyticItemCollectionViewModel}}"
+                                          Source={StaticResource AnalyticItemCollectionViewModel},
+                                          Mode=TwoWay,
+                                          UpdateSourceTrigger=PropertyChanged,
+                                          NotifyOnSourceUpdated=True,
+                                          NotifyOnTargetUpdated=True}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"

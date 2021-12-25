@@ -370,6 +370,9 @@ namespace MpWpfApp {
         }
 
         public virtual bool Validate() {
+            if(SelectedPresetViewModel == null) {
+                return true;
+            }
             return SelectedPresetViewModel.IsAllValid;
         }
 
@@ -382,15 +385,7 @@ namespace MpWpfApp {
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpAnalyticItemPreset aip) {
                 if (aip.AnalyticItemId == AnalyticItemId) {
-                    var presetVm = PresetViewModels.FirstOrDefault(x => x.Preset.Id == aip.Id);
-                    if (presetVm != null) {
-                        MpHelpers.Instance.RunOnMainThread(async () => {
-                            aip = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
-                            await presetVm.InitializeAsync(aip);
-                            OnPropertyChanged(nameof(ContextMenuItems));
-                            OnPropertyChanged(nameof(QuickActionPresetMenuItems));
-                        });
-                    }
+                    
                 }
             }
         }
@@ -433,9 +428,14 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(IsSelected):
+                    //if(IsSelected) {
+                    //    Parent.Items.ForEach(x => x.IsSelected = x == this);
+                    //}
+                    if(IsSelected && Parent.SelectedItemIdx != Parent.Items.IndexOf(this)) {
+                        Parent.SelectedItemIdx = Parent.Items.IndexOf(this);
+                    }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
@@ -444,6 +444,9 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
                 case nameof(SelectedPresetViewModel):
+                    //if(SelectedPresetViewModel != null) {
+                    //    SelectedPresetViewModel.OnPropertyChanged(nameof(SelectedPresetViewModel.IsEditing));
+                    //}
                     break;
             }
         }
@@ -534,19 +537,16 @@ namespace MpWpfApp {
 
         public ICommand ManageAnalyticItemCommand => new RelayCommand(
              () => {
-                 //if (!IsLoaded) {
-                 //    await LoadChildren();
-                 //}
                  if (!IsSelected) {
                      Parent.Items.ForEach(x => x.IsSelected = x.AnalyticItemId == AnalyticItemId);
                  }
                  if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
-                     PresetViewModels.ForEach(x => x.IsSelected = false);
-                     PresetViewModels[0].IsSelected = true;
+                     PresetViewModels.ForEach(x => x.IsSelected = x == PresetViewModels[0]);
                  }
                  if(!Parent.IsVisible) {
                      Parent.IsVisible = true;
                  }
+                 OnPropertyChanged(nameof(SelectedPresetViewModel));
              });
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(

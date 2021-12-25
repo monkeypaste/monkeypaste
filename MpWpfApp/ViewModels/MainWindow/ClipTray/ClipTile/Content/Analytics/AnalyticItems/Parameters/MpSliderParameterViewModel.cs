@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModel {
         #region Private Variables
-        private string _defaultValue;
+        //private string _defaultValue;
         #endregion
 
         #region Properties
@@ -19,7 +19,7 @@ namespace MpWpfApp {
 
         public override string CurrentValue { get; set; } = string.Empty;
 
-        public override string DefaultValue => _defaultValue;
+        //public override string DefaultValue => _defaultValue;
 
         public double SliderValue {
             get {
@@ -112,17 +112,18 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if (Parameter == null || Parameter.Values == null) {
-                ResetToDefault();
-            } else {
-                MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
-                if (defVal != null) {
-                    _defaultValue = defVal.Value;
-                } else {
-                    _defaultValue = "0";
-                }
-                ResetToDefault();
-            }
+            //if (Parameter == null || Parameter.Values == null) {
+            //    ResetToDefault();
+            //} else {
+            //    MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
+            //    if (defVal != null) {
+            //        _defaultValue = defVal.Value;
+            //    } else {
+            //        _defaultValue = "0";
+            //    }
+            //    ResetToDefault();
+            //}
+            ResetToDefault();
 
             OnPropertyChanged(nameof(Min));
             OnPropertyChanged(nameof(Max));

@@ -226,9 +226,7 @@ namespace MpWpfApp {
             adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
             adornerLayer.Add(DropLineAdorner);
 
-            //if (GetType() != typeof(MpExternalDropBehavior)) {
-            //    EnableDebugMode();
-            //}
+            IsDebugEnabled = false;
 
             RefreshDropRects();
         }
