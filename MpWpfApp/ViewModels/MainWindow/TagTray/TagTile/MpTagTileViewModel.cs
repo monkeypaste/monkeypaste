@@ -59,12 +59,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsPinned => Parent != null &&
-                                Parent.PinnedItems.Any(x => x.TagId == TagId);
-
-
-        public bool IsRootTagTile => TagId == MpTag.RootTagId;
-
         public bool HasProperties => TagProperties != null && TagProperties.TagProperties.Count > 0;
 
         public bool IsNew {
@@ -84,7 +78,7 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.Id == MpTag.AllTagId || Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.HelpTagId;
+                return Tag.Id == MpTag.AllTagId || Tag.Id == MpTag.RecentTagId;
             }
         }
 
@@ -164,11 +158,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
+
         public Brush TagBorderBackgroundBrush {
             get {
-                if(IsRootTagTile) {
-                    return Brushes.Transparent;
-                }
                 if (IsSelected) {
                     return Brushes.DimGray;
                 }
@@ -193,9 +185,6 @@ namespace MpWpfApp {
 
         public Brush TagTextColor {
             get {
-                if(IsRootTagTile) {
-                    return Brushes.White;
-                }
                 if(IsSelected) {
                     return Brushes.White;
                 }
@@ -239,6 +228,26 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        //public bool IsPinned => Parent != null &&
+        //                        Parent.PinnedItems.Any(x => x.TagId == TagId);
+
+        public bool IsPinned {
+            get {
+                if(Tag == null) {
+                    return false;
+                }
+                return Tag.IsPinned;
+            }
+            set {
+                if(IsPinned != value) {
+                    Tag.IsPinned = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsPinned));
+                    Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
+                }
+            }
+        }
 
         public int ParentTagId {
             get {
@@ -349,8 +358,14 @@ namespace MpWpfApp {
             }
         }
 
-        
+
         #endregion
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler OnRequestSelectAll;
 
         #endregion
 
@@ -412,14 +427,25 @@ namespace MpWpfApp {
                     }
                     //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
+                case nameof(HasModelChanged):
+                    if(IsBusy) {
+                        return;
+                    }
+                    Task.Run(async () => {
+                        await Tag.WriteToDatabaseAsync();
+                        HasModelChanged = false;
+                    });
+                    break;
             }
         }
 
-        public IEnumerable<MpTagTileViewModel> FindChildren() { 
+        public List<MpTagTileViewModel> FindChildren() {
+            var cl = new List<MpTagTileViewModel>();
             foreach(var cttvm in ChildTagViewModels) {
-                yield return cttvm;
-                cttvm.FindChildren();
+                cl.Add(cttvm);
+                cl.AddRange(cttvm.FindChildren());
             }
+            return cl;
         }
 
         public async Task AddContentItem(MpContentItemViewModel rtbvm) {
@@ -638,11 +664,10 @@ namespace MpWpfApp {
             });
 
         public ICommand RenameTagCommand => new RelayCommand(
-            () => {
+            async () => {
                 _originalTagName = TagName;
-                //MpTagTrayViewModel.Instance.ClearTagSelection();
-                //IsSelected = true;
                 IsEditing = true;
+                OnRequestSelectAll?.Invoke(this, null);
             },
             () => {
                 return !IsTagReadOnly;

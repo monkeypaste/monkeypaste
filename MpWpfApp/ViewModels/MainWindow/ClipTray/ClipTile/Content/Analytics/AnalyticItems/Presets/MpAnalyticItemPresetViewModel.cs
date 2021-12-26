@@ -466,13 +466,17 @@ namespace MpWpfApp {
 
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {
-                if(!Parent.IsLoaded) {
-                    throw new Exception("Item should be loaded on startup");
-                }
                 Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
                 Parent.PresetViewModels.ForEach(x => x.IsEditing = x == this);
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
             }, !IsEditing && !Parent.IsAnyEditing);
+
+        public ICommand ExecutePresetCommand => new RelayCommand(
+            () => {
+                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
+                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
+                Parent.ExecuteAnalysisCommand.Execute(null);
+            });
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

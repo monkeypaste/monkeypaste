@@ -96,34 +96,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button x:Name="AnalyzeButton"
-                    Width="150"
-                    BorderThickness="0"
-                    Background="DarkGreen"
-                    Style="{StaticResource RoundedButton}"
-                    Margin="10"
-                    HorizontalAlignment="Right"
-                    Command="{Binding Parent.ExecuteAnalysisCommand}">
-                <DockPanel Width="{Binding ActualWidth,
-                                           ElementName=AnalyzeButton}"
-                           LastChildFill="False">
-                    <Image Source="{Binding .,
-                                            Converter={StaticResource StringToImageSourceConverter},
-                                            Source={StaticResource BrainWhiteIcon}}"
-                           DockPanel.Dock="Left"
-                           Margin="10,0"
-                           HorizontalAlignment="Left"
-                           Width="15"
-                           Height="15" />
-                    <TextBlock DockPanel.Dock="Right"
-                               Foreground="Yellow"
-                               FontSize="14"
-                               FontWeight="SemiBold"
-                               Margin="10,0"
-                               Padding="5"
-                               Text="Analyze" />
-                </DockPanel>
-            </Button>
         </StackPanel>
     </Border>
 </local:MpUserControl>

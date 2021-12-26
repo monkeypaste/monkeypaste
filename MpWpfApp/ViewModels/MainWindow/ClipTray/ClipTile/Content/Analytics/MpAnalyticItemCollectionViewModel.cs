@@ -20,9 +20,17 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAnalyticItemViewModel> Items { get; set; } = new ObservableCollection<MpAnalyticItemViewModel>();
 
-        public MpAnalyticItemViewModel SelectedItem => Items.FirstOrDefault(x => x.IsSelected);
-
-        public int SelectedItemIdx { get; set; } = 0;
+        public MpAnalyticItemViewModel SelectedItem {//=> Items.FirstOrDefault(x => x.IsSelected);//{
+            get => Items.FirstOrDefault(x => x.IsSelected);
+            set {
+                if (value != SelectedItem) {
+                    Items.ForEach(x => x.IsSelected = false);
+                    if (value != null) {
+                        value.IsSelected = true;
+                    }
+                }
+            }
+        }
 
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
@@ -130,6 +138,7 @@ namespace MpWpfApp {
             Items.Clear();
 
             var ail = await MpDb.Instance.GetItemsAsync<MpAnalyticItem>();
+            ail.Reverse();
             foreach(var ai in ail) {
                 var aivm = await CreateAnalyticItemViewModel(ai);
                 Items.Add(aivm);
@@ -144,10 +153,10 @@ namespace MpWpfApp {
             MpAnalyticItemViewModel aivm = null;
             switch(ai.Title) {
                 case "Open Ai":
-                    aivm = new MpTranslatorViewModel(this);
+                    aivm = new MpOpenAiViewModel(this);
                     break;
                 case "Language Translator":
-                    aivm = new MpOpenAiViewModel(this);
+                    aivm = new MpTranslatorViewModel(this);
                     break;
             }
             await aivm.InitializeAsync(ai);
@@ -171,10 +180,6 @@ namespace MpWpfApp {
                         SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
                         //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
                     }
-                    OnPropertyChanged(nameof(SelectedItem));
-                    break;
-                case nameof(SelectedItemIdx):
-                    Items.ForEach(x => x.IsSelected = Items.IndexOf(x) == SelectedItemIdx);
                     OnPropertyChanged(nameof(SelectedItem));
                     break;
             }

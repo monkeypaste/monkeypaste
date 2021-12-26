@@ -162,6 +162,39 @@
             </Setter>
         </Style>
 
+        <Style x:Key="RoundedButton_NoOutline"
+               TargetType="{x:Type Button}">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="Yellow" />
+                            </Trigger>
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="HotPink" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="FrameGripButton"
                TargetType="{x:Type Button}">
             <Setter Property="Background"
@@ -1168,6 +1201,7 @@
         <s:String x:Key="PauseIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pause.png</s:String>
         <s:String x:Key="CogIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/cog.png</s:String>
         <s:String x:Key="LockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/lock.png</s:String>
+        <s:String x:Key="ExecuteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/execute.png</s:String>
         <s:String x:Key="PasteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/paste.png</s:String>
         <s:String x:Key="DeleteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/Delete.png</s:String>
         <s:String x:Key="EditIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/edit.png</s:String>

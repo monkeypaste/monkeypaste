@@ -234,5 +234,6 @@ namespace MpWpfApp {
         private void PinButton_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.Parent.IsOverPinButton = false;
         }
+
     }
 }

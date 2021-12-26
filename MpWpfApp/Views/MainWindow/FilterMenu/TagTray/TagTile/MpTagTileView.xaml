@@ -12,178 +12,116 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <local:MpClipBorder x:Name="TagTileBorder"
-                        Loaded="TagTileBorder_Loaded"
-                        MouseEnter="TagTileBorder_MouseEnter"
-                        MouseLeave="TagTileBorder_MouseLeave"
-                        LostFocus="TagTileBorder_LostFocus"
-                        PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
-                        PreviewMouseRightButtonDown="TagTileBorder_PreviewMouseRightButtonDown"
-                        CornerRadius="10"
-                        Margin="5,3,0,0"
-                        Padding="7,5,7,5"
-                        Focusable="False"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Left"
-                        Background="{Binding TagBorderBackgroundBrush}"
-                        BorderBrush="{Binding TagBorderBrush}"
-                        Tag="{Binding DataContext,
-                                      RelativeSource={RelativeSource Mode=Self}}"
-                        BorderThickness="1.5"
-                        Height="{Binding TagHeight}">
-        <local:MpClipBorder.Resources>
-            <local:MpBindingProxy x:Key="TagTileVmProxy"
-                                  Data="{Binding}" />
-        </local:MpClipBorder.Resources>
-        <local:MpClipBorder.ContextMenu>
-            <ContextMenu Loaded="TagTile_ContextMenu_Loaded"
-                         Opened="TagTile_ContextMenu_Opened"
-                         Closed="TagTile_ContextMenu_Closed">
-                <MenuItem Header="Rename"
-                          Icon="{Binding Source={StaticResource RenameIcon},
-                                         Converter={StaticResource StringToIconConverter},
-                                         Mode=OneWay}"
-                          Click="RenameMenuItem_Click" />
-                <MenuItem Header="Assign Hotkey"
-                          Icon="{Binding Source={StaticResource HotkeyIcon},
-                                         Converter={StaticResource StringToIconConverter},
-                                         Mode=OneWay}"
-                          InputGestureText="{Binding Data.ShortcutKeyString,
-                                                     Source={StaticResource TagTileVmProxy}}"
-                          Command="{Binding Data.AssignHotkeyCommand,
-                                            Source={StaticResource TagTileVmProxy}}" />
-                <Separator />
-                <MenuItem x:Name="ClipTileColorContextMenuItem"
-                          Style="{StaticResource ColorPalleteMenuItemStyle}" />
-                <Separator />
-                <MenuItem Header="Link"
-                          Visibility="{Binding Data.IsUserTag,
-                                               Converter={StaticResource BoolToVisibilityConverter},
-                                               Source={StaticResource TagTileVmProxy}}">
-                    <MenuItem.Resources>
-                        <Style x:Key="TagExpressionMenuItemStyle"
-                               TargetType="{x:Type MenuItem}">
-                            <Setter Property="Header"
-                                    Value="{Binding Header}" />
-                            <Setter Property="Icon"
-                                    Value="{Binding Header,
-                                                    Converter={StaticResource FilePathStringToIconConverter}}" />
-                            <Setter Property="Command"
-                                    Value="{Binding Command}" />
-                            <Setter Property="CommandParameter"
-                                    Value="{Binding CommandParameter}" />
-                            <Setter Property="ItemsSource"
-                                    Value="{Binding SubItems}" />
-                        </Style>
-
-                    </MenuItem.Resources>
-                    <!--<local:MpContextMenuView Header="Directory"
-                              ItemContainerStyle="{StaticResource TagExpressionMenuItemStyle}"
-                              ItemsSource="{Binding Data,
-                                                    Converter={StaticResource TagExpressionToDirectoryMenuItemViewModelCollectionConverter},
-                                                    Source={StaticResource TagTileVmProxy}}" />
-                    <MenuItem Header="Expression"
-                              ItemsSource="{Binding Data,
-                                                    Converter={StaticResource TagExpressionToDataFilterMenuItemViewModelCollectionConverter},
-                                                   Source={StaticResource TagTileVmProxy}}" />-->
-
-                </MenuItem>
-                <Separator Visibility="{Binding Data.IsUserTag, Converter={StaticResource BoolToVisibilityConverter}, Source={StaticResource TagTileVmProxy}}" />
-                <MenuItem Header="Delete"
-                          Icon="{Binding Source={StaticResource DeleteIcon},
-                                         Converter={StaticResource StringToIconConverter},
-                                         Mode=OneWay}"
-                          Click="DeleteMenuItem_Clicked" />
-            </ContextMenu>
-        </local:MpClipBorder.ContextMenu>
-        <StackPanel Orientation="Horizontal">
-            <Grid DockPanel.Dock="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <!--  Tag Count Box  -->
-                <local:MpClipBorder CornerRadius="5"
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    MinWidth="20"
-                                    Margin="3,0,0,0"
-                                    Padding="5,5,5,5"
-                                    BorderThickness="0"
-                                    Visibility="{Binding IsRootTagTile,
-                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                    Background="{Binding TagBrush,
-                                                         Mode=TwoWay,
-                                                         UpdateSourceTrigger=PropertyChanged,
-                                                         NotifyOnTargetUpdated=True,
-                                                         NotifyOnSourceUpdated=True}">
-                    <TextBlock Background="Transparent"
-                               VerticalAlignment="Center"
+    <StackPanel Orientation="Horizontal">
+        <local:MpClipBorder x:Name="TagTileBorder"
+                            Loaded="TagTileBorder_Loaded"
+                            Unloaded="TagTileBorder_Unloaded"
+                            MouseEnter="TagTileBorder_MouseEnter"
+                            MouseLeave="TagTileBorder_MouseLeave"
+                            LostFocus="TagTileBorder_LostFocus"
+                            PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
+                            PreviewMouseRightButtonDown="TagTileBorder_PreviewMouseRightButtonDown"
+                            CornerRadius="10"
+                            Margin="5,3,0,0"
+                            Padding="7,5,7,5"
+                            Focusable="False"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Left"
+                            Background="{Binding TagBorderBackgroundBrush}"
+                            BorderBrush="{Binding TagBorderBrush}"
+                            Tag="{Binding DataContext,
+                                          RelativeSource={RelativeSource Mode=Self}}"
+                            BorderThickness="1.5"
+                            Height="{Binding TagHeight}">
+            <local:MpClipBorder.Resources>
+                <local:MpBindingProxy x:Key="TagTileVmProxy"
+                                      Data="{Binding}" />
+            </local:MpClipBorder.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Grid DockPanel.Dock="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <!--  Tag Count Box  -->
+                    <local:MpClipBorder CornerRadius="5"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        MinWidth="20"
+                                        Margin="3,0,0,0"
+                                        Padding="5,5,5,5"
+                                        BorderThickness="0"
+                                        Background="{Binding TagBrush,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnTargetUpdated=True,
+                                                             NotifyOnSourceUpdated=True}">
+                        <TextBlock Background="Transparent"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Text="{Binding TagClipCount,
+                                                  Converter={StaticResource IntToStringConverter},
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged,
+                                                  NotifyOnTargetUpdated=True,
+                                                  NotifyOnSourceUpdated=True}"
+                                   Foreground="{Binding TagCountTextColor}" />
+                    </local:MpClipBorder>
+                    <TextBlock x:Name="TagTextBlock"
+                               Grid.Column="1"
+                               Grid.Row="0"
+                               Margin="5,0,0,0"
+                               Background="Transparent"
                                HorizontalAlignment="Center"
-                               Text="{Binding TagClipCount,
-                                              Converter={StaticResource IntToStringConverter},
+                               VerticalAlignment="Center"
+                               Visibility="{Binding IsEditing,
+                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                               FontSize="{Binding TagFontSize}"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding TagTextColor}"
+                               Text="{Binding TagName,
                                               Mode=TwoWay,
                                               UpdateSourceTrigger=PropertyChanged,
                                               NotifyOnTargetUpdated=True,
-                                              NotifyOnSourceUpdated=True}"
-                               Foreground="{Binding TagCountTextColor}" />
-                </local:MpClipBorder>
-                <TextBlock x:Name="TagTextBlock"
-                           Grid.Column="1"
-                           Grid.Row="0"
-                           Margin="5,0,0,0"
-                           Background="Transparent"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Visibility="{Binding IsEditing,
-                                                Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                           FontSize="{Binding TagFontSize}"
-                           FontWeight="SemiBold"
-                           Foreground="{Binding TagTextColor}"
-                           Text="{Binding TagName,
-                                          Mode=TwoWay,
-                                          UpdateSourceTrigger=PropertyChanged,
-                                          NotifyOnTargetUpdated=True,
-                                          NotifyOnSourceUpdated=True}" />
-                <TextBox x:Name="TagTextBox"
-                         IsVisibleChanged="TagTextBox_IsVisibleChanged"
-                         LostFocus="TagTextBox_LostFocus"
-                         PreviewKeyDown="TagTextBox_PreviewKeyDown"
-                         TextChanged="TagTextBox_TextChanged"
-                         Grid.Row="0"
-                         Grid.Column="1"
-                         Margin="5,0,0,0"
-                         Background="White"
-                         Foreground="Black"
-                         IsReadOnly="False"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Visibility="{Binding IsEditing,
-                                              Converter={StaticResource BoolToVisibilityConverter}}"
-                         FontSize="{Binding TagFontSize}"
-                         Text="{Binding TagName,
-                                        Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        NotifyOnTargetUpdated=True,
-                                        NotifyOnSourceUpdated=True}" />
-            </Grid>
-
+                                              NotifyOnSourceUpdated=True}" />
+                    <TextBox x:Name="TagTextBox"
+                             IsVisibleChanged="TagTextBox_IsVisibleChanged"
+                             LostFocus="TagTextBox_LostFocus"
+                             PreviewKeyDown="TagTextBox_PreviewKeyDown"
+                             TextChanged="TagTextBox_TextChanged"
+                             Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="5,0,0,0"
+                             Background="White"
+                             Foreground="Black"
+                             IsReadOnly="False"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Visibility="{Binding IsEditing,
+                                                  Converter={StaticResource BoolToVisibilityConverter}}"
+                             FontSize="{Binding TagFontSize}"
+                             Text="{Binding TagName,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            NotifyOnTargetUpdated=True,
+                                            NotifyOnSourceUpdated=True}" />
+                </Grid>
+            </StackPanel>
+        </local:MpClipBorder>
+        <StackPanel x:Name="AddTagButtonPanel"
+                    Margin="10,5,5,0">
             <Button x:Name="AddTagButton"
-                    DockPanel.Dock="Right"
-                    Visibility="{Binding IsRootTagTile,
-                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                    Visibility="{Binding IsSelected,
+                                         Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}"
                     Height="30"
                     Width="30"
-                    Grid.Column="1"
-                    BorderThickness="0"
-                    ToolTip="Add Collection"
+                    ToolTip="Add Collection"                    
                     ToolTipService.InitialShowDelay="100"
-                    Template="{StaticResource SearchButtonControlTemplate}"
+                    Style="{StaticResource RoundedButton}"
                     Command="{Binding Parent.CreateTagCommand}">
                 <Image Stretch="Fill"
-                       Margin="8,0,0,8"
-                       Source="/MpWpfApp;component/Resources/Images/add2.png" />
+                       Source="/MpWpfApp;component/Resources/Images/add4.png" />
             </Button>
         </StackPanel>
-    </local:MpClipBorder>
+    </StackPanel>
 </local:MpUserControl>

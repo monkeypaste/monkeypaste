@@ -4,6 +4,7 @@ using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -42,6 +43,8 @@ namespace MonkeyPaste {
         [Column("IsQuickAction")]
         public int QuickAction { get; set; } = 0;
 
+
+        public int Pinned { get; set; } = 0;
         #endregion
 
         #region Fk Models
@@ -60,6 +63,12 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        [Ignore]
+        public bool IsPinned {
+            get => Pinned == 1;
+            set => Pinned = value == true ? 1 : 0;
+        }
 
         [Ignore]
         public bool IsDefault {

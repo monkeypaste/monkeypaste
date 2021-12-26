@@ -428,12 +428,12 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(IsSelected):
-                    //if(IsSelected) {
-                    //    Parent.Items.ForEach(x => x.IsSelected = x == this);
+                    //if (IsSelected) {
+                    //    Parent.Items.ForEach(x => x.IsSelected = x.AnalyticItemId == AnalyticItemId);
                     //}
-                    if(IsSelected && Parent.SelectedItemIdx != Parent.Items.IndexOf(this)) {
-                        Parent.SelectedItemIdx = Parent.Items.IndexOf(this);
-                    }
+                    //if(IsSelected && Parent.SelectedItemIdx != Parent.Items.IndexOf(this)) {
+                    //    Parent.SelectedItemIdx = Parent.Items.IndexOf(this);
+                    //}
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
@@ -474,7 +474,9 @@ namespace MpWpfApp {
             var ci = await MpCopyItem.Create(source, resultData, MpCopyItemType.RichText);
 
             var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
-
+            if(scivm == null) {
+                return;
+            }
             var sml = scivm.Parent.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
             for (int i = 0; i < sml.Count; i++) {
                 if (i == scivm.CompositeSortOrderIdx) {
@@ -501,8 +503,7 @@ namespace MpWpfApp {
                 var result = await ExecuteAnalysis(analysisStr) as Tuple<string,MpJsonMessage>;
 
                 await ConvertToCopyItem(sourceCopyItemId,result.Item1, result.Item2.Serialize());
-            },
-            CanExecuteAnalysis);
+            },CanExecuteAnalysis);
 
         protected abstract Task<object> ExecuteAnalysis(object obj);
 

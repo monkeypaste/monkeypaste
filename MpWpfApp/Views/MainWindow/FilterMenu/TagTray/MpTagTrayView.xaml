@@ -91,8 +91,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpTagTileView Visibility="{Binding IsRootTagTile,
-                                                              Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                    <local:MpTagTileView Visibility="{Binding IsPinned,
+                                                              Converter={StaticResource BoolToVisibilityConverter}}"
                                          DataContext="{Binding}" />
 
                     <!--  Tag Tile Border  -->
@@ -111,21 +111,5 @@
             <Image Source="/Resources/Images/forward_black.png"
                    Stretch="Fill" />
         </RepeatButton>
-
-        <!--  Add Tag Button  -->
-
-        <Button x:Name="AddTagButton"
-                Height="30"
-                Width="30"
-                Grid.Column="4"
-                BorderThickness="0"
-                ToolTip="Add Collection"
-                ToolTipService.InitialShowDelay="100"
-                Template="{StaticResource SearchButtonControlTemplate}"
-                Background="Transparent"
-                Command="{Binding CreateTagCommand}">
-            <Image Stretch="Fill"
-                   Source="/MpWpfApp;component/Resources/Images/add2.png" />
-        </Button>
     </Grid>
 </local:MpUserControl>

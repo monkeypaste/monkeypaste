@@ -11,34 +11,86 @@
              Closed="TagTile_ContextMenu_Closed"
              d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel,
                                               IsDesignTimeCreatable=False}">
+    <ContextMenu.Resources>
+        <local:MpBindingProxy x:Key="TagTileVmProxy" Data="{Binding}"/>
+    </ContextMenu.Resources>
     <MenuItem Header="Rename"
-              Icon="{Binding Source={StaticResource RenameIcon},
-                             Converter={StaticResource StringToIconConverter},
-                             Mode=OneWay}"
-              Command="{Binding PlacementTarget.RenameTagCommand,
-                                RelativeSource={RelativeSource Mode=FindAncestor,
-                                                               AncestorType=ContextMenu}}"
-              CommandParameter="{Binding TagId}" />
+                          Icon="{Binding Source={StaticResource RenameIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          Click="RenameMenuItem_Click" />
     <MenuItem Header="Assign Hotkey"
-              Icon="{Binding Source={StaticResource HotkeyIcon},
+                          Icon="{Binding Source={StaticResource HotkeyIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          InputGestureText="{Binding Data.ShortcutKeyString,
+                                                     Source={StaticResource TagTileVmProxy}}"
+                          Command="{Binding Data.AssignHotkeyCommand,
+                                            Source={StaticResource TagTileVmProxy}}" />
+    <MenuItem Header="Pin"
+              
+              Visibility="{Binding DataContext.IsPinned,
+                                   Converter={StaticResource BoolToVisibilityFlipConverter},
+                                   RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                  AncestorType=ContextMenu}}"
+              Icon="{Binding Source={StaticResource PinIcon},
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
-              InputGestureText="{Binding PlacementTarget.ShortcutKeyString,
-                                         RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                        AncestorType=ContextMenu}}"
-              Command="{Binding PlacementTarget.AssignHotkeyCommand,
-                                RelativeSource={RelativeSource Mode=FindAncestor,
-                                                               AncestorType=ContextMenu}}"
-              CommandParameter="{Binding TagId}" />
+              Command="{Binding ToggleTileIsPinnedCommand,
+                                Source={StaticResource TagTrayViewModel}}"
+              CommandParameter="{Binding}" />
+    <MenuItem Header="Unpin"
+              Visibility="{Binding DataContext.IsPinned,
+                                   Converter={StaticResource BoolToVisibilityConverter},
+                                   RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                  AncestorType=ContextMenu}}"
+              Icon="{Binding Source={StaticResource PinIcon},
+                             Converter={StaticResource StringToIconConverter},
+                             Mode=OneWay}"
+              Command="{Binding ToggleTileIsPinnedCommand,
+                                Source={StaticResource TagTrayViewModel}}"
+              CommandParameter="{Binding}" />
     <Separator />
     <MenuItem x:Name="ClipTileColorContextMenuItem"
-              Style="{StaticResource ColorPalleteMenuItemStyle}" />
+                          Style="{StaticResource ColorPalleteMenuItemStyle}" />
     <Separator />
+    <MenuItem Header="Link"
+                          Visibility="{Binding Data.IsUserTag,
+                                               Converter={StaticResource BoolToVisibilityConverter},
+                                               Source={StaticResource TagTileVmProxy}}">
+        <MenuItem.Resources>
+            <Style x:Key="TagExpressionMenuItemStyle"
+                               TargetType="{x:Type MenuItem}">
+                <Setter Property="Header"
+                                    Value="{Binding Header}" />
+                <Setter Property="Icon"
+                                    Value="{Binding Header,
+                                                    Converter={StaticResource FilePathStringToIconConverter}}" />
+                <Setter Property="Command"
+                                    Value="{Binding Command}" />
+                <Setter Property="CommandParameter"
+                                    Value="{Binding CommandParameter}" />
+                <Setter Property="ItemsSource"
+                                    Value="{Binding SubItems}" />
+            </Style>
+
+        </MenuItem.Resources>
+        <!--<local:MpContextMenuView Header="Directory"
+                              ItemContainerStyle="{StaticResource TagExpressionMenuItemStyle}"
+                              ItemsSource="{Binding Data,
+                                                    Converter={StaticResource TagExpressionToDirectoryMenuItemViewModelCollectionConverter},
+                                                    Source={StaticResource TagTileVmProxy}}" />
+                    <MenuItem Header="Expression"
+                              ItemsSource="{Binding Data,
+                                                    Converter={StaticResource TagExpressionToDataFilterMenuItemViewModelCollectionConverter},
+                                                   Source={StaticResource TagTileVmProxy}}" />-->
+
+    </MenuItem>
+    <Separator Visibility="{Binding Data.IsUserTag, Converter={StaticResource BoolToVisibilityConverter}, Source={StaticResource TagTileVmProxy}}" />
     <MenuItem Header="Delete"
-              Icon="{Binding Source={StaticResource DeleteIcon},
-                             Converter={StaticResource StringToIconConverter},
-                             Mode=OneWay}"
-              Command="{Binding DeleteTagCommand,
-                                Source={StaticResource TagTrayViewModel}}"
-              CommandParameter="{Binding TagId}" />
+                          Icon="{Binding Source={StaticResource DeleteIcon},
+                                         Converter={StaticResource StringToIconConverter},
+                                         Mode=OneWay}"
+                          Click="DeleteMenuItem_Clicked" />
+
 </ContextMenu>

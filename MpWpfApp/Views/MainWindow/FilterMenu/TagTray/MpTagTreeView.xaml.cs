@@ -76,15 +76,7 @@ namespace MpWpfApp {
         }
 
         private void TagTray_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-            if(BindingContext.SelectedTagTile.TagId != MpTag.RootTagId) {
-                BindingContext.SelectTagCommand.Execute(null);
-            }
-        }
-
-        private void MpTagTileView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if((sender as FrameworkElement).DataContext is MpTagTileViewModel ttvm) {
-                e.Handled = ttvm.IsRootTagTile;
-            }
+            BindingContext.SelectTagCommand.Execute(null);
         }
     }
 }

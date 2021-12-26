@@ -15,8 +15,8 @@ namespace MonkeyPaste {
         public const int RecentTagId = 1;
         public const int AllTagId = 2;
         public const int FavoritesTagId = 3;
-        public const int HelpTagId = 4;
-        public const int RootTagId = 5;
+        //public const int HelpTagId = 4;
+        //public const int RootTagId = 5;
 
         #region Columns
         [PrimaryKey, AutoIncrement]
@@ -29,6 +29,30 @@ namespace MonkeyPaste {
 
         [Column("MpTagGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+       
+
+        [Column("SortIdx")]
+        public int TagSortIdx { get; set; } = 0;
+
+        [Column("HexColor")]
+        public string HexColor { get; set; }
+
+        public string TagName { get; set; } = string.Empty;
+
+        public int Pinned { get; set; } = 0;
+
+        #endregion
+
+        #region Fk Models
+        [ManyToMany(typeof(MpCopyItemTag))]
+        public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
+
+        //[OneToMany]
+        //public List<MpShortcut> Shortcuts { get; set; }
+        #endregion
+
+        #region Properties
 
         [Ignore]
         public Guid TagGuid {
@@ -43,22 +67,12 @@ namespace MonkeyPaste {
             }
         }
 
-        [Column("SortIdx")]
-        public int TagSortIdx { get; set; } = 0;
+        [Ignore]
+        public bool IsPinned {
+            get => Pinned == 1;
+            set => Pinned = value == true ? 1:0;
+        }
 
-        [Column("HexColor")]
-        public string HexColor { get; set; }
-
-        public string TagName { get; set; } = string.Empty;
-
-        #endregion
-
-        #region Fk Models
-        [ManyToMany(typeof(MpCopyItemTag))]
-        public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
-
-        //[OneToMany]
-        //public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
         #region Statics
