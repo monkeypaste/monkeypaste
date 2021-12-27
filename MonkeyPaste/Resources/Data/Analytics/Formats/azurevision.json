@@ -1,0 +1,112 @@
+{
+  "parameters": [
+    {
+      "label": "Language",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 1,
+      "sortOrderIdx": 0,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isValueDeferred": false,
+      "values": [
+        {
+          "label": "English",
+          "value": "en",
+          "isDefault": true
+        },
+        {
+          "label": "Spanish",
+          "value": "es",
+          "isDefault": false
+        },
+        {
+          "label": "Japanese",
+          "value": "ja",
+          "isDefault": false
+        },
+        {
+          "label": "Portuguese",
+          "value": "pt",
+          "isDefault": false
+        },
+        {
+          "label": "Simplified Chinese",
+          "value": "zh",
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "label": "Visual Features",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 2,
+      "sortOrderIdx": 1,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isValueDeferred": false,
+      "isMultiValue": true,
+      "values": [
+        {
+          "label": "Adult",
+          "value": "adult",
+          "isDefault": false
+        },
+        {
+          "label": "Brands",
+          "value": "brands",
+          "isDefault": false
+        },
+        {
+          "label": "Categories",
+          "value": "categories",
+          "isDefault": true
+        },
+        {
+          "label": "Description",
+          "value": "description",
+          "isDefault": true
+        },
+        {
+          "label": "Faces",
+          "value": "faces",
+          "isDefault": true
+        },
+        {
+          "label": "Objects",
+          "value": "objects",
+          "isDefault": true
+        },
+        {
+          "label": "Tags",
+          "value": "tags",
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "label": "Details",
+      "parameterType": "ComboBox",
+      "valueType": "PlainText",
+      "enumId": 3,
+      "sortOrderIdx": 2,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isValueDeferred": false,
+      "isMultiValue": true,
+      "values": [
+        {
+          "label": "Celebrities",
+          "value": "celebrities",
+          "isDefault": true
+        },
+        {
+          "label": "Landmarks",
+          "value": "landmarks",
+          "isDefault": true
+        }
+      ]
+    }
+  ]
+}

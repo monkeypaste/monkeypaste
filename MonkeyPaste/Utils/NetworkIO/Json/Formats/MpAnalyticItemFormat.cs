@@ -25,6 +25,23 @@ namespace MonkeyPaste {
         Image,
         Custom
     }
+    //adult,brands,categories,description,faces,objects,tags
+    public class MpAnalyticItemParameterValue {
+        [JsonProperty("value")]
+        public string Value { get; set; } = string.Empty;
+
+        [JsonProperty("label")]
+        public string Label { get; set; } = string.Empty;
+
+        [JsonProperty("isDefault")]
+        public bool IsDefault { get; set; } = false;
+
+        [JsonProperty("isMinimum")]
+        public bool IsMinimum { get; set; } = false;
+
+        [JsonProperty("isMaximum")]
+        public bool IsMaximum { get; set; } = false;
+    }
 
     public class MpAnalyticItemParameter {
         [JsonProperty("label")]
@@ -51,34 +68,17 @@ namespace MonkeyPaste {
         [JsonProperty("isRequired")]
         public bool IsRequired { get; set; } = false;
 
+        [JsonProperty("isMultiValue")]
+        public bool IsMultiValue { get; set; } = false;
+
         [JsonProperty("formatInfo")]
         public string FormatInfo { get; set; } = string.Empty;
-
-        //[JsonProperty("analyticItemId")]
-        //public int AnalyticItemId { get; set; }
 
         [JsonProperty("isValueDeferred")]
         public bool IsValueDeferred { get; set; } = false;
 
         [JsonProperty("values")]
         public List<MpAnalyticItemParameterValue> Values { get; set; } = new List<MpAnalyticItemParameterValue>();
-    }
-
-    public class MpAnalyticItemParameterValue  {
-        [JsonProperty("value")]
-        public string Value { get; set; } = string.Empty;
-
-        [JsonProperty("label")]
-        public string Label { get; set; } = string.Empty;
-
-        [JsonProperty("isDefault")]
-        public bool IsDefault { get; set; } = false;
-
-        [JsonProperty("isMinimum")]
-        public bool IsMinimum { get; set; } = false;
-
-        [JsonProperty("isMaximum")]
-        public bool IsMaximum { get; set; } = false;
     }
 
     public class MpAnalyticItemFormat {

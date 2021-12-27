@@ -44,23 +44,18 @@ using WindowsInput;
 using Microsoft.Win32;
 using System.Net.Sockets;
 using MonkeyPaste;
-using Yolov5Net.Scorer.Models;
-using Yolov5Net.Scorer;
-
 
 namespace MpWpfApp {
     public class MpHelpers : MpSingleton<MpHelpers> {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
-        private YoloScorer<YoloCocoP5Model> yoloWrapper = null;
 
         public async Task Init() {
             await Task.Run(() => {
                 Rand = new Random((int)DateTime.Now.Ticks);
                 // SharedRtb = new RichTextBox();
                 //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
-                yoloWrapper = new YoloScorer<YoloCocoP5Model>();
                 _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
             });
         }
@@ -1772,47 +1767,6 @@ namespace MpWpfApp {
                 return MpHelpers.Instance.ConvertWinFormsColorToSolidColorBrush(cd.Color);
             }
             return null;
-        }
-
-        public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
-            var detectedObjectList = new List<MpDetectedImageObject>();
-            await Dispatcher.CurrentDispatcher.InvokeAsync(
-                () => {
-                    yoloWrapper = new YoloScorer<YoloCocoP5Model>("Assets/Weights/yolov5s.onnx");
-                    using (var bmp = MpHelpers.Instance.ConvertBitmapSourceToBitmap(MpHelpers.Instance.ConvertByteArrayToBitmapSource(image))) {
-                        List<YoloPrediction> predictions = yoloWrapper.Predict(bmp);
-                        using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                            foreach (var item in predictions) // iterate predictions to draw results
-                            {
-                                double score = Math.Round(item.Score, 2);
-
-                                if(score >= confidence) {
-                                    detectedObjectList.Add(new MpDetectedImageObject(
-                                                    0,
-                                                    0,
-                                                    item.Score,
-                                                    item.Rectangle.X,
-                                                    item.Rectangle.Y,
-                                                    item.Rectangle.Width,
-                                                    item.Rectangle.Height,
-                                                    item.Label.Name));
-
-                                    graphics.DrawRectangles(
-                                        new System.Drawing.Pen(item.Label.Color, 1),
-                                        new[] { item.Rectangle });
-
-                                    var (x, y) = (item.Rectangle.X - 3, item.Rectangle.Y - 23);
-
-                                    graphics.DrawString($"{item.Label.Name} ({score})",
-                                        new System.Drawing.Font("Arial", 16, System.Drawing.GraphicsUnit.Pixel), new System.Drawing.SolidBrush(item.Label.Color),
-                                        new System.Drawing.PointF(x, y));
-                                }
-                            }
-
-                        }
-                    }
-                }, DispatcherPriority.Background);
-            return detectedObjectList;
         }
 
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {

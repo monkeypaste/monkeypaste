@@ -63,8 +63,7 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
-    <None Remove="Resources\Data\Analytics\Formats\LanguageTranslator\azuretranslator.json" />
-    <None Remove="Resources\Data\Analytics\Formats\OpenAi\openai.json" />
+    <None Remove="Resources\Data\Analytics\Formats\azurevision.json" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
@@ -88,10 +87,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\LanguageTranslator\azuretranslator.json">
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\azurevision.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\OpenAi\openai.json">
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\azuretranslator.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\openai.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\yolo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />

@@ -358,6 +358,16 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpDetectedImageObject
+
+        public async Task<List<MpDetectedImageObject>> GetDetectedImageObjects(int ciid) {
+            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=?");
+            var result = await MpDb.Instance.QueryAsync<MpDetectedImageObject>(query,ciid);
+            return result;
+        }
+
+        #endregion
+
         #region MpCopyItemTag
 
         public async Task<List<int>> GetCopyItemIdsForTagAsync(int tagId) {

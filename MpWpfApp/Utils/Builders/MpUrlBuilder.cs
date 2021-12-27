@@ -41,7 +41,7 @@ namespace MpWpfApp {
             }
             string sourceUrlTitle = title;
             if(string.IsNullOrEmpty(sourceUrlTitle)) {
-                await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(url);
+                sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(url);
             }
 
             var result = await MpUrl.Create(url, sourceUrlTitle, app);

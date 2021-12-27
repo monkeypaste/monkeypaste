@@ -12,11 +12,123 @@
                      HorizontalAlignment="Stretch"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid Background="DarkViolet">
+    <Grid x:Name="ParamGrid"
+          Background="DarkViolet">
         <Grid.Resources>
+            <Style x:Key="MultiSelectComboBox"
+                   TargetType="{x:Type ComboBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid SnapsToDevicePixels="true"
+                                  x:Name="MainGrid"
+                                  Height="Auto"
+                                  Width="Auto">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="0" />
+                                </Grid.ColumnDefinitions>
+                                <Popup AllowsTransparency="true"
+                                       IsOpen="{Binding Path=IsDropDownOpen,
+                                                        RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Bottom"
+                                       PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+                                       Margin="1"
+                                       x:Name="PART_Popup"
+                                       Grid.ColumnSpan="2">
+                                    <Border x:Name="DropDownBorder"
+                                            MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                            MinWidth="{Binding Path=ActualWidth,
+                                                               ElementName=MainGrid}">
+                                        <ScrollViewer CanContentScroll="true">
+                                            <ListBox x:Name="lstBox"
+                                                     Loaded="lstBox_Loaded"
+                                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                     KeyboardNavigation.DirectionalNavigation="Contained"
+                                                     SelectionMode="Multiple"
+                                                     SelectionChanged="lstBox_SelectionChanged"
+                                                     ItemsSource="{TemplateBinding ItemsSource}" />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                                <ToggleButton Background="{TemplateBinding Background}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              Grid.ColumnSpan="2"
+                                              IsChecked="{Binding Path=IsDropDownOpen,
+                                                                  Mode=TwoWay,
+                                                                  RelativeSource={RelativeSource TemplatedParent}}"
+                                              Style="{DynamicResource ToggleButtonStyle}" />
+                                <ItemsControl IsHitTestVisible="false"
+                                              ItemsSource="{Binding Path=SelectedItems,
+                                                                    ElementName=lstBox}"
+                                              Margin="4,0,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel IsItemsHost="True"
+                                                        Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="MultiSelectComboBoxParameter"
+                          DataType="local:MpMultiSelectComboBoxParameterViewModel">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Column="0"
+                               DockPanel.Dock="Left"
+                               Margin="0,0,7,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               Foreground="Black"
+                               Text="{Binding Label}" />
+                    <Border DockPanel.Dock="Right"
+                            BorderThickness="0"
+                            CornerRadius="2"
+                            ToolTipService.InitialShowDelay="2"
+                            ToolTip="{Binding ParameterTooltipText}"
+                            BorderBrush="{Binding ParameterBorderBrush}">
+                        <ComboBox x:Name="MultiSelectComboBox"
+                                  Loaded="MultiSelectComboBox_Loaded"
+                                  ItemsSource="{Binding ValueViewModels}"
+                                  Style="{StaticResource MultiSelectComboBox}"
+                                  HorizontalAlignment="Right"
+                                  MinWidth="80">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Label}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <!--<ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            NotifyOnTargetUpdated=True}" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>-->
+                        </ComboBox>
+                        <!--<local:MpMultiComboBox ItemsSource="{Binding ValueViewModels}"
+                                               SelectionMode="Multiple"
+                                               SelectedItems="{Binding SelectedViewModels}"
+                                               HorizontalAlignment="Right"
+                                               MinWidth="80">
+                            <local:MpMultiComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Label}" />
+                                </DataTemplate>
+                            </local:MpMultiComboBox.ItemTemplate>
+                        </local:MpMultiComboBox>-->
+                    </Border>
+                </DockPanel>
+            </DataTemplate>
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
-                <DockPanel  LastChildFill="False">
+                <DockPanel LastChildFill="False">
                     <TextBlock Grid.Column="0"
                                DockPanel.Dock="Left"
                                Margin="0,0,7,0"
@@ -118,6 +230,7 @@
                 </DockPanel>
             </DataTemplate>
             <local:MpParameterViewSelector x:Key="ParameterViewSelector"
+                                           MultiSelectComboBoxTemplate="{StaticResource MultiSelectComboBoxParameter}"
                                            ComboBoxTemplate="{StaticResource ComboBoxParameter}"
                                            TextBoxTemplate="{StaticResource TextBoxParameter}"
                                            CheckBoxTemplate="{StaticResource CheckBoxParameter}"

@@ -263,7 +263,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext.IsAnyEditingTitle) {
+            if (BindingContext.IsAnyEditingTitle || BindingContext.ItemViewModels.Count == 0) {
                 e.Handled = false;
                 return;
             }

@@ -25,8 +25,7 @@ namespace MpWpfApp {
 
         public string ErrorMessage { get; private set; } = string.Empty;
 
-        public async Task<string> ExecuteRequest(MpBillableItem service, string requestBody, bool isSystemRequest) {
-            
+        public async Task<string> ExecuteRequest(MpBillableItem service, string requestBody, bool isSystemRequest) {            
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage()) {
                 try {

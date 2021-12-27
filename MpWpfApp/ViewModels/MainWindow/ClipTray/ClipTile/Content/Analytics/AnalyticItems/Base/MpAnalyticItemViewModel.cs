@@ -226,6 +226,25 @@ namespace MpWpfApp {
 
         #region MpAnalyticItem
 
+
+        public MpCopyItemType InputContentType { 
+            get {
+                if(AnalyticItem == null) {
+                    return MpCopyItemType.None;
+                }
+                return AnalyticItem.InputFormatType;
+            }
+        }
+
+        public MpOutputFormatType OutputFormatType {
+            get {
+                if (AnalyticItem == null) {
+                    return MpOutputFormatType.None;
+                }
+                return AnalyticItem.OutputFormatType;
+            }
+        }
+
         public string ItemIconBase64 {
             get {
                 if (AnalyticItem == null || AnalyticItem.Icon == null) {
@@ -264,7 +283,7 @@ namespace MpWpfApp {
                 if (AnalyticItem == null) {
                     return string.Empty;
                 }
-                return AnalyticItem.ParameterFormatJson;
+                return AnalyticItem.ParameterFormatResourcePath;
             }
         }
 
@@ -289,6 +308,7 @@ namespace MpWpfApp {
         public MpAnalyticItem AnalyticItem { get; set; }
         
         #endregion
+
         
         #region Http
         //public abstract MpHttpResponseBase ResponseObj { get; }
@@ -319,13 +339,25 @@ namespace MpWpfApp {
             IsBusy = true;
             AnalyticItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(ai.Id);
 
+            if(AnalyticItem.Icon == null) {
+                var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null);
+                AnalyticItem.Icon = url.Icon;
+                AnalyticItem.IconId = url.IconId;
+                await AnalyticItem.WriteToDatabaseAsync();
+                OnPropertyChanged(nameof(ItemIconBase64));
+            }
             // Init Presets
             PresetViewModels.Clear();
 
-            foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
-                var naipvm = await CreatePresetViewModel(preset);
+            if(AnalyticItem.Presets.Count == 0) {
+                var naipvm = await CreatePresetViewModel(null);
                 PresetViewModels.Add(naipvm);
-            }
+            } else {
+                foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
+                    var naipvm = await CreatePresetViewModel(preset);
+                    PresetViewModels.Add(naipvm);
+                }
+            }            
 
             PresetViewModels.OrderBy(x => x.SortOrderIdx);
 
@@ -410,6 +442,32 @@ namespace MpWpfApp {
 
         #endregion
 
+
+        protected virtual async Task ConvertToCopyItem(int parentCopyItemId, object resultData, object reqStr) {
+            var app = MpPreferences.Instance.ThisAppSource.App;
+            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr.ToString());
+            var source = await MpSource.Create(app, url);
+            var ci = await MpCopyItem.Create(source, resultData.ToString(), MpCopyItemType.RichText);
+
+            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
+            if (scivm == null) {
+                return;
+            }
+            var sml = scivm.Parent.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+            for (int i = 0; i < sml.Count; i++) {
+                if (i == scivm.CompositeSortOrderIdx) {
+                    ci.CompositeParentCopyItemId = sml[0].Id;
+                    ci.CompositeSortOrderIdx = i + 1;
+                    await ci.WriteToDatabaseAsync();
+                } else if (i > scivm.CompositeSortOrderIdx) {
+                    sml[i].CompositeSortOrderIdx += 1;
+                    await sml[i].WriteToDatabaseAsync();
+                }
+            }
+
+            await scivm.Parent.InitializeAsync(sml[0]);
+        }
+
         #endregion
 
         #region Private Methods
@@ -467,31 +525,6 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task ConvertToCopyItem(int parentCopyItemId,string resultData, string reqStr) {
-            var app = MpPreferences.Instance.ThisAppSource.App;
-            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr);
-            var source = await MpSource.Create(app, url);
-            var ci = await MpCopyItem.Create(source, resultData, MpCopyItemType.RichText);
-
-            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
-            if(scivm == null) {
-                return;
-            }
-            var sml = scivm.Parent.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
-            for (int i = 0; i < sml.Count; i++) {
-                if (i == scivm.CompositeSortOrderIdx) {
-                    ci.CompositeParentCopyItemId = sml[0].Id;
-                    ci.CompositeSortOrderIdx = i + 1;
-                    await ci.WriteToDatabaseAsync();
-                } else if (i > scivm.CompositeSortOrderIdx) {
-                    sml[i].CompositeSortOrderIdx += 1;
-                    await sml[i].WriteToDatabaseAsync();
-                }
-            }
-
-            await scivm.Parent.InitializeAsync(sml[0]);
-        }
-        
         #endregion
 
         #region Commands
@@ -500,9 +533,9 @@ namespace MpWpfApp {
             async () => {
                 int sourceCopyItemId = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemId;
                 string analysisStr = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemData.ToPlainText();
-                var result = await ExecuteAnalysis(analysisStr) as Tuple<string,MpJsonMessage>;
+                var result = await ExecuteAnalysis(analysisStr) as Tuple<object,object>;
 
-                await ConvertToCopyItem(sourceCopyItemId,result.Item1, result.Item2.Serialize());
+                await ConvertToCopyItem(sourceCopyItemId,result.Item1, result.Item2);
             },CanExecuteAnalysis);
 
         protected abstract Task<object> ExecuteAnalysis(object obj);
@@ -510,7 +543,8 @@ namespace MpWpfApp {
         protected virtual bool CanExecuteAnalysis() {
             return SelectedPresetViewModel != null && 
                    SelectedPresetViewModel.IsAllValid && 
-                   MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 0;
+                   MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 0 &&
+                   MpClipTrayViewModel.Instance.SelectedContentItemViewModels.All(x=>x.CopyItemType == InputContentType);
         }
 
         public ICommand CreateNewPresetCommand => new RelayCommand(

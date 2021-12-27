@@ -134,15 +134,16 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
+            string formatJson = MonkeyPaste.MpHelpers.Instance.ReadTextFromResource(analyticItem.ParameterFormatResourcePath);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
-                analyticItem.ParameterFormatJson, new MpJsonEnumConverter()).ParameterFormats;
+                formatJson, new MpJsonEnumConverter()).ParameterFormats;
 
             foreach(var param in paramlist.OrderBy(x=>x.SortOrderIdx)) {
                 string defValue = string.Empty;
                 if(param.Values != null && param.Values.Count > 0) {
                     if(param.Values.Any(x=>x.IsDefault)) {
-                        defValue = param.Values.FirstOrDefault(x => x.IsDefault).Value;
+                        defValue = string.Join(",",param.Values.Where(x => x.IsDefault).Select(x=>x.Value));
                     } else {
                         defValue = param.Values[0].Value;
                     }
@@ -152,6 +153,8 @@ namespace MonkeyPaste {
                     newAnalyticItemPreset,
                     param.EnumId,
                     defValue);
+
+                newAnalyticItemPreset.PresetParameterValues.Add(paramPreset);
             }
             return newAnalyticItemPreset;
         }

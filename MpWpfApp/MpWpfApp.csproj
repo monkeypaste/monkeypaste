@@ -138,6 +138,7 @@
     <Compile Include="Behaviors\Input\MpKeyGestureBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
+    <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpTileResizeBehavior.cs" />
@@ -145,12 +146,17 @@
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
+    <Compile Include="Controls\MpMoveThumb.cs" />
+    <Compile Include="Controls\MpResizeThumb.cs" />
+    <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
+    <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
+    <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
     <Compile Include="Converters\MpBoolToCursorConverter.cs" />
@@ -206,19 +212,26 @@
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
+    <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Translator\MpTranslatorViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Azure\Translator\MpTranslatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\MpSingleton.cs" />
     <Compile Include="Utils\MpWpfDbInfo.cs" />
@@ -497,6 +510,10 @@
     <Compile Include="Views\SystemTray\MpSystemTrayView.xaml.cs">
       <DependentUpon>MpSystemTrayView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\MultiSelectComboBox\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\MpAnimatedListBoxResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2413,7 +2430,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Data\" />
-    <Folder Include="Utils\Analytics\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />

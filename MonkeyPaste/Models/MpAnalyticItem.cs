@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpInputFormatType {
-        None = 0,
-        Text,
-        Image,
-        CustomFile
-    }
 
+    public enum MpOutputFormatType {
+        None = 0,
+        Text = 1,
+        Image = 2,
+        BoundingBox = 4,
+        CustomFile = 8
+    }
 
     public class MpAnalyticItem : MpDbModelBase {
         #region Columns
@@ -28,8 +29,11 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [Column("InputFormatTypeId")]
+        [Column("e_MpCopyItemType")]
         public int InputFormatTypeId { get; set; } = 0;
+
+        [Column("e_MpOutputFormatType")]
+        public int OutputFormatTypeId { get; set; } = 0;
 
         [Column("Title")]
         public string Title { get; set; } = string.Empty;
@@ -44,7 +48,7 @@ namespace MonkeyPaste {
 
         public string ApiKey { get; set; }
 
-        public string ParameterFormatJson { get; set; }
+        public string ParameterFormatResourcePath { get; set; }
         #endregion
 
         #region Fk Models
@@ -66,14 +70,22 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public MpInputFormatType InputFormatType {
+        public MpCopyItemType InputFormatType {
             get {
-                return (MpInputFormatType)InputFormatTypeId;
+                return (MpCopyItemType)InputFormatTypeId;
             }
             set {
-                if (InputFormatTypeId != (int)value) {
-                    InputFormatTypeId = (int)value;
-                }
+                InputFormatTypeId = (int)value;
+            }
+        }
+
+        [Ignore]
+        public MpOutputFormatType OutputFormatType {
+            get {
+                return (MpOutputFormatType)OutputFormatTypeId;
+            }
+            set {
+                OutputFormatTypeId = (int)value;
             }
         }
 
@@ -95,7 +107,8 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItem> Create(
             string endPoint,
             string apiKey,
-            MpInputFormatType format,
+            MpCopyItemType inputFormat,
+            MpOutputFormatType outputFormat,
             string title,
             string description,
             string parameterFormatResourcePath,
@@ -121,10 +134,11 @@ namespace MonkeyPaste {
                 ApiKey = apiKey,
                 IconId = icon.Id,
                 Icon = icon,
-                InputFormatType = format,
+                InputFormatType = inputFormat,
+                OutputFormatType = outputFormat,
                 Title = title,
                 Description = description,
-                ParameterFormatJson = parameterFormatResourcePath,
+                ParameterFormatResourcePath = parameterFormatResourcePath,
                 SortOrderIdx = sortOrderIdx
             };
 

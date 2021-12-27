@@ -28,13 +28,14 @@ namespace MpWpfApp {
         double ds = 0;
 
         private int _detailIdx = 0;
-                
+
         #endregion
 
         #region Properties
 
         #region View Models
 
+        public MpDetectedImageObjectCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
         private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
         public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
@@ -271,6 +272,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
         public bool IsOverHyperlink { get; set; } = false;
 
@@ -631,6 +634,12 @@ namespace MpWpfApp {
 
             CycleDetailCommand.Execute(null);
 
+            if(CopyItemType == MpCopyItemType.Image) {
+                DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(this);
+                await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
+                OnPropertyChanged(nameof(HasDetectedObjects));
+            }
+
             RequestUiUpdate();
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
@@ -649,13 +658,13 @@ namespace MpWpfApp {
                 analyticTasks.Add(urlTask);
             }
 
-            if (CopyItem.ItemType == MpCopyItemType.Image) {
-                var itemBmpBytes = MpHelpers.Instance.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
-                ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
-                analyticTasks.Add(ocrTask);
-                cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
-                analyticTasks.Add(cvTask);
-            }
+            //if (CopyItem.ItemType == MpCopyItemType.Image) {
+            //    var itemBmpBytes = MpHelpers.Instance.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
+            //    ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
+            //    analyticTasks.Add(ocrTask);
+            //    cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
+            //    analyticTasks.Add(cvTask);
+            //}
 
             await Task.WhenAll(analyticTasks.ToArray());
 
@@ -848,25 +857,25 @@ namespace MpWpfApp {
         }
 
         private void UpdateDetails() {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.Instance.RunOnMainThread((System.Action)(async () => {
                 _detailIdx = 1;
                 switch (CopyItem.ItemType) {
-                    case MpCopyItemType.Image:
+                    case MonkeyPaste.MpCopyItemType.Image:
                         var bmp = CopyItem.ItemData.ToBitmapSource();
                         itemSize = new Size(bmp.Width, bmp.Height);
                         break;
-                    case MpCopyItemType.FileList:
+                    case MonkeyPaste.MpCopyItemType.FileList:
                         var fl = await MpCopyItemMerger.Instance.GetFileList(CopyItem);
                         fc = fl.Count;
                         ds = MpHelpers.Instance.FileListSize(fl.ToArray());
                         break;
-                    case MpCopyItemType.RichText:
+                    case MonkeyPaste.MpCopyItemType.RichText:
                         lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
                         cc = CopyItem.ItemData.ToPlainText().Length;
                         itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
                         break;
                 }
-            });
+            }));
         }
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {

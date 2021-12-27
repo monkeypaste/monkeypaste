@@ -23,6 +23,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
         #endregion
 
         #endregion
@@ -93,7 +94,7 @@ namespace MpWpfApp {
                 fromCode);
 
             IsBusy = false;
-            return new Tuple<string, MpJsonMessage>(
+            return new Tuple<object, object>(
                 translatedText,
                 new MpLangTranslateRequestFormat() {
                     FromCode = fromCode,

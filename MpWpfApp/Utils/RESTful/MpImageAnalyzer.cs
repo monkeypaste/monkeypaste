@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MonkeyPaste;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -28,13 +29,13 @@ namespace MpWpfApp {
         /// the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
-        public async Task<string> AnalyzeImage(byte[] byteData) {
+        public async Task<MpImageAnalysis> AnalyzeImage(byte[] byteData, MpAzureImageAnalysisRequest req) {
             try {
                 HttpClient client = new HttpClient();
 
                 // Request headers.
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
-                
+
                 // Request parameters. A third optional parameter is "details".
                 // The Analyze Image method returns information about the following
                 // visual features:
@@ -44,8 +45,17 @@ namespace MpWpfApp {
                 //              sentence in supported languages.
                 // Color:       determines the accent color, dominant color, 
                 //              and whether an image is black & white.
-                string requestParameters = "visualFeatures=Categories,Description,Color";
-
+                //string requestParameters = "visualFeatures=Categories,Description,Color";
+                string requestParameters = string.Empty;
+                if(req.VisualFeatures.Count > 0) {
+                    requestParameters = "visualFeatures=" + string.Join(",", req.VisualFeatures);
+                }
+                if (req.Details.Count > 0) {
+                    if (req.VisualFeatures.Count > 0) {
+                        requestParameters += "&";
+                    }
+                    requestParameters += "details=" + string.Join(",", req.Details);
+                }
                 // Assemble the URI for the REST API method.
                 string uri = _uriBase + "?" + requestParameters;
 
@@ -71,12 +81,12 @@ namespace MpWpfApp {
                 string contentString = await response.Content.ReadAsStringAsync();
 
                 // Display the JSON response.
-                MonkeyPaste.MpConsole.WriteLine("\nResponse:\n\n{0}\n",
-                    JToken.Parse(contentString).ToString());
+                //MonkeyPaste.MpConsole.WriteLine("\nResponse:\n\n{0}\n",
+                //    JToken.Parse(contentString).ToString());
 
-                return contentString;                                
-                //return JsonConvert.DeserializeObject<MpImageAnalysis>(contentString);
-
+                //return contentString;                                
+                var result = JsonConvert.DeserializeObject<MpImageAnalysis>(contentString);
+                return result;
             }
             catch (Exception e) {
                 MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);

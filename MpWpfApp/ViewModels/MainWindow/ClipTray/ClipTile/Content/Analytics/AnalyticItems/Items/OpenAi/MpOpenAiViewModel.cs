@@ -97,7 +97,7 @@ namespace MpWpfApp {
 
             IsBusy = false;
 
-            return new Tuple<string, MpJsonMessage>(resultData,jsonReq);
+            return new Tuple<object, object>(resultData,jsonReq);
         }
         #endregion
 

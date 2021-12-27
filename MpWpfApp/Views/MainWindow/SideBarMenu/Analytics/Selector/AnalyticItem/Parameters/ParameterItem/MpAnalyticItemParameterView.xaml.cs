@@ -22,5 +22,26 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
+        private void lstBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var lb = sender as ListBox;            
+
+            foreach(var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).ValueViewModels) {
+                aipvvm.IsSelected = lb.SelectedItems.Contains(aipvvm);
+            }
+        }
+
+        private void lstBox_Loaded(object sender, RoutedEventArgs e) {
+            //var lb = sender as ListBox;
+            //foreach(var svvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).SelectedViewModels) {
+            //    lb.SelectedItems.Add(svvm);
+            //}
+        }
+
+        private void MultiSelectComboBox_Loaded(object sender, RoutedEventArgs e) {
+            var mscb = sender as ComboBox;
+            foreach (var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).SelectedViewModels) {
+                ((ListBox)mscb.Template.FindName("lstBox", mscb)).SelectedItems.Add(aipvvm);
+            }
+        }
     }
 }

@@ -226,12 +226,19 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
+
             ParameterViewModels.Clear();
 
-            Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            if(aip == null) {
+                Preset = await MpAnalyticItemPreset.Create(Parent.AnalyticItem, "Default", Parent.AnalyticItem.Icon, true, false, 0);
+            } else {
+                Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            }
+
+            string formatJson = MonkeyPaste.MpHelpers.Instance.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
-                Preset.AnalyticItem.ParameterFormatJson, new MpJsonEnumConverter()).ParameterFormats;
+                formatJson, new MpJsonEnumConverter()).ParameterFormats;
 
             foreach (var param in paramlist.OrderBy(x => x.SortOrderIdx)) {
                 var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.EnumId);
@@ -253,7 +260,11 @@ namespace MpWpfApp {
 
             switch (aip.ParameterType) {
                 case MpAnalyticItemParameterType.ComboBox:
-                    naipvm = new MpComboBoxParameterViewModel(this);
+                    if(aip.IsMultiValue) {
+                        naipvm = new MpMultiSelectComboBoxParameterViewModel(this);
+                    } else {
+                        naipvm = new MpComboBoxParameterViewModel(this);
+                    }                    
                     break;
                 case MpAnalyticItemParameterType.Text:
                     naipvm = new MpTextBoxParameterViewModel(this);
@@ -282,7 +293,12 @@ namespace MpWpfApp {
             if (aipv != null) {
                 aip.Values.ForEach(x => x.IsDefault = x.Value == aipv.Value);
             } else if (aip.Values.Count > 0) {
-                aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
+                if(aip.IsMultiValue) {
+                    var mvl = aippv.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    aip.Values.ForEach(x => x.IsDefault = mvl.Any(y => y.ToLower() == x.Value.ToLower()));
+                } else {
+                    aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
+                }
             }
 
             await naipvm.InitializeAsync(aip);

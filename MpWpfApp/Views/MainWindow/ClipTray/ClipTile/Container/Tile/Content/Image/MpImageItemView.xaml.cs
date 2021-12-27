@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpImageItemView.xaml
     /// </summary>
-    public partial class MpImageItemView : MpContentUserControl<MpContentItemViewModel> {
+    public partial class MpImageItemView : MpUserControl<MpContentItemViewModel> {
         public MpImageItemView() : base() {
             InitializeComponent();
         }

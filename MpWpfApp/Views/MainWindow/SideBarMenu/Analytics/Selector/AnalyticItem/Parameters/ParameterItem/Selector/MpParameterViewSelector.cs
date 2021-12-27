@@ -36,16 +36,21 @@ namespace MpWpfApp {
             set { _sliderTemplate = value; }
         }
 
+        public DataTemplate MultiSelectComboBoxTemplate { get; set; }
+
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
                 return null;
             }
 
-            var aipvm = (item as MpAnalyticItemParameterViewModel);
+            var aipvm = item as MpAnalyticItemParameterViewModel;
             
             switch(aipvm.Parameter.ParameterType) {
                 case MpAnalyticItemParameterType.ComboBox:
+                    if (aipvm.Parameter.IsMultiValue) {
+                        return MultiSelectComboBoxTemplate;
+                    }
                     return ComboBoxTemplate;
                 case MpAnalyticItemParameterType.Text:
                     return TextBoxTemplate;

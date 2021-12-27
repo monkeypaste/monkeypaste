@@ -112,10 +112,11 @@
                     Margin="10,5,5,0">
             <Button x:Name="AddTagButton"
                     Visibility="{Binding IsSelected,
-                                         Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}"
+                                         Converter={StaticResource BoolToVisibilityConverter},
+                                         ConverterParameter={StaticResource Hide}}"
                     Height="30"
                     Width="30"
-                    ToolTip="Add Collection"                    
+                    ToolTip="Add Collection"
                     ToolTipService.InitialShowDelay="100"
                     Style="{StaticResource RoundedButton}"
                     Command="{Binding Parent.CreateTagCommand}">

@@ -37,7 +37,8 @@
                              Visibility="{Binding IsTrayEmpty,
                                                   Converter={StaticResource BoolToVisibilityFlipConverter},
                                                   ConverterParameter={StaticResource Hide}}"
-                             ItemsSource="{Binding Items, IsAsync=True}"
+                             ItemsSource="{Binding Items,
+                                                   IsAsync=True}"
                              Background="Transparent"
                              Loaded="ClipTray_Loaded"
                              IsSynchronizedWithCurrentItem="True"

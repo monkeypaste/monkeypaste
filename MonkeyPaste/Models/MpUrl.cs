@@ -83,9 +83,9 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(domainStr)) {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
-            } else if(app != null) {
+            } else {
                 var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
-                if(favIconImg64 == MpBase64Images.Instance.UnknownFavIcon) {
+                if(favIconImg64 == MpBase64Images.Instance.UnknownFavIcon && app != null) {
                     //url has no favicon so use application's icon
                     MpConsole.WriteLine($"Url: {urlPath} has no favicon, using app: {app.AppPath}");
                     newUrl.Icon = app.Icon;
@@ -94,7 +94,8 @@ namespace MonkeyPaste {
                     newUrl.Icon = await MpIcon.Create(favIconImg64);
                     newUrl.IconId = newUrl.Icon.Id;
                 }                
-            } else {
+            } 
+            if(newUrl.Icon == null) {
                 newUrl.Icon = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon;
                 newUrl.IconId = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.Id;
             }

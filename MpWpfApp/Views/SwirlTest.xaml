@@ -7,7 +7,7 @@
              Height="65"
              Width="270">
     <Canvas>
-        <Path x:Name="Layer0"  
+        <Path x:Name="Layer0"
               Stroke="#C0000000"
               StrokeThickness="1">
             <Path.Data>

@@ -1305,6 +1305,7 @@
         <local:MpBoolToIconSourceConverter x:Key="BoolToIconSourceConverter" />
         <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
         <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
+        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

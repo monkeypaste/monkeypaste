@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {
@@ -18,6 +19,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        #region View Models
+
+        public ObservableCollection<MpDetectedImageObjectViewModel> Items { get; set; } = new ObservableCollection<MpDetectedImageObjectViewModel>();
+
+        #endregion
+
         private BitmapSource _copyItemBmp = null;
         public BitmapSource CopyItemBmp {
             get {
@@ -69,86 +77,104 @@ namespace MpWpfApp {
         #region Public Methods
         public MpDetectedImageObjectCollectionViewModel() : base(null) {
         }
-        public MpDetectedImageObjectCollectionViewModel(MpContentItemViewModel parent, MpCopyItem ci, bool isEnabled = false) : base(parent) {
+        public MpDetectedImageObjectCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
+           
+        }
+
+        public async Task InitializeAsync(MpCopyItem ci, bool isEnabled = false) {
+            IsBusy = true;
+
             _isEnabled = isEnabled;
-            if(ci.ItemType != MpCopyItemType.Image) {
+            if (ci.ItemType != MpCopyItemType.Image) {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
             }
-            foreach(var dio in ci.ImageItemObjectList) {
-                dio.CopyItemId = ci.CopyItemId;
-                this.Add(new MpDetectedImageObjectViewModel(dio));
+            var iiol = await MpDataModelProvider.Instance.GetDetectedImageObjects(ci.Id);
+            foreach (var dio in iiol) {
+                var diovm = await CreateDetectedImageObjectViewModel(dio);
+                Items.Add(diovm);
             }
-            CopyItemBmp = ci.ItemBitmapSource;
+            
+            OnPropertyChanged(nameof(Items));
+
+            CopyItemBmp = ci.ItemData.ToBitmapSource();
+
+            IsBusy = false;
         }
 
-        public void ClipTileImageDetectedObjectItemscontrol_Loaded(object sender, RoutedEventArgs args) {
-            if(!_isEnabled) {
-                return;
-            }
-            var itemsControl = (ItemsControl)sender;
-            var itemsControlCanvas = (Canvas)itemsControl.FindName("ClipTileImageDetectedObjectsCanvas");
-            var vbGrid = itemsControl.GetVisualAncestor<Grid>();
-            var ctvm = (MpClipTileViewModel)vbGrid.DataContext;
+        public async Task<MpDetectedImageObjectViewModel> CreateDetectedImageObjectViewModel(MpDetectedImageObject dio) {
+            var diovm = new MpDetectedImageObjectViewModel(this);
+            await diovm.InitializeAsync(dio);
+            return diovm;
+        }
 
-            bool isCreatingNewItem = false;
+        //public void ClipTileImageDetectedObjectItemscontrol_Loaded(object sender, RoutedEventArgs args) {
+        //    if(!_isEnabled) {
+        //        return;
+        //    }
+        //    var itemsControl = (ItemsControl)sender;
+        //    var itemsControlCanvas = (Canvas)itemsControl.FindName("ClipTileImageDetectedObjectsCanvas");
+        //    var vbGrid = itemsControl.GetVisualAncestor<Grid>();
+        //    var ctvm = (MpClipTileViewModel)vbGrid.DataContext;
 
-            vbGrid.MouseMove += (s, e) => {
-                if (!ctvm.IsSelected && !ctvm.IsHovering) {
-                    Mouse.Capture(null);
-                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                    return;
-                }
-                foreach (var diovm in this) {
-                    if (diovm.IsHovering) {
-                        return;
-                    }
-                }
+        //    bool isCreatingNewItem = false;
+
+        //    vbGrid.MouseMove += (s, e) => {
+        //        if (!ctvm.IsSelected && !ctvm.IsHovering) {
+        //            Mouse.Capture(null);
+        //            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+        //            return;
+        //        }
+        //        foreach (var diovm in this) {
+        //            if (diovm.IsHovering) {
+        //                return;
+        //            }
+        //        }
                 
-                if(isCreatingNewItem) {
-                    Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
-                } else {
-                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                }                
-            };
+        //        if(isCreatingNewItem) {
+        //            Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
+        //        } else {
+        //            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+        //        }                
+        //    };
  
-            vbGrid.MouseLeftButtonDown += (s, e) => {
-                if (!ctvm.IsSelected) {
-                    return;
-                }
-                foreach (var diovm in this) {
-                    if (diovm.IsHovering) {
-                        return;
-                    }
-                }
-                //Mouse.Capture(vbGrid);
-                var p = Mouse.GetPosition(itemsControl);
-                this.Add(new MpDetectedImageObjectViewModel(
-                    new MpDetectedImageObject(0, ctvm.CopyItemId, 1, p.X, p.Y, 1, 1, "New Item"),
-                    true));
-                isCreatingNewItem = true;
-            };
+        //    vbGrid.MouseLeftButtonDown += (s, e) => {
+        //        if (!ctvm.IsSelected) {
+        //            return;
+        //        }
+        //        foreach (var diovm in this) {
+        //            if (diovm.IsHovering) {
+        //                return;
+        //            }
+        //        }
+        //        //Mouse.Capture(vbGrid);
+        //        var p = Mouse.GetPosition(itemsControl);
+        //        this.Add(new MpDetectedImageObjectViewModel(
+        //            new MpDetectedImageObject(0, ctvm.CopyItemId, 1, p.X, p.Y, 1, 1, "New Item"),
+        //            true));
+        //        isCreatingNewItem = true;
+        //    };
 
-            vbGrid.MouseLeftButtonUp += (s, e) => {
-                if (!ctvm.IsSelected) {
-                    return;
-                }
-                //Mouse.Capture(null);
-                var p = Mouse.GetPosition(itemsControl);
+        //    vbGrid.MouseLeftButtonUp += (s, e) => {
+        //        if (!ctvm.IsSelected) {
+        //            return;
+        //        }
+        //        //Mouse.Capture(null);
+        //        var p = Mouse.GetPosition(itemsControl);
                 
-                Application.Current.MainWindow.Cursor = Cursors.Arrow;
+        //        Application.Current.MainWindow.Cursor = Cursors.Arrow;
 
-                if (isCreatingNewItem) {
-                    var newItem = this[this.Count - 1];
-                    if (newItem.Width * newItem.Height < 10) {
-                        this.Remove(newItem);
-                    } else {
-                        newItem.IsNameReadOnly = false;
-                    }
-                    isCreatingNewItem = false;
-                }
-            };
-        }
+        //        if (isCreatingNewItem) {
+        //            var newItem = this[this.Count - 1];
+        //            if (newItem.Width * newItem.Height < 10) {
+        //                this.Remove(newItem);
+        //            } else {
+        //                newItem.IsNameReadOnly = false;
+        //            }
+        //            isCreatingNewItem = false;
+        //        }
+        //    };
+        //}
         #endregion
 
         #region Commands

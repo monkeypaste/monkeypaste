@@ -5,7 +5,7 @@ namespace MonkeyPaste {
         Task<MpAnalyticItem> Create(
             string endPoint,
             string apiKey,
-            MpInputFormatType format,
+            MpCopyItemType format,
             string title,
             string description,
             MpIIconBuilder iconBuilder);

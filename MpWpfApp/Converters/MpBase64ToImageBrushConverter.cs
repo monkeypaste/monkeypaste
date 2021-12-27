@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
-using Windows.Foundation.Collections;
+using System.Windows.Media;
 
 namespace MpWpfApp {
-
-    public class MpStringToImageSourceConverter : IValueConverter {
+    public class MpBase64ToImageBrushConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string valueStr) {
-                if(valueStr.StartsWith("pack")) {
-                    return valueStr;
-                }
-                return @"/Resources" + value.ToString();
+                var bmpSrc = valueStr.ToBitmapSource();
+                bmpSrc.Freeze();
+                return new ImageBrush() {
+                    ImageSource = bmpSrc,
+                    Stretch = Stretch.Fill,
+                    
+                };
             }
             return null;
         }

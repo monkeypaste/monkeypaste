@@ -786,7 +786,8 @@ namespace MonkeyPaste {
             var ai1 = await MpAnalyticItem.Create(
                         "https://api.cognitive.microsofttranslator.com/{0}",
                         MpPreferences.Instance.AzureCognitiveServicesKey,
-                        MpInputFormatType.Text,
+                        MpCopyItemType.RichText,
+                        MpOutputFormatType.Text,
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator",
                         MpHelpers.Instance.ReadTextFromResource(
@@ -796,7 +797,8 @@ namespace MonkeyPaste {
             var ai2 = await MpAnalyticItem.Create(
                         "https://api.openai.com/v1/",
                         MpPreferences.Instance.RestfulOpenAiApiKey,
-                        MpInputFormatType.Text,
+                        MpCopyItemType.RichText,
+                        MpOutputFormatType.Text,
                         "Open Ai",
                         "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
                         MpHelpers.Instance.ReadTextFromResource(

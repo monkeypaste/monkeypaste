@@ -87,6 +87,8 @@
                             <DataTemplate>
                                 <CheckBox HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
+                                          ToolTip="Quick Action?"
+                                          ToolTipService.InitialShowDelay="0"
                                           IsChecked="{Binding IsQuickAction,
                                                               Mode=TwoWay,
                                                               UpdateSourceTrigger=PropertyChanged,

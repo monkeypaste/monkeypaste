@@ -17,6 +17,7 @@ namespace MpWpfApp {
 
         public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
 
+
         public virtual MpAnalyticItemParameterValueViewModel CurrentValueViewModel {
             get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
             set {
@@ -55,6 +56,7 @@ namespace MpWpfApp {
         }
 
         public override string DefaultValue => ValueViewModels.FirstOrDefault(x => x.IsDefault)?.Value;
+
 
         #endregion
 
