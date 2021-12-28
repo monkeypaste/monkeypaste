@@ -44,6 +44,8 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
+            _defaultValue = aip.Values.FirstOrDefault(x => x.IsDefault).Value;
+
             //if(Parameter == null || Parameter.Values == null) {
             //    ResetToDefault();
             //} else {

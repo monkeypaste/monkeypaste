@@ -9,10 +9,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase<MpDetectedImageObjectCollectionViewModel> {
         #region Private Variables       
-        //private double _xr = 1, _yr = 1;
-        private bool _isMouseDown = false;
-        private bool _isDragging = false;
-        private bool _isDrawing = false;
+
         #endregion
 
         #region Properties
@@ -219,7 +216,6 @@ namespace MpWpfApp {
 
             await Task.Delay(1);
 
-            _isDrawing = isDrawing;
             DetectedImageObject = dio;
 
             IsBusy = false;

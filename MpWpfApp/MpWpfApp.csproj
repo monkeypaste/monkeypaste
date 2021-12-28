@@ -456,6 +456,9 @@
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
+      <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpMessageBox.xaml.cs">
       <DependentUpon>MpMessageBox.xaml</DependentUpon>
     </Compile>
@@ -687,6 +690,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

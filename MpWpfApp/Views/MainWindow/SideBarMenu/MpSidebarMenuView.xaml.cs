@@ -22,6 +22,8 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-
+        private void ManageAnalyticItemsContainerView_Loaded(object sender, RoutedEventArgs e) {
+            (sender as FrameworkElement).DataContext = MpAnalyticItemCollectionViewModel.Instance;
+        }
     }
 }

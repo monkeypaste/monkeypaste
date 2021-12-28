@@ -10,7 +10,6 @@ using System.Windows.Media;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
-using MonkeyPaste;
 using System.Web;
 
 namespace MpWpfApp {
@@ -562,7 +561,7 @@ namespace MpWpfApp {
             });
 
         public ICommand SelectPresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
-            async (selectedPresetVm) => {
+             (selectedPresetVm) => {
                 //if(!IsLoaded) {
                 //    await LoadChildren();
                 //}

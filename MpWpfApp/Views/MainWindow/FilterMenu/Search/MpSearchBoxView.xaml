@@ -18,9 +18,10 @@
                 Background="Transparent"
                 Foreground="Transparent"
                 BorderThickness="0"
+                Command="{Binding SaveSearchCommand}"
                 MouseEnter="SaveSearchButton_MouseEnter"
                 MouseLeave="SaveSearchButton_MouseLeave"
-                Visibility="{Binding HasCriteriaItems,
+                Visibility="{Binding CanAddCriteriaItem,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
                 Style="{StaticResource Transparent_Button}">
@@ -138,41 +139,8 @@
                             <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}" />
                         </Button.Background>
                     </Button>
-                    <!--  Add Or Clear Search Criteria Button  -->
-                    <!--
-                        Visibility="{Binding CanAddCriteriaItem,
-                        Converter={StaticResource BoolToVisibilityConverter}}"
-                    -->
-                    <Button x:Name="AddOrClearSearchCriteriaButton"
-                            BorderThickness="0"
-                            Width="40"
-                            Margin="5,0,0,0"
-                            Padding="5"
-                            Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
-                            Visibility="Collapsed"
-                            Style="{StaticResource SemiTransparentButton}">
-                        <Button.Background>
-                            <RadialGradientBrush GradientOrigin="0.5,0.5"
-                                                 Center="0.3,0.5"
-                                                 RadiusX="1.0"
-                                                 RadiusY="0.5">
-                                <RadialGradientBrush.GradientStops>
-                                    <GradientStop Color="DimGray"
-                                                  Offset="0" />
-                                    <GradientStop Color="Violet"
-                                                  Offset="1.0" />
-                                </RadialGradientBrush.GradientStops>
-                            </RadialGradientBrush>
-                        </Button.Background>
-                        <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
-                               Height="20"
-                               Width="30"
-                               Stretch="Uniform" />
-                    </Button>
-
                     <!--  Search Navigation Border  -->
-                    <Border Grid.Column="1"
-                            CornerRadius="10"
+                    <Border CornerRadius="10"
                             Visibility="{Binding IsMultipleMatches,
                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                             HorizontalAlignment="Left"
@@ -198,10 +166,22 @@
                                 <Image Source="/Resources/Images/forward_black.png" />
                             </Button>
                         </StackPanel>
-                    </Border>
-                </StackPanel>
+                    </Border>                    
+                </StackPanel>                
             </Grid>
         </local:MpClipBorder>
-
+        <!--  Add Or Clear Search Criteria Button  -->
+        <Button x:Name="AddOrClearSearchCriteriaButton"
+                            BorderThickness="0"
+                Margin="5"
+                            Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
+                            Visibility="{Binding CanAddCriteriaItem,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                            Template="{StaticResource SearchButtonControlTemplate}">
+            <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
+                               Height="20"
+                               Width="20"
+                               Stretch="Uniform" />
+        </Button>
     </StackPanel>
 </local:MpUserControl>

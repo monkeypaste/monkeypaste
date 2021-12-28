@@ -130,16 +130,16 @@ namespace MpWpfApp {
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            return;
+            //return;
 
-            MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                //check if property has affects child attribute
-                var affectsAttributes = GetType().GetProperty(propertyName).GetCustomAttributes<MpAffectsBaseAttribute>();
-                int affectCount = affectsAttributes.Sum(x => x.FindAndNotifyProperties(this, propertyName));
-                if (affectCount == 0 && ThrowOnInvalidPropertyName) {
-                    throw new Exception($"{this.GetType().Name}.{propertyName} has affects children with no children found");
-                }
-            }, System.Windows.Threading.DispatcherPriority.Normal);
+            //MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            //    //check if property has affects child attribute
+            //    var affectsAttributes = GetType().GetProperty(propertyName).GetCustomAttributes<MpAffectsBaseAttribute>();
+            //    int affectCount = affectsAttributes.Sum(x => x.FindAndNotifyProperties(this, propertyName));
+            //    if (affectCount == 0 && ThrowOnInvalidPropertyName) {
+            //        throw new Exception($"{this.GetType().Name}.{propertyName} has affects children with no children found");
+            //    }
+            //}, System.Windows.Threading.DispatcherPriority.Normal);
         }
 
 

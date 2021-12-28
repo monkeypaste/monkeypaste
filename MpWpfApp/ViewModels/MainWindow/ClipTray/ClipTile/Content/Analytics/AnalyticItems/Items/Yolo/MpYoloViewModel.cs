@@ -15,7 +15,6 @@ using Xamarin.Forms.Internals;
 using System.IO;
 using MpWpfApp.Properties;
 using System.Windows.Markup;
-using MonkeyPaste;
 
 namespace MpWpfApp {
 

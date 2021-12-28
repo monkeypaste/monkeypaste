@@ -41,6 +41,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
+        private double _lastSearchCriteriaHeight = 0;
 
         private double _startMainWindowTop;
         private double _endMainWindowTop;
@@ -234,7 +235,9 @@ namespace MpWpfApp {
 
             Application.Current.Resources["MainWindowViewModel"] = MpMainWindowViewModel.Instance;
 
-
+            MpMessenger.Instance.Register<MpMessageType>(
+                MpSearchBoxViewModel.Instance,
+                ReceivedSearchBoxViewModelMessage);
             
             IsMainWindowLoading = false;
         }
@@ -251,7 +254,7 @@ namespace MpWpfApp {
             }
         }
 
-        public void SetupMainWindowRect() {
+        public void SetupMainWindowRect(bool isAnimated = true) {
             switch (MpScreenInformation.TaskbarLocation) {
                 case MpTaskbarLocation.Bottom:
                     _startMainWindowTop = SystemParameters.WorkArea.Bottom; 
@@ -259,7 +262,7 @@ namespace MpWpfApp {
                     break;
             }
 
-            MainWindowTop = _startMainWindowTop;
+            MainWindowTop = isAnimated ? _startMainWindowTop:_endMainWindowTop;
         }
 
         #endregion
@@ -291,6 +294,23 @@ namespace MpWpfApp {
                 return;
             }
             _tempFilePathList.Add(fp.ToLower());
+        }
+        #endregion
+
+        #region Private Methods
+
+        private void ReceivedSearchBoxViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.SearchCriteriaItemsChanged:
+                    double yDiff = MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight - _lastSearchCriteriaHeight;
+
+                    MainWindowHeight += yDiff;
+                    SetupMainWindowRect(false);
+
+                    _lastSearchCriteriaHeight = MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
+                    //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
+                    break;
+            }
         }
         #endregion
 
@@ -334,9 +354,52 @@ namespace MpWpfApp {
         }
 
         public ICommand ShowWindowCommand => new RelayCommand(
-            async () => {
+            () => {
                 IsMainWindowOpening = true;
-                await MpHelpers.Instance.RunOnMainThreadAsync(ShowWindow,DispatcherPriority.Render);
+
+                //Ss = MpHelpers.Instance.CopyScreen();
+                //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
+
+
+
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.MainWindowOpening);
+
+                var mw = (MpMainWindow)Application.Current.MainWindow;
+                mw.Show();
+                mw.Activate();
+                mw.Visibility = Visibility.Visible;
+                mw.Topmost = true;
+
+                if (IsMainWindowInitiallyOpening) {
+                    //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
+                    IsMainWindowInitiallyOpening = false;
+                }
+
+                SetupMainWindowRect();
+
+                double tt = MpPreferences.Instance.ShowMainWindowAnimationMilliseconds;
+                double fps = 30;
+                double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+
+                var timer = new DispatcherTimer(DispatcherPriority.Normal);
+                timer.Interval = TimeSpan.FromMilliseconds(fps);
+
+                timer.Tick += (s, e32) => {
+                    if (MainWindowTop > _endMainWindowTop) {
+                        MainWindowTop += dt;
+                    } else {
+                        MainWindowTop = _endMainWindowTop;
+                        timer.Stop();
+                        IsMainWindowLoading = false;
+                        IsMainWindowOpening = false;
+                        IsMainWindowOpen = true;
+                        OnMainWindowShow?.Invoke(this, null);
+
+                        //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+                    }
+                };
+
+                timer.Start();
             },
             () => {
                 return (Application.Current.MainWindow == null ||
@@ -344,52 +407,6 @@ namespace MpWpfApp {
                    MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                    !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
-
-        private async Task ShowWindow() {
-            //Ss = MpHelpers.Instance.CopyScreen();
-            //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
-
-            
-
-            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.MainWindowOpening);
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            mw.Show();
-            mw.Activate();
-            mw.Visibility = Visibility.Visible;
-            mw.Topmost = true;
-
-            if(IsMainWindowInitiallyOpening) {
-                //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
-                IsMainWindowInitiallyOpening = false;
-            }
-            
-            SetupMainWindowRect();
-
-            double tt = MpPreferences.Instance.ShowMainWindowAnimationMilliseconds;
-            double fps = 30;
-            double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
-
-            var timer = new DispatcherTimer(DispatcherPriority.Normal);
-            timer.Interval = TimeSpan.FromMilliseconds(fps);
-            
-            timer.Tick += (s, e32) => {
-                if (MainWindowTop > _endMainWindowTop) {
-                    MainWindowTop += dt;
-                } else {
-                    MainWindowTop = _endMainWindowTop;
-                    timer.Stop();
-                    IsMainWindowLoading = false;
-                    IsMainWindowOpening = false;
-                    IsMainWindowOpen = true;
-                    OnMainWindowShow?.Invoke(this, null);
-
-                    //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
-                }
-            };
-            
-            timer.Start();            
-        }
 
         public ICommand HideWindowCommand => new RelayCommand<object>(
             async (args) => {

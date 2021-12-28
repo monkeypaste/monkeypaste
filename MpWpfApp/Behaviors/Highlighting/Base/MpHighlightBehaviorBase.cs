@@ -123,14 +123,15 @@ namespace MpWpfApp {
 
         public virtual async Task FindHighlighting() {
             await Task.Delay(5);
-            string st = MpDataModelProvider.Instance.QueryInfo.SearchText;
-            if(AssociatedObject.DataContext is MpContentItemViewModel civm && civm.CopyItemTitle == "Untitled650") {
-                //Debugger.Break();
+            if(AssociatedObject == null) {
+                // NOTE currently occurs during active search and tag changes
+                return;
             }
+            string st = MpDataModelProvider.Instance.QueryInfo.SearchText;
+
             _matches = MpHelpers.Instance.FindStringRangesFromPosition(
                 ContentRange.Start,
-                st);//,
-                //AssociatedObject.CTS.Token);
+                st);
 
             SelectedIdx = -1;
 

@@ -36,34 +36,30 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="1"
+        <ToggleButton x:Name="TagTreeToggleButton"
+                      Grid.Row="1"
                       ToolTipService.InitialShowDelay="0"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Collection Tree"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible,
-                                          Source={StaticResource TagTrayViewModel}}"
+                      Click="TagTreeToggleButton_Click"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton Grid.Row="2"
+        <ToggleButton x:Name="AnalyzerToggleButton" 
+                      Grid.Row="2" 
                       ToolTipService.InitialShowDelay="0"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible,
-                                          Source={StaticResource AnalyticItemCollectionViewModel},
-                                          Mode=TwoWay,
-                                          UpdateSourceTrigger=PropertyChanged,
-                                          NotifyOnSourceUpdated=True,
-                                          NotifyOnTargetUpdated=True}"
+                      Click="AnalyzerToggleButton_Click"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringToImageSourceConverter}}"

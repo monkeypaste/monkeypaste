@@ -28,7 +28,6 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpSearchCriteriaItemViewModel>();
 
-
         private ObservableCollection<MpSearchFilterViewModel> _filters;
         public ObservableCollection<MpSearchFilterViewModel> Filters {
             get {
@@ -108,7 +107,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
 
         #region Layout
 
@@ -354,9 +352,7 @@ namespace MpWpfApp {
             var sfvm = sender as MpSearchFilterViewModel;
             switch(e.PropertyName) {
                 case nameof(sfvm.IsChecked):
-                    if(sfvm.PreferenceName == nameof(MpPreferences.Instance.SearchByRegex)) {
-                        ValidateFilters();
-                    }
+                    ValidateFilters();
                     break;
             }
         }
@@ -369,6 +365,14 @@ namespace MpWpfApp {
                 cssfvm.IsEnabled = false;
             } else {
                 cssfvm.IsEnabled = true;
+            }
+
+            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByTextType));
+            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByImageType));
+            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByFileType));
+
+            if(!sbffvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
+                sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
             }
         }
 
@@ -434,7 +438,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsPlaceholderVisible));
                     OnPropertyChanged(nameof(CaretBrush));
                     break;
-
                 case nameof(HasCriteriaItems):
                     OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
                     break;
@@ -540,6 +543,7 @@ namespace MpWpfApp {
                 }
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             }, CanAddCriteriaItem);
 
         public ICommand AddSearchCriteriaItemCommand => new RelayCommand(
@@ -551,6 +555,7 @@ namespace MpWpfApp {
                 CriteriaItems.Add(nscivm);
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             },CanAddCriteriaItem);
 
         public ICommand RemoveSearchCriteriaItemCommand => new RelayCommand<MpSearchCriteriaItemViewModel>(
@@ -561,11 +566,21 @@ namespace MpWpfApp {
                     await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
                 }
                 await UpdateCriteriaSortOrder();
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
         public ICommand SaveSearchCommand => new RelayCommand(
             async () => {
-                await UserSearch.WriteToDatabaseAsync();
+                string searchName = UserSearch == null ? string.Empty : UserSearch.Name;
+                searchName = MpTextBoxMessageBox.ShowCustomMessageBox(searchName);
+                if(!string.IsNullOrEmpty(searchName)) {
+                    if(UserSearch == null) {
+                        UserSearch = await MpUserSearch.Create(searchName, DateTime.Now);
+                    } else {
+                        UserSearch.Name = searchName;
+                        await UserSearch.WriteToDatabaseAsync();
+                    }
+                }
             });
 
         #endregion

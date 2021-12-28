@@ -31,8 +31,7 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpTranslatorViewModel(MpAnalyticItemCollectionViewModel parent) : base(parent) {
-            PropertyChanged += MpTranslatorViewModel_PropertyChanged;
-        }
+         }
 
         #endregion
 
@@ -104,14 +103,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private void MpTranslatorViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                
-            }
-        }
-
-
-
+        
         #endregion
     }
 }

@@ -23,8 +23,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private bool _isSeqComplete = false;
-        private bool _isNewCombination = true;
 
         private bool _isReplacingShortcut = false;
         private bool _wasPreviouslyASequence = false;
@@ -213,7 +211,6 @@ namespace MpWpfApp {
             _assigningCommand = command;
             ShortcutDisplayName = shortcutName;
             //KeysString = keysList;
-            _isSeqComplete = true;
         }
 
         private void MpAssignShortcutModalWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -237,10 +234,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(KeyString));
             Validate();
             OnPropertyChanged(nameof(KeyItems));
-        }
-
-        private void SeqTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-            _isSeqComplete = true;
         }
 
         private void _windowRef_Closed(object sender, EventArgs e) {
@@ -306,8 +299,6 @@ namespace MpWpfApp {
             }
         }
         private void Clear() {
-            _isSeqComplete = false;
-            _isNewCombination = true;
             KeyList.Clear();
             KeyItems.Clear();
             Validate();

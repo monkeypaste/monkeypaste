@@ -21,31 +21,5 @@ namespace MpWpfApp {
         public MpAnalyticItemSelectorView() {
             InitializeComponent();
         }
-
-        private void AnalyticItemChooserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            BindingContext.Items.ForEach(x => x.IsSelected = false);
-            if(AnalyticItemChooserComboBox.SelectionBoxItem == null) {
-                return;
-            }
-            var saivm = BindingContext.Items.FirstOrDefault(x => x == AnalyticItemChooserComboBox.SelectionBoxItem);
-            if(saivm != null) {
-                saivm.IsSelected = true;
-            }
-        }
-
-        private void StackPanel_Loaded(object sender, RoutedEventArgs e) {
-            //BindingContext.PropertyChanged += BindingContext_PropertyChanged;
-        }
-
-        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(BindingContext.SelectedItem):
-                    int sIdx = AnalyticItemChooserComboBox.Items.IndexOf(BindingContext.SelectedItem);
-                    if(sIdx >= 0) {
-                        AnalyticItemChooserComboBox.SelectedIndex = sIdx;
-                    }
-                    break;
-            }
-        }
     }
 }

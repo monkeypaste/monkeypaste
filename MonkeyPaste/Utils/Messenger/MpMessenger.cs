@@ -31,7 +31,8 @@ namespace MonkeyPaste {
         Resizing,
         ResizeCompleted,
         SelectNextMatch,
-        SelectPreviousMatch
+        SelectPreviousMatch,
+        SearchCriteriaItemsChanged
     }
 
     public class MpMessenger : MpSingleton<MpMessenger> {

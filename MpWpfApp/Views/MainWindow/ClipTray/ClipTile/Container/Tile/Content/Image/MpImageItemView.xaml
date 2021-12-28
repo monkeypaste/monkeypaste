@@ -128,10 +128,6 @@
                                 <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
                                                       Data="{Binding}" />
                             </Border.Resources>
-                            <Border.Visibility>
-                                <Binding Path="Data.TileDetectedImageItemsVisibility"
-                                         Source="{StaticResource ClipTileProxy}" />
-                            </Border.Visibility>
                             <TextBox HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      HorizontalContentAlignment="Center"

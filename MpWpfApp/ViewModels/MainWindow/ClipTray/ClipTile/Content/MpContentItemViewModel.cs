@@ -1007,7 +1007,7 @@ namespace MpWpfApp {
              ()=>IsSelected);
 
         public ICommand ScrollDownCommand => new RelayCommand(
-            async () => {
+            () => {
                 NormalizedVerticalScrollOffset = Math.Min(0, NormalizedVerticalScrollOffset + KeyboardScrollAmount);
                 RequestScrollWheelChange(NormalizedVerticalScrollOffset);
             },
@@ -1022,7 +1022,7 @@ namespace MpWpfApp {
              () => IsSelected);
 
         public ICommand ScrollToEndCommand => new RelayCommand(
-            async () => {
+            () => {
                 NormalizedVerticalScrollOffset = 1;
                 RequestScrollWheelChange(NormalizedVerticalScrollOffset);
             },

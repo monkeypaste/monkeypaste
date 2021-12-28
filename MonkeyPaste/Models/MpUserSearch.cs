@@ -2,6 +2,7 @@
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpUserSearch : MpDbModelBase {
@@ -14,6 +15,8 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public string Name { get; set; }
+
+        public DateTime CreatedDateTime { get; set; }
 
         #endregion
 
@@ -42,7 +45,16 @@ namespace MonkeyPaste {
 
         #region Statics
 
+        public static async Task<MpUserSearch> Create(string name, DateTime timeCreated) {
+            var us = new MpUserSearch() {
+                UserSearchGuid = System.Guid.NewGuid(),
+                Name = name,
+                CreatedDateTime = timeCreated
+            };
+            await us.WriteToDatabaseAsync();
 
+            return us;
+        }
         #endregion
 
         public MpUserSearch() : base() { }

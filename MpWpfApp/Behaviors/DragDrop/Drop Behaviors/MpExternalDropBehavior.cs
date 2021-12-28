@@ -24,8 +24,6 @@ namespace MpWpfApp {
         public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
         #endregion
 
-        private IDataObject _ido;
-
         public override MpDropType DropType => MpDropType.External;
 
         public override FrameworkElement AdornedElement => AssociatedObject;

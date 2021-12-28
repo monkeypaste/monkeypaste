@@ -27,7 +27,7 @@ namespace MpWpfApp {
         public MpAnalyticItemPresetParameterValueViewModel() : base (null) { }
 
         public MpAnalyticItemPresetParameterValueViewModel(MpAnalyticItemViewModel parent) : base(parent) {
-            PropertyChanged += MpPresetParameterValueViewModel_PropertyChanged;
+            
         }
 
         #endregion
@@ -54,10 +54,6 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private void MpPresetParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-            } 
-        }
 
         #endregion
     }

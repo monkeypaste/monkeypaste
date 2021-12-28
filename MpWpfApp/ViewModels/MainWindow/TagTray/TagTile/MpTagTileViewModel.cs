@@ -664,7 +664,7 @@ namespace MpWpfApp {
             });
 
         public ICommand RenameTagCommand => new RelayCommand(
-            async () => {
+             () => {
                 _originalTagName = TagName;
                 IsEditing = true;
                 OnRequestSelectAll?.Invoke(this, null);

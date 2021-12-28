@@ -1247,7 +1247,8 @@
         <s:String x:Key="PinOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pinover.png</s:String>
         <s:String x:Key="PinDownIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindown.png</s:String>
         <s:String x:Key="PinDownOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindownover.png</s:String>
-
+        <s:String x:Key="PlusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add2.png</s:String>
+        <s:String x:Key="MinusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/minus2.png</s:String>
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->

@@ -136,7 +136,7 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight;
+        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight - MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
 
         public double PinTrayScreenWidth { get; set; }
 
@@ -631,7 +631,7 @@ namespace MpWpfApp {
 
         
 
-        public void OnClipboardChanged(object sender, Dictionary<string, string> cd) {
+        public void ClipboardChanged(object sender, Dictionary<string, string> cd) {
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await AddItemFromClipboard(cd);
             });
@@ -643,7 +643,7 @@ namespace MpWpfApp {
             return nctvm;
         }
 
-        public async Task<IDataObject> GetDataObjectByCopyItems(List<MpCopyItem> selectedModels, bool isDragDrop, bool isToExternalApp) {
+        public IDataObject GetDataObjectByCopyItems(List<MpCopyItem> selectedModels, bool isDragDrop, bool isToExternalApp) {
             IDataObject d = new DataObject();
             string rtf = string.Empty.ToRichText();
             string pt = string.Empty;
@@ -765,7 +765,7 @@ namespace MpWpfApp {
 
             selectedModels.Reverse();
 
-            var result = await GetDataObjectByCopyItems(selectedModels, isDragDrop, isToExternalApp);
+            var result = GetDataObjectByCopyItems(selectedModels, isDragDrop, isToExternalApp);
             return result;
         }
 
@@ -983,58 +983,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                return;
-                MpHelpers.Instance.RunOnMainThread(
-                    async () => {
-                    var civm = GetContentItemViewModelById(ci.Id);
-                    if (civm == null ||
-                        civm.Parent == null) {
-                        return;
-                    }
-                    var ctvm = civm.Parent;
-                    int tileIdx = Items.IndexOf(ctvm);
-                    int itemIdx = ctvm.ItemViewModels.IndexOf(civm);
-                    civm.IsSelected = false;
-                    if (ctvm.ItemViewModels.Count == 1) {
-                        //when removing multiple items wait until the last one to reset selection, prefering next item
-                        ctvm.IsSelected = false;
-                        int newSelectedIdx = tileIdx + 1;
-                        if (newSelectedIdx >= Items.Count) {
-                            //this was the last item 
-                            if (Items.Count == 1) {
-                                //there are no other items to select
-                                newSelectedIdx = -1;
-                            } else {
-                                //select previous item
-                                newSelectedIdx = tileIdx - 1;
-                            }
-                        }
-                        if (newSelectedIdx >= 0) {
-                            Items[newSelectedIdx].IsSelected = true;
-                        }
-                    } else if (ctvm.ItemViewModels.Count > 1 && ctvm.SelectedItems.Count == 0) {
-                        //when removing a composite item wait and not all removed, wait until last one and prefer selecting next item
-                        int newSubSelectedIdx = itemIdx + 1;
-                        if (newSubSelectedIdx >= ctvm.ItemViewModels.Count) {
-                            if (ctvm.ItemViewModels.Count == 1) {
-                                //no more items to sub select
-                                newSubSelectedIdx = -1;
-                            } else {
-                                newSubSelectedIdx = itemIdx - 1;
-                            }
-                            if (newSubSelectedIdx >= 0) {
-                                ctvm.ItemViewModels[newSubSelectedIdx].IsSelected = true;
-                            }
-                        }
-                    }
-                    ctvm.ItemViewModels.Remove(civm);
-                    if (ctvm.ItemViewModels.Count == 0) {
-                        Items.Move(tileIdx, (int)(Items.Count - 1));
-                        await ctvm.InitializeAsync(null);
-                    }
-
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
-                });
+                
             }
         }
 
@@ -1260,7 +1209,7 @@ namespace MpWpfApp {
                 int[] ciidl = args is int[]? args as int[] : new int[] { (int)args };
 
                 var cil = await MpDataModelProvider.Instance.GetCopyItemsByIdList(ciidl.ToList());
-                var pasteDataObject = await GetDataObjectByCopyItems(cil, false, true);
+                var pasteDataObject = GetDataObjectByCopyItems(cil, false, true);
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
             },
             (args) => args != null && (args is int || args is int[]));
@@ -1291,6 +1240,9 @@ namespace MpWpfApp {
             },
             (addToCurrentTag) => {
                 if (_newModels.Count == 0) {
+                    return false;
+                }
+                if(!string.IsNullOrEmpty(MpSearchBoxViewModel.Instance.LastSearchText)) {
                     return false;
                 }
                 if (MpDataModelProvider.Instance.QueryInfo.SortType == MpContentSortType.Manual) {
@@ -1552,7 +1504,7 @@ namespace MpWpfApp {
              },()=>SelectedItems.Count == 1);
 
         public ICommand ScrollDownCommand => new RelayCommand(
-            async () => {
+             () => {
                 PrimaryItem.ScrollDownCommand.Execute(null);
             }, () => SelectedItems.Count == 1);
 

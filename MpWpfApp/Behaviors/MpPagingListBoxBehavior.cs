@@ -12,8 +12,6 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpPagingListBoxBehavior : MpSingletonBehavior<ScrollViewer,MpPagingListBoxBehavior> {
-        private static readonly Lazy<MpPagingListBoxBehavior> _Lazy = new Lazy<MpPagingListBoxBehavior>(() => new MpPagingListBoxBehavior());
-        public static MpPagingListBoxBehavior Instance { get { return _Lazy.Value; } }
         
         #region Private Variables
 
@@ -172,7 +170,7 @@ namespace MpWpfApp {
 
 
         private async Task PerformPageJump() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
 
                 Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
 

@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUserSearch UserSearch { get; set; }
 
         #endregion

@@ -269,6 +269,10 @@ namespace MpWpfApp {
                 case nameof(IsVisible):
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                    
+                    if(IsVisible) {
+                        MpAnalyticItemCollectionViewModel.Instance.IsVisible = false;
+                    }
                     break;
             }
         }
@@ -336,7 +340,7 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
-            async (args) => {
+            (args) => {
                 var pctvm = args as MpTagTileViewModel;
                 pctvm.IsPinned = !pctvm.IsPinned;
 

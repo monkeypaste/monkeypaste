@@ -28,15 +28,14 @@
             <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,
-                                                      Converter={StaticResource BoolToVisibilityConverter},
-                                                      Source={StaticResource TagTrayViewModel}}"
+                                                      Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{Binding TagTrayViewModel,
                                                        IsAsync=True}" />
-            <local:MpManageAnalyticItemsContainerView MinWidth="100"
+            <local:MpManageAnalyticItemsContainerView x:Name="ManageAnalyticItemsContainerView" 
+                                                      MinWidth="100"
+                                                      DataContext="{Binding AnalyticItemCollectionViewModel}"
                                                       Visibility="{Binding IsVisible,
-                                                                           Converter={StaticResource BoolToVisibilityConverter},
-                                                                           Source={StaticResource AnalyticItemCollectionViewModel}}"
-                                                      DataContext="{Binding AnalyticItemCollectionViewModel}" />
+                                                                           Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
     </Grid>
 

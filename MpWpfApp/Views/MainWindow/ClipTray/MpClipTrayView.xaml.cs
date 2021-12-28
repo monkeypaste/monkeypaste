@@ -32,7 +32,7 @@ namespace MpWpfApp {
 
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             MpClipboardManager.Instance.Init();
-            MpClipboardManager.Instance.ClipboardChanged += BindingContext.OnClipboardChanged;
+            MpClipboardManager.Instance.ClipboardChanged += BindingContext.ClipboardChanged;
          
             if (MpPreferences.Instance.IsInitialLoad) {
                 BindingContext.InitIntroItems();

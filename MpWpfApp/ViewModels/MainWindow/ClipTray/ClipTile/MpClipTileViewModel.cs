@@ -52,24 +52,24 @@ using System.Speech.Synthesis;
         #region Properties
 
         #region Property Reflection Referencer
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
+        //public object this[string propertyName] {
+        //    get {
+        //        // probably faster without reflection:
+        //        // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+        //        // instead of the following
+        //        Type myType = typeof(MpClipTileViewModel);
+        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+        //        if (myPropInfo == null) {
+        //            throw new Exception("Unable to find property: " + propertyName);
+        //        }
+        //        return myPropInfo.GetValue(this, null);
+        //    }
+        //    set {
+        //        Type myType = typeof(MpClipTileViewModel);
+        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+        //        myPropInfo.SetValue(this, value, null);
+        //    }
+        //}
         #endregion
 
         #region View Models
@@ -977,7 +977,7 @@ using System.Speech.Synthesis;
         }
 
         public void RequestFocus() {
-            //OnFocusRequest?.Invoke(this, null);
+            OnFocusRequest?.Invoke(this, null);
         }
 
         #endregion
@@ -1194,7 +1194,7 @@ using System.Speech.Synthesis;
                         //ClearSelection();
                     } else {
                         LastSelectedDateTime = DateTime.Now;
-                        RequestFocus();
+                        //RequestFocus();
                         if(IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
@@ -1303,7 +1303,7 @@ using System.Speech.Synthesis;
              ()=>IsSelected);
 
         public ICommand ScrollDownCommand => new RelayCommand(
-            async () => {
+            () => {
                 if (SelectedItems.Count == 0) {
                     ResetSubSelection(false);
                 }

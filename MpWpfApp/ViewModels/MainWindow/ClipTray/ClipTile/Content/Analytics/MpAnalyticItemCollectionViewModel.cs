@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,14 +111,19 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpAnalyticItemCollectionViewModel() : base() {
+
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
         }
+
 
         #endregion
 
         #region Public Methods
 
         public async Task Init() {
+            if (this != MpAnalyticItemCollectionViewModel.Instance) {
+                Debugger.Break();
+            }
             IsBusy = true;
 
             Items.Clear();
@@ -163,18 +169,18 @@ namespace MpWpfApp {
             return aivm;
         }
 
-        private async void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
                 case nameof(IsVisible):
-                    if(IsVisible && Items.Count == 0) {
-                        await Init();
-                    }
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
+                    if (IsVisible) {
+                        MpTagTrayViewModel.Instance.IsVisible = false;
+                    }
                     if(SelectedItem == null) {
                         Items[0].IsSelected = true;
                         SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = false);
@@ -191,9 +197,9 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ManageItemCommand => new RelayCommand<int>(
+        public ICommand ManageItemCommand => new RelayCommand<object>(
             (itemId) => {
-                Items.ForEach(x => x.IsSelected = x.AnalyticItemId == itemId);
+                Items.ForEach(x => x.IsSelected = x.AnalyticItemId == (int)itemId);
                 SelectedItem.ManageAnalyticItemCommand.Execute(null);
             }, (itemId) => itemId != null);
 

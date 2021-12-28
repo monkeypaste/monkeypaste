@@ -11,8 +11,7 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpRtbViewDropBehavior : MpDropBehaviorBase<MpRtbView> {
-        private object _dataContext;
-
+        
         public override bool IsEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Content;
@@ -150,7 +149,7 @@ namespace MpWpfApp {
             //reverse drag items and merge incrementally
             dragModels.Reverse();
 
-            foreach (var dragModel in dragModels) {
+            foreach (var dragModel in dragModels.ToList()) {
                 await MergeContentItem(dragModel, isCopy);
             }
 

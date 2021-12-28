@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpSearchBoxView.xaml
     /// </summary>
     public partial class MpSearchBoxView : MpUserControl<MpSearchBoxViewModel> {
-        private ContextMenu searchByContextMenu;
+        private ContextMenu _searchByContextMenu;
 
         public MpSearchBoxView() {
             InitializeComponent();
@@ -26,10 +27,8 @@ namespace MpWpfApp {
         private void SearchViewContainerStackPanel_Loaded(object sender, RoutedEventArgs e) {
             //SearchBox.Focus();
 
-            searchByContextMenu = new ContextMenu();
-
-            foreach (var sfvm in BindingContext.Filters) {
-                searchByContextMenu.Items.Add(CreateSearchByMenuItem(sfvm));
+            if(_searchByContextMenu == null) {
+                InitContextMenu();
             }
         }
 
@@ -73,10 +72,23 @@ namespace MpWpfApp {
         }
 
         private void SearchDropDownButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            SearchDropDownButton.ContextMenu = searchByContextMenu;
+            SearchDropDownButton.ContextMenu = _searchByContextMenu;
             SearchDropDownButton.ContextMenu.PlacementTarget = SearchDropDownButton;
             SearchDropDownButton.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Top;
             SearchDropDownButton.ContextMenu.IsOpen = true;
+        }
+
+        private void InitContextMenu() {
+            MpHelpers.Instance.RunOnMainThread(async () => {
+                _searchByContextMenu = new ContextMenu();
+
+                foreach (var sfvm in BindingContext.Filters) {
+                    _searchByContextMenu.Items.Add(CreateSearchByMenuItem(sfvm));
+                }
+                _searchByContextMenu.Items.Add(new Separator());
+                var picker = await CreateSavedSearchPicker();
+                _searchByContextMenu.Items.Add(picker);
+            });
         }
 
         private object CreateSearchByMenuItem(MpSearchFilterViewModel sfvm) {
@@ -105,6 +117,29 @@ namespace MpWpfApp {
                 menuItem.Icon = cb;
                 menuItem.Header = l;
             }
+
+            return menuItem;
+        }
+
+        private async Task<object> CreateSavedSearchPicker() {
+            var usl = await MpDb.Instance.GetItemsAsync<MpUserSearch>();
+
+            var comboBox = new ComboBox() {
+                Width = 200
+            };
+            usl.OrderByDescending(x => x.CreatedDateTime).ForEach(x => comboBox.Items.Add(x.Name));
+
+            var b = new Border() {
+                CornerRadius = new CornerRadius(10),
+                BorderThickness = new Thickness(2),
+                BorderBrush = Brushes.Black,
+                Background = Brushes.DimGray
+            };
+            b.Child = comboBox;
+
+            var menuItem = new MenuItem();
+            menuItem.Icon = null;
+            menuItem.Header = b;
 
             return menuItem;
         }

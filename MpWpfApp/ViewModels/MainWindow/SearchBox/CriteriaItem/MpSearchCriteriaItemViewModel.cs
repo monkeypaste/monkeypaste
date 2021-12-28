@@ -73,12 +73,14 @@ namespace MpWpfApp {
                     case MpSearchCriteriaPropertyType.ContentType:
                         return ContentTypeOptionLabels;
 
-                    //case MpSearchCriteriaPropertyType.ContentType:
-                    //case MpSearchCriteriaPropertyType.Collection:
+                    case MpSearchCriteriaPropertyType.Collection:
+                        return CollectionsOptionLabels;
+
                     //case MpSearchCriteriaPropertyType.Source:
                     //    return MpSearchCriteriaUnitType.Text | MpSearchCriteriaUnitType.Enumerable;
 
-                    //case MpSearchCriteriaPropertyType.Time:
+                    case MpSearchCriteriaPropertyType.Time:
+                        return DateTimeUnitOptionLabels;
                     //    return MpSearchCriteriaUnitType.Text |
                     //           MpSearchCriteriaUnitType.Number |
                     //           MpSearchCriteriaUnitType.DateTime |
@@ -90,11 +92,20 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<string> TertiaryOptionLabels {
+        public ObservableCollection<string> TertiaryLabels {
             get {
+                switch(SelectedCriteriaType) {
+                    case MpSearchCriteriaPropertyType.Collection:
+                        if(SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
+                            return TextUnitOptionLabels;
+                        }
+                        break;
+                }
                 return null;
             }
         }
+
+        #region Option Labels
 
         public ObservableCollection<string> TextUnitOptionLabels {
             get {
@@ -102,7 +113,8 @@ namespace MpWpfApp {
                     "Matches",
                     "Contains",
                     "Begins With",
-                    "Ends With"
+                    "Ends With",
+                    "Regular Expression"
                 };
             }
         }
@@ -162,6 +174,10 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<string> CollectionsOptionLabels { get; private set; } = new ObservableCollection<string>();
+
+        #endregion
+
         #endregion
 
         #region Appearance
@@ -190,7 +206,9 @@ namespace MpWpfApp {
 
         public bool HasSecondaryLabels => SecondaryLabels != null && SecondaryLabels.Count > 0;
 
-        //public bool HasTertiaryLabels => SecondaryLabels != null && SecondaryLabels[SelectedSecondaryIdx] ;
+        public bool CanInputText => SearchCriteriaUnitTypeFlags.HasFlag(MpSearchCriteriaUnitType.Text);
+
+        public bool HasTertiaryLabels => TertiaryLabels != null && TertiaryLabels.Count > 0;
 
         public bool IsSelected { get; set; } = false;
 
@@ -200,19 +218,28 @@ namespace MpWpfApp {
 
         public int SelectedSecondaryIdx { get; set; } = 0;
 
+        public int SelectedTertiaryIdx { get; set; } = 0;
+
         public MpSearchCriteriaPropertyType SelectedCriteriaType => (MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx;
 
         public MpSearchCriteriaUnitType SearchCriteriaUnitTypeFlags {
             get {
-                switch(SelectedCriteriaType) {
+                switch (SelectedCriteriaType) {
                     case MpSearchCriteriaPropertyType.Title:
                     case MpSearchCriteriaPropertyType.Content:
                         return MpSearchCriteriaUnitType.Text;
 
-                    case MpSearchCriteriaPropertyType.ContentType:
                     case MpSearchCriteriaPropertyType.Collection:
+                        if (SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
+                            return MpSearchCriteriaUnitType.Enumerable | MpSearchCriteriaUnitType.Text;
+                        }
+                        return MpSearchCriteriaUnitType.Enumerable;
+
                     case MpSearchCriteriaPropertyType.Source:
-                        return MpSearchCriteriaUnitType.Text | MpSearchCriteriaUnitType.Enumerable;
+                        return MpSearchCriteriaUnitType.Enumerable;
+
+                    case MpSearchCriteriaPropertyType.ContentType:
+                        return MpSearchCriteriaUnitType.Text;
 
                     case MpSearchCriteriaPropertyType.Time:
                         return MpSearchCriteriaUnitType.Text | 
@@ -283,6 +310,12 @@ namespace MpWpfApp {
 
             SearchCriteriaItem = sci;
             SelectedCriteriaTypeIdx = 0;
+
+            MpTagTrayViewModel.Instance.TagTileViewModels.ForEach(x => CollectionsOptionLabels.Add(x.TagName));
+            CollectionsOptionLabels.Sort(x=>x);
+            CollectionsOptionLabels.Add(" - Custom - ");
+            OnPropertyChanged(nameof(CollectionsOptionLabels));
+
             await Task.Delay(1);
 
             IsBusy = false;
@@ -296,6 +329,13 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(SelectedCriteriaTypeIdx):
                     OnPropertyChanged(nameof(SecondaryLabels));
+                    break;
+                case nameof(SelectedSecondaryIdx):
+                    OnPropertyChanged(nameof(TertiaryLabels));
+                    OnPropertyChanged(nameof(CanInputText));
+                    break;
+                case nameof(InputValue):
+                    OnPropertyChanged(nameof(CanInputText));
                     break;
             }
         }

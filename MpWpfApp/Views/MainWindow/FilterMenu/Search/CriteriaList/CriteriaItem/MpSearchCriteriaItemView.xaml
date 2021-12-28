@@ -48,6 +48,20 @@
                                                       Mode=TwoWay}"
                               MinWidth="80" />
                 </local:MpClipBorder>
+                <local:MpClipBorder BorderBrush="DimGray"
+                                    BorderThickness="1.5"
+                                    Background="Transparent"
+                                    Visibility="{Binding HasTertiaryLabels,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    CornerRadius="5"
+                                    Margin="10,3"
+                                    Padding="3">
+                    <ComboBox Padding="3"
+                              ItemsSource="{Binding TertiaryLabels}"
+                              SelectedIndex="{Binding SelectedTertiaryIdx,
+                                                      Mode=TwoWay}"
+                              MinWidth="80" />
+                </local:MpClipBorder>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Right"
@@ -67,7 +81,9 @@
                             BorderBrush="{Binding RemoveCriteriaItemButtonBorderBrush}"
                             BorderThickness="2">
                         <Image Stretch="Fill"
-                               Source="/MpWpfApp;component/Resources/Images/minus2.png" />
+                               Source="{Binding .,
+                                                Source={StaticResource MinusIcon},
+                                                Converter={StaticResource StringToImageSourceConverter}}" />
                     </Border>
                 </Button>
                 <Button x:Name="AddCriteriaItemButton"
@@ -84,13 +100,17 @@
                             BorderBrush="{Binding AddCriteriaItemButtonBorderBrush}"
                             BorderThickness="2">
                         <Image Stretch="Fill"
-                               Source="/MpWpfApp;component/Resources/Images/add2.png" />
+                               Source="{Binding .,
+                                                Source={StaticResource PlusIcon},
+                                                Converter={StaticResource StringToImageSourceConverter}}" />
                     </Border>
                 </Button>
             </StackPanel>
             <local:MpClipBorder x:Name="SearchCriteriaInputBorder"
                                 CornerRadius="10"
                                 BorderThickness="1"
+                                Visibility="{Binding CanInputText,
+                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                 MouseEnter="SearchCriteriaTextBox_MouseEnter"
                                 MouseLeave="SearchCriteriaTextBox_MouseLeave"
                                 Margin="3,5,10,5">

@@ -75,5 +75,17 @@ namespace MpWpfApp {
 
             tb.ContextMenu.IsOpen = true;
         }
+
+        private void AnalyzerToggleButton_Click(object sender, RoutedEventArgs e) {
+            MpAnalyticItemCollectionViewModel.Instance.IsVisible = !MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsVisible;
+        }
+
+        private void TagTreeToggleButton_Click(object sender, RoutedEventArgs e) {
+            MpTagTrayViewModel.Instance.IsVisible = !MpTagTrayViewModel.Instance.IsVisible;
+            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsVisible;
+            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+        }
     }
 }
