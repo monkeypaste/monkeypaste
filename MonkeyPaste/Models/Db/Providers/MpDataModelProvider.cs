@@ -12,12 +12,19 @@ namespace MonkeyPaste {
         #region Private Variables
         private IList<MpCopyItem> _lastResult;
 
-        
+
         #endregion
 
         #region Properties
-
-        public MpIQueryInfo QueryInfo { get; set; }
+        public List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
+        public MpIQueryInfo QueryInfo {
+            get {
+                if(QueryInfos.Count > 0) {
+                    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
+                }
+                return null;
+            }
+        }
 
         public ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
@@ -34,7 +41,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public void Init(MpIQueryInfo queryInfo) {
-            QueryInfo = queryInfo;
+            QueryInfos.Add(queryInfo);
             MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
             MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
         }
@@ -44,14 +51,57 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
-
         #region MpQueryInfo Fetch Methods
+                
 
         public async Task QueryForTotalCount() {
-            string allRootIdQuery = GetQueryForCount();
-            MpConsole.WriteTraceLine("Current DataModel Query: " + allRootIdQuery);
-            var idl = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
-            AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
+            AllFetchedAndSortedCopyItemIds.Clear();
+            MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
+
+            for (int i = 0;i < QueryInfos.Count;i++) {
+                var qi = QueryInfos[i];
+                if(i > 0) {
+                    qi.IsDescending = QueryInfos[i - 1].IsDescending;
+                    qi.SortType = QueryInfos[i - 1].SortType;
+                    qi.TagId = QueryInfos[i - 1].TagId;
+                }
+                if(qi.FilterFlags.HasFlag(MpContentFilterType.Tag) && i > 0) {
+                    if(qi.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
+                        qi.TagId = MpTag.AllTagId;
+                    } else {
+                        qi.TagId = Convert.ToInt32(qi.SearchText);
+                    }
+                }
+                if(qi.LogicFlags != MpLogicalFilterFlagType.None) {
+                    lastLogicFlag = qi.LogicFlags;
+                    continue;
+                }
+                string allRootIdQuery = GetQueryForCount(i);
+                MpConsole.WriteTraceLine("Current DataModel Query: " + allRootIdQuery);
+                var idl = await MpDb.Instance.QueryScalarsAsync<int>(allRootIdQuery);
+                var curIds = new ObservableCollection<int>(idl.Distinct());
+
+                var totalIds = new List<int>();
+                if (i == 0) {
+                    AllFetchedAndSortedCopyItemIds = curIds;
+                } else if (lastLogicFlag == MpLogicalFilterFlagType.And) {
+                    foreach (var allId in AllFetchedAndSortedCopyItemIds) {
+                        if (curIds.Contains(allId)) {
+                            totalIds.Add(allId);
+                        }
+                    }
+                } else {
+                    //same as or
+                    totalIds.AddRange(AllFetchedAndSortedCopyItemIds);
+                    totalIds.AddRange(curIds);
+                    totalIds = totalIds.Distinct().ToList();
+                }
+
+                if(totalIds.Count > 0) {
+                    AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
+                }
+            }
+            
             QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
         }
 
@@ -68,14 +118,15 @@ namespace MonkeyPaste {
 
         #region View Queries
 
-        public string GetQueryForCount() {
+        public string GetQueryForCount(int qiIdx = 0) {
+            var qi = QueryInfos[qiIdx];
             string query = "select RootId from MpSortableCopyItem_View";
             string tagClause = string.Empty;
             string sortClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
 
-            if (QueryInfo.TagId != MpTag.AllTagId) {
+            if (qi.TagId != MpTag.AllTagId) {
                 tagClause = string.Format(
                     @"RootId in 
                     (select 
@@ -87,57 +138,69 @@ namespace MonkeyPaste {
 		                end
 		                from MpCopyItem where pk_MpCopyItemId in 
 		                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}))",
-                    QueryInfo.TagId);
+                    qi.TagId);
             }
-            if (!string.IsNullOrEmpty(QueryInfo.SearchText)) {
+            if (!string.IsNullOrEmpty(qi.SearchText)) {
                 string searchOp = "like";
                 string escapeStr = "";
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
                     searchOp = "=";
-                } else if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
+                } else if (qi.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
                     searchOp = "REGEXP";
                 } else {
                     escapeStr = "%";
                 }
-                string searchText = QueryInfo.SearchText;
+                string searchText = qi.SearchText;
 
                 string escapeClause = string.Empty;
                 if (searchOp == "like" && searchText.Contains('%')) {
                     searchText = searchText.Replace("%", @"\%");
                     escapeClause = @" ESCAPE '\'";
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Title)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.Title)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Content)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.Content)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Url)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.Url)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemDescription"), searchOp, escapeStr, searchText, escapeClause));
                 }
+
+                if(qi.FilterFlags.HasFlag(MpContentFilterType.Time)) {
+                    if(qi.TimeFlags.HasFlag(MpTimeFilterFlagType.After)) {
+                        searchOp = ">";
+                    } else if (qi.TimeFlags.HasFlag(MpTimeFilterFlagType.Before)) {
+                        searchOp = "<";
+                    } else {
+                        searchOp = "=";
+                    }
+                    searchText = DateTime.Parse(searchText).Ticks.ToString();
+                    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
+                }
             }
-            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
+            if (qi.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
                 types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.RichText));
             }
-            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
+            if (qi.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
                 types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.FileList));
             }
-            if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
+            if (qi.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
                 types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Image));
             }
-            switch (QueryInfo.SortType) {
+            switch (qi.SortType) {
                 case MpContentSortType.CopyDateTime:
                     sortClause = string.Format(@"order by {0}", "CopyDateTime");
                     break;
@@ -160,7 +223,7 @@ namespace MonkeyPaste {
 
                     break;
             }
-            if (QueryInfo.IsDescending) {
+            if (qi.IsDescending) {
                 sortClause += " DESC";
             }
 
@@ -216,6 +279,19 @@ namespace MonkeyPaste {
 
         #endregion MpUserDevice
 
+        #region DbImage
+
+        public async Task<MpDbImage> GetDbImageByBase64Str(string text64) {
+            string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64=?";
+            var result = await MpDb.Instance.QueryAsync<MpDbImage>(query, text64);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
+
         #region MpIcon
 
         public async Task<MpIcon> GetIconByImageStr(string text64) {
@@ -270,9 +346,27 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public async Task<List<MpUrl>> GetAllUrlsByDomainName(string domain) {
+            string query = $"select * from MpUrl where UrlDomainPatn=?";
+            var result = await MpDb.Instance.QueryAsync<MpUrl>(query, domain.ToLower());
+            return result;
+        }
+
         #endregion MpUrl
 
         #region MpSource
+
+        public async Task<List<MpSource>> GetAllSourcesByAppId(int appId) {
+            string query = $"select * from MpSource where fk_MpAppId=?";
+            var result = await MpDb.Instance.QueryAsync<MpSource>(query, appId);
+            return result;
+        }
+
+        public async Task<List<MpSource>> GetAllSourcesByUrlId(int urlId) {
+            string query = $"select * from MpSource where fk_MpUrlId=?";
+            var result = await MpDb.Instance.QueryAsync<MpSource>(query, urlId);
+            return result;
+        }
 
         public async Task<MpSource> GetSourceByMembers(int appId, int urlId) {
             string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=?";
@@ -295,6 +389,37 @@ namespace MonkeyPaste {
         #endregion MpSource
 
         #region MpCopyItem
+
+        public async Task<List<MpCopyItem>> GetCopyItemsByAppId(int appId) {
+            var sl = await GetAllSourcesByAppId(appId);
+
+            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
+            string query = $"select * from MpCopyItem where {whereStr}";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<List<MpCopyItem>> GetCopyItemsByUrlId(int urlId) {
+            List<MpSource> sl = await GetAllSourcesByUrlId(urlId);
+            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
+            string query = $"select * from MpCopyItem where {whereStr}";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
+
+        public async Task<List<MpCopyItem>> GetCopyItemsByUrlDomain(string domainStr) {
+            var urll = await GetAllUrlsByDomainName(domainStr);
+            List<MpSource> sl = new List<MpSource>();
+            foreach(var url in urll) {
+                var ssl = await GetAllSourcesByUrlId(url.Id);
+                sl.AddRange(ssl);
+            }
+            sl = sl.Distinct().ToList();
+            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
+            string query = $"select * from MpCopyItem where {whereStr}";
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
 
         public async Task<List<MpCopyItem>> GetCopyItemsByIdList(List<int> ciida) {
             string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0}", x)));

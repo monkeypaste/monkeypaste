@@ -30,9 +30,34 @@ namespace MonkeyPaste {
         Tag = 512,
         Regex = 1024,
         Content = 2048,
-        UrlTitle = 4096
+        UrlTitle = 4096,
+        Time = 8192
     }
 
+    [Flags]
+    public enum MpTimeFilterFlagType {
+        None = 0,
+        Exactly,
+        Before,
+        After
+    }
+
+    [Flags]
+    public enum MpLogicalFilterFlagType {
+        None = 0,
+        And,
+        Or
+    }
+
+    [Flags]
+    public enum MpTextFilterFlagType {
+        None = 0,
+        Matches,
+        Contains,
+        BeginsWith,
+        EndsWith,
+        RegEx
+    }
     public interface MpIQueryInfo {
         public int TotalItemsInQuery { get; set; }
 
@@ -42,9 +67,17 @@ namespace MonkeyPaste {
 
         public MpContentFilterType FilterFlags { get; set; }
 
+        public MpLogicalFilterFlagType LogicFlags { get; set; }
+
+        public MpTextFilterFlagType TextFlags { get; set; }
+
+        public MpTimeFilterFlagType TimeFlags { get; set; }
+
         public int TagId { get; set; }
 
         public string SearchText { get;  set; }
+
+        public int SortOrderIdx { get; set; }
 
         void NotifyQueryChanged(bool isFilterSortOrSearch = true);
     }

@@ -1288,7 +1288,10 @@ namespace MpWpfApp {
             }
             var mwta = mwt.Split(new string[] { "-" },StringSplitOptions.RemoveEmptyEntries);
             if (mwta.Length == 1) {
-                return "Explorer";
+                if(string.IsNullOrEmpty(mwta[0])) {
+                    return "Explorer";
+                }
+                return mwta[0];
             }
             return mwta[mwta.Length - 1].Trim();
         }
@@ -1463,9 +1466,9 @@ namespace MpWpfApp {
         public async Task<List<string>> CreatePrimaryColorListAsync(BitmapSource bmpSource, int palleteSize = 5, DispatcherPriority priority = DispatcherPriority.Normal) {
             List<string> result = null;
             
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+            await Task.Run(() => {
                 result = CreatePrimaryColorList(bmpSource, palleteSize);
-            }, priority);
+            });
 
             return result;
         }
@@ -1806,9 +1809,9 @@ namespace MpWpfApp {
 
         public async Task<BitmapSource> TintBitmapSourceAsync(BitmapSource bmpSrc, Color tint, bool retainAlpha = false, DispatcherPriority priority = DispatcherPriority.Background) {
             BitmapSource bmpSource = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+            await Task.Run(() => {
                 bmpSource = TintBitmapSource(bmpSrc, tint, retainAlpha);
-            }, priority);
+            });
             return bmpSource;
         }
 

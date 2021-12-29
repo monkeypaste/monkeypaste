@@ -144,10 +144,9 @@
                 <local:MpSidebarMenuView x:Name="SidebarMenuView"
                                          Grid.Row="1"
                                          Grid.Column="0"
+                                         VerticalAlignment="Top"
                                          HorizontalAlignment="Left"
                                          DataContext="{Binding}"
-                                         Height="{Binding ClipTrayHeight,
-                                                          Source={StaticResource ClipTrayViewModel}}"
                                          Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
                 <GridSplitter Background="Black"
                               Grid.Row="1"

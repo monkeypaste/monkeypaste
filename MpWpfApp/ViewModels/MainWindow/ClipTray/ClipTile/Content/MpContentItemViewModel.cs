@@ -740,7 +740,7 @@ namespace MpWpfApp {
                 case MpCopyItemDetailType.DateTimeCreated:
                     // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
 
-                    info = "Copied " + CopyItem.CopyDateTime.ToString();
+                    info = "Copied " + CopyItem.CopyDateTime.ToReadableTimeSpan();
                     break;
                 //chars/lines
                 case MpCopyItemDetailType.DataSize:

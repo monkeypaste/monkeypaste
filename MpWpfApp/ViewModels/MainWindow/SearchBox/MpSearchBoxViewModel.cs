@@ -514,7 +514,6 @@ namespace MpWpfApp {
                     LastSearchText = SearchText;
                 }
                 IsMultipleMatches = false;
-                MpDataModelProvider.Instance.QueryInfo.FilterFlags = FilterType;
 
                 MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
             },!MpMainWindowViewModel.Instance.IsMainWindowLoading);

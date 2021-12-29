@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Controls;
+using System.IO;
 using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-
-    public class MpFilePathStringToIconConverter : IValueConverter {
+    public class MpFilePathToFolderPathConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string pathStr) {
-                if(string.IsNullOrEmpty(pathStr)) {
-                    return new Image();
+                if(Directory.Exists(pathStr)) {
+                    return pathStr;
                 }
-                return MpHelpers.Instance.GetIconImage(pathStr);
+                if (File.Exists(pathStr)) {
+                    return Path.GetDirectoryName(pathStr);
+                }
             }
-            return new Image();
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

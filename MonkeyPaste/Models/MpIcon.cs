@@ -65,12 +65,13 @@ namespace MonkeyPaste {
         #region Statics
 
         public static async Task<MpIcon> Create(string iconImgBase64) {
-            var iconImage = new MpDbImage() {
-                DbImageGuid = System.Guid.NewGuid(),
-                ImageBase64 = iconImgBase64
-            };
+            var dupCheck = await MpDataModelProvider.Instance.GetIconByImageStr(iconImgBase64);
+            if(dupCheck != null) {
+                dupCheck = await MpDb.Instance.GetItemAsync<MpIcon>(dupCheck.Id);
+                return dupCheck;
+            }
 
-            await iconImage.WriteToDatabaseAsync();
+            var iconImage = await MpDbImage.Create(iconImgBase64);
 
             var newIcon = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),
@@ -80,11 +81,9 @@ namespace MonkeyPaste {
 
             var iconBuilder = MpNativeWrapper.Instance.GetIconBuilder();
             if (iconBuilder != null) {
-                var iconBorderImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = await iconBuilder.CreateBorder(iconImgBase64, MpXamMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Color.White.ToHex())
-                };
-                await iconBorderImage.WriteToDatabaseAsync();
+                var borderImage64Str = await iconBuilder.CreateBorder(iconImgBase64, 1.25, @"#FFFFFFFF");
+                var iconBorderImage = await MpDbImage.Create(borderImage64Str);
+
                 var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
@@ -94,11 +93,8 @@ namespace MonkeyPaste {
                 newIcon.HexColor4 = colorList[3];
                 newIcon.HexColor5 = colorList[4];
             } else {
-                var iconBorderImage = new MpDbImage() {
-                    DbImageGuid = System.Guid.NewGuid(),
-                    ImageBase64 = iconImgBase64
-                };
-                await iconBorderImage.WriteToDatabaseAsync();
+                var iconBorderImage = await MpDbImage.Create(iconImgBase64);
+
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
                 newIcon.HexColor1 = MpHelpers.Instance.GetRandomColor().ToHex();

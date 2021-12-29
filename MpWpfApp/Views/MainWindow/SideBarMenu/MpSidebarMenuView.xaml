@@ -7,24 +7,27 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      mc:Ignorable="d"
                      HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid>
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding AppModeButtonGridMinWidth, Source={StaticResource AppModeViewModel}}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <local:MpAppModeButtonGridView Grid.Column="0"
-                                       HorizontalAlignment="Center"
+                                       HorizontalAlignment="Center" 
                                        Margin="0,3"
                                        Visibility="{Binding IsAnyTileExpanded,
                                                             Source={StaticResource ClipTrayViewModel},
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        DataContext="{StaticResource AppModeViewModel}" />
 
-        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
+        <StackPanel Grid.Column="1" 
+                    HorizontalAlignment="Stretch">
             <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,

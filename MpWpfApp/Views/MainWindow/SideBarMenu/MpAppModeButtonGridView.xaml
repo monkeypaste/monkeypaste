@@ -13,6 +13,9 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
           ClipToBounds="False"
+          VerticalAlignment="Top"
+          Height="{Binding ClipTrayHeight,
+                                                          Source={StaticResource ClipTrayViewModel}}"
           Width="{Binding AppModeButtonGridMinWidth}"
           Background="{local:MpThemeColorsBinding Key=App_Mode_Grid_Background_Color}">
         <Grid.RowDefinitions>

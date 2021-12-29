@@ -7,84 +7,242 @@
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=local:MpSettingsWindowViewModel,
+                                              IsDesignTimeCreatable=False}">
     <Grid>
-        <StackPanel Orientation="Vertical"
-                    DataContext="{Binding SecurityViewModel}">
-            <DataGrid Grid.Row="1"
-                      x:Name="ExcludedAppDatagrid"
-                      ItemsSource="{Binding AppViewModels}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Top"
-                      Width="Auto"
-                      Height="Auto"
-                      SelectedIndex="{Binding SelectedExcludedAppIndex,
-                                              Mode=TwoWay}"
-                      SelectionMode="Single"
-                      GridLinesVisibility="None"
-                      CanUserAddRows="False"
-                      Margin="15,15,15,5"
-                      AutoGenerateColumns="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="AppCollectionDataGrid_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected,
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged}" />
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="30">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding IconImage, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Known Applications"
-                                            Width="300">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock VerticalAlignment="Center"
-                                           Margin="10,0,0,0"
-                                           Text="{Binding AppName}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="70"
-                                            Header="Excluded?">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox Background="White"
-                                          BorderThickness="1"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          VerticalContentAlignment="Stretch"
-                                          IsChecked="{Binding IsAppRejected,
-                                                              Mode=TwoWay,
-                                                              UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Button Width="200"
-                    Command="{Binding AddExcludedAppCommand}">
-                <DockPanel>
-                    <Image Source="/MpWpfApp;component/Resources/Images/add.png"
-                           DockPanel.Dock="Left"
-                           Width="20"
-                           Height="20" />
-                    <Label DockPanel.Dock="Right"
-                           Content="Add Application" />
-                </DockPanel>
-            </Button>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical"
+                            DataContext="{Binding AppCollectionViewModel}">
+                    <DataGrid Grid.Row="1"
+                              x:Name="ExcludedAppDatagrid"
+                              ItemsSource="{Binding AppViewModels}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              Width="430"
+                              MaxHeight="350"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              SelectedItem="{Binding SelectedAppViewModel,
+                                                     Mode=TwoWay}"
+                              SelectionMode="Single"
+                              GridLinesVisibility="None"
+                              CanUserAddRows="False"
+                              Margin="15,15,15,5"
+                              AutoGenerateColumns="False">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="30">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Width="15"
+                                               Height="15"
+                                               Source="{Binding IconImageStr,
+                                                                Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Name"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="AppName"
+                                                    CanUserResize="True"
+                                                    Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{Binding AppName}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Process Path"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="AppPath"
+                                                    CanUserResize="True"
+                                                    Width="240">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Foreground="Black"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Text="{Binding AppPath}"
+                                                   Background="Transparent" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="70"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="IsAppRejected"
+                                                    Header="Exclude">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Background="White"
+                                                  BorderThickness="1"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalContentAlignment="Stretch"
+                                                  IsChecked="{Binding IsAppRejected,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Width="200"
+                            Command="{Binding AddAppCommand}">
+                        <DockPanel>
+                            <Image Source="{Binding .,
+                                                    Source={StaticResource AddIcon},
+                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                   DockPanel.Dock="Left"
+                                   Width="20"
+                                   Height="20" />
+                            <Label DockPanel.Dock="Right"
+                                   Content="Add Application" />
+                        </DockPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"
+                            DataContext="{Binding UrlCollectionViewModel}">
+                    <DataGrid Grid.Row="1"
+                              x:Name="ExcludedUrlDatagrid"
+                              ItemsSource="{Binding UrlViewModels}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              Width="430"
+                              MaxHeight="350"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              SelectedItem="{Binding SelectedUrlViewModel,
+                                                     Mode=TwoWay}"
+                              SelectionMode="Single"
+                              GridLinesVisibility="None"
+                              CanUserAddRows="False"
+                              Margin="15,15,15,5"
+                              AutoGenerateColumns="False">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="30">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Width="15"
+                                               Height="15"
+                                               Source="{Binding IconImageStr,
+                                                                Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Url"
+                                                    CanUserSort="True"
+                                                    CanUserResize="True"
+                                                    SortMemberPath="UrlPath"
+                                                    Width="125">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{Binding UrlPath}">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Domain"
+                                                    CanUserResize="True"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="UrlDomainPath"
+                                                    Width="75">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{Binding UrlDomainPath}">
+                                            <!--<TextBlock.ToolTip>
+                                                <TextBlock>
+                                                    <TextBlock.Inlines>
+                                                        <Run Text="Open Url Domain " />
+                                                        <Run Text="{Binding UrlDomainPath}" />
+                                                    </TextBlock.Inlines>
+                                                </TextBlock>
+                                            </TextBlock.ToolTip>
+                                            <TextBlock.Inlines>
+                                                <Hyperlink Background="Transparent"
+                                                           IsEnabled="{Binding IsSelected}"
+                                                           NavigateUri="{Binding UrlDomainPath}">
+                                                    <Hyperlink.Inlines>
+                                                        <Run Text="{Binding UrlDomainPath}" />
+                                                    </Hyperlink.Inlines>
+                                                </Hyperlink>
+                                            </TextBlock.Inlines>-->
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90"
+                                                    CanUserSort="True"
+                                                    CanUserResize="True"
+                                                    SortMemberPath="IsDomainRejected"
+                                                    Header="Excluded Url?">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Background="White"
+                                                  BorderThickness="1"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalContentAlignment="Stretch"
+                                                  IsEnabled="{Binding IsDomainRejected,
+                                                                      Converter={StaticResource BoolFlipConverter}}"
+                                                  IsChecked="{Binding IsUrlRejected,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="110"
+                                                    CanUserSort="True"
+                                                    CanUserResize="True"
+                                                    SortMemberPath="IsDomainRejected"
+                                                    Header="Excluded Domain?">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Background="White"
+                                                  BorderThickness="1"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalContentAlignment="Stretch"
+                                                  IsChecked="{Binding IsDomainRejected,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Width="200"
+                            Command="{Binding AddUrlCommand}">
+                        <DockPanel>
+                            <Image Source="{Binding .,
+                                                    Source={StaticResource AddIcon},
+                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                   DockPanel.Dock="Left"
+                                   Width="20"
+                                   Height="20" />
+                            <Label DockPanel.Dock="Right"
+                                   Content="Add Url" />
+                        </DockPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -87,6 +87,16 @@ namespace MpWpfApp {
                 if(!string.IsNullOrEmpty(htmlData)) {
                     try {
                         url = await MpUrlBuilder.CreateFromHtmlData(htmlData, app);
+                        if(url != null) {                            
+                            if (MpUrlCollectionViewModel.Instance.IsDomainRejected(url.UrlDomainPath)) {
+                                MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
+                                return null;
+                            }
+                            if (MpUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
+                                MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
+                                return null;
+                            }
+                        }
                     }
                     catch (Exception ex) {
                         MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);

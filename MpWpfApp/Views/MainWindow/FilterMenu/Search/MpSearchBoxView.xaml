@@ -166,22 +166,22 @@
                                 <Image Source="/Resources/Images/forward_black.png" />
                             </Button>
                         </StackPanel>
-                    </Border>                    
-                </StackPanel>                
+                    </Border>
+                </StackPanel>
             </Grid>
         </local:MpClipBorder>
         <!--  Add Or Clear Search Criteria Button  -->
         <Button x:Name="AddOrClearSearchCriteriaButton"
-                            BorderThickness="0"
+                BorderThickness="0"
                 Margin="5"
-                            Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
-                            Visibility="{Binding CanAddCriteriaItem,
-                                                 Converter={StaticResource BoolToVisibilityConverter}}"
-                            Template="{StaticResource SearchButtonControlTemplate}">
+                Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
+                Visibility="{Binding CanAddCriteriaItem,
+                                     Converter={StaticResource BoolToVisibilityConverter}}"
+                Template="{StaticResource SearchButtonControlTemplate}">
             <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
-                               Height="20"
-                               Width="20"
-                               Stretch="Uniform" />
+                   Height="20"
+                   Width="20"
+                   Stretch="Uniform" />
         </Button>
     </StackPanel>
 </local:MpUserControl>

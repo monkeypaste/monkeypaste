@@ -9,8 +9,7 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Vertical"
-                    DataContext="{Binding PreferencesViewModel}">
+        <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Monitor" />
                 <ComboBox SelectedIndex="{local:MpSettingBinding MainWindowMonitorIdx}">

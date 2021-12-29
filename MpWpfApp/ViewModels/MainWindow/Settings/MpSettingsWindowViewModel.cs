@@ -55,9 +55,6 @@ namespace MpWpfApp {
 
     public class MpSettingsWindowViewModel : MpViewModelBase<object> {
         #region Private Variables
-        private Window _windowRef;
-        private int _tabToShow = 0;
-        private object _args = null;
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToRegister = new ObservableCollection<MpShortcutViewModel>();
@@ -75,6 +72,10 @@ namespace MpWpfApp {
             }
         }
 
+        public MpAppCollectionViewModel AppCollectionViewModel => MpAppCollectionViewModel.Instance;
+
+        public MpUrlCollectionViewModel UrlCollectionViewModel => MpUrlCollectionViewModel.Instance;
+
         private MpPreferencesViewModel _preferencesViewModel = new MpPreferencesViewModel();
         public MpPreferencesViewModel PreferencesViewModel {
             get {
@@ -88,18 +89,18 @@ namespace MpWpfApp {
             }
         }
 
-        private MpSecurityViewModel _securityViewModel = new MpSecurityViewModel();
-        public MpSecurityViewModel SecurityViewModel {
-            get {
-                return _securityViewModel;
-            }
-            set {
-                if (_securityViewModel != value) {
-                    _securityViewModel = value;
-                    OnPropertyChanged(nameof(SecurityViewModel));
-                }
-            }
-        }
+        //private MpSecurityViewModel _securityViewModel = new MpSecurityViewModel();
+        //public MpSecurityViewModel SecurityViewModel {
+        //    get {
+        //        return _securityViewModel;
+        //    }
+        //    set {
+        //        if (_securityViewModel != value) {
+        //            _securityViewModel = value;
+        //            OnPropertyChanged(nameof(SecurityViewModel));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Panel Visibility
@@ -178,131 +179,87 @@ namespace MpWpfApp {
         #region Public Methods
         public MpSettingsWindowViewModel() : base(null) {
             PreferencesViewModel = new MpPreferencesViewModel(this);
-            SecurityViewModel = new MpSecurityViewModel(this);
+            //SecurityViewModel = new MpSecurityViewModel(this);
         }
 
-        public MpSettingsWindowViewModel(int tabToShow,object args = null) : this() {
-            _tabToShow = tabToShow;
-            _args = args;
-        }
 
-        public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
-            _windowRef = (Window)sender;
-            _windowRef.Closed += (s, e2) => {
-                MpMainWindowViewModel.Instance.IsShowingDialog = false;
-            };
-            MpMainWindowViewModel.Instance.IsShowingDialog = true;
-            ClickSettingsPanelCommand.Execute(_tabToShow);
+        public async Task InitializeAsync(int tabToShow = 1, object args = null) {
+            await MpAppCollectionViewModel.Instance.Init();
+            await MpUrlCollectionViewModel.Instance.Init();
 
-            if(_args != null) {
-                if(_tabToShow == 1) {
-                    if(_args is MpApp app) {
+            ClickSettingsPanelCommand.Execute(tabToShow);
+
+            if (args != null) {
+                if (tabToShow == 1) {
+                    if (args is MpApp app) {
                         PreferencesViewModel.PasteToAppPathViewModelCollection.AddPasteToAppPathCommand.Execute(app);
-                    } 
+                    }
                 }
             }
         }
 
-        public bool ShowSettingsWindow(int tabToShow = 0, object args = null) {
-            var sw = new MpSettingsWindow(tabToShow,args);
-            return sw.ShowDialog() ?? false;
-        }
         #endregion
 
         #region Private Methods    
         #endregion
 
         #region Commands
-        private RelayCommand _cancelSettingsCommand;
-        public ICommand CancelSettingsCommand {
-            get {
-                if (_cancelSettingsCommand == null) {
-                    _cancelSettingsCommand = new RelayCommand(CancelSettings);
+        public ICommand CancelSettingsCommand => new RelayCommand(
+            () => {
+
+            });
+
+        public ICommand SaveSettingsCommand => new RelayCommand(
+            () => {
+
+            });
+
+        public ICommand ResetSettingsCommand => new RelayCommand(
+            () => {
+
+            });
+
+        public ICommand ClickSettingsPanelCommand => new RelayCommand<object>(
+            (args) => {
+                switch ((int)args) {
+                    case 0:
+                        SettingsPanel1Visibility = Visibility.Visible;
+                        SettingsPanel2Visibility = Visibility.Collapsed;
+                        SettingsPanel3Visibility = Visibility.Collapsed;
+                        SettingsPanel4Visibility = Visibility.Collapsed;
+                        SettingsPanel5Visibility = Visibility.Collapsed;
+                        break;
+                    case 1:
+                        SettingsPanel2Visibility = Visibility.Visible;
+                        SettingsPanel1Visibility = Visibility.Collapsed;
+                        SettingsPanel3Visibility = Visibility.Collapsed;
+                        SettingsPanel4Visibility = Visibility.Collapsed;
+                        SettingsPanel5Visibility = Visibility.Collapsed;
+                        break;
+                    case 2:
+                        SettingsPanel3Visibility = Visibility.Visible;
+                        SettingsPanel2Visibility = Visibility.Collapsed;
+                        SettingsPanel1Visibility = Visibility.Collapsed;
+                        SettingsPanel4Visibility = Visibility.Collapsed;
+                        SettingsPanel5Visibility = Visibility.Collapsed;
+                        break;
+                    case 3:
+                        SettingsPanel4Visibility = Visibility.Visible;
+                        SettingsPanel2Visibility = Visibility.Collapsed;
+                        SettingsPanel3Visibility = Visibility.Collapsed;
+                        SettingsPanel1Visibility = Visibility.Collapsed;
+                        SettingsPanel5Visibility = Visibility.Collapsed;
+                        break;
+                    case 4:
+                        SettingsPanel5Visibility = Visibility.Visible;
+                        SettingsPanel2Visibility = Visibility.Collapsed;
+                        SettingsPanel3Visibility = Visibility.Collapsed;
+                        SettingsPanel4Visibility = Visibility.Collapsed;
+                        SettingsPanel1Visibility = Visibility.Collapsed;
+                        break;
                 }
-                return _cancelSettingsCommand;
-            }
-        }
-        private void CancelSettings() {
-            //ShortcutViewModels = _shortcutViewModelsBackup;
-            _windowRef.Close();
-        }
+            },(args) => args != null);
 
-        private RelayCommand _saveSettingsCommand;
-        public ICommand SaveSettingsCommand {
-            get {
-                if (_saveSettingsCommand == null) {
-                    _saveSettingsCommand = new RelayCommand(SaveSettings);
-                }
-                return _saveSettingsCommand;
-            }
-        }
-        private void SaveSettings() {
-            _windowRef.Close();
-        }
-
-        private RelayCommand _resetSettingsCommand;
-        public ICommand ResetSettingsCommand {
-            get {
-                if (_resetSettingsCommand == null) {
-                    _resetSettingsCommand = new RelayCommand(ResetSettings);
-                }
-                return _resetSettingsCommand;
-            }
-        }
-        private void ResetSettings() {
-
-        }
-
-
-
-        private RelayCommand<int> _clickSettingsPanelCommand;
-        public ICommand ClickSettingsPanelCommand {
-            get {
-                if (_clickSettingsPanelCommand == null) {
-                    _clickSettingsPanelCommand = new RelayCommand<int>(ClickSettingsPanel);
-                }
-                return _clickSettingsPanelCommand;
-            }
-        }
-        private void ClickSettingsPanel(int panelClicked) {
-            switch (panelClicked) {
-                case 0:
-                    SettingsPanel1Visibility = Visibility.Visible;
-                    SettingsPanel2Visibility = Visibility.Collapsed;
-                    SettingsPanel3Visibility = Visibility.Collapsed;
-                    SettingsPanel4Visibility = Visibility.Collapsed;
-                    SettingsPanel5Visibility = Visibility.Collapsed;
-                    break;
-                case 1:
-                    SettingsPanel2Visibility = Visibility.Visible;
-                    SettingsPanel1Visibility = Visibility.Collapsed;
-                    SettingsPanel3Visibility = Visibility.Collapsed;
-                    SettingsPanel4Visibility = Visibility.Collapsed;
-                    SettingsPanel5Visibility = Visibility.Collapsed;
-                    break;
-                case 2:
-                    SettingsPanel3Visibility = Visibility.Visible;
-                    SettingsPanel2Visibility = Visibility.Collapsed;
-                    SettingsPanel1Visibility = Visibility.Collapsed;
-                    SettingsPanel4Visibility = Visibility.Collapsed;
-                    SettingsPanel5Visibility = Visibility.Collapsed;
-                    break;
-                case 3:
-                    SettingsPanel4Visibility = Visibility.Visible;
-                    SettingsPanel2Visibility = Visibility.Collapsed;
-                    SettingsPanel3Visibility = Visibility.Collapsed;
-                    SettingsPanel1Visibility = Visibility.Collapsed;
-                    SettingsPanel5Visibility = Visibility.Collapsed;
-                    break;
-                case 4:
-                    SettingsPanel5Visibility = Visibility.Visible;
-                    SettingsPanel2Visibility = Visibility.Collapsed;
-                    SettingsPanel3Visibility = Visibility.Collapsed;
-                    SettingsPanel4Visibility = Visibility.Collapsed;
-                    SettingsPanel1Visibility = Visibility.Collapsed;
-                    break;
-            }
-        }
         #endregion
     }
 }

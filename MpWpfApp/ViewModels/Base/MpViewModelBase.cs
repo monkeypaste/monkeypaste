@@ -29,6 +29,8 @@ namespace MpWpfApp {
                 MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
             }
         }
+
+        public bool SupressPropertyChangedNotification { get; set; } = false;
         #endregion
 
         #region Constructors
@@ -129,6 +131,9 @@ namespace MpWpfApp {
         //}
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            if(SupressPropertyChangedNotification) {
+                return;
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             //return;
 

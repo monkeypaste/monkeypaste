@@ -98,9 +98,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -168,6 +170,7 @@
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
+    <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
+    <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
@@ -287,6 +291,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
@@ -340,7 +346,6 @@
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Security\MpSecurityViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutKeyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutPanelViewModel.cs" />

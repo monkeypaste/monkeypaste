@@ -1293,6 +1293,7 @@
         <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
         <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
         <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
+        <local:MpFilePathToFolderPathConverter x:Key="FilePathToFolderPathConverter" />
         <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
         <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
         <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
@@ -1307,6 +1308,7 @@
         <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
         <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
         <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
+        <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->
@@ -1320,7 +1322,7 @@
         <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
         <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
         <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
-        <!--<local:MpQuickActionAnalyzerCollectionViewModel x:Key="QuickActionAnalyzerCollectionViewModel"/>-->
+        <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
         <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>

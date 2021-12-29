@@ -87,16 +87,17 @@ namespace MpWpfApp {
                     App.IsAppRejected = value;
                     OnPropertyChanged(nameof(IsAppRejected));
                     OnPropertyChanged(nameof(App));
+                    HasModelChanged = true;
                 }
             }
         }
 
-        public BitmapSource IconImage {
+        public string IconImageStr {
             get {
                 if (App == null) {
-                    return new BitmapImage();
+                    return string.Empty;
                 }
-                return App.Icon.IconImage.ImageBase64.ToBitmapSource();
+                return App.Icon.IconImage.ImageBase64;
             }
         }
 
@@ -129,7 +130,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(AppPath));
                     OnPropertyChanged(nameof(AppName));
                     OnPropertyChanged(nameof(IsAppRejected));
-                    OnPropertyChanged(nameof(IconImage));
+                    OnPropertyChanged(nameof(IconImageStr));
                     OnPropertyChanged(nameof(RejectAppVisibility));
                     OnPropertyChanged(nameof(AddButtonVisibility));
                     OnPropertyChanged(nameof(PrimaryIconColorList));
@@ -147,17 +148,22 @@ namespace MpWpfApp {
 
         public MpAppViewModel(MpAppCollectionViewModel parent, MpApp app) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
+            IsBusy = true;
             App = app;
+            IsBusy = false;
         }
 
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsAppRejected):
+                    if(IsBusy) {
+                        return;
+                    }
                     Task.Run(async () => {
                         bool isRejected = await MpAppCollectionViewModel.Instance.UpdateRejection(this, IsAppRejected);
                         if(isRejected != App.IsAppRejected) {
                             await App.WriteToDatabaseAsync();
-                        }                        
+                        }
                     });
                     break;
             }

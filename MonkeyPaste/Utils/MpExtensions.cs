@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
+using static Xamarin.Forms.Internals.Profile;
 
 namespace MonkeyPaste {
     public static class MpExtensions {
@@ -94,6 +95,44 @@ namespace MonkeyPaste {
         #endregion
 
         #region Strings
+
+        public static string ToReadableTimeSpan(this DateTime dt) {
+            int totalYears, totalMonths, totalWeeks, totalDays, totalMinutes;
+
+            var ts = DateTime.Now - dt;
+            string outStr = string.Empty;
+            totalYears = (int)(ts.TotalDays / 365);
+            totalMonths = DateTime.Now.MonthDifference(dt);
+            totalWeeks = DateTime.Now.WeekDifference(dt);
+            totalDays = (int)ts.TotalDays;
+            totalMinutes = (int)ts.TotalMinutes;
+
+            if(totalYears > 1) {
+                return string.Format($"{totalYears} years ago");
+            }
+            if(totalMonths >= 1) {
+                return string.Format($"{totalMonths} month{(totalMonths == 1 ? string.Empty:"s")} ago");
+            }
+            if(totalWeeks >= 1) {
+                return string.Format($"{totalWeeks} week{(totalWeeks == 1 ? string.Empty : "s")} ago");
+            }
+            if (totalDays >= 1) {
+                return string.Format($"{totalDays} day{(totalDays == 1 ? string.Empty : "s")} ago");
+            }
+            if (totalMinutes >= 1) {
+                return string.Format($"{totalMinutes} minute{(totalMinutes == 1 ? string.Empty : "s")} ago");
+            }
+            return "Less than a minute ago";
+        }
+
+        public static int WeekDifference(this DateTime lValue, DateTime rValue) {
+            double weeks = (lValue - rValue).TotalDays / 7;
+            return (int)weeks;
+        }
+
+        public static int MonthDifference(this DateTime lValue, DateTime rValue) {
+            return (lValue.Month - rValue.Month) + 12 * (lValue.Year - rValue.Year);
+        }
 
         public static string ToTitleCase(this string str) {
             TextInfo textInfo = new CultureInfo(MpPreferences.Instance.UserCultureInfoName, false).TextInfo;

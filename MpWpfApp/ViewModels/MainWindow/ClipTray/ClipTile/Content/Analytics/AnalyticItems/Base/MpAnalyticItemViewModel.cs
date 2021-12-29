@@ -539,7 +539,7 @@ namespace MpWpfApp {
 
         protected abstract Task<object> ExecuteAnalysis(object obj);
 
-        protected virtual bool CanExecuteAnalysis() {
+        public virtual bool CanExecuteAnalysis() {
             return SelectedPresetViewModel != null && 
                    SelectedPresetViewModel.IsAllValid && 
                    MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 0 &&

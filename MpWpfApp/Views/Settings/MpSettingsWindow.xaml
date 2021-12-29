@@ -15,8 +15,8 @@
                 mc:Ignorable="d"
                 Title="Settings"
                 Height="650"
-                Width="800"
-                ResizeMode="NoResize"
+                MinWidth="800"
+                SizeToContent="Width"
                 ShowInTaskbar="False"
                 Topmost="True"
                 WindowStartupLocation="CenterScreen"
@@ -25,12 +25,6 @@
     <Window.DataContext>
         <local:MpSettingsWindowViewModel />
     </Window.DataContext>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:CallMethodAction MethodName="SettingsWindow_Loaded"
-                                TargetObject="{Binding}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*" />
@@ -145,7 +139,7 @@
         <!--  Security  -->
         <StackPanel Grid.Row="1"
                     Visibility="{Binding SettingsPanel3Visibility}">
-            <local:MpSecurityTabPanel DataContext="{Binding SecurityViewModel}" />
+            <local:MpSecurityTabPanel DataContext="{Binding}" />
         </StackPanel>
         <!--  Shortcuts  -->
         <local:MpShortcutsTabPanel Grid.Row="1"
@@ -159,21 +153,25 @@
         <!--  Footer  -->
         <DockPanel Grid.Row="2"
                    HorizontalAlignment="Stretch">
-            <Button DockPanel.Dock="Left"
+            <Button x:Name="ResetButton"
+                    DockPanel.Dock="Left"
                     Width="100"
                     Margin="10,20,10,10"
-                    Command="{Binding ResetSettingsCommand}"
+                    Click="ResetButton_Click"
                     Content="Reset All" />
             <StackPanel DockPanel.Dock="Right"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-                <Button Width="100"
+                <Button x:Name="SaveButton"
+                        Width="100"
                         Margin="10,20,10,10"
-                        Command="{Binding SaveSettingsCommand}"
+                        IsDefault="True"
+                        Click="SaveButton_Click"
                         Content="Save" />
-                <Button Width="100"
+                <Button x:Name="CancelButton"
+                        Width="100"
                         Margin="10,20,10,10"
-                        Command="{Binding CancelSettingsCommand}"
+                        Click="CancelButton_Click"
                         Content="Cancel" />
             </StackPanel>
         </DockPanel>

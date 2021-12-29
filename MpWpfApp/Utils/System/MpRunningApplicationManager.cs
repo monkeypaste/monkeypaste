@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Threading;
 using System.Collections.Concurrent;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpRunningApplicationManager : MpViewModelBase<object> {
@@ -18,7 +19,7 @@ namespace MpWpfApp {
         public static MpRunningApplicationManager Instance { get { return _Lazy.Value; } }
 
         #region Private Variables
-
+        private bool _isFirstLoad = true;
         #endregion
 
         #region Properties
@@ -106,6 +107,7 @@ namespace MpWpfApp {
                 }
                 if (wasStackChanged) {
                     //OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
+
                 }
             }
         }
@@ -140,6 +142,7 @@ namespace MpWpfApp {
                     CurrentProcessWindowHandleStackDictionary.TryAdd(processName, new List<IntPtr> { fgHandle });
                     wasStackChanged = true;
                     ActiveProcessPath = processName;
+
                     //MonkeyPaste.MpConsole.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
                 }
                 //}

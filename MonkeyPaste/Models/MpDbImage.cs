@@ -30,7 +30,24 @@ namespace MonkeyPaste {
 
         public string ImageBase64 { get; set; }
 
-        
+        public static async Task<MpDbImage> Create(string base64Str) {
+            if(!base64Str.IsBase64String()) {
+                MpConsole.WriteLine("Warning malformed base64 str, cannot create dbimage so returing default");
+                return MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.IconImage;
+            }
+
+            var dupCheck = await MpDataModelProvider.Instance.GetDbImageByBase64Str(base64Str);
+            if(dupCheck != null) {
+                return dupCheck;
+            }
+            var i = new MpDbImage() {
+                DbImageGuid = System.Guid.NewGuid(),
+                ImageBase64 = base64Str
+            };
+
+            await i.WriteToDatabaseAsync();
+            return i;
+        }
         public MpDbImage() { }
 
         public async Task<object> CreateFromLogs(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            

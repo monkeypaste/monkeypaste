@@ -7,23 +7,38 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpWpfQueryInfo : MpIQueryInfo {
-        public int TotalItemsInQuery { get; set; }
-        public bool IsDescending { get; set; }
-        public MpContentSortType SortType { get; set; }
-        public int TagId { get; set; }
-        public string SearchText { get; set; }
-        public MpContentFilterType FilterFlags { get; set; }
-        public int PageSize { get; set; }
+        
+        public int TotalItemsInQuery { get; set; } = 0;
+        public bool IsDescending { get; set; } = true;
+        public MpContentSortType SortType { get; set; } = MpContentSortType.None;
+        public int TagId { get; set; } = 0;
+        public string SearchText { get; set; } = string.Empty;
 
+        public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
+        public MpTextFilterFlagType TextFlags { get; set; } = MpTextFilterFlagType.None;
+        public MpTimeFilterFlagType TimeFlags { get; set; } = MpTimeFilterFlagType.None;
+        public MpLogicalFilterFlagType LogicFlags { get; set; }
+
+        public int PageSize { get; set; } = 0;
+
+        public int SortOrderIdx { get; set; } = 0;
+
+        
         public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
             IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
             SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
-            FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
             TotalItemsInQuery = MpDataModelProvider.Instance.TotalTilesInQuery;
 
-            if(isFilterSortOrSearch) {
+            var qi = MpDataModelProvider.Instance.QueryInfo;
+            MpDataModelProvider.Instance.QueryInfos.Clear();
+
+            qi.FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
+            MpDataModelProvider.Instance.QueryInfos.Add(qi);
+            MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.Instance.QueryInfos.Add(x.ToQueryInfo()));
+
+            if (isFilterSortOrSearch) {
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);
             } else {
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SubQueryChanged);

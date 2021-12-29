@@ -20,14 +20,15 @@ namespace MpWpfApp {
     */
     public enum MpSearchCriteriaPropertyType {
         Content = 0,
+        Description,
         ContentType,
         Collection,
         Title,
-        Source,
-        Time
-        //CopiedDate,
-        //PastedDate,
-        //ModifiedDate
+        Application,
+        Website,
+        Time,
+        Device,
+        Logical
     }
 
     public enum MpSearchCriteriaUnitType {
@@ -48,18 +49,19 @@ namespace MpWpfApp {
 
         #region Item Sources
 
-        public ObservableCollection<string> CriteriaTypeLabels {
+        public ObservableCollection<string> PrimaryLabels {
             get {
                 return new ObservableCollection<string>() {
                     "Content",
+                    "Description",
                     "Content Type",
                     "Collection",
                     "Title",
-                    "Source",
-                    "Time"
-                    //"Copied Date",
-                    //"Pasted Date",
-                    //"Modified Date"
+                    "Application",
+                    "Website",
+                    "Date/Time",
+                    "Device",
+                    "Logical"
                 };
             }
         }
@@ -69,24 +71,28 @@ namespace MpWpfApp {
                 switch (SelectedCriteriaType) {
                     case MpSearchCriteriaPropertyType.Title:
                     case MpSearchCriteriaPropertyType.Content:
+                    case MpSearchCriteriaPropertyType.Description:
                         return TextUnitOptionLabels;
+
                     case MpSearchCriteriaPropertyType.ContentType:
                         return ContentTypeOptionLabels;
 
                     case MpSearchCriteriaPropertyType.Collection:
                         return CollectionsOptionLabels;
 
-                    //case MpSearchCriteriaPropertyType.Source:
-                    //    return MpSearchCriteriaUnitType.Text | MpSearchCriteriaUnitType.Enumerable;
+                    case MpSearchCriteriaPropertyType.Application:
+                        return ApplicaitonTypeUnitOptionLabels;
+
+                    case MpSearchCriteriaPropertyType.Website:
+                        return WebContentTypeUnitOptionLabels;
 
                     case MpSearchCriteriaPropertyType.Time:
                         return DateTimeUnitOptionLabels;
-                    //    return MpSearchCriteriaUnitType.Text |
-                    //           MpSearchCriteriaUnitType.Number |
-                    //           MpSearchCriteriaUnitType.DateTime |
-                    //           MpSearchCriteriaUnitType.TimeSpan |
-                    //           MpSearchCriteriaUnitType.Enumerable;
 
+                    case MpSearchCriteriaPropertyType.Device:
+                        return DeviceOptionLabels;
+                    case MpSearchCriteriaPropertyType.Logical:
+                        return LogicalTypeOptionLabels;
                     default: return null;
                 }
             }
@@ -100,10 +106,27 @@ namespace MpWpfApp {
                             return TextUnitOptionLabels;
                         }
                         break;
+                    case MpSearchCriteriaPropertyType.Application:
+                    case MpSearchCriteriaPropertyType.Website:
+                        return TextUnitOptionLabels;
                 }
                 return null;
             }
         }
+
+        public ObservableCollection<string> QuaternaryLabels {
+            get {
+                switch (SelectedCriteriaType) {
+                    case MpSearchCriteriaPropertyType.Collection:
+                        if (SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
+                            return TextUnitOptionLabels;
+                        }
+                        break;
+                }
+                return null;
+            }
+        }
+        
 
         #region Option Labels
 
@@ -114,7 +137,18 @@ namespace MpWpfApp {
                     "Contains",
                     "Begins With",
                     "Ends With",
-                    "Regular Expression"
+                    "RegEx"
+                };
+            }
+        }
+
+        public ObservableCollection<string> LogicalTypeOptionLabels {
+            get {
+                return new ObservableCollection<string>() {
+                    "And",
+                    "Or",
+                    "Not",
+                    "Xor"
                 };
             }
         }
@@ -176,6 +210,37 @@ namespace MpWpfApp {
 
         public ObservableCollection<string> CollectionsOptionLabels { get; private set; } = new ObservableCollection<string>();
 
+        public ObservableCollection<string> DeviceOptionLabels { get; private set; } = new ObservableCollection<string>();
+
+        public ObservableCollection<string> FileContentTypeUnitOptionLabels {
+            get {
+                return new ObservableCollection<string>() {
+                    "Path",
+                    "Name",
+                    "Extension"
+                };
+            }
+        }
+
+        public ObservableCollection<string> ApplicaitonTypeUnitOptionLabels {
+            get {
+                return new ObservableCollection<string>() {
+                    "Path",
+                    "Name"
+                };
+            }
+        }
+
+        public ObservableCollection<string> WebContentTypeUnitOptionLabels {
+            get {
+                return new ObservableCollection<string>() {
+                    "Url",
+                    "Domain",
+                    "Title"
+                };
+            }
+        }
+
         #endregion
 
         #endregion
@@ -208,6 +273,8 @@ namespace MpWpfApp {
 
         public bool CanInputText => SearchCriteriaUnitTypeFlags.HasFlag(MpSearchCriteriaUnitType.Text);
 
+        public bool CanInputDate => SearchCriteriaUnitTypeFlags.HasFlag(MpSearchCriteriaUnitType.DateTime);
+
         public bool HasTertiaryLabels => TertiaryLabels != null && TertiaryLabels.Count > 0;
 
         public bool IsSelected { get; set; } = false;
@@ -219,6 +286,8 @@ namespace MpWpfApp {
         public int SelectedSecondaryIdx { get; set; } = 0;
 
         public int SelectedTertiaryIdx { get; set; } = 0;
+
+        public int SelectedQuaternaryIdx { get; set; } = 0;
 
         public MpSearchCriteriaPropertyType SelectedCriteriaType => (MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx;
 
@@ -235,21 +304,90 @@ namespace MpWpfApp {
                         }
                         return MpSearchCriteriaUnitType.Enumerable;
 
-                    case MpSearchCriteriaPropertyType.Source:
+                    case MpSearchCriteriaPropertyType.Application:
                         return MpSearchCriteriaUnitType.Enumerable;
 
                     case MpSearchCriteriaPropertyType.ContentType:
                         return MpSearchCriteriaUnitType.Text;
 
                     case MpSearchCriteriaPropertyType.Time:
-                        return MpSearchCriteriaUnitType.Text | 
-                               MpSearchCriteriaUnitType.Number | 
-                               MpSearchCriteriaUnitType.DateTime |
-                               MpSearchCriteriaUnitType.TimeSpan |
-                               MpSearchCriteriaUnitType.Enumerable;
+                        return MpSearchCriteriaUnitType.DateTime;
 
                     default: return MpSearchCriteriaUnitType.None;
                 }
+            }
+        }
+
+        public MpContentFilterType FilterFlags {
+            get {
+                MpContentFilterType ff = MpContentFilterType.None;
+                switch (SelectedCriteriaType) {
+                    case MpSearchCriteriaPropertyType.Description:
+                        ff |= MpContentFilterType.Meta;
+                        if (SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
+                            ff |= MpContentFilterType.Regex;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Title:
+                        ff |= MpContentFilterType.Title;
+                        if(SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
+                            ff |= MpContentFilterType.Regex;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Content:
+                        ff |= MpContentFilterType.Content;
+                        if (SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
+                            ff |= MpContentFilterType.Regex;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Collection:
+                        ff |= MpContentFilterType.Tag;
+                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
+                            if(SelectedQuaternaryIdx == TextUnitOptionLabels.Count - 1) {
+                                ff |= MpContentFilterType.Regex;
+                            }
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Application:
+                        if (SelectedSecondaryIdx == 0) {
+                            ff |= MpContentFilterType.AppPath;
+                        } else if(SelectedSecondaryIdx == 1) {
+                            ff |= MpContentFilterType.AppName;
+                        }
+                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
+                            ff |= MpContentFilterType.Regex;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Website:
+                        if (SelectedSecondaryIdx == 0) {
+                            ff |= MpContentFilterType.Url;
+                        } else if (SelectedSecondaryIdx == 1) {
+                            ff |= MpContentFilterType.Url;
+                        } else if (SelectedSecondaryIdx == 2) {
+                            ff |= MpContentFilterType.UrlTitle;
+                        }
+                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
+                            ff |= MpContentFilterType.Regex;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.ContentType:
+                        if(SelectedSecondaryIdx == 0) {
+                            ff |= MpContentFilterType.TextType;
+                        } else if (SelectedSecondaryIdx == 1) {
+                            ff |= MpContentFilterType.ImageType;
+                        } else if (SelectedSecondaryIdx == 2) {
+                            ff |= MpContentFilterType.FileType;
+                        }
+                        break;
+                    case MpSearchCriteriaPropertyType.Time:
+                        ff |= MpContentFilterType.Time;
+                        break;
+                    case MpSearchCriteriaPropertyType.Logical:
+                        return ff;
+                    default:
+                        throw new Exception("Unknonw criteria");
+                }
+                return ff;
             }
         }
 
@@ -275,6 +413,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        public bool IsCaseSensitive { get; set; } = false;
 
         public string InputValue {
             get {
@@ -313,12 +453,50 @@ namespace MpWpfApp {
 
             MpTagTrayViewModel.Instance.TagTileViewModels.ForEach(x => CollectionsOptionLabels.Add(x.TagName));
             CollectionsOptionLabels.Sort(x=>x);
-            CollectionsOptionLabels.Add(" - Custom - ");
+            CollectionsOptionLabels.Add(" - custom -");
             OnPropertyChanged(nameof(CollectionsOptionLabels));
 
-            await Task.Delay(1);
+            var dl = await MpDb.Instance.GetItemsAsync<MpUserDevice>();
+
+            dl.ForEach(x => DeviceOptionLabels.Add(x.MachineName));
+            DeviceOptionLabels.Sort(x => x);
+            DeviceOptionLabels.Add(" - custom -");
+            OnPropertyChanged(nameof(DeviceOptionLabels));
 
             IsBusy = false;
+        }
+
+        public MpIQueryInfo ToQueryInfo() {
+            var qi = new MpWpfQueryInfo();
+            qi.SortOrderIdx = Parent.CriteriaItems.IndexOf(this) + 1;
+            qi.FilterFlags = this.FilterFlags;
+
+            if(CanInputText) {
+                if(SecondaryLabels != null && SecondaryLabels[1] == "Matches") {
+                    qi.TextFlags = (MpTextFilterFlagType)SelectedSecondaryIdx;
+                } else if (TertiaryLabels != null && TertiaryLabels.Count > 0 && TertiaryLabels[1] == "Matches") {
+                    qi.TextFlags = (MpTextFilterFlagType)SelectedTertiaryIdx;
+                } else if (QuaternaryLabels != null && QuaternaryLabels.Count > 0 && QuaternaryLabels[1] == "Matches") {
+                    qi.TextFlags = (MpTextFilterFlagType)SelectedQuaternaryIdx;
+                }                
+            }
+            if (CanInputDate) {
+                qi.TimeFlags = (MpTimeFilterFlagType)SelectedTertiaryIdx;
+            }
+
+            if(CanInputDate || CanInputText) {
+                qi.SearchText = InputValue;
+            } else {
+                if ((MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx == MpSearchCriteriaPropertyType.Collection) {
+                    qi.SearchText = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagName == CollectionsOptionLabels[SelectedSecondaryIdx].ToLower()).TagId.ToString();
+                } 
+            }
+
+            if((MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx == MpSearchCriteriaPropertyType.Logical) {
+                qi.LogicFlags = (MpLogicalFilterFlagType)SelectedSecondaryIdx;
+            }
+
+            return qi;
         }
 
         #endregion
@@ -328,16 +506,31 @@ namespace MpWpfApp {
         private void MpSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(SelectedCriteriaTypeIdx):
-                    OnPropertyChanged(nameof(SecondaryLabels));
+                    SelectedSecondaryIdx = SelectedTertiaryIdx = 0;
+                    Refresh();
+                    InputValue = string.Empty;
                     break;
                 case nameof(SelectedSecondaryIdx):
-                    OnPropertyChanged(nameof(TertiaryLabels));
-                    OnPropertyChanged(nameof(CanInputText));
+                    SelectedTertiaryIdx = 0;
+                    Refresh();
+                    InputValue = string.Empty;
+                    break;
+                case nameof(SelectedTertiaryIdx):
+                    Refresh();
+                    InputValue = string.Empty;
                     break;
                 case nameof(InputValue):
-                    OnPropertyChanged(nameof(CanInputText));
+                    Refresh();
                     break;
             }
+        }
+
+        private void Refresh() {
+
+            OnPropertyChanged(nameof(SecondaryLabels));
+            OnPropertyChanged(nameof(TertiaryLabels));
+            OnPropertyChanged(nameof(CanInputText));
+            OnPropertyChanged(nameof(CanInputDate));
         }
 
         #endregion

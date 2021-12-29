@@ -20,12 +20,24 @@ namespace MonkeyPaste {
     }
 
     public class MpUserDevice : MpDbModelBase, MpISyncableDbObject {
+        #region Columns
+
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpUserDeviceId")]
         public override int Id { get; set; }
 
         [Column("MpUserDeviceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        public string MachineName { get; set; }
+
+        [Column("PlatformTypeId")]
+        public int TypeId { get; set; } = 0;
+
+
+        #endregion
+
+        #region Properties
 
         [Ignore]
         public Guid UserDeviceGuid {
@@ -39,9 +51,6 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-
-        [Column("PlatformTypeId")]
-        public int TypeId { get; set; } = 0;
 
         [Ignore]
         public MpUserDeviceType PlatformType {
@@ -71,6 +80,8 @@ namespace MonkeyPaste {
                 return PlatformType == MpPreferences.Instance.ThisDeviceType;
             }
         }
+
+        #endregion
 
         public MpUserDevice() { }
 

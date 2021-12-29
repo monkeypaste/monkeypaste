@@ -33,7 +33,10 @@ namespace MpWpfApp {
             }
             BindingContext.CycleDetailCommand.Execute(null);                       
 
-            if (BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo || 
+            if (BindingContext.CurDetailType == MpCopyItemDetailType.DateTimeCreated) {
+                ClipTileDetailTextBlock.ToolTip = BindingContext.CopyItemCreatedDateTime.ToString();
+            }
+            else if (BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo || 
                 BindingContext.CurDetailType == MpCopyItemDetailType.UrlInfo) {
                 string linkText = BindingContext.DetailText;
                 string linkPath = BindingContext.DetailText;

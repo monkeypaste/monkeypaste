@@ -27,9 +27,13 @@ namespace MpWpfApp {
         }
 
         public override async Task FindHighlighting() {
+            
             await Task.Delay(1);
 
             _matches.Clear();
+            if (AssociatedObject == null) {
+                return;
+            }
 
             var civm = AssociatedObject.BindingContext;
             var qi = MpDataModelProvider.Instance.QueryInfo;

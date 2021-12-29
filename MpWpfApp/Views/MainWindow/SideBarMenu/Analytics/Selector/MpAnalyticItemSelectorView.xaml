@@ -20,7 +20,9 @@
                     Margin="10,0">
                 <ComboBox x:Name="AnalyticItemChooserComboBox"
                           IsSynchronizedWithCurrentItem="True"
-                          SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedItem,
+                                                 Mode=TwoWay,
+                                                 UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding Items}">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">

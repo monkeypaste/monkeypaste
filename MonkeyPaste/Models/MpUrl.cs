@@ -24,6 +24,10 @@ namespace MonkeyPaste {
 
         public string UrlTitle { get; set; }
 
+        public int UrlRejected { get; set; } = 0;
+
+        public int DomainRejected { get; set; } = 0;
+
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; } = 0;
@@ -52,15 +56,24 @@ namespace MonkeyPaste {
             }
         }
 
-        public int IsRejected { get; set; } = 0;
 
         [Ignore]
         public bool IsDomainRejected {
             get {
-                return IsRejected == 1;
+                return DomainRejected == 1;
             }
             set {
-                IsRejected = value ? 1 : 0;
+                DomainRejected = value ? 1 : 0;
+            }
+        }
+
+        [Ignore]
+        public bool IsUrlRejected {
+            get {
+                return UrlRejected == 1;
+            }
+            set {
+                UrlRejected = value ? 1 : 0;
             }
         }
 

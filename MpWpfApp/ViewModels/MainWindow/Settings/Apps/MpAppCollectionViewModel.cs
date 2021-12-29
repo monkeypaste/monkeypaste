@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
+using System.IO;
 
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : MpSingletonViewModel<MpAppCollectionViewModel> {
+        #region Properties
 
         #region View Models
-        private ObservableCollection<MpAppViewModel> _appViewModels = new ObservableCollection<MpAppViewModel>();
-        public ObservableCollection<MpAppViewModel> AppViewModels {
-            get {
-                return _appViewModels;
-            }
+                
+        public ObservableCollection<MpAppViewModel> AppViewModels { get; set; } = new ObservableCollection<MpAppViewModel>();
+
+        public MpAppViewModel SelectedAppViewModel {
+            get => AppViewModels.FirstOrDefault(x => x.IsSelected);
             set {
-                if(_appViewModels != value) {
-                    _appViewModels = value;
-                    OnPropertyChanged(nameof(AppViewModels));
+                AppViewModels.ForEach(x => x.IsSelected = false);
+                if(value != null) {
+                    AppViewModels.ForEach(x => x.IsSelected = x.AppId == value.AppId);
                 }
             }
         }
+
         #endregion
-
-        #region Properties
-
         #endregion
 
         #region Constructors
@@ -50,21 +50,21 @@ namespace MpWpfApp {
         }
 
         public MpAppViewModel GetAppViewModelByProcessPath(string processPath) {
-            foreach (var avm in AppViewModels.Where(x => x.AppPath == processPath)) {
+            foreach (var avm in AppViewModels.Where(x => x.AppPath.ToLower() == processPath.ToLower())) {
                 return avm;
             }
             return null;
         }
 
         public async Task<bool> UpdateRejection(MpAppViewModel app, bool rejectApp) {
-            if(app.App.IsAppRejected == rejectApp) {
-                return rejectApp;
-            }
-            if (AppViewModels.Contains(app)) {
+            IsBusy = true;
+
+            if (GetAppViewModelByProcessPath(app.AppPath) != null) {
                 bool wasCanceled = false;
                 if (rejectApp) {
-                    var ctrvm = MpClipTrayViewModel.Instance;
-                    var clipsFromApp = ctrvm.GetClipTilesByAppId(app.AppId);
+                    var clipsFromApp = await MpDataModelProvider.Instance.GetCopyItemsByAppId(app.AppId);
+                    IsBusy = false;
+                    
                     if (clipsFromApp != null && clipsFromApp.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + app.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                         if (confirmExclusionResult == MessageBoxResult.Cancel) {
@@ -72,83 +72,42 @@ namespace MpWpfApp {
                         } else {
                             MpApp appToReject = app.App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
-                                //var clipTilesToRemove = clipsFromApp.Select(x => x.ItemViewModels.Where(y => y.CopyItem.Source.AppId == appToReject.Id));
+                                IsBusy = true;
 
-                                //foreach (var ctToRemove in clipTilesToRemove) {
-                                //    ctToRemove.Parent.ItemViewModels.Remove(ctToRemove);
-                                //    if (ctr)
-                                //        ctToRemove.CopyItem.DeleteFromDatabase();
-                                //}
-
-
-                                // TODO Remove content items or empty clips above
+                                await Task.WhenAll(clipsFromApp.Select(x => x.DeleteFromDatabaseAsync()));
                             }
                         }
                     }
                 }
                 if (wasCanceled) {
+                    IsBusy = false;
                     return app.IsAppRejected;
                 }
                 int appIdx = AppViewModels.IndexOf(app);
                 AppViewModels[appIdx].App.IsAppRejected = rejectApp;
                 await AppViewModels[appIdx].App.WriteToDatabaseAsync();
 
-                // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
-                foreach (var ctvm in MpClipTrayViewModel.Instance.Items) {
-                    foreach (var rtbvm in ctvm.ItemViewModels) {
-                        if (rtbvm.CopyItem.Source.App.Id == AppViewModels[appIdx].AppId) {
-                            rtbvm.CopyItem.Source.App = AppViewModels[appIdx].App;
-                        }
-                    }
-                }
             } else {
                 MonkeyPaste.MpConsole.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
             }
+            IsBusy = false;
             return rejectApp;
         }
 
         public async Task AddApp(MpAppViewModel avm) {
-            if(avm.IsAppRejected && avm.App != null) {
-                var dupList = AppViewModels.Where(x => x.AppPath == avm.AppPath).ToList();
-                if (dupList != null && dupList.Count > 0) {
-                    var ctrvm = MpClipTrayViewModel.Instance;
-                    var ctvms = ctrvm.GetClipTilesByAppId(dupList[0].AppId);
-                    if(ctvms != null && ctvms.Count > 0) {
-                        MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + avm.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                        if (confirmExclusionResult == MessageBoxResult.Cancel) {
-                            //do nothing
-                        } else {
-                            MpApp appToReject = dupList[0].App;
-                            if (confirmExclusionResult == MessageBoxResult.Yes) {
-                                //var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                //foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
-                                //    if (ctvm.CopyItemAppId == appToReject.Id) {
-                                //        clipTilesToRemove.Add(ctvm);
-                                //    }
-                                //}
-                                //foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                                //    ctrvm.Remove(ctToRemove);
-                                //    ctToRemove.CopyItem.DeleteFromDatabase();
-                                //}
-
-
-                                // TODO Remove content items or empty clips above
-                            }
-                            appToReject.IsAppRejected = true;
-                            await appToReject.WriteToDatabaseAsync();
-                            return;
-                        }
-                    }
-                } else {
-                    await avm .App.WriteToDatabaseAsync();
-                }
+            var dupCheck = GetAppViewModelByProcessPath(avm.AppPath);
+            if (dupCheck == null) {
+                await avm.App.WriteToDatabaseAsync();
+                AppViewModels.Add(avm);
             }
-            //base.Add(avm);
+
+            await UpdateRejection(avm, avm.IsAppRejected);
+
             await Refresh();
         }
 
         public bool IsAppRejected(string processPath) {
-            var avm = AppViewModels.FirstOrDefault(x => x.AppPath == processPath);
+            var avm = GetAppViewModelByProcessPath(processPath);
             if(avm == null) {
                 return false;
             }
@@ -165,10 +124,44 @@ namespace MpWpfApp {
             foreach (var app in appl) {
                 AppViewModels.Add(new MpAppViewModel(this,app));
             }
+            OnPropertyChanged(nameof(AppViewModels));
         }
         #endregion
 
         #region Commands
+
+        public ICommand AddAppCommand => new RelayCommand(
+            async () => {
+                string appPath = string.Empty;
+
+                var openFileDialog = new System.Windows.Forms.OpenFileDialog() {
+                    Filter = "Applications|*.lnk;*.exe",
+                    Title = "Select application path",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                };
+                var openResult = openFileDialog.ShowDialog();
+                if (openResult == System.Windows.Forms.DialogResult.Cancel) {
+                    return;
+                }
+                if (openResult == System.Windows.Forms.DialogResult.OK) {
+                    appPath = openFileDialog.FileName;
+                    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                        appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                    }
+                    MpApp app = null;
+                    var avm = AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                    if (avm == null) {
+                        var iconBmpSrc = MpHelpers.Instance.GetIconImage(appPath);
+                        var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
+                        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
+                        avm = new MpAppViewModel(this, app);
+                        await AddApp(avm);
+                    }
+
+                    SelectedAppViewModel = avm;
+                }
+            });
+
         #endregion
     }
 }

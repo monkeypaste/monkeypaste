@@ -67,5 +67,10 @@ namespace MpWpfApp {
             SearchCriteriaTextBox.Focus();
             e.Handled = true;
         }
+
+        private void DatePicker_Loaded(object sender, RoutedEventArgs e) {
+            var dtp = sender as DatePicker;
+            dtp.DisplayDateEnd = DateTime.Now;
+        }
     }
 }

@@ -115,9 +115,9 @@ namespace MpWpfApp {
             });
 
         public ICommand ShowSettingsWindowCommand => new RelayCommand<object>(
-            (args) => {
-                MpMainWindowViewModel.Instance.IsShowingDialog = true;
-                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+            async (args) => {
+                
+                //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
                 int tabIdx = 0;
                 if (args is int) {
                     tabIdx = (int)args;
@@ -129,10 +129,7 @@ namespace MpWpfApp {
                     tabIdx = 1;
                 }
 
-                SettingsWindowViewModel = new MpSettingsWindowViewModel();
-                SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
-
-                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+                await MpSettingsWindow.ShowDialog(tabIdx, args);
             });
         #endregion
     }

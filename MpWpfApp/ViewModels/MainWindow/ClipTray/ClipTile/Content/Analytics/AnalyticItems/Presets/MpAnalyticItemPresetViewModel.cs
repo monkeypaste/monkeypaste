@@ -492,7 +492,7 @@ namespace MpWpfApp {
                 Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                 Parent.ExecuteAnalysisCommand.Execute(null);
-            });
+            }, Parent.CanExecuteAnalysis);
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

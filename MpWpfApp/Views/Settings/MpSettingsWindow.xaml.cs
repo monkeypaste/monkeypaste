@@ -17,13 +17,60 @@ namespace MpWpfApp {
     /// Interaction logic for MpSettingsWindow.xaml
     /// </summary>
     public partial class MpSettingsWindow : MpWindow<MpSettingsWindowViewModel> {
-        public MpSettingsWindow() {
-            InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel();
+        public static async Task ShowDialog(int tabToShow, object args = null) {
+            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+                var swvm = new MpSettingsWindowViewModel();
+                await swvm.InitializeAsync(tabToShow, args);
+                var sw = new MpSettingsWindow();
+                sw.DataContext = swvm;
+
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                var result = sw.ShowDialog();
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+
+                if (result.HasValue) {
+                    if (result.Value) {
+                        // clicked save
+                        swvm.SaveSettingsCommand.Execute(null);
+                        return;
+                    }
+                    // clicked cancel
+                    swvm.CancelSettingsCommand.Execute(null);
+                    return;
+                }
+                //clicked restore defaults (may no implement
+                swvm.ResetSettingsCommand.Execute(null);
+                return;
+            });
         }
-        public MpSettingsWindow(int tabToShow, object args = null) {
+
+        public MpSettingsWindow() : base() {
             InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel(tabToShow, args);
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e) {
+            var swvm = DataContext as MpSettingsWindowViewModel;
+
+            var result = MessageBox.Show("Are you sure you want to reset all settings to default?", "Reset All", MessageBoxButton.YesNo);
+            if(result == MessageBoxResult.Yes) {
+                swvm.ResetSettingsCommand.Execute(null);
+                Close();
+                return;
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            var swvm = DataContext as MpSettingsWindowViewModel;
+
+            swvm.SaveSettingsCommand.Execute(null);
+            Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e) {
+            var swvm = DataContext as MpSettingsWindowViewModel;
+
+            swvm.CancelSettingsCommand.Execute(null);
+            Close();
         }
     }
 }
