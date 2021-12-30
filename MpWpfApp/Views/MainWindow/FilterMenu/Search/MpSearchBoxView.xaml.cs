@@ -180,6 +180,14 @@ namespace MpWpfApp {
             BindingContext.IsOverSaveSearchButton = false;
         }
 
+        private void DeleteSearchButton_MouseEnter(object sender, MouseEventArgs e) {
+            BindingContext.IsOverDeleteSearchButton = true;
+        }
+
+        private void DeleteSearchButton_MouseLeave(object sender, MouseEventArgs e) {
+            BindingContext.IsOverDeleteSearchButton = false;
+        }
+
         private void AddOrClearSearchCriteriaButton_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;

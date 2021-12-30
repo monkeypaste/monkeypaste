@@ -290,6 +290,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlCollectionViewModel.cs" />
@@ -299,6 +300,10 @@
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
+      <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\MpManageAnalyticItemsContainerView.xaml.cs">
       <DependentUpon>MpManageAnalyticItemsContainerView.xaml</DependentUpon>
     </Compile>
@@ -533,6 +538,10 @@
     <Page Include="Styles\MpPagingListBoxResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Analytics\MpManageAnalyticItemsContainerView.xaml">
       <Generator>MSBuild:Compile</Generator>

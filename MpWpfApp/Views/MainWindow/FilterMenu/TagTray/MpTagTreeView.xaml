@@ -19,6 +19,7 @@
                       Loaded="TagTray_Loaded"
                       Background="Transparent"
                       dd:DragDrop.IsDragSource="True"
+                      dd:DragDrop.IsDropTarget="True"
                       BorderThickness="0"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"

@@ -94,7 +94,49 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        #region Enums
+
+        public static string[] EnumToLabels(this Type e, string noneText = "") {
+            if(!e.IsEnum) {
+                throw new Exception($"{e.ToString()} is not enum type");
+            }
+            var names = Enum.GetNames(e);
+            for (int i = 0; i < names.Length; i++) {
+                names[i] = names[i].ToLabel(noneText);
+            }
+            return names;
+        }
+
+        public static string EnumToLabel<TValue>(this TValue value)
+            where TValue : Enum {
+            string valStr = nameof(value);
+            var valParts = valStr.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+
+            return valParts[valParts.Length - 1].ToLabel();
+        }
+
+        public static int EnumToInt<TValue>(this TValue value) 
+            where TValue : Enum => Convert.ToInt32(value);
+
+        #endregion
+
         #region Strings
+
+        public static string ToLabel(this string titleCaseStr, string noneText = "") {
+            // TODO when automating UI language need to parameterize low vs up case logic
+            //Converts 'ThisIsALabel" to 'This Is A Label'
+            string outStr = string.Empty;
+            for (int i = 0; i < titleCaseStr.Length; i++) {                
+                if(i > 0 && titleCaseStr[i-1] > 'Z' && titleCaseStr[i] <= 'Z') {
+                    outStr += " ";
+                }
+                outStr += titleCaseStr[i];
+            }
+            if(outStr.ToLower() == "none") {
+                return noneText;
+            }
+            return outStr;
+        }
 
         public static string ToReadableTimeSpan(this DateTime dt) {
             int totalYears, totalMonths, totalWeeks, totalDays, totalMinutes;

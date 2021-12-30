@@ -8,16 +8,9 @@ using System.Web.UI.WebControls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using MonkeyPaste;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace MpWpfApp {
-    /*
-        Name, Contents - Text - Matches, Contains, Begins/Ends With
-        Number - Equals, Greater/Less Than, Is Not
-        Kind - is (Types, Other - Text)
-        DateTime - is (within last (days,weeks,months,years) 
-                    # days/weeks/months/years, exactly , before, after (all date pickers), 
-                    today, yesterday, this week/month/year 
-    */
     public enum MpSearchCriteriaPropertyType {
         Content = 0,
         Description,
@@ -34,216 +27,648 @@ namespace MpWpfApp {
     public enum MpSearchCriteriaUnitType {
         None = 0,
         Text = 1,
-        Number = 2,
-        DateTime = 4,
+        Hex = 512, 
+        Integer = 2,
+        ByteX4 = 1024, 
+        Decimal = 256, 
+        UnitDecimalX4 = 2048, 
+        DateTime = 128,
         TimeSpan = 8,
         Enumerable = 16,
-        Other = 32
+        EnumerableValue = 4096,
+        RegEx = 32,
+        CaseSensitivity = 64
     };
+
+
+    #region Option Enums
+
+    public enum MpRootOptionType {
+        None = 0,
+        Content,
+        Collection,
+        Source,
+        DateOrTime
+    }
+
+    public enum MpContentOptionType {
+        None = 0,
+        AnyText,
+        TypeSpecific,
+        Title
+    }
+
+    public enum MpContentTypeOptionType {
+        None = 0,
+        Text,
+        Image,
+        Files
+    }
+
+    public enum MpSourceOptionType {
+        None = 0,
+        Device,
+        App,
+        Website
+    }
+
+    public enum MpAppOptionType {
+        None = 0,
+        ApplicationName,
+        ProcessPath
+    }
+
+    public enum MpWebsiteOptionType {
+        None = 0,
+        Url,
+        Domain,
+        Title
+    }
+
+    public enum MpDateTimeTypeOptionType {
+        None = 0,
+        Created,
+        Modified,
+        Pasted
+    }
+
+    public enum MpDateTimeOptionType {
+        None = 0,
+        WithinLast,
+        Before,
+        After,
+        Exact
+    }
+
+    public enum MpFileContentOptionType {
+        None = 0,
+        Path,
+        Name,
+        Kind
+    }
+
+    public enum MpFileOptionType {
+        None = 0,
+        Document,
+        Image,
+        Video,
+        Spreadsheet,
+        Custom
+    }
+
+    public enum MpTextOptionType {
+        None = 0,
+        Matches,
+        Contains,
+        BeginsWith,
+        EndsWith,
+        RegEx
+    }
+
+    public enum MpImageOptionType {
+        None = 0,
+        Dimensions,
+        Format,
+        Description,
+        Color
+    }
+
+    public enum MpNumberOptionType {
+        None = 0,
+        Equals,
+        GreaterThan,
+        LessThan,
+        IsNot
+    }
+
+    public enum MpDimensionOptionType {
+        None = 0,
+        Width,
+        Height
+    }
+
+    public enum MpColorOptionType {
+        None = 0,
+        Hex,
+        RGBA
+    }
+
+    public enum MpTimeSpanWithinUnitType {
+        None = 0,
+        Hours,
+        Days,
+        Weeks,
+        Months,
+        Years
+    }
+
+    public enum MpDateBeforeUnitType {
+        None = 0,
+        Today,
+        Yesterday,
+        ThisWeek,
+        ThisMonth,
+        ThisYear,
+        Exact
+    }
+
+    public enum MpDateAfterUnitType {
+        None = 0,
+        Yesterday,
+        LastWeek,
+        LastMonth,
+        LastYear,
+        Exact
+    }
+
+    #endregion
 
     public class MpSearchCriteriaItemViewModel : MpViewModelBase<MpSearchBoxViewModel> {
         #region Private Variables
+        private List<string> _deviceNames;
+
         #endregion
 
         #region Properties
 
-        #region Item Sources
+        #region ViewModels
 
-        public ObservableCollection<string> PrimaryLabels {
+        private ObservableCollection<MpSearchCriteriaOptionViewModel> _selectedOptions;
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> SelectedOptions {
             get {
-                return new ObservableCollection<string>() {
-                    "Content",
-                    "Description",
-                    "Content Type",
-                    "Collection",
-                    "Title",
-                    "Application",
-                    "Website",
-                    "Date/Time",
-                    "Device",
-                    "Logical"
-                };
-            }
-        }
-
-        public ObservableCollection<string> SecondaryLabels {
-            get {
-                switch (SelectedCriteriaType) {
-                    case MpSearchCriteriaPropertyType.Title:
-                    case MpSearchCriteriaPropertyType.Content:
-                    case MpSearchCriteriaPropertyType.Description:
-                        return TextUnitOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.ContentType:
-                        return ContentTypeOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.Collection:
-                        return CollectionsOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.Application:
-                        return ApplicaitonTypeUnitOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.Website:
-                        return WebContentTypeUnitOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.Time:
-                        return DateTimeUnitOptionLabels;
-
-                    case MpSearchCriteriaPropertyType.Device:
-                        return DeviceOptionLabels;
-                    case MpSearchCriteriaPropertyType.Logical:
-                        return LogicalTypeOptionLabels;
-                    default: return null;
+                if(_selectedOptions == null) {
+                    _selectedOptions = new ObservableCollection<MpSearchCriteriaOptionViewModel>();
                 }
-            }
-        }
-
-        public ObservableCollection<string> TertiaryLabels {
-            get {
-                switch(SelectedCriteriaType) {
-                    case MpSearchCriteriaPropertyType.Collection:
-                        if(SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
-                            return TextUnitOptionLabels;
-                        }
+               // var tsovml = new ObservableCollection<MpSearchCriteriaOptionViewModel>();
+                _selectedOptions.Clear();
+                var node = RootOptionViewModel;
+                while(node != null) {
+                    _selectedOptions.Add(node);
+                    int selIdx = node.Items.IndexOf(node.SelectedItem);
+                    if(selIdx <= 0 || !node.HasChildren) {
                         break;
-                    case MpSearchCriteriaPropertyType.Application:
-                    case MpSearchCriteriaPropertyType.Website:
-                        return TextUnitOptionLabels;
+                    }
+                    node = node.SelectedItem;
                 }
-                return null;
+                
+                
+                return _selectedOptions;
             }
         }
 
-        public ObservableCollection<string> QuaternaryLabels {
-            get {
-                switch (SelectedCriteriaType) {
-                    case MpSearchCriteriaPropertyType.Collection:
-                        if (SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
-                            return TextUnitOptionLabels;
-                        }
+        #region Options
+
+        #region Content
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetTextOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var tovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpTextOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                tovm.UnitType = MpSearchCriteriaUnitType.Text;
+                if (i == labels.Length - 1) {
+                    tovm.UnitType |= MpSearchCriteriaUnitType.RegEx;
+                } else {
+                    tovm.UnitType |= MpSearchCriteriaUnitType.CaseSensitivity;
+                }
+                tovml.Add(tovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(tovml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetNumberOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpNumberOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                tovm.UnitType = MpSearchCriteriaUnitType.Decimal;
+                novml.Add(tovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetColorOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpColorOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpColorOptionType)i) {
+                    case MpColorOptionType.Hex:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Hex;
+                        break;
+                    case MpColorOptionType.RGBA:
+                        ovm.UnitType = MpSearchCriteriaUnitType.ByteX4 | MpSearchCriteriaUnitType.UnitDecimalX4;
                         break;
                 }
-                return null;
+                novml.Add(ovm);
             }
-        }
-        
-
-        #region Option Labels
-
-        public ObservableCollection<string> TextUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Matches",
-                    "Contains",
-                    "Begins With",
-                    "Ends With",
-                    "RegEx"
-                };
-            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
         }
 
-        public ObservableCollection<string> LogicalTypeOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "And",
-                    "Or",
-                    "Not",
-                    "Xor"
-                };
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDimensionsOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpDimensionOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                tovm.UnitType = MpSearchCriteriaUnitType.Integer;
+                novml.Add(tovm);
             }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
         }
 
-        public ObservableCollection<string> ContentTypeOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Text",
-                    "Image",
-                    "Files"
-                };
-            }
-        }        
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetImageContentOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpImageOptionType).EnumToLabels();
 
-        public ObservableCollection<string> NumberUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Equals",
-                    "Greater Than",
-                    "Less Than",
-                    "Is Not"
-                };
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpImageOptionType)i) {
+                    case MpImageOptionType.Dimensions:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetDimensionsOptionViewModel(ovm);
+                        break;
+                    case MpImageOptionType.Format:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Text;
+                        break;
+                    case MpImageOptionType.Description:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpImageOptionType.Color:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetColorOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
             }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<string> TimeSpanWithinUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Hours",
-                    "Days",
-                    "Weeks",
-                    "Months",
-                    "Years"
-                };
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetFileOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpFileOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                if ((MpFileOptionType)i == MpFileOptionType.Custom) {
+                    ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                    ovm.Items = GetTextOptionViewModel(ovm);
+                } else {
+                    ovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                }
+                iovml.Add(ovm);
             }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<string> TimeSpanFromDateTimeUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Today",
-                    "Yesterday",
-                    "This Week",
-                    "This Month",
-                    "This Year"
-                };
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetFileContentOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpFileContentOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpFileContentOptionType)i) {
+                    case MpFileContentOptionType.Name:
+                    case MpFileContentOptionType.Path:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpFileContentOptionType.Kind:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetFileOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
             }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<string> DateTimeUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Exactly",
-                    "Before",
-                    "After"
-                };
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetContentTypeContentOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpContentTypeOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpContentTypeOptionType)i) {
+                    case MpContentTypeOptionType.Text:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpContentTypeOptionType.Image:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetImageContentOptionViewModel(ovm);
+                        break;
+                    case MpContentTypeOptionType.Files:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetFileContentOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
             }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
         }
 
-        public ObservableCollection<string> CollectionsOptionLabels { get; private set; } = new ObservableCollection<string>();
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetContentOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpContentOptionType).EnumToLabels();
 
-        public ObservableCollection<string> DeviceOptionLabels { get; private set; } = new ObservableCollection<string>();
-
-        public ObservableCollection<string> FileContentTypeUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Path",
-                    "Name",
-                    "Extension"
-                };
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpContentOptionType)i) {
+                    case MpContentOptionType.AnyText:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.TypeSpecific:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetContentTypeContentOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.Title:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
             }
-        }
-
-        public ObservableCollection<string> ApplicaitonTypeUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Path",
-                    "Name"
-                };
-            }
-        }
-
-        public ObservableCollection<string> WebContentTypeUnitOptionLabels {
-            get {
-                return new ObservableCollection<string>() {
-                    "Url",
-                    "Domain",
-                    "Title"
-                };
-            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
         }
 
         #endregion
 
+        #region Collection Options
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetCollectionOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+            ovm.Label = "";
+            ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+            ovm.Items = GetTextOptionViewModel(ovm);
+            iovml.Add(ovm);
+            foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels.OrderBy(x => x.TagName)) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = ttvm.TagName;
+                tovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                iovml.Add(tovm);
+            }
+            var covm = new MpSearchCriteriaOptionViewModel(this, parent);
+            covm.Label = " - Custom - ";
+            covm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+            covm.Items = GetTextOptionViewModel(covm);
+            iovml.Add(covm);
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
         #endregion
+
+        #region Source Options
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDeviceOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            
+            string[] labels = _deviceNames.ToArray();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                ovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                iovml.Add(ovm);
+            }
+            var ovm1 = new MpSearchCriteriaOptionViewModel(this, parent);
+            ovm1.Label = "";
+            ovm1.UnitType = MpSearchCriteriaUnitType.Enumerable;
+            ovm1.Items = GetTextOptionViewModel(ovm1);
+            iovml.Insert(0, ovm1);
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetAppOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpAppOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpAppOptionType)i) {
+                    case MpAppOptionType.ProcessPath:
+                    case MpAppOptionType.ApplicationName:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Text;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetWebsiteOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpWebsiteOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpWebsiteOptionType)i) {
+                    case MpWebsiteOptionType.Domain:
+                    case MpWebsiteOptionType.Url:
+                    case MpWebsiteOptionType.Title:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Text;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetSourceOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpSourceOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpSourceOptionType)i) {
+                    case MpSourceOptionType.Device:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetDeviceOptionViewModel(ovm);
+                        break;
+                    case MpSourceOptionType.App:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetAppOptionViewModel(ovm);
+                        break;
+                    case MpSourceOptionType.Website:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetWebsiteOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        #endregion
+
+        #region Date Options
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetTimeSpanWithinOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpTimeSpanWithinUnitType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                tovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                tovm.Items = GetNumberOptionViewModel(tovm);
+                novml.Add(tovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDateBeforeOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpDateBeforeUnitType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                switch ((MpDateBeforeUnitType)i) {
+                    case MpDateBeforeUnitType.Exact:
+                        tovm.UnitType = MpSearchCriteriaUnitType.DateTime;
+                        break;
+                    default:
+                        tovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                        break;
+                }
+                novml.Add(tovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDateAfterOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpDateAfterUnitType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                tovm.Label = labels[i];
+                switch ((MpDateAfterUnitType)i) {
+                    case MpDateAfterUnitType.Exact:
+                        tovm.UnitType = MpSearchCriteriaUnitType.DateTime;
+                        break;
+                    default:
+                        tovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                        break;
+                }
+                novml.Add(tovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDateTimeOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var novml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpDateTimeOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpDateTimeOptionType)i) {
+                    case MpDateTimeOptionType.WithinLast:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetTimeSpanWithinOptionViewModel(ovm);
+                        break;
+                    case MpDateTimeOptionType.Before:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetDateBeforeOptionViewModel(ovm);
+                        break;
+                    case MpDateTimeOptionType.After:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetDateAfterOptionViewModel(ovm);
+                        break;
+                    case MpDateTimeOptionType.Exact:
+                        ovm.UnitType = MpSearchCriteriaUnitType.DateTime;
+                        break;
+                }
+                novml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(novml);
+        }
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetDateTimeTypeOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpDateTimeTypeOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.Label = labels[i];
+                switch ((MpDateTimeTypeOptionType)i) {
+                    case MpDateTimeTypeOptionType.Created:
+                    case MpDateTimeTypeOptionType.Modified:
+                    case MpDateTimeTypeOptionType.Pasted:
+                        ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                        ovm.Items = GetDateTimeOptionViewModel(ovm);
+                        break;
+                }
+                iovml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        #endregion
+
+        #region Root Option
+
+        private MpSearchCriteriaOptionViewModel GetRootOption() {
+            var rovm = new MpSearchCriteriaOptionViewModel(this, null);
+            rovm.HostCriteriaItem = this;
+            rovm.IsSelected = true;
+            rovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+            rovm.Items.Clear();
+            string[] labels = typeof(MpRootOptionType).EnumToLabels(" - Please Select - ");
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpSearchCriteriaOptionViewModel(this, rovm);
+                tovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
+                tovm.Label = labels[i];
+                switch ((MpRootOptionType)i) {
+                    case MpRootOptionType.Content:
+                        tovm.Items = GetContentOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.Collection:
+                        tovm.Items = GetCollectionOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.Source:
+                        tovm.Items = GetSourceOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.DateOrTime:
+                        tovm.Items = GetDateTimeTypeOptionViewModel(tovm);
+                        break;
+                }
+                rovm.Items.Add(tovm);
+            }
+            return rovm;
+        }
+
+        #endregion
+
+        public MpSearchCriteriaOptionViewModel RootOptionViewModel { get; set; }
+
+        #endregion
+
+        #endregion
+
 
         #region Appearance
 
@@ -265,131 +690,28 @@ namespace MpWpfApp {
             }
         }
 
+        public Brush CriteriaItemBackgroundBrush {
+            get {
+                Brush b = MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Filter_Menu_Background_Color];
+                Brush e = Brushes.DarkMagenta;
+                Brush o = Brushes.LightBlue;
+                return SortOrderIdx % 2 == 0 ? e : o;
+            }
+        }
+
         #endregion
 
         #region State
 
-        public bool HasSecondaryLabels => SecondaryLabels != null && SecondaryLabels.Count > 0;
+        public bool IsCaseSensitive { get; set; } = false;
 
-        public bool CanInputText => SearchCriteriaUnitTypeFlags.HasFlag(MpSearchCriteriaUnitType.Text);
+        public bool CanSetCaseSensitive { get; set; } = false;
 
-        public bool CanInputDate => SearchCriteriaUnitTypeFlags.HasFlag(MpSearchCriteriaUnitType.DateTime);
-
-        public bool HasTertiaryLabels => TertiaryLabels != null && TertiaryLabels.Count > 0;
+        public bool IsInputVisible => !SelectedOptions[SelectedOptions.Count - 1].HasChildren && !SelectedOptions[SelectedOptions.Count - 1].UnitType.HasFlag(MpSearchCriteriaUnitType.EnumerableValue);
 
         public bool IsSelected { get; set; } = false;
 
         public bool IsHovering { get; set; } = false;
-
-        public int SelectedCriteriaTypeIdx { get; set; } = 0;
-
-        public int SelectedSecondaryIdx { get; set; } = 0;
-
-        public int SelectedTertiaryIdx { get; set; } = 0;
-
-        public int SelectedQuaternaryIdx { get; set; } = 0;
-
-        public MpSearchCriteriaPropertyType SelectedCriteriaType => (MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx;
-
-        public MpSearchCriteriaUnitType SearchCriteriaUnitTypeFlags {
-            get {
-                switch (SelectedCriteriaType) {
-                    case MpSearchCriteriaPropertyType.Title:
-                    case MpSearchCriteriaPropertyType.Content:
-                        return MpSearchCriteriaUnitType.Text;
-
-                    case MpSearchCriteriaPropertyType.Collection:
-                        if (SelectedSecondaryIdx == CollectionsOptionLabels.Count - 1) {
-                            return MpSearchCriteriaUnitType.Enumerable | MpSearchCriteriaUnitType.Text;
-                        }
-                        return MpSearchCriteriaUnitType.Enumerable;
-
-                    case MpSearchCriteriaPropertyType.Application:
-                        return MpSearchCriteriaUnitType.Enumerable;
-
-                    case MpSearchCriteriaPropertyType.ContentType:
-                        return MpSearchCriteriaUnitType.Text;
-
-                    case MpSearchCriteriaPropertyType.Time:
-                        return MpSearchCriteriaUnitType.DateTime;
-
-                    default: return MpSearchCriteriaUnitType.None;
-                }
-            }
-        }
-
-        public MpContentFilterType FilterFlags {
-            get {
-                MpContentFilterType ff = MpContentFilterType.None;
-                switch (SelectedCriteriaType) {
-                    case MpSearchCriteriaPropertyType.Description:
-                        ff |= MpContentFilterType.Meta;
-                        if (SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
-                            ff |= MpContentFilterType.Regex;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Title:
-                        ff |= MpContentFilterType.Title;
-                        if(SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
-                            ff |= MpContentFilterType.Regex;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Content:
-                        ff |= MpContentFilterType.Content;
-                        if (SelectedSecondaryIdx == TextUnitOptionLabels.Count - 1) {
-                            ff |= MpContentFilterType.Regex;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Collection:
-                        ff |= MpContentFilterType.Tag;
-                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
-                            if(SelectedQuaternaryIdx == TextUnitOptionLabels.Count - 1) {
-                                ff |= MpContentFilterType.Regex;
-                            }
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Application:
-                        if (SelectedSecondaryIdx == 0) {
-                            ff |= MpContentFilterType.AppPath;
-                        } else if(SelectedSecondaryIdx == 1) {
-                            ff |= MpContentFilterType.AppName;
-                        }
-                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
-                            ff |= MpContentFilterType.Regex;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Website:
-                        if (SelectedSecondaryIdx == 0) {
-                            ff |= MpContentFilterType.Url;
-                        } else if (SelectedSecondaryIdx == 1) {
-                            ff |= MpContentFilterType.Url;
-                        } else if (SelectedSecondaryIdx == 2) {
-                            ff |= MpContentFilterType.UrlTitle;
-                        }
-                        if (SelectedTertiaryIdx == TextUnitOptionLabels.Count - 1) {
-                            ff |= MpContentFilterType.Regex;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.ContentType:
-                        if(SelectedSecondaryIdx == 0) {
-                            ff |= MpContentFilterType.TextType;
-                        } else if (SelectedSecondaryIdx == 1) {
-                            ff |= MpContentFilterType.ImageType;
-                        } else if (SelectedSecondaryIdx == 2) {
-                            ff |= MpContentFilterType.FileType;
-                        }
-                        break;
-                    case MpSearchCriteriaPropertyType.Time:
-                        ff |= MpContentFilterType.Time;
-                        break;
-                    case MpSearchCriteriaPropertyType.Logical:
-                        return ff;
-                    default:
-                        throw new Exception("Unknonw criteria");
-                }
-                return ff;
-            }
-        }
 
         public int SortOrderIdx {
             get {
@@ -413,8 +735,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-
-        public bool IsCaseSensitive { get; set; } = false;
 
         public string InputValue {
             get {
@@ -449,89 +769,26 @@ namespace MpWpfApp {
             IsBusy = true;
 
             SearchCriteriaItem = sci;
-            SelectedCriteriaTypeIdx = 0;
-
-            MpTagTrayViewModel.Instance.TagTileViewModels.ForEach(x => CollectionsOptionLabels.Add(x.TagName));
-            CollectionsOptionLabels.Sort(x=>x);
-            CollectionsOptionLabels.Add(" - custom -");
-            OnPropertyChanged(nameof(CollectionsOptionLabels));
 
             var dl = await MpDb.Instance.GetItemsAsync<MpUserDevice>();
+            _deviceNames = dl.Select(x => x.MachineName).ToList();
 
-            dl.ForEach(x => DeviceOptionLabels.Add(x.MachineName));
-            DeviceOptionLabels.Sort(x => x);
-            DeviceOptionLabels.Add(" - custom -");
-            OnPropertyChanged(nameof(DeviceOptionLabels));
+            RootOptionViewModel = GetRootOption();
+            OnPropertyChanged(nameof(SelectedOptions));
 
             IsBusy = false;
-        }
-
-        public MpIQueryInfo ToQueryInfo() {
-            var qi = new MpWpfQueryInfo();
-            qi.SortOrderIdx = Parent.CriteriaItems.IndexOf(this) + 1;
-            qi.FilterFlags = this.FilterFlags;
-
-            if(CanInputText) {
-                if(SecondaryLabels != null && SecondaryLabels[1] == "Matches") {
-                    qi.TextFlags = (MpTextFilterFlagType)SelectedSecondaryIdx;
-                } else if (TertiaryLabels != null && TertiaryLabels.Count > 0 && TertiaryLabels[1] == "Matches") {
-                    qi.TextFlags = (MpTextFilterFlagType)SelectedTertiaryIdx;
-                } else if (QuaternaryLabels != null && QuaternaryLabels.Count > 0 && QuaternaryLabels[1] == "Matches") {
-                    qi.TextFlags = (MpTextFilterFlagType)SelectedQuaternaryIdx;
-                }                
-            }
-            if (CanInputDate) {
-                qi.TimeFlags = (MpTimeFilterFlagType)SelectedTertiaryIdx;
-            }
-
-            if(CanInputDate || CanInputText) {
-                qi.SearchText = InputValue;
-            } else {
-                if ((MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx == MpSearchCriteriaPropertyType.Collection) {
-                    qi.SearchText = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagName == CollectionsOptionLabels[SelectedSecondaryIdx].ToLower()).TagId.ToString();
-                } 
-            }
-
-            if((MpSearchCriteriaPropertyType)SelectedCriteriaTypeIdx == MpSearchCriteriaPropertyType.Logical) {
-                qi.LogicFlags = (MpLogicalFilterFlagType)SelectedSecondaryIdx;
-            }
-
-            return qi;
         }
 
         #endregion
 
         #region Private Methods
+        
 
         private void MpSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(SelectedCriteriaTypeIdx):
-                    SelectedSecondaryIdx = SelectedTertiaryIdx = 0;
-                    Refresh();
-                    InputValue = string.Empty;
-                    break;
-                case nameof(SelectedSecondaryIdx):
-                    SelectedTertiaryIdx = 0;
-                    Refresh();
-                    InputValue = string.Empty;
-                    break;
-                case nameof(SelectedTertiaryIdx):
-                    Refresh();
-                    InputValue = string.Empty;
-                    break;
-                case nameof(InputValue):
-                    Refresh();
-                    break;
             }
         }
 
-        private void Refresh() {
-
-            OnPropertyChanged(nameof(SecondaryLabels));
-            OnPropertyChanged(nameof(TertiaryLabels));
-            OnPropertyChanged(nameof(CanInputText));
-            OnPropertyChanged(nameof(CanInputDate));
-        }
 
         #endregion
 

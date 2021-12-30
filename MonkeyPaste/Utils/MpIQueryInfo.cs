@@ -58,6 +58,7 @@ namespace MonkeyPaste {
         EndsWith,
         RegEx
     }
+
     public interface MpIQueryInfo {
         public int TotalItemsInQuery { get; set; }
 

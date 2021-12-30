@@ -14,6 +14,28 @@
     <StackPanel x:Name="SearchViewContainerStackPanel"
                 Loaded="SearchViewContainerStackPanel_Loaded"
                 Orientation="Horizontal">
+        <Button x:Name="DeleteSearchButton"
+                Background="Transparent"
+                Foreground="Transparent"
+                BorderThickness="0"
+                Command="{Binding DeleteSearchCommand}"
+                MouseEnter="DeleteSearchButton_MouseEnter"
+                MouseLeave="DeleteSearchButton_MouseLeave"
+                Visibility="{Binding CanDeleteSearch,
+                                     Converter={StaticResource BoolToVisibilityConverter},
+                                     ConverterParameter={StaticResource Hide}}"
+                Style="{StaticResource Transparent_Button}">
+            <Border CornerRadius="5"
+                    Padding="12,5"
+                    Background="LightGray"
+                    BorderBrush="{Binding DeleteSearchButtonBorderBrush}"
+                    BorderThickness="3">
+                <TextBlock FontWeight="Bold"
+                           Text="DELETE"
+                           Foreground="DimGray"
+                           Background="Transparent" />
+            </Border>
+        </Button>
         <Button x:Name="SaveSearchButton"
                 Background="Transparent"
                 Foreground="Transparent"
@@ -21,7 +43,7 @@
                 Command="{Binding SaveSearchCommand}"
                 MouseEnter="SaveSearchButton_MouseEnter"
                 MouseLeave="SaveSearchButton_MouseLeave"
-                Visibility="{Binding CanAddCriteriaItem,
+                Visibility="{Binding CanSaveSearch,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
                 Style="{StaticResource Transparent_Button}">

@@ -36,7 +36,7 @@ namespace MpWpfApp {
 
             qi.FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
             MpDataModelProvider.Instance.QueryInfos.Add(qi);
-            MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.Instance.QueryInfos.Add(x.ToQueryInfo()));
+           // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.Instance.QueryInfos.Add(x.ToQueryInfo()));
 
             if (isFilterSortOrSearch) {
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);

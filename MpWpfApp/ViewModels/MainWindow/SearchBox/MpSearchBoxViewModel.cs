@@ -143,13 +143,17 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
+
+        public bool CanSaveSearch => HasCriteriaItems || HasText;
+
         public bool IsMultipleMatches { get; private set; } = false;
 
         public bool HasCriteriaItems => CriteriaItems.Count > 0;
 
         public bool IsSaved => UserSearch != null && UserSearch.Id > 0;
 
-        public bool CanAddCriteriaItem => !string.IsNullOrEmpty(LastSearchText) && !IsSearching;
+        public bool CanAddCriteriaItem => true;//!string.IsNullOrEmpty(LastSearchText) && !IsSearching;
 
         public string LastSearchText { get; private set; } = string.Empty;
 
@@ -190,6 +194,8 @@ namespace MpWpfApp {
 
         public bool IsOverSaveSearchButton { get; set; }
 
+        public bool IsOverDeleteSearchButton { get; set; }
+
         #endregion
 
         #region Appearance
@@ -198,6 +204,15 @@ namespace MpWpfApp {
             get {
                 if(IsOverSaveSearchButton) {
                     return Brushes.DimGray;
+                }
+                return Brushes.LightGray;
+            }
+        }
+
+        public Brush DeleteSearchButtonBorderBrush {
+            get {
+                if (IsOverDeleteSearchButton) {
+                    return Brushes.Red;
                 }
                 return Brushes.LightGray;
             }
@@ -579,8 +594,14 @@ namespace MpWpfApp {
                         UserSearch.Name = searchName;
                         await UserSearch.WriteToDatabaseAsync();
                     }
+                    OnPropertyChanged(nameof(CanDeleteSearch));
                 }
             });
+
+        public ICommand DeleteSearchCommand => new RelayCommand(
+            async () => {
+                await UserSearch.DeleteFromDatabaseAsync();
+            },UserSearch != null);
 
         #endregion
     }
