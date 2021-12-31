@@ -2,6 +2,7 @@
 using MonkeyPaste;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpAnalyticItemParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel>  {
@@ -10,6 +11,27 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        #region Appearance
+
+        public Brush BackgroundBrush {
+            get {
+                if(IsSelected) {
+                    return Brushes.Blue;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush BorderBrush {
+            get {
+                if (IsHovering) {
+                    return Brushes.Yellow;
+                }
+                return Brushes.Transparent;
+            }
+        }
+        #endregion
 
         #region State
 

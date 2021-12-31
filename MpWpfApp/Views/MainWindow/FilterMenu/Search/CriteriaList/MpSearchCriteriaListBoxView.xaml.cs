@@ -15,11 +15,19 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpItemSortView.xaml
+    /// Interaction logic for MpSearchDetailView.xaml
     /// </summary>
-    public partial class MpItemSortView : MpUserControl<MpClipTileSortViewModel> {
-        public MpItemSortView() {
+    public partial class MpSearchCriteriaListBoxView : MpUserControl<MpSearchBoxViewModel> {
+        public MpSearchCriteriaListBoxView() {
             InitializeComponent();
+        }
+
+        private void SearchCriteriaListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+            e.Handled = true;
+        }
+
+        private void SearchCriteriaListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            e.Handled = true;
         }
     }
 }

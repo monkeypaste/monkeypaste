@@ -153,8 +153,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock VerticalAlignment="Center"
-                                                   Text="{Binding UrlPath}">
-                                        </TextBlock>
+                                                   Text="{Binding UrlPath}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

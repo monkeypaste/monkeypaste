@@ -18,6 +18,175 @@
                     Value="Top" />
         </Style>-->
 
+        <!--  Settings Tab Indexes  -->
+        <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
+        <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
+        <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
+        <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
+        <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
+        <!--  Settings Tab Indexes End  -->
+
+        <!--  Command Parameter Primitives  -->
+        <s:Int32 x:Key="Files">1</s:Int32>
+        <s:Int32 x:Key="Csv">2</s:Int32>
+        <s:Int32 x:Key="Zip">3</s:Int32>
+        <s:Int32 x:Key="Up">-1</s:Int32>
+        <s:Int32 x:Key="Down">1</s:Int32>
+
+        <s:Boolean x:Key="True">True</s:Boolean>
+        <s:Boolean x:Key="False">False</s:Boolean>
+
+        <s:String x:Key="Hide">Hide</s:String>
+        <s:String x:Key="Collapse">Collapse</s:String>
+        <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
+        <!--  Command Parameter Primitives End  -->
+
+        <!--  Cursor Source Paths  -->
+        <s:String x:Key="CopyCursor">Resources\Cursors\copy.cur</s:String>
+        <s:String x:Key="HandOpenCursor">Resources\Cursors\hand_open.cur</s:String>
+        <s:String x:Key="HandClosedCursor">Resources\Cursors\hand_closed.cur</s:String>
+        <!--  Cursor Source Paths END  -->
+
+        <!--  Icon/Image Source Paths  -->
+        <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
+        <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
+        <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
+        <s:String x:Key="BrainWhiteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brainwhite.png</s:String>
+        <s:String x:Key="NoneClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noneclick.png</s:String>
+        <s:String x:Key="LeftClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/leftclick.png</s:String>
+        <s:String x:Key="RightClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rightclick.png</s:String>
+        <s:String x:Key="BothClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bothclick.png</s:String>
+        <s:String x:Key="AppendIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/append.png</s:String>
+        <s:String x:Key="AppendLineIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/appendline.png</s:String>
+        <s:String x:Key="AppendRunIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
+        <s:String x:Key="HelpIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/help.png</s:String>
+        <s:String x:Key="PlayIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/play.png</s:String>
+        <s:String x:Key="PauseIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pause.png</s:String>
+        <s:String x:Key="CogIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/cog.png</s:String>
+        <s:String x:Key="LockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/lock.png</s:String>
+        <s:String x:Key="ExecuteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/execute.png</s:String>
+        <s:String x:Key="PasteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/paste.png</s:String>
+        <s:String x:Key="DeleteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/Delete.png</s:String>
+        <s:String x:Key="EditIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/edit.png</s:String>
+        <s:String x:Key="EditContentIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
+        <s:String x:Key="ToolsIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tools.png</s:String>
+        <s:String x:Key="RenameIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rename.png</s:String>
+        <s:String x:Key="DuplicateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duplicate.png</s:String>
+        <s:String x:Key="MergeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/merge.png</s:String>
+        <s:String x:Key="EmailIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/email.png</s:String>
+        <s:String x:Key="QrIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/qr.png</s:String>
+        <s:String x:Key="SpeakIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/speak.png</s:String>
+        <s:String x:Key="SearchIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/web.png</s:String>
+        <s:String x:Key="GoogleIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/googleIcon.png</s:String>
+        <s:String x:Key="BingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bingIcon.png</s:String>
+        <s:String x:Key="DuckIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duckduckgoIcon.png</s:String>
+        <s:String x:Key="YandexIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/yandexIcon.png</s:String>
+        <s:String x:Key="SelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selection.png</s:String>
+        <s:String x:Key="BringToFrontIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bringToFront.png</s:String>
+        <s:String x:Key="SendToBackIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sendToBack.png</s:String>
+        <s:String x:Key="SelectAllIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selectall.png</s:String>
+        <s:String x:Key="InvertSelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/invertSelection.png</s:String>
+        <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick2.png</s:String>
+        <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive2.png</s:String>
+        <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
+        <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
+        <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
+        <s:String x:Key="UserIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/user.png</s:String>
+        <s:String x:Key="SlidersIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sliders.png</s:String>
+        <s:String x:Key="ShieldIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/shield.png</s:String>
+        <s:String x:Key="SignOutIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/signout.png</s:String>
+        <s:String x:Key="CopyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/copy.png</s:String>
+        <s:String x:Key="WarningIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/warning.png</s:String>
+        <s:String x:Key="SaveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/save.png</s:String>
+        <s:String x:Key="ResetIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/reset.png</s:String>
+        <s:String x:Key="AscendingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/asc_black.png</s:String>
+        <s:String x:Key="DecendingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/desc_black.png</s:String>
+        <s:String x:Key="AscendingIcon_Disabled">pack://application:,,,/MpWpfApp;component/Resources/Images/asc_gray.png</s:String>
+        <s:String x:Key="DecendingIcon_Disabled">pack://application:,,,/MpWpfApp;component/Resources/Images/desc_gray.png</s:String>
+        <s:String x:Key="FrameGripTile">pack://application:,,,/MpWpfApp;component/Resources/Images/frame_grip.png</s:String>
+        <s:String x:Key="TrashCanIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/trashcan.png</s:String>
+        <s:String x:Key="AddIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add.png</s:String>
+        <s:String x:Key="PinIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pin.png</s:String>
+        <s:String x:Key="PinOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pinover.png</s:String>
+        <s:String x:Key="PinDownIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindown.png</s:String>
+        <s:String x:Key="PinDownOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindownover.png</s:String>
+        <s:String x:Key="PlusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add2.png</s:String>
+        <s:String x:Key="MinusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/minus2.png</s:String>
+        <!--  Icon/Image Source Paths End  -->
+
+        <!--  Font Awesome  -->
+
+        <FontFamily x:Key="FontAwesomeSolid">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Solid.otf#Font Awesome 5 Free Solid</FontFamily>
+        <FontFamily x:Key="FontAwesomeRegular">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Regular.otf#Font Awesome 5 Free Regular</FontFamily>
+        <FontFamily x:Key="FontAwesomeBrands">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Brands.otf#Font Awesome 5 Brands Regular</FontFamily>
+
+        <s:String x:Key="TranslateIcon_FAS">f1ab</s:String>
+
+        <!--  Font Awesome End  -->
+
+        <!--  Color Palletes  -->
+        <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
+        <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
+        <SolidColorBrush x:Key="ClipTileTitleTextBoxBackgroundBrush"
+                         Opacity="0.5"
+                         Color="White" />
+        <SolidColorBrush x:Key="ClipTileDetectedObjectTextBoxBackgroundBrush"
+                         Opacity="0.5"
+                         Color="Black" />
+        <!--  Color Palletes End  -->
+
+        <!--  Converter Declarations  -->
+        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+        <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
+        <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
+        <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
+        <local:MpStringToImageSourceConverter x:Key="StringToImageSourceConverter" />
+        <local:MpStringToIconConverter x:Key="StringToIconConverter" />
+        <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
+        <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
+        <local:MpIntToStringConverter x:Key="IntToStringConverter" />
+        <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:MpBoolToVisibilityFlipConverter x:Key="BoolToVisibilityFlipConverter" />
+        <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
+        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
+        <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
+        <local:MpDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
+        <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
+        <local:MpBoolToCursorConverter x:Key="BoolToCursorConverter" />
+        <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
+        <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
+        <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
+        <local:MpFilePathToFolderPathConverter x:Key="FilePathToFolderPathConverter" />
+        <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
+        <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
+        <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
+        <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
+        <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
+        <local:MpBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
+        <local:MpBoolToScrollBarVisibilityFlipConverter x:Key="BoolToScrollBarVisibilityFlipConverter" />
+        <local:MpNegateDoubleConverter x:Key="NegateDoubleConverter" />
+        <local:MpBackgroundBrushToForegroundBrushConverter x:Key="BackgroundBrushToForegroundBrushConverter" />
+        <local:MpBoolToImageSourceConverter x:Key="BoolToImageSourceConverter" />
+        <local:MpBoolToIconSourceConverter x:Key="BoolToIconSourceConverter" />
+        <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
+        <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
+        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
+        <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+        <!--  Converter Declarations End  -->
+
+        <!--  Singleton View Model Declarations  -->
+        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
+        <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
+        <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
+        <local:MpSystemTrayViewModel x:Key="SystemTrayViewModel" />
+        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
+        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
+        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
+        <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
+        <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
+        <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
+        <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
+        <!--  Singleton View Model Declarations End  -->
 
 
         <Style TargetType="{x:Type ItemsControl}">
@@ -1155,175 +1324,7 @@
         </Style>
         <!--  Semi-Transparent Button End  -->
 
-        <!--  Settings Tab Indexes  -->
-        <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
-        <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
-        <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
-        <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
-        <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
-        <!--  Settings Tab Indexes End  -->
 
-        <!--  Command Parameter Primitives  -->
-        <s:Int32 x:Key="Files">1</s:Int32>
-        <s:Int32 x:Key="Csv">2</s:Int32>
-        <s:Int32 x:Key="Zip">3</s:Int32>
-        <s:Int32 x:Key="Up">-1</s:Int32>
-        <s:Int32 x:Key="Down">1</s:Int32>
-
-        <s:Boolean x:Key="True">True</s:Boolean>
-        <s:Boolean x:Key="False">False</s:Boolean>
-
-        <s:String x:Key="Hide">Hide</s:String>
-        <s:String x:Key="Collapse">Collapse</s:String>
-        <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
-        <!--  Command Parameter Primitives End  -->
-
-        <!--  Cursor Source Paths  -->
-        <s:String x:Key="CopyCursor">Resources\Cursors\copy.cur</s:String>
-        <s:String x:Key="HandOpenCursor">Resources\Cursors\hand_open.cur</s:String>
-        <s:String x:Key="HandClosedCursor">Resources\Cursors\hand_closed.cur</s:String>
-        <!--  Cursor Source Paths END  -->
-
-        <!--  Icon/Image Source Paths  -->
-        <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
-        <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
-        <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
-        <s:String x:Key="BrainWhiteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brainwhite.png</s:String>
-        <s:String x:Key="NoneClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noneclick.png</s:String>
-        <s:String x:Key="LeftClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/leftclick.png</s:String>
-        <s:String x:Key="RightClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rightclick.png</s:String>
-        <s:String x:Key="BothClickIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bothclick.png</s:String>
-        <s:String x:Key="AppendIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/append.png</s:String>
-        <s:String x:Key="AppendLineIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/appendline.png</s:String>
-        <s:String x:Key="AppendRunIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
-        <s:String x:Key="HelpIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/help.png</s:String>
-        <s:String x:Key="PlayIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/play.png</s:String>
-        <s:String x:Key="PauseIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pause.png</s:String>
-        <s:String x:Key="CogIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/cog.png</s:String>
-        <s:String x:Key="LockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/lock.png</s:String>
-        <s:String x:Key="ExecuteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/execute.png</s:String>
-        <s:String x:Key="PasteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/paste.png</s:String>
-        <s:String x:Key="DeleteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/Delete.png</s:String>
-        <s:String x:Key="EditIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/edit.png</s:String>
-        <s:String x:Key="EditContentIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
-        <s:String x:Key="ToolsIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tools.png</s:String>
-        <s:String x:Key="RenameIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rename.png</s:String>
-        <s:String x:Key="DuplicateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duplicate.png</s:String>
-        <s:String x:Key="MergeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/merge.png</s:String>
-        <s:String x:Key="EmailIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/email.png</s:String>
-        <s:String x:Key="QrIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/qr.png</s:String>
-        <s:String x:Key="SpeakIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/speak.png</s:String>
-        <s:String x:Key="SearchIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/web.png</s:String>
-        <s:String x:Key="GoogleIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/googleIcon.png</s:String>
-        <s:String x:Key="BingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bingIcon.png</s:String>
-        <s:String x:Key="DuckIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/duckduckgoIcon.png</s:String>
-        <s:String x:Key="YandexIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/yandexIcon.png</s:String>
-        <s:String x:Key="SelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selection.png</s:String>
-        <s:String x:Key="BringToFrontIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bringToFront.png</s:String>
-        <s:String x:Key="SendToBackIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sendToBack.png</s:String>
-        <s:String x:Key="SelectAllIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/selectall.png</s:String>
-        <s:String x:Key="InvertSelectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/invertSelection.png</s:String>
-        <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick2.png</s:String>
-        <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive2.png</s:String>
-        <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
-        <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
-        <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
-        <s:String x:Key="UserIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/user.png</s:String>
-        <s:String x:Key="SlidersIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sliders.png</s:String>
-        <s:String x:Key="ShieldIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/shield.png</s:String>
-        <s:String x:Key="SignOutIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/signout.png</s:String>
-        <s:String x:Key="CopyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/copy.png</s:String>
-        <s:String x:Key="WarningIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/warning.png</s:String>
-        <s:String x:Key="SaveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/save.png</s:String>
-        <s:String x:Key="ResetIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/reset.png</s:String>
-        <s:String x:Key="AscendingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/asc_black.png</s:String>
-        <s:String x:Key="DecendingIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/desc_black.png</s:String>
-        <s:String x:Key="AscendingIcon_Disabled">pack://application:,,,/MpWpfApp;component/Resources/Images/asc_gray.png</s:String>
-        <s:String x:Key="DecendingIcon_Disabled">pack://application:,,,/MpWpfApp;component/Resources/Images/desc_gray.png</s:String>
-        <s:String x:Key="FrameGripTile">pack://application:,,,/MpWpfApp;component/Resources/Images/frame_grip.png</s:String>
-        <s:String x:Key="TrashCanIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/trashcan.png</s:String>
-        <s:String x:Key="AddIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add.png</s:String>
-        <s:String x:Key="PinIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pin.png</s:String>
-        <s:String x:Key="PinOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pinover.png</s:String>
-        <s:String x:Key="PinDownIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindown.png</s:String>
-        <s:String x:Key="PinDownOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindownover.png</s:String>
-        <s:String x:Key="PlusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add2.png</s:String>
-        <s:String x:Key="MinusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/minus2.png</s:String>
-        <!--  Icon/Image Source Paths End  -->
-
-        <!--  Font Awesome  -->
-
-        <FontFamily x:Key="FontAwesomeSolid">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Solid.otf#Font Awesome 5 Free Solid</FontFamily>
-        <FontFamily x:Key="FontAwesomeRegular">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Regular.otf#Font Awesome 5 Free Regular</FontFamily>
-        <FontFamily x:Key="FontAwesomeBrands">/MpWpfApp;component/Resources/Icons/FontAwesome/FontAwesome5Brands.otf#Font Awesome 5 Brands Regular</FontFamily>
-
-        <s:String x:Key="TranslateIcon_FAS">f1ab</s:String>
-
-        <!--  Font Awesome End  -->
-
-        <!--  Color Palletes  -->
-        <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
-        <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
-        <SolidColorBrush x:Key="ClipTileTitleTextBoxBackgroundBrush"
-                         Opacity="0.5"
-                         Color="White" />
-        <SolidColorBrush x:Key="ClipTileDetectedObjectTextBoxBackgroundBrush"
-                         Opacity="0.5"
-                         Color="Black" />
-        <!--  Color Palletes End  -->
-
-        <!--  Converter Declarations  -->
-        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
-        <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
-        <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
-        <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
-        <local:MpStringToImageSourceConverter x:Key="StringToImageSourceConverter" />
-        <local:MpStringToIconConverter x:Key="StringToIconConverter" />
-        <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
-        <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
-        <local:MpIntToStringConverter x:Key="IntToStringConverter" />
-        <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <local:MpBoolToVisibilityFlipConverter x:Key="BoolToVisibilityFlipConverter" />
-        <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
-        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
-        <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
-        <local:MpDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
-        <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
-        <local:MpBoolToCursorConverter x:Key="BoolToCursorConverter" />
-        <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
-        <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
-        <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
-        <local:MpFilePathToFolderPathConverter x:Key="FilePathToFolderPathConverter" />
-        <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
-        <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />
-        <local:MpBoolFlipConverter x:Key="BoolFlipConverter" />
-        <local:MpMultiObjectToTupleConverter x:Key="MultiObjectToTupleConverter" />
-        <local:MpBase64StringToIconConverter x:Key="Base64StringToIconConverter" />
-        <local:MpBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
-        <local:MpBoolToScrollBarVisibilityFlipConverter x:Key="BoolToScrollBarVisibilityFlipConverter" />
-        <local:MpNegateDoubleConverter x:Key="NegateDoubleConverter" />
-        <local:MpBackgroundBrushToForegroundBrushConverter x:Key="BackgroundBrushToForegroundBrushConverter" />
-        <local:MpBoolToImageSourceConverter x:Key="BoolToImageSourceConverter" />
-        <local:MpBoolToIconSourceConverter x:Key="BoolToIconSourceConverter" />
-        <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
-        <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
-        <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
-        <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
-        <!--  Converter Declarations End  -->
-
-        <!--  Singleton View Model Declarations  -->
-        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
-        <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
-        <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
-        <local:MpSystemTrayViewModel x:Key="SystemTrayViewModel" />
-        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
-        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
-        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
-        <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
-        <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
-        <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
-        <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
-        <!--  Singleton View Model Declarations End  -->
 
     </Application.Resources>
 </Application>

@@ -13,6 +13,7 @@ namespace MpWpfApp {
         public DataTemplate TextTemplate { get; set; }
         public DataTemplate DateTemplate { get; set; }
         public DataTemplate RGBATemplate { get; set; }
+        public DataTemplate EmptyTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
@@ -21,7 +22,7 @@ namespace MpWpfApp {
 
             var scovm = item as MpSearchCriteriaOptionViewModel;
             if(scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.EnumerableValue)) {
-                return null;
+                return EmptyTemplate;
             }
             if(scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.Enumerable)) {
                 return EnumerableTemplate;

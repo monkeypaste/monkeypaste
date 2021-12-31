@@ -1754,6 +1754,7 @@ namespace MpWpfApp {
         public ICommand LinkTagToCopyItemCommand => new RelayCommand<MpTagTileViewModel>(
             async (tagToLink) => {
                 bool isUnlink = await tagToLink.IsLinked(SelectedItems[0]);
+
                 foreach (var selectedClipTile in SelectedItems) {
                     foreach (var ivm in selectedClipTile.ItemViewModels) {
                         if (isUnlink) {
@@ -1761,6 +1762,8 @@ namespace MpWpfApp {
                         } else {
                             await tagToLink.AddContentItem(ivm);
                         }
+
+                        await ivm.UpdateColorPallete();
                     }
                 }
                 await MpTagTrayViewModel.Instance.RefreshAllCounts();
@@ -1773,17 +1776,8 @@ namespace MpWpfApp {
                     return false;
                 }
                 return true;
-                //if (SelectedItems.Count == 1) {
-                //    return true;
-                //}
-                //bool isLastClipTileLinked = tagToLink.IsLinked(SelectedItems[0]);
-                //foreach (var selectedClipTile in SelectedItems) {
-                //    if (tagToLink.IsLinked(selectedClipTile) != isLastClipTileLinked) {
-                //        return false;
-                //    }
-                //}
-                //return true;
             });
+
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             () => {

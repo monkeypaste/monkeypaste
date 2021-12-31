@@ -15,11 +15,15 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpItemSortView.xaml
+    /// Interaction logic for MpAnalyticToolbarTreeView.xaml
     /// </summary>
-    public partial class MpItemSortView : MpUserControl<MpClipTileSortViewModel> {
-        public MpItemSortView() {
+    public partial class MpSearchCriteriaItemView : MpUserControl<MpSearchCriteriaItemViewModel> {
+        public MpSearchCriteriaItemView() {
             InitializeComponent();
+        }
+
+        private void ListBox_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
+            e.Handled = true;
         }
     }
 }

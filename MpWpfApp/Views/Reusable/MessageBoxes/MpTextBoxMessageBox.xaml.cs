@@ -28,11 +28,7 @@ namespace MpWpfApp {
             mb.WindowState = WindowState.Maximized;
             var result = mb.ShowDialog();
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
-            
-            if(result.HasValue && result.Value) {
-                return mb.MsgBoxTextBox.Text;
-            }
-            return null;
+            return mb.MsgBoxTextBox.Text;
         }
 
         public MpTextBoxMessageBox() {
@@ -40,7 +36,21 @@ namespace MpWpfApp {
         }
 
         private void btn_Click(object sender, RoutedEventArgs e) {
+            if(string.IsNullOrWhiteSpace(MsgBoxTextBox.Text)) {
+                MsgBoxTextBox.BorderBrush = Brushes.Red;
+                return;
+            }
             this.Close();
+        }
+
+        private void btn2_Click(object sender, RoutedEventArgs e) {
+            MsgBoxTextBox.Text = null;
+            Close();
+        }
+
+
+        private void MsgBoxTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+            MsgBoxTextBox.BorderBrush = string.IsNullOrWhiteSpace(MsgBoxTextBox.Text) ? Brushes.Red : Brushes.Black;
         }
     }
 }

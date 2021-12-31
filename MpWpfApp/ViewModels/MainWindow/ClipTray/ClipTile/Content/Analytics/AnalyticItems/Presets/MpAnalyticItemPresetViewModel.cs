@@ -52,6 +52,8 @@ namespace MpWpfApp {
 
         #region Appearance
 
+        public MpCursorType DeleteCursor => IsDefault ? MpCursorType.Invalid : MpCursorType.Default;
+
         public string ResetLabel => $"Reset {Label}";
 
         public string DeleteLabel => $"Delete {Label}";
@@ -182,6 +184,45 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
+        #endregion
+
+        #region MpIToggleButtonViewModel (Manage Preset)
+
+        public bool IsChecked { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Brush CheckedBorderBrush => throw new NotImplementedException();
+
+        public Brush CheckedBackgroundBrush => throw new NotImplementedException();
+
+        public Brush UncheckedBorderBrush => throw new NotImplementedException();
+
+        public Brush UncheckedBackgroundBrush => throw new NotImplementedException();
+
+        public bool IsHovering { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Brush HoverBorderBrush => throw new NotImplementedException();
+
+        public Brush HoverBackgroundBrush => throw new NotImplementedException();
+
+        public Brush SelectedBorderBrush => throw new NotImplementedException();
+
+        public Brush SelectedBackgroundBrush => throw new NotImplementedException();
+
+        public Brush UnselectedBorderBrush => throw new NotImplementedException();
+
+        public Brush UnselectedBackgroundBrush => throw new NotImplementedException();
+
+        public bool IsEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Brush DisabledBorderBrush => throw new NotImplementedException();
+
+        public Brush DisabledBackgroundBrush => throw new NotImplementedException();
+
+        public ICommand Command => throw new NotImplementedException();
+
+        public object CommandParameter => throw new NotImplementedException();
+
+        
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -406,15 +447,17 @@ namespace MpWpfApp {
                 MpHelpers.Instance.SetColorChooserMenuItem(
                     iconContextMenu,
                     iconColorChooserMenuItem,
-                    async (s1, e1) => {
-                        var brush = (Brush)((Border)s1).Tag;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
-                        Preset.IconId = Preset.Icon.Id;
-                        //await Preset.WriteToDatabaseAsync();
+                    (s1, e1) => {
+                        MpHelpers.Instance.RunOnMainThread(async () => {
+                            var brush = (Brush)((Border)s1).Tag;
+                            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
+                            var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                            Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(),false);
+                            Preset.IconId = Preset.Icon.Id;
+                            //await Preset.WriteToDatabaseAsync();
 
-                        OnPropertyChanged(nameof(PresetIcon));
+                            OnPropertyChanged(nameof(PresetIcon));
+                        });
                     }
                 );
                 var iconImageChooserMenuItem = new MenuItem();
@@ -487,12 +530,12 @@ namespace MpWpfApp {
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
             }, !IsEditing && !Parent.IsAnyEditing);
 
-        public ICommand ExecutePresetCommand => new RelayCommand(
-            () => {
-                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
-                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
-                Parent.ExecuteAnalysisCommand.Execute(null);
-            }, Parent.CanExecuteAnalysis);
+        //public ICommand ExecutePresetCommand => new RelayCommand(
+        //    () => {
+        //        Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
+        //        Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
+        //        Parent.ExecuteAnalysisCommand.Execute(null);
+        //    }, ()=>Parent.CanExecuteAnalysis(this));
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {
@@ -506,14 +549,13 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(ShortcutViewModel));
 
                 OnPropertyChanged(nameof(ShortcutKeyString));
-                
 
-                if(ShortcutViewModel != null) {
+
+                if (ShortcutViewModel != null) {
                     ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
                 }
             });
 
-        
         #endregion
     }
 }

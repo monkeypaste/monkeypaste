@@ -43,7 +43,7 @@
                         Height="30"
                         Background="#FFCFC9FF"
                         Foreground="#FF6F5DF5"
-                        IsDefault="True"
+                        IsDefault="False"
                         Click="btn_Click" />
                 <Button x:Name="btn2"
                         FontWeight="SemiBold"
@@ -54,8 +54,7 @@
                         Margin="0,0,30.429,27.714"
                         MinWidth="60"
                         Height="30"
-                        IsCancel="True"
-                        Click="btn_Click" Width="95" />
+                        Click="btn2_Click" Width="95" />
                 <TextBlock x:Name="tbMessageBoxCaption"
                            FontWeight="SemiBold"
                            Margin="30,23,10,0"
@@ -70,6 +69,7 @@
                          Width="300"
                          BorderThickness="1"
                          BorderBrush="Black"
+                         TextChanged="MsgBoxTextBox_TextChanged"
                          Text="{Binding Result,
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged,

@@ -20,6 +20,8 @@
         </Grid.ColumnDefinitions>
         <local:MpAppModeButtonGridView Grid.Column="0"
                                        HorizontalAlignment="Center" 
+                                       VerticalAlignment="Stretch"
+                                       VerticalContentAlignment="Stretch"
                                        Margin="0,3"
                                        Visibility="{Binding IsAnyTileExpanded,
                                                             Source={StaticResource ClipTrayViewModel},

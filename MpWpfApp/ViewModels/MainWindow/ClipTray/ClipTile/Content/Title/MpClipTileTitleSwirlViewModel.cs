@@ -97,27 +97,24 @@ namespace MpWpfApp {
         public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) { }
 
         public async Task InitializeAsync() {
+            if(Parent.IsPlaceholder) {
+                return;
+            }
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                if (Parent.IsPlaceholder) {
-                    //for (int i = 0; i < 5; i++) {
-                    //    Swirls.Add(new MpSwirlLayerViewModel(this));
-                    //}
-                } else {
-                    var cl = MpHelpers.Instance.GetRandomizedList<string>(Parent.ColorPallete);
-                    for (int i = 0; i < cl.Count; i++) {
-                        var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
-                        if (i < Swirls.Count) {
-                            Swirls[i].LayerId = i;
-                            Swirls[i].LayerBrush = scb;
-                            Swirls[i].LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
-                        } else {
-                            Swirls.Add(
-                                new MpSwirlLayerViewModel(
-                                    this,
-                                    i,
-                                    scb,
-                                    (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
-                        }
+                var cl = Parent.ColorPallete;
+                for (int i = 0; i < cl.Length; i++) {
+                    var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
+                    if (i < Swirls.Count) {
+                        Swirls[i].LayerId = i;
+                        Swirls[i].LayerBrush = scb;
+                        Swirls[i].LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
+                    } else {
+                        Swirls.Add(
+                            new MpSwirlLayerViewModel(
+                                this,
+                                i,
+                                scb,
+                                (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
                     }
                 }
             });
@@ -137,6 +134,5 @@ namespace MpWpfApp {
         #region Private Methods
 
         #endregion
-
     }
 }

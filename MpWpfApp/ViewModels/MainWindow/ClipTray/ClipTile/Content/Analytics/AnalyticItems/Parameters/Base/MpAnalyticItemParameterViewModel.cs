@@ -126,6 +126,15 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsVisible {
+            get {
+                if(Parameter == null) {
+                    return false;
+                }
+                return Parameter.IsVisible;
+            }
+        }
+
         public bool BoolValue {
             get {
                 if (string.IsNullOrWhiteSpace(CurrentValue)) {

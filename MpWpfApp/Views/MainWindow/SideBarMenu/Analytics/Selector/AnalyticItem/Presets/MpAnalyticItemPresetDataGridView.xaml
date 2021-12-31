@@ -114,9 +114,10 @@
                             <DataTemplate>
                                 <ToggleButton Background="Transparent"
                                               BorderThickness="0"
-                                              HorizontalAlignment="Center"
-                                              HorizontalContentAlignment="Center"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
                                               ToolTip="Configure"
+                                              Margin="0"
                                               Template="{StaticResource LockToggleButtonControlTemplate}"
                                               IsChecked="{Binding IsEditing,
                                                                   Mode=TwoWay,
@@ -137,10 +138,9 @@
                             <DataTemplate>
                                 <Button Background="Transparent"
                                         BorderThickness="0"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
                                         ToolTip="Analyze"
-                                        Command="{Binding ExecutePresetCommand}">
+                                        Command="{Binding Parent.ExecuteAnalysisCommand}"
+                                        CommandParameter="{Binding}">
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding .,
@@ -156,8 +156,8 @@
                                 <Button Background="Transparent"
                                         BorderThickness="0"
                                         ToolTip="Delete"
-                                        MouseEnter="Button_MouseEnter"
-                                        MouseLeave="Button_MouseLeave"
+                                        local:MpHoverableExtension.IsEnabled="True"
+                                        local:MpHoverableExtension.HoverCursor="{Binding DeleteCursor}"
                                         Command="{Binding Parent.DeletePresetCommand}"
                                         CommandParameter="{Binding}">
                                     <Image Width="20"

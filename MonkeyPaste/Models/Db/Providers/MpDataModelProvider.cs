@@ -529,6 +529,13 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task<List<string>> GetTagColorsForCopyItem(int ciid) {
+            string query = @"select HexColor from MpTag where pk_MpTagId in (select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId = ?)";
+            var result = await MpDb.Instance.QueryScalarsAsync<string>(query,ciid);
+            return result;
+        }
+        
+
         public async Task<List<MpCopyItemTag>> GetCopyItemTagsForCopyItemAsync(int ciid) {
             string query = string.Format(@"select * from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
             var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(query);

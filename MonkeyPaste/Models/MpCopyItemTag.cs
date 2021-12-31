@@ -37,7 +37,7 @@ namespace MonkeyPaste {
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
-        public int CopyItemSortIdx { get; set; } = -1;
+        public int CopyItemSortIdx { get; set; } = 0;
 
         #endregion
 

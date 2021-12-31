@@ -1616,7 +1616,7 @@ namespace MpWpfApp {
             cmi.Header = cmic;
             cmi.Height = h;
             cmi.Style = (Style)Application.Current.MainWindow.FindResource("ColorPalleteMenuItemStyle");
-            cm.Width = 350;
+            cm.Width = 300;
         }
 
         private double sign(Point p1, Point p2, Point p3) {

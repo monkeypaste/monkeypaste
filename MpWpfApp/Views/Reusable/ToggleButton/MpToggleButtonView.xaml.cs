@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpSearchDetailView.xaml
+    /// Interaction logic for MpToggleButtonView.xaml
     /// </summary>
-    public partial class MpSearchCriteriaListView : MpUserControl<MpSearchBoxViewModel> {
-        public MpSearchCriteriaListView() {
+    public partial class MpToggleButtonView : UserControl {
+        public MpToggleButtonView() {
             InitializeComponent();
         }
     }

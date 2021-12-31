@@ -122,10 +122,13 @@ namespace MpWpfApp {
             }
         }
 
+        public double SearchCriteriaListBoxItemHeight => 50;
+
         public double SearchCriteriaListBoxHeight {
             get {
-                return ((MpMeasurements.Instance.SearchDetailRowHeight * CriteriaItems.Count) +
-                       ((MpMeasurements.Instance.SearchDetailBorderThickness * 2) * CriteriaItems.Count));
+                //return ((MpMeasurements.Instance.SearchDetailRowHeight * CriteriaItems.Count) +
+                //       ((MpMeasurements.Instance.SearchDetailBorderThickness * 2) * CriteriaItems.Count));
+                return SearchCriteriaListBoxItemHeight * CriteriaItems.Count;
             }
         }
 
@@ -203,9 +206,9 @@ namespace MpWpfApp {
         public Brush SaveSearchButtonBorderBrush {
             get {
                 if(IsOverSaveSearchButton) {
-                    return Brushes.DimGray;
+                    return Brushes.LightGray;
                 }
-                return Brushes.LightGray;
+                return Brushes.DimGray;
             }
         }
 
@@ -543,22 +546,13 @@ namespace MpWpfApp {
                 MpMessenger.Instance.Send(MpMessageType.SelectPreviousMatch);
             });
 
-        public ICommand CreateOrClearSearchCriteriaItemsCommand => new RelayCommand(
+        public ICommand ClearSearchCriteriaItemsCommand => new RelayCommand(
             async () => {
-                if(HasCriteriaItems) {
-                    CriteriaItems.Clear();
-
-                } else {
-                    MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
-                        SortOrderIdx = CriteriaItems.Count
-                    };
-                    MpSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
-                    CriteriaItems.Add(nscivm);
-                }
+                CriteriaItems.Clear();
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            }, CanAddCriteriaItem);
+            });
 
         public ICommand AddSearchCriteriaItemCommand => new RelayCommand(
             async () => {

@@ -10,22 +10,26 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaOptionViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid Margin="5">
+    <Grid Margin="0,3">
         <Grid.Resources>
             <DataTemplate x:Key="EnumerableOption"
                           DataType="local:MpSearchCriteriaOptionViewModel">
-                <ComboBox IsSynchronizedWithCurrentItem="True"
-                          MinWidth="85"
-                          ItemsSource="{Binding Items}"
-                          SelectedItem="{Binding SelectedItem,
-                                                 Mode=TwoWay,
-                                                 UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Label}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    <!--<ComboBox.ItemContainerStyle>
+                <local:MpClipBorder CornerRadius="15">
+                    <ComboBox IsSynchronizedWithCurrentItem="True"
+                              MinWidth="85"
+                              ItemsSource="{Binding Items}"
+                              SelectedItem="{Binding SelectedItem,
+                                                     Mode=TwoWay,
+                                                     UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <ItemContainerTemplate>
+                                <TextBlock FontSize="16" 
+                                           HorizontalAlignment="Center"
+                                           Padding="3"
+                                           Text="{Binding Label}" />
+                            </ItemContainerTemplate>
+                        </ComboBox.ItemTemplate>
+                        <!--<ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected,
@@ -35,7 +39,8 @@
                                                     NotifyOnSourceUpdated=True}" />
                         </Style>
                     </ComboBox.ItemContainerStyle>-->
-                </ComboBox>
+                    </ComboBox>
+                </local:MpClipBorder>
             </DataTemplate>
             <DataTemplate x:Key="TextOption"
                           DataType="local:MpSearchCriteriaOptionViewModel">
@@ -49,6 +54,10 @@
                                   IsChecked="{Binding IsChecked,
                                                       Mode=TwoWay}" />
                     </StackPanel>
+                    <local:MpClipBorder Margin="5"
+                                        CornerRadius="10"
+                                        Background="WHite"
+                                        BorderBrush="White">
                     <TextBox MinWidth="900"
                              Margin="3,0,0,0"
                              Height="23"
@@ -60,6 +69,7 @@
                                             NotifyOnSourceUpdated=True,
                                             NotifyOnTargetUpdated=True,
                                             UpdateSourceTrigger=PropertyChanged}" />
+                    </local:MpClipBorder>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="RGBAOption"
@@ -124,11 +134,14 @@
                                                    Converter={StaticResource StringToDateTimeConverter}}"
                             SelectedDateFormat="Long" />
             </DataTemplate>
+            <DataTemplate x:Key="EmptyOption"
+                          DataType="local:MpSearchCriteriaOptionViewModel"/>
             <local:MpSearchCriteriaOptionViewSelector x:Key="OptionViewSelector"
                                                       EnumerableTemplate="{StaticResource EnumerableOption}"
                                                       TextTemplate="{StaticResource TextOption}"
-                                                      DateTemplate="{StaticResource DateOption}" 
-                                                      RGBATemplate="{StaticResource RGBAOption}"/>
+                                                      DateTemplate="{StaticResource DateOption}"
+                                                      RGBATemplate="{StaticResource RGBAOption}" 
+                                                      EmptyTemplate="{StaticResource EmptyOption}"/>
         </Grid.Resources>
         <local:MpClipBorder BorderThickness="0"
                             Background="Transparent"

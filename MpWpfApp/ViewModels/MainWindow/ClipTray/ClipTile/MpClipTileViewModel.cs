@@ -982,7 +982,6 @@ using System.Speech.Synthesis;
 
         #endregion
 
-
         public async Task GatherAnalytics() {
             var analyticsTask = new List<Task>();
             Task itemTask = null;

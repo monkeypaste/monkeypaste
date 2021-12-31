@@ -46,6 +46,7 @@ namespace MpWpfApp {
     public enum MpRootOptionType {
         None = 0,
         Content,
+        ContentType,
         Collection,
         Source,
         DateOrTime
@@ -408,6 +409,23 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Content Type Options
+
+        public ObservableCollection<MpSearchCriteriaOptionViewModel> GetContentTypeOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
+            var iovml = new List<MpSearchCriteriaOptionViewModel>();
+            string[] labels = typeof(MpContentTypeOptionType).EnumToLabels();
+
+            for (int i = 0; i < labels.Length; i++) {
+                var ovm = new MpSearchCriteriaOptionViewModel(this, parent);
+                ovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;
+                ovm.Label = labels[i];
+                iovml.Add(ovm);
+            }
+            return new ObservableCollection<MpSearchCriteriaOptionViewModel>(iovml);
+        }
+
+        #endregion
+
         #region Collection Options
 
         public ObservableCollection<MpSearchCriteriaOptionViewModel> GetCollectionOptionViewModel(MpSearchCriteriaOptionViewModel parent) {
@@ -655,6 +673,9 @@ namespace MpWpfApp {
                     case MpRootOptionType.DateOrTime:
                         tovm.Items = GetDateTimeTypeOptionViewModel(tovm);
                         break;
+                    case MpRootOptionType.ContentType:
+                        tovm.Items = GetContentTypeOptionViewModel(tovm);
+                        break;
                 }
                 rovm.Items.Add(tovm);
             }
@@ -674,13 +695,13 @@ namespace MpWpfApp {
 
         public Brush AddCriteriaItemButtonBorderBrush {
             get {
-                return IsOverAddCriteriaButton ? Brushes.DimGray : Brushes.LightGray;
+                return IsOverAddCriteriaButton ? Brushes.LightGray : Brushes.DimGray;
             }
         }
 
         public Brush RemoveCriteriaItemButtonBorderBrush {
             get {
-                return IsOverRemoveCriteriaButton ? Brushes.DimGray : Brushes.LightGray;
+                return IsOverRemoveCriteriaButton ? Brushes.LightGray : Brushes.DimGray;
             }
         }
 

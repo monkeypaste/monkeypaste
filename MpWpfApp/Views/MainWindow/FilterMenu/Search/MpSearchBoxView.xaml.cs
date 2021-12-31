@@ -155,48 +155,5 @@ namespace MpWpfApp {
                 BindingContext.PerformSearchCommand.Execute(null);
             }
         }
-
-        private void ClearTextBoxButton_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.IsOverClearTextButton = true;
-        }
-
-        private void ClearTextBoxButton_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.IsOverClearTextButton = false;
-        }
-
-        private void SearchBox_MouseEnter(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
-        }
-
-        private void SearchBox_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-        }
-
-        private void SaveSearchButton_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.IsOverSaveSearchButton = true;
-        }
-
-        private void SaveSearchButton_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.IsOverSaveSearchButton = false;
-        }
-
-        private void DeleteSearchButton_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.IsOverDeleteSearchButton = true;
-        }
-
-        private void DeleteSearchButton_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.IsOverDeleteSearchButton = false;
-        }
-
-        private void AddOrClearSearchCriteriaButton_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                await Task.Delay(500);
-                UpdateLayout();
-                AddOrClearSearchCriteriaButton.UpdateLayout();
-            });
-        }
     }
 }

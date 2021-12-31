@@ -9,13 +9,14 @@
                      mc:Ignorable="d"
                      d:DesignHeight="50"
                      d:DesignWidth="800"
-                     MouseEnter="CriteriaItemBorder_MouseEnter"
-                     MouseLeave="CriteriaItemBorder_MouseLeave"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.IsHovering="{Binding IsHovering}"
                      d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaItemViewModel,
                                                       IsDesignTimeCreatable=False}">
     <DockPanel LastChildFill="False">
         <ListBox Background="Transparent"
                  BorderThickness="0"
+                 RequestBringIntoView="ListBox_RequestBringIntoView"
                  ItemsSource="{Binding SelectedOptions}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -31,13 +32,33 @@
         </ListBox>
         <StackPanel Orientation="Horizontal"
                     DockPanel.Dock="Right">
-            <Button x:Name="RemoveCriteriaItemButton"
+            <Button x:Name="AddCriteriaItemButton"
                     Background="Transparent"
                     Height="25"
                     Width="25"
                     BorderThickness="2"
-                    MouseEnter="RemoveCriteriaItemButton_MouseEnter"
-                    MouseLeave="RemoveCriteriaItemButton_MouseLeave"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.IsHovering="{Binding IsOverAddCriteriaButton, Mode=TwoWay}"
+                    Style="{StaticResource SemiTransparentButton}"
+                    Command="{Binding Parent.AddSearchCriteriaItemCommand}">
+                <Border CornerRadius="2"
+                        Background="LightGray"
+                        BorderBrush="{Binding AddCriteriaItemButtonBorderBrush}"
+                        BorderThickness="2">
+                    <Image Stretch="Fill"
+                           Source="{Binding .,
+                                            Source={StaticResource PlusIcon},
+                                            Converter={StaticResource StringToImageSourceConverter}}" />
+                </Border>
+            </Button>
+            <Button x:Name="RemoveCriteriaItemButton"
+                    Margin="10"
+                    Background="Transparent"
+                    Height="25"
+                    Width="25"
+                    BorderThickness="2"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.IsHovering="{Binding IsOverRemoveCriteriaButton, Mode=TwoWay}"
                     Style="{StaticResource SemiTransparentButton}"
                     Command="{Binding Parent.RemoveSearchCriteriaItemCommand}"
                     CommandParameter="{Binding}">
@@ -48,26 +69,6 @@
                     <Image Stretch="Fill"
                            Source="{Binding .,
                                             Source={StaticResource MinusIcon},
-                                            Converter={StaticResource StringToImageSourceConverter}}" />
-                </Border>
-            </Button>
-            <Button x:Name="AddCriteriaItemButton"
-                    Background="Transparent"
-                    Height="25"
-                    Width="25"
-                    Margin="2"
-                    BorderThickness="2"
-                    MouseEnter="AddCriteriaItemButton_MouseEnter"
-                    MouseLeave="AddCriteriaItemButton_MouseLeave"
-                    Style="{StaticResource SemiTransparentButton}"
-                    Command="{Binding Parent.AddSearchCriteriaItemCommand}">
-                <Border CornerRadius="2"
-                        Background="LightGray"
-                        BorderBrush="{Binding AddCriteriaItemButtonBorderBrush}"
-                        BorderThickness="2">
-                    <Image Stretch="Fill"
-                           Source="{Binding .,
-                                            Source={StaticResource PlusIcon},
                                             Converter={StaticResource StringToImageSourceConverter}}" />
                 </Border>
             </Button>

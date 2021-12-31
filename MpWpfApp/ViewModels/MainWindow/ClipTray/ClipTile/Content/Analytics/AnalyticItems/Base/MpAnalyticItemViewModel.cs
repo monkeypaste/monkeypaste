@@ -55,6 +55,7 @@ namespace MpWpfApp {
 
         #region Appearance
 
+        
         public string ManageLabel => $"{Title} Preset Manager";
 
         public Brush ItemBackgroundBrush {
@@ -528,20 +529,25 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ExecuteAnalysisCommand => new RelayCommand(
-            async () => {
+        public ICommand ExecuteAnalysisCommand => new RelayCommand<object>(
+            async (args) => {
+                if(args != null && args is MpAnalyticItemPresetViewModel aipvm) {
+                    PresetViewModels.ForEach(x => x.IsSelected = x == aipvm);
+                    OnPropertyChanged(nameof(SelectedPresetViewModel));
+                }
                 int sourceCopyItemId = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemId;
                 string analysisStr = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemData.ToPlainText();
                 var result = await ExecuteAnalysis(analysisStr) as Tuple<object,object>;
 
                 await ConvertToCopyItem(sourceCopyItemId,result.Item1, result.Item2);
-            },CanExecuteAnalysis);
+            },(args)=>CanExecuteAnalysis(args));
 
         protected abstract Task<object> ExecuteAnalysis(object obj);
 
-        public virtual bool CanExecuteAnalysis() {
-            return SelectedPresetViewModel != null && 
-                   SelectedPresetViewModel.IsAllValid && 
+        public virtual bool CanExecuteAnalysis(object obj) {
+            var spvm = obj == null ? SelectedPresetViewModel : obj as MpAnalyticItemPresetViewModel;
+            return spvm != null &&
+                   spvm.IsAllValid && 
                    MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 0 &&
                    MpClipTrayViewModel.Instance.SelectedContentItemViewModels.All(x=>x.CopyItemType == InputContentType);
         }
@@ -585,12 +591,16 @@ namespace MpWpfApp {
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {
+                if(presetVm.IsDefault) {
+                    return;
+                }
                 foreach(var presetVal in presetVm.Preset.PresetParameterValues) {
                     await presetVal.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
             },
-            (presetVm) => presetVm != null && presetVm is MpAnalyticItemPresetViewModel aipsvm && !aipsvm.IsDefault);
+            (presetVm) => presetVm != null && 
+            presetVm is MpAnalyticItemPresetViewModel aipsvm);
 
         public ICommand ShiftPresetCommand => new RelayCommand<object>(
             // [0] = shift dir [1] = presetvm

@@ -38,6 +38,7 @@ namespace MonkeyPaste {
 
             var dupCheck = await MpDataModelProvider.Instance.GetDbImageByBase64Str(base64Str);
             if(dupCheck != null) {
+                dupCheck = await MpDb.Instance.GetItemAsync<MpDbImage>(dupCheck.Id);
                 return dupCheck;
             }
             var i = new MpDbImage() {

@@ -19,8 +19,8 @@
                 Foreground="Transparent"
                 BorderThickness="0"
                 Command="{Binding DeleteSearchCommand}"
-                MouseEnter="DeleteSearchButton_MouseEnter"
-                MouseLeave="DeleteSearchButton_MouseLeave"
+                local:MpHoverableExtension.IsEnabled="True"
+                local:MpHoverableExtension.IsHovering="{Binding IsOverDeleteSearchButton}"
                 Visibility="{Binding CanDeleteSearch,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
@@ -41,9 +41,9 @@
                 Foreground="Transparent"
                 BorderThickness="0"
                 Command="{Binding SaveSearchCommand}"
-                MouseEnter="SaveSearchButton_MouseEnter"
-                MouseLeave="SaveSearchButton_MouseLeave"
-                Visibility="{Binding CanSaveSearch,
+                local:MpHoverableExtension.IsEnabled="True"
+                local:MpHoverableExtension.IsHovering="{Binding IsOverSaveSearchButton, Mode=TwoWay}"
+                Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
                 Style="{StaticResource Transparent_Button}">
@@ -112,9 +112,9 @@
                          AllowDrop="False"
                          FontSize="18"
                          Background="Transparent"
-                         MouseEnter="SearchBox_MouseEnter"
-                         MouseLeave="SearchBox_MouseLeave"
                          PreviewMouseLeftButtonDown="SearchBox_PreviewMouseLeftButtonDown"
+                         local:MpHoverableExtension.IsEnabled="True"
+                         local:MpHoverableExtension.HoverCursor="IBeam"
                          Foreground="{Binding TextBoxTextBrush}"
                          FontStyle="{Binding TextBoxFontStyle}"
                          BorderThickness="0"
@@ -150,8 +150,8 @@
                     <Button x:Name="ClearTextBoxButton"
                             Width="15"
                             Height="15"
-                            MouseEnter="ClearTextBoxButton_MouseEnter"
-                            MouseLeave="ClearTextBoxButton_MouseLeave"
+                            local:MpHoverableExtension.IsEnabled="True"
+                            local:MpHoverableExtension.IsHovering="{Binding IsOverClearTextButton}"
                             Style="{StaticResource SemiTransparentButton}"
                             BorderThickness="0"
                             VerticalAlignment="Center"
@@ -193,14 +193,26 @@
             </Grid>
         </local:MpClipBorder>
         <!--  Add Or Clear Search Criteria Button  -->
-        <Button x:Name="AddOrClearSearchCriteriaButton"
+        <Button x:Name="AddSearchCriteriaButton"
+                BorderThickness="0"
+                Margin="5,10"
+                Command="{Binding AddSearchCriteriaItemCommand}"
+                Visibility="{Binding HasCriteriaItems,
+                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                Template="{StaticResource SearchButtonControlTemplate}">
+            <Image Source="{Binding ., Source={StaticResource PlusIcon}}"
+                   Height="20"
+                   Width="20"
+                   Stretch="Uniform" />
+        </Button>
+        <Button x:Name="ClearSearchCriteriaButton"
                 BorderThickness="0"
                 Margin="5"
-                Command="{Binding CreateOrClearSearchCriteriaItemsCommand}"
-                Visibility="{Binding CanAddCriteriaItem,
+                Command="{Binding ClearSearchCriteriaItemsCommand}"
+                Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityConverter}}"
                 Template="{StaticResource SearchButtonControlTemplate}">
-            <Image Source="{Binding AddOrClearSearchCriteriaImagePath}"
+            <Image Source="{Binding ., Source={StaticResource MinusIcon}}"
                    Height="20"
                    Width="20"
                    Stretch="Uniform" />

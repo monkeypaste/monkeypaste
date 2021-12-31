@@ -111,6 +111,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
+    <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
+    <Compile Include="ViewModels\Base\Interfaces\MpIHoverableViewModel.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
@@ -300,6 +302,7 @@
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
+    <Compile Include="ViewModels\Reusable\MpToggleButtonBaseViewModel.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
@@ -433,14 +436,14 @@
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayView.xaml.cs">
       <DependentUpon>MpClipTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml.cs">
-      <DependentUpon>MpSearchCriteriaListView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListBoxView.xaml.cs">
+      <DependentUpon>MpSearchCriteriaListBoxView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\MpSearchBoxView.xaml.cs">
       <DependentUpon>MpSearchBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaItemView.xaml.cs">
-      <DependentUpon>MpSearchCriteriaItemView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaListBoxItemView.xaml.cs">
+      <DependentUpon>MpSearchCriteriaListBoxItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml.cs">
       <DependentUpon>MpItemSortView.xaml</DependentUpon>
@@ -474,6 +477,9 @@
     </Compile>
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\ToggleButton\MpToggleButtonView.xaml.cs">
+      <DependentUpon>MpToggleButtonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
@@ -655,7 +661,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\MpSearchCriteriaListBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -663,7 +669,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaItemView.xaml">
+    <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\MpSearchCriteriaListBoxItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -712,6 +718,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\ToggleButton\MpToggleButtonView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

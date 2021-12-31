@@ -37,18 +37,7 @@ namespace MpWpfApp {
 
         public MpDetectedImageObjectCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
-        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
-        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
-            get {
-                return _clipTileTitleSwirlViewModel;
-            }
-            set {
-                if (_clipTileTitleSwirlViewModel != value) {
-                    _clipTileTitleSwirlViewModel = value;
-                    OnPropertyChanged(nameof(TitleSwirlViewModel));
-                }
-            }
-        }
+        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
 
         private MpTemplateCollectionViewModel _templateCollection;
         [MpChildViewModel(typeof(MpTemplateCollectionViewModel), false)]
@@ -411,20 +400,7 @@ namespace MpWpfApp {
 
         #region Model
 
-        public string[] ColorPallete {
-            get {
-                if(CopyItem == null) {
-                    return new string[] { };
-                }
-                return new string[] {
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor1,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor4,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor5
-                };
-            }
-        }
+        public string[] ColorPallete { get; set; }
 
         public string RelativePalleteColor {
             //since items will have the same source a lot this will choose relative to list order
@@ -624,12 +600,13 @@ namespace MpWpfApp {
             }
             CopyItem = ci;
 
+
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
-            await TitleSwirlViewModel.InitializeAsync();
+            await UpdateColorPallete();
             //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
@@ -795,6 +772,25 @@ namespace MpWpfApp {
             // TODO maybe add archiving
         }
 
+
+        public async Task UpdateColorPallete() {
+            var pallete = new List<string>{
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor1,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor4,
+                    CopyItem.Source.PrimarySource.SourceIcon.HexColor5
+                };
+
+            var tagColors = await MpDataModelProvider.Instance.GetTagColorsForCopyItem(CopyItemId);
+
+            pallete.InsertRange(0, tagColors);
+
+            ColorPallete = pallete.Take(5).ToArray();
+
+            await TitleSwirlViewModel.InitializeAsync();
+        }
+
         #region IDisposable
 
         public override void Dispose() {
@@ -843,6 +839,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
@@ -877,6 +874,7 @@ namespace MpWpfApp {
                 }
             }));
         }
+
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):                    

@@ -12,10 +12,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpAppModeViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
-          ClipToBounds="False"
-          VerticalAlignment="Top"
-          Height="{Binding ClipTrayHeight,
-                                                          Source={StaticResource ClipTrayViewModel}}"
           Width="{Binding AppModeButtonGridMinWidth}"
           Background="{local:MpThemeColorsBinding Key=App_Mode_Grid_Background_Color}">
         <Grid.RowDefinitions>
@@ -26,7 +22,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <ToggleButton Grid.Row="0"
-                      VerticalAlignment="Center"
+                      VerticalAlignment="Top"
                       HorizontalAlignment="Center"
                       ToolTipService.InitialShowDelay="0"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
@@ -54,8 +50,8 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton x:Name="AnalyzerToggleButton" 
-                      Grid.Row="2" 
+        <ToggleButton x:Name="AnalyzerToggleButton"
+                      Grid.Row="2"
                       ToolTipService.InitialShowDelay="0"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
@@ -134,7 +130,7 @@
                       Grid.Row="4"
                       Padding="10"
                       ToolTipService.InitialShowDelay="0"
-                      VerticalAlignment="Center"
+                      VerticalAlignment="Bottom"
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Append to Clipboard"

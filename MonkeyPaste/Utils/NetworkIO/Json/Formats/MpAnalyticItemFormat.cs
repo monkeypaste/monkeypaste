@@ -77,6 +77,9 @@ namespace MonkeyPaste {
         [JsonProperty("isValueDeferred")]
         public bool IsValueDeferred { get; set; } = false;
 
+        [JsonProperty("isVisible")]
+        public bool IsVisible { get; set; } = true;
+
         [JsonProperty("values")]
         public List<MpAnalyticItemParameterValue> Values { get; set; } = new List<MpAnalyticItemParameterValue>();
     }

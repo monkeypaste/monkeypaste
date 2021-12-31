@@ -331,9 +331,9 @@ namespace MpWpfApp {
             set {
                 if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
                     Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    Task.Run(async () => {
-                        await Tag.WriteToDatabaseAsync();
-                    });
+                    //Task.Run(async () => {
+                    //    await Tag.WriteToDatabaseAsync();
+                    //});
                     OnPropertyChanged(nameof(TagBrush));
                     OnPropertyChanged(nameof(TagCountTextColor));
                 }
@@ -449,16 +449,7 @@ namespace MpWpfApp {
         }
 
         public async Task AddContentItem(MpContentItemViewModel rtbvm) {
-            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(TagId,rtbvm.CopyItemId);
-            if(dupCheck != null) {
-                MpConsole.WriteLine($"Tag {TagName} already contains a link with CopyItem {rtbvm.CopyItemTitle}, ignoring");
-                return;
-            }
-            var ncit = new MpCopyItemTag() {
-                TagId = TagId,
-                CopyItemId = rtbvm.CopyItemId,
-                CopyItemTagGuid = Guid.NewGuid()
-            };
+            var ncit = await MpCopyItemTag.Create(TagId, rtbvm.CopyItemId);
             await ncit.WriteToDatabaseAsync();
         }
 
@@ -631,6 +622,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
         public ICommand AssignHotkeyCommand => new RelayCommand<object>(
             async (args) => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
@@ -648,6 +640,10 @@ namespace MpWpfApp {
                 if (newBrush != null) {
                     TagBrush = newBrush;
                     await Tag.WriteToDatabaseAsync();
+
+                    await Task.Delay(50);
+
+                    await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.UpdateColorPallete()));
                 }
             });
 
