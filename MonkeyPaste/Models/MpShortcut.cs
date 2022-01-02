@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
+
     public class MpShortcut : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]

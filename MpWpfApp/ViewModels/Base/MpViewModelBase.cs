@@ -31,6 +31,12 @@ namespace MpWpfApp {
         }
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
+
+        #endregion
+
+        #region Events
+
+
         #endregion
 
         #region Constructors

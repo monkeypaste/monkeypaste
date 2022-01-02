@@ -12,6 +12,8 @@ namespace MonkeyPaste {
         Task<Dictionary<string, string>> DbDiff(object drOrModel);
         Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid);
 
+        //string Guid { get; set; }
+
         //SQLite.TableMapping GetTableMapping();
         //void SetTableMapping(SQLite.TableMapping tmap);
     }

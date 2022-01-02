@@ -8,10 +8,11 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     [Table("MpCopyItem")]
-    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject {
+    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
         #region Column Definitions
 
         [PrimaryKey, AutoIncrement]
+        [ForeignKey(typeof(MpUserObject))]
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; } = 0;
 

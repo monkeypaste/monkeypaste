@@ -81,10 +81,10 @@ namespace MonkeyPaste {
 
             var iconBuilder = createBorder ? MpNativeWrapper.Instance.GetIconBuilder() : null;
             if (iconBuilder != null) {
-                var borderImage64Str = await iconBuilder.CreateBorder(iconImgBase64, 1.25, @"#FFFFFFFF");
+                var borderImage64Str = iconBuilder.CreateBorder(iconImgBase64, 1.25, @"#FFFFFFFF");
                 var iconBorderImage = await MpDbImage.Create(borderImage64Str);
 
-                var colorList = await iconBuilder.CreatePrimaryColorList(iconImgBase64);
+                var colorList = iconBuilder.CreatePrimaryColorList(iconImgBase64);
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
                 newIcon.HexColor1 = colorList[0];

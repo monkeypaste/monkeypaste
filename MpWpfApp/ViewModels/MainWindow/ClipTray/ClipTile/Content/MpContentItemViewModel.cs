@@ -228,8 +228,7 @@ namespace MpWpfApp {
                 }
                 //item height is divided evenly by items but if there are many (more than 5) 
                 //their will only be 5 visible
-                
-                var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
+
                 double h = 0;
                 if(Parent.Count == 1) {
                     h = Parent.TileContentHeight; //MpMeasurements.Instance.ClipTileContentHeight;
@@ -1079,7 +1078,7 @@ namespace MpWpfApp {
         }
         private void CreateQrCodeFromSubSelectedItem() {
             var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());
-            MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
+            //MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 
 

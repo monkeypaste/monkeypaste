@@ -448,15 +448,15 @@ namespace MpWpfApp {
             return cl;
         }
 
-        public async Task AddContentItem(MpContentItemViewModel rtbvm) {
-            var ncit = await MpCopyItemTag.Create(TagId, rtbvm.CopyItemId);
+        public async Task AddContentItem(int ciid) {
+            var ncit = await MpCopyItemTag.Create(TagId, ciid);
             await ncit.WriteToDatabaseAsync();
         }
 
-        public async Task RemoveContentItem(MpContentItemViewModel rtbvm) {
-            var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(rtbvm.CopyItemId, TagId);
+        public async Task RemoveContentItem(int ciid) {
+            var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(ciid, TagId);
             if(cit == null) {
-                MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem {rtbvm.CopyItemTitle} so cannot remove");
+                MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem Id {ciid} so cannot remove");
                 return;
             }
             await cit.DeleteFromDatabaseAsync();

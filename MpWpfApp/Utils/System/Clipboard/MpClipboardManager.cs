@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using WindowsInput;
 using WindowsInput.Native;
 using MonkeyPaste;
+using System.Text;
 
 namespace MpWpfApp {
     public enum MpPasteDataFormats {
@@ -27,7 +28,7 @@ namespace MpWpfApp {
         FileList
     }
 
-    public class MpClipboardManager : IDisposable {
+    public class MpClipboardManager  {
         private static readonly Lazy<MpClipboardManager> _Lazy = new Lazy<MpClipboardManager>(() => new MpClipboardManager());
         public static MpClipboardManager Instance { get { return _Lazy.Value; } }
 
@@ -76,7 +77,7 @@ namespace MpWpfApp {
         #region Constructor
 
         private MpClipboardManager() : base() {
-            _workThread = new Thread(new ThreadStart(CheckClipboard));
+            _workThread = new Thread(new ThreadStart(CheckClipboardThread));
             _workThread.SetApartmentState(ApartmentState.STA);
             _workThread.IsBackground = true;
         }
@@ -102,9 +103,40 @@ namespace MpWpfApp {
             if (_workThread.IsAlive) {
                 _isStopped = false;
             } else {
-                //setting last here will ensure item on cb isn't added when starting
-                _lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
                 _workThread.Start();
+            }
+
+        }
+
+        private void ClipboardMonitor_OnClipboardChange(object sender, object data) {
+            var dobj = data as System.Windows.DataObject;
+            if (dobj == null) {
+                return;
+            }
+            var cbo = ConvertManagedFormats(dobj);
+            if (HasChanged(cbo)) {
+                _lastCbo = cbo;
+                //if (IgnoreClipboardChangeEvent) {
+                //    return;
+                //}
+                if (MpAppModeViewModel.Instance.IsAppPaused) {
+                    MpConsole.WriteLine("App Paused, ignoring copy");
+                } else {
+                    IntPtr hwnd = LastWindowWatcher.LastHandle;
+                    string processPath = MpHelpers.Instance.GetProcessPath(hwnd);
+                    if (MpAppCollectionViewModel.Instance.IsAppRejected(processPath)) {
+                        MpConsole.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
+                    } else {
+                        ClipboardChanged?.Invoke(this, cbo);
+                        // NOTE word 2007 does weird stuff and alters cb after read
+                        // this attempts to circumvent that by waiting a second
+                        // then replacing _last with current
+                        // NOTE 2 commenting this out because it itermittently
+                        // creates duplicates...
+                        //Thread.Sleep(1000);
+                        //_lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
+                    }
+                }
             }
         }
 
@@ -114,9 +146,9 @@ namespace MpWpfApp {
 
         #region IDataObject Wrappers
 
-        public System.Windows.Forms.IDataObject GetDataObjectWrapper() {
+        public IDataObject GetDataObjectWrapper() {
             MpConsole.WriteLine($"Accessing cb at {DateTime.Now}");
-            return System.Windows.Forms.Clipboard.GetDataObject();
+            return Clipboard.GetDataObject();
             //return Clipboard.GetDataObject();
         }
 
@@ -129,8 +161,8 @@ namespace MpWpfApp {
                 if (iDataObject is IDataObject ido) {
                     //throw new Exception("Try converting to win forms version");
                     Clipboard.SetDataObject(iDataObject as IDataObject, copy);
-                } else if (iDataObject is System.Windows.Forms.IDataObject wf_ido) {
-                    System.Windows.Forms.Clipboard.SetDataObject(wf_ido, copy, retryTimes--, retryDelay);
+                } else if (iDataObject is IDataObject wf_ido) {
+                    //Clipboard.SetDataObject(wf_ido, copy, retryTimes--, retryDelay);
                 }
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
@@ -175,7 +207,7 @@ namespace MpWpfApp {
             SetDataObject(ido);
         }
 
-        public async Task PasteDataObject(IDataObject dataObject, IntPtr handle) {
+        public async Task PasteDataObject(object dataObject, IntPtr handle) {
             //to prevent cb listener thread from thinking there's a new item
             _lastCbo = ConvertManagedFormats(dataObject);
             //Mouse.OverrideCursor = Cursors.Wait;
@@ -206,7 +238,7 @@ namespace MpWpfApp {
             //Mouse.OverrideCursor = null;
         }
 
-        public void SetDataObject(IDataObject dataObject) {
+        public void SetDataObject(object dataObject) {
             MpHelpers.Instance.RunOnMainThread(() => {
                 SetDataObjectWrapper(dataObject, true);
             });
@@ -219,12 +251,25 @@ namespace MpWpfApp {
         #region Private Methods
 
         #region IDataObject Wrapper Helper methods
+        
 
-        private void CheckClipboard() {
+        private void CheckClipboardThread() {
+
+            //setting last here will ensure item on cb isn't added when starting
+            _lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
+
+            //MpClipboardMonitor.OnClipboardChange += ClipboardMonitor_OnClipboardChange;
+            //MpClipboardMonitor.Start();
+
+
             while (true) {
+                continue;
                 while (_isStopped || IgnoreClipboardChangeEvent) {
                     Thread.Sleep(100);
                 }
+                Thread.Sleep(500);
+
+                //string test = GetOpenClipboardWindowText();
                 var cbo = ConvertManagedFormats(Clipboard.GetDataObject());
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
@@ -254,7 +299,7 @@ namespace MpWpfApp {
             }
         }
 
-        private Dictionary<string, string> ConvertManagedFormats(IDataObject ido, int retryCount = 5) {
+        private Dictionary<string, string> ConvertManagedFormats(object ido, int retryCount = 5) {
             /*
             from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
             Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -409,4 +454,6 @@ namespace MpWpfApp {
         }
         #endregion
     }
+
+    
 }

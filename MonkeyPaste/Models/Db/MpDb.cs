@@ -341,8 +341,6 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(this, null);
             }
 
-            
-
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -391,6 +389,9 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
+            await _connectionAsync.CreateTableAsync<MpMatcher>();
+            await _connectionAsync.CreateTableAsync<MpMatchCommand>();
+            await _connectionAsync.CreateTableAsync<MpMatchableEvent>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
@@ -442,6 +443,7 @@ namespace MonkeyPaste {
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
+        
         private async Task InitDefaultPortableData() {
             #region User Device
 
@@ -804,6 +806,30 @@ namespace MonkeyPaste {
                         MpHelpers.Instance.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
                             GetType().Assembly));
+            #endregion
+
+            #region Matcher
+
+            /*
+            -on end of startup MpMatchManager loads matchers,events and commands and registers for events
+            -on copy item create invoke event w/ item from tray
+            -in manager run all event commands with copy item
+            -compare content w/ all clipboard matchers
+
+            */
+
+            var mr = await MpMatcher.Create(
+                MpMatcherType.Contains,
+                "cat",
+
+                MpMatchTriggerType.Content,
+                MpMatchActionType.Analyzer,
+                24,
+
+                MpMatchActionType.Classifier,
+                32
+                );
+
             #endregion
 
             MpConsole.WriteTraceLine(@"Created all default tables");

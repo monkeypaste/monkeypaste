@@ -1871,7 +1871,13 @@ namespace MpWpfApp {
         }
 
         public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newScale) {
-            return new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width,newScale.Height));
+            try {
+                var sbmpSrc = new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width, newScale.Height));
+                return sbmpSrc;
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine("Error scaling bmp", ex);
+                return bmpSrc;
+            }
         }
 
         public bool ByteArrayCompare(byte[] b1, byte[] b2) {
@@ -3117,41 +3123,6 @@ namespace MpWpfApp {
                 return null;
             }
         }
-
-        //public string GetFullyFormattedUrl(string str)
-        //{
-        //    if (str.StartsWith(@"http://"))
-        //    {
-        //        return str;
-        //    }
-        //    if (str.StartsWith(@"https://"))
-        //    {
-        //        return str;
-        //    }
-        //    //use http without s because if it is https then it will resolve to but otherwise will not load
-        //    return @"http://" + str;
-        //}
-
-        //public string GetUrlDomain(string url) {
-        //    try {
-        //        url = GetFullyFormattedUrl(url);
-        //        int domainStartIdx = url.IndexOf(@"//") + 2;
-        //        if(url.Length <= domainStartIdx) {
-        //            return string.Empty;
-        //        }
-        //        if(!url.Substring(domainStartIdx).Contains(@"/")) {
-        //            return url.Substring(domainStartIdx);
-        //        }
-        //        int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
-        //        return url.Substring(domainStartIdx).Substring(0, domainEndIdx);
-
-        //        //string[] hostParts = new System.Uri(url).Host.Split('.');
-        //        //return String.Join(".", hostParts.Skip(Math.Max(0, hostParts.Length - 2)).Take(2));
-        //    } catch(Exception ex) {
-        //        MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
-        //    }
-        //    return null;
-        //}
 
         public BitmapSource ConvertUrlToQrCode(string url) {
             using (var qrGenerator = new QRCodeGenerator()) {

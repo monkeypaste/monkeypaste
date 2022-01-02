@@ -144,7 +144,11 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        
+        public MpAnalyticItemPresetViewModel GetPresetViewModelById(int aipid) {
+            var aipvm = Items.SelectMany(x => x.PresetViewModels).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
+            return aipvm;
+        }
+
         #endregion
 
         #region Private Methods

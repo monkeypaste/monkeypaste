@@ -12,7 +12,7 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <Viewbox Width="{Binding Parent.TileContentWidth}"
-             Height="Auto"
+             Height="{Binding EditorHeight}"
              DataContext="{Binding}"
              Loaded="Viewbox_Loaded">
         <Viewbox.Resources>
@@ -88,19 +88,24 @@
             <local:MpBindingProxy x:Key="ClipTileProxy"
                                   Data="{Binding}" />
         </Viewbox.Resources>
-        <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
+        <Grid>
+
+            <Image x:Name="ClipTileAppIconImage"
+               Source="{Binding CopyItemData,
+                                Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+               Stretch="None"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Visibility="Visible" />
+            <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
+                      Background="Transparent"
                       DataContext="{Binding DetectedImageObjectCollectionViewModel}"
                       ItemsSource="{Binding Items}">
-            <ItemsControl.Background>
-                <ImageBrush Stretch="Fill"
-                            ImageSource="{Binding Parent.CopyItemData,
-                                                  Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
-            </ItemsControl.Background>
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
-                    <ContentControl Width="{Binding Width}"
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
+                        <ContentControl Width="{Binding Width}"
                                     MinWidth="20"
                                     Height="{Binding Height}"
                                     MinHeight="20"
@@ -110,25 +115,25 @@
                                                          Converter={StaticResource BoolToVisibilityConverter}}"
                                     Template="{StaticResource DesignerItemTemplate}">
 
-                        <ContentControl.RenderTransform>
-                            <TranslateTransform X="{Binding X}"
+                            <ContentControl.RenderTransform>
+                                <TranslateTransform X="{Binding X}"
                                                 Y="{Binding Y}" />
-                        </ContentControl.RenderTransform>
-                        <!--<Path Fill="Blue"
+                            </ContentControl.RenderTransform>
+                            <!--<Path Fill="Blue"
                             Data="M 0,5 5,0 10,5 5,10 Z"
                             Stretch="Fill"
                             IsHitTestVisible="False"/>-->
 
-                        <Border HorizontalAlignment="Stretch"
+                            <Border HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 BorderThickness="3"
                                 BorderBrush="{Binding BorderBrush}"
                                 Background="Transparent">
-                            <Border.Resources>
-                                <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
+                                <Border.Resources>
+                                    <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
                                                       Data="{Binding}" />
-                            </Border.Resources>
-                            <TextBox HorizontalAlignment="Center"
+                                </Border.Resources>
+                                <TextBox HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -141,13 +146,13 @@
                                      IsReadOnly="{Binding IsNameReadOnly}"
                                      Background="{StaticResource ClipTileDetectedObjectTextBoxBackgroundBrush}"
                                      Foreground="White" />
-                        </Border>
-                    </ContentControl>
-                </DataTemplate>
-            </ItemsControl.Resources>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
+                            </Border>
+                        </ContentControl>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
                             Width="{Binding Data.DetectedImageObjectCollectionViewModel.CopyItemBmpWidth,
                                             Source={StaticResource ClipTileProxy}}"
                             Height="{Binding Data.DetectedImageObjectCollectionViewModel.CopyItemBmpHeight,
@@ -155,8 +160,9 @@
                             HorizontalAlignment="Center"
                             IsItemsHost="True"
                             VerticalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
     </Viewbox>
 </local:MpUserControl>

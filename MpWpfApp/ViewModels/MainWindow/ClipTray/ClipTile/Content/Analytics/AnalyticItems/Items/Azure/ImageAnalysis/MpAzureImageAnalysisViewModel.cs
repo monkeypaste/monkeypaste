@@ -55,7 +55,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task<object> ExecuteAnalysis(object obj) {
+        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
             IsBusy = true;
 
             var paramLookup = SelectedPresetViewModel.ParamLookup;
@@ -73,7 +73,10 @@ namespace MpWpfApp {
 
             IsBusy = false;
 
-            return new Tuple<object, object>(response, aiar);
+            return new MpRestTransaction() {
+                Request = aiar,
+                Response = response
+            };
         }
 
         

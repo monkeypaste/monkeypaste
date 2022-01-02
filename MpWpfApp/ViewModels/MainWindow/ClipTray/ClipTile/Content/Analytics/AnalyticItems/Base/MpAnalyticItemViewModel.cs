@@ -54,7 +54,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
-
         
         public string ManageLabel => $"{Title} Preset Manager";
 
@@ -94,6 +93,8 @@ namespace MpWpfApp {
         public bool IsSelected { get; set; } = false;
 
         public bool IsExpanded { get; set; } = false;
+
+        public MpRestTransaction LastTransaction { get; private set; } = null;
 
         #endregion
 
@@ -442,12 +443,14 @@ namespace MpWpfApp {
 
         #endregion
 
+        protected virtual async Task ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans) {
+            object request = trans.Request;
+            object response = trans.Response;
 
-        protected virtual async Task ConvertToCopyItem(int parentCopyItemId, object resultData, object reqStr) {
             var app = MpPreferences.Instance.ThisAppSource.App;
-            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr.ToString());
+            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, request.ToString());
             var source = await MpSource.Create(app, url);
-            var ci = await MpCopyItem.Create(source, resultData.ToString(), MpCopyItemType.RichText);
+            var ci = await MpCopyItem.Create(source, response.ToString(), MpCopyItemType.RichText);
 
             var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
             if (scivm == null) {
@@ -531,25 +534,64 @@ namespace MpWpfApp {
 
         public ICommand ExecuteAnalysisCommand => new RelayCommand<object>(
             async (args) => {
-                if(args != null && args is MpAnalyticItemPresetViewModel aipvm) {
-                    PresetViewModels.ForEach(x => x.IsSelected = x == aipvm);
-                    OnPropertyChanged(nameof(SelectedPresetViewModel));
-                }
-                int sourceCopyItemId = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemId;
-                string analysisStr = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItemData.ToPlainText();
-                var result = await ExecuteAnalysis(analysisStr) as Tuple<object,object>;
+                bool suppressCreateItem = false;
 
-                await ConvertToCopyItem(sourceCopyItemId,result.Item1, result.Item2);
+                IsBusy = true;
+
+                MpCopyItem sourceCopyItem = null;
+                MpAnalyticItemPresetViewModel targetAnalyzer = null;
+
+                if (args != null && args is object[] argParts) {
+                    suppressCreateItem = true;
+                    targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
+                    sourceCopyItem = argParts[1] as MpCopyItem;
+                } else {
+                    if (args is MpAnalyticItemPresetViewModel aipvm) {
+                        targetAnalyzer = aipvm;
+                    } else {
+                        targetAnalyzer = SelectedPresetViewModel;
+                    }                    
+                    sourceCopyItem = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                }
+
+                PresetViewModels.ForEach(x => x.IsSelected = x == targetAnalyzer);
+                OnPropertyChanged(nameof(SelectedPresetViewModel));
+
+                string analysisStr = sourceCopyItem.ItemData.ToPlainText();
+                
+                LastTransaction = await ExecuteAnalysis(analysisStr);
+
+                if(!suppressCreateItem) {
+                    await ConvertToCopyItem(sourceCopyItem.Id, LastTransaction);
+                }
+
+                IsBusy = false;
             },(args)=>CanExecuteAnalysis(args));
 
-        protected abstract Task<object> ExecuteAnalysis(object obj);
+        protected abstract Task<MpRestTransaction> ExecuteAnalysis(object obj);
 
-        public virtual bool CanExecuteAnalysis(object obj) {
-            var spvm = obj == null ? SelectedPresetViewModel : obj as MpAnalyticItemPresetViewModel;
+        public virtual bool CanExecuteAnalysis(object args) {
+            MpAnalyticItemPresetViewModel spvm = null;
+            MpCopyItem sci = null;
+            if(args == null) {
+                spvm = SelectedPresetViewModel;
+                sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+            } else if(args is MpAnalyticItemPresetViewModel) {
+                if (MpClipTrayViewModel.Instance.PrimaryItem == null || 
+                    MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem == null) {
+                    return false;
+                }
+                spvm = args as MpAnalyticItemPresetViewModel;
+                sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+            } else if(args is object[] argParts) {
+                spvm = argParts[0] as MpAnalyticItemPresetViewModel;
+                sci = argParts[1] as MpCopyItem;
+            }
+
             return spvm != null &&
                    spvm.IsAllValid && 
-                   MpClipTrayViewModel.Instance.SelectedContentItemViewModels.Count > 0 &&
-                   MpClipTrayViewModel.Instance.SelectedContentItemViewModels.All(x=>x.CopyItemType == InputContentType);
+                   sci != null &&
+                   sci.ItemType == InputContentType;
         }
 
         public ICommand CreateNewPresetCommand => new RelayCommand(

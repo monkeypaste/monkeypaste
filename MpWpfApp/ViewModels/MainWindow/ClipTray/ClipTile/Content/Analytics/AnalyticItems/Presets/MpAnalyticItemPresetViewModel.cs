@@ -297,6 +297,8 @@ namespace MpWpfApp {
         }
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip, MpAnalyticItemPresetParameterValue aippv) {
+            
+
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aip.ParameterType) {

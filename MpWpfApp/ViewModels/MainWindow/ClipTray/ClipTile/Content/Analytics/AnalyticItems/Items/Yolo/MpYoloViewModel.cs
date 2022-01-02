@@ -53,7 +53,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task<object> ExecuteAnalysis(object obj) {
+        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
             IsBusy = true;
 
             var paramLookup = SelectedPresetViewModel.ParamLookup;
@@ -64,10 +64,17 @@ namespace MpWpfApp {
 
             IsBusy = false;
 
-            return new Tuple<object, object>(response,minConfidence);
+            //return new Tuple<object, object>(response,minConfidence);
+            return new MpRestTransaction() {
+                Request = minConfidence,
+                Response = response
+            };
         }
 
-        protected override async Task ConvertToCopyItem(int parentCopyItemId, object resultData, object reqStr) {
+        protected override async Task ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans) {
+            object reqStr = trans.Request;
+            object resultData = trans.Response;
+
             var app = MpPreferences.Instance.ThisAppSource.App;
             var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr.ToString());
             var source = await MpSource.Create(app, url);

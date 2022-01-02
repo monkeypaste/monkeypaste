@@ -213,6 +213,7 @@
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\MpLine.cs" />
+    <Compile Include="ViewModels\MainWindow\Match\MpMatcherCollectionViewModel.cs" />
     <Compile Include="Utils\MpNativeWrapper.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Match\MpMatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlViewModel.cs" />
@@ -1105,6 +1107,9 @@
     </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.3</Version>
+    </PackageReference>
+    <PackageReference Include="SharpClipboard">
+      <Version>3.5.2</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>
@@ -2470,6 +2475,10 @@
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
       <Name>MonkeyPaste</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MpClipboardHelper\MpClipboardHelper.csproj">
+      <Project>{e3c8e3f7-3a44-4678-a742-5a6dd971a38c}</Project>
+      <Name>MpClipboardHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

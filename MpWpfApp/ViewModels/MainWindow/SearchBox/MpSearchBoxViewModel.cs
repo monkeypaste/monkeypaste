@@ -547,7 +547,7 @@ namespace MpWpfApp {
             });
 
         public ICommand ClearSearchCriteriaItemsCommand => new RelayCommand(
-            async () => {
+            () => {
                 CriteriaItems.Clear();
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));

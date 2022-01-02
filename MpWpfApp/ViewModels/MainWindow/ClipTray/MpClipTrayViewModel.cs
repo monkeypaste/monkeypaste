@@ -21,8 +21,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
-
-
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel> {
         #region Private Variables      
@@ -361,6 +359,8 @@ namespace MpWpfApp {
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler<double> OnScrollToXRequest;
         public event EventHandler OnScrollToHomeRequest;
+
+        public event EventHandler<object> OnCopyItemItemAdd;
 
         #endregion
 
@@ -769,7 +769,7 @@ namespace MpWpfApp {
             return result;
         }
 
-        public async Task PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
+        public async Task PasteDataObject(object pasteDataObject, bool fromHotKey = false) {
             if (IsAnyPastingTemplate) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
             }
@@ -1165,6 +1165,8 @@ namespace MpWpfApp {
 
             _newModels.Add(newCopyItem);
             AddNewItemsCommand.Execute(null);
+
+            OnCopyItemItemAdd?.Invoke(this, newCopyItem);
         }
 
         #region Sync Events
@@ -1758,9 +1760,9 @@ namespace MpWpfApp {
                 foreach (var selectedClipTile in SelectedItems) {
                     foreach (var ivm in selectedClipTile.ItemViewModels) {
                         if (isUnlink) {
-                            await tagToLink.RemoveContentItem(ivm);
+                            await tagToLink.RemoveContentItem(ivm.CopyItemId);
                         } else {
-                            await tagToLink.AddContentItem(ivm);
+                            await tagToLink.AddContentItem(ivm.CopyItemId);
                         }
 
                         await ivm.UpdateColorPallete();
