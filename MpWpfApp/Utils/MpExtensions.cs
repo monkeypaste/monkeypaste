@@ -837,12 +837,12 @@ namespace MpWpfApp {
         }
 
         public static BitmapSource Scale(this BitmapSource bmpSrc, Size scale) {
-            return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, scale);
+            return MpHelpers.Instance.ScaleBitmapSource(bmpSrc, scale);
         }
 
         public static BitmapSource Resize(this BitmapSource bmpSrc, Size size) {
             Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
-            return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, scale);
+            return MpHelpers.Instance.ScaleBitmapSource(bmpSrc, scale);
         }
 
         public static Image ToImage(this string resourcePathOrBase64Str) {

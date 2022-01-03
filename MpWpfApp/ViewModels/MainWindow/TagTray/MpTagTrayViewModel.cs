@@ -64,6 +64,9 @@ namespace MpWpfApp {
 
         public bool IsEditingTagName {
             get {
+                if(SelectedTagTile == null) {
+                    return false;
+                }
                 return SelectedTagTile.IsEditing;
             }
         }

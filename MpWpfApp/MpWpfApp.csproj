@@ -185,6 +185,8 @@
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
+    <Compile Include="Converters\MpSourceIdToImageSourceBorderConverter.cs" />
+    <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
@@ -296,8 +298,12 @@
     <Compile Include="ViewModels\MainWindow\Match\MpMatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpUrlCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Interfaces\MpISourceItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\MpSourceCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\MpSourceViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\MpTagPropertyCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpDirectoryWatcherTagPropertyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\PropertyCollection\Property\MpTagPropertyViewModel.cs" />
@@ -344,8 +350,8 @@
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\MpAppCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\MpAppViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Help\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />

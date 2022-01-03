@@ -209,8 +209,8 @@
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            Loaded="ClipTileAppIconBorderImage_Loaded"
-                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconBorderImage.ImageBase64,
-                                            Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                           Source="{Binding SourceId,
+                                            Converter={StaticResource SourceIdToImageSourceBorderConverter}}"
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"
                            Visibility="Hidden"
@@ -223,8 +223,8 @@
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
-                           Source="{Binding CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64,
-                                            Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                           Source="{Binding SourceId,
+                                            Converter={StaticResource SourceIdToImageSourceConverter}}"
                            Stretch="Uniform"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"

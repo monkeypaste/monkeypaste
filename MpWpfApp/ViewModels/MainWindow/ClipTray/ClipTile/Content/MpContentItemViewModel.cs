@@ -524,6 +524,15 @@ namespace MpWpfApp {
             }
         }
 
+        public int SourceId {
+            get {
+                if(CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.SourceId;
+            }
+        }
+
         public Brush CopyItemColorBrush {
             get {
                 if (CopyItem == null) {

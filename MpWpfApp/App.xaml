@@ -36,6 +36,7 @@
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
 
+        <s:String x:Key="SecondarySource">SecondarySource</s:String>
         <s:String x:Key="Hide">Hide</s:String>
         <s:String x:Key="Collapse">Collapse</s:String>
         <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
@@ -172,6 +173,8 @@
         <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
         <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
         <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+        <local:MpSourceIdToImageSourceConverter x:Key="SourceIdToImageSourceConverter" />
+        <local:MpSourceIdToImageSourceBorderConverter x:Key="SourceIdToImageSourceBorderConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->
@@ -186,6 +189,7 @@
         <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
         <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
         <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
+        <local:MpSourceCollectionViewModel x:Key="SourceCollectionViewModel" />
         <!--  Singleton View Model Declarations End  -->
 
 

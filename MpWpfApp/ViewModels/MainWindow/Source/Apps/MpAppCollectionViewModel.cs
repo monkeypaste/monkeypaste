@@ -34,8 +34,19 @@ namespace MpWpfApp {
         #region Constructors
 
         public async Task Init() {
-            await Refresh();
+            IsBusy = true;
+
+            var appl = await MpDb.Instance.GetItemsAsync<MpApp>();
+            AppViewModels.Clear();
+            foreach (var app in appl) {
+                var avm = await CreateAppViewModel(app);
+                await AddApp(avm);
+            }
+            OnPropertyChanged(nameof(AppViewModels));
+
+            IsBusy = false;
         }
+
         public MpAppCollectionViewModel() : base() { }
 
         #endregion
@@ -58,8 +69,8 @@ namespace MpWpfApp {
 
         public async Task<bool> UpdateRejection(MpAppViewModel app, bool rejectApp) {
             IsBusy = true;
-
-            if (GetAppViewModelByProcessPath(app.AppPath) != null) {
+            var avm = GetAppViewModelByProcessPath(app.AppPath);
+            if (avm != null) {
                 bool wasCanceled = false;
                 if (rejectApp) {
                     var clipsFromApp = await MpDataModelProvider.Instance.GetCopyItemsByAppId(app.AppId);
@@ -81,11 +92,11 @@ namespace MpWpfApp {
                 }
                 if (wasCanceled) {
                     IsBusy = false;
-                    return app.IsAppRejected;
+                    return app.IsRejected;
                 }
-                int appIdx = AppViewModels.IndexOf(app);
-                AppViewModels[appIdx].App.IsAppRejected = rejectApp;
-                await AppViewModels[appIdx].App.WriteToDatabaseAsync();
+
+                avm.IsRejected = rejectApp;
+                await avm.App.WriteToDatabaseAsync();
 
             } else {
                 MonkeyPaste.MpConsole.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
@@ -101,9 +112,7 @@ namespace MpWpfApp {
                 AppViewModels.Add(avm);
             }
 
-            await UpdateRejection(avm, avm.IsAppRejected);
-
-            await Refresh();
+            await UpdateRejection(avm, avm.IsRejected);
         }
 
         public bool IsAppRejected(string processPath) {
@@ -111,20 +120,17 @@ namespace MpWpfApp {
             if(avm == null) {
                 return false;
             }
-            return avm.IsAppRejected;
+            return avm.IsRejected;
         }
 
         public void Remove(MpAppViewModel avm) {
             AppViewModels.Remove(avm);
         }
 
-        public async Task Refresh() {
-            var appl = await MpDb.Instance.GetItemsAsync<MpApp>();
-            AppViewModels.Clear();
-            foreach (var app in appl) {
-                AppViewModels.Add(new MpAppViewModel(this,app));
-            }
-            OnPropertyChanged(nameof(AppViewModels));
+        public async Task<MpAppViewModel> CreateAppViewModel(MpApp app) {
+            var avm = new MpAppViewModel(this);
+            await avm.InitializeAsync(app);
+            return avm;
         }
         #endregion
 
@@ -154,7 +160,7 @@ namespace MpWpfApp {
                         var iconBmpSrc = MpHelpers.Instance.GetIconImage(appPath);
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
-                        avm = new MpAppViewModel(this, app);
+                        avm = await CreateAppViewModel(app);
                         await AddApp(avm);
                     }
 

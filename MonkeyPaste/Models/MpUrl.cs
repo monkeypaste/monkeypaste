@@ -7,7 +7,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbModelBase, MpICopyItemSource {
+    public class MpUrl : MpDbModelBase, MpISourceItem {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
@@ -77,6 +77,37 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public bool IsUrl => true;
+
+        #endregion
+
+
+        #region MpICopyItemSource Implementation
+        [Ignore]
+        public bool IsRejected => IsDomainRejected;
+
+        [Ignore]
+        public bool IsSubRejected => IsUrlRejected;
+
+        [Ignore]
+        public MpIcon SourceIcon {
+            get {
+                if (Icon == null) {
+                    return null;
+                }
+                return Icon;
+            }
+        }
+
+        [Ignore]
+        public string SourcePath => UrlPath;
+
+        [Ignore]
+        public string SourceName => UrlPath;
+
+        [Ignore]
+        public int RootId => Id;
         #endregion
 
         public static async Task<MpUrl> Create(string urlPath,string urlTitle, MpApp app) {
@@ -119,27 +150,6 @@ namespace MonkeyPaste {
         }
         public MpUrl() { }
 
-        #region MpICopyItemSource Implementation
-
-        [Ignore]
-        public MpIcon SourceIcon {
-            get {
-                if (Icon == null) {
-                    return null;
-                }
-                return Icon;
-            }
-        }
-
-        [Ignore]
-        public string SourcePath => UrlPath;
-
-        [Ignore]
-        public string SourceName => UrlPath;
-
-        [Ignore]
-        public int RootId => Id;
-        #endregion
 
         public async Task<object> CreateFromLogs(string urlGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var urlDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrl", urlGuid);

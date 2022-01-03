@@ -9,36 +9,78 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpUrlViewModel : MpViewModelBase<MpUrlCollectionViewModel> {
+    public class MpUrlViewModel : MpViewModelBase<MpUrlCollectionViewModel>, MpISourceItemViewModel {
         #region Properties
 
-        #region State
-        private bool _isSelected = false;
-        public bool IsSelected {
+        #region View Models
+
+        public MpIconViewModel IconViewModel { get; set; }
+
+        #endregion
+
+        #region MpISourceItemViewModel Implementation
+
+        public MpIcon SourceIcon {
             get {
-                return _isSelected;
-            }
-            set {
-                if (_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
+                if (IconViewModel == null) {
+                    return null;
                 }
+                return IconViewModel.Icon;
             }
         }
 
-        public bool IsNew {
+        public string SourcePath {
             get {
-                return Url != null && UrlId == 0;
+                if (Url == null) {
+                    return null;
+                }
+                return Url.UrlPath;
             }
         }
+
+        public string SourceName {
+            get {
+                if (Url == null) {
+                    return null;
+                }
+                return Url.UrlPath;
+            }
+        }
+
+        public int RootId {
+            get {
+                if (Url == null) {
+                    return 0;
+                }
+                return Url.Id;
+            }
+        }
+
+        public bool IsUrl {
+            get {
+                if (Url == null) {
+                    return false;
+                }
+                return Url.IsUrl;
+            }
+        }
+
+        #endregion
+
+        #region State
+
+        public bool IsSelected { get; set; }
+
+        public bool IsHovering { get; set; }
+
+        //public bool IsNew {
+        //    get {
+        //        return Url != null && UrlId == 0;
+        //    }
+        //}
         #endregion
 
         #region Visibility
-        public Visibility RejectUrlVisibility {
-            get {
-                return Url == null ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
 
         public Visibility AddButtonVisibility {
             get {
@@ -48,6 +90,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
         public int UrlId {
             get {
                 if(Url == null) {
@@ -75,24 +118,24 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsDomainRejected {
+        public bool IsRejected {
             get {
                 if (Url == null) {
                     return false;
                 }
-                return Url.IsDomainRejected;
+                return Url.IsRejected;
             }
             set {
-                if(Url != null && Url.IsDomainRejected != value) {
+                if(Url != null && Url.IsRejected != value) {
                     Url.IsDomainRejected = value;
-                    OnPropertyChanged(nameof(IsDomainRejected));
+                    OnPropertyChanged(nameof(IsRejected));
                     OnPropertyChanged(nameof(Url));
                     HasModelChanged = true;
                 }
             }
         }
 
-        public bool IsUrlRejected {
+        public bool IsSubRejected {
             get {
                 if (Url == null) {
                     return false;
@@ -102,7 +145,7 @@ namespace MpWpfApp {
             set {
                 if (Url != null && Url.IsUrlRejected != value) {
                     Url.IsUrlRejected = value;
-                    OnPropertyChanged(nameof(IsUrlRejected));
+                    OnPropertyChanged(nameof(IsSubRejected));
                     OnPropertyChanged(nameof(Url));
                     HasModelChanged = true;
                 }
@@ -118,78 +161,49 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<string> PrimaryIconColorList {
-            get {
-                if(Url == null || Url.Icon == null) {
-                    return new ObservableCollection<string>();
-                }
-                return new ObservableCollection<string>() { Url.Icon.HexColor1, Url.Icon.HexColor2, Url.Icon.HexColor3, Url.Icon.HexColor4, Url.Icon.HexColor5 };
-            }
-            //set {
-            //    if(Url != null && PrimaryIconColorList != value) {
-            //        Url.Icon.PrimaryIconColorList = value;
-            //        OnPropertyChanged(nameof(PrimaryIconColorList));
-            //    }
-            //}
-        }
+        public MpUrl Url { get; set; }
 
-        private MpUrl _Url;
-        public MpUrl Url {
-            get {
-                return _Url;
-            }
-            set {
-                //if (_Url != value) 
-                {
-                    _Url = value;
-                    OnPropertyChanged(nameof(Url));
-                    OnPropertyChanged(nameof(UrlId));
-                    OnPropertyChanged(nameof(UrlPath));
-                    OnPropertyChanged(nameof(UrlDomainPath));
-                    OnPropertyChanged(nameof(IsDomainRejected));
-                    OnPropertyChanged(nameof(IsUrlRejected));
-                    OnPropertyChanged(nameof(IconImageStr));
-                    OnPropertyChanged(nameof(RejectUrlVisibility));
-                    OnPropertyChanged(nameof(AddButtonVisibility));
-                    OnPropertyChanged(nameof(PrimaryIconColorList));
-                }
-
-                
-            }
-        }
         #endregion
 
         #endregion
 
         #region Public Methods
+
         public MpUrlViewModel() : base(null) { }
 
-        public MpUrlViewModel(MpUrlCollectionViewModel parent, MpUrl url) : base(parent) {
+        public MpUrlViewModel(MpUrlCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpUrlViewModel_PropertyChanged;
+        }
+        
+        public async Task InitializeAsync(MpUrl url) {
             IsBusy = true;
             Url = url;
+
+            IconViewModel = new MpIconViewModel(this);
+            await IconViewModel.InitializeAsync(Url.Icon);
+
             IsBusy = false;
         }
 
         private void MpUrlViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsDomainRejected):
+                case nameof(IsRejected):
                     if(IsBusy || Parent.IsBusy) {
                         return;
                     }
                     Task.Run(async () => {
-                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateDomainRejection(this, IsDomainRejected);
-                        if(isRejected != Url.IsDomainRejected) {
+                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateDomainRejection(this, IsRejected);
+                        if(isRejected != Url.IsRejected) {
                             await Url.WriteToDatabaseAsync();
                         }
                     });
                     break;
-                case nameof(IsUrlRejected):
+                case nameof(IsSubRejected):
                     if (IsBusy || Parent.IsBusy) {
                         return;
                     }
                     Task.Run(async () => {
-                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateUrlRejection(this, IsUrlRejected);
+                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateUrlRejection(this, IsSubRejected);
                         if (isRejected != Url.IsUrlRejected) {
                             await Url.WriteToDatabaseAsync();
                         }

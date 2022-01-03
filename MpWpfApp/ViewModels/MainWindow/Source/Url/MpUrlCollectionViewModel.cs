@@ -34,7 +34,17 @@ namespace MpWpfApp {
         #region Constructors
 
         public async Task Init() {
-            await Refresh();
+            IsBusy = true;
+
+            var Urll = await MpDb.Instance.GetItemsAsync<MpUrl>();
+            UrlViewModels.Clear();
+            foreach (var url in Urll) {
+                var uvm = await CreateUrlViewModel(url);
+                await AddUrl(uvm);
+            }
+            OnPropertyChanged(nameof(UrlViewModels));
+
+            IsBusy = false;
         }
         public MpUrlCollectionViewModel() : base() { }
 
@@ -80,7 +90,7 @@ namespace MpWpfApp {
                 }
                 if (wasCanceled) {
                     IsBusy = false;
-                    return url.IsUrlRejected;
+                    return url.IsSubRejected;
                 }
                 int UrlIdx = UrlViewModels.IndexOf(url);
                 UrlViewModels[UrlIdx].Url.IsUrlRejected = rejectUrl;
@@ -114,7 +124,7 @@ namespace MpWpfApp {
                 }
                 if (wasCanceled) {
                     IsBusy = false;
-                    return url.IsDomainRejected;
+                    return url.IsRejected;
                 }
                 int UrlIdx = UrlViewModels.IndexOf(url);
                 UrlViewModels[UrlIdx].Url.IsDomainRejected = rejectDomain;
@@ -124,8 +134,8 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteLine("UrlCollection.UpdateRejection error, Url: " + url.UrlDomainPath + " is not in collection");
             }
             IsBusy = true;
-            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsDomainRejected = rejectDomain);
-            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsUrlRejected = rejectDomain);
+            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsRejected = rejectDomain);
+            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsSubRejected = rejectDomain);
             IsBusy = false;
             return rejectDomain;
         }
@@ -137,17 +147,15 @@ namespace MpWpfApp {
                 UrlViewModels.Add(avm);
             }
 
-            await UpdateUrlRejection(avm, avm.IsDomainRejected);
-
-            await Refresh();
+            await UpdateUrlRejection(avm, avm.IsRejected);
         }
 
-        public bool IsDomainRejected(string domain) {
+        public bool IsRejected(string domain) {
             var avm = GetUrlViewModelByUrlPath(domain);
             if(avm == null) {
                 return false;
             }
-            return avm.IsDomainRejected;
+            return avm.IsRejected;
         }
 
         public bool IsUrlRejected(string url) {
@@ -155,20 +163,17 @@ namespace MpWpfApp {
             if (avm == null) {
                 return false;
             }
-            return avm.IsDomainRejected;
+            return avm.IsRejected;
         }
 
         public void Remove(MpUrlViewModel avm) {
             UrlViewModels.Remove(avm);
         }
 
-        public async Task Refresh() {
-            var Urll = await MpDb.Instance.GetItemsAsync<MpUrl>();
-            UrlViewModels.Clear();
-            foreach (var Url in Urll) {
-                UrlViewModels.Add(new MpUrlViewModel(this,Url));
-            }
-            OnPropertyChanged(nameof(UrlViewModels));
+        public async Task<MpUrlViewModel> CreateUrlViewModel(MpUrl url) {
+            var uvm = new MpUrlViewModel(this);
+            await uvm.InitializeAsync(url);
+            return uvm;
         }
         #endregion
 
@@ -182,18 +187,18 @@ namespace MpWpfApp {
                     return;
                 }
 
-                MpUrl Url = null;
-                var avm = UrlViewModels.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
-                if (avm == null) {
+                MpUrl url = null;
+                var uvm = UrlViewModels.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
+                if (uvm == null) {
                     var iconBmpSrc = MpHelpers.Instance.GetUrlFavicon(UrlPath);
                     string title = await MpHelpers.Instance.GetUrlTitle(UrlPath);
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                    Url = await MpUrl.Create(UrlPath, title, MpPreferences.Instance.ThisAppSource.App);
-                    avm = new MpUrlViewModel(this, Url);
-                    await AddUrl(avm);
+                    url = await MpUrl.Create(UrlPath, title, MpPreferences.Instance.ThisAppSource.App);
+                    uvm = await CreateUrlViewModel(url);
+                    await AddUrl(uvm);
                 }
 
-                SelectedUrlViewModel = avm;
+                SelectedUrlViewModel = uvm;
             });
 
         

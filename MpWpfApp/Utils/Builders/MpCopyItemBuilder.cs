@@ -88,7 +88,7 @@ namespace MpWpfApp {
                     try {
                         url = await MpUrlBuilder.CreateFromHtmlData(htmlData, app);
                         if(url != null) {                            
-                            if (MpUrlCollectionViewModel.Instance.IsDomainRejected(url.UrlDomainPath)) {
+                            if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
                                 MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
                                 return null;
                             }

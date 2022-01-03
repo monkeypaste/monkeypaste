@@ -190,7 +190,7 @@
                             <DataGridTemplateColumn Width="90"
                                                     CanUserSort="True"
                                                     CanUserResize="True"
-                                                    SortMemberPath="IsDomainRejected"
+                                                    SortMemberPath="IsRejected"
                                                     Header="Excluded Url?">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -199,7 +199,7 @@
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
                                                   VerticalContentAlignment="Stretch"
-                                                  IsEnabled="{Binding IsDomainRejected,
+                                                  IsEnabled="{Binding IsRejected,
                                                                       Converter={StaticResource BoolFlipConverter}}"
                                                   IsChecked="{Binding IsUrlRejected,
                                                                       Mode=TwoWay,
@@ -210,7 +210,7 @@
                             <DataGridTemplateColumn Width="110"
                                                     CanUserSort="True"
                                                     CanUserResize="True"
-                                                    SortMemberPath="IsDomainRejected"
+                                                    SortMemberPath="IsRejected"
                                                     Header="Excluded Domain?">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -219,7 +219,7 @@
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
                                                   VerticalContentAlignment="Stretch"
-                                                  IsChecked="{Binding IsDomainRejected,
+                                                  IsChecked="{Binding IsRejected,
                                                                       Mode=TwoWay,
                                                                       UpdateSourceTrigger=PropertyChanged}" />
                                     </DataTemplate>

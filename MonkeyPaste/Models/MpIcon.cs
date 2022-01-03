@@ -60,6 +60,15 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public List<string> HexColors => new List<string>() { 
+            HexColor1,
+            HexColor2,
+            HexColor3,
+            HexColor4,
+            HexColor5        
+        };
+
         #endregion
 
         #region Statics

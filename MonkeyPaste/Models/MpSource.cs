@@ -48,10 +48,10 @@ namespace MonkeyPaste {
         #endregion
 
         [Ignore]
-        public bool IsUrlSource => PrimarySource == Url;
+        public bool IsUrlPrimarySource => PrimarySource.IsUrl;
 
         [Ignore]
-        public MpICopyItemSource PrimarySource {
+        public MpISourceItem PrimarySource {
             get {
                 if (UrlId <= 0) {
                     if (AppId <= 0) {
@@ -67,7 +67,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpICopyItemSource SecondarySource {
+        public MpISourceItem SecondarySource {
             get {
                 var ps = PrimarySource;
                 if(ps != null) {

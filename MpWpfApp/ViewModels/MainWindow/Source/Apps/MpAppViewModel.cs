@@ -9,31 +9,84 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel> {
+    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel>, MpISourceItemViewModel {
         #region Properties
 
-        #region State
-        private bool _isSelected = false;
-        public bool IsSelected {
+        #region View Models
+
+        public MpIconViewModel IconViewModel { get; set; } 
+
+        #endregion
+
+        #region MpISourceItemViewModel Implementation
+
+        public MpIcon SourceIcon {
             get {
-                return _isSelected;
-            }
-            set {
-                if (_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
+                if(IconViewModel == null) {
+                    return null;
                 }
+                return IconViewModel.Icon;
+            }
+        } 
+
+        public string SourcePath {
+            get {
+                if (App == null) {
+                    return null;
+                }
+                return App.AppPath;
             }
         }
 
-        public bool IsNew {
+        public string SourceName {
             get {
-                return App != null && AppId == 0;
+                if (App == null) {
+                    return null;
+                }
+                return App.AppName;
             }
         }
+
+        public int RootId {
+            get {
+                if (App == null) {
+                    return 0;
+                }
+                return App.Id;
+            }
+        }
+
+        public bool IsUrl {
+            get {
+                if (App == null) {
+                    return false;
+                }
+                return App.IsUrl;
+            }
+        }
+
+        #endregion
+
+        #region Appearance
+
+        #endregion
+
+        #region State
+
+        public bool IsSelected { get; set; }
+
+        public bool IsHovering { get; set; }
+
+        //public bool IsNew {
+        //    get {
+        //        return App != null && AppId == 0;
+        //    }
+        //}
+
         #endregion
 
         #region Visibility
+
         public Visibility RejectAppVisibility {
             get {
                 return App == null ? Visibility.Collapsed : Visibility.Visible;
@@ -45,9 +98,11 @@ namespace MpWpfApp {
                 return App == null ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+
         #endregion
 
         #region Model
+
         public int AppId {
             get {
                 if(App == null) {
@@ -75,7 +130,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsAppRejected {
+        public bool IsRejected {
             get {
                 if (App == null) {
                     return false;
@@ -85,12 +140,14 @@ namespace MpWpfApp {
             set {
                 if(App != null && App.IsAppRejected != value) {
                     App.IsAppRejected = value;
-                    OnPropertyChanged(nameof(IsAppRejected));
+                    OnPropertyChanged(nameof(IsRejected));
                     OnPropertyChanged(nameof(App));
                     HasModelChanged = true;
                 }
             }
         }
+
+        public bool IsSubRejected => IsRejected;
 
         public string IconImageStr {
             get {
@@ -101,44 +158,8 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<string> PrimaryIconColorList {
-            get {
-                if(App == null || App.Icon == null) {
-                    return new ObservableCollection<string>();
-                }
-                return new ObservableCollection<string>() { App.Icon.HexColor1, App.Icon.HexColor2, App.Icon.HexColor3, App.Icon.HexColor4, App.Icon.HexColor5 };
-            }
-            //set {
-            //    if(App != null && PrimaryIconColorList != value) {
-            //        App.Icon.PrimaryIconColorList = value;
-            //        OnPropertyChanged(nameof(PrimaryIconColorList));
-            //    }
-            //}
-        }
+        public MpApp App { get; set; }
 
-        private MpApp _app;
-        public MpApp App {
-            get {
-                return _app;
-            }
-            set {
-                //if (_app != value) 
-                {
-                    _app = value;
-                    OnPropertyChanged(nameof(App));
-                    OnPropertyChanged(nameof(AppId));
-                    OnPropertyChanged(nameof(AppPath));
-                    OnPropertyChanged(nameof(AppName));
-                    OnPropertyChanged(nameof(IsAppRejected));
-                    OnPropertyChanged(nameof(IconImageStr));
-                    OnPropertyChanged(nameof(RejectAppVisibility));
-                    OnPropertyChanged(nameof(AddButtonVisibility));
-                    OnPropertyChanged(nameof(PrimaryIconColorList));
-                }
-
-                
-            }
-        }
         #endregion
 
         #endregion
@@ -146,21 +167,29 @@ namespace MpWpfApp {
         #region Public Methods
         public MpAppViewModel() : base(null) { }
 
-        public MpAppViewModel(MpAppCollectionViewModel parent, MpApp app) : base(parent) {
+        public MpAppViewModel(MpAppCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
+        }
+
+        public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
+
             App = app;
+
+            IconViewModel = new MpIconViewModel(this);
+            await IconViewModel.InitializeAsync(App.Icon);
+
             IsBusy = false;
         }
 
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsAppRejected):
+                case nameof(IsRejected):
                     if(IsBusy) {
                         return;
                     }
                     Task.Run(async () => {
-                        bool isRejected = await MpAppCollectionViewModel.Instance.UpdateRejection(this, IsAppRejected);
+                        bool isRejected = await MpAppCollectionViewModel.Instance.UpdateRejection(this, IsRejected);
                         if(isRejected != App.IsAppRejected) {
                             await App.WriteToDatabaseAsync();
                         }
@@ -168,6 +197,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
         #endregion
 
         #region Commands

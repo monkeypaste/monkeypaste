@@ -50,11 +50,11 @@ namespace MpWpfApp {
 
             MpRunningApplicationManager.Instance.RefreshHandleStack();
 
-            Task.Run(async () => {
+            Task.Run((Func<Task>)(async () => {
                 while (MpClipboardManager.Instance.LastWindowWatcher == null) {
                     await Task.Delay(100);
                 }
-                await MpAppCollectionViewModel.Instance.Refresh();
+                await MpAppCollectionViewModel.Instance.Init();
                 var handleLookup = MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary.ToArray();
                 foreach (var kvp in handleLookup) {
                     var dupCheck = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(kvp.Key);
@@ -73,7 +73,7 @@ namespace MpWpfApp {
 
                     timer.Start();
                 });
-            });
+            }));
 
             
         }

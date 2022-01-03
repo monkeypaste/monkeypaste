@@ -184,8 +184,7 @@ namespace MpWpfApp {
 
 
         public async Task InitializeAsync(int tabToShow = 1, object args = null) {
-            await MpAppCollectionViewModel.Instance.Init();
-            await MpUrlCollectionViewModel.Instance.Init();
+            await Task.Delay(1);
 
             ClickSettingsPanelCommand.Execute(tabToShow);
 

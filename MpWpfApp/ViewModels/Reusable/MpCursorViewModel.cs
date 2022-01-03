@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -101,7 +102,18 @@ namespace MpWpfApp {
             return _cursorLookup[CurrentCursor];
         }
 
-        public void NotifyAppBusy(bool isAppBusy) {
+        //private Dictionary<string, int> _busyCountLookup = new Dictionary<string, int>();
+
+        public void NotifyAppBusy(bool isAppBusy, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+            //int delta = isAppBusy ? 1 : -1;
+            //if(!_busyCountLookup.ContainsKey(callerName)) {
+            //    if(!isAppBusy) {
+            //        Debugger.Break();
+            //    }
+            //    _busyCountLookup.Add(callerName, 1);
+            //} else {
+            //    _busyCountLookup[callerName] += delta;
+            //}
             //this keeps track of notifiers busy status in a list
             //so is busy is not negated when something else is still busy
             _isBusyCount += isAppBusy ? 1 : -1;

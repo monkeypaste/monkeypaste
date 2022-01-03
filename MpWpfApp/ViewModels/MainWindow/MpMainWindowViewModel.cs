@@ -199,6 +199,8 @@ namespace MpWpfApp {
 
             await MpCursorViewModel.Instance.Init();
 
+            await MpSourceCollectionViewModel.Instance.Init();
+
             await MpSearchBoxViewModel.Instance.Init();
             Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;            
 
@@ -229,11 +231,6 @@ namespace MpWpfApp {
 
             while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
-            int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
-            MpStandardBalloonViewModel.ShowBalloon(
-                    "Monkey Paste",
-                    "Successfully loaded w/ " + totalItems + " items",
-                    Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             Application.Current.Resources["MainWindowViewModel"] = MpMainWindowViewModel.Instance;
 
@@ -241,7 +238,7 @@ namespace MpWpfApp {
                 MpSearchBoxViewModel.Instance,
                 ReceivedSearchBoxViewModelMessage);
             
-            IsMainWindowLoading = false;
+            //IsMainWindowLoading = false;
         }
 
         public void ClearEdits() {

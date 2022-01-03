@@ -44,6 +44,7 @@ using WindowsInput;
 using Microsoft.Win32;
 using System.Net.Sockets;
 using MonkeyPaste;
+using System.Security.AccessControl;
 
 namespace MpWpfApp {
     public class MpHelpers : MpSingleton<MpHelpers> {
@@ -874,16 +875,19 @@ namespace MpWpfApp {
             }
         }
         public string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.Instance.ConvertBitmapSourceToBitmap(bmpSrc))) {
-                if(filePath.ToLower().Contains(@".tmp")) {
-                    filePath = filePath.ToLower().Replace(@".tmp", @".png");
-                }
-                bmp.Save(filePath, ImageFormat.Png);
-                if (isTemporary) {
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
-                }
-                return filePath;
+            if (filePath.ToLower().Contains(@".tmp")) {
+                filePath = filePath.ToLower().Replace(@".tmp", @".png");
             }
+            using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bmpSrc));
+                encoder.Save(fileStream);
+            }
+
+            if (isTemporary) {
+                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+            }
+            return filePath;
         }
 
         public string WriteStringListToCsvFile(string filePath, IList<string> strList, bool isTemporary = false) {
@@ -1407,6 +1411,30 @@ namespace MpWpfApp {
 
         #region Visual
 
+        public void ResizeImages(string sourceDir,string targetDir, double newWidth,double newHeight) {
+            if(!Directory.Exists(sourceDir)) {
+                throw new DirectoryNotFoundException(sourceDir);
+            }
+            foreach(var f in Directory.GetFiles(sourceDir)) {
+                if(Directory.Exists(f)) {
+                    continue;
+                }
+                var bmpSrc = ReadImageFromFile(f);
+                var newSize = new Size(newWidth, newHeight);
+
+                if (bmpSrc.Width != bmpSrc.Height) {
+                    if(bmpSrc.Width > bmpSrc.Height) {
+                        newSize.Height *= bmpSrc.Height / bmpSrc.Width;
+                    } else {
+                        newSize.Width *= bmpSrc.Width / bmpSrc.Height;
+                    }
+                }
+                var rbmpSrc = ResizeBitmapSource(bmpSrc, newSize);
+                string targetPath = Path.Combine(targetDir, Path.GetFileName(f));
+                WriteBitmapSourceToFile(targetPath, rbmpSrc);
+            }
+        }
+
         public void PrintVisualTree(int depth, object obj) {
             // Print the object with preceding spaces that represent its depth
             Trace.WriteLine(new string(' ', depth) + obj.GetType().ToString());
@@ -1476,13 +1504,13 @@ namespace MpWpfApp {
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
             //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, new Size(scale,scale));
+            return MpHelpers.Instance.ScaleBitmapSource(borderBmpSrc, new Size(scale,scale));
         }
 
         public async Task<BitmapSource> CreateBorderAsync(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = await MpHelpers.Instance.TintBitmapSourceAsync(img, bgColor, true);
             //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, new Size(scale, scale));
+            return MpHelpers.Instance.ScaleBitmapSource(borderBmpSrc, new Size(scale, scale));
         }
 
         public BitmapSource CopyScreen() {
@@ -1870,11 +1898,24 @@ namespace MpWpfApp {
             return iconBmp;
         }
 
-        public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newScale) {
+        public BitmapSource ScaleBitmapSource(BitmapSource bmpSrc, Size newScale) {
             try {
                 var sbmpSrc = new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width, newScale.Height));
                 return sbmpSrc;
             } catch(Exception ex) {
+                MpConsole.WriteTraceLine("Error scaling bmp", ex);
+                return bmpSrc;
+            }
+        }
+
+        public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
+            try {
+                double sw = newSize.Width / bmpSrc.Width;
+                double sh = newSize.Height / bmpSrc.Height;
+                var rbmpSrc = new TransformedBitmap(bmpSrc, new ScaleTransform(sw,sh));
+                return rbmpSrc;
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine("Error scaling bmp", ex);
                 return bmpSrc;
             }
@@ -2057,7 +2098,7 @@ namespace MpWpfApp {
             for (int i = 0;i < bmpSrcList.Count;i++) {
                 BitmapSource bmp = bmpSrcList[i];
                 if(bmp.PixelWidth != w || bmp.PixelHeight != h) {
-                    bmpSrcList[i] = ResizeBitmapSource(bmp, new Size(w / bmp.PixelWidth, h / bmp.PixelHeight));
+                    bmpSrcList[i] = ScaleBitmapSource(bmp, new Size(w / bmp.PixelWidth, h / bmp.PixelHeight));
                 }
             }
 
@@ -2086,7 +2127,7 @@ namespace MpWpfApp {
             using (DrawingContext drawingContext = drawingVisual.RenderOpen()) {
                 foreach(BitmapSource bmpSrc in bmpSrcList) {
                     Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
-                    var rbmpSrc = ResizeBitmapSource(bmpSrc, scale);
+                    var rbmpSrc = ScaleBitmapSource(bmpSrc, scale);
                     drawingContext.DrawImage(rbmpSrc,new Rect(0, 0, (int)size.Width, (int)size.Width));
                 }
             }
@@ -2690,7 +2731,7 @@ namespace MpWpfApp {
 
         public string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
+            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ScaleBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {
                     for (int w = 0; w < image.Width; w++) {
@@ -2747,7 +2788,9 @@ namespace MpWpfApp {
         }
 
         public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
-            return (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
+            var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
+            bmpSrc.Freeze();
+            return bmpSrc;
         }
 
         public async Task<BitmapSource> ConvertByteArrayToBitmapSourceAsync(byte[] bytes, DispatcherPriority priority) {
@@ -3130,7 +3173,7 @@ namespace MpWpfApp {
                     using (var qrCode = new QRCoder.PngByteQRCode(qrCodeData)) {
                         var qrCodeAsXaml = qrCode.GetGraphic(20);                        
                         //var bmpSrc= ConvertDrawingImageToBitmapSource(qrCodeAsXaml);
-                        return MpHelpers.Instance.ResizeBitmapSource(qrCodeAsXaml.ToBitmapSource(), new Size(0.2, 0.2));
+                        return MpHelpers.Instance.ScaleBitmapSource(qrCodeAsXaml.ToBitmapSource(), new Size(0.2, 0.2));
                     }
                 }
             }

@@ -1071,6 +1071,20 @@ namespace MpWpfApp {
                     RequeryCommand.Execute(HeadQueryIdx);
                     break;
             }
+
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    while(IsBusy) { await Task.Delay(100); }
+                    int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+                    MpStandardBalloonViewModel.ShowBalloon(
+                            "Monkey Paste",
+                            "Successfully loaded w/ " + totalItems + " items",
+                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+                    MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+                });
+            }
         }
 
         private void MpClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

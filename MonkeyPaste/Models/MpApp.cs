@@ -8,7 +8,7 @@ using System.Linq;
 using System.IO;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbModelBase, MpICopyItemSource, MpISyncableDbObject {
+    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {
         #region Columns
         [Column("pk_MpAppId")]
         [PrimaryKey, AutoIncrement]
@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         public string AppName { get; set; } = string.Empty;
 
         [Column("IsAppRejected")]
-        public int IsRejected { get; set; } = 0;        
+        public int IsRejectedVal { get; set; } = 0;        
 
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
@@ -49,18 +49,21 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-
+       
         [Ignore]
         public bool IsAppRejected {
             get {
-                return IsRejected == 1;
+                return IsRejectedVal == 1;
             }
             set {
                 if (IsAppRejected != value) {
-                    IsRejected = value ? 1 : 0;
+                    IsRejectedVal = value ? 1 : 0;
                 }
             }
         }
+
+        [Ignore]
+        public bool IsUrl => false;
 
         [Ignore]
         public Guid AppGuid {
@@ -75,6 +78,27 @@ namespace MonkeyPaste {
             }
         }
 
+        #endregion
+
+
+        #region MpICopyItemSource Implementation
+        [Ignore]
+        public bool IsRejected => IsAppRejected;
+
+        [Ignore]
+        public bool IsSubRejected => IsRejected;
+
+        [Ignore]
+        public MpIcon SourceIcon => Icon;
+
+        [Ignore]
+        public string SourcePath => AppPath;
+
+        [Ignore]
+        public string SourceName => AppName;
+
+        [Ignore]
+        public int RootId => Id;
         #endregion
 
         public static async Task<MpApp> Create(string appPath, string appName, MpIcon icon) {
@@ -113,19 +137,6 @@ namespace MonkeyPaste {
 
         public MpApp() { }
 
-        #region MpICopyItemSource Implementation
-        [Ignore]
-        public MpIcon SourceIcon => Icon;
-
-        [Ignore]
-        public string SourcePath => AppPath;
-
-        [Ignore]
-        public string SourceName => AppName;
-
-        [Ignore]
-        public int RootId => Id;
-        #endregion
 
         public async Task<object> CreateFromLogs(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var adr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpApp", appGuid);
