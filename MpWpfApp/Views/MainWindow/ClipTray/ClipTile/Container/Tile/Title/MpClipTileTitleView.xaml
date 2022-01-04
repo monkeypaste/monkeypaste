@@ -158,23 +158,23 @@
               ClipToBounds="False">
 
             <Button x:Name="PinButton"
-                        MouseEnter="PinButton_MouseEnter"
-                        MouseLeave="PinButton_MouseLeave"
-                        Background="Transparent"
-                        Style="{StaticResource Transparent_Button}"
-                        BorderThickness="0"
+                    MouseEnter="PinButton_MouseEnter"
+                    MouseLeave="PinButton_MouseLeave"
+                    Background="Transparent"
+                    Style="{StaticResource Transparent_Button}"
+                    BorderThickness="0"
                     HorizontalAlignment="Right"
                     Margin="42,0,0,35"
-                        Visibility="{Binding Parent.PinButtonVisibility}"
-                        Command="{Binding ToggleTileIsPinnedCommand,
-                                          Source={StaticResource ClipTrayViewModel}}"
-                        CommandParameter="{Binding Parent}">
+                    Visibility="{Binding Parent.PinButtonVisibility}"
+                    Command="{Binding ToggleTileIsPinnedCommand,
+                                      Source={StaticResource ClipTrayViewModel}}"
+                    CommandParameter="{Binding Parent}">
                 <Image x:Name="PinButtonImage"
-                           Width="15"
-                           Height="15"
-                           Stretch="Uniform"
-                           Source="{Binding Parent.PinIconSourcePath,
-                                            Converter={StaticResource StringToImageSourceConverter}}" />
+                       Width="15"
+                       Height="15"
+                       Stretch="Uniform"
+                       Source="{Binding Parent.PinIconSourcePath,
+                                        Converter={StaticResource StringToImageSourceConverter}}" />
             </Button>
             <Ellipse x:Name="SourceMatchEllipse"
                      Visibility="Hidden"
@@ -210,7 +210,8 @@
                     <Image x:Name="ClipTileAppIconBorderImage"
                            Loaded="ClipTileAppIconBorderImage_Loaded"
                            Source="{Binding SourceId,
-                                            Converter={StaticResource SourceIdToImageSourceBorderConverter}}"
+                                            Converter={StaticResource SourceIdToImageSourceConverter},
+                                            ConverterParameter='border'}"
                            Stretch="Fill"
                            RenderTransformOrigin="0.5, 0.5"
                            Visibility="Hidden"

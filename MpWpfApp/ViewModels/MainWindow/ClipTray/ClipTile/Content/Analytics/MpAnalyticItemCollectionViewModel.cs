@@ -36,18 +36,13 @@ namespace MpWpfApp {
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
                 var pmic = new List<MpContextMenuItemViewModel>();
-                var qamivml = new List<MpContextMenuItemViewModel>();
                 foreach (var item in Items) {
-                    if(item.PresetViewModels.Any(x=>x.IsQuickAction)) {
-                        qamivml.AddRange(item.PresetViewModels.Where(x => x.IsQuickAction).Select(x=>x.ContextMenuItemViewModel));
-                    }
-
                     var imivm = new MpContextMenuItemViewModel(
                         header: item.Title,
                         command: null,
                         commandParameter: null,
                         isChecked: null,
-                        iconSource: item.ItemIconBase64,
+                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == item.IconId).IconBitmapSource,
                         subItems: item.ContextMenuItems,
                         inputGestureText: string.Empty,
                         bgBrush: null);
@@ -66,12 +61,23 @@ namespace MpWpfApp {
 
                     pmic.Add(imivm);
                 }
-                if(qamivml.Count > 0) {
-                    //qamivml.Add(new MpContextMenuItemViewModel());
-                    pmic.InsertRange(0, qamivml);
-                }
-
+                //if(QuickActionContextMenuItems.Count > 0) {                    
+                //    pmic.InsertRange(0, QuickActionContextMenuItems);
+                //    pmic.Insert(QuickActionContextMenuItems.Count, new MpContextMenuItemViewModel());
+                //}
                 return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
+            }
+        }
+
+        public ObservableCollection<MpContextMenuItemViewModel> QuickActionContextMenuItems {
+            get {
+                var qamivml = new List<MpContextMenuItemViewModel>();
+                foreach (var item in Items) {
+                    if (item.PresetViewModels.Any(x => x.IsQuickAction)) {
+                        qamivml.AddRange(item.PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel));
+                    }
+                }
+                return new ObservableCollection<MpContextMenuItemViewModel>(qamivml);
             }
         }
 

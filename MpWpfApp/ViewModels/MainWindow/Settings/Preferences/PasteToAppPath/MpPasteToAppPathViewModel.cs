@@ -163,15 +163,22 @@ namespace MpWpfApp {
                 if (PasteToAppPath == null) {
                     return new BitmapImage();
                 }
-                if(PasteToAppPath.AvatarDbImage != null) {
-                    return PasteToAppPath.AvatarDbImage.ImageBase64.ToBitmapSource();
+                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == AvatarId);
+                if(ivm == null) {
+                    return MpHelpers.Instance.GetIconImage(AppPath);
                 }
-                return MpHelpers.Instance.GetIconImage(AppPath);
+                return ivm.IconBitmapSource;
             }
             set {
                 if(PasteToAppPath != null) {
-                    PasteToAppPath.AvatarDbImage.ImageBase64 = value.ToBase64String();
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    Task.Run(
+                        async () => {
+                            var dbi = await MpDbImage.Create(value.ToBase64String());
+                            PasteToAppPath.AvatarDbImage = dbi;
+                            PasteToAppPath.AvatarId = dbi.Id;
+                            await PasteToAppPath.AvatarDbImage.WriteToDatabaseAsync();
+                            await PasteToAppPath.WriteToDatabaseAsync();
+                        });
                     OnPropertyChanged(nameof(AppIcon));
                 }
             }
@@ -284,6 +291,21 @@ namespace MpWpfApp {
             }
         }
 
+        public int AvatarId {
+            get {
+                if(PasteToAppPath == null) {
+                    return 0;
+                }
+                return PasteToAppPath.AvatarId;
+            }
+            set {
+                if(AvatarId != value) {
+                    PasteToAppPath.AvatarId = value;
+                    OnPropertyChanged(nameof(AvatarId));
+                }
+            }
+        }
+
         public int PasteToAppPathId {
             get {
                 if(PasteToAppPath == null) {
@@ -358,48 +380,40 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand<object> _changeIconCommand;
-        public ICommand ChangeIconCommand {
-            get {
-                if(_changeIconCommand == null) {
-                    _changeIconCommand = new RelayCommand<object>(ChangeIcon);
-                }
-                return _changeIconCommand;
-            }
-        }
-        private void ChangeIcon(object param) {
-            var iconColorChooserMenuItem = new MenuItem();
-            var iconContextMenu = new ContextMenu();
-            iconContextMenu.Items.Add(iconColorChooserMenuItem);
-            MpHelpers.Instance.SetColorChooserMenuItem(
-                iconContextMenu,
-                iconColorChooserMenuItem,
-                (s1, e1) => {
-                    var brush = (Brush)((Border)s1).Tag;
-                    var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                    AppIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                }
-            );
-            var iconImageChooserMenuItem = new MenuItem();
-            iconImageChooserMenuItem.Header = "Choose Image...";
-            iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
-            iconImageChooserMenuItem.Click += (s, e) => {
-                var openFileDialog = new OpenFileDialog() {
-                    Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                    Title = "Select Image for "+Label,
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
-                bool? openResult = openFileDialog.ShowDialog();
-                if (openResult != null && openResult.Value) {
-                    string imagePath = openFileDialog.FileName;
-                    AppIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
-                }
-            };
-            iconContextMenu.Items.Add(iconImageChooserMenuItem);
-            ((Button)param).ContextMenu = iconContextMenu;
-            iconContextMenu.PlacementTarget = ((Button)param);
-            iconContextMenu.IsOpen = true;
-        }
+        public ICommand ChangeIconCommand => new RelayCommand<object>(
+            (param) => {
+                var iconColorChooserMenuItem = new MenuItem();
+                var iconContextMenu = new ContextMenu();
+                iconContextMenu.Items.Add(iconColorChooserMenuItem);
+                MpHelpers.Instance.SetColorChooserMenuItem(
+                    iconContextMenu,
+                    iconColorChooserMenuItem,
+                    (s1, e1) => {
+                        var brush = (Brush)((Border)s1).Tag;
+                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
+                        AppIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                    }
+                );
+                var iconImageChooserMenuItem = new MenuItem();
+                iconImageChooserMenuItem.Header = "Choose Image...";
+                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
+                iconImageChooserMenuItem.Click += (s, e) => {
+                    var openFileDialog = new OpenFileDialog() {
+                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
+                        Title = "Select Image for " + Label,
+                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                    };
+                    bool? openResult = openFileDialog.ShowDialog();
+                    if (openResult != null && openResult.Value) {
+                        string imagePath = openFileDialog.FileName;
+                        AppIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
+                    }
+                };
+                iconContextMenu.Items.Add(iconImageChooserMenuItem);
+                ((Button)param).ContextMenu = iconContextMenu;
+                iconContextMenu.PlacementTarget = ((Button)param);
+                iconContextMenu.IsOpen = true;
+            });
         #endregion
     }
 }

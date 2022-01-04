@@ -175,6 +175,7 @@
         <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
         <local:MpSourceIdToImageSourceConverter x:Key="SourceIdToImageSourceConverter" />
         <local:MpSourceIdToImageSourceBorderConverter x:Key="SourceIdToImageSourceBorderConverter" />
+        <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Singleton View Model Declarations  -->

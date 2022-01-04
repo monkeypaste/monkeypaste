@@ -65,8 +65,10 @@ namespace MpWpfApp {
 
                 var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(itemData);
                 if(dupCheck != null) {
-                    MpConsole.WriteLine("Duplicate item detected, ignoring");
-                    return null;
+                    MpConsole.WriteLine("Duplicate item detected, flipping id and returning");
+                    dupCheck = await MpDb.Instance.GetItemAsync<MpCopyItem>(dupCheck.Id);
+                    dupCheck.Id *= -1;
+                    return dupCheck;
                 }
 
                 MpApp app = await MpDataModelProvider.Instance.GetAppByPath(processPath);

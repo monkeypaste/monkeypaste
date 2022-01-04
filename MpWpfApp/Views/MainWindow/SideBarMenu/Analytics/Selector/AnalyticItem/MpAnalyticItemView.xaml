@@ -21,8 +21,8 @@
             MouseLeave="Border_MouseLeave">
         <DockPanel LastChildFill="False">
             <Image DockPanel.Dock="Left"
-                   Source="{Binding ItemIconBase64,
-                                    Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                   Source="{Binding IconId,
+                                    Converter={StaticResource IconIdToImageSourceConverter}}"
                    Margin="5,0,5,0"
                    Height="25"
                    Width="25" />

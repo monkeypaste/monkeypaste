@@ -512,41 +512,9 @@ namespace MpWpfApp {
                 if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } 
-            //else if(e is MpCopyItem ci && 
-            //          ci.ItemType == MpCopyItemType.FileList &&
-            //          TagId == MpTag.FavoritesTagId) {
-            //    string pinToDir = Path.Combine(
-            //        Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-            //        @"pintest");
-
-            //    foreach(var fli in ci.ItemData.Split(new string[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)) {
-            //        try {
-            //            bool isFile = File.Exists(fli);
-            //            string fname = Path.GetFileName(fli);
-
-            //            string pinToPath = Path.Combine(pinToDir, fname);
-            //            bool isNew = isFile ? File.Exists(pinToPath) : Directory.Exists(pinToPath);
-
-            //            if (isNew) {
-            //                File.Copy(fli, pinToPath, false);
-            //            } else {
-            //                string msgStr = isFile ? "File " : "Directory ";
-            //                msgStr += " already exists";
-            //                string result = MpMessageBox.ShowCustomMessageBox(
-            //                    "Warning", 
-            //                    msgStr, 
-            //                    "/Images/warning.png", 
-            //                    new string[]{ "Rename", "Overwrite", "Ignore"});
-            //                MpConsole.WriteLine(result);
-            //            }
-            //        } catch(Exception ex) {
-            //            MpConsole.WriteTraceLine(ex);
-            //            continue;
-            //        }
-            //    }
-                
-            //}
+            } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
+                TagClipCount++;
+            }
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -554,7 +522,7 @@ namespace MpWpfApp {
                 if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            }
+            } 
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -570,6 +538,8 @@ namespace MpWpfApp {
                         TagClipCount--;
                     }
                 });
+            } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
+                TagClipCount--;
             }
         }
         #endregion

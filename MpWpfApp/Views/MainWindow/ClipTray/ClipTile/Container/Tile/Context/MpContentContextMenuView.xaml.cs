@@ -39,13 +39,6 @@ namespace MpWpfApp {
         }
 
         private async Task PrepareContextMenu() {
-            MpApp app = null;
-            if (MpClipTrayViewModel.Instance.SelectedModels.Count == 1) {
-                app = MpClipTrayViewModel.Instance.SelectedModels[0].Source.App;
-            }
-
-
-
             MpClipTrayViewModel.Instance.TagMenuItems = await MpClipTrayViewModel.Instance.GetTagMenuItemsForSelectedItems();
 
             Tag = DataContext;
@@ -62,38 +55,11 @@ namespace MpWpfApp {
                                 (Application.Current.Resources["NoEntryIcon"] as string).ToBitmapSource()
                             })
             };
-            //MpHelpers.Instance.CombineBitmap
-            //int removeCount = miToRemove.Count;
-            //while(removeCount > 0) {
-            //    this.Items.RemoveAt(this.Items.Count - 1);
-            //    removeCount--;
-            //}
 
             MpShortcutCollectionViewModel.Instance.UpdateInputGestures(this);
-            MpAnalyticItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAnalyticItemCollectionViewModel.Instance.ContextMenuItems));
-
-            //MpAnalyticItemCollectionViewModel.Instance.UpdateQuickActionMenuItem(this);
-            //if(quickActionSep != null) {
-            //    var quickActions = MpQuickActionAnalyzerCollectionViewModel.Instance.GetQuickActionAnalyzerMenuItems();
-            //    if(quickActions != null && quickActions.Count > 0) {
-            //        quickActionSep.Visibility = Visibility.Visible;
-            //        foreach (var qami in quickActions) {
-            //            var mi = new MenuItem() {
-            //                DataContext = qami
-            //            };
-            //            mi.ItemContainerStyle = this.Resources["DefaultItemStyle"] as Style;
-            //            this.Items.Add(mi);
-            //            mi.UpdateLayout();
-            //            this.UpdateLayout();
-            //            mi.UpdateDefaultStyle();
-            //            mi.Height = 25;
-            //            mi.Width = 300;
-            //        }
-            //    } else {
-            //        quickActionSep.Visibility = Visibility.Collapsed;
-            //    }
-            //}
-
+            var aicvm = Application.Current.Resources["AnalyticItemCollectionViewModel"] as MpAnalyticItemCollectionViewModel;
+            
+            aicvm.OnPropertyChanged(nameof(aicvm.ContextMenuItems));
         }
 
         private void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
@@ -102,7 +68,7 @@ namespace MpWpfApp {
             } else if (DataContext is MpContentItemViewModel civm) {
                 civm.IsContextMenuOpen = false;
             }
-
+            this.Items.Refresh();
         }
     }
 }

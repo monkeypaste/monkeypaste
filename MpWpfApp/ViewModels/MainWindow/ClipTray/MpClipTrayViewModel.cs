@@ -637,9 +637,9 @@ namespace MpWpfApp {
             });
         }
 
-        public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci) {
+        public async Task<MpClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci,int queryOffsetIdx = -1) {
             var nctvm = new MpClipTileViewModel(this);
-            await nctvm.InitializeAsync(ci);
+            await nctvm.InitializeAsync(ci,queryOffsetIdx);
             return nctvm;
         }
 
@@ -1119,6 +1119,9 @@ namespace MpWpfApp {
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
+            bool isDup = newCopyItem != null && newCopyItem.Id < 0;
+            newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
+
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
@@ -1155,32 +1158,33 @@ namespace MpWpfApp {
 
             } else {
                 _appendModeCopyItem = null;
-                if (newCopyItem.Id < 0) {
-                    //item is a duplicate
-                    newCopyItem.Id *= -1;
-                    MpConsole.WriteLine("Ignoring duplicate copy item");
-                    newCopyItem.CopyCount++;
-                    // reseting CopyDateTime will move item to top of recent list
-                    newCopyItem.CopyDateTime = DateTime.Now;
-                } else {
-                    if (MpPreferences.Instance.NotificationDoCopySound) {
-                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                    }
-                    if (MpPreferences.Instance.IsTrialExpired) {
-                        MpStandardBalloonViewModel.ShowBalloon(
-                            "Trial Expired",
-                            "Please update your membership to use Monkey Paste",
-                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                    }
+                if (MpPreferences.Instance.NotificationDoCopySound) {
+                    MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                }
+                if (MpPreferences.Instance.IsTrialExpired) {
+                    MpStandardBalloonViewModel.ShowBalloon(
+                        "Trial Expired",
+                        "Please update your membership to use Monkey Paste",
+                        Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
             }
+            if(isDup) {
+                //item is a duplicate
+                MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
+                newCopyItem.CopyCount++;
+                // reseting CopyDateTime will move item to top of recent list
+                newCopyItem.CopyDateTime = DateTime.Now;
+                await newCopyItem.WriteToDatabaseAsync();
+            }else if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                _newModels.Add(newCopyItem);
+                AddNewItemsCommand.Execute(null);
+            }
+
+            OnCopyItemItemAdd?.Invoke(this, newCopyItem);
             totalAddSw.Stop();
             MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
-            _newModels.Add(newCopyItem);
-            AddNewItemsCommand.Execute(null);
-
-            OnCopyItemItemAdd?.Invoke(this, newCopyItem);
+            
         }
 
         #region Sync Events
@@ -1237,22 +1241,56 @@ namespace MpWpfApp {
                 if (addToCurrentTag != null &&
                    addToCurrentTag.Value == true &&
                    MpDataModelProvider.Instance.QueryInfo.TagId != MpTag.AllTagId) {
+                    //this occurs when an item is duplicated and selected tag isn't default
+
                     foreach (var nci in _newModels) {
                         await MpCopyItemTag.Create(
                                 MpDataModelProvider.Instance.QueryInfo.TagId,
                                 nci.Id
                             );
                     }
-                } else if(MpDataModelProvider.Instance.QueryInfo.TagId != MpTag.AllTagId &&
-                          !MpMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    MpClipTileSortViewModel.Instance.ResetToDefault(true);
-                    MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == x.Parent.DefaultTagId).IsSelected = true;
-                } else {
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                }
+
+                //instead of handling all unique cases manuall insert new items in head of current query which may not be 
+                //accurate but allows to continue workflow
+                MpClipTileSortViewModel.Instance.SetToManualSort();
+
+                foreach (var nci in _newModels) {
+                    if (MpAppModeViewModel.Instance.IsAnyAppendMode) {
+                        var amcivm = GetContentItemViewModelById(_appendModeCopyItem.Id);
+                        if (amcivm != null && amcivm.Parent != null) {
+                            var amctvm = amcivm.Parent;
+                            await amctvm.InitializeAsync(amctvm.HeadItem.CopyItem,amctvm.QueryOffsetIdx);
+                        }
+                    } else {
+                        MpClipTileViewModel nctvm = null;
+                        var civm = GetContentItemViewModelById(nci.Id);
+                        if(civm != null && civm.Parent != null && civm.Parent.QueryOffsetIdx > HeadQueryIdx) {
+                            //when duplicate detected and is already on tray (like on reload and last item is in list)
+                            nctvm = civm.Parent;
+                            Items.Where(x => x.QueryOffsetIdx < nctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx++);
+                            MpDataModelProvider.Instance.MoveQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx - 1);
+                            nctvm.QueryOffsetIdx = HeadQueryIdx - 1;
+                            Items.Move(Items.IndexOf(nctvm), 0);
+                        } else {
+                            nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
+                            MpDataModelProvider.Instance.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
+                            OnPropertyChanged(nameof(TotalTilesInQuery));
+
+                            Items.ForEach(x => x.QueryOffsetIdx++);
+                            Items.Insert(0, nctvm);
+                        }
+                    }
+
+                    MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
                 }
 
                 _newModels.Clear();
-                await MpTagTrayViewModel.Instance.RefreshAllCounts();
+
+                IsBusy = false;
+
+                //using tray scroll changed so tile drop behaviors update their drop rects
+                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
             },
             (addToCurrentTag) => {
                 if (_newModels.Count == 0) {
@@ -1264,13 +1302,10 @@ namespace MpWpfApp {
                 if (MpDataModelProvider.Instance.QueryInfo.SortType == MpContentSortType.Manual) {
                     return false;
                 }
-                if (MpDataModelProvider.Instance.QueryInfo.TagId == MpTag.AllTagId) {
+                if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                     return true;
                 }
-                if (addToCurrentTag == null || ((bool)addToCurrentTag) == false) {
-                    return false;
-                }
-                return true;
+                return false;
             });
 
         public ICommand RequeryCommand => new RelayCommand<object>(
@@ -1782,7 +1817,7 @@ namespace MpWpfApp {
                         await ivm.UpdateColorPallete();
                     }
                 }
-                await MpTagTrayViewModel.Instance.RefreshAllCounts();
+                //await MpTagTrayViewModel.Instance.RefreshAllCounts();
                 await MpTagTrayViewModel.Instance.UpdateTagAssociation();
             },
             (tagToLink) => {

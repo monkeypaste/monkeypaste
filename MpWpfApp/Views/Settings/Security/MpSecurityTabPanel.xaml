@@ -44,8 +44,8 @@
                                     <DataTemplate>
                                         <Image Width="15"
                                                Height="15"
-                                               Source="{Binding IconImageStr,
-                                                                Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                               Source="{Binding IconId,
+                                                                Converter={StaticResource IconIdToImageSourceConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -140,8 +140,8 @@
                                     <DataTemplate>
                                         <Image Width="15"
                                                Height="15"
-                                               Source="{Binding IconImageStr,
-                                                                Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                               Source="{Binding IconId,
+                                                                Converter={StaticResource IconIdToImageSourceConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

@@ -60,8 +60,8 @@
                                            Height="20"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Source="{Binding PresetIcon,
-                                                            Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                                           Source="{Binding IconId,
+                                                            Converter={StaticResource IconIdToImageSourceConverter}}" />
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

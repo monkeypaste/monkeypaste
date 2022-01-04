@@ -9,12 +9,19 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel>, MpISourceItemViewModel {
+    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel> {
         #region Properties
 
         #region View Models
 
-        public MpIconViewModel IconViewModel { get; set; } 
+        public MpIconViewModel IconViewModel {
+            get {
+                if(App == null) {
+                    return null;
+                }
+                return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+            }
+        }
 
         #endregion
 
@@ -85,22 +92,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Visibility
-
-        public Visibility RejectAppVisibility {
-            get {
-                return App == null ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        public Visibility AddButtonVisibility {
-            get {
-                return App == null ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        #endregion
-
         #region Model
 
         public int AppId {
@@ -109,6 +100,15 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return App.Id;
+            }
+        }
+
+        public int IconId {
+            get {
+                if (App == null) {
+                    return 0;
+                }
+                return App.IconId;
             }
         }
 
@@ -149,15 +149,6 @@ namespace MpWpfApp {
 
         public bool IsSubRejected => IsRejected;
 
-        public string IconImageStr {
-            get {
-                if (App == null) {
-                    return string.Empty;
-                }
-                return App.Icon.IconImage.ImageBase64;
-            }
-        }
-
         public MpApp App { get; set; }
 
         #endregion
@@ -176,8 +167,8 @@ namespace MpWpfApp {
 
             App = app;
 
-            IconViewModel = new MpIconViewModel(this);
-            await IconViewModel.InitializeAsync(App.Icon);
+            OnPropertyChanged(nameof(IconId));
+            await Task.Delay(1);
 
             IsBusy = false;
         }

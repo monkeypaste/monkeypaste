@@ -42,7 +42,7 @@ namespace MpWpfApp {
                         command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                         commandParameter: Preset.Id,
                         isChecked: null,
-                        iconSource: PresetIcon,
+                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
                         subItems: null,
                         inputGestureText: ShortcutKeyString,
                         bgBrush: null);
@@ -149,28 +149,18 @@ namespace MpWpfApp {
             set {
                 if(IsQuickAction != value) {
                     Preset.IsQuickAction = value;
-                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsQuickAction));
+                    Task.Run(async () => { await Preset.WriteToDatabaseAsync(); });
                 }
             }
         }
 
-        public string PresetIcon {
+        public int IconId {
             get {
-                if (Preset == null || Preset.Icon == null) {
-                    if(Parent == null) {
-                        return null;
-                    }
-                    return Parent.ItemIconBase64;
+                if (Preset == null) {
+                    return 0;
                 }
-                return Preset.Icon.IconImage.ImageBase64;
-            }
-            set {
-                if (PresetIcon != value) {
-                    Preset.Icon.IconImage.ImageBase64 = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(PresetIcon));
-                }
+                return Preset.IconId;
             }
         }
 
@@ -184,45 +174,6 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
-        #endregion
-
-        #region MpIToggleButtonViewModel (Manage Preset)
-
-        public bool IsChecked { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public Brush CheckedBorderBrush => throw new NotImplementedException();
-
-        public Brush CheckedBackgroundBrush => throw new NotImplementedException();
-
-        public Brush UncheckedBorderBrush => throw new NotImplementedException();
-
-        public Brush UncheckedBackgroundBrush => throw new NotImplementedException();
-
-        public bool IsHovering { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public Brush HoverBorderBrush => throw new NotImplementedException();
-
-        public Brush HoverBackgroundBrush => throw new NotImplementedException();
-
-        public Brush SelectedBorderBrush => throw new NotImplementedException();
-
-        public Brush SelectedBackgroundBrush => throw new NotImplementedException();
-
-        public Brush UnselectedBorderBrush => throw new NotImplementedException();
-
-        public Brush UnselectedBackgroundBrush => throw new NotImplementedException();
-
-        public bool IsEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public Brush DisabledBorderBrush => throw new NotImplementedException();
-
-        public Brush DisabledBackgroundBrush => throw new NotImplementedException();
-
-        public ICommand Command => throw new NotImplementedException();
-
-        public object CommandParameter => throw new NotImplementedException();
-
-        
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -456,9 +407,9 @@ namespace MpWpfApp {
                             var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                             Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(),false);
                             Preset.IconId = Preset.Icon.Id;
-                            //await Preset.WriteToDatabaseAsync();
+                            await Preset.WriteToDatabaseAsync();
 
-                            OnPropertyChanged(nameof(PresetIcon));
+                            OnPropertyChanged(nameof(IconId));
                         });
                     }
                 );
@@ -477,9 +428,9 @@ namespace MpWpfApp {
                         var presetIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
                         Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
                         Preset.IconId = Preset.Icon.Id;
-                        //await Preset.WriteToDatabaseAsync();
+                        await Preset.WriteToDatabaseAsync();
 
-                        OnPropertyChanged(nameof(PresetIcon));
+                        OnPropertyChanged(nameof(IconId));
                     }
                 };
                 iconContextMenu.Items.Add(iconImageChooserMenuItem);

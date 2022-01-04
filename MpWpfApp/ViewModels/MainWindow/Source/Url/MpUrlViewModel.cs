@@ -9,12 +9,19 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpUrlViewModel : MpViewModelBase<MpUrlCollectionViewModel>, MpISourceItemViewModel {
+    public class MpUrlViewModel : MpViewModelBase<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models
 
-        public MpIconViewModel IconViewModel { get; set; }
+        public MpIconViewModel IconViewModel {
+            get {
+                if (Url == null) {
+                    return null;
+                }
+                return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+            }
+        }
 
         #endregion
 
@@ -80,15 +87,6 @@ namespace MpWpfApp {
         //}
         #endregion
 
-        #region Visibility
-
-        public Visibility AddButtonVisibility {
-            get {
-                return Url == null ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-        #endregion
-
         #region Model
 
         public int UrlId {
@@ -97,6 +95,16 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return Url.Id;
+            }
+        }
+
+
+        public int IconId {
+            get {
+                if (Url == null) {
+                    return 0;
+                }
+                return Url.IconId;
             }
         }
 
@@ -152,14 +160,6 @@ namespace MpWpfApp {
             }
         }
 
-        public string IconImageStr {
-            get {
-                if (Url == null) {
-                    return string.Empty;
-                }
-                return Url.Icon.IconImage.ImageBase64;
-            }
-        }
 
         public MpUrl Url { get; set; }
 
@@ -179,8 +179,8 @@ namespace MpWpfApp {
             IsBusy = true;
             Url = url;
 
-            IconViewModel = new MpIconViewModel(this);
-            await IconViewModel.InitializeAsync(Url.Icon);
+            OnPropertyChanged(nameof(IconId));
+            await Task.Delay(1);
 
             IsBusy = false;
         }

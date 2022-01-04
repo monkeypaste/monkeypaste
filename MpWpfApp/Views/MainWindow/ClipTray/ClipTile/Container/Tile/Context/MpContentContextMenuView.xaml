@@ -33,7 +33,8 @@
                     Value="{Binding SubItems}" />
         </Style>
     </ContextMenu.Resources>
-    <MenuItem Header="_Copy"
+    <MenuItem x:Name="TopDefaultItem"
+              Header="_Copy"
               Tag="27"
               Icon="{Binding Source={StaticResource CopyIcon},
                              Converter={StaticResource StringToIconConverter},

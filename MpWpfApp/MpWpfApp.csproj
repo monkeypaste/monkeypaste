@@ -172,6 +172,7 @@
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
@@ -298,8 +299,8 @@
     <Compile Include="ViewModels\MainWindow\Match\MpMatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Source\Interfaces\MpISourceItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\MpSourceCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\MpSourceViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />

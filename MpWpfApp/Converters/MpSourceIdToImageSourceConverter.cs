@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace MpWpfApp {
+
     public class MpSourceIdToImageSourceConverter : IValueConverter {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {            
@@ -12,9 +13,12 @@ namespace MpWpfApp {
                     return null;
                 }
                 if(parameter is string paramStr) {
-                    if(paramStr == "SecondarySource") {
-
+                    if(paramStr.ToLower() == "border") {
+                        return svm.PrimarySourceIconViewModel.IconBorderBitmapSource;
+                    } else if (paramStr.ToLower() == "secondary") {
                         return svm.SecondarySourceIconViewModel.IconBitmapSource;
+                    } else if (paramStr.ToLower() == "secondaryborder") {
+                        return svm.SecondarySourceIconViewModel.IconBorderBitmapSource;
                     }
                 }
                 return svm.PrimarySourceIconViewModel.IconBitmapSource;

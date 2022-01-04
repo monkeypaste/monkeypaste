@@ -36,6 +36,7 @@ namespace MpWpfApp {
         public async Task Init() {
             IsBusy = true;
 
+            await MpIconCollectionViewModel.Instance.Init();
             await MpAppCollectionViewModel.Instance.Init();
             await MpUrlCollectionViewModel.Instance.Init();
 

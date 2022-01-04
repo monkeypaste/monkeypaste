@@ -990,7 +990,11 @@ namespace MonkeyPaste {
 
         public void InsertQueryItem(int copyItemId, int newIdx) {
             if (AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                throw new Exception("Query already contains item " + copyItemId);
+                int oldIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
+                if (newIdx > oldIdx) {
+                    newIdx--;
+                }
+                AllFetchedAndSortedCopyItemIds.RemoveAt(oldIdx);                
             }
             if(newIdx < 0) {
                 throw new Exception($"Idx must be >= 0, was [{newIdx}]");

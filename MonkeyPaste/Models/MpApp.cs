@@ -9,7 +9,8 @@ using System.IO;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {
-        #region Columns
+        
+#region Columns
         [Column("pk_MpAppId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
@@ -37,7 +38,6 @@ namespace MonkeyPaste {
         public int UserDeviceId { get; set; }
 
         #endregion
-
         #region Fk Models
 
         [OneToOne(CascadeOperations = CascadeOperation.All)]

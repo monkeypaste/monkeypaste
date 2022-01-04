@@ -40,7 +40,7 @@ namespace MpWpfApp {
                         command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                         commandParameter: p.Preset.Id,
                         isChecked: null,
-                        iconSource: p.PresetIcon,
+                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == IconId).IconBitmapSource,
                         subItems: null,
                         inputGestureText: p.ShortcutKeyString,
                         bgBrush: null);
@@ -246,12 +246,12 @@ namespace MpWpfApp {
             }
         }
 
-        public string ItemIconBase64 {
+        public int IconId {
             get {
-                if (AnalyticItem == null || AnalyticItem.Icon == null) {
-                    return null;
+                if (AnalyticItem == null) {
+                    return 0;
                 }
-                return AnalyticItem.Icon.IconImage.ImageBase64;
+                return AnalyticItem.IconId;
             }
         }
 
@@ -345,7 +345,7 @@ namespace MpWpfApp {
                 AnalyticItem.Icon = url.Icon;
                 AnalyticItem.IconId = url.IconId;
                 await AnalyticItem.WriteToDatabaseAsync();
-                OnPropertyChanged(nameof(ItemIconBase64));
+                OnPropertyChanged(nameof(IconId));
             }
             // Init Presets
             PresetViewModels.Clear();
@@ -366,7 +366,7 @@ namespace MpWpfApp {
             MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {AnalyticItem.Title}");
 
 
-            OnPropertyChanged(nameof(ItemIconBase64));
+            OnPropertyChanged(nameof(IconId));
             OnPropertyChanged(nameof(PresetViewModels));
 
             IsBusy = false;
@@ -575,7 +575,10 @@ namespace MpWpfApp {
             MpCopyItem sci = null;
             if(args == null) {
                 spvm = SelectedPresetViewModel;
-                sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                if(MpClipTrayViewModel.Instance.PrimaryItem != null && 
+                   MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem != null) {
+                    sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                }
             } else if(args is MpAnalyticItemPresetViewModel) {
                 if (MpClipTrayViewModel.Instance.PrimaryItem == null || 
                     MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem == null) {

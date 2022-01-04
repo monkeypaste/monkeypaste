@@ -202,7 +202,11 @@ namespace MpWpfApp {
             await MpSourceCollectionViewModel.Instance.Init();
 
             await MpSearchBoxViewModel.Instance.Init();
-            Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;            
+            Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
+
+            await MpAnalyticItemCollectionViewModel.Instance.Init();
+            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
+
 
             await MpClipTrayViewModel.Instance.Init();
             Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
@@ -221,9 +225,6 @@ namespace MpWpfApp {
 
             await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
-
-            await MpAnalyticItemCollectionViewModel.Instance.Init();
-            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
 
             await MpMatcherCollectionViewModel.Instance.Init();
 
@@ -394,7 +395,7 @@ namespace MpWpfApp {
                         IsMainWindowOpen = true;
                         OnMainWindowShow?.Invoke(this, null);
 
-                        //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+                        MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                     }
                 };
 

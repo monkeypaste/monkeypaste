@@ -9,8 +9,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-
-    public class MpIconViewModel : MpViewModelBase<MpISourceItemViewModel> {
+    public class MpIconViewModel : MpViewModelBase<MpIconCollectionViewModel> {
         #region Properties
 
         #region Appearance
@@ -32,6 +31,15 @@ namespace MpWpfApp {
             }
         }
 
+        public int IconId {
+            get {
+                if(Icon == null) {
+                    return 0;
+                }
+                return Icon.Id;
+            }
+        }
+
         public MpIcon Icon { get; set; }
 
         #endregion
@@ -42,7 +50,7 @@ namespace MpWpfApp {
 
         public MpIconViewModel() : base(null) { }
 
-        public MpIconViewModel(MpISourceItemViewModel parent) : base(parent) {
+        public MpIconViewModel(MpIconCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpIconViewModel_PropertyChanged;
         }
         
