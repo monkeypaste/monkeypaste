@@ -806,6 +806,9 @@ namespace MonkeyPaste {
                         MpHelpers.Instance.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
                             GetType().Assembly));
+
+            // TODO add other analyzers here or better load w/ json
+
             #endregion
 
             #region Matcher
@@ -818,11 +821,11 @@ namespace MonkeyPaste {
 
             */
 
-            var mr = await MpMatcher.Create(
+            var mr1 = await MpMatcher.Create(
                 MpMatcherType.Contains,
                 "cat",
 
-                MpMatchTriggerType.Content,
+                MpMatchTriggerType.ContentItemAdded,
                 MpMatchActionType.Analyzer,
                 24,
 

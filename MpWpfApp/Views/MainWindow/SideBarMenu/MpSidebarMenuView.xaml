@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <local:MpAppModeButtonGridView Grid.Column="0"
-                                       HorizontalAlignment="Center" 
+                                       HorizontalAlignment="Center"
                                        VerticalAlignment="Stretch"
                                        VerticalContentAlignment="Stretch"
                                        Margin="0,3"
@@ -28,7 +28,7 @@
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        DataContext="{StaticResource AppModeViewModel}" />
 
-        <StackPanel Grid.Column="1" 
+        <StackPanel Grid.Column="1"
                     HorizontalAlignment="Stretch">
             <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
@@ -36,11 +36,11 @@
                                                       Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{Binding TagTrayViewModel,
                                                        IsAsync=True}" />
-            <local:MpManageAnalyticItemsContainerView x:Name="ManageAnalyticItemsContainerView" 
-                                                      MinWidth="100"
-                                                      DataContext="{Binding AnalyticItemCollectionViewModel}"
-                                                      Visibility="{Binding IsVisible,
-                                                                           Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpAnalyzerTreeView x:Name="ManageAnalyticItemsContainerView"
+                                      MinWidth="100"
+                                      DataContext="{Binding AnalyticItemCollectionViewModel}"
+                                      Visibility="{Binding IsVisible,
+                                                           Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
     </Grid>
 

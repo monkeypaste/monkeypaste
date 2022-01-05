@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpImageItemView.xaml
+    /// Interaction logic for MpDetectedObjectsCollectionView.xaml
     /// </summary>
-    public partial class MpImageItemView : MpUserControl<MpContentItemViewModel> {
-        public MpImageItemView() : base() {
+    public partial class MpDetectedObjectsCollectionView : MpUserControl<MpDetectedImageObjectCollectionViewModel> {
+        public MpDetectedObjectsCollectionView() {
             InitializeComponent();
         }
     }

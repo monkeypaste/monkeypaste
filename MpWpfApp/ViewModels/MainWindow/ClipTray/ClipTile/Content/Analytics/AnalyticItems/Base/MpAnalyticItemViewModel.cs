@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using System.Web;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel> {
+    public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel {
         #region Private Variables
 
         #endregion
@@ -50,6 +50,10 @@ namespace MpWpfApp {
                 return new ObservableCollection<MpContextMenuItemViewModel>(children);
             }
         }
+
+        public MpITreeItemViewModel ParentTreeItem => Parent;
+
+        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(PresetViewModels.Cast<MpITreeItemViewModel>());
 
         #endregion
 

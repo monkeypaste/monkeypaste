@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpImageItemView.xaml
+    /// Interaction logic for MpTagTreeView.xaml
     /// </summary>
-    public partial class MpImageItemView : MpUserControl<MpContentItemViewModel> {
-        public MpImageItemView() : base() {
+    public partial class MpTagTreeView : MpUserControl<MpTagTrayViewModel> {
+        public MpTagTreeView() {
             InitializeComponent();
         }
     }

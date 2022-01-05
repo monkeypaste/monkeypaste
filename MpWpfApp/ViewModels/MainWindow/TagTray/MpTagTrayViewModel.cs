@@ -16,21 +16,35 @@ using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
-    public interface MpITreeCollectionViewModel<T> where T:class {
 
-    }
-    public class MpSideBarTreeCollectionViewModel : MpSingletonViewModel<MpSideBarTreeCollectionViewModel> {
-        #region Private Variables
-        #endregion
-
-    }
-
-
-    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel> {
+    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel>, MpITreeItemViewModel {
         #region Private Variables
         #endregion
 
         #region Properties
+
+        #region MpITreeItemViewModel Implementation
+
+        public bool IsSelected { get; set; }
+        public bool IsHovering { get; set; }
+        public bool IsExpanded { get; set; }
+
+        public MpITreeItemViewModel ParentTreeItem => MpSideBarTreeCollectionViewModel.Instance;
+
+
+        public ObservableCollection<MpITreeItemViewModel> Children {
+            get {
+                return new ObservableCollection<MpITreeItemViewModel>(RootTagTileViewModels.Cast<MpITreeItemViewModel>());
+            }
+            set {
+                if(Children != value) {
+                    RootTagTileViewModels = new ObservableCollection<MpTagTileViewModel>(value.Cast<MpTagTileViewModel>());
+                    OnPropertyChanged(nameof(Children));
+                }
+            }
+        }
+
+        #endregion
 
         #region View Models
         public ObservableCollection<MpTagTileViewModel> RootTagTileViewModels { get; private set; } = new ObservableCollection<MpTagTileViewModel>();
@@ -175,8 +189,8 @@ namespace MpWpfApp {
             var ctl = await MpDataModelProvider.Instance.GetChildTagsAsync(ttvm.TagId);
             foreach(var ct in ctl) {
                 var cttvm = await CreateTagTileViewModel(ct);
-                cttvm.ParentTagViewModel = ttvm;
-                ttvm.ChildTagViewModels.Add(cttvm);
+                cttvm.ParentTreeItem = ttvm;
+                ttvm.Children.Add(cttvm);
             }
             return ttvm;
         }
@@ -277,6 +291,10 @@ namespace MpWpfApp {
                         MpAnalyticItemCollectionViewModel.Instance.IsVisible = false;
                     }
                     break;
+                case nameof(TagTileViewModels):
+                case nameof(RootTagTileViewModels):
+                    OnPropertyChanged(nameof(Children));
+                    break;
             }
         }
 
@@ -359,7 +377,7 @@ namespace MpWpfApp {
                 //when removing a tag auto-select the history tag
 
                 var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
-                ttvm.ParentTagViewModel.ChildTagViewModels.Remove(ttvm);
+                ttvm.ParentTreeItem.Children.Remove(ttvm);
 
                 var ctl = await MpDataModelProvider.Instance.GetChildTagsAsync((int)tagId);
                 ctl.ForEach(x => DeleteTagCommand.Execute(x.Id));
@@ -395,8 +413,8 @@ namespace MpWpfApp {
                 };
                 await newTag.WriteToDatabaseAsync();
                 var ttvm = await CreateTagTileViewModel(newTag);
-                ttvm.ParentTagViewModel = SelectedTagTile;
-                SelectedTagTile.ChildTagViewModels.Add(ttvm);
+                ttvm.ParentTreeItem = SelectedTagTile;
+                SelectedTagTile.Children.Add(ttvm);
 
                 OnPropertyChanged(nameof(TagTileViewModels));
                 OnPropertyChanged(nameof(RootTagTileViewModels));
@@ -436,6 +454,8 @@ namespace MpWpfApp {
                 }                
             },
             (args)=>args != null);
+
+        
         #endregion
     }
 }

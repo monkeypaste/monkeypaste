@@ -17,10 +17,10 @@ namespace MonkeyPaste {
 
     public enum MpMatchTriggerType {
         None = 0,
-        Content, 
-        File,
-        Folder,
-        Tag,
+        ContentItemAdded, 
+        WatchFileChanged,
+        WatchFolderChange,
+        ContentItemAddedToTag,
         Shortcut
     }
 

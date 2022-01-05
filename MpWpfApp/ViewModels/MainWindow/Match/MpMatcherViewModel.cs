@@ -37,7 +37,7 @@ namespace MpWpfApp {
             Matcher = m;
 
             switch(Matcher.TriggerType) {
-                case MpMatchTriggerType.Content:
+                case MpMatchTriggerType.ContentItemAdded:
                     MpClipTrayViewModel.Instance.OnCopyItemItemAdd += Instance_OnCopyItemItemAdd;
                     break;
             }
@@ -95,7 +95,6 @@ namespace MpWpfApp {
         private void Instance_OnCopyItemItemAdd(object sender, object e) {
             CheckForMatch(e);
         }
-
 
         #endregion
 

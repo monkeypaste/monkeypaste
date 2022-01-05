@@ -128,7 +128,7 @@
                                            Height="20"
                                            Source="{Binding .,
                                                             Converter={StaticResource StringToImageSourceConverter},
-                                                            Source={StaticResource CogIcon}}" />
+                                                            Source={StaticResource SlidersIcon}}" />
                                 </ToggleButton>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIShortcutCommand, ICloneable {
+    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
         #region Properties
 
         #region View Models
@@ -48,6 +48,10 @@ namespace MpWpfApp {
                         bgBrush: null);
             }
         }
+
+        public MpITreeItemViewModel ParentTreeItem => Parent;
+
+        public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
         #endregion
 
         #region Appearance
@@ -70,7 +74,11 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; }
 
+        public bool IsHovering { get; set; }
+
         public bool IsEditing { get; set; }
+
+        public bool IsExpanded { get; set; }
 
         #endregion
 

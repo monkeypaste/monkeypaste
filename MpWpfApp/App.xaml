@@ -191,6 +191,7 @@
         <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
         <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
         <local:MpSourceCollectionViewModel x:Key="SourceCollectionViewModel" />
+        <local:MpSideBarTreeCollectionViewModel x:Key="SideBarTreeCollectionViewModel" />
         <!--  Singleton View Model Declarations End  -->
 
 

@@ -195,7 +195,7 @@ namespace MonkeyPaste {
             if(Source == null) {
                 Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
             }
-            if(CompositeParentCopyItemId == Id) {
+            if(CompositeParentCopyItemId == Id && Id > 0) {
                 MpConsole.WriteLine("Warning! circular copy item ref detected, attempting to fix...");
                 CompositeParentCopyItemId = CompositeSortOrderIdx = 0;
             }

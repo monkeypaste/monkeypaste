@@ -17,9 +17,9 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
     /// </summary>
-    public partial class MpManageAnalyticItemsContainerView : MpUserControl<MpAnalyticItemCollectionViewModel> {
+    public partial class MpAnalyzerTreeView : MpUserControl<MpAnalyticItemCollectionViewModel> {
         public bool IsWindowed { get; set; } = false;
-        public MpManageAnalyticItemsContainerView() {
+        public MpAnalyzerTreeView() {
             InitializeComponent();
         }
 

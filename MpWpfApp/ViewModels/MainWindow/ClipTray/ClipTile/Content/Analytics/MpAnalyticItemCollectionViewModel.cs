@@ -14,7 +14,15 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel>  { //
+    public enum MpAnalyzerType {
+        None = 0,
+        LanguageTranslator,
+        OpenAi,
+        Yolo,
+        AzureImageAnalysis
+    }
+
+    public class MpAnalyticItemCollectionViewModel : MpSingletonViewModel<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel  { //
         #region Properties
 
         #region View Models
@@ -81,6 +89,9 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+
+        public MpITreeItemViewModel ParentTreeItem => MpSideBarTreeCollectionViewModel.Instance;
 
         #endregion
 
@@ -94,6 +105,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsSelected { get; set; }
 
         public bool IsAnySelected => SelectedItem != null;
 
@@ -142,7 +155,7 @@ namespace MpWpfApp {
             }
 
             OnPropertyChanged(nameof(Items));
-
+            
             if (Items.Count > 0) {
                 Items[0].IsSelected = true;
             }
@@ -153,6 +166,15 @@ namespace MpWpfApp {
         public MpAnalyticItemPresetViewModel GetPresetViewModelById(int aipid) {
             var aipvm = Items.SelectMany(x => x.PresetViewModels).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
             return aipvm;
+        }
+
+        public MpAnalyticItemPresetViewModel GetDefaultPresetByAnalyzerType(MpAnalyzerType analyzerType) {
+            string title = analyzerType.EnumToLabel();
+            var aivm = Items.FirstOrDefault(x => x.Title.ToLower() == title.ToLower());
+            if(aivm == null) {
+                return null;
+            }
+            return aivm.DefaultPresetViewModel;
         }
 
         #endregion
@@ -201,6 +223,9 @@ namespace MpWpfApp {
                     }
                     OnPropertyChanged(nameof(SelectedItem));
                     break;
+                case nameof(Items):
+                    OnPropertyChanged(nameof(Children));
+                    break;
             }
         }
         #endregion
@@ -216,6 +241,18 @@ namespace MpWpfApp {
         public ICommand RegisterContentCommand => new RelayCommand<object>(
             (args) => {
                 Content = args;
+            },
+            (args) => args != null);
+
+        public ICommand ExecuteAnalysisCommand => new RelayCommand<object>(
+            (args) => {
+                if(args is object[] argParts) {
+                    MpAnalyticItemPresetViewModel aipvm = null;
+                    if(argParts[0] is MpAnalyzerType analyzerType) {
+
+                    }
+
+                }
             },
             (args) => args != null);
         #endregion

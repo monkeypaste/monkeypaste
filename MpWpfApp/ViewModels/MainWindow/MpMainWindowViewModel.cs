@@ -207,7 +207,6 @@ namespace MpWpfApp {
             await MpAnalyticItemCollectionViewModel.Instance.Init();
             Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
 
-
             await MpClipTrayViewModel.Instance.Init();
             Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
 
@@ -227,6 +226,9 @@ namespace MpWpfApp {
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
             await MpMatcherCollectionViewModel.Instance.Init();
+
+            await MpSideBarTreeCollectionViewModel.Instance.Init();
+            Application.Current.Resources["SideBarTreeCollectionViewModel"] = MpSideBarTreeCollectionViewModel.Instance;
 
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 

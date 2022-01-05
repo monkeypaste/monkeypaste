@@ -1,10 +1,12 @@
-﻿using MonkeyPaste;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpMatcherCollectionViewModel : MpSingletonViewModel<MpMatcherCollectionViewModel> {
@@ -50,6 +52,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Private Methods
+
         private bool IsMatch(MpMatcher matcher, string text) {
             switch(matcher.MatcherType) {
                 case MpMatcherType.Contains:
@@ -66,5 +70,15 @@ namespace MpWpfApp {
                     break;
             }
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand AddMatcherCommand => new RelayCommand<object>(
+            async (args) => {
+
+            }, (args) => args != null);
+        #endregion
     }
 }

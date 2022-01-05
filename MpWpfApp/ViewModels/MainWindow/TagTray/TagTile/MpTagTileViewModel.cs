@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpIShortcutCommand {
+    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpITreeItemViewModel, MpIShortcutCommand {
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
@@ -26,9 +26,9 @@ namespace MpWpfApp {
 
         public MpTagPropertyCollectionViewModel TagProperties { get; set; } = new MpTagPropertyCollectionViewModel();
         
-        public MpTagTileViewModel ParentTagViewModel { get; set; }
+        public MpITreeItemViewModel ParentTreeItem { get; set; }
 
-        public ObservableCollection<MpTagTileViewModel> ChildTagViewModels { get; set; } = new ObservableCollection<MpTagTileViewModel>();
+        public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
 
         #endregion
 
@@ -441,9 +441,9 @@ namespace MpWpfApp {
 
         public List<MpTagTileViewModel> FindChildren() {
             var cl = new List<MpTagTileViewModel>();
-            foreach(var cttvm in ChildTagViewModels) {
+            foreach(var cttvm in Children.Cast<MpTagTileViewModel>()) {
                 cl.Add(cttvm);
-                cl.AddRange(cttvm.FindChildren());
+                cl.AddRange(cttvm.Children.Cast<MpTagTileViewModel>());
             }
             return cl;
         }
