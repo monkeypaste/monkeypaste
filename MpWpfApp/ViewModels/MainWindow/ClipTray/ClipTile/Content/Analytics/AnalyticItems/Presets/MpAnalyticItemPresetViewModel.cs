@@ -52,6 +52,12 @@ namespace MpWpfApp {
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
+
+        public ObservableCollection<MpMatcherViewModel> PresetMatchers => new ObservableCollection<MpMatcherViewModel>(
+                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x=>
+                        (x.Matcher.IsMatchActionType == MpMatchActionType.Analyzer && x.Matcher.IsMatchTargetObjectId == AnalyticItemPresetId) ||
+                        (x.Matcher.TriggerActionType == MpMatchActionType.Analyzer && x.Matcher.TriggerActionObjId == AnalyticItemPresetId)).ToList());
+
         #endregion
 
         #region Appearance
@@ -76,7 +82,9 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; }
 
-        public bool IsEditing { get; set; }
+        public bool IsEditingParameters { get; set; }
+
+        public bool IsEditingMatchers { get; set; }
 
         public bool IsExpanded { get; set; }
 
@@ -249,6 +257,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(ParameterViewModels));
             OnPropertyChanged(nameof(HasAnyParamValueChanged));
+            OnPropertyChanged(nameof(PresetMatchers));
             ParameterViewModels.ForEach(x => x.Validate());
             HasModelChanged = false;
 
@@ -256,8 +265,6 @@ namespace MpWpfApp {
         }
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip, MpAnalyticItemPresetParameterValue aippv) {
-            
-
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aip.ParameterType) {
@@ -364,14 +371,25 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
                     break;
-                case nameof(IsEditing):
-                    if(IsEditing) {
+                case nameof(IsEditingParameters):
+                    if(IsEditingParameters) {
+                        Parent.PresetViewModels.ForEach(x => x.IsEditingMatchers = false);
+                        Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
                         ManagePresetCommand.Execute(null);
                     }
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditing));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
                     OnPropertyChanged(nameof(HasAnyParamValueChanged));
                     OnPropertyChanged(nameof(HasModelChanged));
                     OnPropertyChanged(nameof(CanSave));
+                    break;
+                case nameof(IsEditingMatchers):
+                    if (IsEditingMatchers) {
+                        Parent.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
+                        Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingMatchers = false);
+                        ManageMatchersCommand.Execute(null);
+                    }
+                    OnPropertyChanged(nameof(PresetMatchers));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingMatchers));
                     break;
                 case nameof(HasModelChanged):
                     OnPropertyChanged(nameof(CanSave));
@@ -455,7 +473,7 @@ namespace MpWpfApp {
                 ParameterViewModels.ForEach(x => x.CurrentValue = x.DefaultValue);
                 OnPropertyChanged(nameof(HasAnyParamValueChanged));
                 HasModelChanged = false;
-                IsEditing = false;
+                IsEditingParameters = false;
             },
             CanSave);
 
@@ -487,9 +505,16 @@ namespace MpWpfApp {
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {
                 Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
-                Parent.PresetViewModels.ForEach(x => x.IsEditing = x == this);
+                Parent.PresetViewModels.ForEach(x => x.IsEditingParameters = x == this);
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
-            }, !IsEditing && !Parent.IsAnyEditing);
+            }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
+
+        public ICommand ManageMatchersCommand => new RelayCommand(
+            () => {
+                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
+                Parent.PresetViewModels.ForEach(x => x.IsEditingMatchers = x == this);
+                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
+            }, !IsEditingMatchers && !Parent.IsAnyEditingMatchers);
 
         //public ICommand ExecutePresetCommand => new RelayCommand(
         //    () => {

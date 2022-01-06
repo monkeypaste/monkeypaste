@@ -212,12 +212,13 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
                     if (IsVisible) {
                         MpTagTrayViewModel.Instance.IsVisible = false;
+                        MpMatcherCollectionViewModel.Instance.IsVisible = false;
                     }
                     if(SelectedItem == null) {
                         Items[0].IsSelected = true;
-                        SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = false);
+                        SelectedItem.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
                     }
-                    if(!SelectedItem.IsAnyEditing) {
+                    if(!SelectedItem.IsAnyEditingParameters) {
                         SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
                         //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
                     }

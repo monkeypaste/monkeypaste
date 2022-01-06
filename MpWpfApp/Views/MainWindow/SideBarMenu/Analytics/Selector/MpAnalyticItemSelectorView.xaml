@@ -43,8 +43,17 @@
             </Border>
             <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
         </StackPanel>
-        <Grid Visibility="{Binding SelectedItem.IsAnyEditing, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue='Collapsed'}">
+        <Grid x:Name="PresetParametersGrid"
+              Visibility="{Binding SelectedItem.IsAnyEditingParameters,
+                                   Converter={StaticResource BoolToVisibilityConverter},
+                                   FallbackValue='Collapsed'}">
             <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
+        </Grid>
+        <Grid x:Name="MatcherGrid"
+              Visibility="{Binding SelectedItem.IsAnyEditingMatchers,
+                                   Converter={StaticResource BoolToVisibilityConverter},
+                                   FallbackValue='Collapsed'}">
+            <local:MpMatcherCollectionView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
         </Grid>
     </StackPanel>
 </local:MpUserControl>

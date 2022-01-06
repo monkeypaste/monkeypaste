@@ -326,7 +326,7 @@ namespace MpWpfApp {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
             if (dpo is Control c) {
-                UpdateBrushes(c);
+                //UpdateBrushes(c);
             }
         }
 
@@ -339,7 +339,7 @@ namespace MpWpfApp {
             }
 
             if (dpo is FrameworkElement fe) {
-                UpdateBrushes(fe);
+               // UpdateBrushes(fe);
             } 
         }
 

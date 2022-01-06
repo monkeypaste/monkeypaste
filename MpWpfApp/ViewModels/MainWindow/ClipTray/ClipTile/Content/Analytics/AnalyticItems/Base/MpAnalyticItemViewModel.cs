@@ -90,7 +90,9 @@ namespace MpWpfApp {
 
         public virtual bool IsLoaded => PresetViewModels.Count > 0 && PresetViewModels[0].ParameterViewModels.Count > 0;
 
-        public bool IsAnyEditing => PresetViewModels.Any(x => x.IsEditing);
+        public bool IsAnyEditingParameters => PresetViewModels.Any(x => x.IsEditingParameters);
+
+        public bool IsAnyEditingMatchers => PresetViewModels.Any(x => x.IsEditingMatchers);
 
         public bool IsHovering { get; set; } = false;
 

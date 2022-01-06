@@ -1119,14 +1119,16 @@ namespace MpWpfApp {
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
-            bool isDup = newCopyItem != null && newCopyItem.Id < 0;
-            newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
-
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
                 return;
-            } else if (MpAppModeViewModel.Instance.IsAppendMode) {
+            }
+
+            bool isDup = newCopyItem != null && newCopyItem.Id < 0;
+            newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
+
+            if (MpAppModeViewModel.Instance.IsAppendMode) {
                 //when in append mode just append the new items text to selecteditem
                 if (_appendModeCopyItem == null) {
                     if (PrimaryItem == null) {
@@ -1168,14 +1170,14 @@ namespace MpWpfApp {
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
             }
-            if(isDup) {
+            if (isDup) {
                 //item is a duplicate
                 MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
                 newCopyItem.CopyCount++;
                 // reseting CopyDateTime will move item to top of recent list
                 newCopyItem.CopyDateTime = DateTime.Now;
                 await newCopyItem.WriteToDatabaseAsync();
-            }else if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            } else if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 _newModels.Add(newCopyItem);
                 AddNewItemsCommand.Execute(null);
             }

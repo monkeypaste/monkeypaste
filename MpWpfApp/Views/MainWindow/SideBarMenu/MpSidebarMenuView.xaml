@@ -36,11 +36,17 @@
                                                       Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{Binding TagTrayViewModel,
                                                        IsAsync=True}" />
-            <local:MpAnalyzerTreeView x:Name="ManageAnalyticItemsContainerView"
-                                      MinWidth="100"
-                                      DataContext="{Binding AnalyticItemCollectionViewModel}"
-                                      Visibility="{Binding IsVisible,
-                                                           Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
+                                              MinWidth="100"
+                                              DataContext="{Binding AnalyticItemCollectionViewModel}"
+                                              Visibility="{Binding IsVisible,
+                                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpMatcherCollectionView x:Name="MatcherCollectionView"
+                                 MinWidth="100"
+                                 Visibility="{Binding IsVisible,
+                                                      Converter={StaticResource BoolToVisibilityConverter}}"
+                                 DataContext="{Binding MatcherCollectionViewModel,
+                                                       IsAsync=True}" />
         </StackPanel>
     </Grid>
 

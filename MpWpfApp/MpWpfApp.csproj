@@ -321,9 +321,6 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\MpAnalyzerTreeView.xaml.cs">
-      <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
     </Compile>
@@ -343,6 +340,15 @@
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
       <DependentUpon>MpTagTrayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyticItemTreeView.xaml.cs">
+      <DependentUpon>MpAnalyticItemTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
+      <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Matcher\MpMatcherCollectionView.xaml.cs">
+      <DependentUpon>MpMatcherCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
       <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
@@ -570,10 +576,6 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\MpAnalyzerTreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -713,6 +715,18 @@
     <Page Include="Views\MainWindow\MpMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyticItemTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Matcher\MpMatcherCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\TagTree\MpTagTreeView.xaml">
       <SubType>Designer</SubType>
@@ -2471,6 +2485,9 @@
     <Resource Include="Resources\Images\execute.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\bolt.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2492,7 +2509,6 @@
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
-    <Folder Include="Views\MainWindow\SideBarMenu\AnalyzerTree\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>

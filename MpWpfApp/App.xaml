@@ -90,6 +90,7 @@
         <s:String x:Key="HotkeyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystick2.png</s:String>
         <s:String x:Key="HotkeyActiveIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/joystickactive2.png</s:String>
         <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
+        <s:String x:Key="BullsEyeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
         <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
         <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
         <s:String x:Key="UserIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/user.png</s:String>
@@ -113,6 +114,7 @@
         <s:String x:Key="PinDownOverIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/pindownover.png</s:String>
         <s:String x:Key="PlusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/add2.png</s:String>
         <s:String x:Key="MinusIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/minus2.png</s:String>
+        <s:String x:Key="BoltIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bolt.png</s:String>
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->
@@ -192,6 +194,8 @@
         <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
         <local:MpSourceCollectionViewModel x:Key="SourceCollectionViewModel" />
         <local:MpSideBarTreeCollectionViewModel x:Key="SideBarTreeCollectionViewModel" />
+        <local:MpMatcherCollectionViewModel x:Key="MatcherCollectionViewModel" />
+
         <!--  Singleton View Model Declarations End  -->
 
 
@@ -312,7 +316,7 @@
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="Black"
+                                BorderBrush="Transparent"
                                 BorderThickness="1"
                                 CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="Center"

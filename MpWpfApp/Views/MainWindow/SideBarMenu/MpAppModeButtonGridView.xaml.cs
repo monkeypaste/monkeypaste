@@ -19,6 +19,8 @@ namespace MpWpfApp {
     /// Interaction logic for MpAppModeButtonGridView.xaml
     /// </summary>
     public partial class MpAppModeButtonGridView : MpUserControl<MpAppModeViewModel> {
+        public ToggleButton AppendModeToggleButton, MouseModeToggleButton;
+
         public MpAppModeButtonGridView() {
             InitializeComponent();
         }
@@ -66,14 +68,24 @@ namespace MpWpfApp {
 
             ToggleButton tb = sender as ToggleButton;
 
-            tb.ContextMenu.Placement = PlacementMode.AbsolutePoint;
 
             Rect mouseModeRect = tb.Bounds(Application.Current.MainWindow);
 
-            tb.ContextMenu.HorizontalOffset = mouseModeRect.Right;
-            tb.ContextMenu.VerticalOffset = mouseModeRect.Top;
+            if (tb == AppModeToggleButton) {
+                tb.ContextMenu.Placement = PlacementMode.AbsolutePoint;
+                tb.ContextMenu.IsOpen = true;
+                tb.ContextMenu.HorizontalOffset = mouseModeRect.Right;
+                tb.ContextMenu.VerticalOffset = mouseModeRect.Top;
+            } else {
+                var popup = tb.GetVisualDescendent<Popup>();
+                popup.IsOpen = !popup.IsOpen;
+                popup.Placement = PlacementMode.AbsolutePoint;
+                if(popup.IsOpen) {
+                    popup.HorizontalOffset = mouseModeRect.Left;
+                    popup.VerticalOffset = mouseModeRect.Top - popup.ActualHeight;
+                }
+            }
 
-            tb.ContextMenu.IsOpen = true;
         }
 
         private void AnalyzerToggleButton_Click(object sender, RoutedEventArgs e) {
@@ -86,6 +98,23 @@ namespace MpWpfApp {
             MpTagTrayViewModel.Instance.IsVisible = !MpTagTrayViewModel.Instance.IsVisible;
             TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsVisible;
             AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+        }
+
+        private void MatcherToggleButton_Click(object sender, RoutedEventArgs e) {
+            MpMatcherCollectionViewModel.Instance.IsVisible = !MpMatcherCollectionViewModel.Instance.IsVisible;
+
+        }
+
+        private void AppModeToggleButton_Loaded(object sender, RoutedEventArgs e) {
+            var tb = sender as ToggleButton;
+            var amtbsp = AppModeToggleButton.Resources["AppModeToggleButtonStackPanel"] as StackPanel;
+            
+            MouseModeToggleButton = amtbsp.Children[0] as ToggleButton;
+            AppendModeToggleButton = amtbsp.Children[1] as ToggleButton;
+
+            MouseModeToggleButton.Width = AppendModeToggleButton.Width = tb.ActualWidth;
+            MouseModeToggleButton.Height = AppendModeToggleButton.Height = tb.ActualHeight;
+            MouseModeToggleButton.DataContext = AppendModeToggleButton.DataContext = tb.DataContext;
         }
     }
 }

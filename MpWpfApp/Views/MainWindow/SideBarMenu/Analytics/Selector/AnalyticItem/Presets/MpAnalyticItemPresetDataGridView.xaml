@@ -119,7 +119,7 @@
                                               ToolTip="Configure"
                                               Margin="0"
                                               Template="{StaticResource LockToggleButtonControlTemplate}"
-                                              IsChecked="{Binding IsEditing,
+                                              IsChecked="{Binding IsEditingParameters,
                                                                   Mode=TwoWay,
                                                                   NotifyOnTargetUpdated=True,
                                                                   NotifyOnSourceUpdated=True,
@@ -129,6 +129,30 @@
                                            Source="{Binding .,
                                                             Converter={StaticResource StringToImageSourceConverter},
                                                             Source={StaticResource SlidersIcon}}" />
+                                </ToggleButton>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ToggleButton Background="Transparent"
+                                              BorderThickness="0"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              ToolTip="Configure"
+                                              Margin="0"
+                                              Template="{StaticResource LockToggleButtonControlTemplate}"
+                                              IsChecked="{Binding IsEditingMatchers,
+                                                                  Mode=TwoWay,
+                                                                  NotifyOnTargetUpdated=True,
+                                                                  NotifyOnSourceUpdated=True,
+                                                                  UpdateSourceTrigger=PropertyChanged}">
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="{Binding .,
+                                                            Converter={StaticResource StringToImageSourceConverter},
+                                                            Source={StaticResource BoltIcon}}" />
                                 </ToggleButton>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

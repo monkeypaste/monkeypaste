@@ -73,6 +73,8 @@ namespace MpWpfApp {
 
         public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel => MpAnalyticItemCollectionViewModel.Instance;
 
+        public MpMatcherCollectionViewModel MatcherCollectionViewModel => MpMatcherCollectionViewModel.Instance;
+
         #endregion
 
         #region State
@@ -226,6 +228,7 @@ namespace MpWpfApp {
             Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
             await MpMatcherCollectionViewModel.Instance.Init();
+            Application.Current.Resources["MatcherCollectionViewModel"] = MpMatcherCollectionViewModel.Instance;
 
             await MpSideBarTreeCollectionViewModel.Instance.Init();
             Application.Current.Resources["SideBarTreeCollectionViewModel"] = MpSideBarTreeCollectionViewModel.Instance;

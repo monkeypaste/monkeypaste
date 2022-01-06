@@ -22,12 +22,18 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region State
+
+        public bool IsVisible { get; set; } = false;
+
+        #endregion
+
         #endregion
 
         #region Constructors
 
         public MpMatcherCollectionViewModel() {
-            Task.Run(Init);
+            PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;
         }
 
         public async Task Init() {
@@ -53,6 +59,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void MpMatcherCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsVisible):
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
+                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+
+                    //if (IsVisible) {
+                    //    MpAnalyticItemCollectionViewModel.Instance.IsVisible = false;
+                    //    MpTagTrayViewModel.Instance.IsVisible = false;
+                    //}
+                    break;
+            }
+        }
 
         private bool IsMatch(MpMatcher matcher, string text) {
             switch(matcher.MatcherType) {
@@ -77,7 +96,17 @@ namespace MpWpfApp {
 
         public ICommand AddMatcherCommand => new RelayCommand<object>(
             async (args) => {
+                if(args is MpAnalyticItemPresetViewModel aipvm) {
 
+                }
+            }, (args) => args != null);
+
+        public ICommand DeleteMatcherCommand => new RelayCommand<object>(
+            async (args) => {
+                if(args is MpMatcherViewModel mvm) {
+                    Matchers.Remove(mvm);
+                    await mvm.Matcher.DeleteFromDatabaseAsync();
+                }
             }, (args) => args != null);
         #endregion
     }
