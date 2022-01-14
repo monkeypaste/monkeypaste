@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace MpWpfApp {
     public abstract class MpBehavior<T> : Behavior<T> where T: FrameworkElement {
         protected bool _wasUnloaded;
         protected object _dataContext;
         protected bool _isLoaded = false;
-
+        
         protected override void OnAttached() {
             base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Loaded;
@@ -33,7 +34,6 @@ namespace MpWpfApp {
 
         protected virtual void OnMainWindowShow(object sender, EventArgs e) { }
         
-
         private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
             OnUnload();
         }

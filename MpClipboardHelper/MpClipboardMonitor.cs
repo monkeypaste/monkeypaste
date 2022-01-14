@@ -9,7 +9,6 @@ using System.IO;
 using System.Collections.Specialized;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
-using static System.Net.WebRequestMethods;
 
 namespace MpClipboardHelper {
     public static class MpClipboardMonitor {
@@ -201,8 +200,9 @@ namespace MpClipboardHelper {
                                         //    byte[] bytes = memStream.ToArray();
                                         //    data = Convert.ToBase64String(bytes);
                                         //}
+
                                         using (MemoryStream memoryStream = new MemoryStream()) {
-                                            img.Save(memoryStream, img.RawFormat);
+                                            img.Save(memoryStream, ImageFormat.Bmp);
                                             byte[] imageBytes = memoryStream.ToArray();
                                             data = Convert.ToBase64String(imageBytes);
                                         }

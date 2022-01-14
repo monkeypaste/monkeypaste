@@ -56,16 +56,6 @@ namespace MpWpfApp {
             TagTextBox.SelectAll();
         }
 
-        private void TagTileBorder_MouseEnter(object sender, MouseEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            ttvm.IsHovering = true;
-        }
-
-        private void TagTileBorder_MouseLeave(object sender, MouseEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            ttvm.IsHovering = false;
-        }
-
         private void TagTileBorder_LostFocus(object sender, RoutedEventArgs e) {
             var ttvm = DataContext as MpTagTileViewModel;
             if (!ttvm.IsSelected) {

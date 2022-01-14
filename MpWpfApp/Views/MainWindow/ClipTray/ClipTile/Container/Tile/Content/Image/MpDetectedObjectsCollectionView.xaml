@@ -91,9 +91,14 @@
                                 MinHeight="20"
                                 Canvas.Top="{Binding X}"
                                 Canvas.Left="{Binding Y}"
+                                Background="Transparent"
                                 Visibility="{Binding Parent.Parent.Parent.IsSelected,
                                                      Converter={StaticResource BoolToVisibilityConverter}}"
                                 Template="{StaticResource DesignerItemTemplate}">
+                    <ContentControl.Resources>
+
+                        <SolidColorBrush Color="Transparent" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
+                    </ContentControl.Resources>
                     <ContentControl.RenderTransform>
                         <TranslateTransform X="{Binding X}"
                                             Y="{Binding Y}" />
@@ -105,14 +110,10 @@
 
                     <Button HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
+                            Background="Transparent"
                             BorderThickness="3"
                             local:MpHoverableExtension.IsEnabled="True"
-                            local:MpHoverableExtension.BackgroundBrush="Transparent"
-                            local:MpHoverableExtension.HoverBackgroundBrush="Transparent"
-                            local:MpHoverableExtension.HoverSelectedBackgroundBrush="Transparent"
-                            local:MpHoverableExtension.BorderBrush="Blue"
-                            local:MpHoverableExtension.HoverBorderBrush="Yellow"
-                            local:MpHoverableExtension.SelectedBorderBrush="Red"
+                            local:MpHoverableExtension.IsHovering="{Binding IsHovering,Mode=TwoWay}"
                             Command="{Binding }">
                         <TextBox HorizontalAlignment="Center"
                                  VerticalAlignment="Center"

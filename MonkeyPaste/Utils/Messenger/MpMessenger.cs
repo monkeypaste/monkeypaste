@@ -32,7 +32,9 @@ namespace MonkeyPaste {
         ResizeCompleted,
         SelectNextMatch,
         SelectPreviousMatch,
-        SearchCriteriaItemsChanged
+        SearchCriteriaItemsChanged,
+        TagTileNotificationAdded,
+        TagTileNotificationRemoved
     }
 
     public class MpMessenger : MpSingleton<MpMessenger> {
@@ -99,7 +101,8 @@ namespace MonkeyPaste {
             }
 
             foreach(var result in results) {
-                foreach(var action in result.Value) {
+                foreach(var action in result.Value.ToList()) {
+                    // NOTE enumerating over .ToList() to avoid colleciton changed exception
                     (action as Action<T>).Invoke(message);
                 }
             }

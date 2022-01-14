@@ -1,0 +1,24 @@
+{
+  "outputFieldMappings": [
+    {
+      "sourceFieldName": "/document/normalized_images/*/categories/*",
+      "targetFieldName": "categories"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/tags/*",
+      "targetFieldName": "tags"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/description",
+      "targetFieldName": "description"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/faces/*",
+      "targetFieldName": "faces"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/brands/*/name",
+      "targetFieldName": "brands"
+    }
+  ]
+}

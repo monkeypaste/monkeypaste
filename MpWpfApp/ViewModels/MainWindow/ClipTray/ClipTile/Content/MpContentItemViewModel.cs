@@ -288,6 +288,18 @@ namespace MpWpfApp {
             }
         }
 
+        public bool HasBeenSeen { get; set; } = false;
+
+        public bool IsVisible {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                double screenX = Parent.TrayX - Parent.Parent.ScrollOffset;
+                return screenX >= 0 && screenX < Parent.Parent.ClipTrayScreenWidth;
+            }
+        }
+
         #region Scroll
 
         public double NormalizedVerticalScrollOffset { get; set; } = 0;

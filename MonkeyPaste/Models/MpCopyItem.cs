@@ -363,7 +363,8 @@ namespace MonkeyPaste {
         #endregion
 
         public async Task<object> Clone(bool isReplica) {
-            //var s = await MpDb.Instance.GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+            // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
+
             if(Source == null) {
                 Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
             }

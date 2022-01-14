@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpITreeItemViewModel, MpIShortcutCommand {
+    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpITreeItemViewModel, MpIShortcutCommand, MpIHasNotification {
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
@@ -54,6 +54,12 @@ namespace MpWpfApp {
         public string ShortcutKeyString => ShortcutViewModel.KeyString;
 
         public ICommand AssignCommand => AssignHotkeyCommand;
+
+        #endregion
+
+        #region MpIHasNotification Implementation
+
+        public bool HasNotification { get; set; } = false;
 
         #endregion
 
@@ -152,6 +158,7 @@ namespace MpWpfApp {
         }
 
         public bool IsContextMenuOpened { get; set; } = false;
+
         #endregion
 
         #region Visibility
@@ -367,6 +374,9 @@ namespace MpWpfApp {
 
         public event EventHandler OnRequestSelectAll;
 
+        public event EventHandler<int> OnCopyItemLinked;
+        public event EventHandler<int> OnCopyItemUnlinked;
+
         #endregion
 
         #region Public Methods
@@ -514,6 +524,7 @@ namespace MpWpfApp {
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount++;
+                OnCopyItemLinked?.Invoke(this, cit.CopyItemId);
             }
         }
 
@@ -536,11 +547,13 @@ namespace MpWpfApp {
                     if(cit != null) {
                         await cit.DeleteFromDatabaseAsync();
                         TagClipCount--;
+                        OnCopyItemUnlinked?.Invoke(this, cit.CopyItemId);
                     }
                 });
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount--;
-            }
+                OnCopyItemUnlinked?.Invoke(this, cit.CopyItemId);
+            } 
         }
         #endregion
 

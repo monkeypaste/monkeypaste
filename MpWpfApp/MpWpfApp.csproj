@@ -143,8 +143,10 @@
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
+    <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpMainWindowResizeBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpTileResizeBehavior.cs" />
+    <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />

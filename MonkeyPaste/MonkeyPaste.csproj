@@ -87,10 +87,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\azurevision.json">
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\Azure\azurevision.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\azuretranslator.json">
+    <EmbeddedResource Include="Resources\Data\Analytics\Formats\Azure\azuretranslator.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Data\Analytics\Formats\openai.json">

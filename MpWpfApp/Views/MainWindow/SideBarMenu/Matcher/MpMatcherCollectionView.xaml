@@ -12,7 +12,8 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <Border IsVisibleChanged="Border_IsVisibleChanged" CornerRadius="3"
+    <Border IsVisibleChanged="Border_IsVisibleChanged"
+            CornerRadius="3"
             Margin="10,0"
             BorderThickness="1"
             BorderBrush="Black"
@@ -65,7 +66,7 @@
                                             Header="Trigger Action">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox IsSynchronizedWithCurrentItem="True"                                          
+                                <ComboBox IsSynchronizedWithCurrentItem="True"
                                           VerticalContentAlignment="Center"
                                           SelectedIndex="{Binding SelectedTriggerActionTypeIdx,
                                                                   Mode=TwoWay,

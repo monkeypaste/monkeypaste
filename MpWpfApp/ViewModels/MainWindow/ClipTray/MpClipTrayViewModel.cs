@@ -432,7 +432,7 @@ namespace MpWpfApp {
                 tmil.Add(
                     new MpContextMenuItemViewModel(
                         tagTile.TagName,
-                        MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                        LinkTagToCopyItemCommand,
                         tagTile,
                         isChecked,
                         string.Empty,
@@ -632,6 +632,9 @@ namespace MpWpfApp {
         
 
         public void ClipboardChanged(object sender, Dictionary<string, string> cd) {
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
             MpHelpers.Instance.RunOnMainThread(async () => {
                 await AddItemFromClipboard(cd);
             });
@@ -981,9 +984,35 @@ namespace MpWpfApp {
             }
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                
+                // NOTE content item is removed from tile in MpClipTileViewModel OnDelete db event handler
+                if (PersistentSelectedModels.Any(x => x.Id == ci.Id)) {
+                    PersistentSelectedModels.Remove(PersistentSelectedModels.FirstOrDefault(x => x.Id == ci.Id));
+                }
+                if (PersistentUniqueWidthTileLookup.Any(x => x.Key == ci.Id)) {
+                    PersistentUniqueWidthTileLookup.Remove(ci.Id);
+                }
+                //if (PinnedItems.Any(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id))) {
+                //    var pctvm = PinnedItems.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id));
+                //    pctvm.ItemViewModels.Remove(pctvm.ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id));
+                //}
+            } else if (e is MpCopyItemTag cit && Items.Any(x=>x.ItemViewModels.Any(y => y.CopyItemId == cit.CopyItemId))) {
+                var ctvm = Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == cit.CopyItemId));
+                if(ctvm == null) {
+                    return;
+                }
+                var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == cit.TagId);
+                if(ttvm == null || !ttvm.IsSelected) {
+                    return;
+                }
+                bool isAssociated = await ttvm.IsLinked(ctvm);
+                if(isAssociated) {
+                    return;
+                }
+                await MpDataModelProvider.Instance.RemoveQueryItem(cit.CopyItemId);
+                Items.Remove(ctvm);
+                Items.Where(x => x.QueryOffsetIdx > ctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx--);
             }
         }
 
@@ -1125,10 +1154,17 @@ namespace MpWpfApp {
                 return;
             }
 
-            bool isDup = newCopyItem != null && newCopyItem.Id < 0;
+            bool isDup = newCopyItem.Id < 0;
             newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
             if (MpAppModeViewModel.Instance.IsAppendMode) {
+                if(isDup) {
+                    //when duplicate copied in append mode treat item as new and don't unlink original 
+                    isDup = false;
+                    newCopyItem.Id = 0;
+                    newCopyItem.CopyDateTime = DateTime.Now;
+                    await newCopyItem.WriteToDatabaseAsync();
+                }
                 //when in append mode just append the new items text to selecteditem
                 if (_appendModeCopyItem == null) {
                     if (PrimaryItem == null) {
@@ -1144,7 +1180,7 @@ namespace MpWpfApp {
                     newCopyItem.CompositeSortOrderIdx = compositeChildCount + 1;
                     await newCopyItem.WriteToDatabaseAsync();
 
-                    if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                    if (MpPreferences.Instance.NotificationShowAppendBufferToast) {
                         // TODO now composite item doesn't roll up children so the buffer needs to be created here
                         // if I use this at all
                         MpStandardBalloonViewModel.ShowBalloon(
@@ -1153,7 +1189,7 @@ namespace MpWpfApp {
                             Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                     }
 
-                    if (Properties.Settings.Default.NotificationDoCopySound) {
+                    if (MpPreferences.Instance.NotificationDoCopySound) {
                         MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                     }
                 }
@@ -1179,7 +1215,14 @@ namespace MpWpfApp {
                 await newCopyItem.WriteToDatabaseAsync();
             } else if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 _newModels.Add(newCopyItem);
-                AddNewItemsCommand.Execute(null);
+
+                MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
+
+                if (MpAppModeViewModel.Instance.IsAppendMode) {
+                    AppendNewItemsCommand.Execute(null);
+                } else {
+                    AddNewItemsCommand.Execute(null);
+                }                    
             }
 
             OnCopyItemItemAdd?.Invoke(this, newCopyItem);
@@ -1236,55 +1279,82 @@ namespace MpWpfApp {
             },
             (args) => args != null && (args is int || args is int[]));
 
-        public ICommand AddNewItemsCommand => new RelayCommand<bool?>(
-            async (addToCurrentTag) => {
+        public ICommand DuplicateSelectedClipsCommand => new RelayCommand(
+            async () => {
                 IsBusy = true;
 
-                if (addToCurrentTag != null &&
-                   addToCurrentTag.Value == true &&
-                   MpDataModelProvider.Instance.QueryInfo.TagId != MpTag.AllTagId) {
-                    //this occurs when an item is duplicated and selected tag isn't default
+
+                if (MpDataModelProvider.Instance.QueryInfo.TagId != MpTag.AllTagId) {
+                    //this occurs when appending within non-default tag
 
                     foreach (var nci in _newModels) {
                         await MpCopyItemTag.Create(
                                 MpDataModelProvider.Instance.QueryInfo.TagId,
-                                nci.Id
-                            );
+                                nci.Id);
                     }
                 }
 
-                //instead of handling all unique cases manuall insert new items in head of current query which may not be 
-                //accurate but allows to continue workflow
-                MpClipTileSortViewModel.Instance.SetToManualSort();
+                foreach (var sctvm in SelectedItems) {
+                    foreach (var ivm in sctvm.SelectedItems) {
+                        var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone(true);
+                        await clonedCopyItem.WriteToDatabaseAsync();
+                        _newModels.Add(clonedCopyItem);
+                    }
+                }
+
+                AddNewItemsCommand.Execute(true);
+
+                IsBusy = false;
+            });
+
+        public ICommand AppendNewItemsCommand => new RelayCommand(
+            async() => {
+                IsBusy = true;
+
+                var amctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
+                if (amctvm != null) {
+                    await amctvm.InitializeAsync(amctvm.HeadItem.CopyItem, amctvm.QueryOffsetIdx);
+                }
+
+                IsBusy = false;
+            },
+            _appendModeCopyItem != null);
+
+        public ICommand AddNewItemsCommand => new RelayCommand(
+            async () => {
+                IsBusy = true;                
+
+                if(MpDataModelProvider.Instance.QueryInfo.TagId == MpTag.AllTagId) {
+                    //instead of handling all unique cases manual insert new items in head of current query if which may not be 
+                    //accurate but allows to continue workflow
+
+                    MpClipTileSortViewModel.Instance.SetToManualSort();
+                }
+                
 
                 foreach (var nci in _newModels) {
-                    if (MpAppModeViewModel.Instance.IsAnyAppendMode) {
-                        var amcivm = GetContentItemViewModelById(_appendModeCopyItem.Id);
-                        if (amcivm != null && amcivm.Parent != null) {
-                            var amctvm = amcivm.Parent;
-                            await amctvm.InitializeAsync(amctvm.HeadItem.CopyItem,amctvm.QueryOffsetIdx);
-                        }
-                    } else {
-                        MpClipTileViewModel nctvm = null;
-                        var civm = GetContentItemViewModelById(nci.Id);
-                        if(civm != null && civm.Parent != null && civm.Parent.QueryOffsetIdx > HeadQueryIdx) {
-                            //when duplicate detected and is already on tray (like on reload and last item is in list)
-                            nctvm = civm.Parent;
-                            Items.Where(x => x.QueryOffsetIdx < nctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx++);
-                            MpDataModelProvider.Instance.MoveQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx - 1);
-                            nctvm.QueryOffsetIdx = HeadQueryIdx - 1;
-                            Items.Move(Items.IndexOf(nctvm), 0);
-                        } else {
-                            nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
-                            MpDataModelProvider.Instance.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
-                            OnPropertyChanged(nameof(TotalTilesInQuery));
+                    MpClipTileViewModel nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
+                    MpDataModelProvider.Instance.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
+                    OnPropertyChanged(nameof(TotalTilesInQuery));
 
-                            Items.ForEach(x => x.QueryOffsetIdx++);
-                            Items.Insert(0, nctvm);
-                        }
-                    }
+                    Items.ForEach(x => x.QueryOffsetIdx++);
+                    Items.Insert(0, nctvm);
+                    //var civm = GetContentItemViewModelById(nci.Id);
+                    //if (civm != null && civm.Parent != null && civm.Parent.QueryOffsetIdx > HeadQueryIdx) {
+                    //    //when duplicate detected and is already on tray (like on reload and last item is in list)
+                    //    nctvm = civm.Parent;
+                    //    Items.Where(x => x.QueryOffsetIdx < nctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx++);
+                    //    MpDataModelProvider.Instance.MoveQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx - 1);
+                    //    nctvm.QueryOffsetIdx = HeadQueryIdx - 1;
+                    //    Items.Move(Items.IndexOf(nctvm), 0);
+                    //} else {
+                    //    nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
+                    //    MpDataModelProvider.Instance.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
+                    //    OnPropertyChanged(nameof(TotalTilesInQuery));
 
-                    MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
+                    //    Items.ForEach(x => x.QueryOffsetIdx++);
+                    //    Items.Insert(0, nctvm);
+                    //}
                 }
 
                 _newModels.Clear();
@@ -1294,7 +1364,7 @@ namespace MpWpfApp {
                 //using tray scroll changed so tile drop behaviors update their drop rects
                 MpMessenger.Instance.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
             },
-            (addToCurrentTag) => {
+            () => {
                 if (_newModels.Count == 0) {
                     return false;
                 }
@@ -1806,26 +1876,25 @@ namespace MpWpfApp {
 
         public ICommand LinkTagToCopyItemCommand => new RelayCommand<MpTagTileViewModel>(
             async (tagToLink) => {
-                bool isUnlink = await tagToLink.IsLinked(SelectedItems[0]);
+                var ctvm = PrimaryItem;
+                var civm = PrimaryItem.PrimaryItem;
+                bool isUnlink = await tagToLink.IsLinked(civm);
 
-                foreach (var selectedClipTile in SelectedItems) {
-                    foreach (var ivm in selectedClipTile.ItemViewModels) {
-                        if (isUnlink) {
-                            await tagToLink.RemoveContentItem(ivm.CopyItemId);
-                        } else {
-                            await tagToLink.AddContentItem(ivm.CopyItemId);
-                        }
-
-                        await ivm.UpdateColorPallete();
-                    }
+                if(isUnlink) {
+                    // NOTE item is removed from ui from db ondelete event
+                    await tagToLink.RemoveContentItem(civm.CopyItemId);
+                } else {
+                    await tagToLink.AddContentItem(civm.CopyItemId);
                 }
-                //await MpTagTrayViewModel.Instance.RefreshAllCounts();
+
+
+                await civm.UpdateColorPallete();
                 await MpTagTrayViewModel.Instance.UpdateTagAssociation();
             },
             (tagToLink) => {
                 //this checks the selected clips association with tagToLink
                 //and only returns if ALL selecteds clips are linked or unlinked 
-                if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
+                if (tagToLink == null || SelectedItems == null || SelectedItems.Count != 1 || PrimaryItem.SelectedItems.Count != 1) {
                     return false;
                 }
                 return true;
@@ -1957,25 +2026,6 @@ namespace MpWpfApp {
             () => {
                 return SelectedItems.All(x => x.IsTextItem);
             });
-
-
-        public ICommand DuplicateSelectedClipsCommand => new RelayCommand(
-            async () => {
-                IsBusy = true;
-
-                foreach (var sctvm in SelectedItems) {
-                    foreach (var ivm in sctvm.SelectedItems) {
-                        var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone(true);
-                        await clonedCopyItem.WriteToDatabaseAsync();
-                        _newModels.Add(clonedCopyItem);
-                    }
-                }
-
-                AddNewItemsCommand.Execute(true);
-
-                IsBusy = false;
-            });
-
         public ICommand SelectItemCommand => new RelayCommand<object>(
             (arg) => {
                 MpClipTileViewModel ctvm = null;

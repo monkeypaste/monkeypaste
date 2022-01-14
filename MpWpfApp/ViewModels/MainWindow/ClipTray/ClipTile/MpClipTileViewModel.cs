@@ -1133,15 +1133,6 @@ using System.Speech.Synthesis;
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                //DragDrop Cases
-                // 1. Item Resorted
-
-                //var civm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                //if (civm != null) {
-                //    if(ci.CompositeParentCopyItemId == 0) {
-                //        if(civm)
-                //    }
-                //}
             }
         }
 
@@ -1149,16 +1140,6 @@ using System.Speech.Synthesis;
             if(e is MpCopyItem ci && ItemViewModels.Any(x=>x.CopyItemId == ci.Id)) {
                 var rcivm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
                 ItemViewModels.Remove(rcivm);
-                if(Parent.PersistentSelectedModels.Any(x=>x.Id == ci.Id)) {
-                    Parent.PersistentSelectedModels.Remove(Parent.PersistentSelectedModels.FirstOrDefault(x => x.Id == ci.Id));                    
-                }
-                if (Parent.PersistentUniqueWidthTileLookup.Any(x => x.Key == ci.Id)) {
-                    Parent.PersistentUniqueWidthTileLookup.Remove(ci.Id);
-                }
-                if (Parent.PinnedItems.Any(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id))) {
-                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id));
-                    pctvm.ItemViewModels.Remove(pctvm.ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id));
-                }
 
                 if(ItemViewModels.Count == 0) {
                     MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);

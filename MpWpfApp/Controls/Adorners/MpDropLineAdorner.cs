@@ -46,6 +46,11 @@ namespace MpWpfApp {
                 if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
                     //tray or rtb view vertical drop line
                     double x = dropRect.Left + (dropRect.Width / 2);
+                    if(DropIdx > 0 && DropIdx < DropRects.Count - 1) {
+                        // NOTE due to margin/padding issues calculate mid-point between drop rects and 
+                        // do not derive from singluar drop rect
+                        //double midX1 = 
+                    }
                     return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
                 }
 
