@@ -114,10 +114,10 @@ namespace MpWpfApp {
 
         #region TreeView/TreeViewItem
 
-        public static ScrollViewer GetScrollViewer(this TreeView tv) {
-            ScrollViewer sv = tv.GetVisualDescendent<ScrollViewer>();
-            return sv;
-        }
+        //public static ScrollViewer GetScrollViewer(this TreeView tv) {
+        //    ScrollViewer sv = tv.GetVisualDescendent<ScrollViewer>();
+        //    return sv;
+        //}
 
         public static TreeViewItem GetTreeViewItem(this TreeView tv, int index) {
             if (tv == null) {
@@ -134,7 +134,7 @@ namespace MpWpfApp {
             if (tvi == null || tvi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            var sv = tv.GetScrollViewer();
+            var sv = tv.GetVisualDescendent<ScrollViewer>();
             Point origin = tvi.TranslatePoint(new Point(0, 0), sv);
             return new Rect(origin, new Size(tvi.ActualWidth, tvi.ActualHeight));
         }
@@ -308,46 +308,12 @@ namespace MpWpfApp {
 
         #endregion
 
-        public static Point[] GetAdornerPoints(this ListBox lb, int index, bool isListBoxHorizontal) {
-            var points = new Point[2];
-            var itemRect = index >= lb.Items.Count ? lb.GetListBoxItemRect(lb.Items.Count - 1) : lb.GetListBoxItemRect(index);
-            if (!isListBoxHorizontal) {
-                itemRect.Height = MpMeasurements.Instance.ClipTileContentItemMinHeight;
-            }
-            if (isListBoxHorizontal) {
-                if (index < lb.Items.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.BottomLeft;
-                } else {
-                    points[0] = itemRect.TopRight;
-                    points[1] = itemRect.BottomRight;
-                }
-            } else {
-                if (index < lb.Items.Count) {
-                    points[0] = itemRect.TopLeft;
-                    points[1] = itemRect.TopRight;
-                } else {
-                    points[0] = itemRect.BottomLeft;
-                    points[1] = itemRect.BottomRight;
-                }
-            }
-            var sv = lb.GetScrollViewer();
-            if (sv != null &&
-                (sv.HorizontalOffset > 0 || sv.VerticalOffset > 0)) {
-                points[0].X += sv.Margin.Right;
-                //points[0].Y += ScrollViewer.VerticalOffset;
-                points[1].X += sv.Margin.Right;
-                //points[1].Y += ScrollViewer.VerticalOffset;
-            }
-            return points;
-        }
-
-        public static ScrollViewer GetScrollViewer(this ListBox lb) {
-            if(lb.DataContext is MpClipTrayViewModel) {
-                return lb.GetVisualAncestor<ScrollViewer>();
-            }
-            return lb.GetVisualDescendent<ScrollViewer>();
-        }
+        //public static ScrollViewer GetScrollViewer(this ListBox lb) {
+        //    if(lb.DataContext is MpClipTrayViewModel) {
+        //        return lb.GetVisualAncestor<ScrollViewer>();
+        //    }
+        //    return lb.GetVisualDescendent<ScrollViewer>();
+        //}
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
             //var sbl = sv.GetVisualDescendents<ScrollBar>();
@@ -358,28 +324,10 @@ namespace MpWpfApp {
             return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
         }
         
-        public static bool IsListBoxItemVisible(this ListBox lb, int index) {
-            var lbi = lb.GetListBoxItem(index);
-            if (lbi != null && lbi.Visibility == Visibility.Visible) {
-                var lbir = lb.GetListBoxItemRect(index);
-                if (lbir.Left < lb.GetScrollViewer().HorizontalOffset) {
-                    return false;
-                }
-                if (lbir.Right > lb.GetListBoxRect().Right + lb.GetScrollViewer().HorizontalOffset) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-
         public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
             if (lb == null) {
                 return null;
             }
-            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-            //    return null;
-            //}
             if (index < 0 || index >= lb.Items.Count) {
                 return null;
             }
@@ -390,10 +338,6 @@ namespace MpWpfApp {
             if (lb == null) {
                 return null;
             }
-            //if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
-            //    return null;
-            //}
-
             for (int i = 0; i < lb.Items.Count; i++) {
                 var lbi = lb.Items[i];
                 if (lbi == dataContext) {
@@ -426,7 +370,7 @@ namespace MpWpfApp {
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            var sv = relativeTo == null ? lb.GetScrollViewer():relativeTo;
+            var sv = relativeTo == null ? lb.GetVisualDescendent<ScrollViewer>():relativeTo;
             Point origin = lbi.TranslatePoint(new Point(0, 0), (UIElement)sv);
             //Point origin2 = lbi.TranslatePoint(new Point(0, 0), lb);
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
@@ -440,17 +384,16 @@ namespace MpWpfApp {
             return rl;
         }
 
-        public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p) {
-            int idx = lb.GetItemIndexAtPoint(p);
+        public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p, Visual relativeTo = null) {
+            int idx = lb.GetItemIndexAtPoint(p,relativeTo);
             return idx < 0 ? null : lb.GetListBoxItem(idx);
         }
 
-        public static int GetItemIndexAtPoint(this ListBox lb, Point mp) {
+        public static int GetItemIndexAtPoint(this ListBox lb, Point mp, Visual relativeTo = null) {
             Rect lbr = lb.GetListBoxRect();
-            var sv = lb.GetScrollViewer();
             //mp.X += sv.HorizontalOffset;
             //mp.Y += sv.VerticalOffset;
-            var lbirl = lb.GetListBoxItemRects();
+            var lbirl = lb.GetListBoxItemRects(relativeTo);
             var lbir = lbirl.Where(x => x.Contains(mp)).FirstOrDefault();
 
             int idx = lbirl.IndexOf(lbir);
@@ -461,8 +404,8 @@ namespace MpWpfApp {
                 if (lbr.Contains(mp)) {
                     //point is still in listbox
                     //get first and last lbi rect's
-                    var flbir = lb.GetListBoxItemRect(0);
-                    var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1);
+                    var flbir = lb.GetListBoxItemRect(0,relativeTo);
+                    var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1, relativeTo);
                     if (lb.GetOrientation() == Orientation.Horizontal) {
                         if (mp.X >= 0 && mp.X <= flbir.Left) {
                             return 0;
@@ -928,6 +871,7 @@ namespace MpWpfApp {
             }
         }
 
+
         public static string GetRtf(this RichTextBox rtb) {
             return MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
         }
@@ -1202,7 +1146,6 @@ namespace MpWpfApp {
             
             return ds;
         }
-
         
         public static void ConfigureLineHeight(this FlowDocument doc) {
             if (doc == null) {

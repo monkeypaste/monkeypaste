@@ -17,6 +17,8 @@ namespace MpWpfApp {
         public MpSideBarTreeCollectionViewModel() :base() { }
 
         public async Task Init() {
+            await Task.Delay(1);
+
             Children.Clear();
 
             Children.Add(MpTagTrayViewModel.Instance);

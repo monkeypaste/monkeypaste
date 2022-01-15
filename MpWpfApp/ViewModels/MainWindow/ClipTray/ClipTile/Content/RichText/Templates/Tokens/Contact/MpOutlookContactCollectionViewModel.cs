@@ -18,6 +18,7 @@ namespace MpWpfApp {
 
         #region Constructor
 
+        private MpOutlookContactCollectionViewModel() { }
         public async Task Init() {
             await Task.Run(() => {
                 IsBusy = true;

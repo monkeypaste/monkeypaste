@@ -75,30 +75,43 @@
                 </Grid>
             </ControlTemplate>
             <!--  Designer Item Template  -->
-            <ControlTemplate x:Key="DesignerItemTemplate"
-                             TargetType="ContentControl">
-                <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                    <local:MpMoveThumb Template="{StaticResource MoveThumbTemplate}"
-                                       Cursor="SizeAll" />
-                    <Control Template="{StaticResource ResizeDecoratorTemplate}" />
-                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
-                </Grid>
-            </ControlTemplate>
+
+            <Style x:Key="DetectedObjectContentControlStyle"
+                   TargetType="{x:Type ContentControl}">
+                <Setter Property="MinHeight"
+                        Value="20" />
+                <Setter Property="MinWidth"
+                        Value="20" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ContentControl">
+                            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                <local:MpMoveThumb Template="{StaticResource MoveThumbTemplate}"
+                                                   Cursor="SizeAll" />
+                                <Control Template="{StaticResource ResizeDecoratorTemplate}" />
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=DetectedImageObjectButton,
+                                                   Path=IsMouseOver}"
+                                 Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
                 <ContentControl Width="{Binding Width}"
-                                MinWidth="20"
                                 Height="{Binding Height}"
-                                MinHeight="20"
                                 Canvas.Top="{Binding X}"
                                 Canvas.Left="{Binding Y}"
                                 Background="Transparent"
                                 Visibility="{Binding Parent.Parent.Parent.IsSelected,
                                                      Converter={StaticResource BoolToVisibilityConverter}}"
-                                Template="{StaticResource DesignerItemTemplate}">
-                    <ContentControl.Resources>
-
-                        <SolidColorBrush Color="Transparent" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
-                    </ContentControl.Resources>
+                                Style="{StaticResource DetectedObjectContentControlStyle}">
                     <ContentControl.RenderTransform>
                         <TranslateTransform X="{Binding X}"
                                             Y="{Binding Y}" />
@@ -107,14 +120,15 @@
                             Data="M 0,5 5,0 10,5 5,10 Z"
                             Stretch="Fill"
                             IsHitTestVisible="False"/>-->
-
-                    <Button HorizontalAlignment="Stretch"
+                    <Button x:Name="DetectedImageObjectButton" 
+                            HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Background="Transparent"
                             BorderThickness="3"
                             local:MpHoverableExtension.IsEnabled="True"
-                            local:MpHoverableExtension.IsHovering="{Binding IsHovering,Mode=TwoWay}"
-                            Command="{Binding }">
+                            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                            Mode=TwoWay}"
+                            Command="{Binding}">
                         <TextBox HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
                                  HorizontalContentAlignment="Center"
@@ -125,14 +139,7 @@
                                                 NotifyOnSourceUpdated=True,
                                                 UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="{Binding FontSize}"
-                                 IsReadOnly="{Binding IsNameReadOnly}"
-                                 local:MpHoverableExtension.IsEnabled="True"
-                                 local:MpHoverableExtension.BackgroundBrush="{StaticResource ClipTileDetectedObjectTextBoxBackgroundBrush}"
-                                 
-                            local:MpHoverableExtension.HoverBackgroundBrush="Transparent"
-                            local:MpHoverableExtension.HoverSelectedBackgroundBrush="Transparent"
-                                 local:MpHoverableExtension.ForegroundBrush="White"
-                                 local:MpHoverableExtension.HoverForegroundBrush="Red"/>
+                                 IsReadOnly="{Binding IsNameReadOnly}" />
                     </Button>
                 </ContentControl>
             </DataTemplate>

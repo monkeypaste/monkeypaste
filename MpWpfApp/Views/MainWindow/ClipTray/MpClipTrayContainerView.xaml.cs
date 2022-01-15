@@ -49,5 +49,10 @@ namespace MpWpfApp {
                 ClipTrayContainerGrid.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Auto);
             }
         }
+
+        private void ClipTraySplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+            BindingContext.PinTrayTotalWidth =  PinTrayView.PinTrayListBox.GetVisualDescendent<ScrollViewer>().ExtentWidth;
+            BindingContext.OnPropertyChanged(nameof(BindingContext.ClipTrayScreenWidth));
+        }
     }
 }

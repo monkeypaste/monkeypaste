@@ -217,10 +217,10 @@ using System.Speech.Synthesis;
                 if(IsExpanded) {
                     return MpMeasurements.Instance.ClipTileExpandedMargin;
                 }
-                if(HeadItem == null || IsPinned) {
+                if(HeadItem == null || IsPinned || Parent == null) {
                     return 0;
                 }
-                return MpPagingListBoxBehavior.Instance.FindTileOffsetX(QueryOffsetIdx);
+                return Parent.FindTileOffsetX(QueryOffsetIdx);
 
                 //return QueryOffsetIdx* TileBorderHeight;
             }
@@ -1197,6 +1197,7 @@ using System.Speech.Synthesis;
                     Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
 
+                    var mwrb = (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior;
                     if (IsExpanded) {
                         Parent.ScrollOffset = Parent.LastScrollOfset = 0;
 
@@ -1205,12 +1206,12 @@ using System.Speech.Synthesis;
                         }
 
                         _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                        MpMainWindowResizeBehavior.Instance.Resize(Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
+                        mwrb.Resize(Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
 
                         Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
                     } else {
                         Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                        MpMainWindowResizeBehavior.Instance.Resize(_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
+                        mwrb.Resize(_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
                     }
                     OnPropertyChanged(nameof(TrayX));
 

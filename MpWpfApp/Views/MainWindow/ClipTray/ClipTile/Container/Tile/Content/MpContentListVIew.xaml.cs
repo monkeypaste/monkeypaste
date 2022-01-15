@@ -102,13 +102,13 @@ namespace MpWpfApp {
                 e.Handled = false;
                 return;
             }
-            double origVertOffset = ContentListBox.GetScrollViewer().VerticalOffset;
+            double origVertOffset = ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalOffset;
             if (e.Delta > 0) {
-                ContentListBox.GetScrollViewer().LineDown();
+                ContentListBox.GetVisualDescendent<ScrollViewer>().LineDown();
             } else {
-                ContentListBox.GetScrollViewer().LineUp();
+                ContentListBox.GetVisualDescendent<ScrollViewer>().LineUp();
             }
-            e.Handled = ContentListBox.GetScrollViewer().VerticalOffset != origVertOffset;
+            e.Handled = ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalOffset != origVertOffset;
         }
 
         private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
@@ -191,7 +191,7 @@ namespace MpWpfApp {
         }
 
         private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            ContentListBox?.GetScrollViewer().ScrollToHome();
+            ContentListBox?.GetVisualDescendent<ScrollViewer>().ScrollToHome();
         }
 
         private void Rtbcvm_OnScrollIntoViewRequest(object sender, object e) {
@@ -203,7 +203,7 @@ namespace MpWpfApp {
         public void Civm_OnScrollWheelRequest(object sender, int e) {
             var ctvm = DataContext as MpClipTileViewModel;
             if (ctvm.IsExpanded) {
-                var sv = ContentListBox.GetScrollViewer();
+                var sv = ContentListBox.GetVisualDescendent<ScrollViewer>();
                 double yOffset = sv.VerticalOffset + e;
                 sv.ScrollToVerticalOffset(yOffset);
             }

@@ -43,12 +43,5 @@ namespace MpWpfApp {
         }
     }
 
-    public abstract class MpSingletonBehavior<T,B> : MpBehavior<T> 
-        where B : new()
-        where T : FrameworkElement {
-        #region Singleton Definition
-        private static readonly Lazy<B> _Lazy = new Lazy<B>(() => new B());
-        public static B Instance { get { return _Lazy.Value; } }
-        #endregion
-    }
+    
 }

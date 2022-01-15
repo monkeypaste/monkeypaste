@@ -16,7 +16,10 @@ using System.Runtime.CompilerServices;
 using SQLite;
 
 namespace MpWpfApp {    
-    public abstract class MpViewModelBase : INotifyPropertyChanged {//, IDisposable {
+    public abstract class MpViewModelBase : INotifyPropertyChanged {
+
+        private static Dictionary<string, int> _instanceCountLookup;
+
         #region Properties
 
         public virtual object ParentObj { get; protected set; }
@@ -42,6 +45,18 @@ namespace MpWpfApp {
         #region Constructors
 
         protected MpViewModelBase(object parent) {
+            if (parent == null) {
+                string typeStr = this.GetType().Name;
+                if (_instanceCountLookup == null) {
+                    _instanceCountLookup = new Dictionary<string, int>();
+                }
+                if (_instanceCountLookup.ContainsKey(typeStr)) {
+                    _instanceCountLookup[typeStr]++;
+                } else {
+                    _instanceCountLookup.Add(typeStr, 1);
+                }
+            }
+
             ParentObj = parent;
 
             MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
@@ -53,6 +68,12 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+        public static void PrintInstanceCount() {
+            foreach (var kvp in _instanceCountLookup) {
+                MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
+            }
+        }
 
         #region IDisposable Implementation
         // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/

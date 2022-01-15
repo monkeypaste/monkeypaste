@@ -24,10 +24,10 @@ namespace MpWpfApp {
 
         public void RefreshTray() {
             MpHelpers.Instance.RunOnMainThread(async () => {
-                var sv = TagTray.GetScrollViewer();
+                var sv = TagTray.GetVisualDescendent<ScrollViewer>();
                 while (sv == null) {
                     await Task.Delay(100);
-                    sv = TagTray.GetScrollViewer();
+                    sv = TagTray.GetVisualDescendent<ScrollViewer>();
                 }
                 if (sv.ExtentWidth >= TagTray.MaxWidth) {
                     TagTrayNavLeftButton.Visibility = Visibility.Visible;
@@ -62,11 +62,13 @@ namespace MpWpfApp {
         }
 
         private void TagTrayNavLeftButton_Click(object sender, RoutedEventArgs e) {
-            TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset - 20);
+            var sv = TagTray.GetVisualDescendent<ScrollViewer>();
+            sv.ScrollToHorizontalOffset(TagTray.GetVisualDescendent<ScrollViewer>().HorizontalOffset - 20);
         }
 
         private void TagTrayNavRightButton_Click(object sender, RoutedEventArgs e) {
-            TagTray.GetScrollViewer().ScrollToHorizontalOffset(TagTray.GetScrollViewer().HorizontalOffset + 20);
+            var sv = TagTray.GetVisualDescendent<ScrollViewer>();
+            sv.ScrollToHorizontalOffset(TagTray.GetVisualDescendent<ScrollViewer>().HorizontalOffset + 20);
         }
 
         private void TagTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {

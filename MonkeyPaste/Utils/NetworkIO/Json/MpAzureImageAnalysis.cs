@@ -19,34 +19,34 @@ namespace MonkeyPaste {
     }
 
     //response
-    public class MpImageAnalysis : MpJsonMessage {
-        public List<MpImageCategory> categories { get; set; }
-        public MpImageColor color { get; set; }
-        public MpImageDescription description { get; set; }
+    public class MpAzureImageAnalysis : MpJsonMessage {
+        public List<MpAzureImageCategory> categories { get; set; }
+        public MpAzureImageColor color { get; set; }
+        public MpAzureImageDescription description { get; set; }
         public string requestId { get; set; }
-        public MpImageMetaData metadata { get; set; }
+        public MpAzureImageMetaData metadata { get; set; }
     }
 
-    public class MpImageCategory : MpJsonMessage {
+    public class MpAzureImageCategory : MpJsonMessage {
         public string name { get; set; }
         public double score { get; set; }
     }
-    public class MpImageColor : MpJsonMessage {
+    public class MpAzureImageColor : MpJsonMessage {
         public string dominantColorForeground { get; set; }
         public string dominantColorBackground { get; set; }
         public List<string> dominantColors { get; set; }
         public string accentColor { get; set; }
         public bool isBwImg { get; set; }
     }
-    public class MpImageDescription : MpJsonMessage {
+    public class MpAzureImageDescription : MpJsonMessage {
         public List<string> tags { get; set; }
-        public List<MpImageCaptions> captions { get; set; }
+        public List<MpAzureImageCaptions> captions { get; set; }
     }
-    public class MpImageCaptions : MpJsonMessage {
+    public class MpAzureImageCaptions : MpJsonMessage {
         public string text { get; set; }
         public double confidence { get; set; }
     }
-    public class MpImageMetaData : MpJsonMessage {
+    public class MpAzureImageMetaData : MpJsonMessage {
         public int height { get; set; }
         public int width { get; set; }
         public string format { get; set; }

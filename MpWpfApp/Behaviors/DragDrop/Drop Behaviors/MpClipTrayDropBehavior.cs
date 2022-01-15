@@ -78,23 +78,38 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
-            double tileMargin = MpMeasurements.Instance.ClipTileMargin + MpMeasurements.Instance.ClipTileBorderThickness;
+            double margin = MpMeasurements.Instance.ClipTileMargin;
+            double borderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
+            double tileMargin = Math.Floor(MpMeasurements.Instance.ClipTileMargin * 1) - MpMeasurements.Instance.ClipTileBorderThickness;
 
+            double offset = 5;
+            double width = 15;
             List<Rect> targetRects = new List<Rect>();
 
             var tileRects = AssociatedObject.ClipTray.GetListBoxItemRects(RelativeToElement);
             for (int i = 0; i < tileRects.Count; i++) {
+                // NOTE drop rect is space preceding each tile after previous tile
                 Rect targetRect = tileRects[i];
                 if (i == 0) {
                     targetRect.Location = new Point(0, 0);
 
                     targetRect.Width = targetRect.Left + tileMargin;
-                } else {
+                } 
+                //else if(i < tileRects.Count - 1) {
+                //    double curMidX = targetRect.Location.X + (targetRect.Width / 2);
+                //    double nextMidX = tileRects[i + 1].Location.X + (tileRects[i + 1].Width / 2);
+                //    targetRect.Location = new Point(
+                //        targetRect.Location.X - tileMargin,
+                //        targetRect.Location.Y);
+
+                //    targetRect.Width = tileMargin * 2;
+                //} 
+                else {
                     targetRect.Location = new Point(
-                        targetRect.Location.X - tileMargin,
+                        targetRect.Location.X - offset,
                         targetRect.Location.Y);
 
-                    targetRect.Width = tileMargin * 2;
+                    targetRect.Width = width;
                 }
 
                 targetRects.Add(targetRect);

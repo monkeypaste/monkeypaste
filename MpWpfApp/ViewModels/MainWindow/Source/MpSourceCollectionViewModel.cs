@@ -33,6 +33,8 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        public MpSourceCollectionViewModel() : base() { }
+
         public async Task Init() {
             IsBusy = true;
 

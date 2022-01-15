@@ -32,7 +32,7 @@ namespace MpWpfApp {
         public override FrameworkElement AdornedElement => AssociatedObject.ContentListBox;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
-        public override UIElement RelativeToElement => AssociatedObject.ContentListBox;//GetVisualDescendent<ScrollViewer>();
+        public override UIElement RelativeToElement => AssociatedObject.ContentListBox;
 
         public override void OnLoaded() {
             base.OnLoaded();
@@ -294,7 +294,7 @@ namespace MpWpfApp {
             if (!clb_rect.Contains(ctr_mp)) {
                 return;
             }
-            var sv = lb.GetScrollViewer();
+            var sv = lb.GetVisualDescendent<ScrollViewer>();
             double vertOffset = sv.VerticalOffset;
             if (Math.Abs(clb_rect.Top - ctr_mp.Y) <= _minScrollDist) {
                 vertOffset -= _autoScrollVelocity;

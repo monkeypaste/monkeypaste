@@ -27,7 +27,7 @@ namespace MpWpfApp {
         Link
     }
 
-    public class MpCursorViewModel : MpThreadSafeSingletonViewModel<MpCursorViewModel> {
+    public class MpCursorViewModel : MpSingletonViewModel<MpCursorViewModel> {
         #region Private Variables
 
         private Dictionary<MpCursorType, Cursor> _cursorLookup = 

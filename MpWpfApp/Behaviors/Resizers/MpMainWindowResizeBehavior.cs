@@ -8,10 +8,12 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
 
-    public class MpMainWindowResizeBehavior : MpSingletonBehavior<MpTitleBarView, MpMainWindowResizeBehavior> {
+    public class MpMainWindowResizeBehavior : MpBehavior<MpTitleBarView> {
         #region Private Variables
 
         private Point _lastMousePosition;
+
+        private double _lastMainWindowHeight = 0;
 
         #endregion
 
@@ -21,14 +23,16 @@ namespace MpWpfApp {
 
         protected override void OnLoad() {
             base.OnLoad();
-
+            
             AssociatedObject.PreviewMouseDoubleClick += MpMainWindowResizeBehavior_MouseDoubleClick;
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseEnter += AssociatedObject_MouseEnter;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
+
         }
+
 
         private void MpMainWindowResizeBehavior_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             double deltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.MainWindowDefaultHeight;
@@ -52,12 +56,18 @@ namespace MpWpfApp {
             MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
+
+            double mwDeltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - _lastMainWindowHeight;
+            if(mwDeltaHeight < 0) {
+                //when main window is sized smaller more items become visible but
+            }
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
             AssociatedObject.CaptureMouse();
             MpMainWindowViewModel.Instance.IsResizing = true;
+            _lastMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
             e.Handled = true;
         }
 
@@ -96,7 +106,9 @@ namespace MpWpfApp {
             var msrmvm = MpMeasurements.Instance;
 
             double oldHeadTrayX = ctrvm.HeadItem.TrayX;
-            double oldScrollOffsetDiffWithHead = ctrvm.ScrollOffset - oldHeadTrayX;
+            double oldScrollOffset = ctrvm.ScrollOffset;
+
+            //double oldScrollOffsetDiffWithHead = ctrvm.ScrollOffset - oldHeadTrayX;
             
             var mwvm = MpMainWindowViewModel.Instance;
             mwvm.IsResizing = true;
@@ -110,6 +122,8 @@ namespace MpWpfApp {
             mwvm.MainWindowHeight += deltaHeight;
 
             msrmvm.ClipTileMinSize += deltaHeight;
+            msrmvm.OnPropertyChanged(nameof(msrmvm.ClipTileTitleHeight));
+
             MpClipTileViewModel.DefaultBorderWidth += deltaHeight;
             MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
             ctrvm.Items.ForEach(x => x.TileBorderHeight = msrmvm.ClipTileMinSize);
@@ -123,13 +137,15 @@ namespace MpWpfApp {
             ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
             //adjust the scroll offset using the head items origin and size change as a ratio to update offset
-            double newHeadTrayX = ctrvm.HeadItem.TrayX;
-            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
-            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
-            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
-            double newScrollOfset = MpPagingListBoxBehavior.Instance.FindTileOffsetX(ctrvm.HeadQueryIdx) + newScrollOfsetDiffWithHead;
+            //double newHeadTrayX = ctrvm.HeadItem.TrayX;
+            //double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
+            //headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
+            //double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
+            //double newScrollOfset = MpPagingListBoxBehavior.Instance.FindTileOffsetX(ctrvm.HeadQueryIdx) + newScrollOfsetDiffWithHead;
 
-            ctrvm.ScrollOffset = ctrvm.LastScrollOfset = newScrollOfset;
+            //ctrvm.ScrollOffset = ctrvm.LastScrollOfset = newScrollOfset;
+
+            MpClipTrayViewModel.Instance.AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
 
             mwvm.IsResizing = false;
 

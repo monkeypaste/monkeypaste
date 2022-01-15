@@ -793,7 +793,7 @@ namespace MonkeyPaste {
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator",
                         MpHelpers.Instance.ReadTextFromResource(
-                            "MonkeyPaste.Resources.Data.Analytics.Formats.LanguageTranslator.azuretranslator.json", 
+                            "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
                             GetType().Assembly));
 
             var ai2 = await MpAnalyticItem.Create(

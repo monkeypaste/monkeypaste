@@ -10,9 +10,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Mail;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -29,28 +27,25 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using Newtonsoft.Json;
 using QRCoder;
 using static MpWpfApp.MpShellEx;
-using static QRCoder.PayloadGenerator;
 //using Windows.Graphics.Imaging;
 //using Windows.Media.Ocr;
 //using CsvHelper;
 using System.Windows.Threading;
 using System.Security.Principal;
-using System.Windows.Controls.Primitives;
 using System.Speech.Synthesis;
 using WindowsInput;
 using Microsoft.Win32;
-using System.Net.Sockets;
 using MonkeyPaste;
-using System.Security.AccessControl;
 
 namespace MpWpfApp {
     public class MpHelpers : MpSingleton<MpHelpers> {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
+
+        private MpHelpers() { }
 
         public async Task Init() {
             await Task.Run(() => {

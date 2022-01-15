@@ -75,6 +75,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        public MpClipTileSortViewModel() : base() { }
+
+
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
 
@@ -88,7 +91,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpClipTileSortViewModel() : base() { }
 
         public void SetToManualSort() {
             SelectedSortType = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();

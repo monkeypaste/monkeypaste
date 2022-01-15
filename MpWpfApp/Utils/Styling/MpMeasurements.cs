@@ -12,7 +12,7 @@ namespace MpWpfApp {
     }
 
     public class MpMeasurements : MpSingletonViewModel<MpMeasurements> {
-        public MpMeasurements() {
+        public MpMeasurements() : base() {
             
         }
 
@@ -154,11 +154,11 @@ namespace MpWpfApp {
 
         public int MaxRecentClipTiles {
             get {
-                return TotalVisibleClipTiles;
+                return DefaultTotalVisibleClipTiles;
             }
         }
 
-        public int TotalVisibleClipTiles {
+        public int DefaultTotalVisibleClipTiles {
             get {
                 return 6;// (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
             }
@@ -199,7 +199,7 @@ namespace MpWpfApp {
 
         public double ClipTileDefaultMinSize {
             get {
-                return ClipTrayDefaultWidth / TotalVisibleClipTiles; 
+                return ClipTrayDefaultWidth / DefaultTotalVisibleClipTiles; 
             }
         }
 
@@ -258,7 +258,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleHeight {
             get {
-                return ClipTileDefaultMinSize / 5;
+                return ClipTileMinSize / 5;
             }
         }
 

@@ -44,7 +44,7 @@ namespace MpWpfApp {
             string.Empty
         };
 
-        public MpRegEx() {
+        private MpRegEx() {
             RegExList = _regExStrings.Select(x => 
                 new Regex(x, RegexOptions.ExplicitCapture | RegexOptions.Multiline)).ToList();
         }

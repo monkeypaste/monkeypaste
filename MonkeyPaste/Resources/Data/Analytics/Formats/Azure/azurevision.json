@@ -65,6 +65,11 @@
           "isDefault": true
         },
         {
+          "label": "Color Scheme",
+          "value": "color",
+          "isDefault": true
+        },
+        {
           "label": "Description",
           "value": "description",
           "isDefault": true

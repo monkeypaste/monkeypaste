@@ -130,7 +130,6 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpAnalyticItemCollectionViewModel() : base() {
-
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
         }
 

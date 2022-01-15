@@ -11,12 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpViewModelBase<object> {
-        #region Singleton Definition
-        private static readonly Lazy<MpShortcutCollectionViewModel> _Lazy = new Lazy<MpShortcutCollectionViewModel>(() => new MpShortcutCollectionViewModel());
-        public static MpShortcutCollectionViewModel Instance { get { return _Lazy.Value; } }
-        #endregion
-
+    public class MpShortcutCollectionViewModel : MpSingletonViewModel<MpShortcutCollectionViewModel> {
         #region Private Variables
         #endregion
 
@@ -50,7 +45,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpShortcutCollectionViewModel() : base(null) { }
+        public MpShortcutCollectionViewModel() : base() { }
 
         public async Task Init() {
             var sw = new Stopwatch();

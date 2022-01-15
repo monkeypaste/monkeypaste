@@ -32,7 +32,7 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpMatcherCollectionViewModel() {
+        public MpMatcherCollectionViewModel() : base() {
             PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;
         }
 

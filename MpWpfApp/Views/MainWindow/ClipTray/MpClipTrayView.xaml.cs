@@ -35,14 +35,15 @@ namespace MpWpfApp {
             MpMessenger.Instance.Register<MpMessageType>(
                 MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
-                var sv = ClipTray.GetScrollViewer();
-                while (sv == null) {
-                    await Task.Delay(10);
-                    sv = ClipTray.GetScrollViewer();
-                }
-                PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
-            });
+            //MpHelpers.Instance.RunOnMainThread(async () => {
+            //    var sv = ClipTray.GetScrollViewer();
+            //    while (sv == null) {
+            //        await Task.Delay(10);
+            //        sv = ClipTray.GetScrollViewer();
+            //    }
+            //    PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
+            //});
+            PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
@@ -52,9 +53,9 @@ namespace MpWpfApp {
                        BindingContext.SelectedItems[0].ItemIdx > 0) {
                         return;
                     }
-                    var sv = ClipTray.GetScrollViewer();
-                    sv.ScrollToHorizontalOffset(0);
-                    sv.ScrollToLeftEnd();
+                    //var sv = ClipTray.GetScrollViewer();
+                    PagingScrollViewer.ScrollToHorizontalOffset(0);
+                    PagingScrollViewer.ScrollToLeftEnd();
                     break;
                 case MpMessageType.Expand:
 
@@ -64,8 +65,8 @@ namespace MpWpfApp {
 
 
         private void Ctrvm_OnScrollToXRequest(object sender, double e) {
-            var sv = ClipTray.GetScrollViewer();
-            sv.ScrollToHorizontalOffset(e);
+           // var sv = ClipTray.GetScrollViewer();
+            PagingScrollViewer.ScrollToHorizontalOffset(e);
         }
 
 

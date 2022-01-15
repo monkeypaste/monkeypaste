@@ -5,7 +5,7 @@ namespace MonkeyPaste {
     // from https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate#response-body
 
     //get languages
-    public class MpTranslatorLanguageFormat : MpJsonMessage {
+    public class MpAzureTranslatorLanguageFormat : MpJsonMessage {
         [JsonProperty("name")]
         public string LanguageName { get; set; } = string.Empty;
 
@@ -16,13 +16,13 @@ namespace MonkeyPaste {
         public string Directionality { get; set; } = string.Empty;
     }
 
-    public class MpTranslatableLanguagesRequestFormat : MpJsonMessage {
+    public class MpAzureTranslatableLanguagesRequestFormat : MpJsonMessage {
         [JsonProperty("translation")]
-        public Dictionary<string, MpTranslatorLanguageFormat> Translation { get; set; } = new Dictionary<string, MpTranslatorLanguageFormat>();
+        public Dictionary<string, MpAzureTranslatorLanguageFormat> Translation { get; set; } = new Dictionary<string, MpAzureTranslatorLanguageFormat>();
 
     }
 
-    public class MpLangTranslateRequestFormat : MpJsonMessage {
+    public class MpAzureTranslateRequestFormat : MpJsonMessage {
         [JsonProperty("from")]
         public string FromCode { get; set; } = string.Empty;
 
@@ -31,7 +31,7 @@ namespace MonkeyPaste {
     }
     // translate
 
-    public class MpLangTranslation : MpJsonMessage {
+    public class MpAzureTranslation : MpJsonMessage {
         [JsonProperty("to")]
         public string To { get; set; } = string.Empty;
 
@@ -39,7 +39,7 @@ namespace MonkeyPaste {
         public string Text { get; set; } = string.Empty;
     }
 
-    public class MpDetectedLanguageFormat : MpJsonMessage {
+    public class MpAzureDetectedLanguageFormat : MpJsonMessage {
         [JsonProperty("language")]
         public string Language { get; set; } = string.Empty;
 
@@ -47,16 +47,16 @@ namespace MonkeyPaste {
         public double Score { get; set; } = 0;
     }
 
-    public class MpLangTranslateResultFormat : MpJsonMessage  {
+    public class MpAzureTranslateResultFormat : MpJsonMessage  {
         [JsonProperty("translations")]
-        public List<MpLangTranslation> Translations { get; set; }
+        public List<MpAzureTranslation> Translations { get; set; }
 
         [JsonProperty("detectedLanguage")]
-        public MpDetectedLanguageFormat DetectedLanguage { get; set; }
+        public MpAzureDetectedLanguageFormat DetectedLanguage { get; set; }
     }
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class DetectedLanguage {
+    public class MpAzureDetectedLanguage {
         [JsonProperty("language")]
         public string Language { get; set; }
 
@@ -64,19 +64,11 @@ namespace MonkeyPaste {
         public double Score { get; set; }
     }
 
-    public class Translation {
-        [JsonProperty("text")]
-        public string Text { get; set; }
-
-        [JsonProperty("to")]
-        public string To { get; set; }
-    }
-
     public class Root {
         [JsonProperty("detectedLanguage")]
-        public DetectedLanguage DetectedLanguage { get; set; }
+        public MpAzureDetectedLanguage DetectedLanguage { get; set; }
 
         [JsonProperty("translations")]
-        public List<Translation> Translations { get; set; }
+        public List<MpAzureTranslation> Translations { get; set; }
     }
 }

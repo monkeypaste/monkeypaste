@@ -173,6 +173,9 @@ namespace MpWpfApp {
             var ctrvm = MpClipTrayViewModel.Instance;
             var msrmvm = MpMeasurements.Instance;
 
+            double oldHeadTrayX = ctrvm.HeadItem.TrayX;
+            double oldScrollOffset = ctrvm.ScrollOffset;
+
             double origWidth = ctvm.TileBorderWidth;
             ctvm.TileBorderWidth = Math.Max(msrmvm.ClipTileBorderMinWidth,ctvm.TileBorderWidth + deltaWidth);
             
@@ -187,28 +190,25 @@ namespace MpWpfApp {
                     ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
             }
 
-            double oldHeadTrayX = ctrvm.HeadItem.TrayX;
-            double oldScrollOffsetDiffWithHead = ctrvm.ScrollOffset - oldHeadTrayX;
+            //double oldScrollOffsetDiffWithHead = ctrvm.ScrollOffset - oldHeadTrayX;
 
-            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalTileWidth));
-            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayScreenWidth));
-            ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalWidth));
-            ctrvm.OnPropertyChanged(nameof(ctrvm.MaximumScrollOfset));
-            //ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+            //ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalTileWidth));
+            //ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayScreenWidth));
+            //ctrvm.OnPropertyChanged(nameof(ctrvm.ClipTrayTotalWidth));
+            //ctrvm.OnPropertyChanged(nameof(ctrvm.MaximumScrollOfset));
+            ////ctrvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
-            double newHeadTrayX = ctrvm.HeadItem.TrayX;
-            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
+            //double newHeadTrayX = ctrvm.HeadItem.TrayX;
+            //double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
 
-            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
-            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
-            double newScrollOfset = (ctrvm.HeadQueryIdx * msrmvm.ClipTileMinSize) + newScrollOfsetDiffWithHead;
-
+            //headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
+            //double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
+            //double newScrollOfset = (ctrvm.HeadQueryIdx * msrmvm.ClipTileMinSize) + newScrollOfsetDiffWithHead;
+            
+            MpClipTrayViewModel.Instance.AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
             //ctrvm.ScrollOffset = ctrvm.LastScrollOfset = newScrollOfset;
 
             MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Resizing);
-
-            //Application.Current.MainWindow.UpdateLayout();
-            //AssociatedObject.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
         }
     }
 }

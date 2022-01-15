@@ -96,7 +96,7 @@ namespace MpWpfApp {
             IsBusy = false;
 
             return new MpRestTransaction() {
-                Request = new MpLangTranslateRequestFormat() {
+                Request = new MpAzureTranslateRequestFormat() {
                     FromCode = fromCode,
                     ToCode = toCode
                 },

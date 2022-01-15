@@ -14,19 +14,29 @@ using Xamarin.Forms;
 
 namespace MpWpfApp {
 
-    public class MpLanguageTranslator : MpSingleton<MpLanguageTranslator>  {       
+    public class MpLanguageTranslator : MpSingleton<MpLanguageTranslator>  {
+        #region Private Variables
 
         private string COGNITIVE_SERVICES_KEY = MpPreferences.Instance.AzureCognitiveServicesKey;
+        private string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
 
-        public static readonly string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
-        
-        public SortedDictionary<string, MpTranslatorLanguageFormat> LanguageCodesAndTitles { get; private set; } =
-            new SortedDictionary<string, MpTranslatorLanguageFormat>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
+        #endregion
+
+        #region Properties
+        public SortedDictionary<string, MpAzureTranslatorLanguageFormat> LanguageCodesAndTitles { get; private set; } =
+            new SortedDictionary<string, MpAzureTranslatorLanguageFormat>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
 
         public bool IsLoaded => LanguageList.Count > 0;
 
         public List<string> LanguageList => LanguageCodesAndTitles.Select(x => x.Value.LanguageName).ToList();
-        
+
+
+        #endregion
+
+
+        #region Constructors
+        private MpLanguageTranslator() : base() { }
+
         public async Task Init() {
             if(IsLoaded) {
                 return;
@@ -37,6 +47,8 @@ namespace MpWpfApp {
                 LanguageList.Add(menuItem);
             }
         }
+
+        #endregion
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private async Task GetLanguagesForTranslate(int retryCount = 5) {
@@ -61,7 +73,7 @@ namespace MpWpfApp {
                 using (var reader = new StreamReader(response.GetResponseStream(), UnicodeEncoding.UTF8)) {
                     //var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(reader.ReadToEnd());
                     //var languages = result["translation"];
-                    var result = JsonConvert.DeserializeObject<MpTranslatableLanguagesRequestFormat>(reader.ReadToEnd());
+                    var result = JsonConvert.DeserializeObject<MpAzureTranslatableLanguagesRequestFormat>(reader.ReadToEnd());
                     foreach (var kv in result.Translation) {
                         if(!LanguageCodesAndTitles.ContainsKey(kv.Key)) {
                             LanguageCodesAndTitles.Add(kv.Key, kv.Value);
@@ -112,7 +124,7 @@ namespace MpWpfApp {
                     MpConsole.WriteLine(responseBody);
                     //dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responseBody);
                     //var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
-                    var result = JsonConvert.DeserializeObject<List<MpLangTranslateResultFormat>>(responseBody);
+                    var result = JsonConvert.DeserializeObject<List<MpAzureTranslateResultFormat>>(responseBody);
                     //string translatedText = (string)jsonResponse[0]["translations"][0]["text"];
                     string translatedText = result[0].Translations[0].Text;
                     if (!string.IsNullOrEmpty(translatedText)) {

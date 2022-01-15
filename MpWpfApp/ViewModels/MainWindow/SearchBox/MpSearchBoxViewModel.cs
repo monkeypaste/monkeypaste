@@ -319,6 +319,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+        public MpSearchBoxViewModel() : base() { }
 
         public async Task Init() {
             await MpHelpers.Instance.RunOnMainThreadAsync(() => {
@@ -335,8 +336,6 @@ namespace MpWpfApp {
                 MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
             });
         }
-
-        public MpSearchBoxViewModel() : base() { }
 
         #endregion
 

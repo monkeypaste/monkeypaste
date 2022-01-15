@@ -199,6 +199,7 @@ namespace MpWpfApp {
 
             //MpPluginManager.Instance.Init();
 
+
             await MpCursorViewModel.Instance.Init();
 
             await MpSourceCollectionViewModel.Instance.Init();

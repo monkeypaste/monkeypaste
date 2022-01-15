@@ -100,7 +100,7 @@
                        Background="{local:MpThemeColorsBinding Key=Clip_Tile_Content_Item_Background_Color}">
                 <!--  Tile Title Canvas  -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
-                                           DockPanel.Dock="Top"
+                                           DockPanel.Dock="Top"                                           
                                            Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
                                                                                 Mode=OneWay}"
                                            DataContext="{Binding PrimaryItem}" />

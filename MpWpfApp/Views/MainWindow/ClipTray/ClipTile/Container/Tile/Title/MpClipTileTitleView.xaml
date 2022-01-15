@@ -16,14 +16,15 @@
         <local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior" />
         <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior" />
     </i:Interaction.Behaviors>
-    <Grid x:Name="TileTitleGrid"
-          Loaded="ClipTileAppIconBorderImage_Loaded"
-          Unloaded="Grid_Unloaded">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.75*" />
-            <ColumnDefinition Width="0.25*" />
-        </Grid.ColumnDefinitions>
-        <Viewbox Stretch="Fill"
+    <Grid>
+        <Viewbox VerticalAlignment="Top"
+                 HorizontalAlignment="Stretch"
+                 Width="{local:MpMeasurementsBinding ClipTileMinSize,
+                                                        Mode=OneWay}"
+                 Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
+                                                      Mode=OneWay}"
+                 Loaded="ClipTileAppIconBorderImage_Loaded"
+                 Unloaded="Grid_Unloaded"
                  Grid.ColumnSpan="2">
             <Canvas x:Name="TitleSwirlCanvas"
                     Width="{local:MpMeasurementsBinding ClipTileDefaultMinSize,
@@ -103,138 +104,141 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-            </Canvas>
-        </Viewbox>
-        <Grid x:Name="ClipTileTitleTextGrid"
-              Grid.Column="0"
-              IsHitTestVisible="{Binding HasScrollVelocity,
-                                         Source={StaticResource ClipTrayViewModel},
-                                         Converter={StaticResource BoolFlipConverter}}"
-              MouseEnter="ClipTileTitleTextGrid_MouseEnter"
-              MouseLeave="ClipTileTitleTextGrid_MouseLeave"
-              PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
-              Margin="10,3,30,25"
-              MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
-              MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
-              HorizontalAlignment="Left">
-            <!--  Clip Title TextBlock  -->
-            <TextBlock x:Name="ClipTileTitleTextBlock"
-                       Text="{Binding Path=Text,
-                                      ElementName=ClipTileTitleTextBox}"
-                       FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
-                                                              Mode=OneWay}"
-                       Foreground="White"
-                       Visibility="{Binding IsEditingTitle,
-                                            Converter={StaticResource BoolToVisibilityFlipConverter}}">
-                <TextBlock.Effect>
-                    <DropShadowEffect ShadowDepth="0.5"
-                                      Direction="300"
-                                      Color="Black"
-                                      Opacity="0.70"
-                                      BlurRadius="0.1" />
-                </TextBlock.Effect>
-            </TextBlock>
-            <!--  Clip Title TextBox  -->
-            <TextBox x:Name="ClipTileTitleTextBox"
-                     IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
-                     LostFocus="ClipTileTitleTextBox_LostFocus"
-                     PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
-                     Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
-                     Foreground="Black"
-                     FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
-                                                            Mode=OneWay}"
-                     IsReadOnly="False"
-                     Visibility="{Binding IsEditingTitle,
-                                          Converter={StaticResource BoolToVisibilityConverter}}"
-                     Text="{Binding CopyItemTitle,
-                                    Mode=TwoWay,
-                                    NotifyOnTargetUpdated=True,
-                                    NotifyOnSourceUpdated=True,
-                                    UpdateSourceTrigger=PropertyChanged}" />
 
-        </Grid>
-        <!--  Clip Title Icon Image  -->
-        <Grid Grid.Column="1"
-              ClipToBounds="False">
 
-            <Button x:Name="PinButton"
-                    MouseEnter="PinButton_MouseEnter"
-                    MouseLeave="PinButton_MouseLeave"
-                    Background="Transparent"
-                    Style="{StaticResource Transparent_Button}"
-                    BorderThickness="0"
-                    HorizontalAlignment="Right"
-                    Margin="42,0,0,35"
-                    Visibility="{Binding Parent.PinButtonVisibility}"
-                    Command="{Binding ToggleTileIsPinnedCommand,
-                                      Source={StaticResource ClipTrayViewModel}}"
-                    CommandParameter="{Binding Parent}">
-                <Image x:Name="PinButtonImage"
-                       Width="15"
-                       Height="15"
-                       Stretch="Uniform"
-                       Source="{Binding Parent.PinIconSourcePath,
-                                        Converter={StaticResource StringToImageSourceConverter}}" />
-            </Button>
-            <Ellipse x:Name="SourceMatchEllipse"
-                     Visibility="Hidden"
-                     StrokeThickness="1"
-                     RenderTransformOrigin="0.5,0.5"
-                     HorizontalAlignment="Right"
-                     VerticalAlignment="Center"
-                     Margin="0,3,13,0"
-                     Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}"
-                     Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}" />
-            <Button x:Name="ClipTileAppIconImageButton"
-                    IsHitTestVisible="{Binding HasScrollVelocity,
-                                               Source={StaticResource ClipTrayViewModel},
-                                               Converter={StaticResource BoolFlipConverter}}"
-                    MouseEnter="ClipTileAppIconImageButton_MouseEnter"
-                    MouseLeave="ClipTileAppIconImageButton_MouseLeave"
-                    PreviewMouseLeftButtonDown="ClipTileAppIconImageButton_PreviewMouseLeftButtonDown"
-                    Style="{StaticResource Transparent_Button}"
-                    Visibility="Visible"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,20,0"
-                    VerticalAlignment="Center"
-                    RenderTransformOrigin="0.5,0.5"
-                    Background="Transparent"
-                    BorderThickness="0">
-                <Button.RenderTransform>
-                    <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
-                </Button.RenderTransform>
-                <Button.ContextMenu>
-                    <local:MpClipTileSourceIconContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
-                </Button.ContextMenu>
-                <Grid>
-                    <Image x:Name="ClipTileAppIconBorderImage"
-                           Loaded="ClipTileAppIconBorderImage_Loaded"
-                           Source="{Binding SourceId,
-                                            Converter={StaticResource SourceIdToImageSourceConverter},
-                                            ConverterParameter='border'}"
-                           Stretch="Fill"
-                           RenderTransformOrigin="0.5, 0.5"
-                           Visibility="Hidden"
-                           MaxWidth="{local:MpMeasurementsBinding ClipTileTitleIconSize,
-                                                                  Mode=OneWay}"
-                           MaxHeight="{local:MpMeasurementsBinding ClipTileTitleIconSize,
-                                                                   Mode=OneWay}">
-                        <Image.RenderTransform>
-                            <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
-                        </Image.RenderTransform>
-                    </Image>
-                    <Image x:Name="ClipTileAppIconImage"
-                           Source="{Binding SourceId,
-                                            Converter={StaticResource SourceIdToImageSourceConverter}}"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Visibility="Visible"
-                           Width="{local:MpMeasurementsBinding ClipTileTitleIconSize,
-                                                               Mode=OneWay}"
-                           Height="{local:MpMeasurementsBinding ClipTileTitleIconSize,
-                                                                Mode=OneWay}" />
-                    <!--<Viewbox Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
+                <Grid x:Name="ClipTileTitleTextGrid"
+                      DataContext="{Binding Parent}"
+                      Grid.Column="0"
+                      IsHitTestVisible="{Binding HasScrollVelocity,
+                                                 Source={StaticResource ClipTrayViewModel},
+                                                 Converter={StaticResource BoolFlipConverter}}"
+                      MouseEnter="ClipTileTitleTextGrid_MouseEnter"
+                      MouseLeave="ClipTileTitleTextGrid_MouseLeave"
+                      PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
+                      Margin="10,3,30,25"
+                      MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
+                      MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
+                      HorizontalAlignment="Left">
+                    <!--  Clip Title TextBlock  -->
+                    <TextBlock x:Name="ClipTileTitleTextBlock"
+                               Text="{Binding Path=Text,
+                                              ElementName=ClipTileTitleTextBox}"
+                               FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
+                                                                      Mode=OneWay}"
+                               Foreground="White"
+                               Visibility="{Binding IsEditingTitle,
+                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                        <TextBlock.Effect>
+                            <DropShadowEffect ShadowDepth="0.5"
+                                              Direction="300"
+                                              Color="Black"
+                                              Opacity="0.70"
+                                              BlurRadius="0.1" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <!--  Clip Title TextBox  -->
+                    <TextBox x:Name="ClipTileTitleTextBox"
+                             IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
+                             LostFocus="ClipTileTitleTextBox_LostFocus"
+                             PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
+                             Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
+                             Foreground="Black"
+                             FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
+                                                                    Mode=OneWay}"
+                             IsReadOnly="False"
+                             Visibility="{Binding IsEditingTitle,
+                                                  Converter={StaticResource BoolToVisibilityConverter}}"
+                             Text="{Binding CopyItemTitle,
+                                            Mode=TwoWay,
+                                            NotifyOnTargetUpdated=True,
+                                            NotifyOnSourceUpdated=True,
+                                            UpdateSourceTrigger=PropertyChanged}" />
+
+                </Grid>
+                <!--  Clip Title Icon Image  -->
+                <Grid Grid.Column="1"
+                      Canvas.Right="10"
+                      DataContext="{Binding Parent}"
+                      ClipToBounds="False">
+
+                    <Button x:Name="PinButton"
+                            MouseEnter="PinButton_MouseEnter"
+                            MouseLeave="PinButton_MouseLeave"
+                            Background="Transparent"
+                            Style="{StaticResource Transparent_Button}"
+                            BorderThickness="0"
+                            HorizontalAlignment="Right"
+                            Margin="42,0,0,35"
+                            Visibility="{Binding Parent.PinButtonVisibility}"
+                            Command="{Binding ToggleTileIsPinnedCommand,
+                                              Source={StaticResource ClipTrayViewModel}}"
+                            CommandParameter="{Binding Parent}">
+                        <Image x:Name="PinButtonImage"
+                               Width="15"
+                               Height="15"
+                               Stretch="Uniform"
+                               Source="{Binding Parent.PinIconSourcePath,
+                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                    </Button>
+                    <Ellipse x:Name="SourceMatchEllipse"
+                             Visibility="Hidden"
+                             StrokeThickness="1"
+                             RenderTransformOrigin="0.5,0.5"
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Center"
+                             Margin="0,3,13,0"
+                             Width="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}"
+                             Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}" />
+                    <Button x:Name="ClipTileAppIconImageButton"
+                            IsHitTestVisible="{Binding HasScrollVelocity,
+                                                       Source={StaticResource ClipTrayViewModel},
+                                                       Converter={StaticResource BoolFlipConverter}}"
+                            MouseEnter="ClipTileAppIconImageButton_MouseEnter"
+                            MouseLeave="ClipTileAppIconImageButton_MouseLeave"
+                            PreviewMouseLeftButtonDown="ClipTileAppIconImageButton_PreviewMouseLeftButtonDown"
+                            Style="{StaticResource Transparent_Button}"
+                            Visibility="Visible"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,20,0"
+                            VerticalAlignment="Center"
+                            RenderTransformOrigin="0.5,0.5"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <Button.RenderTransform>
+                            <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
+                        </Button.RenderTransform>
+                        <Button.ContextMenu>
+                            <local:MpClipTileSourceIconContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
+                        </Button.ContextMenu>
+                        <Grid>
+                            <Image x:Name="ClipTileAppIconBorderImage"
+                                   Loaded="ClipTileAppIconBorderImage_Loaded"
+                                   Source="{Binding SourceId,
+                                                    Converter={StaticResource SourceIdToImageSourceConverter},
+                                                    ConverterParameter='border'}"
+                                   Stretch="Fill"
+                                   RenderTransformOrigin="0.5, 0.5"
+                                   Visibility="Hidden"
+                                   MaxWidth="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                          Mode=OneWay}"
+                                   MaxHeight="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                           Mode=OneWay}">
+                                <Image.RenderTransform>
+                                    <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
+                                </Image.RenderTransform>
+                            </Image>
+                            <Image x:Name="ClipTileAppIconImage"
+                                   Source="{Binding SourceId,
+                                                    Converter={StaticResource SourceIdToImageSourceConverter}}"
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="Visible"
+                                   Width="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                       Mode=OneWay}"
+                                   Height="{local:MpMeasurementsBinding ClipTileTitleIconSize,
+                                                                        Mode=OneWay}" />
+                            <!--<Viewbox Width="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                      Height="{local:MpMeasurementsBinding ClipTileTitleIconSize}"
                                                                      Visibility="{Binding MultiSelectOrderMarkerVisibility}">
                                                                 <Grid>
@@ -256,8 +260,10 @@
                                                                                Text="{Binding MultiSelectedOrderIdxDisplayValue}" />
                                                                 </Grid>
                                                             </Viewbox>-->
+                        </Grid>
+                    </Button>
                 </Grid>
-            </Button>
-        </Grid>
+            </Canvas>
+        </Viewbox>
     </Grid>
 </local:MpContentUserControl>

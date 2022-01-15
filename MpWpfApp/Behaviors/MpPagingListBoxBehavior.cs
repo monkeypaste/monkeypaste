@@ -11,7 +11,7 @@ using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPagingListBoxBehavior : MpSingletonBehavior<ScrollViewer,MpPagingListBoxBehavior> {
+    public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {
         
         #region Private Variables
 
@@ -27,8 +27,6 @@ namespace MpWpfApp {
         public double Friction { get; set; } = 0;
 
         public double WheelDampening { get; set; } = 0;
-
-        public bool IsThumbDragging { get; set; } = false;
 
         #region RemainingItemsThresholdProperty
 
@@ -64,6 +62,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+
+        public MpPagingListBoxBehavior() { }
 
         protected override void OnLoad() {
             base.OnLoad();
@@ -103,8 +103,9 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
+                var mwrb = (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior;
                 MpMessenger.Instance.Register<MpMessageType>(
-                    MpMainWindowResizeBehavior.Instance,
+                    mwrb,
                     ReceivedMainWindowResizeBehaviorMessage);
 
                 _timer = new DispatcherTimer(DispatcherPriority.Normal);
@@ -117,11 +118,43 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Public Methods
+
+        public int FindJumpTileIdx(double trackValue) {
+            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
+            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
+            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
+
+            double offsetX = 0;
+            for (int i = 0; i < totalTileCount; i++) {
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
+                int tileHeadId = headItemIds[i];
+
+                if (offsetX >= trackValue) {
+                    return i;
+                }
+
+                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
+                    offsetX += uniqueWidthLookup[tileHeadId];
+                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
+                } else {
+                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
+                }
+            }
+
+            return totalTileCount - 1;
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Resizing:
+                //case MpMessageType.Resizing:
                 case MpMessageType.ResizeCompleted:
-                    
+                    //ApplyOffsetChange(true);
+                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
                     break;
             }
         }
@@ -162,7 +195,7 @@ namespace MpWpfApp {
             //only used when dragging data onto trackbar
             if(!MpDragDropManager.Instance.IsDragAndDrop || 
                 MpClipTrayViewModel.Instance.IsScrollJumping ||
-                IsThumbDragging) {
+                MpClipTrayViewModel.Instance.IsThumbDragging) {
                 return;
             }
             await PerformPageJump();
@@ -179,7 +212,7 @@ namespace MpWpfApp {
                     return;
                 }
 
-                //IsThumbDragging = true;
+                //MpClipTrayViewModel.Instance.IsThumbDragging = true;
 
                 _velocity = _lastWheelDelta = 0;
 
@@ -197,7 +230,7 @@ namespace MpWpfApp {
                 //}
 
                 //int targetTileIdx = FindJumpTileIdx(MpClipTrayViewModel.Instance.ScrollOffset);
-                //IsThumbDragging = false;
+                //MpClipTrayViewModel.Instance.IsThumbDragging = false;
 
                 //if (htrack.Thumb.Bounds().Contains(Mouse.GetPosition(htrack.Thumb))) {
 
@@ -212,60 +245,6 @@ namespace MpWpfApp {
 
                 return;
             });
-        }
-
-        public double FindTileOffsetX(int queryOffsetIdx) {
-            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
-            if(totalTileCount <= 0) {
-                return 0;
-            }
-            queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
-
-            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
-            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
-
-            double offsetX = 0;// MpMeasurements.Instance.ClipTileMargin;
-            for (int i = 1; i <= queryOffsetIdx; i++) {
-                int tileHeadId = headItemIds[i - 1];
-                if(MpClipTrayViewModel.Instance.PinnedItems.Any(x=>x.HeadItem?.CopyItemId == tileHeadId)) {
-                    continue;
-                }
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;                
-
-                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
-                    offsetX += uniqueWidthLookup[tileHeadId];
-                    offsetX -= MpMeasurements.Instance.ClipTileMargin;
-                } else {
-                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
-                }
-            }
-
-            return offsetX;
-        }
-
-        public int FindJumpTileIdx(double trackValue) {
-            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
-            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
-            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
-
-            double offsetX = 0;
-            for (int i = 0; i < totalTileCount; i++) {
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
-                int tileHeadId = headItemIds[i];
-
-                if(offsetX >= trackValue) {
-                    return i;
-                }
-
-                if(uniqueWidthLookup.ContainsKey(tileHeadId)) {
-                    offsetX += uniqueWidthLookup[tileHeadId];
-                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
-                } else {
-                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
-                }
-            }
-
-            return totalTileCount - 1;
         }
 
         private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
@@ -286,27 +265,27 @@ namespace MpWpfApp {
             if ((_lastWheelDelta < 0 && e.Delta > 0) ||
                (_lastWheelDelta > 0 && e.Delta < 0)) {
                 _velocity = 0;
-            }           
+            }
 
             _velocity -= e.Delta * WheelDampening;
             _lastWheelDelta = e.Delta;
         }
 
-        private void ApplyOffsetChange() {
-            if (!LoadMoreCommand.CanExecute(0) || IsThumbDragging) {
+        private void ApplyOffsetChange(bool isChangeResize = false) {
+            if (!LoadMoreCommand.CanExecute(0) || MpClipTrayViewModel.Instance.IsThumbDragging) {
                 return;
             }
 
             double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
-            
+
             Rect svr = AssociatedObject.Bounds();
             ListBox lb = AssociatedObject.GetVisualDescendent<ListBox>();
 
-            if (horizontalChange > 0) {
+            if (horizontalChange > 0 || isChangeResize) {
                 //scrolling down towards end of list
 
                 //get item under point in middle of right edge of listbox
-                int r_target_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2));
+                int r_target_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2),AssociatedObject);
                 if (r_target_idx < 0) {
                     return;
                 }
@@ -319,10 +298,11 @@ namespace MpWpfApp {
                 if (remainingItemsOnRight < RemainingItemsThreshold) {
                     LoadMoreCommand.Execute(1);
                 }
-            } else if (horizontalChange < 0) {
+            } 
+            if (horizontalChange < 0 || isChangeResize) {
                 //scrolling up towards beginning of list
 
-                int l_lbi_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2));
+                int l_lbi_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2),AssociatedObject);
                 if (l_lbi_idx < 0) {
                     l_lbi_idx = 0;
                 }
@@ -336,5 +316,6 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
     }
 }

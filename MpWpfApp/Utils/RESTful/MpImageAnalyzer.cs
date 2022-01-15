@@ -29,7 +29,7 @@ namespace MpWpfApp {
         /// the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
-        public async Task<MpImageAnalysis> AnalyzeImage(byte[] byteData, MpAzureImageAnalysisRequest req) {
+        public async Task<MpAzureImageAnalysis> AnalyzeImage(byte[] byteData, MpAzureImageAnalysisRequest req) {
             try {
                 HttpClient client = new HttpClient();
 
@@ -85,7 +85,7 @@ namespace MpWpfApp {
                 //    JToken.Parse(contentString).ToString());
 
                 //return contentString;                                
-                var result = JsonConvert.DeserializeObject<MpImageAnalysis>(contentString);
+                var result = JsonConvert.DeserializeObject<MpAzureImageAnalysis>(contentString);
                 return result;
             }
             catch (Exception e) {

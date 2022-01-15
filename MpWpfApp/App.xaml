@@ -384,7 +384,7 @@
                         <Border x:Name="border"
                                 BorderBrush="Black"
                                 BorderThickness="1"
-                                CornerRadius="3">
+                                CornerRadius="0">
                             <Border.Background>
                                 <ImageBrush ImageSource="/Resources/Images/frame_grip.png"
                                             TileMode="Tile"

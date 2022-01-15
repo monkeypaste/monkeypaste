@@ -18,10 +18,12 @@
         </Grid.ColumnDefinitions>
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
+                             Width="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
                              DataContext="{Binding}"
                              Visibility="{Binding IsAnyTilePinned,
                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
         <GridSplitter x:Name="ClipTraySplitter"
+                      DragDelta="ClipTraySplitter_DragDelta"
                       Grid.Column="0"
                       IsEnabledChanged="ClipTraySplitter_IsEnabledChanged"
                       IsEnabled="{Binding IsAnyTilePinned}"

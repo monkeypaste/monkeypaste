@@ -157,8 +157,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpImageAnalysis _imageAnalysis = null;
-        public MpImageAnalysis ImageAnalysis {
+        private MpAzureImageAnalysis _imageAnalysis = null;
+        public MpAzureImageAnalysis ImageAnalysis {
             get {
                 return _imageAnalysis;
             }
@@ -185,29 +185,29 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpImageAnalysisViewModel() : base(null) {
-            var ia = new MpImageAnalysis();
-            ia.categories = new List<MpImageCategory>();
-            var testcategory = new MpImageCategory();
+            var ia = new MpAzureImageAnalysis();
+            ia.categories = new List<MpAzureImageCategory>();
+            var testcategory = new MpAzureImageCategory();
             testcategory.name = "Test Category";
             ia.categories.Add(testcategory);
             ia.categories.Add(testcategory);
 
-            ia.description = new MpImageDescription();
+            ia.description = new MpAzureImageDescription();
             ia.description.tags = new List<string>();
             ia.description.tags.Add("Test Tag1");
             ia.description.tags.Add("Test Tag2");
-            ia.description.captions = new List<MpImageCaptions>();
-            var testcaption = new MpImageCaptions();
+            ia.description.captions = new List<MpAzureImageCaptions>();
+            var testcaption = new MpAzureImageCaptions();
             testcaption.text = "Test Caption";
             ia.description.captions.Add(testcaption);
             ia.description.captions.Add(testcaption);
 
-            ia.metadata = new MpImageMetaData();
+            ia.metadata = new MpAzureImageMetaData();
             ia.metadata.format = @"Png";
             ia.metadata.width = 500;
             ia.metadata.height = 500;
 
-            ia.color = new MpImageColor();
+            ia.color = new MpAzureImageColor();
             ia.color.dominantColorForeground = "domFgColor";
             ia.color.dominantColorBackground = "domBgColor";
             ia.color.dominantColors = new List<string>();
@@ -225,7 +225,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(serializedAnalysis)) {
                 return;
             }
-            ImageAnalysis = JsonConvert.DeserializeObject<MpImageAnalysis>(serializedAnalysis);
+            ImageAnalysis = JsonConvert.DeserializeObject<MpAzureImageAnalysis>(serializedAnalysis);
         }
         #endregion
     }

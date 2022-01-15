@@ -170,6 +170,7 @@ namespace MpWpfApp {
 
         public MpThemeType CurrentThemeType { get; private set; }
 
+        public MpThemeColors() : base() { }
 
         public void Init() {
             InitDefaultThemes();

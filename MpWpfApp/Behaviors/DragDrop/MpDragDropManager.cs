@@ -74,7 +74,7 @@ namespace MpWpfApp {
 
         #region Init
 
-        public MpDragDropManager() {
+        private MpDragDropManager() : base() {
             _autoScrollTimer = new DispatcherTimer();
             _autoScrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             _autoScrollTimer.Tick += _autoScrollTimer_Tick;

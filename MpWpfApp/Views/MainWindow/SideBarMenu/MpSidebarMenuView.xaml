@@ -41,12 +41,12 @@
                                               DataContext="{Binding AnalyticItemCollectionViewModel}"
                                               Visibility="{Binding IsVisible,
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
-            <local:MpMatcherCollectionView x:Name="MatcherCollectionView"
+            <!--<local:MpMatcherCollectionView x:Name="MatcherCollectionView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,
                                                       Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{Binding MatcherCollectionViewModel,
-                                                       IsAsync=True}" />
+                                                       IsAsync=True}" />-->
         </StackPanel>
     </Grid>
 
