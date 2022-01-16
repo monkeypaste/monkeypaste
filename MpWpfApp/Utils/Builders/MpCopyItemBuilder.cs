@@ -41,18 +41,18 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.FileList;
                     itemData = iData[DataFormats.FileDrop];
                 } else if (iData.ContainsKey(DataFormats.CommaSeparatedValue)) {
-                    itemType = MpCopyItemType.RichText;
+                    itemType = MpCopyItemType.Text;
                     string csvStr = iData[DataFormats.CommaSeparatedValue];
                     itemData = csvStr.ToRichTextTable();
                 } else if (iData.ContainsKey(DataFormats.Rtf)) {
-                    itemType = MpCopyItemType.RichText;
+                    itemType = MpCopyItemType.Text;
                     itemData = iData[DataFormats.Rtf].EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
                 } else if (iData.ContainsKey(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = iData[DataFormats.Bitmap];
                 } else if ((iData.ContainsKey(DataFormats.Html) || iData.ContainsKey(DataFormats.Text)) && !string.IsNullOrEmpty(iData[DataFormats.Text])) {
-                    itemType = MpCopyItemType.RichText;
+                    itemType = MpCopyItemType.Text;
                     if (iData.ContainsKey(DataFormats.Html)) {
                         htmlData = iData[DataFormats.Html];                        
                     }
@@ -105,7 +105,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                if (itemType == MpCopyItemType.RichText && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
+                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
                     itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
                     if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
@@ -120,7 +120,7 @@ namespace MpWpfApp {
                 }
 
                 if (MpPreferences.Instance.IgnoreWhiteSpaceCopyItems &&
-                    itemType == MpCopyItemType.RichText &&
+                    itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace(((string)itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
                 }

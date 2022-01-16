@@ -102,6 +102,7 @@ namespace MpWpfApp {
 
         public MpRestTransaction LastTransaction { get; private set; } = null;
 
+        public MpCopyItem LastResultContentItem { get; set; } = null;
         #endregion
 
         #region Models
@@ -315,7 +316,6 @@ namespace MpWpfApp {
         public MpAnalyticItem AnalyticItem { get; set; }
         
         #endregion
-
         
         #region Http
         //public abstract MpHttpResponseBase ResponseObj { get; }
@@ -449,32 +449,48 @@ namespace MpWpfApp {
 
         #endregion
 
-        protected virtual async Task ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans) {
+        protected virtual async Task<MpCopyItem> ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans, bool suppressCreateItem) {
             object request = trans.Request;
             object response = trans.Response;
 
             var app = MpPreferences.Instance.ThisAppSource.App;
             var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, request.ToString());
             var source = await MpSource.Create(app, url);
-            var ci = await MpCopyItem.Create(source, response.ToString(), MpCopyItemType.RichText);
 
-            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
-            if (scivm == null) {
-                return;
-            }
-            var sml = scivm.Parent.ItemViewModels.Select(x => x.CopyItem).OrderBy(x => x.CompositeSortOrderIdx).ToList();
-            for (int i = 0; i < sml.Count; i++) {
-                if (i == scivm.CompositeSortOrderIdx) {
-                    ci.CompositeParentCopyItemId = sml[0].Id;
-                    ci.CompositeSortOrderIdx = i + 1;
-                    await ci.WriteToDatabaseAsync();
-                } else if (i > scivm.CompositeSortOrderIdx) {
-                    sml[i].CompositeSortOrderIdx += 1;
-                    await sml[i].WriteToDatabaseAsync();
+            var ci = await MpCopyItem.Create(source, response.ToString(), MpCopyItemType.Text,suppressCreateItem);
+
+            if(suppressCreateItem == false) {
+                //create is suppressed when its part of a match expression
+                if (parentCopyItemId > 0) {
+                    var pci = await MpDb.Instance.GetItemAsync<MpCopyItem>(parentCopyItemId);
+
+                    if (pci.CompositeParentCopyItemId > 0) {
+                        //when this items parent is a composite child, adjust fk/sort so theres single parent
+                        var ppccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                        ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                        for (int i = 0; i < ppccil.Count; i++) {
+                            var cci = ppccil[i];
+                            if (i == parentCopyItemId) {
+                                ci.CompositeParentCopyItemId = parentCopyItemId;
+                                ci.CompositeSortOrderIdx = i + 1;
+                                await ci.WriteToDatabaseAsync();
+                            } else if (i > parentCopyItemId) {
+                                ppccil[i].CompositeSortOrderIdx += 1;
+                                await ppccil[i].WriteToDatabaseAsync();
+                            }
+                        }
+                    }
+                }
+
+                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
+                if (scivm == null) {
+                    //analysis content is  linked with visible item in tray
+                    await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
                 }
             }
+            
 
-            await scivm.Parent.InitializeAsync(sml[0]);
+            return ci;
         }
 
         #endregion
@@ -567,9 +583,7 @@ namespace MpWpfApp {
                 
                 LastTransaction = await ExecuteAnalysis(analysisStr);
 
-                if(!suppressCreateItem) {
-                    await ConvertToCopyItem(sourceCopyItem.Id, LastTransaction);
-                }
+                LastResultContentItem = await ConvertToCopyItem(sourceCopyItem.Id, LastTransaction, suppressCreateItem);
 
                 IsBusy = false;
             },(args)=>CanExecuteAnalysis(args));

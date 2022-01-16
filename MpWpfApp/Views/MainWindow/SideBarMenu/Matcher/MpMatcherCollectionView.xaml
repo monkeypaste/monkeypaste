@@ -98,25 +98,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="100"
-                                            Header="Match Action">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox IsSynchronizedWithCurrentItem="True"
-                                          VerticalContentAlignment="Center"
-                                          SelectedIndex="{Binding SelectedMatchActionTypeIdx,
-                                                                  Mode=TwoWay,
-                                                                  UpdateSourceTrigger=PropertyChanged}"
-                                          ItemsSource="{Binding MatchActionTypes}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

@@ -399,7 +399,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
-            await _connectionAsync.CreateTableAsync<MpTagProperty>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
@@ -788,7 +787,7 @@ namespace MonkeyPaste {
             var ai1 = await MpAnalyticItem.Create(
                         "https://api.cognitive.microsofttranslator.com/{0}",
                         MpPreferences.Instance.AzureCognitiveServicesKey,
-                        MpCopyItemType.RichText,
+                        MpCopyItemType.Text,
                         MpOutputFormatType.Text,
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator",
@@ -799,7 +798,7 @@ namespace MonkeyPaste {
             var ai2 = await MpAnalyticItem.Create(
                         "https://api.openai.com/v1/",
                         MpPreferences.Instance.RestfulOpenAiApiKey,
-                        MpCopyItemType.RichText,
+                        MpCopyItemType.Text,
                         MpOutputFormatType.Text,
                         "Open Ai",
                         "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
@@ -821,17 +820,17 @@ namespace MonkeyPaste {
 
             */
 
-            var mr1 = await MpMatcher.Create(
-                MpMatcherType.Contains,
-                "cat",
+            //var mr1 = await MpMatcher.Create(
+            //    MpMatcherType.Contains,
+            //    "cat",
 
-                MpMatchTriggerType.ContentItemAdded,
-                MpMatchActionType.Analyzer,
-                24,
+            //    MpMatchTriggerType.ContentItemAdded,
+            //    MpMatchActionType.Analyze,
+            //    24,
 
-                MpMatchActionType.Classifier,
-                32
-                );
+            //    MpMatchActionType.Classify,
+            //    32
+            //    );
 
             #endregion
 

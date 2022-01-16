@@ -23,12 +23,14 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        public MpTagPropertyCollectionViewModel TagProperties { get; set; } = new MpTagPropertyCollectionViewModel();
         
         public MpITreeItemViewModel ParentTreeItem { get; set; }
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
+
+        public ObservableCollection<MpMatcherViewModel> TagMatchers => new ObservableCollection<MpMatcherViewModel>(
+                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
+                        x.Matcher.TriggerActionType == MpMatchActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
 
         #endregion
 
@@ -64,8 +66,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
-        public bool HasProperties => TagProperties != null && TagProperties.TagProperties.Count > 0;
 
         public bool IsNew {
             get {
@@ -374,8 +374,8 @@ namespace MpWpfApp {
 
         public event EventHandler OnRequestSelectAll;
 
-        public event EventHandler<int> OnCopyItemLinked;
-        public event EventHandler<int> OnCopyItemUnlinked;
+        public event EventHandler<object> OnCopyItemLinked;
+        public event EventHandler<object> OnCopyItemUnlinked;
 
         #endregion
 
@@ -397,9 +397,6 @@ namespace MpWpfApp {
             Tag = tag;
 
             IsBusy = true;
-
-            TagProperties = new MpTagPropertyCollectionViewModel(this);
-            await TagProperties.InitializeAsync(Tag);
 
             IsBusy = false;
         }
@@ -524,7 +521,7 @@ namespace MpWpfApp {
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount++;
-                OnCopyItemLinked?.Invoke(this, cit.CopyItemId);
+                OnCopyItemLinked?.Invoke(this, cit);
             }
         }
 
@@ -552,7 +549,7 @@ namespace MpWpfApp {
                 });
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount--;
-                OnCopyItemUnlinked?.Invoke(this, cit.CopyItemId);
+                OnCopyItemUnlinked?.Invoke(this, cit);
             } 
         }
         #endregion

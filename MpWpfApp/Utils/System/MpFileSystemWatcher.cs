@@ -8,11 +8,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public interface MpIFileSystemEventHandler {
-        void OnChanged(object sender, FileSystemEventArgs e);
-        void OnCreated(object sender, FileSystemEventArgs e);
-        void OnDeleted(object sender, FileSystemEventArgs e);
-        void OnRenamed(object sender, RenamedEventArgs e);
-        void OnError(object sender, ErrorEventArgs e);
+        void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
     public class MpFileSystemWatcher : MpSingleton<MpFileSystemWatcher>, IDisposable {
@@ -69,11 +65,11 @@ namespace MpWpfApp {
             watcher.Error += OnError;
 
             if (handler != null) {
-                watcher.Changed += handler.OnChanged;
-                watcher.Created += handler.OnCreated;
-                watcher.Deleted += handler.OnDeleted;
-                watcher.Renamed += handler.OnRenamed;
-                watcher.Error += handler.OnError;
+                watcher.Changed += handler.OnFileSystemItemChanged;
+                watcher.Created += handler.OnFileSystemItemChanged;
+                watcher.Deleted += handler.OnFileSystemItemChanged;
+                watcher.Renamed += handler.OnFileSystemItemChanged;
+                //watcher.Error += handler.OnError;
             }
 
             if(Directory.Exists(path)) {

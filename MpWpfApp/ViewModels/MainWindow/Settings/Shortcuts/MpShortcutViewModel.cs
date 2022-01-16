@@ -392,6 +392,12 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<object> OnShortcutExecuted;
+
+        #endregion
+
         #region Public Methods
         public MpShortcutViewModel(MpShortcutCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpShortcutViewModel_PropertyChanged;
@@ -570,6 +576,19 @@ namespace MpWpfApp {
         public ICommand PerformShortcutCommand => new RelayCommand(
             () => {
                 Command?.Execute(CommandId);
+                if(ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
+                    //when shortcut produces a content item notify matchers
+                    // TODO will likely need to have more general case then just analyze
+                    var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
+                    if(aipvm != null) {
+                        Task.Run(async () => {
+                            await Task.Delay(300);
+                            while(aipvm.IsBusy) { await Task.Delay(100); }
+
+                            OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastResultContentItem);
+                        });
+                    }
+                }
             },
             () => {
                 var mwvm = MpMainWindowViewModel.Instance;

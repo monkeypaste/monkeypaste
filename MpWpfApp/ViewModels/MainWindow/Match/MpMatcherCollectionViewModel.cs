@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -44,6 +45,7 @@ namespace MpWpfApp {
                 Matchers.Add(mvm);
             }
 
+            RegisterAll();
         }
 
         #endregion
@@ -54,6 +56,32 @@ namespace MpWpfApp {
             MpMatcherViewModel mvm = new MpMatcherViewModel(this);
             await mvm.InitializeAsync(m);            
             return mvm;
+        }
+
+        public void RegisterAll() {
+            Matchers.ForEach(x => x.Register());
+        }
+
+        public void UnegisterAll() {
+            Matchers.ForEach(x => x.Unegister());
+        }
+
+        public string GetUniqueMatcherName() {
+            int uniqueIdx = 1;
+            string uniqueName = $"Matcher";
+            string testName = string.Format(
+                                        @"{0}{1}",
+                                        uniqueName.ToLower(),
+                                        uniqueIdx);
+
+            while (Matchers.Any(x => x.Title.ToLower() == testName)) {
+                uniqueIdx++;
+                testName = string.Format(
+                                        @"{0}{1}",
+                                        uniqueName.ToLower(),
+                                        uniqueIdx);
+            }
+            return uniqueName + uniqueIdx;
         }
 
         #endregion
@@ -84,7 +112,7 @@ namespace MpWpfApp {
 
         private void PerformCommand(MpMatchCommand mc, MpMatcher m, object arg) {
             switch(mc.MatcherCommandType) {
-                case MpMatchActionType.Analyzer:
+                case MpMatchActionType.Analyze:
 
                     break;
             }

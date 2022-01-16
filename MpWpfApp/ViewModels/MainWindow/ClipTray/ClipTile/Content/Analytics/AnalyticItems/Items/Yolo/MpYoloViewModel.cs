@@ -71,7 +71,7 @@ namespace MpWpfApp {
             };
         }
 
-        protected override async Task ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans) {
+        protected override async Task<MpCopyItem> ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans, bool suppressWrite = false) {
             object reqStr = trans.Request;
             object resultData = trans.Response;
 
@@ -81,7 +81,7 @@ namespace MpWpfApp {
 
             var yoloResponse = JsonConvert.DeserializeObject<MpYoloResponse>(resultData.ToString());
             if(yoloResponse == null) {
-                return;
+                return null;
             }
             foreach(var yoloBox in yoloResponse.DetectedObjects) {
                 var dio = new MpDetectedImageObject() {
@@ -94,22 +94,28 @@ namespace MpWpfApp {
                     DetectedImageObjectGuid = System.Guid.NewGuid(),
                     CopyItemId = parentCopyItemId
                 };
-                await dio.WriteToDatabaseAsync();
+                if(!suppressWrite) {
+                    await dio.WriteToDatabaseAsync();
+                }
             }
 
             var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(parentCopyItemId);
             ci.ItemDescription = reqStr.ToString();
-            await ci.WriteToDatabaseAsync();
+            if (!suppressWrite) {
+                await ci.WriteToDatabaseAsync();
+            }
 
             var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
             if (scivm == null) {
-                return;
+                return ci;
             }
 
             await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem);
 
             scivm.Parent.ClearSelection(false);
             scivm.IsSelected = true;
+
+            return ci;
         }
         #endregion
 

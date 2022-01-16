@@ -55,8 +55,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpMatcherViewModel> PresetMatchers => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x=>
-                        (x.Matcher.IsMatchActionType == MpMatchActionType.Analyzer && x.Matcher.IsMatchTargetObjectId == AnalyticItemPresetId) ||
-                        (x.Matcher.TriggerActionType == MpMatchActionType.Analyzer && x.Matcher.TriggerActionObjId == AnalyticItemPresetId)).ToList());
+                        x.Matcher.TriggerActionType == MpMatchActionType.Analyze && x.Matcher.TriggerActionObjId == AnalyticItemPresetId).ToList());
 
         #endregion
 

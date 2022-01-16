@@ -1161,6 +1161,7 @@ namespace MpWpfApp {
 
                 MpHelpers.Instance.RunOnMainThread(async () => {
                     while(IsBusy) { await Task.Delay(100); }
+
                     int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
                     MpStandardBalloonViewModel.ShowBalloon(
                             "Monkey Paste",
@@ -2045,7 +2046,7 @@ namespace MpWpfApp {
             () => {
                 return SelectedItems.Count > 0 &&
                        SelectedItems.All(x => x.ItemType == SelectedItems[0].ItemType) &&
-                       (SelectedItems[0].ItemType == MpCopyItemType.RichText);
+                       (SelectedItems[0].ItemType == MpCopyItemType.Text);
             });
 
         public ICommand SummarizeCommand => new RelayCommand(
@@ -2071,7 +2072,7 @@ namespace MpWpfApp {
             },
             () => {
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
-                return (GetSelectedClipsType() == MpCopyItemType.RichText) &&
+                return (GetSelectedClipsType() == MpCopyItemType.Text) &&
                     pt.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
             });
 

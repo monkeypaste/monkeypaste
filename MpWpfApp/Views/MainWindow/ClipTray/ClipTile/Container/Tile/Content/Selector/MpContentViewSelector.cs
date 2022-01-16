@@ -42,7 +42,7 @@ namespace MpWpfApp {
             }
 
             switch (ci.ItemType) {
-                case MpCopyItemType.RichText:
+                case MpCopyItemType.Text:
                     return TextContentTemplate;
                 case MpCopyItemType.Image:
                     return ImageContentTemplate;

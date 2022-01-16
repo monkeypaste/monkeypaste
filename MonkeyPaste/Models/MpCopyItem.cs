@@ -25,19 +25,6 @@ namespace MonkeyPaste {
         [Column("MpCopyItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Ignore]
-        public Guid CopyItemGuid {
-            get {
-                if (string.IsNullOrEmpty(Guid)) {
-                    return System.Guid.Empty;
-                }
-                return System.Guid.Parse(Guid);
-            }
-            set {
-                Guid = value.ToString();
-            }
-        }
-
         [ForeignKey(typeof(MpSource))]
         [Column("fk_MpSourceId")]
         public int SourceId { get; set; }
@@ -46,18 +33,6 @@ namespace MonkeyPaste {
 
         [Column("fk_MpCopyItemTypeId")]
         public int TypeId { get; set; } = 0;
-
-        [Ignore]
-        public MpCopyItemType ItemType {
-            get {
-                return (MpCopyItemType)TypeId;
-            }
-            set {
-                if (ItemType != value) {
-                    TypeId = (int)value;
-                }
-            }
-        }
 
         public DateTime CopyDateTime { get; set; }
 
@@ -106,6 +81,34 @@ namespace MonkeyPaste {
         //public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
+        #region Properties
+
+        [Ignore]
+        public Guid CopyItemGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+        [Ignore]
+        public MpCopyItemType ItemType {
+            get {
+                return (MpCopyItemType)TypeId;
+            }
+            set {
+                if (ItemType != value) {
+                    TypeId = (int)value;
+                }
+            }
+        }
+
+        #endregion
+
         #region Static Methods
 
         public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
@@ -121,7 +124,11 @@ namespace MonkeyPaste {
             return new ObservableCollection<MpCopyItem>(searchResult);
         }
 
-        public static async Task<MpCopyItem> Create(MpSource source, string data, MpCopyItemType itemType) {
+        public static async Task<MpCopyItem> Create(
+            MpSource source, 
+            string data, 
+            MpCopyItemType itemType,
+            bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(data);
             if (MpPreferences.Instance.IgnoreNewDuplicates && dupCheck != null) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
@@ -132,6 +139,8 @@ namespace MonkeyPaste {
             int count = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
             
             if(itemType == MpCopyItemType.FileList) {
+                // NOTE when filedrop is added to clipboard the string collection is broken into file list composite item
+                // sorted by given order
                 MpCopyItem parentItem = null;
                 var pl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < pl.Length; i++) {
@@ -150,7 +159,9 @@ namespace MonkeyPaste {
                     if(i > 0) {
                         curItem.CompositeParentCopyItemId = parentItem.Id;
                     }
-                    await curItem.WriteToDatabaseAsync();
+                    if(!suppressWrite) {
+                        await curItem.WriteToDatabaseAsync();
+                    }                    
 
                     if (i == 0) {
                         parentItem = curItem;
@@ -168,8 +179,9 @@ namespace MonkeyPaste {
                 Source = source,
                 CopyCount = 1
             };
-
-            await newCopyItem.WriteToDatabaseAsync();
+            if (!suppressWrite) {
+                await newCopyItem.WriteToDatabaseAsync();
+            }
             return newCopyItem;
         }
 
@@ -415,7 +427,7 @@ namespace MonkeyPaste {
 
     public enum MpCopyItemType {
         None = 0,
-        RichText,
+        Text,
         Image,
         FileList,
        // Csv, //this is only used during runtime

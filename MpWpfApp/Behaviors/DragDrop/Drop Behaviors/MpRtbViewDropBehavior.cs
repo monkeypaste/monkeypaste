@@ -110,7 +110,7 @@ namespace MpWpfApp {
                     return false;
                 }
 
-                if(ddl[0].ItemType != MpCopyItemType.RichText) {
+                if(ddl[0].ItemType != MpCopyItemType.Text) {
                     return false;
                 }
             }

@@ -551,7 +551,7 @@ using System.Speech.Synthesis;
                 }
                 return //HeadItem.CopyItemType == MpCopyItemType.Csv ||
                         HeadItem.CopyItemType == MpCopyItemType.Html ||
-                        HeadItem.CopyItemType == MpCopyItemType.RichText;
+                        HeadItem.CopyItemType == MpCopyItemType.Text;
             }
         }
 

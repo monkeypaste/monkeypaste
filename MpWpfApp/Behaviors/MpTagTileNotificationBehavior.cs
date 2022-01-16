@@ -95,18 +95,20 @@ namespace MpWpfApp {
             MpHelpers.Instance.RunOnMainThread(UpdateNotifier);
         }
 
-        private void BindingContext_OnCopyItemLinked(object sender, int e) {
+        private void BindingContext_OnCopyItemLinked(object sender, object e) {
+            var ci = e as MpCopyItem;
             // NOTE triggered from tag tile OnItemAdded db event for MpCopyItemTag
-            if(_copyItemIdsNeedingView.Contains(e)) {
+            if(_copyItemIdsNeedingView.Contains(ci.Id)) {
                 return;
             }
-            _copyItemIdsNeedingView.Add(e);
+            _copyItemIdsNeedingView.Add(ci.Id);
         }
 
-        private void BindingContext_OnCopyItemUnlinked(object sender, int e) {
+        private void BindingContext_OnCopyItemUnlinked(object sender, object e) {
+            var ci = e as MpCopyItem;
             // NOTE triggered from tag tile OnItemDeleted db event for MpCopyItemTag
-            if (_copyItemIdsNeedingView.Contains(e)) {
-                _copyItemIdsNeedingView.Remove(e);
+            if (_copyItemIdsNeedingView.Contains(ci.Id)) {
+                _copyItemIdsNeedingView.Remove(ci.Id);
             }            
         }
 

@@ -48,7 +48,7 @@ namespace MpWpfApp {
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.MainWindowOpening:
+                case MpMessageType.MainWindowOpening: 
                     if(BindingContext.SelectedItems.Count >= 1 && 
                        BindingContext.SelectedItems[0].ItemIdx > 0) {
                         return;

@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,8 @@ namespace MonkeyPaste {
         BeginsWith = 8,
         EndsWith = 16,
         Regex = 32,
-        Source = 64
+        Source = 64,
+        Automatic = 128
     }
 
     public enum MpMatchTriggerType {
@@ -21,14 +23,16 @@ namespace MonkeyPaste {
         WatchFileChanged,
         WatchFolderChange,
         ContentItemAddedToTag,
-        Shortcut
+        Shortcut,
+        ParentMatchOutput
     }
 
     public enum MpMatchActionType {
         None = 0,
-        Classifier, //tagid
-        Analyzer, //analyticItemPresetId
-        Transformer //copyItemId
+        Classify, //tagid
+        Analyze, //analyticItemPresetId
+        Transform, //copyItemId
+        Compare
     }
 
     public class MpMatcher : MpDbModelBase {
@@ -41,21 +45,38 @@ namespace MonkeyPaste {
         [Column("MpMatcherGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+        [ForeignKey(typeof(MpMatcher))]
+        [Column("fk_ParentMatcherId")]
+        public int ParentMatcherId { get; set; } = 0;
+
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; } = 0;
+
+        public int SortOrderIdx { get; set; } = 0;
+
         [Column("e_MpMatcherTypeId")]
-        public int MatcherTypeId { get; set; }
+        public int MatcherTypeId { get; set; } = 0;
 
         [Column("e_MpMatchTriggerTypeId")]
-        public int MatchTriggerTypeId { get; set; }
+        public int MatchTriggerTypeId { get; set; } = 0;
 
-        public int TriggerActionTypeId { get; set; }
-        public int TriggerActionObjId { get; set; }
+        [Column("e_MpTriggerActionTypeId")]
+        public int TriggerActionTypeId { get; set; } = 0;
 
-        [Column("e_MpIsMatchActionTypeId")]
-        public int IsMatchActionTypeId { get; set; }
+        [Column("fk_TriggerActionObjId")]
+        public int TriggerActionObjId { get; set; } = 0;
 
-        public int IsMatchTargetObjectId { get; set; }
+        //[Column("e_MpIsMatchActionTypeId")]
+        //public int IsMatchActionTypeId { get; set; } = 0;
 
-        public string MatchData { get; set; }
+        //public int IsMatchTargetObjectId { get; set; } = 0;
+
+        public string Title { get; set; } = string.Empty;
+
+        public string MatchData { get; set; } = string.Empty;
+
+        public string IsMatchPropertyPath { get; set; } = string.Empty;
 
         #endregion
 
@@ -73,6 +94,7 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
+
         [Ignore]
         public MpMatcherType MatcherType {
             get => (MpMatcherType)MatcherTypeId;
@@ -91,16 +113,18 @@ namespace MonkeyPaste {
             set => TriggerActionTypeId = (int)value;
         }
 
-        [Ignore]
-        public MpMatchActionType IsMatchActionType {
-            get => (MpMatchActionType)IsMatchActionTypeId;
-            set => IsMatchActionTypeId = (int)value;
-        }
+        //[Ignore]
+        //public MpMatchActionType IsMatchActionType {
+        //    get => (MpMatchActionType)IsMatchActionTypeId;
+        //    set => IsMatchActionTypeId = (int)value;
+        //}
 
         #endregion
 
         public static async Task<MpMatcher> Create(
             MpMatcherType matchType, 
+            string title,
+            string matchPropertyPath,
             string matchData,
 
             MpMatchTriggerType trigger,            
@@ -109,19 +133,51 @@ namespace MonkeyPaste {
             int onTriggerActionObjId,
 
             MpMatchActionType isMatchAction,
-            int isMatchTargetObjId) {            
+            int isMatchTargetObjId,
+            int parentMatcherId = 0,
+            int sortOrderIdx = 0) {
+
+            string iconStr = null;
+            switch(trigger) {
+                case MpMatchTriggerType.ContentItemAdded:
+                    iconStr = MpBase64Images.Instance.ClipboardIcon;
+                    break;
+                case MpMatchTriggerType.ContentItemAddedToTag:
+                    iconStr = MpBase64Images.Instance.TagIcon;
+                    break;
+                case MpMatchTriggerType.WatchFolderChange:
+                case MpMatchTriggerType.WatchFileChanged:
+                    iconStr = MpBase64Images.Instance.FolderChangedIcon;
+                    break;
+                case MpMatchTriggerType.Shortcut:
+                    iconStr = MpBase64Images.Instance.JoystickUnset;
+                    break;
+                case MpMatchTriggerType.ParentMatchOutput:
+                    iconStr = MpBase64Images.Instance.ChainIcon;
+                    break;
+            }
+            int iconId = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.Id;
+            if(!string.IsNullOrEmpty(iconStr)) {
+                var icon = await MpIcon.Create(iconStr, false);
+                iconId = icon.Id;
+            }
             var mr = new MpMatcher() {
                 MatcherGuid = System.Guid.NewGuid(),
 
                 MatcherType = matchType,
+                Title = title,
+                IsMatchPropertyPath = matchPropertyPath,
                 MatchData = matchData,
 
                 TriggerType = trigger,
                 TriggerActionType = onTriggerAction,
                 TriggerActionObjId = onTriggerActionObjId,
 
-                IsMatchActionType = isMatchAction,
-                IsMatchTargetObjectId = isMatchTargetObjId
+                //IsMatchActionType = isMatchAction,
+                //IsMatchTargetObjectId = isMatchTargetObjId
+                ParentMatcherId = parentMatcherId,
+                SortOrderIdx = sortOrderIdx,
+                IconId = iconId
             };
 
             await mr.WriteToDatabaseAsync();

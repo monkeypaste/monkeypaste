@@ -17,6 +17,7 @@ namespace MonkeyPaste {
 
         #region Properties
         public List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
+
         public MpIQueryInfo QueryInfo {
             get {
                 if(QueryInfos.Count > 0) {
@@ -29,6 +30,8 @@ namespace MonkeyPaste {
         public ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
         public int TotalTilesInQuery => AllFetchedAndSortedCopyItemIds.Count;
+
+        public int TotalItemCount { get; set; } = 0;
 
         #endregion
 
@@ -192,7 +195,7 @@ namespace MonkeyPaste {
                 }
             }
             if (qi.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.RichText));
+                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Text));
             }
             if (qi.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
                 types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.FileList));
@@ -561,16 +564,6 @@ namespace MonkeyPaste {
         public async Task<List<MpTag>> GetChildTagsAsync(int tagId) {
             string query = "select * from MpTag where fk_ParentTagId=?";
             var result = await MpDb.Instance.QueryAsync<MpTag>(query,tagId);
-            return result;
-        }
-
-        #endregion
-
-        #region MpTagProperty
-
-        public async Task<List<MpTagProperty>> GetTagPropertiesById(int tagId) {
-            string query = "select * from MpTagProperty where fk_MpTagId=?";
-            var result = await MpDb.Instance.QueryAsync<MpTagProperty>(query,tagId);
             return result;
         }
 

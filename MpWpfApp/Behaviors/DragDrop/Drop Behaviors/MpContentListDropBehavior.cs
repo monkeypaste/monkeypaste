@@ -91,7 +91,7 @@ namespace MpWpfApp {
             }
 
             switch(AssociatedObject.BindingContext.ItemType) {
-                case MpCopyItemType.RichText:
+                case MpCopyItemType.Text:
                     return GetRtbDropTargetRects();
                 case MpCopyItemType.FileList:
                     return GetFileListDropTargetRects();

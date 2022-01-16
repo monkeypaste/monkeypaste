@@ -743,7 +743,7 @@ namespace MpWpfApp {
                 case MpCopyItemDetailType.DataSize:
                     if (CopyItem.ItemType == MpCopyItemType.Image) {
                         info = "(" + (int)itemSize.Width + "px) x (" + (int)itemSize.Height + "px)";
-                    } else if (CopyItem.ItemType == MpCopyItemType.RichText) {
+                    } else if (CopyItem.ItemType == MpCopyItemType.Text) {
                         info = cc + " chars | " + lc + " lines";
                     } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
                         info = fc + " files | " + ds + " MB";
@@ -886,7 +886,7 @@ namespace MpWpfApp {
                         fc = fl.Count;
                         ds = MpHelpers.Instance.FileListSize(fl.ToArray());
                         break;
-                    case MonkeyPaste.MpCopyItemType.RichText:
+                    case MonkeyPaste.MpCopyItemType.Text:
                         lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
                         cc = CopyItem.ItemData.ToPlainText().Length;
                         itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();

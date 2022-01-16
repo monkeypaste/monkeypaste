@@ -78,7 +78,7 @@ namespace MpWpfApp {
             if (CopyItem.ItemType == MpCopyItemType.FileList) {
                 if (forceType == MpCopyItemType.Image) {
                     fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
-                } else if (forceType == MpCopyItemType.RichText) {
+                } else if (forceType == MpCopyItemType.Text) {
                     fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
                 } else {
                     var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -96,7 +96,7 @@ namespace MpWpfApp {
                 string op = Path.GetTempFileName();// MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
                 //file extension
                 switch (CopyItem.ItemType) {
-                    case MpCopyItemType.RichText:
+                    case MpCopyItemType.Text:
                         if (forceType == MpCopyItemType.Image) {
                             fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         } else {
@@ -113,7 +113,7 @@ namespace MpWpfApp {
                         }
                         break;
                     case MpCopyItemType.Image:
-                        if (forceType == MpCopyItemType.RichText) {
+                        if (forceType == MpCopyItemType.Text) {
                             fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToPlainText()));
                         } else {
                             fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));

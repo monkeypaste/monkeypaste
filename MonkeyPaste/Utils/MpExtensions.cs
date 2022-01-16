@@ -367,17 +367,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Reflection
-        public static TEnum ToEnum<TEnum>(this string value, TEnum defaultValue) {
-
-            if (string.IsNullOrEmpty(value)) return defaultValue;
-
-            return (TEnum)Enum.Parse(typeof(TEnum), value, true);
-        }
-
-        public static T ToEnum<T>(this object obj) where T:Enum {
-            var enumName = Enum.GetName(typeof(T), obj);
-            return (T)Enum.Parse(typeof(T), enumName);// Enum.GetNames(typeof(T)).ToList().IndexOf(enumName);
-        }
 
         public static async Task<T> InvokeAsync<T>(this MethodInfo @this, object obj, params object[] parameters) {
             dynamic awaitable = @this.Invoke(obj, parameters);
@@ -389,6 +378,36 @@ namespace MonkeyPaste {
             dynamic awaitable = @this.Invoke(obj, parameters);
             await awaitable;
         }
+
+        public static object GetPropertyValue(this object obj, string propertyPath, object[] index = null) {
+            object propObj = obj;
+            PropertyInfo propInfo = null;
+            var propPathParts = propertyPath.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < propPathParts.Length; i++) {
+                string propPathPart = propPathParts[i];
+
+                if (propObj == null) {
+                    throw new Exception($"Child Object {propPathPart} on path {propertyPath} not found on object: {obj.GetType()}");
+                }
+                Type objType = propObj.GetType();
+                propInfo = objType.GetProperty(propPathPart);
+                if (propObj == null) {
+                    throw new Exception($"Property {propPathPart} not found on object: {propObj.GetType()}");
+                }
+                propInfo.GetValue(propObj);
+
+                if (i < propPathParts.Length - 1) {
+                    propObj = propInfo.GetValue(propObj);
+                }
+            }
+            return propInfo.GetValue(propObj, index);
+        }
+
+        public static T GetPropertyValue<T>(this object obj, string propertyPath, object[] index = null) 
+            where T : class {
+            return obj.GetPropertyValue(propertyPath, index) as T;
+        }
+
         #endregion
     }
 }

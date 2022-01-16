@@ -88,49 +88,6 @@ namespace MpWpfApp {
 
             var cm = sender as ContextMenu;
             cm.Tag = ttvm;
-            foreach (var i in cm.Items) {
-                if (i == null || i is Separator) {
-                    continue;
-                }
-                MenuItem mi = i as MenuItem;
-                if (mi.Header != null && mi.Header.ToString() == "Link") {
-                    mi.Items.Clear();
-
-                    var dirMenuItem = new MenuItem() {
-                        Header = "Directory"
-                    };
-
-                    dirMenuItem.Items.Add(new MenuItem() {
-                        Icon = new MpStringToIconConverter().Convert(Application.Current.Resources["NoEntryIcon"] as string, typeof(Image), null, CultureInfo.InvariantCulture) as Image,
-                        Header = "Add New...",
-                        Command = ttvm.TagProperties.AddDirectoryPropertyToTagCommand
-                    });
-                    if (ttvm.HasProperties) {
-                        dirMenuItem.Items.Add(new Separator());
-
-                        foreach (var prop in ttvm.TagProperties.TagProperties) {
-                            if (prop is MpDirectoryWatcherTagPropertyViewModel dwtpvm) {
-                                dirMenuItem.Items.Add(new MenuItem() {
-                                    Icon = new MpFilePathStringToIconConverter().Convert(dwtpvm.PropertyData, typeof(ImageSource), null, CultureInfo.InvariantCulture) as ImageSource,
-                                    Header = System.IO.Path.GetDirectoryName(dwtpvm.PropertyData),
-                                    Command = dwtpvm.OpenPathCommand,
-                                    CommandParameter = dwtpvm.PropertyData
-                                });
-                            }
-                        }
-
-                        dirMenuItem.Items.Add(new Separator());
-
-                        dirMenuItem.Items.Add(new MpContextMenuItemViewModel() {
-                            Icon = new MpStringToIconConverter().Convert(Application.Current.Resources["CogIcon"] as string, typeof(Image), null, CultureInfo.InvariantCulture) as Image,
-                            Header = "Manage...",
-                            Command = ttvm.TagProperties.ManagePropertiesCommand
-                        });
-                    }
-
-                    mi.Items.Add(dirMenuItem);
-                }
-            }
             MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
         }
 
