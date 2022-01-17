@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Plugin.Wpf_Template {
     public class MpPluginHook : MpIClipboardItemPluginComponent, MpIPlugin {

@@ -252,7 +252,10 @@ namespace MonkeyPaste {
         CustomMinimum, //used to differentiate type
         PasteCopyItem, //10
         SelectTag,
-        AnalyzeCopyItemWithPreset
+        AnalyzeCopyItemWithPreset,
+        CutCopyItem,
+        CopyCopyItem,
+        DuplicateCopyItem
     }
 
 

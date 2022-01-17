@@ -6,10 +6,23 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpMatcherViewModel : MpViewModelBase<MpMatcherCollectionViewModel>, MpIFileSystemEventHandler, MpITreeItemViewModel {
+
+    public interface MpIMatchTrigger {
+        void RegisterMatcher(MpMatcherViewModel mvm);
+        void UnregisterMatcher(MpMatcherViewModel mvm);
+        //ObservableCollection<MpMatcherViewModel> Matchers { get; }
+    }
+
+    public class MpMatcherViewModel : MpViewModelBase<MpMatcherCollectionViewModel>, MpIFileSystemEventHandler, MpITreeItemViewModel, MpIMatchTrigger {
+        #region Private Variables
+
+        private Regex _regEx = null;
+
+        #endregion
 
         #region Properties
 
@@ -237,7 +250,7 @@ namespace MpWpfApp {
 
         #region Events
 
-        public event EventHandler<object> OnMatch;
+        public event EventHandler<MpCopyItem> OnMatch;
 
         #endregion
 
@@ -260,21 +273,21 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public void Register() {
+        public void LinkTriggers() {
             switch (Matcher.TriggerType) {
                 case MpMatchTriggerType.ContentItemAdded:
-                    MpClipTrayViewModel.Instance.OnCopyItemItemAdd += OnMatcherTrigggered;
+                    MpClipTrayViewModel.Instance.RegisterMatcher(this);
                     break;
                 case MpMatchTriggerType.ContentItemAddedToTag:
                     var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == TriggerActionObjId);
                     if(ttvm != null) {
-                        ttvm.OnCopyItemLinked += OnMatcherTrigggered;
+                        ttvm.RegisterMatcher(this);
                     }
                     break;
                 case MpMatchTriggerType.Shortcut:
                     var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == TriggerActionObjId);
                     if(scvm != null) {
-                        scvm.OnShortcutExecuted += OnMatcherTrigggered;
+                        scvm.RegisterMatcher(this);
                     }
                     break;
                 case MpMatchTriggerType.WatchFileChanged:
@@ -284,7 +297,8 @@ namespace MpWpfApp {
                         if(ci != null) {
                             if(ci.Source.App.UserDeviceId == MpPreferences.Instance.ThisUserDevice.Id) {
                                 //only add filesystem watchers for this device
-                                MpFileSystemWatcher.Instance.AddWatcher(ci.ItemData.ToString(), this);
+                                MatchData = ci.ItemData.ToString();
+                                MpFileSystemWatcher.Instance.RegisterMatcher(this);
                             }                            
                         }
                     });
@@ -293,19 +307,37 @@ namespace MpWpfApp {
                     var pmvm = Parent.Matchers.FirstOrDefault(x => x.MatcherId == ParentMatcherId);
                     if (pmvm != null) {
                         ParentMatcherViewModel = pmvm;
-                        ParentMatcherViewModel.OnMatch += OnMatcherTrigggered;
+                        ParentMatcherViewModel.RegisterMatcher(this);
                     }
                     break;
             }
+
+            if(MatcherType == MpMatcherType.Regex) {
+                _regEx = new Regex(
+                    MatchData, 
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+            }
         }
 
-        public void Unegister() {
+        public void UnlinkTriggers() {
 
         }
 
         #endregion
 
-        
+        #region MpIMatchTrigger Implementation
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            OnMatch += mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Parent Matcher {Title} Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            OnMatch -= mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Parent Matcher {Title} Unregistered {mvm.Title} from OnCopyItemAdded");
+        }
+
+        #endregion
 
         #region MpIFileSystemWatcher Implementation
 
@@ -346,18 +378,17 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private void OnMatcherTrigggered(object sender, object e) {
-            CheckForMatch(e);
+        public void OnMatcherTrigggered(object sender, MpCopyItem e) {
+            PerformTriggerAction(e);
         }
 
-
-        private void CheckForMatch(object arg) {
+        private void PerformTriggerAction(MpCopyItem arg) {
+            if(arg == null) {
+                return;
+            }
             Task.Run(async () => {
-                object resultOutput = null;
-
-                switch (Matcher.TriggerActionType) {
+                switch (TriggerActionType) {
                     case MpMatchActionType.Analyze:
-
                         var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Matcher.TriggerActionObjId);
                         object[] args = new object[] { aipvm, arg as MpCopyItem };
                         aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
@@ -366,42 +397,60 @@ namespace MpWpfApp {
                             await Task.Delay(100);
                         }
 
-                        resultOutput = aipvm.Parent.LastResultContentItem;
-                        if (resultOutput == null) {
-                            return;
-                        }
+                        OnMatch?.Invoke(this, aipvm.Parent.LastResultContentItem);
                         break;
-                }
+                    case MpMatchActionType.Classify:
+                        var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x=>x.TagId == Matcher.TriggerActionObjId);
+                        await ttvm.AddContentItem((arg as MpCopyItem).Id);
+                        OnMatch?.Invoke(this, arg);
+                        break;
+                    case MpMatchActionType.Compare:
+                        // NOTE always case insensitive
 
-                switch(Matcher.MatcherType) {
-                    case MpMatcherType.Contains:
-                        object matchVal = resultOutput.GetPropertyValue(IsMatchPropertyPath);
-                        if(matchVal != null) {
-                            string compareStr = matchVal.ToString();
-                            if (compareStr != null &&
-                                compareStr.ToLower().Contains(Matcher.MatchData.ToLower())) {
-                                //await PerformIsMatchAction(arg);
-                                OnMatch?.Invoke(this, resultOutput);
-                            }
+                        object matchVal = arg.GetPropertyValue(IsMatchPropertyPath);
+                        string compareStr = string.Empty;
+                        if (matchVal != null) {
+                            compareStr = matchVal.ToString();                            
+                        }                       
+
+                        if (IsMatch(compareStr)) {
+                            OnMatch?.Invoke(this, arg);
                         }
-                        
                         break;
                 }
             });            
         }
 
-
-
-        //private async Task PerformIsMatchAction(object arg) {
-        //    switch(Matcher.IsMatchActionType) {
-        //        case MpMatchActionType.Classify:
-        //            var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == Matcher.IsMatchTargetObjectId);
-        //            await ttvm.AddContentItem((arg as MpCopyItem).Id);
-        //            break;
-        //    }
-        //}
-
-
+        private bool IsMatch(string compareStr) {
+            switch (MatcherType) {
+                case MpMatcherType.Contains:
+                    if (compareStr.ToLower().Contains(MatchData.ToLower())) {
+                        return true;
+                    }
+                    break;
+                case MpMatcherType.Exact:
+                    if (compareStr.ToLower().Equals(MatchData.ToLower())) {
+                        return true;
+                    }
+                    break;
+                case MpMatcherType.BeginsWith:
+                    if (compareStr.ToLower().StartsWith(MatchData.ToLower())) {
+                        return true;
+                    }
+                    break;
+                case MpMatcherType.EndsWith:
+                    if (compareStr.ToLower().EndsWith(MatchData.ToLower())) {
+                        return true;
+                    }
+                    break;
+                case MpMatcherType.Regex:
+                    if (_regEx != null && _regEx.IsMatch(compareStr)) {
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
         #endregion
 
     }

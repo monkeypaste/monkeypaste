@@ -10,6 +10,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
+    public enum MpContextMenuType {
+        None = 0,
+        ContentItem,
+        Tag,
+        TextEditor
+    }
+
+    public enum MpContextMenuItemsSourceType {
+        None = 0,
+        ContentItems,
+        Tags,
+        Analyzers,
+        Matchers
+    }
+
+    public interface MpIContextMenuItemViewModel {
+        Dictionary<string,ObservableCollection<MpContentItemViewModel>> ContextMenuItemsLookup { get; }
+    }
+
     public class MpContextMenuItemViewModel : MpViewModelBase<object> {
         #region Properties
         public MenuItem MenuItem {

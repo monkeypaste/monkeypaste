@@ -124,13 +124,16 @@ using System.Speech.Synthesis;
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                if (HoverItem != null) {
-                    return HoverItem;
-                }
 
                 if (SelectedItem != null) {
                     return SelectedItem;
                 }
+
+                if (HoverItem != null) {
+                    return HoverItem;
+                }
+
+                
                 return HeadItem;
             }
         }

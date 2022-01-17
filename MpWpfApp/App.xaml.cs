@@ -16,6 +16,7 @@ namespace MpWpfApp {
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
+            MpBootstrapper.Init();
             MpHelpers.Instance.RunOnMainThread(async () => {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -28,7 +29,9 @@ namespace MpWpfApp {
                 await MpDb.Instance.Init(new MpWpfDbInfo());
 
                 await MpMainWindowViewModel.Instance.Init();
-                
+
+                //
+
                 base.OnStartup(e);
             });
         }

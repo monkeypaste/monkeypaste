@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public enum MpPluginComponentType {
         None = 0,
         Clipboard,
@@ -30,8 +30,6 @@ namespace MpWpfApp {
 
         #region Public Methods        
         
-        #endregion
-
-        
+        #endregion        
     }
 }

@@ -180,6 +180,7 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base(null) {
+            //MpHelpers.Instance.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -195,10 +196,9 @@ namespace MpWpfApp {
                 IconBuilder = new MpIconBuilder()
             });
 
-            await MpHelpers.Instance.Init();
+            //await MpHelpers.Instance.Init();
 
-            //MpPluginManager.Instance.Init();
-
+            MpPluginManager.Instance.Init();
 
             await MpCursorViewModel.Instance.Init();
 
@@ -239,7 +239,7 @@ namespace MpWpfApp {
             while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
 
-            Application.Current.Resources["MainWindowViewModel"] = MpMainWindowViewModel.Instance;
+            Application.Current.Resources["MainWindowViewModel"] = this;
 
             MpMessenger.Instance.Register<MpMessageType>(
                 MpSearchBoxViewModel.Instance,

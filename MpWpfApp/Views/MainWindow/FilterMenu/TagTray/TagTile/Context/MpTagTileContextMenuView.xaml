@@ -58,7 +58,7 @@
               Icon="{Binding Source={StaticResource BoltIcon},
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
-              ItemsSource="{Binding TagMatchers}"
+              ItemsSource="{Binding Matchers}"
               ItemContainerStyle="{StaticResource DefaultItemStyle}" />
     <Separator Visibility="{Binding Data.IsUserTag, Converter={StaticResource BoolToVisibilityConverter}, Source={StaticResource TagTileVmProxy}}" />
     <MenuItem Header="Delete"

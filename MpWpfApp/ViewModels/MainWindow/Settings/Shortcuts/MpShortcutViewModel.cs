@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
-    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel> {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIMatchTrigger {
         #region Properties        
 
         #region View Models
@@ -47,9 +47,16 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
+                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
+                        x.TriggerType == MpMatchTriggerType.ContentItemAdded).ToList());
+
+        
+
         #endregion
 
         #region Visibility 
+
         public Visibility GlobalRoutingTypeComboItemVisibility {
             get {
                 return IsRoutable ? Visibility.Visible : Visibility.Collapsed;
@@ -75,7 +82,8 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Business Logic
+        #region State
+
         private string _menuItemTag = string.Empty;
         public string MenuItemTag {
             get {
@@ -234,10 +242,6 @@ namespace MpWpfApp {
             }
         }
 
-        //public object CommandParameter { get; set; } = null;
-        #endregion
-
-        #region State
 
         public bool IsEmpty => KeyItems.Count == 0;
 
@@ -394,7 +398,7 @@ namespace MpWpfApp {
 
         #region Events
 
-        public event EventHandler<object> OnShortcutExecuted;
+        public event EventHandler<MpCopyItem> OnShortcutExecuted;
 
         #endregion
 
@@ -458,6 +462,18 @@ namespace MpWpfApp {
                 //MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
+        }
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            //by design this only can occur for shortcuts with a selected item as its context
+
+            OnShortcutExecuted += mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            OnShortcutExecuted -= mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from OnShortcutExecuted");
         }
 
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -576,18 +592,19 @@ namespace MpWpfApp {
         public ICommand PerformShortcutCommand => new RelayCommand(
             () => {
                 Command?.Execute(CommandId);
-                if(ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
-                    //when shortcut produces a content item notify matchers
-                    // TODO will likely need to have more general case then just analyze
+
+                if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                     var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
-                    if(aipvm != null) {
+                    if (aipvm != null) {
                         Task.Run(async () => {
                             await Task.Delay(300);
-                            while(aipvm.IsBusy) { await Task.Delay(100); }
+                            while (aipvm.IsBusy) { await Task.Delay(100); }
 
                             OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastResultContentItem);
                         });
                     }
+                } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteSelectedClip) {
+                    OnShortcutExecuted?.Invoke(this, MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem);
                 }
             },
             () => {

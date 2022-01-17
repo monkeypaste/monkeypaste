@@ -10,6 +10,8 @@ namespace MpWpfApp {
     public class MpYoloTransaction : MpSingleton<MpYoloTransaction> {
         private YoloScorer<YoloCocoP5Model> _yoloWrapper = null;
 
+        private MpYoloTransaction() { }
+
         public void Init() {
             _yoloWrapper = new YoloScorer<YoloCocoP5Model>("Assets/Weights/yolov5s.onnx", null);
         }

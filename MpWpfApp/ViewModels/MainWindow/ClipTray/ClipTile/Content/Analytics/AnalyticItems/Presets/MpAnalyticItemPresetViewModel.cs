@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
+    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIMatchTrigger, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
         #region Properties
 
         #region View Models
@@ -318,6 +318,16 @@ namespace MpWpfApp {
             var caipvm = new MpAnalyticItemPresetViewModel(Parent);
             caipvm.Preset = Preset.Clone() as MpAnalyticItemPreset;
             return caipvm;
+        }
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            Parent.OnAnalysisCompleted += mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            Parent.OnAnalysisCompleted -= mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Title} matcher");
         }
 
         #endregion

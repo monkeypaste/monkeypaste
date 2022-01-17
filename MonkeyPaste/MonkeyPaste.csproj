@@ -16,7 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Bootstrapper\**" />
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
@@ -27,7 +26,6 @@
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Popups\**" />
-    <EmbeddedResource Remove="Bootstrapper\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
@@ -38,7 +36,6 @@
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Popups\**" />
-    <None Remove="Bootstrapper\**" />
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
@@ -106,8 +103,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.561" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.562" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.40" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" PrivateAssets="All" />

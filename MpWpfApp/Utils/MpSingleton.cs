@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
-    public abstract class MpSingleton2<T> where T: new() {
-        #region Singleton Definition
-        private static readonly Lazy<T> _Lazy = new Lazy<T>(() => new T());
-        public static T Instance { get { return _Lazy.Value; } }
-        #endregion
+    public abstract class MpSingleton2 {
+        public object InstanceObj { get; set; }
+    }
+    public abstract class MpSingletonViewModel : MpViewModelBase {
+
+        public MpSingletonViewModel() : base(null) { }
     }
 
-    public abstract class MpSingletonViewModel<T> : MpViewModelBase where T:class {
+
+
+    public abstract class MpSingletonViewModel<T> : MpSingletonViewModel where T:class {
         private static Dictionary<string, object> _instanceLookup;
 
         private static readonly Lazy<T> _instance = new Lazy<T>(() => {
@@ -51,9 +54,8 @@ namespace MpWpfApp {
             get { return _instance.Value; }
         }
 
-        public MpSingletonViewModel() : base(null) {
             
-        }        
+               
     }
 
     public abstract class MpSingletonBehavior<T,B> : MpBehavior<T> 
@@ -80,69 +82,7 @@ namespace MpWpfApp {
         }
     }
 
-    /// <summary>
-    /// A generic abstract implementation of the Singleton design pattern (http://en.wikipedia.org/wiki/Singleton_pattern).
-    /// 
-    /// Derived type must contain a non-public default constructor to satisfy the rules of the Singleton Pattern.
-    /// If no matching constructor is found, an exception will be thrown at run-time. I am working on a StyleCop
-    /// constraint that will throw a compile-time error in the future.
-    /// 
-    /// Example Usage (C#):
-    /// 
-    ///     class MySingleton : Singleton<MySingleton>
-    ///     {
-    ///         private const string HelloWorldMessage = "Hello World - from MySingleton";
-    ///     
-    ///         public string HelloWorld { get; private set; }
-    ///
-    ///         // Note: *** Private Constructor ***
-    ///         private MySingleton()
-    ///         {
-    ///             // Set default message here.
-    ///             HelloWorld = HelloWorldMessage;
-    ///         }
-    ///     }
-    /// 
-    ///     class Program
-    ///     {
-    ///         static void Main()
-    ///         {
-    ///             var mySingleton = MySingleton.Instance;
-    ///             Console.WriteLine(mySingleton.HelloWorld);
-    ///             Console.ReadKey();
-    ///         }
-    ///     }
-    /// </summary>
-    /// <typeparam name="T">Type of derived Singleton object (i.e. class MySingletone: Singleton<MySingleton>).</typeparam>
     public abstract class MpSingleton<T> where T : class {
-        /// <summary>
-        /// "_instance" is the meat of the Singleton<T> base-class, as it both holds the instance
-        /// pointer and the reflection based factory class used by Lazy<T> for instantiation.
-        /// 
-        /// Lazy<T>.ctor(Func<T> valueFactory,LazyThreadSafetyMode mode), valueFactory:
-        /// 
-        ///     Due to the fact Lazy<T> cannot access a singleton's (non-public) default constructor and
-        ///     there is no "non-public default constructor required" constraint available for C# 
-        ///     generic types, Lazy<T>'s valueFactory Lambda uses reflection to create the instance.
-        ///
-        /// Lazy<T>.ctor(Func<T> valueFactory,LazyThreadSafetyMode mode), mode:
-        /// 
-        ///     Explanation of selected mode (ExecutionAndPublication) is from MSDN.
-        ///     
-        ///     Locks are used to ensure that only a single thread can initialize a Lazy<T> instance 
-        ///     in a thread-safe manner. If the initialization method (or the default constructor, if 
-        ///     there is no initialization method) uses locks internally, deadlocks can occur. If you 
-        ///     use a Lazy<T> constructor that specifies an initialization method (valueFactory parameter),
-        ///     and if that initialization method throws an exception (or fails to handle an exception) the 
-        ///     first time you call the Lazy<T>.Value property, then the exception is cached and thrown
-        ///     again on subsequent calls to the Lazy<T>.Value property. If you use a Lazy<T> 
-        ///     constructor that does not specify an initialization method, exceptions that are thrown by
-        ///     the default constructor for T are not cached. In that case, a subsequent call to the 
-        ///     Lazy<T>.Value property might successfully initialize the Lazy<T> instance. If the
-        ///     initialization method recursively accesses the Value property of the Lazy<T> instance,
-        ///     an InvalidOperationException is thrown.
-        /// 
-        /// </summary>
         private static readonly Lazy<T> _instance = new Lazy<T>(() =>
         {
             // Get non-public constructors for T.
@@ -166,6 +106,12 @@ namespace MpWpfApp {
         /// </summary>
         public static T Instance {
             get { return _instance.Value; }
+        }
+    }
+
+    public abstract class MpSingleton2<T> : MpSingleton2 where T : class {
+        public static T Instance {
+            get { return MpResolver.Resolve<T>(); }
         }
     }
 

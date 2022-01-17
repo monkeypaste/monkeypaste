@@ -45,7 +45,7 @@ namespace MpWpfApp {
                 Matchers.Add(mvm);
             }
 
-            RegisterAll();
+            LinkAllTriggers();
         }
 
         #endregion
@@ -58,12 +58,12 @@ namespace MpWpfApp {
             return mvm;
         }
 
-        public void RegisterAll() {
-            Matchers.ForEach(x => x.Register());
+        public void LinkAllTriggers() {
+            Matchers.ForEach(x => x.LinkTriggers());
         }
 
-        public void UnegisterAll() {
-            Matchers.ForEach(x => x.Unegister());
+        public void UnlinkAllTriggers() {
+            Matchers.ForEach(x => x.UnlinkTriggers());
         }
 
         public string GetUniqueMatcherName() {

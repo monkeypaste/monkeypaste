@@ -21,8 +21,10 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
+using FFImageLoading.Helpers.Exif;
+
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel> {
+    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel>, MpIMatchTrigger {
         #region Private Variables      
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -123,8 +125,14 @@ namespace MpWpfApp {
 
         public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
 
+        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
+                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
+                        x.TriggerType == MpMatchTriggerType.ContentItemAdded).ToList());
+
+        
+
         #region Context Menu Item View Models
-                
+
 
         public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
 
@@ -307,7 +315,6 @@ namespace MpWpfApp {
 
         public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsAnyItemContextMenuOpened);
 
-
         public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
 
         [MpAffectsChild]
@@ -362,13 +369,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
+
         public event EventHandler<object> OnFocusRequest;
         public event EventHandler OnUiRefreshRequest;
         public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler<double> OnScrollToXRequest;
         public event EventHandler OnScrollToHomeRequest;
 
-        public event EventHandler<object> OnCopyItemItemAdd;
+        public event EventHandler<MpCopyItem> OnCopyItemItemAdd;
 
         #endregion
 
@@ -416,7 +424,21 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods        
+        #region Public Methods
+
+        #region MpIMatchTrigger Implementation
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            OnCopyItemItemAdd += mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            OnCopyItemItemAdd -= mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from OnCopyItemAdded");
+        }
+
+        #endregion
 
         public async Task<ObservableCollection<MpContextMenuItemViewModel>> GetTagMenuItemsForSelectedItems() {
             var tmil = new ObservableCollection<MpContextMenuItemViewModel>();

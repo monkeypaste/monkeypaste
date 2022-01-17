@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="MonkeyPaste.Plugin">
+      <HintPath>..\MonkeyPaste.Plugin\bin\Debug\netstandard2.1\MonkeyPaste.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
   </ItemGroup>
 

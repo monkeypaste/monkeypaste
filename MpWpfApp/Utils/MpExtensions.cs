@@ -926,7 +926,7 @@ namespace MpWpfApp {
         }
 
         public static bool IsBase64String(this string str) {
-            if (str.IsStringRichText()) {
+            if (str.IsStringRichText() || str.IsStringResourcePath()) {
                 return false;
             }
             try {
@@ -940,6 +940,13 @@ namespace MpWpfApp {
                 // If exception is caught, then it is not a base64 encoded string
                 return false;
             }
+        }
+
+        public static bool IsStringResourcePath(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith("pack:");
         }
 
         public static bool IsStringRichTextTable(this string text) {

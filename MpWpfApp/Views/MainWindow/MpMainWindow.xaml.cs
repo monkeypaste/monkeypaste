@@ -14,6 +14,9 @@ namespace MpWpfApp {
             sw.Start();
             DataContext = MpMainWindowViewModel.Instance;
             InitializeComponent();
+            //temporary
+            //MpBootstrapper.Init();
+            //DataContext = MpResolver.Resolve<MpMainWindowViewModel>();
         }
 
         private  void MainWindow_Loaded(object sender, RoutedEventArgs e) {

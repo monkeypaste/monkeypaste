@@ -12,16 +12,22 @@ namespace MpWpfApp {
                 if(svm == null) {
                     return null;
                 }
-                if(parameter is string paramStr) {
+                string paramStr = string.Empty;
+                MpIconViewModel ivm = null;
+                if(parameter is string) {
+                    paramStr = parameter as string;
                     if(paramStr.ToLower() == "border") {
-                        return svm.PrimarySourceIconViewModel.IconBorderBitmapSource;
-                    } else if (paramStr.ToLower() == "secondary") {
-                        return svm.SecondarySourceIconViewModel.IconBitmapSource;
-                    } else if (paramStr.ToLower() == "secondaryborder") {
-                        return svm.SecondarySourceIconViewModel.IconBorderBitmapSource;
+                        ivm = svm.PrimarySourceIconViewModel;
+                    } else { 
+                        ivm = svm.SecondarySourceIconViewModel;
                     }
+                } else {
+                    ivm = svm.PrimarySourceIconViewModel;
                 }
-                return svm.PrimarySourceIconViewModel.IconBitmapSource;
+                if(ivm == null) {
+                    return null;
+                }
+                return paramStr.ToLower() == "border" ? ivm.IconBorderBitmapSource : ivm.IconBitmapSource;
             }
             return null;
         }

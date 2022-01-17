@@ -68,5 +68,40 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpSource s) {
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    var svm = await CreateSourceViewModel(s);
+                    Items.Add(svm);
+                    OnPropertyChanged(nameof(Items));
+                });
+            }
+        }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpSource s) {
+                MpHelpers.Instance.RunOnMainThread(async () => {
+                    var svm = Items.FirstOrDefault(x => x.Source.Id == s.Id);
+                    if(svm != null) {
+                        await svm.InitializeAsync(s);
+                    }
+                });
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpSource s) {
+                var svm = Items.FirstOrDefault(x => x.Source.Id == s.Id);
+                if (svm != null) {
+                    Items.Remove(svm);
+                }
+            }
+        }
+        #endregion
+        #endregion
     }
 }

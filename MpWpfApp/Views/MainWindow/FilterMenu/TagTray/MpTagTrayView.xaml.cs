@@ -77,6 +77,9 @@ namespace MpWpfApp {
                 return;
             }
             var sttvm = e.AddedItems[0] as MpTagTileViewModel;
+            if(sttvm.IsSelected) {
+                return;
+            }
             BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
 

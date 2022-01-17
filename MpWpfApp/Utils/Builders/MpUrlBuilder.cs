@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -21,14 +22,29 @@ namespace MpWpfApp {
         #region Public Methods
         public static async Task<MpUrl> CreateFromHtmlData(string htmlDataStr, MpApp app) {
             string sourceTag = "SourceURL:";
-            var htmlParts = htmlDataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            string sourceUrlLine = string.Empty;
 
-            var sourceUrlLine = htmlParts.Where(x => x.StartsWith(sourceTag)).FirstOrDefault();
-            if(sourceUrlLine == null) {
+            if (!htmlDataStr.ToLower().Contains(sourceTag)) {
+                // NOTE this occurs when copying images
+                var m = MpRegEx.Instance.GetRegExForTokenType(MpSubTextTokenType.Uri).Match(htmlDataStr);
+                if(m.Success) {
+                    sourceUrlLine = m.ToString();
+                    if(sourceUrlLine.EndsWith("\"")) {
+                        // removes trailing " from <img src>
+                        sourceUrlLine = sourceUrlLine.Substring(0, sourceUrlLine.Length - 1);
+                    }
+                }
+            } else {
+                var htmlParts = htmlDataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+                sourceUrlLine = htmlParts.Where(x => x.StartsWith(sourceTag)).FirstOrDefault();
+            }
+            if(string.IsNullOrWhiteSpace(sourceUrlLine)) {
                 return null;
             }
 
             string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
+
             string sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(sourceUrl);
 
             var result = await MpUrl.Create(sourceUrl, sourceUrlTitle,app);

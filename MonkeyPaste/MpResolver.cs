@@ -2,6 +2,7 @@
 
 namespace MonkeyPaste {
     public static class MpResolver {
+        //container holds config info on how to resolve types (from autofac)
         private static IContainer _container;
 
         public static void Initialize(IContainer container) {

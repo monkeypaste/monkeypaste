@@ -11,7 +11,7 @@ namespace MpWpfApp {
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcher : MpSingleton<MpFileSystemWatcher>, IDisposable {
+    public class MpFileSystemWatcher : MpSingleton<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -34,6 +34,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            AddWatcher(mvm.MatchData, mvm);
+            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            RemoveWatcher(mvm.MatchData);
+            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
+        }
 
         public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
             if(!File.Exists(path) && !Directory.Exists(path)) {

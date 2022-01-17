@@ -36,12 +36,13 @@ namespace MpWpfApp {
         public async Task Init() {
             IsBusy = true;
 
-            var Urll = await MpDb.Instance.GetItemsAsync<MpUrl>();
+            var urll = await MpDb.Instance.GetItemsAsync<MpUrl>();
             UrlViewModels.Clear();
-            foreach (var url in Urll) {
+            foreach (var url in urll) {
                 var uvm = await CreateUrlViewModel(url);
-                await AddUrl(uvm);
+                UrlViewModels.Add(uvm);
             }
+            await Task.WhenAll(UrlViewModels.Select(x => UpdateRejection(x)));
             OnPropertyChanged(nameof(UrlViewModels));
 
             IsBusy = false;
@@ -71,6 +72,11 @@ namespace MpWpfApp {
                 return avm;
             }
             return null;
+        }
+
+        public async Task UpdateRejection(MpUrlViewModel uvm) {
+            await UpdateDomainRejection(uvm, uvm.Url.IsDomainRejected);
+            await UpdateUrlRejection(uvm, uvm.Url.IsUrlRejected);
         }
 
         public async Task<bool> UpdateUrlRejection(MpUrlViewModel url, bool rejectUrl) {
@@ -140,16 +146,6 @@ namespace MpWpfApp {
             return rejectDomain;
         }
 
-        public async Task AddUrl(MpUrlViewModel avm) {
-            var dupCheck = GetUrlViewModelByUrlPath(avm.UrlPath);
-            if (dupCheck == null) {
-                await avm.Url.WriteToDatabaseAsync();
-                UrlViewModels.Add(avm);
-            }
-
-            await UpdateUrlRejection(avm, avm.IsRejected);
-        }
-
         public bool IsRejected(string domain) {
             var avm = GetUrlViewModelByUrlPath(domain);
             if(avm == null) {
@@ -195,9 +191,8 @@ namespace MpWpfApp {
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                     url = await MpUrl.Create(UrlPath, title, MpPreferences.Instance.ThisAppSource.App);
                     uvm = await CreateUrlViewModel(url);
-                    await AddUrl(uvm);
+                    await UpdateRejection(uvm);
                 }
-
                 SelectedUrlViewModel = uvm;
             });
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MonkeyPaste;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -16,8 +17,8 @@ namespace MpWpfApp {
         private bool _isOcrLocal = true;
 
         // Add your Computer Vision subscription key and endpoint to your environment variables.
-        private string _subscriptionKey = Properties.Settings.Default.AzureCognitiveServicesKey;
-        private static string _endpoint = Properties.Settings.Default.AzureCognitiveServicesEndpoint;
+        private string _subscriptionKey = MpPreferences.Instance.AzureCognitiveServicesKey;
+        private static string _endpoint = MpPreferences.Instance.AzureCognitiveServicesEndpoint;
 
         // the OCR method endpoint
         private string _uriBase = _endpoint + "vision/v2.1/ocr";

@@ -33,9 +33,9 @@ namespace MpWpfApp {
                 string appName = MpHelpers.Instance.GetProcessApplicationName(processHandle);
                 string processIconImg64 = MpHelpers.Instance.GetIconImage(processPath).ToBase64String();
                 
-                string itemData;
+                string itemData = null;
                 string htmlData = string.Empty;
-                MpCopyItemType itemType;
+                MpCopyItemType itemType = MpCopyItemType.None;
 
                 if (iData.ContainsKey(DataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
@@ -51,16 +51,23 @@ namespace MpWpfApp {
                 } else if (iData.ContainsKey(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = iData[DataFormats.Bitmap];
-                } else if ((iData.ContainsKey(DataFormats.Html) || iData.ContainsKey(DataFormats.Text)) && !string.IsNullOrEmpty(iData[DataFormats.Text])) {
+                } else if(iData.ContainsKey(DataFormats.Text)) {                    
                     itemType = MpCopyItemType.Text;
-                    if (iData.ContainsKey(DataFormats.Html)) {
-                        htmlData = iData[DataFormats.Html];                        
-                    }
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText(iData[DataFormats.UnicodeText]);
                     //itemData = itemData.ToQuillText();
                 } else {
-                    MonkeyPaste.MpConsole.WriteLine("MpData error clipboard data is not known format");
+                    MonkeyPaste.MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;
+                }
+
+                if (MpPreferences.Instance.IgnoreWhiteSpaceCopyItems &&
+                    itemType == MpCopyItemType.Text &&
+                    string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
+                    return null;
+                }
+
+                if (iData.ContainsKey(DataFormats.Html)) {
+                    htmlData = iData[DataFormats.Html];
                 }
 
                 var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(itemData);
@@ -107,22 +114,16 @@ namespace MpWpfApp {
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
                     itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
-                    if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
+                    if (((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
-                        if (Properties.Settings.Default.NotificationShowCopyItemTooLargeToast) {
+                        if (MpPreferences.Instance.NotificationShowCopyItemTooLargeToast) {
                             MpStandardBalloonViewModel.ShowBalloon(
                             "Item TOO LARGE",
-                            $"Max Item Characters is {Properties.Settings.Default.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
-                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                            $"Max Item Characters is {MpPreferences.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                            MpPreferences.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                         }
                         return null;
                     }
-                }
-
-                if (MpPreferences.Instance.IgnoreWhiteSpaceCopyItems &&
-                    itemType == MpCopyItemType.Text &&
-                    string.IsNullOrWhiteSpace(((string)itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
-                    return null;
                 }
 
                 if (app == null) {

@@ -32,7 +32,17 @@ namespace MpWpfApp {
                 if(Source == null) {
                     return null;
                 }
-                return Source.IsUrlPrimarySource ? UrlViewModel.IconViewModel : AppViewModel.IconViewModel;
+                if(Source.IsUrlPrimarySource) {
+                    if(UrlViewModel == null) {
+                        return null;
+                    }
+                    return UrlViewModel.IconViewModel;
+                } else {
+                    if (AppViewModel == null) {
+                        return null;
+                    }
+                    return AppViewModel.IconViewModel;
+                }
             }
         }
 
@@ -41,7 +51,17 @@ namespace MpWpfApp {
                 if (Source == null) {
                     return null;
                 }
-                return !Source.IsUrlPrimarySource ? UrlViewModel.IconViewModel : AppViewModel.IconViewModel;
+                if (!Source.IsUrlPrimarySource) {
+                    if (UrlViewModel == null) {
+                        return null;
+                    }
+                    return UrlViewModel.IconViewModel;
+                } else {
+                    if (AppViewModel == null) {
+                        return null;
+                    }
+                    return AppViewModel.IconViewModel;
+                }
             }
         }
 

@@ -40,20 +40,16 @@ using Microsoft.Win32;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpHelpers : MpSingleton<MpHelpers> {
+    public class MpHelpers : MpSingleton2<MpHelpers> {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
 
-        private MpHelpers() { }
-
-        public async Task Init() {
-            await Task.Run(() => {
-                Rand = new Random((int)DateTime.Now.Ticks);
-                // SharedRtb = new RichTextBox();
-                //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
-                _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
-            });
+        public MpHelpers() {
+            Rand = new Random((int)DateTime.Now.Ticks);
+            // SharedRtb = new RichTextBox();
+            //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
+            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }
 
         #region Documents    

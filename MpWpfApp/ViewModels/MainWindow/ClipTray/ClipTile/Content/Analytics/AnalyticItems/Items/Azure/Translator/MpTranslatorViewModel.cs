@@ -59,7 +59,7 @@ namespace MpWpfApp {
 
 
         public override bool Validate() {
-            if (IsBusy || Parent.IsBusy) {
+            if (IsBusy || Parent.IsBusy || !IsLoaded) {
                 return true;
             }
 

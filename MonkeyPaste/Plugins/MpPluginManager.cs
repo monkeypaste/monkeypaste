@@ -7,7 +7,7 @@ using System.Xml;
 using HtmlAgilityPack;
 using System.Reflection;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpPluginManager {
         #region Singleton
         private static readonly Lazy<MpPluginManager> _Lazy = new Lazy<MpPluginManager>(() => new MpPluginManager());
@@ -23,7 +23,8 @@ namespace MpWpfApp {
         #region Public Methods
         public void Init() {
             //find plugin folder in main app folder
-            var pluginRootFolderPath = Properties.Settings.Default.DbPath;
+            var pluginRootFolderPath = Directory.GetCurrentDirectory();
+
             pluginRootFolderPath = pluginRootFolderPath.Replace("mp.db", string.Empty);
             pluginRootFolderPath = Path.Combine(pluginRootFolderPath, "Plugins");
 
@@ -58,20 +59,23 @@ namespace MpWpfApp {
                         //malformed plugin directory, log, ignore and continue
                         MonkeyPaste.MpConsole.WriteLine(string.Format(@"Plugin directory {0} does not contain {0}.dll or {0}.dll cannot be loaded, ignoring plugin"));
                     }
+                    for(int i = 0;i < pluginAssembly.GetTypes().Length;i++) {
+                        var curType = pluginAssembly.GetTypes()[i];
+                        if(curType.GetInterface("MonkeyPaste.Plugin.MpIPlugin") != null) {
+                            var pluginObj = Activator.CreateInstance(curType);
 
-                    Type pluginHookType = pluginAssembly.GetType("MonkeyPaste.Plugin.Wpf_Template.MpPluginHook");
-                    var pluginObj = Activator.CreateInstance(pluginHookType);
+                            if (pluginObj != null) {
+                                var plugin = new MpPlugin();
+                                plugin.Name = pluginObj.GetType().GetMethod("GetName").Invoke(pluginObj, null) as string;
 
-                    if (pluginObj != null) {
-                        var plugin = new MpPlugin();
-                        plugin.Name = pluginObj.GetType().GetMethod("GetName").Invoke(pluginObj, null) as string;
-
-                        var cl = pluginObj.GetType().GetMethod("GetComponents").Invoke(pluginObj, null);
-                        if (cl != null && cl is object[]) {
-                            plugin.Components = cl as object[];
+                                var cl = pluginObj.GetType().GetMethod("GetComponents").Invoke(pluginObj, null);
+                                if (cl != null && cl is object[]) {
+                                    plugin.Components = cl as object[];
+                                }
+                                MonkeyPaste.MpConsole.WriteLine(@"Loaded " + plugin.Name + "...");
+                                Plugins.Add(plugin);
+                            }
                         }
-                        MonkeyPaste.MpConsole.WriteLine(@"Loaded " + plugin.Name + "...");
-                        Plugins.Add(plugin);
                     }
                 }
             }

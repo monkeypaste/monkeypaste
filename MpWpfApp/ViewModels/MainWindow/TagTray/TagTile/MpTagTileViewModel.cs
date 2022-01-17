@@ -13,7 +13,13 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpTagTileViewModel : MpViewModelBase<MpTagTrayViewModel>, MpITreeItemViewModel, MpIShortcutCommand, MpIHasNotification {
+    public class MpTagTileViewModel : 
+        MpViewModelBase<MpTagTrayViewModel>, 
+        MpITreeItemViewModel, 
+        MpIShortcutCommand, 
+        MpIHasNotification, 
+        MpIMatchTrigger {
+
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
@@ -28,10 +34,14 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
 
-        public ObservableCollection<MpMatcherViewModel> TagMatchers => new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.Matcher.TriggerActionType == MpMatchActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
+                        x.TriggerActionType == MpMatchActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
 
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            OnCopyItemLinked -= mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from {TagName} TagAdd");
+        }
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -374,8 +384,8 @@ namespace MpWpfApp {
 
         public event EventHandler OnRequestSelectAll;
 
-        public event EventHandler<object> OnCopyItemLinked;
-        public event EventHandler<object> OnCopyItemUnlinked;
+        public event EventHandler<MpCopyItem> OnCopyItemLinked;
+        public event EventHandler<MpCopyItem> OnCopyItemUnlinked;
 
         #endregion
 
@@ -394,13 +404,16 @@ namespace MpWpfApp {
         public virtual async Task InitializeAsync(MpTag tag) {
             PropertyChanged -= MpTagTileViewModel_PropertyChanged;
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
-            Tag = tag;
 
             IsBusy = true;
 
+            Tag = tag;
+
+            await Task.Delay(1);
             IsBusy = false;
         }
                 
+
         protected virtual void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEditing):
@@ -453,6 +466,11 @@ namespace MpWpfApp {
                 cl.AddRange(cttvm.Children.Cast<MpTagTileViewModel>());
             }
             return cl;
+        }
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            OnCopyItemLinked += mvm.OnMatcherTrigggered;
+            MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Title} matcher");
         }
 
         public async Task AddContentItem(int ciid) {
@@ -509,6 +527,8 @@ namespace MpWpfApp {
 
             PropertyChanged -= MpTagTileViewModel_PropertyChanged;
         }
+
+
         #endregion
 
         #region Protected Methods
@@ -521,7 +541,11 @@ namespace MpWpfApp {
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount++;
-                OnCopyItemLinked?.Invoke(this, cit);
+
+                Task.Run(async () => {
+                    var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(cit.CopyItemId);
+                OnCopyItemLinked?.Invoke(this, ci);
+                });
             }
         }
 
@@ -538,18 +562,13 @@ namespace MpWpfApp {
                 if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpCopyItem ci) {
-                Task.Run(async () => {
-                    var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(ci.Id, TagId);
-                    if(cit != null) {
-                        await cit.DeleteFromDatabaseAsync();
-                        TagClipCount--;
-                        OnCopyItemUnlinked?.Invoke(this, cit.CopyItemId);
-                    }
-                });
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount--;
-                OnCopyItemUnlinked?.Invoke(this, cit);
+                Task.Run(async () => {
+                    var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(cit.CopyItemId);
+                    OnCopyItemUnlinked?.Invoke(this, ci);
+                });
+                
             } 
         }
         #endregion

@@ -314,15 +314,21 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItem AnalyticItem { get; set; }
-        
+
         #endregion
-        
+
         #region Http
         //public abstract MpHttpResponseBase ResponseObj { get; }
 
         #endregion
 
         #endregion
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<MpCopyItem> OnAnalysisCompleted;
 
         #endregion
 
@@ -336,6 +342,7 @@ namespace MpWpfApp {
         }
 
         #endregion
+
 
         #region Public Methods
 
@@ -584,6 +591,8 @@ namespace MpWpfApp {
                 LastTransaction = await ExecuteAnalysis(analysisStr);
 
                 LastResultContentItem = await ConvertToCopyItem(sourceCopyItem.Id, LastTransaction, suppressCreateItem);
+
+                OnAnalysisCompleted?.Invoke(SelectedPresetViewModel, LastResultContentItem);
 
                 IsBusy = false;
             },(args)=>CanExecuteAnalysis(args));
