@@ -81,5 +81,9 @@ namespace MonkeyPaste {
                 throw new Exception($"Uknown property type {newValue.GetType()} for key {key}");
             }
         }
+
+        public string GetDefaultBrowserPath() {
+            return null;
+        }
     }
 }

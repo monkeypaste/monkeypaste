@@ -14,7 +14,9 @@ namespace MonkeyPaste {
         EndsWith = 16,
         Regex = 32,
         Source = 64,
-        Automatic = 128
+        Automatic = 128,
+        Wildcard = 256,
+        Lexical = 512 // like azure cognitive search?
     }
 
     public enum MpMatchTriggerType {
@@ -67,10 +69,7 @@ namespace MonkeyPaste {
         [Column("fk_TriggerActionObjId")]
         public int TriggerActionObjId { get; set; } = 0;
 
-        //[Column("e_MpIsMatchActionTypeId")]
-        //public int IsMatchActionTypeId { get; set; } = 0;
-
-        //public int IsMatchTargetObjectId { get; set; } = 0;
+        public int MatchCount { get; set; } = 0;
 
         public string Title { get; set; } = string.Empty;
 

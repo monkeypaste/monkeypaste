@@ -151,7 +151,7 @@ namespace MpWpfApp {
                     Resize(deltaX);
                 } 
             } else {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
 
             AssociatedObject.BindingContext.IsResizing = _isResizing;

@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public class MpNativeWrapper : MpINativeInterfaceWrapper {
-        #region Singleton Definition
-        private static readonly Lazy<MpNativeWrapper> _Lazy = new Lazy<MpNativeWrapper>(() => new MpNativeWrapper());
-        public static MpNativeWrapper Instance { get { return _Lazy.Value; } }
-
-        public void Init(MpINativeInterfaceWrapper niw) {
+    public class MpNativeWrapper : MpSingleton2<MpNativeWrapper>, MpINativeInterfaceWrapper {
+        public MpNativeWrapper(MpINativeInterfaceWrapper niw) {
             _niw = niw;
         }
-        #endregion
+
+        public void Init() {
+            _niw.Init();
+        }
 
         #region Private Variables
         private MpINativeInterfaceWrapper _niw;
@@ -23,7 +22,6 @@ namespace MonkeyPaste {
             return _niw.GetKeyboardInteractionService();
         }
 
-
         public MpIGlobalTouch GetGlobalTouch() {
             return _niw.GetGlobalTouch();
         }
@@ -32,13 +30,20 @@ namespace MonkeyPaste {
             return _niw.GetLocationFetcher();
         }
 
-
         public MpIDbInfo GetDbInfo() {
             return _niw.GetDbInfo();
         }
 
         public MpIIconBuilder GetIconBuilder() {
             return _niw?.GetIconBuilder();
+        }
+
+        public MpIPreferenceIO GetPreferenceIO() {
+            return _niw?.GetPreferenceIO();
+        }
+
+        public MpIQueryInfo GetQueryInfo() {
+            return _niw?.GetQueryInfo();
         }
         #endregion
     }

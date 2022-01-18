@@ -7,7 +7,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectViewModel : MpViewModelBase<MpDetectedImageObjectCollectionViewModel> {
+    public class MpDetectedImageObjectViewModel : 
+        MpViewModelBase<MpDetectedImageObjectCollectionViewModel>, MpIDesignerItemViewModel {
+        public object DesignerItemContext {
+            get {
+                return this;
+            }
+        }
+
         #region Private Variables       
 
         #endregion

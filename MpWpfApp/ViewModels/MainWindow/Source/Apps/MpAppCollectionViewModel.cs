@@ -11,7 +11,7 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpSingletonViewModel<MpAppCollectionViewModel> {
+    public class MpAppCollectionViewModel : MpSingletonViewModel2<MpAppCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,6 +33,11 @@ namespace MpWpfApp {
 
         #region Constructors
 
+
+        public MpAppCollectionViewModel() : base() {
+            Task.Run(Init);
+        }
+
         public async Task Init() {
             IsBusy = true;
 
@@ -47,24 +52,16 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public MpAppCollectionViewModel() : base() { }
-
         #endregion
 
         #region Public Methods
 
         public MpAppViewModel GetAppViewModelByAppId(int appId) {
-            foreach(var avm in AppViewModels.Where(x => x.AppId == appId)) {
-                return avm;
-            }
-            return null;
+            return AppViewModels.FirstOrDefault(x => x.AppId == appId);
         }
 
         public MpAppViewModel GetAppViewModelByProcessPath(string processPath) {
-            foreach (var avm in AppViewModels.Where(x => x.AppPath.ToLower() == processPath.ToLower())) {
-                return avm;
-            }
-            return null;
+            return AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
         }
 
         public async Task<bool> UpdateRejection(MpAppViewModel app, bool rejectApp) {

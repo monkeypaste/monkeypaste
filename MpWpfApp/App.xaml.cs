@@ -20,13 +20,11 @@ namespace MpWpfApp {
             MpHelpers.Instance.RunOnMainThread(async () => {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-                MpThemeColors.Instance.Init();
                 
-                MpPreferences.Instance.Init(new MpWpfPreferences());
-                MpPreferences.Instance.ThisAppDip = (double)MpScreenInformation.RawDpi / 96;//VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+                //MpPreferences.Instance.Init(new MpWpfPreferences());
 
                 MpDb.Instance.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;
-                await MpDb.Instance.Init(new MpWpfDbInfo());
+                //await MpDb.Instance.Init(new MpWpfDbInfo());
 
                 await MpMainWindowViewModel.Instance.Init();
 

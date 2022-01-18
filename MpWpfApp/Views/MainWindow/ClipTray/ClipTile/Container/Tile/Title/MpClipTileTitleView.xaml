@@ -20,7 +20,7 @@
         <Viewbox VerticalAlignment="Top"
                  HorizontalAlignment="Stretch"
                  Width="{local:MpMeasurementsBinding ClipTileMinSize,
-                                                        Mode=OneWay}"
+                                                     Mode=OneWay}"
                  Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
                                                       Mode=OneWay}"
                  Loaded="ClipTileAppIconBorderImage_Loaded"

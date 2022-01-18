@@ -5,9 +5,21 @@ using MonkeyPaste;
 using Xamarin.Forms.PlatformConfiguration;
 
 namespace MpWpfApp {
-    public class MpNativeWrapper : MpINativeInterfaceWrapper {
+    public class MpWpfWrapper : MpINativeInterfaceWrapper {
         public MpIconBuilder IconBuilder { private get; set; }
         public MpWpfDbInfo DbInfo { private get; set; }
+        public MpWpfPreferences WpfPreferences { private get; set; }
+        public MpWpfQueryInfo QueryInfo { private get; set; }
+
+        public MpWpfWrapper() {
+            Init();
+        }
+
+        public void Init() {
+            DbInfo = new MpWpfDbInfo();
+            WpfPreferences = new MpWpfPreferences();
+            QueryInfo = new MpWpfQueryInfo();
+        }
 
         public MpIDbInfo GetDbInfo() {
             return DbInfo;
@@ -27,6 +39,14 @@ namespace MpWpfApp {
 
         public MpIUiLocationFetcher GetLocationFetcher() {
             throw new System.NotImplementedException();
+        }
+
+        public MpIPreferenceIO GetPreferenceIO() {
+            return WpfPreferences;
+        }
+
+        public MpIQueryInfo GetQueryInfo() {
+            return QueryInfo;
         }
     }
 }

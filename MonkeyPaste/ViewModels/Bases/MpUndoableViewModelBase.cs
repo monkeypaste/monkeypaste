@@ -32,11 +32,7 @@ namespace MonkeyPaste {
         /// <param name="newValue">The updated value.</param>
         /// <param name="name">The name of the undo operation.</param>
         protected void AddUndo(T instance, string property, object oldValue, object newValue, string name) {
-            if (!IsInDesignMode) {
-                // Only add an undoable item if we aren't in design time. We don't want to
-                // use up valuable resources, and this is a handy little optimisation.
-                Undoable.Add(new MpUndoableProperty<T>(property, instance, oldValue, newValue, name));
-            }
+            Undoable.Add(new MpUndoableProperty<T>(property, instance, oldValue, newValue, name));
         }
 
         /// <summary>

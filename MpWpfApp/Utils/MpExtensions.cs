@@ -65,6 +65,13 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Graphics
+
+        public static Point ToWpfPoint(this MpPoint p) {
+            return new Point() { X = p.X, Y = p.Y };
+        }
+        #endregion
+
         #region Collections
 
         public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {

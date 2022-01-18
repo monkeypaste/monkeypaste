@@ -27,7 +27,7 @@ namespace MpWpfApp {
         Link
     }
 
-    public class MpCursorViewModel : MpSingletonViewModel<MpCursorViewModel> {
+    public class MpCursorViewModel : MpSingletonViewModel2<MpCursorViewModel> {
         #region Private Variables
 
         private Dictionary<MpCursorType, Cursor> _cursorLookup = 
@@ -65,18 +65,21 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpCursorViewModel() : base() { }
+        public MpCursorViewModel() : base() {
+            MpHelpers.Instance.RunOnMainThread(Init);
+        }
+
+
+        public void Init() {
+            PropertyChanged -= MpMouseViewModel_PropertyChanged;
+            PropertyChanged += MpMouseViewModel_PropertyChanged;
+            CurrentCursor = MpCursorType.Default;
+        }
 
         #endregion
 
         #region Public Methods
 
-        public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                PropertyChanged += MpMouseViewModel_PropertyChanged;
-                CurrentCursor = MpCursorType.Default;
-            });
-        }
 
         public MpCursorType GetCursorFromString(string text) {
             if (text.ToLower() == "wait") {
@@ -145,6 +148,10 @@ namespace MpWpfApp {
                 Mouse.OverrideCursor = cursor;
                 Mouse.PrimaryDevice.OverrideCursor = cursor;
 
+                if(Application.Current.MainWindow == null) {
+                    // NOTE occurs on init
+                    return;
+                }
                 Application.Current.MainWindow.ForceCursor = true;
                 Application.Current.MainWindow.Cursor = cursor;
             } else {

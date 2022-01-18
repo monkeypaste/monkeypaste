@@ -8,17 +8,17 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpPreferences : MpSingleton<MpPreferences> {
+    public class MpPreferences : MpSingleton2<MpPreferences> {
         #region Constructors
 
-        public void Init(MpIPreferenceIO prefIo) {
+        public MpPreferences(MpIPreferenceIO prefIo) {
             _prefIo = prefIo;
-
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
-                MpPreferences.Instance.ThisDeviceGuid = System.Guid.NewGuid().ToString();
+                ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
             ResetClipboardAfterMonkeyPaste = false;
         }
+
         #endregion
 
         #region Private Variables

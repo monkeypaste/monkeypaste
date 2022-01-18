@@ -15,11 +15,16 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpDetectedObjectsCollectionView.xaml
+    /// Interaction logic for MpDesignerItemView.xaml
     /// </summary>
-    public partial class MpDetectedObjectsCollectionView : MpUserControl<MpDetectedImageObjectCollectionViewModel> {
-        public MpDetectedObjectsCollectionView() {
+    public partial class MpDesignerItemView : MpUserControl<MpIDesignerItemViewModel> {
+
+        public object DesignerContent { get; set; }
+
+        public MpDesignerItemView() {
             InitializeComponent();
+            DesignerContainer.Content = DesignerContent;
         }
+
     }
 }

@@ -78,7 +78,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "ForegroundBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.Black));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -154,7 +154,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "BackgroundBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.White));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -176,7 +176,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "HoverSelectedBorderBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.Yellow));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -194,7 +194,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "SelectedBorderBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.Red));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -212,7 +212,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "HoverBorderBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.Yellow));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -230,7 +230,7 @@ namespace MpWpfApp {
             DependencyProperty.Register(
                 "BorderBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
-                new FrameworkPropertyMetadata(Brushes.Black));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -326,7 +326,7 @@ namespace MpWpfApp {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
             if (dpo is Control c) {
-                //UpdateBrushes(c);
+                UpdateBrushes(c);
             }
         }
 
@@ -339,7 +339,7 @@ namespace MpWpfApp {
             }
 
             if (dpo is FrameworkElement fe) {
-               // UpdateBrushes(fe);
+                UpdateBrushes(fe);
             } 
         }
 
@@ -364,14 +364,18 @@ namespace MpWpfApp {
         }
 
         private static Brush GetBrush(DependencyObject dpo, bool isHovering, bool isSelected, string prefix) {
+            prefix += "Brush";
             Stack<string> propertyNameStack = new Stack<string>();
-            propertyNameStack.Push(prefix + "Brush");
+            propertyNameStack.Push(prefix);
 
-            if (isSelected) {
-                propertyNameStack.Push("Selected" + propertyNameStack);
-            }
+
             if (isHovering) {
-                propertyNameStack.Push("Hover" + propertyNameStack);
+                prefix = "Hover" + prefix;
+                propertyNameStack.Push(prefix);
+            }
+            if (isSelected) {
+                prefix = "Selected" + prefix;
+                propertyNameStack.Push(prefix);
             }
             DependencyPropertyDescriptor descriptor = null;
             while (descriptor == null) { 
@@ -385,7 +389,7 @@ namespace MpWpfApp {
                                 typeof(Brush));
             }
             if(descriptor == null) {
-                return Brushes.Red;
+                return Brushes.Transparent;
             }
 
             return descriptor.GetValue(dpo) as Brush;

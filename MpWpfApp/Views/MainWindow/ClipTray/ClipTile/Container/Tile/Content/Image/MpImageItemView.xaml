@@ -11,18 +11,20 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <Viewbox Width="{Binding Parent.TileContentWidth}"
+    <!--<Viewbox Width="{Binding Parent.TileContentWidth}"
              Height="{Binding EditorHeight}"
-             DataContext="{Binding}">
-        <Grid>
+             DataContext="{Binding}"
+             Stretch="Uniform">-->
+        <Grid Width="{Binding Parent.TileContentWidth}" 
+             Height="{Binding EditorHeight}">
             <Image x:Name="ClipTileAppIconImage"
                Source="{Binding CopyItemData,
                                 Converter={StaticResource Base64StringToBitmapSourceConverter}}"
-               Stretch="None"
+               Stretch="Uniform"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Visibility="Visible" />
             <local:MpDetectedObjectsCollectionView DataContext="{Binding DetectedImageObjectCollectionViewModel}"/>
         </Grid>
-    </Viewbox>
+    <!--</Viewbox>-->
 </local:MpUserControl>

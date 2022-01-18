@@ -11,7 +11,7 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpUrlCollectionViewModel : MpSingletonViewModel<MpUrlCollectionViewModel> {
+    public class MpUrlCollectionViewModel : MpSingletonViewModel2<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,6 +33,10 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        public MpUrlCollectionViewModel() : base() {
+            Task.Run(Init);
+        }
+
         public async Task Init() {
             IsBusy = true;
 
@@ -47,7 +51,6 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-        public MpUrlCollectionViewModel() : base() { }
 
         #endregion
 

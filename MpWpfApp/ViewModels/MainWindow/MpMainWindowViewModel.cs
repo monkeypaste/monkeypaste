@@ -187,22 +187,22 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
+            //MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
 
-            await MpSystemTrayViewModel.Instance.Init();
-            Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
+            //await MpSystemTrayViewModel.Instance.Init();
+            //Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
 
-            MonkeyPaste.MpNativeWrapper.Instance.Init(new MpNativeWrapper() {
-                IconBuilder = new MpIconBuilder()
-            });
+            //MonkeyPaste.MpNativeWrapper.Instance.Init(new MpWpfWrapper() {
+            //    IconBuilder = new MpIconBuilder()
+            //});
 
             //await MpHelpers.Instance.Init();
 
-            MpPluginManager.Instance.Init();
+            //MpPluginManager.Instance.Init();
 
-            await MpCursorViewModel.Instance.Init();
+            //await MpCursorViewModel.Instance.Init();
 
-            await MpSourceCollectionViewModel.Instance.Init();
+            //await MpSourceCollectionViewModel.Instance.Init();
 
             await MpSearchBoxViewModel.Instance.Init();
             Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;

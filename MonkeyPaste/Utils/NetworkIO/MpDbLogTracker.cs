@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpDbLogTracker {
-        public static async Task TrackDbWriteAsync(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
+        public static async Task LogDbWriteAsync(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
             if(string.IsNullOrEmpty(dbModel.Guid)) {
                 MpConsole.WriteLine(@"Cannot track item without a guid");
                 return;

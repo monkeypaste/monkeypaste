@@ -1,0 +1,86 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpDetectedObjectsCollectionView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpDetectedImageObjectCollectionViewModel"
+                     mc:Ignorable="d"
+                     d:DataContext="{d:DesignInstance Type=local:MpDetectedImageObjectCollectionViewModel,
+                                                      IsDesignTimeCreatable=False}"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800">
+    <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol" 
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Visibility="{Binding Parent.Parent.IsSelected,
+                                       Converter={StaticResource BoolToVisibilityConverter}}"
+                  ItemsSource="{Binding Items}">
+        <ItemsControl.Resources>
+            <local:MpBindingProxy x:Key="DetectedImageObjectCollectionViewModelProxy"
+                                  Data="{Binding}" />
+            <!--<Path Fill="Blue"
+                            Data="M 0,5 5,0 10,5 5,10 Z"
+                            Stretch="Fill"
+                            IsHitTestVisible="False"/>-->
+            <!--<DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
+               <ContentControl Width="{Binding Width}"
+                                Height="{Binding Height}"
+                                Canvas.Top="0"
+                                Canvas.Left="0"
+                                Background="Transparent"
+                                Visibility="{Binding Parent.Parent.Parent.IsSelected,
+                                                     Converter={StaticResource BoolToVisibilityConverter}}"
+                                Style="{StaticResource DetectedObjectContentControlStyle}">
+                    <ContentControl.RenderTransform>
+                        <TranslateTransform X="{Binding X}"
+                                            Y="{Binding Y}" />
+                    </ContentControl.RenderTransform>
+                    <Button x:Name="DetectedImageObjectButton"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="Transparent"
+                            BorderThickness="3"
+                            local:MpHoverableExtension.IsEnabled="True"
+                            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                            Mode=TwoWay}"
+                            Command="{Binding}">
+                        <TextBox HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding ObjectTypeName,
+                                                Mode=TwoWay,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="{Binding FontSize}"
+                                 IsReadOnly="{Binding IsNameReadOnly}" />
+                    </Button>
+                </ContentControl>-->
+                
+                <!--<local:MpDetectedObjectItemView Width="100"
+                        Height="100"  DataContext="{Binding}" />
+                <Ellipse Fill="Red" Width="50" Height="50"/>
+            </DataTemplate>-->
+        </ItemsControl.Resources>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas x:Name="ClipTileImageDetectedObjectsCanvas" 
+                        IsItemsHost="True" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Canvas.Left" Value="{Binding X}" />
+                <Setter Property="Canvas.Top" Value="{Binding Y}" />
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <local:MpDetectedObjectItemView DataContext="{Binding}" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</local:MpUserControl>

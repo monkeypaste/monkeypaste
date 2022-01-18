@@ -18,7 +18,8 @@
         </Grid.ColumnDefinitions>
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
-                             Width="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
+                             Width="{Binding PinTrayScreenWidth,
+                                             Mode=OneWayToSource}"
                              DataContext="{Binding}"
                              Visibility="{Binding IsAnyTilePinned,
                                                   Converter={StaticResource BoolToVisibilityConverter}}" />

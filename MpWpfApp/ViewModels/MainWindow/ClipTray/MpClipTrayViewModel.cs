@@ -1190,6 +1190,7 @@ namespace MpWpfApp {
                             "Successfully loaded w/ " + totalItems + " items",
                             Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
+                    MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
                     MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
                 });
             }

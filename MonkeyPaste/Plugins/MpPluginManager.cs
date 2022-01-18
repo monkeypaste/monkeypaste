@@ -6,21 +6,20 @@ using System.Text;
 using System.Xml;
 using HtmlAgilityPack;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpPluginManager {
-        #region Singleton
-        private static readonly Lazy<MpPluginManager> _Lazy = new Lazy<MpPluginManager>(() => new MpPluginManager());
-        public static MpPluginManager Instance { get { return _Lazy.Value; } }
-
-        private MpPluginManager() { }
-        #endregion
+    public class MpPluginManager : MpSingleton2<MpPluginManager> {
 
         #region Properties
         public ObservableCollection<MpPlugin> Plugins = new ObservableCollection<MpPlugin>();
         #endregion
 
         #region Public Methods
+
+        public MpPluginManager() {
+            Task.Run(Init);
+        }
         public void Init() {
             //find plugin folder in main app folder
             var pluginRootFolderPath = Directory.GetCurrentDirectory();

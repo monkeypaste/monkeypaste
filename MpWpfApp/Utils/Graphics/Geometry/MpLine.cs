@@ -7,21 +7,21 @@ using System.Windows;
 
 namespace MpWpfApp {
     public class MpLine {
-        public Point P1 { get; set; } = new Point();
-        public Point P2 { get; set; } = new Point();
+        public MpPoint P1 { get; set; } = new MpPoint();
+        public MpPoint P2 { get; set; } = new MpPoint();
 
-        public Point[] P => new Point[] { P1, P2 };
+        public MpPoint[] P => new MpPoint[] { P1, P2 };
 
         public MpLine() { }
 
-        public MpLine(Point p1, Point p2) {
+        public MpLine(MpPoint p1, MpPoint p2) {
             P1 = p1;
             P2 = p2;
         }
 
         public MpLine(double x1, double y1, double x2, double y2) {
-            P1 = new Point(x1, y1);
-            P2 = new Point(x2, y2);
+            P1 = new MpPoint(x1, y1);
+            P2 = new MpPoint(x2, y2);
         }
 
         public override string ToString() {

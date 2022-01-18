@@ -43,6 +43,9 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
             get {
+                if(MpIconCollectionViewModel.Instance == null) {
+                    return new ObservableCollection<MpContextMenuItemViewModel>();
+                }
                 var pmic = new List<MpContextMenuItemViewModel>();
                 foreach (var item in Items) {
                     var imivm = new MpContextMenuItemViewModel(

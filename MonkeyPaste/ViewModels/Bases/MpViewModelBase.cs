@@ -1,47 +1,61 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 
-namespace MonkeyPaste {
-    public abstract class MpViewModelBase1<P> : INotifyPropertyChanged, IDisposable
-        where P : class {
-        #region Private Variables
-        #endregion
+namespace MonkeyPaste {    
+    public abstract class MpViewModelBase : INotifyPropertyChanged {
+
+        private static Dictionary<string, int> _instanceCountLookup;
 
         #region Properties
 
-        public P Parent { get; set; }
-        //public P Parent {
-        //    get {
-        //        return _parent;
-        //    }
-        //    set {
-        //        if(_parent != value) {
-        //            _parent = value;
-        //            OnPropertyChanged(nameof(Parent));
-        //        }
-        //    }
-        //}
+        public virtual object ParentObj { get; protected set; }
+
+        private bool _isBusy = false;
+        public bool IsBusy {
+            get => _isBusy;
+            set {
+                SetProperty(ref _isBusy, value);
+                //MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
+            }
+        }
+        public bool IsNotBusy => !IsBusy;
+
+        public bool IsLoaded { get; set; } = false;
+
+        public bool SupressPropertyChangedNotification { get; set; } = false;
 
 
-        public bool IsBusy { get; set; }
-
-        public bool? IsItemVisible { get; set; } = true;
+        public bool HasModelChanged { get; set; } = false;
 
         #endregion
 
         #region Events
+
         public event EventHandler ViewModelLoaded;
         protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
+
         #endregion
 
         #region Constructors
 
-        protected MpViewModelBase1(P parent) {
-            Parent = parent;
+        protected MpViewModelBase() { }
+
+        protected MpViewModelBase(object parent) {
+            if (parent == null) {
+                string typeStr = this.GetType().Name;
+                if (_instanceCountLookup == null) {
+                    _instanceCountLookup = new Dictionary<string, int>();
+                }
+                if (_instanceCountLookup.ContainsKey(typeStr)) {
+                    _instanceCountLookup[typeStr]++;
+                } else {
+                    _instanceCountLookup.Add(typeStr, 1);
+                }
+            }
+
+            ParentObj = parent;
 
             MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
             MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
@@ -53,20 +67,44 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Public Methods
+        public static void PrintInstanceCount() {
+            foreach (var kvp in _instanceCountLookup) {
+                MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
+            }
+        }
+
+        #region IDisposable Implementation
+        // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/
+        // and https://web.archive.org/web/20200720045029/https://docs.microsoft.com/en-us/archive/blogs/jgoldb/finding-memory-leaks-in-wpf-based-applications
 
         public virtual void Dispose() {
-            MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
-            MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
-            MpDb.Instance.SyncAdd -= Instance_SyncAdd;
-            MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
-            MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) {
+            // Release unmanaged memory
+            if (disposing) {
+                // Release other objects
+                IsBusy = false;
+
+                MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
+                MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
+                MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
+                MpDb.Instance.SyncAdd -= Instance_SyncAdd;
+                MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
+                MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+            }
+        }
+
+        ~MpViewModelBase() {
+            Dispose(false);
         }
 
         #endregion
 
         #region Protected Methods
+
 
         #region Db Events
 
@@ -96,10 +134,33 @@ namespace MonkeyPaste {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool ThrowOnInvalidPropertyName { get; private set; } = false;
+        private bool ThrowOnInvalidPropertyName => false;
 
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string name = "") {
+            if (!EqualityComparer<T>.Default.Equals(field, value)) {
+                field = value;
+                var handler = PropertyChanged;
+                if (handler != null) {
+                    handler(this, new PropertyChangedEventArgs(name));
+                }
+            }
+        }
+
+        // SetProperty example below
+        //private int unitsInStock;
+        //public int UnitsInStock {
+        //    get { return unitsInStock; }
+        //    set {
+        //        SetProperty(ref unitsInStock, value);
+        //    }
+        //}
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            if(SupressPropertyChangedNotification) {
+                return;
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            //return;
 
             //MpHelpers.Instance.RunOnMainThreadAsync(() => {
             //    //check if property has affects child attribute
@@ -115,90 +176,36 @@ namespace MonkeyPaste {
         #endregion
     }
 
-    public class MpViewModelBase : MpObservableObject {
+    public abstract class MpViewModelBase<P> : MpViewModelBase where P: class {
         #region Private Variables
-        #endregion        
+        #endregion
 
         #region Properties
 
-        #region View Models
-        //public MpMainShellViewModel MainShellViewModel {
-        //    get {
-        //        return Application.Current.MainPage.BindingContext as MpMainShellViewModel;
-        //    }
-        //}
-        public MpViewModelBase ParentViewModel { get; set; }
-        #endregion
-
-        public MpINavigate Navigation { get; set; } = new MpNavigator();
-        public static string User { get; set; }
-
-        
-        public bool CanAcceptChildren { get; set; } = true;
-
-        private bool _isLoading;
-        public bool IsLoading {
+        public P Parent {
             get {
-                return _isLoading;
+                if (ParentObj == null) {
+                    return null;
+                }
+                return (P)ParentObj;
             }
-            set {
-                if (_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
+            private set {
+                if(Parent != value) {
+                    ParentObj = value;
+                    OnPropertyChanged(nameof(Parent));
                 }
             }
         }
 
+        #endregion
 
-        private static bool _designMode = false;
-        protected bool IsInDesignMode {
-            get {
-                return _designMode;
-            }
-        }
+        #region Constructors
 
-        private string _name = string.Empty;
-        public string Name {
-            get {
-                return _name;
-            }
-            set {
-                if (_name != value) {
-                    _name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
+        protected MpViewModelBase(P parent) : base(parent) {
+            Parent = parent;
         }
-
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get {
-                return _isBusy;
-            }
-            set
-            {
-                if(_isBusy != value)
-                {
-                    _isBusy = value;
-                    OnPropertyChanged(nameof(IsBusy));
-                }
-            }
-        }
-        public bool IsNotBusy => !IsBusy;
 
         #endregion
 
-        
-
-        #region Protected Methods
-        protected MpViewModelBase() : base() { }
-
-        #endregion
-
-        #region Private methods
-        #endregion
-
-        
     }
 }

@@ -76,7 +76,6 @@ namespace MpWpfApp {
 
         #region MpITreeItemViewModel Implementation
 
-
         public bool IsSelected { get; set; }
         public bool IsHovering { get; set; }
         public bool IsExpanded { get; set; }

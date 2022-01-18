@@ -125,6 +125,7 @@
     <Compile Include="Attributes\DependsOn\MpDependsOnChildAttribute.cs" />
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
     <Compile Include="Behaviors\Base\MpBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\Drag Behaviors\Base\MpDragBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
@@ -209,15 +210,18 @@
     <Compile Include="Utils\Builders\MpIconBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
+    <Compile Include="Utils\Graphics\Geometry\MpPoint.cs" />
+    <Compile Include="Utils\Graphics\Geometry\MpRect.cs" />
+    <Compile Include="Utils\Graphics\Geometry\MpSize.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
-    <Compile Include="Utils\MpLine.cs" />
+    <Compile Include="Utils\Graphics\Geometry\MpLine.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpITreeItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Match\MpMatcherCollectionViewModel.cs" />
-    <Compile Include="Utils\MpNativeWrapper.cs" />
+    <Compile Include="Utils\MpWpfWrapper.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
@@ -308,9 +312,16 @@
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Geometry\MpPointViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Geometry\MpRectViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Geometry\MpSizeViewModel.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="ViewModels\Reusable\MpToggleButtonBaseViewModel.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpDetectedObjectsCollectionView.xaml.cs">
+    <Compile Include="Views\Base\MpIRectViewModel.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml.cs">
+      <DependentUpon>MpDetectedObjectItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml.cs">
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
@@ -485,6 +496,9 @@
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reusable\DesignerItem\MpDesignerItemView.xaml.cs">
+      <DependentUpon>MpDesignerItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
     </Compile>
@@ -564,9 +578,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpDetectedObjectsCollectionView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>
@@ -743,6 +761,10 @@
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Reusable\DesignerItem\MpDesignerItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>

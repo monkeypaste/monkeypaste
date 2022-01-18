@@ -140,8 +140,8 @@ namespace MpWpfApp {
                 Visibility = Visibility.Visible;
                 drawingContext.DrawLine(
                     new Pen(Brushes.Red, 1.5) { DashStyle = DashStyles.Dash },
-                    DropLine.P1,
-                    DropLine.P2);
+                    DropLine.P1.ToWpfPoint(),
+                    DropLine.P2.ToWpfPoint());
             } else if(!IsDebugMode) {
                 Visibility = Visibility.Hidden;
             }

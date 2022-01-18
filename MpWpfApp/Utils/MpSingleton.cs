@@ -9,15 +9,10 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
-    public abstract class MpSingleton2 {
-        public object InstanceObj { get; set; }
-    }
     public abstract class MpSingletonViewModel : MpViewModelBase {
 
         public MpSingletonViewModel() : base(null) { }
     }
-
-
 
     public abstract class MpSingletonViewModel<T> : MpSingletonViewModel where T:class {
         private static Dictionary<string, object> _instanceLookup;
@@ -36,7 +31,7 @@ namespace MpWpfApp {
 
             // If we can't find the right type of construcor, throw an exception.
             if (!Array.Exists(ctors, (ci) => ci.GetParameters().Length == 0)) {
-                throw new ConstructorNotFoundException("Non-public ctor() note found.");
+                //throw new ConstructorNotFoundException("Non-public ctor() note found.");
             }
 
             // Get reference to default non-public constructor.
@@ -67,7 +62,7 @@ namespace MpWpfApp {
 
             // If we can't find the right type of construcor, throw an exception.
             if (!Array.Exists(ctors, (ci) => ci.GetParameters().Length == 0)) {
-                throw new ConstructorNotFoundException("Non-public ctor() note found.");
+                //throw new ConstructorNotFoundException("Non-public ctor() note found.");
             }
 
             // Get reference to default non-public constructor.
@@ -91,7 +86,7 @@ namespace MpWpfApp {
             // If we can't find the right type of construcor, throw an exception.
             if (!Array.Exists(ctors, (ci) => ci.GetParameters().Length == 0)) {
                 
-                throw new ConstructorNotFoundException("Non-public ctor() note found.");
+                //throw new ConstructorNotFoundException("Non-public ctor() note found.");
             }
 
             // Get reference to default non-public constructor.
@@ -109,19 +104,4 @@ namespace MpWpfApp {
         }
     }
 
-    public abstract class MpSingleton2<T> : MpSingleton2 where T : class {
-        public static T Instance {
-            get { return MpResolver.Resolve<T>(); }
-        }
-    }
-
-    /// <summary>
-    /// Exception thrown by Singleton<T> when derived type does not contain a non-public default constructor.
-    /// </summary>
-    public class ConstructorNotFoundException : Exception {
-        private const string ConstructorNotFoundMessage = "Singleton<T> derived types require a non-public default constructor.";
-        public ConstructorNotFoundException() : base(ConstructorNotFoundMessage) { }
-        public ConstructorNotFoundException(string auxMessage) : base(String.Format("{0} - {1}", ConstructorNotFoundMessage, auxMessage)) { }
-        public ConstructorNotFoundException(string auxMessage, Exception inner) : base(String.Format("{0} - {1}", ConstructorNotFoundMessage, auxMessage), inner) { }
-    }
 }

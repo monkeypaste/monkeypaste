@@ -35,11 +35,15 @@ namespace MpWpfApp {
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
 
+        public bool HasModelChanged { get; set; } = false;
+
         #endregion
 
         #region Events
 
-
+        public event EventHandler ViewModelLoaded;
+        protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
+        
         #endregion
 
         #region Constructors
@@ -106,7 +110,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
-
 
         #region Db Events
 
@@ -198,8 +201,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        public bool HasModelChanged { get; set; } = false;
 
         #endregion
 

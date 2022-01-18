@@ -9,7 +9,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSourceCollectionViewModel : MpSingletonViewModel<MpSourceCollectionViewModel> {
+    public class MpSourceCollectionViewModel : MpSingletonViewModel2<MpSourceCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,14 +33,16 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpSourceCollectionViewModel() : base() { }
+        public MpSourceCollectionViewModel() : base() {
+            Task.Run(Init);
+        }
 
         public async Task Init() {
             IsBusy = true;
 
-            await MpIconCollectionViewModel.Instance.Init();
-            await MpAppCollectionViewModel.Instance.Init();
-            await MpUrlCollectionViewModel.Instance.Init();
+            //await MpIconCollectionViewModel.Instance.Init();
+            //await MpAppCollectionViewModel.Instance.Init();
+            //await MpUrlCollectionViewModel.Instance.Init();
 
             var sl = await MpDb.Instance.GetItemsAsync<MpSource>();
             foreach(var s in sl) {

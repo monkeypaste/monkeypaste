@@ -8,7 +8,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpSingletonViewModel<MpSystemTrayViewModel> {
+    public class MpSystemTrayViewModel : MpSingletonViewModel2<MpSystemTrayViewModel> {
 
         #region View Models
         private MpSettingsWindowViewModel _settingsWindowViewModel = null;
@@ -94,9 +94,8 @@ namespace MpWpfApp {
         #region Constructors
 
 
-        public async Task Init() {
-            int totalItemCount = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
-            TotalItemCountLabel = string.Format(@"{0} total entries", totalItemCount);
+        public MpSystemTrayViewModel() {
+            Application.Current.Resources["SystemTrayViewModel"] = this;
         }
 
         #endregion
@@ -104,7 +103,6 @@ namespace MpWpfApp {
         #region Commands
         public ICommand ExitApplicationCommand => new RelayCommand(
             () => {
-
                 MpMainWindowViewModel.Instance.Dispose();
                 Application.Current.Shutdown();
             });

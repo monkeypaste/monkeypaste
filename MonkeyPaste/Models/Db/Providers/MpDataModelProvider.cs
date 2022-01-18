@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
-    public class MpDataModelProvider : MpSingleton<MpDataModelProvider> {
+    public class MpDataModelProvider : MpSingleton2<MpDataModelProvider> {
         #region Private Variables
         private IList<MpCopyItem> _lastResult;
 
@@ -43,10 +43,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public void Init(MpIQueryInfo queryInfo) {
+        public MpDataModelProvider(MpIQueryInfo queryInfo) {
             QueryInfos.Add(queryInfo);
-            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
         }
 
         public void ResetQuery() {
@@ -54,8 +52,7 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
-        #region MpQueryInfo Fetch Methods
-                
+        #region MpQueryInfo Fetch Methods                
 
         public async Task QueryForTotalCount() {
             AllFetchedAndSortedCopyItemIds.Clear();
@@ -227,7 +224,10 @@ namespace MonkeyPaste {
                     break;
             }
             if (qi.IsDescending) {
-                sortClause += " DESC";
+                if(!sortClause.EndsWith(" ")) {
+                    sortClause += " ";
+                }
+                sortClause += "DESC";
             }
 
             if (!string.IsNullOrEmpty(tagClause)) {
@@ -1003,35 +1003,5 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"QueryItem {copyItemId} was inserted at idx [{newIdx}]");            
         }
 
-        private  void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci) {
-                //if(_allFetchedAndSortedCopyItemIds.Contains(ci.Id)) {
-                //    int newParentId = 0;
-                //    var ccil = await GetCompositeChildrenAsync(ci.Id);
-                //    for (int i = 0; i < ccil.Count; i++) {
-                //        if (i == 0) {
-                //            newParentId = ccil[i].Id;
-                //            ccil[i].CompositeParentCopyItemId = 0;
-                //        } else {
-                //            ccil[i].CompositeParentCopyItemId = newParentId;
-                //        }
-                //        ccil[i].CompositeSortOrderIdx = i;
-                //        await ccil[i].WriteToDatabaseAsync();
-                //    }
-                //    if (newParentId > 0) {
-                //        _allFetchedAndSortedCopyItemIds[_allFetchedAndSortedCopyItemIds.IndexOf(ci.Id)] = newParentId;
-                //    } else {
-                //        _allFetchedAndSortedCopyItemIds.Remove(ci.Id);
-                //    }
-
-                //    QueryInfo.NotifyQueryChanged(false);
-                //}
-            }
-        }
-
-        private  void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-            }
-        }
     }
 }

@@ -17,5 +17,7 @@ namespace MonkeyPaste {
         void Set(string key, object newValue);
 
         MpUserDeviceType GetDeviceType();
+
+        string GetDefaultBrowserPath();
     }
 }

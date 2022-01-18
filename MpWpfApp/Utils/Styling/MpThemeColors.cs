@@ -36,7 +36,7 @@ namespace MpWpfApp {
         Custom
     }
 
-    public class MpThemeColors : MpSingletonViewModel<MpThemeColors> {
+    public class MpThemeColors : MpSingletonViewModel2<MpThemeColors> {
 
         #region Private Variables
 
@@ -170,7 +170,9 @@ namespace MpWpfApp {
 
         public MpThemeType CurrentThemeType { get; private set; }
 
-        public MpThemeColors() : base() { }
+        public MpThemeColors() : base() {
+            Init();
+        }
 
         public void Init() {
             InitDefaultThemes();

@@ -50,6 +50,8 @@
     <Compile Remove="Models\MpAnalyticItemParameterValue.cs" />
     <Compile Remove="Models\MpColor.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
+    <Compile Remove="ViewModels\Bases\MpObservableObject.cs" />
+    <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpCopyItemDetailPageViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
