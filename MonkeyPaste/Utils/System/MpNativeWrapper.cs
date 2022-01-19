@@ -10,6 +10,7 @@ namespace MonkeyPaste {
 
         public void Init() {
             _niw.Init();
+            IsLoaded = true;
         }
 
         #region Private Variables

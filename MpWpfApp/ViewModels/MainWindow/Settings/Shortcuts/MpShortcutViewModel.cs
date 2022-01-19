@@ -534,7 +534,7 @@ namespace MpWpfApp {
         }
 
         public void PassKeysToForegroundWindow() {
-            MpHelpers.Instance.PassKeysListToWindow(MpClipboardManager.Instance.LastWindowWatcher.LastHandle,KeyList);
+            MpHelpers.Instance.PassKeysListToWindow(MpResolver.Resolve<MpProcessHelper.MpProcessManager>().LastHandle,KeyList);
         }
 
         public bool IsSequence() {

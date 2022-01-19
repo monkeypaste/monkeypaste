@@ -207,7 +207,7 @@ namespace MpWpfApp {
             SetDataObject(ido);
         }
 
-        public async Task PasteDataObject(object dataObject, IntPtr handle) {
+        public async Task PasteDataObject(MpData dataObject, IntPtr handle) {
             //to prevent cb listener thread from thinking there's a new item
             _lastCbo = ConvertManagedFormats(dataObject);
             //Mouse.OverrideCursor = Cursors.Wait;

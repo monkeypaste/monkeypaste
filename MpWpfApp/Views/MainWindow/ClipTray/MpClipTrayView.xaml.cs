@@ -17,11 +17,12 @@ namespace MpWpfApp {
         }
 
         private void ClipTray_Loaded(object sender, RoutedEventArgs e) {
-            MpClipboardManager.Instance.Init();
-            //MpClipboardManager.Instance.ClipboardChanged += BindingContext.ClipboardChanged;
-            MpClipboardHelper.MpClipboardMonitor.OnClipboardChange += BindingContext.ClipboardChanged;
-            MpClipboardHelper.MpClipboardMonitor.Start();
+            //MpClipboardManager.Instance.Init();
+            ////MpClipboardManager.Instance.ClipboardChanged += BindingContext.ClipboardChanged;
+            //MpClipboardHelper.MpClipboardMonitor.OnClipboardChange += BindingContext.ClipboardChanged;
+            //MpClipboardHelper.MpClipboardMonitor.Start();
 
+            
             if (MpPreferences.Instance.IsInitialLoad) {
                 BindingContext.InitIntroItems();
             }

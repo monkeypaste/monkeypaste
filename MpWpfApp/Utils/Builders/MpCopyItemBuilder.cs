@@ -18,20 +18,28 @@ namespace MpWpfApp {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromClipboard(Dictionary<string, string> iData) {
-            try {
-                if (iData == null || iData.Count == 0) {
+        public static async Task<MpCopyItem> CreateFromClipboard(MpDataObject mpdo) {
+            try {                
+                if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
+                var iData = mpdo.DataFormatLookup as Dictionary<string,string>;
+                var processManager = MpResolver.Resolve<MpProcessHelper.MpProcessManager>();
 
-                var processHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
+                string processPath, appName, processIconImg64;
+
+                var processHandle = processManager.LastHandle;
                 if (processHandle == IntPtr.Zero) {
                     // since source is unknown set to this app
-                    processHandle = MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle;
+
+                    processPath = MpPreferences.Instance.ThisAppSource.App.AppPath;
+                    appName = MpPreferences.Instance.ThisAppSource.App.AppName;
+                    processIconImg64 = MpPreferences.Instance.ThisAppSource.App.Icon.IconImage.ImageBase64;
+                } else {
+                    processPath = MpHelpers.Instance.GetProcessPath(processHandle);
+                    appName = MpHelpers.Instance.GetProcessApplicationName(processHandle);
+                    processIconImg64 = MpHelpers.Instance.GetIconImage(processPath).ToBase64String();
                 }
-                string processPath = MpHelpers.Instance.GetProcessPath(processHandle);
-                string appName = MpHelpers.Instance.GetProcessApplicationName(processHandle);
-                string processIconImg64 = MpHelpers.Instance.GetIconImage(processPath).ToBase64String();
                 
                 string itemData = null;
                 string htmlData = string.Empty;

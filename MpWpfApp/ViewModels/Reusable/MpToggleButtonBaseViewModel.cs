@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public abstract class MpToggleButtonBaseViewModel<P> : MpViewModelBase<P>, MpIToggleButtonViewModel 
         where P:MpViewModelBase {

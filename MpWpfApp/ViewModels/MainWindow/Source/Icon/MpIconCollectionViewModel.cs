@@ -32,6 +32,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(IconViewModels));
 
             IsBusy = false;
+            IsLoaded = true;
         }
 
         #endregion

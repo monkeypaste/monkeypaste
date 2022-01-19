@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public class MpNotificationCollectionViewModel : MpViewModelBase<object> {
         #region Singleton

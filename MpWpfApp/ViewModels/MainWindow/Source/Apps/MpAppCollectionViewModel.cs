@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
 
         public MpAppCollectionViewModel() : base() {
-            Task.Run(Init);
+            MpHelpers.Instance.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -45,11 +45,14 @@ namespace MpWpfApp {
             AppViewModels.Clear();
             foreach (var app in appl) {
                 var avm = await CreateAppViewModel(app);
-                await AddApp(avm);
+                AppViewModels.Add(avm);
             }
             OnPropertyChanged(nameof(AppViewModels));
 
+            Application.Current.Resources["AppCollectionViewModel"] = this;
+
             IsBusy = false;
+            IsLoaded = true;
         }
 
         #endregion
@@ -102,15 +105,7 @@ namespace MpWpfApp {
             return rejectApp;
         }
 
-        public async Task AddApp(MpAppViewModel avm) {
-            var dupCheck = GetAppViewModelByProcessPath(avm.AppPath);
-            if (dupCheck == null) {
-                await avm.App.WriteToDatabaseAsync();
-                AppViewModels.Add(avm);
-            }
 
-            await UpdateRejection(avm, avm.IsRejected);
-        }
 
         public bool IsAppRejected(string processPath) {
             var avm = GetAppViewModelByProcessPath(processPath);
@@ -158,7 +153,7 @@ namespace MpWpfApp {
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);
-                        await AddApp(avm);
+                        AppViewModels.Add(avm);
                     }
 
                     SelectedAppViewModel = avm;

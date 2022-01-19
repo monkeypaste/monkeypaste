@@ -48,27 +48,18 @@ namespace MpWpfApp {
                 }
                 var pmic = new List<MpContextMenuItemViewModel>();
                 foreach (var item in Items) {
-                    var imivm = new MpContextMenuItemViewModel(
-                        header: item.Title,
-                        command: null,
-                        commandParameter: null,
-                        isChecked: null,
-                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == item.IconId).IconBitmapSource,
-                        subItems: item.ContextMenuItems,
-                        inputGestureText: string.Empty,
-                        bgBrush: null);
-
+                    var imivm = new MpContextMenuItemViewModel() {
+                        Header = item.Title,
+                        IconId = item.IconId,
+                        SubItems = item.ContextMenuItems
+                    };
 
                     imivm.SubItems.Add(
-                        new MpContextMenuItemViewModel(
-                                    header: "Manage...",
-                                    command: ManageItemCommand,
-                                    commandParameter: item.AnalyticItemId,
-                                    isChecked: null,
-                                    iconSource: null,//Application.Current.Resources["CogIcon"] as string,
-                                    subItems: null,
-                                    inputGestureText: string.Empty,
-                                    bgBrush: null));
+                        new MpContextMenuItemViewModel() {
+                            Header = "Manage",
+                            Command = ManageItemCommand,
+                            CommandParameter = item.AnalyticItemId
+                        });
 
                     pmic.Add(imivm);
                 }

@@ -16,7 +16,8 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
                 ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
-            ResetClipboardAfterMonkeyPaste = false;
+            ResetClipboardAfterMonkeyPaste = false; 
+            IsLoaded = true;
         }
 
         #endregion

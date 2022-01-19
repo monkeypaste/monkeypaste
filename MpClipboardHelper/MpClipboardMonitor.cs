@@ -9,21 +9,40 @@ using System.IO;
 using System.Collections.Specialized;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
+using MonkeyPaste;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using MpImageHelper;
 
 namespace MpClipboardHelper {
     public static class MpClipboardMonitor {
-        public delegate void OnClipboardChangeEventHandler(object sender, Dictionary<string, string> data);
+        public delegate void OnClipboardChangeEventHandler(object sender, MpDataObject data);
         public static event OnClipboardChangeEventHandler OnClipboardChange;
 
-        //public static event EventHandler<Dictionary<string, string>> ClipboardChanged;
+        private static MpDataObject _LastDataObject = null;
+        private static MpDataObject _TempDataObject = null; // used when restoring clipboard
+        public static bool IgnoreClipboardChangeEvent = false;
+
+        //public static event EventHandler<MpDataObject> ClipboardChanged;
 
         public static void Start() {
             MpClipboardWatcher.Start();
-            MpClipboardWatcher.OnClipboardChange += (object sender, Dictionary<string, string> data) => {
+            MpClipboardWatcher.OnClipboardChange += (object sender, MpDataObject data) => {
                 if (OnClipboardChange != null)
                     OnClipboardChange(sender, data);
             };
 
+        }
+
+        public static async Task PasteDataObject(MpDataObject mpdo,IntPtr handle, bool finishWithEnterKey = false) {
+            await MpClipboardWatcher.PasteDataObject(mpdo, handle);
+            if(finishWithEnterKey) {
+                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+            }
+        }
+
+        public static void SetDataObjectWrapper(MpDataObject mpdo) {
+            MpClipboardWatcher.SetDataObjectWrapper(mpdo);
         }
 
         public static void Stop() {
@@ -32,15 +51,25 @@ namespace MpClipboardHelper {
         }
 
         class MpClipboardWatcher : Form {
+            static readonly string[] formats = Enum.GetNames(typeof(ClipboardFormat));
+            private readonly string[] _managedDataFormats = {
+                DataFormats.UnicodeText,
+                DataFormats.Text,
+                DataFormats.Html,
+                DataFormats.Rtf,
+                DataFormats.Bitmap,
+                DataFormats.FileDrop,
+                DataFormats.CommaSeparatedValue
+            };
+
             // static instance of this form
             private static MpClipboardWatcher mInstance;
 
             // needed to dispose this form
             static IntPtr nextClipboardViewer;
 
-            public delegate void OnClipboardChangeEventHandler(object sender, Dictionary<string, string> data);
+            public delegate void OnClipboardChangeEventHandler(object sender, MpDataObject data);
             public static event OnClipboardChangeEventHandler OnClipboardChange;
-
 
 
             // start listening
@@ -66,6 +95,8 @@ namespace MpClipboardHelper {
                 mInstance = null;
             }
 
+            
+
             // on load: (hide this window)
             protected override void SetVisibleCore(bool value) {
                 CreateHandle();
@@ -86,6 +117,11 @@ namespace MpClipboardHelper {
             [DllImport("user32.dll", CharSet = CharSet.Auto)]
             private static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
+
+            [DllImportAttribute("user32.dll")]
+            public static extern bool SetForegroundWindow(IntPtr hWnd);
+            [DllImport("user32.dll")]
+            public static extern bool SetActiveWindow(IntPtr hWnd);
             // defined in winuser.h
             const int WM_DRAWCLIPBOARD = 0x308;
             const int WM_CHANGECBCHAIN = 0x030D;
@@ -93,6 +129,10 @@ namespace MpClipboardHelper {
             protected override void WndProc(ref System.Windows.Forms.Message m) {
                 switch (m.Msg) {
                     case WM_DRAWCLIPBOARD:
+                        if(IgnoreClipboardChangeEvent) {
+                            MpConsole.WriteLine("Ignoring clipboard changed event");
+                            return;
+                        }
                         ClipChanged();
                         SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                         break;
@@ -110,42 +150,15 @@ namespace MpClipboardHelper {
                 }
             }
 
-            static readonly string[] formats = Enum.GetNames(typeof(ClipboardFormat));
-
+            
             private void ClipChanged() {
                 IDataObject iData = Clipboard.GetDataObject();
-
-                //ClipboardFormat? format = null;
-
-                //foreach (var f in formats) {
-                //    if (iData.GetDataPresent(f)) {
-                //        format = (ClipboardFormat)Enum.Parse(typeof(ClipboardFormat), f);
-                //        break;
-                //    }
-                //}
-
-                //object data = iData.GetData(format.ToString());
-
-                //if (data == null || format == null)
-                //    return;
-
-                //if (OnClipboardChange != null)
-                //    OnClipboardChange((ClipboardFormat)format, data);
-
-                var cbo = ConvertManagedFormats(iData);
-                OnClipboardChange?.Invoke(this, cbo);
+                _LastDataObject = ConvertManagedFormats(iData);
+                OnClipboardChange?.Invoke(this, _LastDataObject);
             }
-            private readonly string[] _managedDataFormats = {
-            DataFormats.UnicodeText,
-            DataFormats.Text,
-            DataFormats.Html,
-            DataFormats.Rtf,
-            DataFormats.Bitmap,
-            DataFormats.FileDrop,
-            DataFormats.CommaSeparatedValue
-        };
+            
 
-            private Dictionary<string, string> ConvertManagedFormats(object ido, int retryCount = 5) {
+            private MpDataObject ConvertManagedFormats(object ido, int retryCount = 5) {
                 /*
                 from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
                 Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -160,7 +173,7 @@ namespace MpClipboardHelper {
                 recognizing your data. To preserve your data format, add your data as a Byte array 
                 to a MemoryStream and pass the MemoryStream to the SetData method.
                 */
-                var cbDict = new Dictionary<string, string>();
+                var cbDict = new MpDataObject();
                 if (retryCount == 0) {
                     Console.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                     return cbDict;
@@ -195,12 +208,6 @@ namespace MpClipboardHelper {
                                 case nameof(DataFormats.Bitmap):
                                     BinaryFormatter binFormatter = new BinaryFormatter();
                                     using (Image img = Clipboard.GetImage()) {
-                                        //using (MemoryStream memStream = new MemoryStream()) {
-                                        //    binFormatter.Serialize(memStream, img);
-                                        //    byte[] bytes = memStream.ToArray();
-                                        //    data = Convert.ToBase64String(bytes);
-                                        //}
-
                                         using (MemoryStream memoryStream = new MemoryStream()) {
                                             img.Save(memoryStream, ImageFormat.Bmp);
                                             byte[] imageBytes = memoryStream.ToArray();
@@ -224,7 +231,7 @@ namespace MpClipboardHelper {
                                 data = dobj.GetData(af, true);
                             }
                             if (data != null) {
-                                cbDict.Add(af, data.ToString());
+                                cbDict.DataFormatLookup.Add(af, data.ToString());
                             }
                         }
                     }
@@ -236,6 +243,77 @@ namespace MpClipboardHelper {
                     retryCount--;
                     return ConvertManagedFormats(ido, retryCount);
                 }
+            }
+
+            private static IDataObject ConvertToOleDataObject(MpDataObject mpdo) {
+                DataObject dobj = new DataObject();
+                foreach (var kvp in mpdo.DataFormatLookup) {
+                    SetDataWrapper(ref dobj,kvp.Key, kvp.Value);
+                }
+                return dobj;
+            }
+
+            private static void SetDataWrapper(ref DataObject dobj, string format, string dataStr) {
+                switch(format) {
+                    case nameof(DataFormats.Bitmap):
+                        byte[] bytes = Convert.FromBase64String(dataStr);
+                        Image image;
+                        using (MemoryStream ms = new MemoryStream(bytes)) {
+                            image = Image.FromStream(ms);
+                            dobj.SetData(format, image);
+                        }
+                        
+                        break;
+                    case nameof(DataFormats.FileDrop):
+                        var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                        var sc = new StringCollection();
+                        sc.AddRange(fl);
+                        dobj.SetFileDropList(sc);
+                        break;
+                    default:
+                        dobj.SetData(format, dataStr);
+                        break;
+                }
+            }
+
+            public static void SetDataObjectWrapper(MpDataObject mpdo) {
+                Clipboard.SetDataObject(ConvertToOleDataObject(mpdo));
+            }
+
+            public static async Task PasteDataObject(MpDataObject dataObject, IntPtr handle) {
+                //to prevent cb listener thread from thinking there's a new item
+                IgnoreClipboardChangeEvent = true;
+                try {
+                    if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
+                        _TempDataObject = _LastDataObject;
+                    }
+
+                    Clipboard.SetDataObject(dataObject);
+                    SetForegroundWindow(handle);
+                    SetActiveWindow(handle);
+
+                    await Task.Delay(300);
+                    System.Windows.Forms.SendKeys.SendWait("^v");
+
+                    if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
+                        //from https://stackoverflow.com/a/52438404/105028
+                        var clipboardThread = new Thread(new ThreadStart(ResetClipboard));
+                        clipboardThread.SetApartmentState(ApartmentState.STA);
+                        clipboardThread.Start();
+                    }
+                    IgnoreClipboardChangeEvent = false;
+                }
+                catch (Exception e) {
+                    MonkeyPaste.MpConsole.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
+                }
+                //Mouse.OverrideCursor = null;
+            }
+
+            private static void ResetClipboard() {
+                if(_TempDataObject == null) {
+                    return;
+                }
+                Clipboard.SetDataObject(ConvertToOleDataObject(_TempDataObject));
             }
         }
 

@@ -35,15 +35,20 @@ namespace MpWpfApp {
                 var children = new List<MpContextMenuItemViewModel>();
 
                 foreach (var p in PresetViewModels.Where(x=>x.IsQuickAction)) {
-                    var pmi = new MpContextMenuItemViewModel(
-                        header: p.Label,
-                        command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                        commandParameter: p.Preset.Id,
-                        isChecked: null,
-                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == IconId).IconBitmapSource,
-                        subItems: null,
-                        inputGestureText: p.ShortcutKeyString,
-                        bgBrush: null);
+                    var pmi = new MpContextMenuItemViewModel() {
+                        Header = p.Label,
+                        Command = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                        IconId = IconId,
+                        InputGestureText = p.ShortcutKeyString
+                    };
+                        //header: p.Label,
+                        //command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                        //commandParameter: p.Preset.Id,
+                        //isChecked: null,
+                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == IconId).IconBitmapSource,
+                        //subItems: null,
+                        //inputGestureText: p.ShortcutKeyString,
+                        //bgBrush: null);
                     children.Add(pmi);
                 }
 

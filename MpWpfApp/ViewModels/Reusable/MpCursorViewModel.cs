@@ -74,7 +74,13 @@ namespace MpWpfApp {
             PropertyChanged -= MpMouseViewModel_PropertyChanged;
             PropertyChanged += MpMouseViewModel_PropertyChanged;
             CurrentCursor = MpCursorType.Default;
+            OnBusyChanged += MpViewModelBase_OnBusyChanged;
         }
+
+        private void MpViewModelBase_OnBusyChanged(object sender, bool e) {
+            NotifyAppBusy(e);
+        }
+
 
         #endregion
 

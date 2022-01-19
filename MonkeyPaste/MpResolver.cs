@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using System;
 
 namespace MonkeyPaste {
     public static class MpResolver {
@@ -10,6 +11,10 @@ namespace MonkeyPaste {
         }
         public static T Resolve<T>() {
             return _container.Resolve<T>();
+        }
+
+        public static object Resolve(Type t) {
+            return _container.Resolve(t);
         }
     }
 }

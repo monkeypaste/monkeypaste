@@ -230,7 +230,7 @@
                             <Image x:Name="ClipTileAppIconImage"
                                    Source="{Binding SourceId,
                                                     Converter={StaticResource SourceIdToImageSourceConverter}}"
-                                   Stretch="Uniform"
+                                   Stretch="UniformToFill"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Visibility="Visible"

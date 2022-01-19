@@ -34,7 +34,7 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpUrlCollectionViewModel() : base() {
-            Task.Run(Init);
+            MpHelpers.Instance.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -50,6 +50,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(UrlViewModels));
 
             IsBusy = false;
+            IsLoaded = true;
         }
 
         #endregion

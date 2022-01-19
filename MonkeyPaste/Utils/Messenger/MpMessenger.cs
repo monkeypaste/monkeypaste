@@ -34,7 +34,10 @@ namespace MonkeyPaste {
         SelectPreviousMatch,
         SearchCriteriaItemsChanged,
         TagTileNotificationAdded,
-        TagTileNotificationRemoved
+        TagTileNotificationRemoved,
+        Loaded, //has context (object)
+        Busy,
+        NotBusy
     }
 
     public class MpMessenger : MpSingleton<MpMessenger> {
@@ -42,7 +45,9 @@ namespace MonkeyPaste {
 
         private readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
-        public MpMessenger() { }
+        public MpMessenger() : base() {
+            IsLoaded = true;
+        }
         
         public void Register(object sender, Action<MpMessageType> callback, object context = null) {
             Register<MpMessageType>(sender, callback, context);
@@ -82,7 +87,7 @@ namespace MonkeyPaste {
         }
 
         public void Send(MpMessageType message, object context = null) {
-            Send(message, context);
+            Send<MpMessageType>(message, context);
         }
 
         public void Send<T>(T message) {

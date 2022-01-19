@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public class MpMarqueeTextBlockViewModel : MpViewModelBase<object> {
 

@@ -6,7 +6,7 @@ using System.Media;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public class MpSoundPlayerViewModel : MpViewModelBase<object> {
         #region Private Variables

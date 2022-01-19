@@ -9,8 +9,14 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public static class WinApi {
-        
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
         [StructLayout(LayoutKind.Sequential)]
         public struct Win32Point {
             public Int32 X;

@@ -37,7 +37,9 @@ namespace MonkeyPaste {
 
         #region Constructor
 
-        public MpDataModelProvider() { }
+        public MpDataModelProvider() {
+            IsLoaded = true;
+        }
 
         #endregion
 

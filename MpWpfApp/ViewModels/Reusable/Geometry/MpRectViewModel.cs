@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public class MpRectViewModel : MpViewModelBase {
         #region Properties

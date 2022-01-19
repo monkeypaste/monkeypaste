@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste {    
     public abstract class MpViewModelBase : INotifyPropertyChanged {
+        public static event EventHandler<bool> OnBusyChanged;
+        public static event EventHandler OnLoaded;
 
         private static Dictionary<string, int> _instanceCountLookup;
 
@@ -17,12 +19,28 @@ namespace MonkeyPaste {
             get => _isBusy;
             set {
                 SetProperty(ref _isBusy, value);
+                OnBusyChanged?.Invoke(this, _isBusy);
                 //MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
+                //MpMessenger.Instance.Send(MpMessageType.Busy);
             }
         }
         public bool IsNotBusy => !IsBusy;
 
-        public bool IsLoaded { get; set; } = false;
+        private bool _isLoaded = false;
+        public bool IsLoaded {
+            get {
+                return _isLoaded;
+            }
+            set {
+                if (_isLoaded != value) {
+                    IsLoaded = value;
+                    if (IsLoaded) {
+                        MpMessenger.Instance.Send(MpMessageType.Loaded, this);
+                        OnLoaded?.Invoke(this, null);
+                    }
+                }
+            }
+        }
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
 

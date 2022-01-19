@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -8,7 +9,8 @@ namespace MpWpfApp {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {            
             if (value is int sourceId) {
-                var svm = MpSourceCollectionViewModel.Instance.GetSourceViewModelBySourceId(sourceId);
+                var scvm = MpResolver.Resolve<MpSourceCollectionViewModel>();
+                var svm = scvm.GetSourceViewModelBySourceId(sourceId);
                 if(svm == null) {
                     return null;
                 }

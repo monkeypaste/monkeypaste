@@ -1742,7 +1742,7 @@ using System.Speech.Synthesis;
                     () => {
                         DoCommandSelection();
                         var cil = ItemViewModels.Select(x => x.CopyItem).ToList();
-                        MpClipboardManager.Instance.CopyItemsToClipboard(cil);
+                        //MpClipboardManager.Instance.CopyItemsToClipboard(cil);
                     });
             }
         }

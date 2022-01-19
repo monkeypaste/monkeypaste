@@ -11,9 +11,9 @@ namespace MpWpfApp {
         private static readonly Lazy<MpImageHistogram> _Lazy = new Lazy<MpImageHistogram>(() => new MpImageHistogram());
         public static MpImageHistogram Instance { get { return _Lazy.Value; } }
 
-        public int[] R { get; private set; }
-        public int[] G { get; private set; }
-        public int[] B { get; private set; }
+        //public int[] R { get; private set; }
+        //public int[] G { get; private set; }
+        //public int[] B { get; private set; }
 
         public List<KeyValuePair<PixelColor, int>> GetStatistics(BitmapSource bmpSource) {
             var countDictionary = new Dictionary<PixelColor, int>();

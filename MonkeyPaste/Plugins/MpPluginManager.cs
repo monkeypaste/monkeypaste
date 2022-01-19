@@ -81,7 +81,7 @@ namespace MonkeyPaste {
             catch(Exception ex) {
                 MonkeyPaste.MpConsole.WriteTraceLine(ex);
             }
-            
+            IsLoaded = true;
             return;
         }
 

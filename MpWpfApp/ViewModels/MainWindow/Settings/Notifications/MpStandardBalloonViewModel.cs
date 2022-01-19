@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-
+using MonkeyPaste;
 namespace MpWpfApp {
     public class MpStandardBalloonViewModel : MpViewModelBase<object> {
         private static readonly Lazy<MpStandardBalloonViewModel> _Lazy = new Lazy<MpStandardBalloonViewModel>(() => new MpStandardBalloonViewModel());

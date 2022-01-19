@@ -212,6 +212,14 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static bool IsStringHexColor(this string text) {
+            //if (!text.StartsWith("#")) {
+            // enforce that hex colors start with '#'
+            //    text = "#" + text;
+            //}
+            return MpRegEx.Instance.IsMatch(MpSubTextTokenType.HexColor6, text) ||
+                   MpRegEx.Instance.IsMatch(MpSubTextTokenType.HexColor8, text);
+        }
 
         public static bool IsBase64String(this string str) {
             try {

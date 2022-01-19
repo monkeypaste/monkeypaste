@@ -1169,7 +1169,7 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        MpClipboardManager.Instance.CopyItemsToClipboard(new List<MpCopyItem> { CopyItem });
+                       // MpClipboardManager.Instance.CopyItemsToClipboard(new List<MpCopyItem> { CopyItem });
                     });
             }
         }

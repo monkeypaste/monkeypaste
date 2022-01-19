@@ -34,7 +34,7 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpSourceCollectionViewModel() : base() {
-            Task.Run(Init);
+            MpHelpers.Instance.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -53,6 +53,7 @@ namespace MpWpfApp {
             Application.Current.Resources["SourceCollectionViewModel"] = this;
 
             IsBusy = false;
+            IsLoaded = true;
         }
 
         #endregion

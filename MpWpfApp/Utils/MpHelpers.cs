@@ -28,7 +28,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using QRCoder;
-using static MpWpfApp.MpShellEx;
+//using static MpWpfApp.MpShellEx;
 //using Windows.Graphics.Imaging;
 //using Windows.Media.Ocr;
 //using CsvHelper;
@@ -38,15 +38,21 @@ using System.Speech.Synthesis;
 using WindowsInput;
 using Microsoft.Win32;
 using MonkeyPaste;
+using MpProcessHelper;
+using MpImageHelper;
 
 namespace MpWpfApp {
     public class MpHelpers : MpSingleton2<MpHelpers> {
         //public RichTextBox SharedRtb { get; set; }
         private InputSimulator sim = new InputSimulator();
         private BitmapSource _defaultFavIcon = null;
+        private MpProcessHelper.MpProcessIconBuilder _iconLoader = null;
+        private MpImageHelper.MpImageHelper _imageHelper = null;
 
         public MpHelpers() {
             Rand = new Random((int)DateTime.Now.Ticks);
+            _imageHelper = new MpImageHelper.MpImageHelper();
+            _iconLoader = new MpProcessHelper.MpProcessIconBuilder(_imageHelper);
             // SharedRtb = new RichTextBox();
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
             _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
@@ -1853,11 +1859,13 @@ namespace MpWpfApp {
                         //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
                         iconBmp = ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Exclamation.ToBitmap());
                     } else {
-                        iconBmp = GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
+                        iconBmp = _iconLoader.GetBase64BitmapFromFolderPath(sourcePath).ToBitmapSource();
+                        //iconBmp = GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
                     }
 
                 } else {
-                    iconBmp = GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
+                    //iconBmp = GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
+                    iconBmp = _iconLoader.GetBase64BitmapFromFilePath(sourcePath).ToBitmapSource();
                 }                
             }
             catch(Exception ex) {

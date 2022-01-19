@@ -1,3 +1,4 @@
+using MonkeyPaste;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -119,6 +120,7 @@ namespace MpWpfApp {
             int flags,
             ref IntPtr picon);
     };
+
     public class MpShellEx {
         private const int SHGFI_SMALLICON = 0x1;
         private const int SHGFI_LARGEICON = 0x0;
@@ -223,7 +225,7 @@ namespace MpWpfApp {
             var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
             if (retval == 0) {
                 // This occurs from a COM exception likely from the AddTileThread so in this case just return the app icon handle
-                return MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle;
+                return MpResolver.Resolve<MpProcessHelper.MpProcessManager>().ThisAppHandle;
             }
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");

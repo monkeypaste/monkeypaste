@@ -420,13 +420,13 @@ namespace MpWpfApp {
                     return;
                 }
 
-                IDataObject pasteDataObject = null;
+                MpDataObject pasteDataObject = null;
                 bool pasteSelected = false;
                 if (args != null) {
                     if (args is bool) {
                         pasteSelected = (bool)args;
-                    } else if (args is IDataObject) {
-                        pasteDataObject = (IDataObject)args;
+                    } else if (args is MpDataObject) {
+                        pasteDataObject = (MpDataObject)args;
                     }
                 }
                 string test;
@@ -438,8 +438,8 @@ namespace MpWpfApp {
                     if(pasteDataObject == null) {
                         pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
                     }
-                    test = pasteDataObject.GetData(DataFormats.Text).ToString();
-                    MpConsole.WriteLine("Cb Text: " + test);
+                    //test = pasteDataObject.GetData(DataFormats.Text).ToString();
+                    //MpConsole.WriteLine("Cb Text: " + test);
                 }
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;

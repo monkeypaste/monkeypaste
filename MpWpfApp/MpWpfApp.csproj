@@ -262,7 +262,6 @@
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\Styling\MpThemeColors.cs" />
-    <Compile Include="Utils\System\Clipboard\MpClipboardManager.cs" />
     <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
@@ -276,8 +275,6 @@
     <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
     <Compile Include="Utils\RESTful\MpMinifyUrl.cs" />
     <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />
-    <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
-    <Compile Include="Utils\System\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\System\MpScreenInformation.cs" />
     <Compile Include="Utils\System\WinApi.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
@@ -810,7 +807,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
     <Page Include="Views\Settings\MpSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2549,6 +2545,14 @@
     <ProjectReference Include="..\MpClipboardHelper\MpClipboardHelper.csproj">
       <Project>{e3c8e3f7-3a44-4678-a742-5a6dd971a38c}</Project>
       <Name>MpClipboardHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MpImageHelper\MpImageHelper.csproj">
+      <Project>{e85822d3-6b7f-48c5-adea-ef3ab9c3e3e1}</Project>
+      <Name>MpImageHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MpRunningApplicationHelper\MpProcessHelper.csproj">
+      <Project>{56e5faad-0c31-400f-b95f-d83517c07ed3}</Project>
+      <Name>MpProcessHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

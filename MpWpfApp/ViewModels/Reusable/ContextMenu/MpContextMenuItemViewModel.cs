@@ -25,8 +25,12 @@ namespace MpWpfApp {
         Matchers
     }
 
-    public interface MpIContextMenuItemViewModel {
-        Dictionary<string,ObservableCollection<MpContentItemViewModel>> ContextMenuItemsLookup { get; }
+    public interface MpIContextMenuViewModel {
+        Dictionary<MpContextMenuItemsSourceType,MpContextMenuItemViewModel> MenuItemViewModelLookup { get; }
+    }
+
+    public interface MpIMenuItemViewModel {
+        MpContextMenuItemViewModel MenuItemViewModel { get; }
     }
 
     public class MpContextMenuItemViewModel : MpViewModelBase<object> {
@@ -44,18 +48,11 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isSeparator = false;
-        public bool IsSeparator {
-            get {
-                return _isSeparator;
-            }
-            set {
-                if (_isSeparator != value) {
-                    _isSeparator = value;
-                    OnPropertyChanged(nameof(IsSeparator));
-                }
-            }
-        }
+        public bool IsSeparator { get; set; }
+
+        public bool IsColorPallete { get; set; }
+
+        public bool IsColorPalleteItem { get; set; }
 
         private bool? _isChecked = null;
         public bool? IsChecked {
@@ -95,7 +92,9 @@ namespace MpWpfApp {
 
         public Image Icon { get; set; }
 
-        public ObservableCollection<MpContextMenuItemViewModel> SubItems { get; set; }
+        public int IconId { get; set; }
+
+        public IList<MpContextMenuItemViewModel> SubItems { get; set; }
 
         #endregion
 
@@ -103,9 +102,8 @@ namespace MpWpfApp {
 
         public MpContextMenuItemViewModel() : base(null)  {
             PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
-            IsSeparator = true;
+            //IsSeparator = true;
         }
-
         
         public MpContextMenuItemViewModel(
             string header, 
@@ -183,5 +181,9 @@ namespace MpWpfApp {
 
 
         #endregion
+    }
+
+    public class MpContextMenuViewModel {
+
     }
 }

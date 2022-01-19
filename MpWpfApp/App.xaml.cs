@@ -17,6 +17,9 @@ namespace MpWpfApp {
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
             MpBootstrapper.Init();
+
+            // TODO add color pallete colors and all app.xaml icons as MpIcons and store guids (for initDefaultData)
+
             MpHelpers.Instance.RunOnMainThread(async () => {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 

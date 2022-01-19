@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
     public enum MpSubTextTokenType {
@@ -17,9 +18,10 @@ namespace MonkeyPaste {
         HtmlTag
     }
 
-    public class MpRegEx {
-        private static readonly Lazy<MpRegEx> _Lazy = new Lazy<MpRegEx>(() => new MpRegEx());
-        public static MpRegEx Instance { get { return _Lazy.Value; } }
+    public class MpRegEx : MpSingleton2<MpRegEx> {
+        public MpRegEx() {
+            IsLoaded = true;
+        }
 
         public List<string> RegExList { get; private set; } = new List<string> {
             //none
@@ -50,6 +52,10 @@ namespace MonkeyPaste {
 
         public string GetRegExForTokenType(MpSubTextTokenType tokenType) {
             return RegExList[(int)tokenType];
+        }
+
+        public bool IsMatch(MpSubTextTokenType tokenType, string compareStr) {
+            return Regex.IsMatch(GetRegExForTokenType(tokenType), compareStr);
         }
     }
 }

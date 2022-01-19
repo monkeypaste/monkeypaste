@@ -37,15 +37,21 @@ namespace MpWpfApp {
 
         public MpContextMenuItemViewModel ContextMenuItemViewModel {
             get {
-                return new MpContextMenuItemViewModel(
-                        header: Label,
-                        command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                        commandParameter: Preset.Id,
-                        isChecked: null,
-                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
-                        subItems: null,
-                        inputGestureText: ShortcutKeyString,
-                        bgBrush: null);
+                return new MpContextMenuItemViewModel() {
+                    Header = Label,
+                    Command = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                    CommandParameter = AnalyticItemPresetId,
+                    IconId = IconId,
+                    InputGestureText = ShortcutKeyString
+                };
+                        //header: Label,
+                        //command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                        //commandParameter: Preset.Id,
+                        //isChecked: null,
+                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
+                        //subItems: null,
+                        //inputGestureText: ShortcutKeyString,
+                        //bgBrush: null);
             }
         }
 
