@@ -1,20 +1,29 @@
-﻿using Autofac;
+﻿
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 namespace MonkeyPaste {
     public static class MpResolver {
-        //container holds config info on how to resolve types (from autofac)
-        private static IContainer _container;
+        private static Dictionary<Type,object> _typeLookup;
 
-        public static void Initialize(IContainer container) {
-            _container = container;
-        }
-        public static T Resolve<T>() {
-            return _container.Resolve<T>();
+        public static void Initialize() {
+            _typeLookup = new Dictionary<Type, object>();
         }
 
-        public static object Resolve(Type t) {
-            return _container.Resolve(t);
+        public static void Register<T>(T dependencyType) where T:class {
+            _typeLookup.AddOrReplace(dependencyType.GetType(), dependencyType);
+        }
+
+        public static void Unregister<T>(T dependencyType) where T : class {
+            _typeLookup.Remove(dependencyType.GetType());
+        }
+
+        public static T Resolve<T>() where T: class {
+            return Resolve(typeof(T)) as T;
+        }
+
+        public static object Resolve(Type dependencyType) {
+            return _typeLookup[dependencyType];
         }
     }
 }

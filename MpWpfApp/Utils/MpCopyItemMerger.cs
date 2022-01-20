@@ -23,12 +23,12 @@ namespace MpWpfApp {
             foreach(var ci in cil) {
                 switch(ci.ItemType) {
                     case MpCopyItemType.Image:
-                        fd = MpHelpers.Instance.CombineFlowDocuments(
+                        fd = MpHelpers.CombineFlowDocuments(
                                 ci.ItemDescription.ToFlowDocument(),
                                 fd, true);
                         break;
                     default:
-                        fd = MpHelpers.Instance.CombineFlowDocuments(
+                        fd = MpHelpers.CombineFlowDocuments(
                                 ci.ItemData.ToFlowDocument(),
                                 fd, true);
                         break;
@@ -46,16 +46,16 @@ namespace MpWpfApp {
             foreach (var ci in cil) {
                 switch (ci.ItemType) {
                     case MpCopyItemType.Image:
-                        bmp = MpHelpers.Instance.CombineBitmap(
+                        bmp = MpHelpers.CombineBitmap(
                             new List<BitmapSource> { bmp, ci.ItemData.ToBitmapSource() });
                         break;
                     default:
                         var fd = ci.ItemData.ToFlowDocument();
-                        var rtfImg = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
+                        var rtfImg = MpHelpers.ConvertFlowDocumentToBitmap(
                             fd,
                             fd.GetDocumentSize(), Brushes.White);
 
-                        bmp = MpHelpers.Instance.CombineBitmap(
+                        bmp = MpHelpers.CombineBitmap(
                             new List<BitmapSource> { bmp, rtfImg });
                         break;
                 }
@@ -77,9 +77,9 @@ namespace MpWpfApp {
             var fileList = new List<string>();
             if (CopyItem.ItemType == MpCopyItemType.FileList) {
                 if (forceType == MpCopyItemType.Image) {
-                    fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
+                    fileList.Add(MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
                 } else if (forceType == MpCopyItemType.Text) {
-                    fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
+                    fileList.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
                 } else {
                     var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     if (splitArray == null || splitArray.Length == 0) {
@@ -93,30 +93,30 @@ namespace MpWpfApp {
                     }
                 }
             } else {
-                string op = Path.GetTempFileName();// MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
+                string op = Path.GetTempFileName();// MpHelpers.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
                 //file extension
                 switch (CopyItem.ItemType) {
                     case MpCopyItemType.Text:
                         if (forceType == MpCopyItemType.Image) {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         } else {
-                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
+                            fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                         }
                         var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(CopyItem.Id);
                         foreach (var cci in ccil) {
                             if (forceType == MpCopyItemType.Image) {
-                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                                fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                             } else {
-                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
+                                fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                             }
-                            op = Path.GetTempFileName(); //MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
+                            op = Path.GetTempFileName(); //MpHelpers.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
                         }
                         break;
                     case MpCopyItemType.Image:
                         if (forceType == MpCopyItemType.Text) {
-                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, CopyItem.ItemData.ToPlainText()));
+                            fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToPlainText()));
                         } else {
-                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
+                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         }
                         break;
                 }

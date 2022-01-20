@@ -123,12 +123,12 @@ namespace MpWpfApp {
                     Parent.Count > 1) {
                     if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
                         if(_itemBackgroundBrush == null) {
-                            _itemBackgroundBrush = MpHelpers.Instance.GetRandomBrushColor();
+                            _itemBackgroundBrush = MpHelpers.GetRandomBrushColor();
                         }
                     } else if(_itemBackgroundBrush != CopyItemColorBrush) {
                         _itemBackgroundBrush = CopyItemColorBrush;
                     }
-                    return MpHelpers.Instance.GetLighterBrush(_itemBackgroundBrush, 0.75);
+                    return MpHelpers.GetLighterBrush(_itemBackgroundBrush, 0.75);
                 }
 
                 return MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
@@ -656,7 +656,7 @@ namespace MpWpfApp {
             }
 
             //if (CopyItem.ItemType == MpCopyItemType.Image) {
-            //    var itemBmpBytes = MpHelpers.Instance.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
+            //    var itemBmpBytes = MpHelpers.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
             //    ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
             //    analyticTasks.Add(ocrTask);
             //    cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
@@ -668,11 +668,11 @@ namespace MpWpfApp {
             if (urlTask != null) {
                 string detectedUrl = await urlTask;
                 if (!string.IsNullOrEmpty(detectedUrl)) {
-                    string urlTitle = await MpHelpers.Instance.GetUrlTitle(detectedUrl);
+                    string urlTitle = await MpHelpers.GetUrlTitle(detectedUrl);
                     //CopyItemUrl = MpUrl.Create(detectedUrl, urlTitle);
                     //if (CopyItemUrlDomain == null) {
-                    //    string urlDomain = MpHelpers.Instance.GetUrlDomain(detectedUrl);
-                    //    string urlDomainTitle = await MpHelpers.Instance.GetUrlTitle(urlDomain);
+                    //    string urlDomain = MpHelpers.GetUrlDomain(detectedUrl);
+                    //    string urlDomainTitle = await MpHelpers.GetUrlTitle(urlDomain);
                     //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
                     //}
                 }
@@ -874,7 +874,7 @@ namespace MpWpfApp {
         }
 
         private void UpdateDetails() {
-            MpHelpers.Instance.RunOnMainThread((System.Action)(async () => {
+            MpHelpers.RunOnMainThread((System.Action)(async () => {
                 _detailIdx = 1;
                 switch (CopyItem.ItemType) {
                     case MonkeyPaste.MpCopyItemType.Image:
@@ -884,10 +884,10 @@ namespace MpWpfApp {
                     case MonkeyPaste.MpCopyItemType.FileList:
                         var fl = await MpCopyItemMerger.Instance.GetFileList(CopyItem);
                         fc = fl.Count;
-                        ds = MpHelpers.Instance.FileListSize(fl.ToArray());
+                        ds = MpHelpers.FileListSize(fl.ToArray());
                         break;
                     case MonkeyPaste.MpCopyItemType.Text:
-                        lc = MpHelpers.Instance.GetRowCount(CopyItem.ItemData.ToPlainText());
+                        lc = MpHelpers.GetRowCount(CopyItem.ItemData.ToPlainText());
                         cc = CopyItem.ItemData.ToPlainText().Length;
                         itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
                         break;
@@ -1079,10 +1079,10 @@ namespace MpWpfApp {
             return !IsEditingContent;
         }
         private void SendSubSelectedToEmail() {
-            MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
+            MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
             //MpClipTrayViewModel.Instance.ClearClipSelection();
             //IsSelected = true;
-            //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+            //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
         private RelayCommand _createQrCodeFromSubSelectedItemCommand;
@@ -1098,7 +1098,7 @@ namespace MpWpfApp {
             return true;//CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= Properties.Settings.Default.MaxQrCodeCharLength;
         }
         private void CreateQrCodeFromSubSelectedItem() {
-            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());
+            var bmpSrc = MpHelpers.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());
             //MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         }
 

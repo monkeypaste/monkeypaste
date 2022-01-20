@@ -90,7 +90,7 @@ namespace MpWpfApp {
                 // TODO need to fill in service models
                 return true;
             }
-            if(!MpHelpers.Instance.IsConnectedToInternet()) {
+            if(!MpHelpers.IsConnectedToInternet()) {
                 return false;
             }
 

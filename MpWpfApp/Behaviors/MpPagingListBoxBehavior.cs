@@ -67,7 +67,7 @@ namespace MpWpfApp {
 
         protected override void OnLoad() {
             base.OnLoad();
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 AssociatedObject.PreviewMouseWheel += Sv_MouseWheel;
 
                 var hScrollBar = AssociatedObject.GetScrollBar(Orientation.Horizontal);
@@ -84,13 +84,13 @@ namespace MpWpfApp {
                 hScrollBar.Track.MouseMove += Track_MouseMove;
                 //hScrollBar.Track.Thumb.MouseMove += Thumb_MouseMove;
 
-                MpHelpers.Instance.CreateBinding(
+                MpHelpers.CreateBinding(
                    MpClipTrayViewModel.Instance,
                    new PropertyPath(
                        nameof(MpClipTrayViewModel.Instance.ScrollOffset)),
                    hScrollBar.Track, Track.ValueProperty);
 
-                MpHelpers.Instance.CreateBinding(
+                MpHelpers.CreateBinding(
                     MpClipTrayViewModel.Instance,
                     new PropertyPath(
                         nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset)),
@@ -203,7 +203,7 @@ namespace MpWpfApp {
 
 
         private async Task PerformPageJump() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
 
                 Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
 

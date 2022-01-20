@@ -32,7 +32,7 @@ namespace MpWpfApp {
             BindingContext.UnformattedContentSize = new Size(ActualWidth, ActualHeight);
             
             if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
-                MpHelpers.Instance.RunOnMainThread(async () => {
+                MpHelpers.RunOnMainThread(async () => {
                     var clv = this.GetVisualAncestor<MpContentListView>();
                     while (clv == null) {
                         clv = this.GetVisualAncestor<MpContentListView>();

@@ -11,7 +11,7 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpUrlCollectionViewModel : MpSingletonViewModel2<MpUrlCollectionViewModel> {
+    public class MpUrlCollectionViewModel : MpViewModelBase, MpISingleton<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,8 +33,11 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpUrlCollectionViewModel _instance;
+        public static MpUrlCollectionViewModel Instance => _instance ?? (_instance = new MpUrlCollectionViewModel());
+
+
         public MpUrlCollectionViewModel() : base() {
-            MpHelpers.Instance.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -190,8 +193,8 @@ namespace MpWpfApp {
                 MpUrl url = null;
                 var uvm = UrlViewModels.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
-                    var iconBmpSrc = MpHelpers.Instance.GetUrlFavicon(UrlPath);
-                    string title = await MpHelpers.Instance.GetUrlTitle(UrlPath);
+                    var iconBmpSrc = MpHelpers.GetUrlFavicon(UrlPath);
+                    string title = await MpHelpers.GetUrlTitle(UrlPath);
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                     url = await MpUrl.Create(UrlPath, title, MpPreferences.Instance.ThisAppSource.App);
                     uvm = await CreateUrlViewModel(url);

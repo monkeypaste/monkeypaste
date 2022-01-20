@@ -29,15 +29,15 @@ namespace MpWpfApp {
                     foreach (var k in kl) {
                         if (kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             true, false, seqIdx));
                         } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count - 1) {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             false, true, seqIdx));
                         } else {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             false, false, seqIdx));
                         }
 
@@ -429,8 +429,8 @@ namespace MpWpfApp {
                     }
                     var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
 
-                    var cl = MpHelpers.Instance.ConvertStringToKeySequence(KeyString);
-                    var wfcl = cl.Select(x => x.Select(y => MpHelpers.Instance.WpfKeyToWinformsKey(y)).ToList()).ToList();
+                    var cl = MpHelpers.ConvertStringToKeySequence(KeyString);
+                    var wfcl = cl.Select(x => x.Select(y => MpHelpers.WpfKeyToWinformsKey(y)).ToList()).ToList();
                     string keyValStr = string.Join(",", wfcl.Select(x =>
                                                  string.Join("+", x.Select(y =>
                                                     Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
@@ -534,7 +534,7 @@ namespace MpWpfApp {
         }
 
         public void PassKeysToForegroundWindow() {
-            MpHelpers.Instance.PassKeysListToWindow(MpResolver.Resolve<MpProcessHelper.MpProcessManager>().LastHandle,KeyList);
+            MpHelpers.PassKeysListToWindow(MpProcessHelper.MpProcessManager.Instance.LastHandle,KeyList);
         }
 
         public bool IsSequence() {

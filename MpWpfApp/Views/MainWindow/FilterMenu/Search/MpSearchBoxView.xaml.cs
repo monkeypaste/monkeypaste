@@ -47,7 +47,7 @@ namespace MpWpfApp {
             var sbvm = DataContext as MpSearchBoxViewModel;
             sbvm.IsTextBoxFocused = true;
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 while(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     await Task.Delay(100);
                 }
@@ -79,7 +79,7 @@ namespace MpWpfApp {
         }
 
         private void InitContextMenu() {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 _searchByContextMenu = new ContextMenu();
 
                 foreach (var sfvm in BindingContext.Filters) {
@@ -97,19 +97,19 @@ namespace MpWpfApp {
                 return new Separator();
             } else {
                 var cb = new CheckBox();
-                MpHelpers.Instance.CreateBinding(
+                MpHelpers.CreateBinding(
                     sfvm,
                     new PropertyPath(nameof(sfvm.IsChecked)),
                     cb, CheckBox.IsCheckedProperty, BindingMode.TwoWay);
 
-                MpHelpers.Instance.CreateBinding(
+                MpHelpers.CreateBinding(
                     sfvm,
                     new PropertyPath(nameof(sfvm.IsEnabled)),
                     cb, CheckBox.IsEnabledProperty);
 
                 var l = new Label();
 
-                MpHelpers.Instance.CreateBinding(
+                MpHelpers.CreateBinding(
                     sfvm,
                     new PropertyPath(nameof(sfvm.Label)),
                     l, Label.ContentProperty);

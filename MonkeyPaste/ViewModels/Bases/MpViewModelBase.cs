@@ -180,7 +180,7 @@ namespace MonkeyPaste {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             //return;
 
-            //MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            //MpHelpers.RunOnMainThreadAsync(() => {
             //    //check if property has affects child attribute
             //    var affectsAttributes = GetType().GetProperty(propertyName).GetCustomAttributes<MpAffectsBaseAttribute>();
             //    int affectCount = affectsAttributes.Sum(x => x.FindAndNotifyProperties(this, propertyName));

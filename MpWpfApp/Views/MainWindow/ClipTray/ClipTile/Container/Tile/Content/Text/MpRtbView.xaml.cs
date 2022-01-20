@@ -42,7 +42,7 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.Unexpand:
                     Rtb.FitDocToRtb();
-                    MpHelpers.Instance.RunOnMainThread(async()=> {
+                    MpHelpers.RunOnMainThread(async()=> {
                         await SyncModelsAsync();
                     });
                     break;
@@ -98,7 +98,7 @@ namespace MpWpfApp {
                 }
                 ScrollToHome();
 
-                MpHelpers.Instance.RunOnMainThread(async () => {
+                MpHelpers.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync(CTS.Token);
                 });
 
@@ -119,7 +119,7 @@ namespace MpWpfApp {
                 RtbHighlightBehavior.Attach(this);
                 RtbViewDropBehavior.Attach(this);
 
-                //MpHelpers.Instance.RunOnMainThread(async () => {
+                //MpHelpers.RunOnMainThread(async () => {
                 //    var clv = this.GetVisualAncestor<MpContentListView>();
                 //    while (clv == null) {
                 //        clv = this.GetVisualAncestor<MpContentListView>();
@@ -190,7 +190,7 @@ namespace MpWpfApp {
                     ncivm.OnSyncModels += Rtbivm_OnSyncModels;
                     ncivm.OnFitContentRequest += Ncivm_OnFitContentRequest;
                     if(e.OldValue != null) {
-                        MpHelpers.Instance.RunOnMainThread(async () => {
+                        MpHelpers.RunOnMainThread(async () => {
                             await CreateHyperlinksAsync(CTS.Token);
                         });
                     }
@@ -199,7 +199,7 @@ namespace MpWpfApp {
         }
 
         private void Ncivm_OnMergeRequest(object sender, EventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 RtbViewDropBehavior.Attach(this);
 
                 RtbViewDropBehavior.DropIdx = 1;
@@ -311,7 +311,7 @@ namespace MpWpfApp {
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
             if (e.Key == Key.Space && civm.IsEditingContent) {
-               // MpHelpers.Instance.RunOnMainThread(async () => {
+               // MpHelpers.RunOnMainThread(async () => {
                     // TODO Update regex hyperlink matches (but ignore current ones??)
                     //await SyncModelsAsync();
                 //});
@@ -436,7 +436,7 @@ namespace MpWpfApp {
             //MpConsole.WriteLine("Item syncd w/ data: " + rtbvm.CopyItemData);
             //MpRtbTemplateCollection.CreateTemplateViews(Rtb);
 
-            //MpHelpers.Instance.RunOnMainThread(UpdateLayout);
+            //MpHelpers.RunOnMainThread(UpdateLayout);
             //rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
         }
 
@@ -490,14 +490,14 @@ namespace MpWpfApp {
             var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);
             string templateRegEx = string.Join("|", templateModels.Select(x => x.TemplateToken));
             string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
-            for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
+            for (int i = 1; i < MpRegEx.RegExList.Count; i++) {
                 var linkType = (MpSubTextTokenType)i;
                 if (linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }
                 var lastRangeEnd = Rtb.Document.ContentStart;
-                Regex regEx = MpRegEx.Instance.RegExList[i]; //MpRegEx.Instance.GetRegExForTokenType(linkType);
+                Regex regEx = MpRegEx.GetRegExForTokenType(linkType);
                 if (linkType == MpSubTextTokenType.TemplateSegment) {
                     if (string.IsNullOrEmpty(templateRegEx)) {
                         //this occurs for templates when copyitem has no templates
@@ -511,7 +511,7 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
-                            var matchRange = await MpHelpers.Instance.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, ct, dp, true);
+                            var matchRange = await MpHelpers.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, ct, dp, true);
                             if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
                             }
@@ -533,7 +533,7 @@ namespace MpWpfApp {
                                 //if (linkText == @"DragAction.Cancel") {
                                 //    linkText = linkText;
                                 //}
-                                //MpHelpers.Instance.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
+                                //MpHelpers.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
 
                                 KeyEventHandler hlKeyDown = (object o, KeyEventArgs e) => {
                                     // This gives user feedback so if they see the 'ctrl + click to follow'
@@ -569,7 +569,7 @@ namespace MpWpfApp {
                                 };
                                 MouseButtonEventHandler hlMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
                                     if (hl.NavigateUri != null && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
+                                        MpHelpers.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
                                 RoutedEventHandler hlUnload = null;
@@ -588,8 +588,8 @@ namespace MpWpfApp {
                                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
                                 RoutedEventHandler qrItemClick = (object o, RoutedEventArgs e) => {
                                     var hyperLink = (Hyperlink)((MenuItem)o).Tag;
-                                    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    MpClipboardHelper.MpClipboardMonitor.SetDataObjectWrapper(
+                                    var bmpSrc = MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
+                                    MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
                                         new MpDataObject() {
                                             DataFormatLookup = new Dictionary<string, string>() {
                                                 {
@@ -617,8 +617,8 @@ namespace MpWpfApp {
                                         break;
                                     case MpSubTextTokenType.Uri:
                                         try {
-                                            string urlText = MonkeyPaste.MpHelpers.Instance.GetFullyFormattedUrl(linkText);
-                                            if (MpHelpers.Instance.IsValidUrl(urlText) /*&&
+                                            string urlText = MonkeyPaste.MpHelpers.GetFullyFormattedUrl(linkText);
+                                            if (MpHelpers.IsValidUrl(urlText) /*&&
                                                    Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
                                                 hl.NavigateUri = new Uri(urlText);
                                             } else {
@@ -676,7 +676,7 @@ namespace MpWpfApp {
                                             //"https://www.google.com/search?q=%24500.80+to+yen"
                                             MenuItem convertCurrencyMenuItem = new MenuItem();
                                             convertCurrencyMenuItem.Header = "Convert Currency To";
-                                            var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
+                                            var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
                                             foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
                                                 if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
                                                     continue;
@@ -686,7 +686,7 @@ namespace MpWpfApp {
                                                 RoutedEventHandler subItemClick = async (object o, RoutedEventArgs e) => {
                                                     Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
                                                     var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-                                                        MpHelpers.Instance.GetCurrencyValueFromString(linkText),
+                                                        MpHelpers.GetCurrencyValueFromString(linkText),
                                                         fromCurrencyType,
                                                         toCurrencyType);
                                                     convertedValue = Math.Round(convertedValue, 2);
@@ -721,13 +721,13 @@ namespace MpWpfApp {
                                         hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
                                         hl.IsEnabled = true;
                                         Action showChangeColorDialog = () => {
-                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
+                                            var result = MpHelpers.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
                                             if (result != null) {
                                                 var run = new Run(result.ToString());
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
                                                 var bgBrush = result;
-                                                var fgBrush = MpHelpers.Instance.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
+                                                var fgBrush = MpHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
                                                 var tr = new TextRange(run.ElementStart, run.ElementEnd);
                                                 tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
                                                 tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
@@ -768,7 +768,7 @@ namespace MpWpfApp {
                                         hl.ContextMenu.Items.Add(changeColorItem);
 
                                         hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
-                                        hl.Foreground = MpHelpers.Instance.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
+                                        hl.Foreground = MpHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
                                         break;
                                     default:
                                         MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);

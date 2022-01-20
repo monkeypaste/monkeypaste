@@ -126,7 +126,7 @@
                     Margin="10,5,10,10"
                     HorizontalAlignment="Right"
                     Command="{Binding AddMatcherCommand,
-                                      Source={StaticResource MatcherCollectionViewModel}}"
+                                      Source={x:Static local:MpMatcherCollectionViewModel.Instance}}"
                     CommandParameter="{Binding}">
                 <DockPanel>
                     <Image Source="{Binding .,

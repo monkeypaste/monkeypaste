@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerGroupCollectionViewModel : MpSingletonViewModel<MpSoundPlayerGroupCollectionViewModel> {
+    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase, MpISingleton<MpSoundPlayerGroupCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -66,13 +66,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+
+        private static MpSoundPlayerGroupCollectionViewModel _instance;
+        public static MpSoundPlayerGroupCollectionViewModel Instance => _instance ?? (_instance = new MpSoundPlayerGroupCollectionViewModel());
+
         public async Task Init() {
-            PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
 
             await SetSoundGroupIdx(MpPreferences.Instance.NotificationSoundGroupIdx);
         }
 
-        public MpSoundPlayerGroupCollectionViewModel() : base() { }
+        public MpSoundPlayerGroupCollectionViewModel() : base() {
+            PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
+        }
         #endregion
 
         #region Public Methods

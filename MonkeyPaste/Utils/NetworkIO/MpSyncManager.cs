@@ -571,7 +571,7 @@ namespace MonkeyPaste {
         }
 
         private async Task<ClientWebSocket> ConnectWebSocket() {
-            var serverIp = MpHelpers.Instance.GetIpForDomain("www.monkeypaste.com");
+            var serverIp = MpHelpers.GetIpForDomain("www.monkeypaste.com");
             var socket = new ClientWebSocket();
             try {
                 await socket.ConnectAsync(new Uri(string.Format(@"ws://{0}:8080",serverIp)), CancellationToken.None);

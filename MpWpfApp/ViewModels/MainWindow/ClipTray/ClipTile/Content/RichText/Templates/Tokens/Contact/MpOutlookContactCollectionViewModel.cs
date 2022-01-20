@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpOutlookContactCollectionViewModel : MpSingletonViewModel<MpOutlookContactCollectionViewModel> {
+    public class MpOutlookContactCollectionViewModel : MpViewModelBase {
         #region Properties
 
         public ObservableCollection<ContactItem> OutlookContacts = new ObservableCollection<ContactItem>();

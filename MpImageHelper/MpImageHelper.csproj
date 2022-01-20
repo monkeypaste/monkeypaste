@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MpImageExtensions.cs" />
-    <Compile Include="MpImageHelper.cs" />
+    <Compile Include="MpWpfImageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

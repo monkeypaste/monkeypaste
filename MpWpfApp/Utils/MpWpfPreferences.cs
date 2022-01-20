@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace MpWpfApp {
-    public class MpWpfPreferences : MpSingleton2<MpWpfPreferences>, MonkeyPaste.MpIPreferenceIO {
+    public class MpWpfPreferences : MonkeyPaste.MpIPreferenceIO {
 
         #region Public Methods
         public MpWpfPreferences() {

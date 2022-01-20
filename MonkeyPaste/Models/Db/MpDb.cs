@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpDb : MpSingleton2<MpDb>, MpISync {
+    public class MpDb : MpISingleton<MpDb>, MpISync {
         #region Private Variables
         private MpIDbInfo _dbInfo;
         private object _rdLock = new object();
@@ -46,9 +46,16 @@ namespace MonkeyPaste {
 
         #region Constructors
 
+        private static MpDb _instance;
+        public static MpDb Instance => _instance ?? (_instance = new MpDb());
+
+        public MpDb() {
+            throw new Exception("Must be instantiated with args");
+        }
+
         public MpDb(MpIDbInfo dbInfo) {
             _dbInfo = dbInfo;
-            Task.Run(Init);
+            _instance = this;
         }
 
         public async Task Init() {
@@ -813,7 +820,7 @@ namespace MonkeyPaste {
                         MpOutputFormatType.Text,
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator",
-                        MpHelpers.Instance.ReadTextFromResource(
+                        MpHelpers.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
                             GetType().Assembly));
 
@@ -824,7 +831,7 @@ namespace MonkeyPaste {
                         MpOutputFormatType.Text,
                         "Open Ai",
                         "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
-                        MpHelpers.Instance.ReadTextFromResource(
+                        MpHelpers.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
                             GetType().Assembly));
 
@@ -1169,11 +1176,11 @@ namespace MonkeyPaste {
         }
 
         public bool IsConnectedToNetwork() {
-            return MpHelpers.Instance.IsConnectedToNetwork();
+            return MpHelpers.IsConnectedToNetwork();
         }
 
         public bool IsConnectedToInternet() {
-            return MpHelpers.Instance.IsConnectedToInternet();
+            return MpHelpers.IsConnectedToInternet();
         }
         public int GetSyncPort() {
             return 44381;
@@ -1185,21 +1192,21 @@ namespace MonkeyPaste {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.Instance.GetLocalIp4Address();
+            return MpHelpers.GetLocalIp4Address();
         }
 
         public string[] GetAllLocalIp4Addresses() {
             if (!IsConnectedToNetwork()) {
                 return new string[] { "0.0.0.0" };
             }
-            return MpHelpers.Instance.GetAllLocalIPv4();
+            return MpHelpers.GetAllLocalIPv4();
         }
 
         public string GetExternalIp4Address() {
             if (!IsConnectedToInternet()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.Instance.GetExternalIp4Address();
+            return MpHelpers.GetExternalIp4Address();
         }
 
         public async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {

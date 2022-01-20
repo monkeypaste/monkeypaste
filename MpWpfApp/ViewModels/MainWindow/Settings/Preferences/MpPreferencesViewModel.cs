@@ -91,7 +91,7 @@ namespace MpWpfApp {
             get {
                 if (_languages == null) {
                     _languages = new ObservableCollection<string>();
-                    foreach (var lang in MpLanguageTranslator.Instance.LanguageList) {
+                    foreach (var lang in MpLanguageTranslator.LanguageList) {
                         _languages.Add(lang);
                     }
                 }
@@ -240,7 +240,7 @@ namespace MpWpfApp {
             foreach (SettingsProperty dsp in Properties.DefaultUiStrings.Default.Properties) {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {
-                        usp.DefaultValue = await MpLanguageTranslator.Instance.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
+                        usp.DefaultValue = await MpLanguageTranslator.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
                         MonkeyPaste.MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
                     }
                 }
@@ -250,13 +250,13 @@ namespace MpWpfApp {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
-            if(!MpHelpers.Instance.IsThisAppAdmin()) {
+            if(!MpHelpers.IsThisAppAdmin()) {
                 //MonkeyPaste.MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
                 return;
             }
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = MpHelpers.Instance.GetApplicationDirectory();// MpClipTrayViewModel.Instance.ClipboardManager.LastWindowWatcher.ThisAppPath;
+            string appPath = MpHelpers.GetApplicationDirectory();// MpClipTrayViewModel.Instance.ClipboardManager.LastWindowWatcher.ThisAppPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {

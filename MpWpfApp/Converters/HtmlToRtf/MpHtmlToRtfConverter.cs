@@ -160,7 +160,7 @@ namespace MpWpfApp {
             var img = te.FindChildren<Image>().FirstOrDefault();
             //byte[] data = Convert.FromBase64String(imgStr);
             //string decodedString = Encoding.UTF8.GetString(data);
-            img.Source = MpHelpers.Instance.ConvertStringToBitmapSource(imgStr);
+            img.Source = MpHelpers.ConvertStringToBitmapSource(imgStr);
             img.Height = 100;
             img.Width = 100;
             return te;
@@ -282,7 +282,7 @@ namespace MpWpfApp {
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string rtf = ConvertHtmlToRtf(html);
-                MpHelpers.Instance.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
+                MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
             }
         }
     }

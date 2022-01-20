@@ -178,7 +178,7 @@ namespace MpWpfApp {
             
 
             colorContextMenu.Items.Add(colorMenuItem);
-            MpHelpers.Instance.SetColorChooserMenuItem(
+            MpHelpers.SetColorChooserMenuItem(
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {
@@ -199,7 +199,7 @@ namespace MpWpfApp {
             
 
             colorContextMenu.Items.Add(colorMenuItem);
-            MpHelpers.Instance.SetColorChooserMenuItem(
+            MpHelpers.SetColorChooserMenuItem(
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {

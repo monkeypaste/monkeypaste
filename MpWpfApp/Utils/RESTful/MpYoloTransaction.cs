@@ -7,22 +7,22 @@ using Yolov5Net.Scorer;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpYoloTransaction : MpSingleton<MpYoloTransaction> {
-        private YoloScorer<YoloCocoP5Model> _yoloWrapper = null;
+    public static class MpYoloTransaction {
+        private static bool _isLoaded = false;
+        private static YoloScorer<YoloCocoP5Model> _yoloWrapper = null;
 
-        private MpYoloTransaction() { }
-
-        public void Init() {
+        public static void Init() {
             _yoloWrapper = new YoloScorer<YoloCocoP5Model>("Assets/Weights/yolov5s.onnx", null);
+            _isLoaded = true;
         }
 
-        public async Task<MpYoloResponse> DetectObjectsAsync(byte[] image, double minConfidence = 0.0) {            
+        public static async Task<MpYoloResponse> DetectObjectsAsync(byte[] image, double minConfidence = 0.0) {            
             var response = new MpYoloResponse();
             await Task.Run(() => {
-                if(_yoloWrapper == null) {
+                if(!_isLoaded) {
                     Init();
                 }
-                using (var bmp = MpHelpers.Instance.ConvertBitmapSourceToBitmap(MpHelpers.Instance.ConvertByteArrayToBitmapSource(image))) {
+                using (var bmp = MpHelpers.ConvertBitmapSourceToBitmap(MpHelpers.ConvertByteArrayToBitmapSource(image))) {
                     List<YoloPrediction> predictions = _yoloWrapper.Predict(bmp);
                     using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
                         foreach (var item in predictions) {

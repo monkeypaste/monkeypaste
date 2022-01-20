@@ -183,23 +183,6 @@
         <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
         <!--  Converter Declarations End  -->
 
-        <!--  Singleton View Model Declarations  -->
-        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
-        <local:MpClipTrayViewModel x:Key="ClipTrayViewModel" />
-        <local:MpTagTrayViewModel x:Key="TagTrayViewModel" />
-        <local:MpSystemTrayViewModel x:Key="SystemTrayViewModel" />
-        <local:MpClipTileSortViewModel x:Key="ClipTileSortViewModel" />
-        <local:MpSearchBoxViewModel x:Key="SearchBoxViewModel" />
-        <local:MpAppModeViewModel x:Key="AppModeViewModel" />
-        <local:MpAnalyticItemCollectionViewModel x:Key="AnalyticItemCollectionViewModel" />
-        <local:MpShortcutCollectionViewModel x:Key="ShortcutCollectionViewModel" />
-        <local:MpSoundPlayerGroupCollectionViewModel x:Key="SoundPlayerGroupCollectionViewModel" />
-        <local:MpAppCollectionViewModel x:Key="AppCollectionViewModel" />
-        <local:MpSourceCollectionViewModel x:Key="SourceCollectionViewModel" />
-        <local:MpSideBarTreeCollectionViewModel x:Key="SideBarTreeCollectionViewModel" />
-        <local:MpMatcherCollectionViewModel x:Key="MatcherCollectionViewModel" />
-
-        <!--  Singleton View Model Declarations End  -->
 
 
         <Style TargetType="{x:Type ItemsControl}">

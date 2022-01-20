@@ -35,21 +35,21 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpHelpers {
-        #region Singleton
-        private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
-        public static MpHelpers Instance { get { return _Lazy.Value; } }
+    public static class MpHelpers {
 
-        private MpHelpers() {
-            Rand = new Random((int)DateTime.Now.Ticks);
+        private static Random _rand;
+        public static Random Rand { 
+            get {
+                if(_rand == null) {
+                    _rand = new Random((int)DateTime.Now.Ticks);
+                }
+                return _rand;
+            }
         }
-        #endregion
-
-        public Random Rand { get; set; }
 
         #region Documents
 
-        public List<int> IndexListOfAll(string text, string matchStr) {
+        public static List<int> IndexListOfAll(string text, string matchStr) {
             var idxList = new List<int>();
             int curIdx = text.IndexOf(matchStr);
             int offset = 0;
@@ -65,7 +65,7 @@ namespace MonkeyPaste {
             return idxList;
         }
 
-        public bool IsStringQuillText(string str) {
+        public static bool IsStringQuillText(string str) {
             if (string.IsNullOrEmpty(str)) {
                 return false;
             }
@@ -78,7 +78,7 @@ namespace MonkeyPaste {
             return false;
         }
 
-        public string Diff(string str1, string str2) {
+        public static string Diff(string str1, string str2) {
             if (str1 == null) {
                 return str2;
             }
@@ -94,7 +94,7 @@ namespace MonkeyPaste {
             return string.Join("", diff);
         }
 
-        public string LoadTextResource(string resourcePath) {
+        public static string LoadTextResource(string resourcePath) {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItem)).Assembly;
             var stream = assembly.GetManifestResourceStream(resourcePath); 
             using (var reader = new System.IO.StreamReader(stream)) {
@@ -102,9 +102,9 @@ namespace MonkeyPaste {
                 return res;
             }
         }
-        public SKBitmap LoadBitmapResource(string resourcePath) {
+        public static SKBitmap LoadBitmapResource(string resourcePath) {
             // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
-            var assembly = this.GetType().GetTypeInfo().Assembly;
+            var assembly = typeof(MpHelpers).GetTypeInfo().Assembly;
             byte[] buffer = null;
 
             using (System.IO.Stream s = assembly.GetManifestResourceStream(resourcePath)) {
@@ -118,7 +118,7 @@ namespace MonkeyPaste {
             return new MpImageConverter().Convert(buffer,typeof(SKBitmap)) as SKBitmap;
         }
 
-        public async Task<string> GetCheckSum(string theString) {
+        public static async Task<string> GetCheckSum(string theString) {
             string result = await Task<string>.Run(() => {
                 using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
                     string hash = BitConverter.ToString(
@@ -132,8 +132,8 @@ namespace MonkeyPaste {
 
         public const string AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         public const string OtherChars = @"`~!@#$%^*()_-+[{]}\|;':,<./";
-        private string _passwordChars = null;
-        public string PasswordChars {
+        private static string _passwordChars = null;
+        public static string PasswordChars {
             get {
                 if (_passwordChars == null) {
                     var sb = new StringBuilder();
@@ -149,50 +149,50 @@ namespace MonkeyPaste {
             }
         }
 
-        public string GetRandomString(int length, string chars = AlphaNumericChars) {
+        public static string GetRandomString(int length, string chars = AlphaNumericChars) {
             return new string(Enumerable.Repeat(chars, length).Select(s => s[Rand.Next(s.Length)]).ToArray());
         }
 
-        public string GetNewAccessToken() {
+        public static string GetNewAccessToken() {
             return GetRandomString(Rand.Next(20, 50), AlphaNumericChars);
         }
 
-        public bool IsStringCsv(string text) {
+        public static bool IsStringCsv(string text) {
             if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
                 return false;
             }
             return text.Contains(",");
         }
 
-        public bool IsStringRichText(string text) {
+        public static bool IsStringRichText(string text) {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
             return text.StartsWith(@"{\rtf");
         }
 
-        public bool IsStringXaml(string text) {
+        public static bool IsStringXaml(string text) {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
             return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
         }
 
-        public bool IsStringSpan(string text) {
+        public static bool IsStringSpan(string text) {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
             return text.StartsWith(@"<Span xmlns=");
         }
 
-        public bool IsStringSection(string text) {
+        public static bool IsStringSection(string text) {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
             return text.StartsWith(@"<Section xmlns=");
         }
 
-        public bool IsStringPlainText(string text) {
+        public static bool IsStringPlainText(string text) {
             //returns true for csv
             if (text == null) {
                 return false;
@@ -206,7 +206,7 @@ namespace MonkeyPaste {
             return true;
         }
 
-        private string[] _quillTags = new string[] {
+        private static string[] _quillTags = new string[] {
             "p",
             "ol",
             "li",
@@ -223,7 +223,7 @@ namespace MonkeyPaste {
 
         #region System
 
-        public int ParseEnumValue(Type enumType, string typeStr) {
+        public static int ParseEnumValue(Type enumType, string typeStr) {
             for (int i = 0; i < Enum.GetValues(enumType).Length; i++) {
                 if (Enum.GetName(enumType, i).ToLower() == typeStr.ToLower()) {
                     return i;
@@ -232,21 +232,16 @@ namespace MonkeyPaste {
             return 0;
         }
 
-        public string AppStorageFilePath {
-            get {
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            }
-        }
 
-        public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
+        public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);
         }
 
-        public double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
+        public static double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
             return Math.Round((megabytes * 1024f) * 1024f, precision);
         }
 
-        public double GetFileSizeInBytes(string filePath) {
+        public static double GetFileSizeInBytes(string filePath) {
             try {
                 if (File.Exists(filePath)) {
                     FileInfo fi = new FileInfo(filePath);
@@ -259,7 +254,7 @@ namespace MonkeyPaste {
             return -1;
         }
 
-        public void AppendTextToFile(string path, string textToAppend) {
+        public static void AppendTextToFile(string path, string textToAppend) {
             try {
                 if (!File.Exists(path)) {
                     // Create a file to write to.
@@ -280,7 +275,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public string ReadTextFromFile(string filePath) {
+        public static string ReadTextFromFile(string filePath) {
             try {
                 using (StreamReader f = new StreamReader(filePath)) {
                     string outStr = string.Empty;
@@ -295,7 +290,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
+        public static string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
             try {
                 assembly = assembly == null ? Assembly.GetExecutingAssembly() : assembly;
                 //var resourceName = "MyCompany.MyProduct.MyFile.txt";
@@ -313,7 +308,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<byte[]> ReadBytesFromUriAsync(string url) {
+        public static async Task<byte[]> ReadBytesFromUriAsync(string url) {
             if(!Uri.IsWellFormedUriString(url,UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
@@ -327,7 +322,7 @@ namespace MonkeyPaste {
             return bytes;
         }
 
-        public byte[] ReadBytesFromUri(string url) {
+        public static byte[] ReadBytesFromUri(string url) {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
@@ -342,7 +337,7 @@ namespace MonkeyPaste {
             return bytes;
         }
 
-        public byte[] ReadBytesFromFile(string filePath) {
+        public static byte[] ReadBytesFromFile(string filePath) {
             if(!File.Exists(filePath)) {
                 return null;
             }
@@ -364,7 +359,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public Xamarin.Forms.ImageSource ReadImageFromFile(string filePath) {
+        public static Xamarin.Forms.ImageSource ReadImageFromFile(string filePath) {
             try {
                 var bytes = ReadBytesFromFile(filePath);
                 return new MpImageConverter().Convert(bytes.ToArray(), typeof(Xamarin.Forms.ImageSource)) as Xamarin.Forms.ImageSource;
@@ -375,7 +370,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public bool DeleteFile(string filePath) {
+        public static bool DeleteFile(string filePath) {
             if (File.Exists(filePath)) {
                 try {
                     File.Delete(filePath);
@@ -388,13 +383,13 @@ namespace MonkeyPaste {
             return true;
         }
 
-        public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+        public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     string extension = string.Empty;
-                    if (MpHelpers.Instance.IsStringRichText(text)) {
+                    if (IsStringRichText(text)) {
                         extension = @".rtf";
-                    } else if (MpHelpers.Instance.IsStringCsv(text)) {
+                    } else if (IsStringCsv(text)) {
                         extension = @".csv";
                     } else {
                         extension = @".txt";
@@ -405,7 +400,7 @@ namespace MonkeyPaste {
                     of.Write(text);
                     of.Close();
                     if (isTemporary) {
-                        MpTempFileManager.Instance.AddTempFilePath(filePath);
+                        MpTempFileManager.AddTempFilePath(filePath);
                     }
                     return filePath;
                 }
@@ -416,7 +411,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary = false) {
+        public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary = false) {
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     filePath = filePath.ToLower().Replace(@".tmp", @".png");
@@ -433,7 +428,7 @@ namespace MonkeyPaste {
 
         #region Visual
 
-        private List<List<Brush>> _ContentColors = new List<List<Brush>> {
+        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
                     new SolidColorBrush(Color.FromRgb(243, 69, 68)),
@@ -534,16 +529,38 @@ namespace MonkeyPaste {
                 }
             };
 
-        public Brush GetContentColor(int c, int r) {
+        public static Brush GetContentColor(int c, int r) {
             return _ContentColors[c][r];
         }
+        public static List<KeyValuePair<SKColor, int>> GetHistogram(SKBitmap bitmap) {
+            var countDictionary = new Dictionary<SKColor, int>();
+            for (int x = 0; x < bitmap.Width; x++) {
+                for (int y = 0; y < bitmap.Height; y++) {
+                    SKColor currentColor = bitmap.GetPixel(x, y);
+                    //if (currentColor.Alpha == 0) {
+                    //    continue;
+                    //}
+                    //If a record already exists for this color, set the count, otherwise just set it as 0
+                    int currentCount = countDictionary.ContainsKey(currentColor) ? countDictionary[currentColor] : 0;
 
-        public List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
+                    if (currentCount == 0) {
+                        //If this color doesnt already exists in the dictionary, add it
+                        countDictionary.Add(currentColor, 1);
+                    } else {
+                        //If it exists, increment the value and update it
+                        countDictionary[currentColor] = currentCount + 1;
+                    }
+                }
+            }
+            //order the list from most used to least used before returning
+            return countDictionary.OrderByDescending(o => o.Value).ToList();
+        }
+        public static List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
 
             var primaryIconColorList = new List<string>();
-            List<KeyValuePair<SKColor, int>> hist = MpImageHistogram.Instance.GetStatistics(skbmp);
+            List<KeyValuePair<SKColor, int>> hist = GetHistogram(skbmp);
             //foreach (var kvp in hist) {
             //    //var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
             //    SKColor c = kvp.Key;
@@ -561,7 +578,7 @@ namespace MonkeyPaste {
 
             //    //0-255 0 is black
             //    var grayScaleValue = c.ToGrayScale().Red; //0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B;
-            //    var relativeDist = 100;// primaryIconColorList.Count == 0 ? 100 : primaryIconColorList[primaryIconColorList.Count - 1].ToSkColor().ColorDistance(c);// MpHelpers.Instance.ColorDistance(Color.FromHex(), c);
+            //    var relativeDist = 100;// primaryIconColorList.Count == 0 ? 100 : primaryIconColorList[primaryIconColorList.Count - 1].ToSkColor().ColorDistance(c);// ColorDistance(Color.FromHex(), c);
             //    if (totalDiff > 50 &&
             //        grayScaleValue > 50 &&
             //        relativeDist > 15) {
@@ -571,7 +588,7 @@ namespace MonkeyPaste {
 
             //if only 1 color found within threshold make random list
             for (int i = primaryIconColorList.Count; i < listCount; i++) {
-                primaryIconColorList.Add(MpHelpers.Instance.GetRandomColor().ToHex());
+                primaryIconColorList.Add(GetRandomColor().ToHex());
             }
 
             foreach(var c in primaryIconColorList) {
@@ -582,7 +599,7 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public double ColorDistance(SKColor e1, SKColor e2) {
+        public static double ColorDistance(SKColor e1, SKColor e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = (long)((e1.Red + e2.Red) / 2);
             long r = (long)(e1.Red - e2.Red);
@@ -593,7 +610,7 @@ namespace MonkeyPaste {
             return d / max;
         }
 
-        public double ColorDistance(Color e1, Color e2) {
+        public static double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)(e1.R*255) + (long)(e2.R*255)) / 2;
             long r = (long)(e1.R * 255) - (long)(e2.R * 255);
@@ -604,7 +621,7 @@ namespace MonkeyPaste {
             return d / max;
         }
 
-        public bool IsBright(Color c, int brightThreshold = 150) {
+        public static bool IsBright(Color c, int brightThreshold = 150) {
             double s = c.R < 1 || c.G < 1 || c.B < 1 ? 255 : 1;
             int grayVal = (int)Math.Sqrt(
                 (c.R * s) * (c.R * s) * .299 +
@@ -613,13 +630,13 @@ namespace MonkeyPaste {
             return grayVal > brightThreshold;
         }
 
-        public SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
+        public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
             var c = solidColorBrush.Color;
             solidColorBrush.Color = Color.FromRgba(c.R, c.G, c.B, (double)alpha);
             return solidColorBrush;
         }
 
-        public SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
+        public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
             if (correctionFactor == 0.0f) {
                 return b;
             }
@@ -641,15 +658,15 @@ namespace MonkeyPaste {
             return new SolidColorBrush(Color.FromRgba((byte)red, (byte)green, (byte)blue, b.Color.A));
         }
 
-        public Brush GetDarkerBrush(Brush b) {
+        public static Brush GetDarkerBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, -0.5);
         }
 
-        public Brush GetLighterBrush(Brush b) {
+        public static Brush GetLighterBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
-        public Color GetRandomColor(byte alpha = 255) {
+        public static Color GetRandomColor(byte alpha = 255) {
             //if (alpha == 255) {
             //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             //}
@@ -659,14 +676,14 @@ namespace MonkeyPaste {
             return ((SolidColorBrush)GetContentColor(x, y)).Color;
         }
 
-        public Brush GetRandomBrushColor(byte alpha = 255) {
+        public static Brush GetRandomBrushColor(byte alpha = 255) {
             return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
         }
         #endregion
 
         #region Network
 
-        public string GetIpForDomain(string domain) {
+        public static string GetIpForDomain(string domain) {
             if(string.IsNullOrEmpty(domain)) {
                 return "0.0.0.0";
             }
@@ -683,7 +700,7 @@ namespace MonkeyPaste {
         const string SERVICE_BASE_URL = "https://devenvexe.com"; //replace base address   
         const string SERVICE_RELATIVE_URL = "/my/api/path";
 
-        public async Task<string> GetDataAsync(string baseUrl, string relUrl) {
+        public static async Task<string> GetDataAsync(string baseUrl, string relUrl) {
             var uri = new Uri(relUrl, UriKind.Relative);
             var request = new HttpRequestMessage {
                 Method = HttpMethod.Get,
@@ -706,7 +723,7 @@ namespace MonkeyPaste {
             return content;
         }
 
-        HttpClient GetHttpClient(string baseUrl) {
+        static HttpClient GetHttpClient(string baseUrl) {
             var handler = new HttpClientHandler {
                 UseProxy = true,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
@@ -722,7 +739,7 @@ namespace MonkeyPaste {
 
             return client;
         }
-        public bool IsConnectedToInternet() {
+        public static bool IsConnectedToInternet() {
             var current = Connectivity.NetworkAccess;
 
             if (current == NetworkAccess.Internet) {
@@ -730,12 +747,12 @@ namespace MonkeyPaste {
             }
             return false;
         }
-        public bool IsConnectedToNetwork() {
+        public static bool IsConnectedToNetwork() {
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
         }
 
-        public bool IsMpServerAvailable() {
+        public static bool IsMpServerAvailable() {
             if (!IsConnectedToNetwork()) {
                 return false;
             }
@@ -764,7 +781,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public string GetLocalIp4Address() {
+        public static string GetLocalIp4Address() {
             var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211);
             if (ips.Length > 0) {
                 return ips[0];
@@ -776,13 +793,13 @@ namespace MonkeyPaste {
             return "0.0.0.0";
         }
 
-        public string[] GetAllLocalIPv4() {
+        public static string[] GetAllLocalIPv4() {
             var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211).ToList();
             ips.AddRange(GetAllLocalIPv4(NetworkInterfaceType.Ethernet));
             return ips.ToArray();
         }
 
-        private string[] GetAllLocalIPv4(NetworkInterfaceType _type) {
+        private static string[] GetAllLocalIPv4(NetworkInterfaceType _type) {
             List<string> ipAddrList = new List<string>();
             foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces()) {
                 if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up && !item.Description.ToLower().Contains("virtual")) {
@@ -796,11 +813,11 @@ namespace MonkeyPaste {
             return ipAddrList.ToArray();
         }
 
-        public string GetExternalIp4Address() {
+        public static string GetExternalIp4Address() {
             return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
-        public string GetFullyFormattedUrl(string str) {
+        public static string GetFullyFormattedUrl(string str) {
             //returns url so it has protocol prefix
             if (str.StartsWith(@"http://")) {
                 return str;
@@ -812,7 +829,7 @@ namespace MonkeyPaste {
             return @"http://" + str;
         }
 
-        public async Task<string> GetUrlTitleAsync(string url) {
+        public static async Task<string> GetUrlTitleAsync(string url) {
             string urlSource = await GetHttpSourceCodeAsync(url);
 
             //sdf<title>poop</title>
@@ -821,7 +838,7 @@ namespace MonkeyPaste {
             return GetXmlElementContent(urlSource, @"title");
         }
 
-        public string GetUrlTitle(string url) {
+        public static string GetUrlTitle(string url) {
             string urlSource = GetHttpSourceCode(url);
 
             //sdf<title>poop</title>
@@ -830,7 +847,7 @@ namespace MonkeyPaste {
             return GetXmlElementContent(urlSource, @"title");
         }
 
-        public async Task<string> GetHttpSourceCodeAsync(string url) {
+        public static async Task<string> GetHttpSourceCodeAsync(string url) {
             if (!IsValidUrl(url)) {
                 return string.Empty;
             }
@@ -844,7 +861,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public string GetHttpSourceCode(string url) {
+        public static string GetHttpSourceCode(string url) {
             if (!IsValidUrl(url)) {
                 return string.Empty;
             }
@@ -858,7 +875,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public bool IsValidUrl(string str) {
+        public static bool IsValidUrl(string str) {
             bool hasValidExtension = false;
             string lstr = str.ToLower();
             foreach (var ext in _domainExtensions) {
@@ -870,11 +887,10 @@ namespace MonkeyPaste {
             if (!hasValidExtension) {
                 return false;
             }
-            var mc = Regex.Match(str, MpRegEx.Instance.GetRegExForTokenType(MpSubTextTokenType.Uri), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-            return mc.Success;
+            return MpRegEx.IsMatch(MpSubTextTokenType.Uri,lstr);
         }
 
-        public string GetXmlElementContent(string xml, string element) {
+        public static string GetXmlElementContent(string xml, string element) {
             if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
                 return string.Empty;
             }
@@ -899,7 +915,7 @@ namespace MonkeyPaste {
             //return xml.Substring(sIdx, eIdx - sIdx);
         }
 
-        public string GetUrlDomain(string url) {
+        public static string GetUrlDomain(string url) {
             //returns protocol prefixed domain url text
             try {
                 url = GetFullyFormattedUrl(url);
@@ -936,7 +952,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public string GetUrlFavicon(String url) {
+        public static string GetUrlFavicon(String url) {
             try {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
@@ -956,7 +972,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<string> GetUrlFaviconAsync(string url) {
+        public static async Task<string> GetUrlFaviconAsync(string url) {
             try {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
@@ -969,7 +985,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private string[] _domainExtensions = new string[] {
+        private static string[] _domainExtensions = new string[] {
             // TODO try to sort these by common use to make more efficient
             ".com",
             ".org",

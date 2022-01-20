@@ -7,9 +7,15 @@ using System.Xml;
 using HtmlAgilityPack;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpPluginManager : MpSingleton2<MpPluginManager> {
+    public class MpPluginManager : MpISingleton<MpPluginManager> {
+        private static MpPluginManager _instance;
+        public static MpPluginManager Instance => _instance ?? (_instance = new MpPluginManager());
+
+
+        public MpPluginManager() { }
 
         #region Properties
         public ObservableCollection<MpPlugin> Plugins = new ObservableCollection<MpPlugin>();
@@ -17,10 +23,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public MpPluginManager() {
-            Task.Run(Init);
-        }
-        public void Init() {
+        public async Task Init() {
+            await Task.Delay(1);
             //find plugin folder in main app folder
             var pluginRootFolderPath = Directory.GetCurrentDirectory();
 
@@ -81,7 +85,6 @@ namespace MonkeyPaste {
             catch(Exception ex) {
                 MonkeyPaste.MpConsole.WriteTraceLine(ex);
             }
-            IsLoaded = true;
             return;
         }
 

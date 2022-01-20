@@ -177,7 +177,7 @@ namespace MonkeyPaste {
         //                { "@ia", IsAdmin ? 1:0 },
         //                { "@l", Label },
         //                { "@a", Args },
-        //                //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+        //                //{ "@ib", MpHelpers.ConvertBitmapSourceToByteArray(Icon) },
         //                { "@is", IsSilent ? 1:0 },
         //                { "@ws", (int)WindowState },
         //                {"@pe", PressEnter ? 1:0 }
@@ -194,7 +194,7 @@ namespace MonkeyPaste {
         //                { "@cid", PasteToAppPathId },
         //                { "@l", Label },
         //                { "@a", Args },
-        //                //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+        //                //{ "@ib", MpHelpers.ConvertBitmapSourceToByteArray(Icon) },
         //                { "@is", IsSilent ? 1:0 },
         //                { "@ws", (int)WindowState },
         //                { "@pe", PressEnter ? 1:0 }

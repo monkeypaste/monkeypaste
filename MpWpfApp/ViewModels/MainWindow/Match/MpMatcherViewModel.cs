@@ -341,7 +341,7 @@ namespace MpWpfApp {
         #region MpIFileSystemWatcher Implementation
 
         void MpIFileSystemEventHandler.OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:

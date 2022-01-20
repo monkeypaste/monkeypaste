@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpMessageType {
@@ -40,14 +41,17 @@ namespace MonkeyPaste {
         NotBusy
     }
 
-    public class MpMessenger : MpSingleton<MpMessenger> {
-        // from https://stackoverflow.com/a/68272972/105028
+    public class MpMessenger : MpISingleton<MpMessenger> {
+        private static MpMessenger _instance;
+        public static MpMessenger Instance => _instance ?? (_instance = new MpMessenger());
+
+        public MpMessenger() : base() { }
+
+        public async Task Init() { await Task.Delay(1); }
 
         private readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
-        public MpMessenger() : base() {
-            IsLoaded = true;
-        }
+        
         
         public void Register(object sender, Action<MpMessageType> callback, object context = null) {
             Register<MpMessageType>(sender, callback, context);

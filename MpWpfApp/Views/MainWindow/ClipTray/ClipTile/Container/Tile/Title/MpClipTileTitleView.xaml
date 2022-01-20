@@ -110,7 +110,7 @@
                       DataContext="{Binding Parent}"
                       Grid.Column="0"
                       IsHitTestVisible="{Binding HasScrollVelocity,
-                                                 Source={StaticResource ClipTrayViewModel},
+                                                 Source={x:Static local:MpClipTrayViewModel.Instance},
                                                  Converter={StaticResource BoolFlipConverter}}"
                       MouseEnter="ClipTileTitleTextGrid_MouseEnter"
                       MouseLeave="ClipTileTitleTextGrid_MouseLeave"
@@ -171,7 +171,7 @@
                             Margin="42,0,0,35"
                             Visibility="{Binding Parent.PinButtonVisibility}"
                             Command="{Binding ToggleTileIsPinnedCommand,
-                                              Source={StaticResource ClipTrayViewModel}}"
+                                              Source={x:Static local:MpClipTrayViewModel.Instance}}"
                             CommandParameter="{Binding Parent}">
                         <Image x:Name="PinButtonImage"
                                Width="15"
@@ -191,7 +191,7 @@
                              Height="{local:MpMeasurementsBinding ClipTileTitleIconBorderSize}" />
                     <Button x:Name="ClipTileAppIconImageButton"
                             IsHitTestVisible="{Binding HasScrollVelocity,
-                                                       Source={StaticResource ClipTrayViewModel},
+                                                       Source={x:Static local:MpClipTrayViewModel.Instance},
                                                        Converter={StaticResource BoolFlipConverter}}"
                             MouseEnter="ClipTileAppIconImageButton_MouseEnter"
                             MouseLeave="ClipTileAppIconImageButton_MouseLeave"

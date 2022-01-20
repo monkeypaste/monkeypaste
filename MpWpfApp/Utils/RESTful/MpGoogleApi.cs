@@ -9,7 +9,7 @@ using Google.Apis.Discovery.v1;
 using Google.Apis.Discovery.v1.Data;
 
 namespace MpWpfApp {
-    public class MpGoogleApi : MpSingleton<MpGoogleApi> {
+    public class MpGoogleApi {
         #region Private constants
         private const string G_API_KEY = "AIzaSyAMhJvuoptUvconBSCJDdQDh3mHYDl9KxM";
         private const string G_OAUTH_CLIENT_ID = "160673782966-087nt2ga6udhjr476ekj8n9apqvct0d9.apps.googleusercontent.com";

@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
             if (!htmlDataStr.ToLower().Contains(sourceTag)) {
                 // NOTE this occurs when copying images
-                var m = MpRegEx.Instance.GetRegExForTokenType(MpSubTextTokenType.Uri).Match(htmlDataStr);
+                var m = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Uri).Match(htmlDataStr);
                 if(m.Success) {
                     sourceUrlLine = m.ToString();
                     if(sourceUrlLine.EndsWith("\"")) {
@@ -45,7 +45,7 @@ namespace MpWpfApp {
 
             string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
 
-            string sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(sourceUrl);
+            string sourceUrlTitle = await MonkeyPaste.MpHelpers.GetUrlTitleAsync(sourceUrl);
 
             var result = await MpUrl.Create(sourceUrl, sourceUrlTitle,app);
             return result;
@@ -57,7 +57,7 @@ namespace MpWpfApp {
             }
             string sourceUrlTitle = title;
             if(string.IsNullOrEmpty(sourceUrlTitle)) {
-                sourceUrlTitle = await MonkeyPaste.MpHelpers.Instance.GetUrlTitleAsync(url);
+                sourceUrlTitle = await MonkeyPaste.MpHelpers.GetUrlTitleAsync(url);
             }
 
             var result = await MpUrl.Create(url, sourceUrlTitle, app);

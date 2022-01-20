@@ -17,7 +17,7 @@ namespace MpWpfApp {
 
         public List<KeyValuePair<PixelColor, int>> GetStatistics(BitmapSource bmpSource) {
             var countDictionary = new Dictionary<PixelColor, int>();
-            var pixels = MpHelpers.Instance.GetPixels(bmpSource);
+            var pixels = MpHelpers.GetPixels(bmpSource);
 
             for (int x = 0; x < bmpSource.PixelWidth; x++) {
                 for (int y = 0; y < bmpSource.PixelHeight; y++) {

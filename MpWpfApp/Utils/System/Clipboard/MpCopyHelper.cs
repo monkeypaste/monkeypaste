@@ -35,7 +35,7 @@ namespace MpWpfApp {
         //    CommonFileDialog dlg = ((MpExportType)exportType == MpExportType.Csv || (MpExportType)exportType == MpExportType.Zip) ? new CommonSaveFileDialog() as CommonFileDialog : new CommonOpenFileDialog();
         //    dlg.Title = (MpExportType)exportType == MpExportType.Csv ? "Export CSV" : (MpExportType)exportType == MpExportType.Zip ? "Export Zip" : "Export Items to Directory...";
         //    if ((MpExportType)exportType != MpExportType.Files) {
-        //        dlg.DefaultFileName = "Mp_Exported_Data_" + MpHelpers.Instance.RemoveSpecialCharacters(DateTime.Now.ToString());
+        //        dlg.DefaultFileName = "Mp_Exported_Data_" + MpHelpers.RemoveSpecialCharacters(DateTime.Now.ToString());
         //        dlg.DefaultExtension = (MpExportType)exportType == MpExportType.Csv ? "csv" : "zip";
         //    } else {
         //        ((CommonOpenFileDialog)dlg).IsFolderPicker = true;
@@ -136,7 +136,7 @@ namespace MpWpfApp {
         //        var sb = new StringBuilder();
         //        foreach (var sctvm in SelectedItems) {
         //            if ((sctvm.CopyItemType != MpCopyItemType.RichText) &&
-        //                MpHelpers.Instance.IsStringCsv(sctvm.CopyItem.ItemData)) {
+        //                MpHelpers.IsStringCsv(sctvm.CopyItem.ItemData)) {
         //                sb.Append(sctvm.CopyItem.ItemData + ",");
         //                continue;
         //            } else {
@@ -185,7 +185,7 @@ namespace MpWpfApp {
 
         //public string[] SelectedClipTilesMergedPlainTextFileList {
         //    get {
-        //        string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(
+        //        string mergedPlainTextFilePath = MpHelpers.WriteTextToFile(
         //            Path.GetTempFileName(), SelectedClipTilesMergedPlainText, true);
 
         //        return new string[] { mergedPlainTextFilePath };
@@ -197,11 +197,11 @@ namespace MpWpfApp {
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
         //        foreach (var sctvm in SelectedItems) {
         //            if (sctvm.CopyItemType == MpCopyItemType.RichText) {
-        //                fd = MpHelpers.Instance.CombineFlowDocuments(
+        //                fd = MpHelpers.CombineFlowDocuments(
         //                    sctvm.RtbItemCollectionViewModel.SubSelectedClipTilesMergedRtf.ToFlowDocument(),
         //                    fd);
         //            } else {
-        //                fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
+        //                fd = MpHelpers.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
         //            }
         //        }
         //        return fd.ToRichText();
@@ -211,7 +211,7 @@ namespace MpWpfApp {
 
         //public string[] SelectedClipTilesMergedRtfFileList {
         //    get {
-        //        string mergedRichTextFilePath = MpHelpers.Instance.WriteTextToFile(
+        //        string mergedRichTextFilePath = MpHelpers.WriteTextToFile(
         //            Path.GetTempFileName(), SelectedClipTilesMergedRtf, true);
 
         //        return new string[] { mergedRichTextFilePath };
@@ -233,7 +233,7 @@ namespace MpWpfApp {
         //        if (wasEmptySelection) {
         //            ClearSubSelection();
         //        }
-        //        return MpHelpers.Instance.CombineBitmap(bmpList, false);
+        //        return MpHelpers.CombineBitmap(bmpList, false);
         //    }
         //}
 
@@ -283,7 +283,7 @@ namespace MpWpfApp {
         //        foreach (var sctvm in SubSelectedContentItems) {
         //            if (sctvm.HasTokens) {
         //                sb.Append(
-        //                    MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
+        //                    MpHelpers.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
         //            } else {
         //                sb.Append(sctvm.CopyItemPlainText + Environment.NewLine);
         //            }
@@ -298,7 +298,7 @@ namespace MpWpfApp {
         //public string[] SubSelectedClipTilesMergedPlainTextFileList {
         //    get {
 
-        //        string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(
+        //        string mergedPlainTextFilePath = MpHelpers.WriteTextToFile(
         //            System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedPlainText, true);
 
         //        return new string[] { mergedPlainTextFilePath };
@@ -314,9 +314,9 @@ namespace MpWpfApp {
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
         //        foreach (var sctvm in SubSelectedContentItems.OrderBy(x => x.LastSubSelectedDateTime)) {
         //            if (sctvm.HasTokens) {
-        //                fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.TemplateRichText.ToFlowDocument(), fd);
+        //                fd = MpHelpers.CombineFlowDocuments(sctvm.TemplateRichText.ToFlowDocument(), fd);
         //            } else {
-        //                fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
+        //                fd = MpHelpers.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
         //            }
         //        }
         //        if (wasEmptySelection) {
@@ -328,7 +328,7 @@ namespace MpWpfApp {
 
         //public string[] SubSelectedClipTilesMergedRtfFileList {
         //    get {
-        //        string mergedRichTextFilePath = MpHelpers.Instance.WriteTextToFile(
+        //        string mergedRichTextFilePath = MpHelpers.WriteTextToFile(
         //            System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedRtf, true);
 
         //        return new string[] { mergedRichTextFilePath };

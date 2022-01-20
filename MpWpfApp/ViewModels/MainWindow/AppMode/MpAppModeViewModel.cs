@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpAppModeViewModel : MpSingletonViewModel<MpAppModeViewModel> {
+    public class MpAppModeViewModel : MpViewModelBase, MpISingleton<MpAppModeViewModel> {
         #region Properties
 
         #region View Models
@@ -216,8 +216,11 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpAppModeViewModel _instance;
+        public static MpAppModeViewModel Instance => _instance ?? (_instance = new MpAppModeViewModel());
+
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpAppModeViewModel_PropertyChanged;
 
                 MpMessenger.Instance.Register<MpMessageType>(

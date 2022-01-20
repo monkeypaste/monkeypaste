@@ -59,7 +59,7 @@ namespace MpWpfApp {
             var paramLookup = SelectedPresetViewModel.ParamLookup;
             double minConfidence = paramLookup[(int)MpYoloParamType.Confidence].DoubleValue;
 
-            var response = await MpYoloTransaction.Instance.DetectObjectsAsync(obj.ToString().ToBitmapSource().ToByteArray(), minConfidence);
+            var response = await MpYoloTransaction.DetectObjectsAsync(obj.ToString().ToBitmapSource().ToByteArray(), minConfidence);
             
 
             IsBusy = false;

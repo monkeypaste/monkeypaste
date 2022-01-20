@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpMatcherCollectionViewModel : MpSingletonViewModel<MpMatcherCollectionViewModel> {
+    public class MpMatcherCollectionViewModel : MpViewModelBase, MpISingleton<MpMatcherCollectionViewModel> {
         #region Private Variables
 
         #endregion
@@ -32,6 +32,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+
+        private static MpMatcherCollectionViewModel _instance;
+        public static MpMatcherCollectionViewModel Instance => _instance ?? (_instance = new MpMatcherCollectionViewModel());
+
 
         public MpMatcherCollectionViewModel() : base() {
             PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;

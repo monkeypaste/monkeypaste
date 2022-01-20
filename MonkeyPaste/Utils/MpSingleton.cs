@@ -52,40 +52,12 @@ namespace MonkeyPaste {
         }
     }
 
-    public abstract class MpSingleton2 {
+    public abstract class MpSingleton {
         public object InstanceObj { get; set; }
-
-        public static event EventHandler OnLoaded;
-
-        private bool _isLoaded = false;
-        public bool IsLoaded {
-            get {
-                return _isLoaded;
-            }
-            set {
-                if (_isLoaded != value) {
-                    _isLoaded = value;
-                    if (IsLoaded) {
-                        OnLoaded?.Invoke(this, null);
-                    }
-                }
-            }
-        }
     }
-    public abstract class MpSingletonViewModel2 : MpViewModelBase {
+    public abstract class MpSingletonViewModel : MpViewModelBase {
         public object InstanceObj { get; set; }
-        public MpSingletonViewModel2() : base() { }
+        public MpSingletonViewModel() : base() { }
     }
 
-    public abstract class MpSingleton2<T> : MpSingleton2 where T : class {
-        public static T Instance {
-            get { return MpResolver.Resolve<T>(); }
-        }
-    }
-
-    public abstract class MpSingletonViewModel2<T> : MpSingletonViewModel2 where T : MpViewModelBase {
-        public static T Instance {
-            get { return MpResolver.Resolve<T>(); }
-        }
-    }
 }

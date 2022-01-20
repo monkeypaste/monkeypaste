@@ -71,7 +71,7 @@ namespace MpWpfApp {
 
         private void Timer_Elapsed(object sender, EventArgs e) {   
             string gesture = GetGesture();
-            var keylist = MpHelpers.Instance.ConvertStringToKeySequence(gesture);
+            var keylist = MpHelpers.ConvertStringToKeySequence(gesture);
             _asmwvm.SetKeyList(keylist);
         }
 
@@ -92,7 +92,7 @@ namespace MpWpfApp {
             _downCount++;
 
             string gesture = GetGesture();
-            var keylist = MpHelpers.Instance.ConvertStringToKeySequence(gesture);
+            var keylist = MpHelpers.ConvertStringToKeySequence(gesture);
             _asmwvm.SetKeyList(keylist);
         }
 
@@ -102,7 +102,7 @@ namespace MpWpfApp {
 
             if(_downCount == 0) {
                 string gesture = GetGesture();
-                var keylist = MpHelpers.Instance.ConvertStringToKeySequence(gesture);
+                var keylist = MpHelpers.ConvertStringToKeySequence(gesture);
                 _asmwvm.SetKeyList(keylist);
             }
             _lastUpTime = DateTime.Now;

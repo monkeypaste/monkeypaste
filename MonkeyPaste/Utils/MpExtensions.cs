@@ -182,7 +182,7 @@ namespace MonkeyPaste {
         }
 
         public static List<int> IndexListOfAll(this string str, string compareStr) {
-            return MpHelpers.Instance.IndexListOfAll(str, compareStr);
+            return MpHelpers.IndexListOfAll(str, compareStr);
         }
 
 
@@ -208,7 +208,7 @@ namespace MonkeyPaste {
 
 
         public static async Task<string> CheckSum(this string str) {
-            string result = await MpHelpers.Instance.GetCheckSum(str);
+            string result = await MpHelpers.GetCheckSum(str);
             return result;
         }
 
@@ -217,8 +217,7 @@ namespace MonkeyPaste {
             // enforce that hex colors start with '#'
             //    text = "#" + text;
             //}
-            return MpRegEx.Instance.IsMatch(MpSubTextTokenType.HexColor6, text) ||
-                   MpRegEx.Instance.IsMatch(MpSubTextTokenType.HexColor8, text);
+            return MpRegEx.IsMatch(MpSubTextTokenType.HexColor, text);
         }
 
         public static bool IsBase64String(this string str) {
@@ -236,7 +235,7 @@ namespace MonkeyPaste {
         }
 
         public static bool IsStringQuillText(this string text) {
-            return MpHelpers.Instance.IsStringQuillText(text);
+            return MpHelpers.IsStringQuillText(text);
         }
 
         public static bool IsStringCsv(this string text) {

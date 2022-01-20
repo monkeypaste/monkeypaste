@@ -118,9 +118,9 @@ namespace MpWpfApp {
                 string processName = GetKnownProcessPath(fgHandle);
                 if (string.IsNullOrEmpty(processName)) {
                     //if it is not resolve its process path
-                    processName = MpHelpers.Instance.GetProcessPath(fgHandle);
+                    processName = MpHelpers.GetProcessPath(fgHandle);
                 }
-                if (processName == MpHelpers.Instance.GetApplicationProcessPath()) {
+                if (processName == MpHelpers.GetApplicationProcessPath()) {
                     return;
                 }
                 bool wasStackChanged = false;
@@ -193,12 +193,12 @@ namespace MpWpfApp {
                 IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
                 if (handle != IntPtr.Zero || !CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
                     //if process is not running anymore or needs to be started (custom pastetoapppath)
-                    handle = MpHelpers.Instance.StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
+                    handle = MpHelpers.StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
                 } else {
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
                     var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
                     foreach (var h in handleList) {
-                        if (isAdmin == MpHelpers.Instance.IsProcessAdmin(h)) {
+                        if (isAdmin == MpHelpers.IsProcessAdmin(h)) {
                             handle = h;
                             if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
                                 forceWindowState = LastWindowStateHandleDictionary[handle];
@@ -208,10 +208,10 @@ namespace MpWpfApp {
                     }
                     if (handle == IntPtr.Zero) {
                         //no handle found matching admin rights
-                        handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent, forceWindowState);
+                        handle = MpHelpers.StartProcess(args,processPath, isAdmin, isSilent, forceWindowState);
                     } else {
                         //show running window with last known window state
-                        WinApi.ShowWindowAsync(handle, MpHelpers.Instance.GetShowWindowValue(forceWindowState));
+                        WinApi.ShowWindowAsync(handle, MpHelpers.GetShowWindowValue(forceWindowState));
                     }
                 }
                 

@@ -100,21 +100,21 @@ namespace MpWpfApp {
             if(Parent.IsPlaceholder) {
                 return;
             }
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 var cl = Parent.ColorPallete;
                 for (int i = 0; i < cl.Length; i++) {
                     var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
                     if (i < Swirls.Count) {
                         Swirls[i].LayerId = i;
                         Swirls[i].LayerBrush = scb;
-                        Swirls[i].LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
+                        Swirls[i].LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
                     } else {
                         Swirls.Add(
                             new MpSwirlLayerViewModel(
                                 this,
                                 i,
                                 scb,
-                                (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
+                                (double)MpHelpers.Rand.Next(40, 120) / 255));
                     }
                 }
             });
@@ -122,7 +122,7 @@ namespace MpWpfApp {
         public void ForceBrush(Brush forcedBrush) {
             foreach(var slvm in Swirls) {
                 slvm.LayerBrush = forcedBrush;
-                slvm.LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
+                slvm.LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
             }
         }
 

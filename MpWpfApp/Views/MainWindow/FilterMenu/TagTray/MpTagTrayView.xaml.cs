@@ -23,7 +23,7 @@ namespace MpWpfApp {
         }
 
         public void RefreshTray() {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 var sv = TagTray.GetVisualDescendent<ScrollViewer>();
                 while (sv == null) {
                     await Task.Delay(100);
@@ -42,7 +42,7 @@ namespace MpWpfApp {
 
         private void TagTray_Loaded(object sender, RoutedEventArgs e) {
             TagTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 while (BindingContext == null || BindingContext.IsBusy) {
                     await Task.Delay(100);
                 }

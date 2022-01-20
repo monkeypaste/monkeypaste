@@ -9,7 +9,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSourceCollectionViewModel : MpSingletonViewModel2<MpSourceCollectionViewModel> {
+    public class MpSourceCollectionViewModel : MpViewModelBase, MpISingleton<MpSourceCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,8 +33,12 @@ namespace MpWpfApp {
 
         #region Constructors
 
+
+        private static MpSourceCollectionViewModel _instance;
+        public static MpSourceCollectionViewModel Instance => _instance ?? (_instance = new MpSourceCollectionViewModel());
+
         public MpSourceCollectionViewModel() : base() {
-            MpHelpers.Instance.RunOnMainThreadAsync(Init);
+
         }
 
         public async Task Init() {
@@ -78,7 +82,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpSource s) {
-                MpHelpers.Instance.RunOnMainThread(async () => {
+                MpHelpers.RunOnMainThread(async () => {
                     var svm = await CreateSourceViewModel(s);
                     Items.Add(svm);
                     OnPropertyChanged(nameof(Items));
@@ -87,7 +91,7 @@ namespace MpWpfApp {
         }
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpSource s) {
-                MpHelpers.Instance.RunOnMainThread(async () => {
+                MpHelpers.RunOnMainThread(async () => {
                     var svm = Items.FirstOrDefault(x => x.Source.Id == s.Id);
                     if(svm != null) {
                         await svm.InitializeAsync(s);

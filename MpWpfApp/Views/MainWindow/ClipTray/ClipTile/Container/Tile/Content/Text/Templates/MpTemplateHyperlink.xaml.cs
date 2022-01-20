@@ -31,14 +31,14 @@ namespace MpWpfApp {
                 var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
                 trSHl.Inlines.Clear();
                 var span = new Span(new Run(linkText), trSHl.ElementStart);
-                tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+                tr = MpHelpers.FindStringRangeFromPosition(span.ContentStart, trText, true);
                 MpConsole.WriteLine("Splitting range");
             }
             if (trEHl != null && trEHl != trSHl) {
                 var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
                 trEHl.Inlines.Clear();
                 var span = new Span(new Run(linkText), trEHl.ElementStart);
-                tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+                tr = MpHelpers.FindStringRangeFromPosition(span.ContentStart, trText, true);
                 MpConsole.WriteLine("Splitting range");
             }
 

@@ -15,14 +15,14 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding ExcludeSubSelectedItemApplicationCommand,
-                                Source={StaticResource ClipTrayViewModel}}"
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}"
               CommandParameter="False" />
     <MenuItem x:Name="ExcludeSourceDomainItem"
               Icon="{Binding Source={StaticResource NoEntryIcon},
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding ExcludeSubSelectedItemApplicationCommand,
-                                Source={StaticResource ClipTrayViewModel}}"
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}"
               CommandParameter="True" />
     <MenuItem x:Name="PasteMacroMenuItem"
               Header="Add Paste Macro For Source"
@@ -30,6 +30,6 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding ShowSettingsWindowCommand,
-                                Source={StaticResource SystemTrayViewModel}}"
+                                Source={x:Static local:MpSystemTrayViewModel.Instance}}"
               CommandParameter="{Binding}" />
 </ContextMenu>

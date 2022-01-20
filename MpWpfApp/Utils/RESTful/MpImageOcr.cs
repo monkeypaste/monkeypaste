@@ -112,7 +112,7 @@ namespace MpWpfApp {
         }
 
         private async Task<MpOcrAnalysis> OcrEngineFromByteArrayAsync(byte[] byteData, bool isTemporaryFile = true) {
-            string imagePath = MpHelpers.Instance.WriteBitmapSourceToFile(MpHelpers.Instance.GetTempFileNameWithExtension(@".png"), byteData.ToBitmapSource());
+            string imagePath = MpHelpers.WriteBitmapSourceToFile(MpHelpers.GetTempFileNameWithExtension(@".png"), byteData.ToBitmapSource());
 
             var ocrResult = await OcrEngineFromFileAsync(imagePath, isTemporaryFile);
 

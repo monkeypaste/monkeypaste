@@ -8,16 +8,16 @@ using System.Windows.Threading;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpDragDropManager : MpSingleton<MpDragDropManager> {
-        #region Private Variables
+    public class MpDragDropManager : MpISingleton<MpDragDropManager> {
+        #region private  Variables
 
         private const double MINIMUM_DRAG_DISTANCE = 10;
 
-        private Point _mouseStartPosition;
+        private  Point _mouseStartPosition;
 
-        private MpIContentDropTarget _curDropTarget;
+        private  MpIContentDropTarget _curDropTarget;
 
-        private List<MpIContentDropTarget> _dropTargets {
+        private  List<MpIContentDropTarget> _dropTargets {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
@@ -35,7 +35,7 @@ namespace MpWpfApp {
             }
         }
 
-        private DispatcherTimer _autoScrollTimer;
+        private  DispatcherTimer _autoScrollTimer;
 
         #endregion
 
@@ -69,12 +69,17 @@ namespace MpWpfApp {
 
         #region Events
 
-
         #endregion
 
         #region Init
 
-        private MpDragDropManager() : base() {
+        private static MpDragDropManager _instance;
+        public static MpDragDropManager Instance => _instance ?? (_instance = new MpDragDropManager());
+
+        public MpDragDropManager() { }
+
+        public async Task Init() {
+
             _autoScrollTimer = new DispatcherTimer();
             _autoScrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             _autoScrollTimer.Tick += _autoScrollTimer_Tick;
@@ -82,11 +87,12 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.OnMainWindowHide += Instance_OnMainWindowHide;
 
             MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+            await Task.Delay(1);
         }
 
         #endregion
 
-        #region Public Methods
+        #region public Methods
 
         public void StartDragCheck(Point mainWindowMouseDownPosition) {
             IsCheckingForDrag = true;
@@ -99,9 +105,9 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Private Methods
+        #region private  Methods
 
-        private MpIContentDropTarget SelectDropTarget(object dragData) {
+        private  MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
             foreach (var dt in _dropTargets.Where(x => x.IsEnabled)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.IsCtrlDown, dragData)) {
@@ -119,7 +125,7 @@ namespace MpWpfApp {
             return selectedTarget;
         }
 
-        private  void Application_KeyDown(object sender, KeyEventArgs e) {
+        private   void Application_KeyDown(object sender, KeyEventArgs e) {
             if(!IsDragAndDrop) {
                 return;
             }
@@ -127,7 +133,7 @@ namespace MpWpfApp {
                 Reset();
             }
         }
-        private async void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+        private  async void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (e.Button != System.Windows.Forms.MouseButtons.Left) {
                 return;
             }
@@ -142,7 +148,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
+        private  void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!IsCheckingForDrag && !IsDragAndDrop) {
                 Reset();
                 return;
@@ -169,7 +175,7 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task PerformDrop(object dragData) {
+        private  async Task PerformDrop(object dragData) {
             if (_curDropTarget != null) {
                 await _curDropTarget?.Drop(
                         MpShortcutCollectionViewModel.Instance.IsCtrlDown,
@@ -189,7 +195,7 @@ namespace MpWpfApp {
 
             Reset();
         }
-        private void Reset() {
+        private  void Reset() {
             IsCheckingForDrag = IsDragAndDrop = false;
 
             _curDropTarget = null;
@@ -205,7 +211,7 @@ namespace MpWpfApp {
             UpdateCursor();
         }
 
-        private void UpdateCursor() {
+        private  void UpdateCursor() {
             MpCursorType currentCursor = MpCursorType.Default;
 
             if (!IsDragAndDrop) {
@@ -221,11 +227,11 @@ namespace MpWpfApp {
             MpCursorViewModel.Instance.CurrentCursor = currentCursor;
         }
 
-        private void Instance_OnMainWindowHide(object sender, EventArgs e) {
+        private  void Instance_OnMainWindowHide(object sender, EventArgs e) {
             Reset();
         }
 
-        private void _autoScrollTimer_Tick(object sender, EventArgs e) {
+        private  void _autoScrollTimer_Tick(object sender, EventArgs e) {
             
             _dropTargets.ForEach(x => x.UpdateAdorner());
             _dropTargets.ForEach(x => x.AutoScrollByMouse());
@@ -233,7 +239,7 @@ namespace MpWpfApp {
             UpdateCursor();
         }
 
-        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+        private  void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:

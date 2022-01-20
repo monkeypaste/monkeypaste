@@ -202,7 +202,7 @@ namespace MonkeyPaste {
             var newTag = new MpTag() {
                 TagName = "Untitled",
                 TagSortIdx = TagViewModels.Count,
-                HexColor = MpHelpers.Instance.GetRandomColor().ToHex()
+                HexColor = MpHelpers.GetRandomColor().ToHex()
             };
             //await MpDb.Instance.AddItem<MpColor>(newTag.Color);
             //newTag.ColorId = newTag.Color.Id;

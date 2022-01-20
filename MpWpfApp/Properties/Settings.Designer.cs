@@ -1503,5 +1503,17 @@ namespace MpWpfApp.Properties {
                 this["SearchByRegex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AppStorageFilePath {
+            get {
+                return ((string)(this["AppStorageFilePath"]));
+            }
+            set {
+                this["AppStorageFilePath"] = value;
+            }
+        }
     }
 }

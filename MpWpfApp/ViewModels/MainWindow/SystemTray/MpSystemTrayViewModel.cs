@@ -8,7 +8,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpSingletonViewModel2<MpSystemTrayViewModel> {
+    public class MpSystemTrayViewModel : MpViewModelBase, MpISingleton<MpSystemTrayViewModel> {
 
         #region View Models
         private MpSettingsWindowViewModel _settingsWindowViewModel = null;
@@ -62,7 +62,7 @@ namespace MpWpfApp {
 
         public string DbSizeInMbs {
             get {
-                return Math.Round(MpHelpers.Instance.FileListSize(new string[] { Properties.Settings.Default.DbPath }),2).ToString() + " megabytes";
+                return Math.Round(MpHelpers.FileListSize(new string[] { Properties.Settings.Default.DbPath }),2).ToString() + " megabytes";
             }
         }
 
@@ -93,8 +93,14 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpSystemTrayViewModel _instance;
+        public static MpSystemTrayViewModel Instance => _instance ?? (_instance = new MpSystemTrayViewModel());
 
-        public MpSystemTrayViewModel() {
+        public async Task Init() {
+            await Task.Delay(1);
+        }
+
+        public MpSystemTrayViewModel() : base() {
             Application.Current.Resources["SystemTrayViewModel"] = this;
         }
 

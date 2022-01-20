@@ -98,7 +98,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpDropLineAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
-            _debugColor = MpHelpers.Instance.GetRandomColor();
+            _debugColor = MpHelpers.GetRandomColor();
             _debugColor.A = 50;
             
         }

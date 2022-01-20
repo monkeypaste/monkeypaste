@@ -8,6 +8,7 @@
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpSystemTrayViewModel"
                      mc:Ignorable="d"
+                     DataContext="{x:Static local:MpSystemTrayViewModel.Instance}"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpSystemTrayViewModel}">
@@ -18,7 +19,7 @@
                     Tag="{Binding DataContext,
                                   RelativeSource={RelativeSource Mode=Self}}"
                     ToolTipText="{Binding SystemTrayIconToolTipText,
-                                          Source={StaticResource SystemTrayViewModel}}">
+                                          Source={x:Static local:MpSystemTrayViewModel.Instance}}">
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Settings"
@@ -26,7 +27,7 @@
                                          Converter={StaticResource StringToIconConverter},
                                          Mode=OneWay}"
                           Command="{Binding ShowSettingsWindowCommand,
-                                            Source={StaticResource SystemTrayViewModel}}"
+                                            Source={x:Static local:MpSystemTrayViewModel.Instance}}"
                           CommandParameter="{StaticResource SettingsTabAccount}" />
                 <MenuItem Header="{Binding PlacementTarget.Tag.PauseOrPlayHeader,
                                            RelativeSource={RelativeSource Mode=FindAncestor,
@@ -34,15 +35,15 @@
                           Icon="{Binding IsAppPaused,
                                          Converter={StaticResource BoolToIconSourceConverter},
                                          ConverterParameter='PlayIcon|PauseIcon',
-                                         Source={StaticResource AppModeViewModel}}"
+                                         Source={x:Static local:MpAppModeViewModel.Instance}}"
                           Command="{Binding ToggleIsAppPausedCommand,
-                                            Source={StaticResource AppModeViewModel}}" />
+                                            Source={x:Static local:MpAppModeViewModel.Instance}}" />
                 <MenuItem Header="Help"
                           Icon="{Binding Source={StaticResource HelpIcon},
                                          Converter={StaticResource StringToIconConverter},
                                          Mode=OneWay}"
                           Command="{Binding ShowSettingsWindowCommand,
-                                            Source={StaticResource SystemTrayViewModel}}"
+                                            Source={x:Static local:MpSystemTrayViewModel.Instance}}"
                           CommandParameter="{StaticResource SettingsTabHelp}" />
                 <MenuItem Header="Log..."
                           Command="{Binding PlacementTarget.Tag.ShowLogDialogCommand,
@@ -59,7 +60,7 @@
             </ContextMenu>
         </tb:TaskbarIcon.ContextMenu>
         <tb:TaskbarIcon.TrayToolTip>
-            <Border DataContext="{StaticResource SystemTrayViewModel}"
+            <Border DataContext="{x:Static local:MpSystemTrayViewModel.Instance}"
                     Background="{StaticResource AppColorDark}"
                     BorderBrush="{StaticResource AppColorLight}"
                     BorderThickness="2"

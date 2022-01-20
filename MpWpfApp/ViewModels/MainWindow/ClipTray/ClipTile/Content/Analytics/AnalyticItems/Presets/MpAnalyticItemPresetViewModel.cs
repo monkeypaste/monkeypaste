@@ -248,7 +248,7 @@ namespace MpWpfApp {
                 Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
             }
 
-            string formatJson = MonkeyPaste.MpHelpers.Instance.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
+            string formatJson = MonkeyPaste.MpHelpers.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
                 formatJson, new MpJsonEnumConverter()).ParameterFormats;
@@ -438,14 +438,14 @@ namespace MpWpfApp {
                 var iconColorChooserMenuItem = new MenuItem();
                 var iconContextMenu = new ContextMenu();
                 iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.Instance.SetColorChooserMenuItem(
+                MpHelpers.SetColorChooserMenuItem(
                     iconContextMenu,
                     iconColorChooserMenuItem,
                     (s1, e1) => {
-                        MpHelpers.Instance.RunOnMainThread(async () => {
+                        MpHelpers.RunOnMainThread(async () => {
                             var brush = (Brush)((Border)s1).Tag;
                             var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                            var presetIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                            var presetIcon = MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                             Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(),false);
                             Preset.IconId = Preset.Icon.Id;
                             await Preset.WriteToDatabaseAsync();

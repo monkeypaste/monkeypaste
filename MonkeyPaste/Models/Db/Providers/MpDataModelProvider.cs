@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
-    public class MpDataModelProvider : MpSingleton2<MpDataModelProvider> {
+    public class MpDataModelProvider : MpISingleton<MpDataModelProvider> {
         #region Private Variables
         private IList<MpCopyItem> _lastResult;
 
@@ -37,17 +37,27 @@ namespace MonkeyPaste {
 
         #region Constructor
 
+        private static MpDataModelProvider _instance;
+        public static MpDataModelProvider Instance => _instance ?? (_instance = new MpDataModelProvider());
+
         public MpDataModelProvider() {
-            IsLoaded = true;
+            throw new Exception("Must have query data to init");
+        }
+
+        public MpDataModelProvider(MpIQueryInfo queryInfo) {
+            QueryInfos.Add(queryInfo);
+            _instance = this;
+        }
+
+        public async Task Init() {
+            ResetQuery(); 
+            await Task.Delay(1);
         }
 
         #endregion
 
         #region Public Methods
 
-        public MpDataModelProvider(MpIQueryInfo queryInfo) {
-            QueryInfos.Add(queryInfo);
-        }
 
         public void ResetQuery() {
             AllFetchedAndSortedCopyItemIds.Clear();

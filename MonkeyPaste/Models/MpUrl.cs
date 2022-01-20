@@ -117,7 +117,7 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
 
-            var domainStr = MpHelpers.Instance.GetUrlDomain(urlPath);
+            var domainStr = MpHelpers.GetUrlDomain(urlPath);
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
                 UrlPath = urlPath,
@@ -128,7 +128,7 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
             } else {
-                var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
+                var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
                 if(favIconImg64 == MpBase64Images.Instance.UnknownFavIcon && app != null) {
                     //url has no favicon so use application's icon
                     MpConsole.WriteLine($"Url: {urlPath} has no favicon, using app: {app.AppPath}");

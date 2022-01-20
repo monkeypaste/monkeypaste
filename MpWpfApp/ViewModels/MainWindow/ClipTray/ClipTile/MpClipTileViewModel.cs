@@ -890,7 +890,7 @@ using System.Speech.Synthesis;
         }
 
         public async Task InsertRange(int idx, List<MpCopyItem> models) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            await MpHelpers.RunOnMainThreadAsync(async () => {
                 var curModels = ItemViewModels.Where(x => x.CopyItem != null).Select(x => x.CopyItem).ToList();
 
                 idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
@@ -912,7 +912,7 @@ using System.Speech.Synthesis;
         }
 
         public async Task RemoveRange(List<MpCopyItem> models) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 for (int i = 0; i < models.Count; i++) {
                     var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
                     if (ivm != null) {
@@ -1036,9 +1036,9 @@ using System.Speech.Synthesis;
                 foreach (var rtbvm in SelectedItems) {
                     if (rtbvm.HasTemplates) {
                         string rtbvmrtf = rtbvm.TemplateRichText;
-                        rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
+                        rtf = MpHelpers.CombineRichText(rtbvmrtf, rtf, true);
                     } else {
-                        rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
+                        rtf = MpHelpers.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
                     }
                 }
                 sw.Stop();
@@ -1330,7 +1330,7 @@ using System.Speech.Synthesis;
         //    return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
         //}
         //private void CreateQrCodeFromClip() {
-        //    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItemPlainText);
+        //    var bmpSrc = MpHelpers.ConvertUrlToQrCode(CopyItemPlainText);
         //    System.Windows.MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
         //}
 
@@ -1347,10 +1347,10 @@ using System.Speech.Synthesis;
         //    return !IsEditingContent;
         //}
         //private void SendClipToEmail() {
-        //    MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
+        //    MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
         //    //Parent.ClearClipSelection();
         //    //IsSelected = true;
-        //    //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        //    //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         //}
 
 
@@ -1503,7 +1503,7 @@ using System.Speech.Synthesis;
                     () => {
                         try {
                             IsBusy = true;
-                            MpHelpers.Instance.RunOnMainThread(
+                            MpHelpers.RunOnMainThread(
                                     (Action)(() => {
                                         var tempSelectedClipTiles = SelectedItems;
                                         ClearSelection();
@@ -1579,7 +1579,7 @@ using System.Speech.Synthesis;
             if (args == null || args.GetType() != typeof(string)) {
                 return;
             }
-            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(HeadItem.CopyItem.ItemData.ToPlainText()));
+            MpHelpers.OpenUrl(args.ToString() + System.Uri.EscapeDataString(HeadItem.CopyItem.ItemData.ToPlainText()));
         }
 
         private RelayCommand _deleteSubSelectedClipsCommand;

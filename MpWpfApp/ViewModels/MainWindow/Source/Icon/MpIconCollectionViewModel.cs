@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpIconCollectionViewModel : MpSingletonViewModel2<MpIconCollectionViewModel> {
+    public class MpIconCollectionViewModel : MpViewModelBase, MpISingleton<MpIconCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -16,8 +16,12 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpIconCollectionViewModel _instance;
+        public static MpIconCollectionViewModel Instance => _instance ?? (_instance = new MpIconCollectionViewModel());
+
+
         public MpIconCollectionViewModel() : base() {
-            MpHelpers.Instance.RunOnMainThreadAsync(Init);
+            MpHelpers.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {

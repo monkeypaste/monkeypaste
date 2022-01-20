@@ -18,7 +18,7 @@
             Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
             IsHitTestVisible="{Binding HasScrollVelocity,
-                                       Source={StaticResource ClipTrayViewModel},
+                                       Source={x:Static local:MpClipTrayViewModel.Instance},
                                        Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"

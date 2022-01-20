@@ -9,8 +9,8 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(valueStr)) {
                     return string.Empty;
                 }
-                return MpHelpers.Instance.GetKeyLiteral(
-                        MpHelpers.Instance.ConvertStringToKey(valueStr));
+                return MpHelpers.GetKeyLiteral(
+                        MpHelpers.ConvertStringToKey(valueStr));
             }
             return null;
         }

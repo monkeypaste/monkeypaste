@@ -134,7 +134,7 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
-            string formatJson = MonkeyPaste.MpHelpers.Instance.ReadTextFromResource(analyticItem.ParameterFormatResourcePath);
+            string formatJson = MonkeyPaste.MpHelpers.ReadTextFromResource(analyticItem.ParameterFormatResourcePath);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
                 formatJson, new MpJsonEnumConverter()).ParameterFormats;

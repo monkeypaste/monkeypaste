@@ -4,20 +4,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpPreferences : MpSingleton2<MpPreferences> {
+    public class MpPreferences : MpISingleton<MpPreferences> {
         #region Constructors
+
+        private static MpPreferences _instance;
+        public static MpPreferences Instance => _instance ?? (_instance = new MpPreferences());
+
+        public MpPreferences() {
+            throw new Exception("Must be init'd with args");
+        }
+
+        public async Task Init() {
+            await Task.Delay(1);
+        }
 
         public MpPreferences(MpIPreferenceIO prefIo) {
             _prefIo = prefIo;
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
                 ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
-            ResetClipboardAfterMonkeyPaste = false; 
-            IsLoaded = true;
+            ResetClipboardAfterMonkeyPaste = false;
+
+            _instance = this;
         }
 
         #endregion
@@ -75,8 +88,6 @@ namespace MonkeyPaste {
         #region Db
 
         public string DbName { get; set; } = "Mp.db";
-        public int MinDbPasswordLength { get; set; } = 12;
-        public int MaxDbPasswordLength { get; set; } = 18;
 
         public string DbPath {
             get {
@@ -332,6 +343,15 @@ namespace MonkeyPaste {
 
         public MpUserDevice ThisUserDevice { get; set; }
 
+        public string AppStorageFilePath {
+            get {
+                return _prefIo.Get(nameof(AppStorageFilePath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            }
+            set {
+                _prefIo.Set(nameof(AppStorageFilePath), value);
+            }
+        }
+
         public double MainWindowInitialHeight {
             get {
                 return _prefIo.Get(nameof(MainWindowInitialHeight), default(double));
@@ -421,11 +441,7 @@ namespace MonkeyPaste {
             get {
                 return _prefIo.Get(
                     nameof(DbPassword),
-                    MpHelpers.Instance.GetRandomString(
-                        MpHelpers.Instance.Rand.Next(
-                            MinDbPasswordLength,
-                            MaxDbPasswordLength),
-                        MpHelpers.Instance.PasswordChars));
+                    MpPasswordGenerator.GetRandomPassword());
             }
         }
         #endregion
@@ -1064,6 +1080,11 @@ namespace MonkeyPaste {
         public void SetPreferenceValue(string preferenceName, object preferenceValue) {
             this.GetType().GetProperty(preferenceName).SetValue(this, preferenceValue);
         }
+        #endregion
+
+        #region Private Methods
+
+
         #endregion
     }
 }

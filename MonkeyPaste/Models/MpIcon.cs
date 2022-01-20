@@ -106,11 +106,11 @@ namespace MonkeyPaste {
 
                 newIcon.IconBorderImageId = iconBorderImage.Id;
                 newIcon.IconBorderImage = iconBorderImage;
-                newIcon.HexColor1 = MpHelpers.Instance.GetRandomColor().ToHex();
-                newIcon.HexColor2 = MpHelpers.Instance.GetRandomColor().ToHex();
-                newIcon.HexColor3 = MpHelpers.Instance.GetRandomColor().ToHex();
-                newIcon.HexColor4 = MpHelpers.Instance.GetRandomColor().ToHex();
-                newIcon.HexColor5 = MpHelpers.Instance.GetRandomColor().ToHex();
+                newIcon.HexColor1 = MpHelpers.GetRandomColor().ToHex();
+                newIcon.HexColor2 = MpHelpers.GetRandomColor().ToHex();
+                newIcon.HexColor3 = MpHelpers.GetRandomColor().ToHex();
+                newIcon.HexColor4 = MpHelpers.GetRandomColor().ToHex();
+                newIcon.HexColor5 = MpHelpers.GetRandomColor().ToHex();
             }
             
             await newIcon.WriteToDatabaseAsync();

@@ -18,7 +18,7 @@ namespace MonkeyPaste {
             Task.Run(async() => {
                 //await MpDb.Instance.Init(MpMainPage.NativeWrapper.GetDbInfo());
 
-                MpTempFileManager.Instance.Init();
+                MpTempFileManager.Init();
                 //MpSocketClient.StartClient("192.168.43.209");
 
                 //MpSyncManager.Instance.Init(MpDb.Instance);

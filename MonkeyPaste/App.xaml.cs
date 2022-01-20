@@ -29,13 +29,13 @@ namespace MonkeyPaste {
             //string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
             //string path = System.IO.Path.Combine(folder, string.Format(@"Editor2.html"));
 
-            //var html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
-            //MpHelpers.Instance.WriteTextToFile(path, html);
+            //var html = MpHelpers.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            //MpHelpers.WriteTextToFile(path, html);
             //MpConsole.WriteLine(@"Editor written to: " + path);
 
             //path = path.Replace("Editor2.html", "Editor2.js");
-            //html = MpHelpers.Instance.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
-            //MpHelpers.Instance.WriteTextToFile(path, html);
+            //html = MpHelpers.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
+            //MpHelpers.WriteTextToFile(path, html);
             //MpConsole.WriteLine(@"Editor js written to: " + path);
         }
 
@@ -55,7 +55,7 @@ namespace MonkeyPaste {
             //                string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
             //                string path = System.IO.Path.Combine(folder, string.Format(@"screen{0}.png", DateTime.Now.ToString()));
 
-            //                MpHelpers.Instance.WriteByteArrayToFile(path, ss);
+            //                MpHelpers.WriteByteArrayToFile(path, ss);
             //            }
 
 

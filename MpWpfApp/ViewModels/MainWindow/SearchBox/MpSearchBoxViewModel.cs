@@ -18,7 +18,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSearchBoxViewModel : MpSingletonViewModel<MpSearchBoxViewModel> {
+    public class MpSearchBoxViewModel : MpViewModelBase, MpISingleton<MpSearchBoxViewModel> {
         #region Private Variables
         #endregion
 
@@ -319,11 +319,17 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
-        public MpSearchBoxViewModel() : base() { }
+
+        private static MpSearchBoxViewModel _instance;
+        public static MpSearchBoxViewModel Instance => _instance ?? (_instance = new MpSearchBoxViewModel());
+
+
+        public MpSearchBoxViewModel() : base() {
+            PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
+        }
 
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
-                PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
 
 

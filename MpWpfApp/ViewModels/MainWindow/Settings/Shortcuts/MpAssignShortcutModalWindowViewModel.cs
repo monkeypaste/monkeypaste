@@ -85,15 +85,15 @@ namespace MpWpfApp {
                     foreach(var k in kl) {
                         if(kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
                             KeyItems.Add(new MpShortcutKeyViewModel(
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             true,false,seqIdx));
                         } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count -1) {
                             KeyItems.Add(new MpShortcutKeyViewModel(
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             false, true, seqIdx));
                         } else {
                             KeyItems.Add(new MpShortcutKeyViewModel(
-                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            MpHelpers.GetKeyLiteral(k),
                                             false, false, seqIdx));
                         }
 
@@ -106,7 +106,7 @@ namespace MpWpfApp {
                 //    view.GroupDescriptions.Add(groupDescription);
                 //}
                 
-                return MpHelpers.Instance.ConvertKeySequenceToString(KeyList);
+                return MpHelpers.ConvertKeySequenceToString(KeyList);
             }
         }        
 
@@ -207,7 +207,7 @@ namespace MpWpfApp {
                 _wasPreviouslyASequence = true;
                 WarningString = @"Sequence hot key's require a restart to be enabled";
             }
-            KeyList = MpHelpers.Instance.ConvertStringToKeySequence(keyString);
+            KeyList = MpHelpers.ConvertStringToKeySequence(keyString);
             _assigningCommand = command;
             ShortcutDisplayName = shortcutName;
             //KeysString = keysList;

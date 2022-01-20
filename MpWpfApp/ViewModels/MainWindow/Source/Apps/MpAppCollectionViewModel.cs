@@ -11,7 +11,7 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpSingletonViewModel2<MpAppCollectionViewModel> {
+    public class MpAppCollectionViewModel : MpViewModelBase, MpISingleton<MpAppCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -33,9 +33,12 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpAppCollectionViewModel _instance;
+        public static MpAppCollectionViewModel Instance => _instance ?? (_instance = new MpAppCollectionViewModel());
+
 
         public MpAppCollectionViewModel() : base() {
-            MpHelpers.Instance.RunOnMainThreadAsync(Init);
+            MpHelpers.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -144,12 +147,12 @@ namespace MpWpfApp {
                 if (openResult == System.Windows.Forms.DialogResult.OK) {
                     appPath = openFileDialog.FileName;
                     if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                        appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                        appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
                     }
                     MpApp app = null;
                     var avm = AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
                     if (avm == null) {
-                        var iconBmpSrc = MpHelpers.Instance.GetIconImage(appPath);
+                        var iconBmpSrc = MpHelpers.GetIconImage(appPath);
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);

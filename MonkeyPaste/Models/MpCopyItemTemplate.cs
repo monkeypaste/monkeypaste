@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                 CopyItemTemplateGuid = System.Guid.NewGuid(),
                 CopyItemId = copyItemId,
                 TemplateName = templateName,
-                HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.Instance.GetRandomColor().ToHex() : templateColor
+                HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.GetRandomColor().ToHex() : templateColor
             };
 
             await newCopyItemTemplate.WriteToDatabaseAsync();
@@ -97,7 +97,7 @@ namespace MonkeyPaste {
                 HexColor,
                 Id,
                 string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B),
-                MpHelpers.Instance.IsBright(c) ? "black" : "white");
+                MpHelpers.IsBright(c) ? "black" : "white");
         }
 
         public string ToDocToken() {

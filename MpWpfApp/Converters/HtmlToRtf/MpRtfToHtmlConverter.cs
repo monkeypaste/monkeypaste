@@ -216,7 +216,7 @@ namespace MpWpfApp {
             using (var reader = new System.IO.StreamReader(stream)) {
                 string rtf = MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(reader.ReadToEnd());
                 string html = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(rtf);
-                MpHelpers.Instance.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
+                MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
             }
         }
     }

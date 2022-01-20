@@ -24,7 +24,7 @@ using MonkeyPaste;
 using FFImageLoading.Helpers.Exif;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpSingletonViewModel<MpClipTrayViewModel>, MpIMatchTrigger, MpIContextMenuViewModel {
+    public class MpClipTrayViewModel : MpViewModelBase, MpISingleton<MpClipTrayViewModel>, MpIMatchTrigger, MpIContextMenuViewModel {
         #region Private Variables      
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -400,10 +400,14 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpClipTrayViewModel() : base() { }
+        private static MpClipTrayViewModel _instance;
+        public static MpClipTrayViewModel Instance => _instance ?? (_instance = new MpClipTrayViewModel());
+
+
+        public MpClipTrayViewModel() : base(null) { }
 
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 IsBusy = true;
 
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
@@ -421,7 +425,7 @@ namespace MpWpfApp {
                 MpMessenger.Instance.Register<MpMessageType>(
                     MpDataModelProvider.Instance.QueryInfo, ReceivedQueryInfoMessage);
 
-                MpClipboardHelper.MpClipboardMonitor.OnClipboardChange += ClipboardChanged;
+                MpClipboardHelper.MpClipboardManager.OnClipboardChange += ClipboardChanged;
 
 
                 IsBusy = false;
@@ -618,7 +622,7 @@ namespace MpWpfApp {
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.RunOnMainThread((Action)(() => {
                 if (clearEditing) {
                     ClearClipEditing();
                 }
@@ -635,7 +639,7 @@ namespace MpWpfApp {
         }
 
         public void ClearPinnedSelection(bool clearEditing = true) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.RunOnMainThread((Action)(() => {
                 if (clearEditing) {
                     ClearPinnedEditing();
                 }
@@ -651,7 +655,7 @@ namespace MpWpfApp {
 
         public void ResetClipSelection(bool clearEditing = true) {
             IsSelectionReset = true;
-            MpHelpers.Instance.RunOnMainThread(() => {
+            MpHelpers.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
                 ClearPinnedSelection(clearEditing);
 
@@ -689,7 +693,7 @@ namespace MpWpfApp {
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 await AddItemFromClipboard(mpdo);
             });
         }
@@ -716,7 +720,7 @@ namespace MpWpfApp {
                     } else if (sctvm.ItemType == MpCopyItemType.Image) {
                         continue;
                     }
-                    rtf = MpHelpers.Instance.CombineRichText(itemData, rtf);
+                    rtf = MpHelpers.CombineRichText(itemData, rtf);
                 }
                 pt = rtf.ToPlainText();
             }
@@ -732,26 +736,26 @@ namespace MpWpfApp {
                     // TODO maybe for multiple files w/ ctrl down compress into zip?
                     if (MpExternalDropBehavior.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
                         //merge as plain text
-                        string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Txt, selectedModels[0].Title);
-                        sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, pt, true));
+                        string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Txt, selectedModels[0].Title);
+                        sctfl.Add(MpHelpers.WriteTextToFile(fp, pt, true));
                     } else {
                         //merge as rich text
-                        string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Rtf, selectedModels[0].Title);
-                        sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, rtf, true));
+                        string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Rtf, selectedModels[0].Title);
+                        sctfl.Add(MpHelpers.WriteTextToFile(fp, rtf, true));
                     }
                 } else {
                     foreach (var sci in selectedModels) {
                         if (sci.ItemType == MpCopyItemType.FileList) {
                             sctfl.AddRange(sci.ItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
                         } else if (sci.ItemType == MpCopyItemType.Image) {
-                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Png, sci.Title);
-                            sctfl.Add(MpHelpers.Instance.WriteBitmapSourceToFile(fp, sci.ItemData.ToBitmapSource(), true));
+                            string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Png, sci.Title);
+                            sctfl.Add(MpHelpers.WriteBitmapSourceToFile(fp, sci.ItemData.ToBitmapSource(), true));
                         } else if (MpExternalDropBehavior.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
-                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Txt, sci.Title);
-                            sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, sci.ItemData.ToPlainText(), true));
+                            string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Txt, sci.Title);
+                            sctfl.Add(MpHelpers.WriteTextToFile(fp, sci.ItemData.ToPlainText(), true));
                         } else {
-                            string fp = MpHelpers.Instance.GetUniqueFileName(MpExternalDropFileType.Rtf, sci.Title);
-                            sctfl.Add(MpHelpers.Instance.WriteTextToFile(fp, sci.ItemData.ToRichText(), true));
+                            string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Rtf, sci.Title);
+                            sctfl.Add(MpHelpers.WriteTextToFile(fp, sci.ItemData.ToRichText(), true));
                         }
                     }
                 }
@@ -834,7 +838,7 @@ namespace MpWpfApp {
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null && pasteDataObject is MpDataObject mpdo) {
                 MpConsole.WriteLine("Pasting " + SelectedItems.Count + " items");
-                MpProcessHelper.MpProcessManager processManager = MpResolver.Resolve<MpProcessHelper.MpProcessManager>();
+                MpProcessHelper.MpProcessManager processManager = MpProcessHelper.MpProcessManager.Instance;
 
                 IntPtr pasteToWindowHandle = IntPtr.Zero;
                 if (_selectedPasteToAppPathViewModel != null) {
@@ -848,7 +852,7 @@ namespace MpWpfApp {
                 } else if (_selectedPasteToAppPathWindowHandle != IntPtr.Zero) {
                     var windowState = WinApi.SW_SHOWMAXIMIZED;
                     if (MpRunningApplicationManager.Instance.LastWindowStateHandleDictionary.ContainsKey(_selectedPasteToAppPathWindowHandle)) {
-                        windowState = MpHelpers.Instance.GetShowWindowValue(MpRunningApplicationManager.Instance.LastWindowStateHandleDictionary[_selectedPasteToAppPathWindowHandle]);
+                        windowState = MpHelpers.GetShowWindowValue(MpRunningApplicationManager.Instance.LastWindowStateHandleDictionary[_selectedPasteToAppPathWindowHandle]);
                     }
                     WinApi.ShowWindowAsync(_selectedPasteToAppPathWindowHandle, windowState);
                     pasteToWindowHandle = _selectedPasteToAppPathWindowHandle;
@@ -857,7 +861,7 @@ namespace MpWpfApp {
                     pasteToWindowHandle = processManager.LastHandle;
                 }
                 bool finishWithEnterKey = _selectedPasteToAppPathViewModel != null && _selectedPasteToAppPathViewModel.PressEnter;
-                await MpClipboardHelper.MpClipboardMonitor.PasteDataObject(mpdo, pasteToWindowHandle,finishWithEnterKey);
+                await MpClipboardHelper.MpClipboardManager.PasteDataObject(mpdo, pasteToWindowHandle,finishWithEnterKey);
 
                 if (!fromHotKey) {
                     //resort list so pasted items are in front and paste is tracked
@@ -865,7 +869,7 @@ namespace MpWpfApp {
                     for (int i = SelectedItems.Count - 1; i >= 0; i--) {
                         var sctvm = SelectedItems[i];
 
-                        var a = await MpDataModelProvider.Instance.GetAppByPath(MpHelpers.Instance.GetProcessPath(processManager.LastHandle));
+                        var a = await MpDataModelProvider.Instance.GetAppByPath(MpHelpers.GetProcessPath(processManager.LastHandle));
                         var aid = a == null ? 0 : a.Id;
                         foreach (var ivm in sctvm.ItemViewModels) {
                             //var ud = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
@@ -979,12 +983,12 @@ namespace MpWpfApp {
             //var introItem1 = new MpCopyItem(
             //        MpCopyItemType.RichText,
             //        "Welcome to MonkeyPaste!",
-            //        MpHelpers.Instance.ConvertPlainTextToRichText("Take a moment to look through the available features in the following tiles, which are always available in the 'Help' pinboard"));
+            //        MpHelpers.ConvertPlainTextToRichText("Take a moment to look through the available features in the following tiles, which are always available in the 'Help' pinboard"));
 
             //var introItem2 = new MpCopyItem(
             //    MpCopyItemType.RichText,
             //    "One place for your clipboard",
-            //    MpHelpers.Instance.ConvertPlainTextToRichText(""));
+            //    MpHelpers.ConvertPlainTextToRichText(""));
             //Properties.Settings.Default.IsInitialLoad = false;
             //Properties.Settings.Default.Save();
         }
@@ -1117,7 +1121,7 @@ namespace MpWpfApp {
         #region Sync Events
 
         private void MpDbObject_SyncDelete(object sender, MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.RunOnMainThread((Action)(() => {
                 if (sender is MpCopyItem ci) {
                     var ctvmToRemove = GetContentItemViewModelById(ci.Id);
                     if (ctvmToRemove != null) {
@@ -1135,12 +1139,12 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.RunOnMainThread((Action)(() => {
             }));
         }
 
         private void MpDbObject_SyncAdd(object sender, MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
                     ci.Source.App.StartSync(e.SourceGuid);
@@ -1201,7 +1205,7 @@ namespace MpWpfApp {
 
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
 
-                MpHelpers.Instance.RunOnMainThread(async () => {
+                MpHelpers.RunOnMainThread(async () => {
                     while(IsBusy) { await Task.Delay(100); }
 
                     int totalItems = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
@@ -1727,7 +1731,7 @@ namespace MpWpfApp {
                             Environment.NewLine, 
                             PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
 
-                MpHelpers.Instance.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
+                MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);
 
         public ICommand ScrollToHomeCommand => new RelayCommand(
@@ -1891,7 +1895,7 @@ namespace MpWpfApp {
         public ICommand CopySelectedClipsCommand => new RelayCommand(
             async () => {
                 var ido = await GetDataObjectFromSelectedClips(false, false);
-                MpClipboardHelper.MpClipboardMonitor.SetDataObjectWrapper(ido);
+                MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(ido);
             });
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
@@ -2070,13 +2074,13 @@ namespace MpWpfApp {
         public ICommand SendToEmailCommand => new RelayCommand(
             () => {
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
-                MpHelpers.Instance.OpenUrl(
+                MpHelpers.OpenUrl(
                     string.Format("mailto:{0}?subject={1}&body={2}",
                     string.Empty, SelectedItems[0].HeadItem.CopyItem.Title,
                     pt));
                 //MpClipTrayViewModel.Instance.ClearClipSelection();
                 //IsSelected = true;
-                //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+                //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
             },
             () => {
                 return !IsAnyEditingClipTile && SelectedItems.Count > 0;
@@ -2106,11 +2110,11 @@ namespace MpWpfApp {
 
         public ICommand CreateQrCodeFromSelectedClipsCommand => new RelayCommand(
              () => {
-                MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                MpHelpers.RunOnMainThreadAsync(() => {
                     BitmapSource bmpSrc = null;
                     string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
-                    bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(pt);
-                    MpClipboardHelper.MpClipboardMonitor.SetDataObjectWrapper(
+                    bmpSrc = MpHelpers.ConvertUrlToQrCode(pt);
+                    MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
                         new MpDataObject() {
                             DataFormatLookup = new Dictionary<string, string>() { 
                                 { 

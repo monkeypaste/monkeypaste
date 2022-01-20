@@ -34,7 +34,7 @@ namespace MpWpfApp {
         #region Input
 
         public static string ToString(this Key key) {
-            return MpHelpers.Instance.ConvertKeyToString(key);
+            return MpHelpers.ConvertKeyToString(key);
         }
 
         #endregion
@@ -458,7 +458,7 @@ namespace MpWpfApp {
         #region Visual 
 
         public static double Distance(this Point from, Point to) {
-            return MpHelpers.Instance.DistanceBetweenPoints(from, to);
+            return MpHelpers.DistanceBetweenPoints(from, to);
         }
 
         public static UIElement TryGetNextAncestorDropTargetElement(this UIElement element) {
@@ -708,7 +708,7 @@ namespace MpWpfApp {
         }
 
         public static string ToHex(this Color c) {
-            return MpHelpers.Instance.ConvertColorToHex(c);
+            return MpHelpers.ConvertColorToHex(c);
         }
 
         public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
@@ -746,7 +746,7 @@ namespace MpWpfApp {
         }
 
         public static bool HasTable(this RichTextBox rtb) {
-            return MpHelpers.Instance.HasTable(rtb);
+            return MpHelpers.HasTable(rtb);
         }
 
         public static void UpdateLayout(this UIElement rtb) {
@@ -773,7 +773,7 @@ namespace MpWpfApp {
         }
 
         public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
-            return MpHelpers.Instance.ConvertFlowDocumentToBitmap(
+            return MpHelpers.ConvertFlowDocumentToBitmap(
                                 fd.Clone(),
                                 fd.GetDocumentSize(),
                                 bgBrush);
@@ -783,16 +783,16 @@ namespace MpWpfApp {
             if (!resourcePathOrBase64Str.IsBase64String()) {
                 return new BitmapImage(new Uri(resourcePathOrBase64Str));
             }
-            return MpHelpers.Instance.ConvertStringToBitmapSource(resourcePathOrBase64Str);
+            return MpHelpers.ConvertStringToBitmapSource(resourcePathOrBase64Str);
         }
 
         public static BitmapSource Scale(this BitmapSource bmpSrc, Size scale) {
-            return MpHelpers.Instance.ScaleBitmapSource(bmpSrc, scale);
+            return MpHelpers.ScaleBitmapSource(bmpSrc, scale);
         }
 
         public static BitmapSource Resize(this BitmapSource bmpSrc, Size size) {
             Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
-            return MpHelpers.Instance.ScaleBitmapSource(bmpSrc, scale);
+            return MpHelpers.ScaleBitmapSource(bmpSrc, scale);
         }
 
         public static Image ToImage(this string resourcePathOrBase64Str) {
@@ -803,7 +803,7 @@ namespace MpWpfApp {
         }
 
         public static string ToBase64String(this BitmapSource bmpSrc) {
-            return MpHelpers.Instance.ConvertBitmapSourceToBase64String(bmpSrc);
+            return MpHelpers.ConvertBitmapSourceToBase64String(bmpSrc);
         }
 
         public static bool Equals(this TextRange tra, TextRange trb) {
@@ -880,7 +880,7 @@ namespace MpWpfApp {
 
 
         public static string GetRtf(this RichTextBox rtb) {
-            return MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
+            return MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
         }
 
         public static void SetXaml(this System.Windows.Controls.RichTextBox rtb, string document) {
@@ -1050,9 +1050,9 @@ namespace MpWpfApp {
                 return MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(str);
             }
             if(str.IsStringXaml()) {
-                return MpHelpers.Instance.ConvertXamlToRichText(str);
+                return MpHelpers.ConvertXamlToRichText(str);
             }
-            return MpHelpers.Instance.ConvertPlainTextToRichText(str);
+            return MpHelpers.ConvertPlainTextToRichText(str);
         }
 
         public static string ToCsv(this string str) {
@@ -1066,10 +1066,10 @@ namespace MpWpfApp {
             if (str == null) {
                 return string.Empty;
             }
-            if (MpHelpers.Instance.IsStringPlainText(str)) {
+            if (MpHelpers.IsStringPlainText(str)) {
                 return str;
             }
-            return MpHelpers.Instance.ConvertRichTextToPlainText(str);
+            return MpHelpers.ConvertRichTextToPlainText(str);
         }
 
         public static string EscapeExtraOfficeRtfFormatting(this string str) {
@@ -1091,7 +1091,7 @@ namespace MpWpfApp {
         }
 
         public static string ToRichText(this FlowDocument doc) {
-            return MpHelpers.Instance.ConvertFlowDocumentToRichText(doc);
+            return MpHelpers.ConvertFlowDocumentToRichText(doc);
         }
 
         public static string ToPlainText(this FlowDocument doc) {
@@ -1107,19 +1107,19 @@ namespace MpWpfApp {
 
         public static MpEventEnabledFlowDocument ToFlowDocument(this string str) {
             if(string.IsNullOrEmpty(str)) {
-                return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
+                return MpHelpers.ConvertRichTextToFlowDocument(MpHelpers.ConvertPlainTextToRichText(string.Empty));
             }
             if(str.IsStringQuillText()) {
                 return str.ToRichText().ToFlowDocument();
             }
-            if(MpHelpers.Instance.IsStringPlainText(str)) {
-                return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(str));
+            if(MpHelpers.IsStringPlainText(str)) {
+                return MpHelpers.ConvertRichTextToFlowDocument(MpHelpers.ConvertPlainTextToRichText(str));
             }
             if(str.IsStringXaml()) {
-                return MpHelpers.Instance.ConvertXamlToFlowDocument(str); 
+                return MpHelpers.ConvertXamlToFlowDocument(str); 
             }
-            if(MpHelpers.Instance.IsStringRichText(str)) {
-                return MpHelpers.Instance.ConvertRichTextToFlowDocument(str);
+            if(MpHelpers.IsStringRichText(str)) {
+                return MpHelpers.ConvertRichTextToFlowDocument(str);
             }
             throw new Exception("ToFlowDocument exception string must be plain or rich text. Its content is: " + str);
         }
@@ -1137,17 +1137,17 @@ namespace MpWpfApp {
             if (str.IsStringQuillText()) {
                 return str.ToRichText().ToXaml();
             }
-            if (MpHelpers.Instance.IsStringPlainText(str)) {
+            if (MpHelpers.IsStringPlainText(str)) {
                 return str.ToRichText().ToXaml();
             }
-            if (MpHelpers.Instance.IsStringRichText(str)) {
-                return MpHelpers.Instance.ConvertRichTextToXaml(str);
+            if (MpHelpers.IsStringRichText(str)) {
+                return MpHelpers.ConvertRichTextToXaml(str);
             }
             throw new Exception("ToXaml exception string must be plain or rich text. Its content is: " + str);
         }
 
         public static string ToXaml(this FlowDocument fd) {
-            return MpHelpers.Instance.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)fd);
+            return MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)fd);
         }
 
         public static Size GetDocumentSize(this FlowDocument doc) {
@@ -1230,7 +1230,7 @@ namespace MpWpfApp {
 
 
         public static List<int> IndexListOfAll(this string str, string compareStr) {
-            return MpHelpers.Instance.IndexListOfAll(str, compareStr);
+            return MpHelpers.IndexListOfAll(str, compareStr);
         }
         #endregion
 
@@ -1252,10 +1252,10 @@ namespace MpWpfApp {
         }
 
         public static byte[] ToByteArray(this BitmapSource source) {
-            return MpHelpers.Instance.ConvertBitmapSourceToByteArray(source);
+            return MpHelpers.ConvertBitmapSourceToByteArray(source);
         }
         public static BitmapSource ToBitmapSource(this byte[] byteArray) {
-            return MpHelpers.Instance.ConvertByteArrayToBitmapSource(byteArray);
+            return MpHelpers.ConvertByteArrayToBitmapSource(byteArray);
         }
         public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
             var height = source.PixelHeight;

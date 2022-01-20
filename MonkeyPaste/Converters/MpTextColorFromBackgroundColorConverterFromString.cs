@@ -11,7 +11,7 @@ namespace MonkeyPaste {
             if(value == null || string.IsNullOrEmpty(value.ToString())) {
                 return Color.Black;
             }
-            return MpHelpers.Instance.IsBright(Color.FromHex(value.ToString())) ? Color.Black : Color.White;
+            return MpHelpers.IsBright(Color.FromHex(value.ToString())) ? Color.Black : Color.White;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             return ((Color)value).ToHex();

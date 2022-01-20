@@ -75,7 +75,7 @@ namespace MpWpfApp {
         }
 
         private void H_Click(object sender, RoutedEventArgs e) {
-            MpHelpers.Instance.OpenUrl((sender as Hyperlink).NavigateUri.ToString());
+            MpHelpers.OpenUrl((sender as Hyperlink).NavigateUri.ToString());
         }
         private void ClipTileHotkeyButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             BindingContext.AssignHotkeyCommand.Execute(null);

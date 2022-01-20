@@ -19,10 +19,8 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, INotifyPropertyChanged {
-        private static readonly Lazy<MpPasteToAppPathViewModelCollection> _Lazy = new Lazy<MpPasteToAppPathViewModelCollection>(() => new MpPasteToAppPathViewModelCollection());
-        public static MpPasteToAppPathViewModelCollection Instance { get { return _Lazy.Value; } }
-
+    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpISingleton<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
+        
         #region Private Variables
 
         #endregion
@@ -34,7 +32,7 @@ namespace MpWpfApp {
                 if (_menuItemViewModels == null) {
                     _menuItemViewModels = new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>();
                     foreach (var kvp in MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary) {
-                        var appName = MpHelpers.Instance.GetProcessApplicationName(kvp.Value[0]);
+                        var appName = MpHelpers.GetProcessApplicationName(kvp.Value[0]);
                         if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
                             continue;
                         }
@@ -46,9 +44,9 @@ namespace MpWpfApp {
                                     this,
                                     new MpPasteToAppPath(
                                         processPath,
-                                        MpHelpers.Instance.GetProcessMainWindowTitle(handle),
-                                        MpHelpers.Instance.GetIconImage(processPath).ToBase64String(),
-                                        MpHelpers.Instance.IsProcessAdmin(handle)),
+                                        MpHelpers.GetProcessMainWindowTitle(handle),
+                                        MpHelpers.GetIconImage(processPath).ToBase64String(),
+                                        MpHelpers.IsProcessAdmin(handle)),
                                     handle));
                         }
                         //check already created menu items and add handles to AppName if it already exists
@@ -57,7 +55,7 @@ namespace MpWpfApp {
                             if (mivm.Count == 0) {
                                 continue;
                             }
-                            if (appName.ToLower() == MpHelpers.Instance.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
+                            if (appName.ToLower() == MpHelpers.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
                                 mivmIdx = _menuItemViewModels.IndexOf(mivm);
                             }
                         }
@@ -108,6 +106,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        private static MpPasteToAppPathViewModelCollection _instance;
+        public static MpPasteToAppPathViewModelCollection Instance => _instance ?? (_instance = new MpPasteToAppPathViewModelCollection());
+
+
         public async Task Init() {
             MpRunningApplicationManager.Instance.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -172,7 +175,7 @@ namespace MpWpfApp {
                         continue;
                     }
                     var ptamip = new MenuItem();
-                    ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
+                    ptamip.Header = MpHelpers.GetProcessApplicationName(ptamivmc[0].Handle);
                     ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
                     foreach (var ptamivm in ptamivmc) {
                         if (ptamivm.IsHidden) {
@@ -180,7 +183,7 @@ namespace MpWpfApp {
                         }
                         var ptami = new MenuItem();
                         var l = new Label();
-                        l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
+                        l.Content = MpHelpers.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
 
                         var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
                         var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
@@ -335,7 +338,7 @@ namespace MpWpfApp {
                     if (openResult != null && openResult.Value) {
                         appPath = openFileDialog.FileName;
                         if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                            appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                            appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
                         }
                     }
                 }
@@ -345,7 +348,7 @@ namespace MpWpfApp {
                     new MpPasteToAppPath(
                         appPath, 
                         string.Empty, 
-                        MpHelpers.Instance.GetIconImage(appPath).ToBase64String(), 
+                        MpHelpers.GetIconImage(appPath).ToBase64String(), 
                         false));
 
                 await nptapvm.PasteToAppPath.WriteToDatabaseAsync();

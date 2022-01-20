@@ -14,30 +14,30 @@ using Xamarin.Forms;
 
 namespace MpWpfApp {
 
-    public class MpLanguageTranslator : MpSingleton<MpLanguageTranslator>  {
-        #region Private Variables
+    public static class MpLanguageTranslator  {
+        #region private static Variables
 
-        private string COGNITIVE_SERVICES_KEY = MpPreferences.Instance.AzureCognitiveServicesKey;
-        private string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
+        private static bool _isLoaded = false;
+        private static string COGNITIVE_SERVICES_KEY = MpPreferences.Instance.AzureCognitiveServicesKey;
+        private static string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
 
         #endregion
 
         #region Properties
-        public SortedDictionary<string, MpAzureTranslatorLanguageFormat> LanguageCodesAndTitles { get; private set; } =
+        public static SortedDictionary<string, MpAzureTranslatorLanguageFormat> LanguageCodesAndTitles { get; private set; } =
             new SortedDictionary<string, MpAzureTranslatorLanguageFormat>(Comparer<string>.Create((a, b) => string.Compare(a, b, true)));
 
-        public bool IsLoaded => LanguageList.Count > 0;
+        public static bool IsLoaded => _isLoaded;
 
-        public List<string> LanguageList => LanguageCodesAndTitles.Select(x => x.Value.LanguageName).ToList();
+        public static List<string> LanguageList => LanguageCodesAndTitles.Select(x => x.Value.LanguageName).ToList();
 
 
         #endregion
 
 
         #region Constructors
-        private MpLanguageTranslator() : base() { }
 
-        public async Task Init() {
+        public static async Task Init() {
             if(IsLoaded) {
                 return;
             }
@@ -46,13 +46,14 @@ namespace MpWpfApp {
             foreach (string menuItem in LanguageCodesAndTitles.Keys) {
                 LanguageList.Add(menuItem);
             }
+            _isLoaded = true;
         }
 
         #endregion
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
-        private async Task GetLanguagesForTranslate(int retryCount = 5) {
-            if(IsLoaded || !MpHelpers.Instance.IsConnectedToInternet()) {
+        private static async Task GetLanguagesForTranslate(int retryCount = 5) {
+            if(IsLoaded || !MpHelpers.IsConnectedToInternet()) {
                 return;
             }
             if(retryCount <= 0) {
@@ -89,7 +90,7 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<string> TranslateAsync(string textToTranslate, string toLanguageCode, string fromLanguageCode = "") {
+        public static async Task<string> TranslateAsync(string textToTranslate, string toLanguageCode, string fromLanguageCode = "") {
             if(!IsLoaded) {
                 MpConsole.WriteTraceLine("Is not connected, ignoring translation");
                 return string.Empty;
@@ -139,12 +140,12 @@ namespace MpWpfApp {
             }
         }
 
-        public string GetCodeByLanguageName(string langName) {
+        public static string GetCodeByLanguageName(string langName) {
             var result = LanguageCodesAndTitles.Where(x => x.Value.LanguageName.ToLower() == langName.ToLower()).FirstOrDefault();
             return null ?? result.Key;
         }
 
-        public string GetLanguageNameByCode(string code) {
+        public static string GetLanguageNameByCode(string code) {
             if(LanguageCodesAndTitles.ContainsKey(code)) {
                 return LanguageCodesAndTitles[code].LanguageName;
             }

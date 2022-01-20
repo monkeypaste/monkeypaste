@@ -41,11 +41,11 @@ namespace MpWpfApp {
         public override async Task<MpAnalyticItemParameter> DeferredCreateParameterModel(MpAnalyticItemParameter aip) {
             IsBusy = true;
 
-            if (!MpLanguageTranslator.Instance.IsLoaded) {
-                await MpLanguageTranslator.Instance.Init();
+            if (!MpLanguageTranslator.IsLoaded) {
+                await MpLanguageTranslator.Init();
             }
 
-            foreach(var lcat in MpLanguageTranslator.Instance.LanguageCodesAndTitles) {
+            foreach(var lcat in MpLanguageTranslator.LanguageCodesAndTitles) {
                 var laipv = new MpAnalyticItemParameterValue() {
                     Label = string.Format(@"{0} - {1}",lcat.Value.LanguageName, lcat.Value.NativeName),
                     Value = lcat.Key.ToString()
@@ -88,7 +88,7 @@ namespace MpWpfApp {
             string fromCode = paramLookup[(int)MpTranslatorParamType.FromLang].CurrentValue;
             string toCode = paramLookup[(int)MpTranslatorParamType.ToLang].CurrentValue;
 
-            string translatedText = await MpLanguageTranslator.Instance.TranslateAsync(
+            string translatedText = await MpLanguageTranslator.TranslateAsync(
                 obj.ToString(),
                 toCode,
                 fromCode);

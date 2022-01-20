@@ -9,7 +9,7 @@ namespace MpWpfApp {
             if (value == null) {
                 return Brushes.Red;
             }
-            return MpHelpers.Instance.IsBright((value as SolidColorBrush).Color) ? Brushes.Black : Brushes.White;
+            return MpHelpers.IsBright((value as SolidColorBrush).Color) ? Brushes.Black : Brushes.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

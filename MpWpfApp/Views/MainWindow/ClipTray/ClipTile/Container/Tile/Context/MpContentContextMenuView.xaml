@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:MpWpfApp"
-             DataContext="{StaticResource ClipTrayViewModel}"
+             DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
              Loaded="ClipTile_ContextMenu_Loaded"
              Opened="ClipTile_ContextMenu_Opened"
              Closed="ClipTile_ContextMenu_Closed"
@@ -40,14 +40,14 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding CopySelectedClipsCommand,
-                                Source={StaticResource ClipTrayViewModel}}" />
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     <MenuItem Header="_Paste"
               Tag="6"
               Icon="{Binding Source={StaticResource PasteIcon},
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding PasteSelectedClipsCommand,
-                                Source={StaticResource ClipTrayViewModel}}" />
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     <Separator />
     <MenuItem Header="Delete"
               Tag="7"
@@ -55,7 +55,7 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding DeleteSelectedClipsCommand,
-                                Source={StaticResource ClipTrayViewModel}}" />
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     <Separator />
     <MenuItem Header="_Edit"
               Icon="{Binding Source={StaticResource EditIcon},
@@ -67,14 +67,14 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding EditSelectedContentCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="_Rename"
                   Tag="21"
                   Icon="{Binding Source={StaticResource RenameIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding EditSelectedTitleCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     </MenuItem>
     <MenuItem x:Name="AnalyzeMenuItem"
               Header="_Analyze"
@@ -82,7 +82,7 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               ItemsSource="{Binding ContextMenuItems,
-                                    Source={StaticResource AnalyticItemCollectionViewModel}}"
+                                    Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
               ItemContainerStyle="{StaticResource DefaultItemStyle}" />
     <MenuItem x:Name="ToolsMenuItem"
               Header="_Tools"
@@ -95,14 +95,14 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding DuplicateSelectedClipsCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="_Merge"
                   Tag="17"
                   Icon="{Binding Source={StaticResource MergeIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding MergeSelectedClipsCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <Separator />
         <MenuItem Header="Send as Email"
                   Tag="23"
@@ -110,14 +110,14 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding SendToEmailCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="Duplicate As _Qr Code"
                   Tag="24"
                   Icon="{Binding Source={StaticResource QrIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding CreateQrCodeFromSelectedClipsCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <Separator />
         <MenuItem Header="Say"
                   Tag="16"
@@ -125,7 +125,7 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding SpeakSelectedClipsCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <Separator />
         <MenuItem Header="Search"
                   Icon="{Binding Source={StaticResource SearchIcon},
@@ -136,28 +136,28 @@
                                      Converter={StaticResource StringToIconConverter},
                                      Mode=OneWay}"
                       Command="{Binding SearchWebCommand,
-                                        Source={StaticResource ClipTrayViewModel}}"
+                                        Source={x:Static local:MpClipTrayViewModel.Instance}}"
                       CommandParameter="https://www.google.com/search?q=" />
             <MenuItem Header="_Bing"
                       Icon="{Binding Source={StaticResource BingIcon},
                                      Converter={StaticResource StringToIconConverter},
                                      Mode=OneWay}"
                       Command="{Binding SearchWebCommand,
-                                        Source={StaticResource ClipTrayViewModel}}"
+                                        Source={x:Static local:MpClipTrayViewModel.Instance}}"
                       CommandParameter="https://www.bing.com/search?q=" />
             <MenuItem Header="_DuckDuckGo"
                       Icon="{Binding Source={StaticResource DuckIcon},
                                      Converter={StaticResource StringToIconConverter},
                                      Mode=OneWay}"
                       Command="{Binding SearchWebCommand,
-                                        Source={StaticResource ClipTrayViewModel}}"
+                                        Source={x:Static local:MpClipTrayViewModel.Instance}}"
                       CommandParameter="https://duckduckgo.com/?q=" />
             <MenuItem Header="_Yandex"
                       Icon="{Binding Source={StaticResource YandexIcon},
                                      Converter={StaticResource StringToIconConverter},
                                      Mode=OneWay}"
                       Command="{Binding SearchWebCommand,
-                                        Source={StaticResource ClipTrayViewModel}}"
+                                        Source={x:Static local:MpClipTrayViewModel.Instance}}"
                       CommandParameter="https://yandex.com/search/?text=" />
         </MenuItem>
         <Separator />
@@ -167,13 +167,13 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding ExcludeSubSelectedItemApplicationCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="Add Paste Macro For Application"
                   Icon="{Binding Source={StaticResource RobotClawIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding ShowSettingsWindowCommand,
-                                    Source={StaticResource SystemTrayViewModel}}"
+                                    Source={x:Static local:MpSystemTrayViewModel.Instance}}"
                   CommandParameter="{Binding}" />
     </MenuItem>
     <MenuItem Header="_Selection"
@@ -186,14 +186,14 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding BringSelectedClipTilesToFrontCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="_Send to Back"
                   Tag="13"
                   Icon="{Binding Source={StaticResource SendToBackIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding SendSelectedClipTilesToBackCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <Separator />
         <MenuItem Header="Select _All"
                   Tag="10"
@@ -201,16 +201,16 @@
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding SelectAllCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
         <MenuItem Header="_Invert Selection"
                   Tag="11"
                   Icon="{Binding Source={StaticResource InvertSelectionIcon},
                                  Converter={StaticResource StringToIconConverter},
                                  Mode=OneWay}"
                   Command="{Binding InvertSelectionCommand,
-                                    Source={StaticResource ClipTrayViewModel}}" />
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     </MenuItem>
-    <MenuItem DataContext="{StaticResource ClipTrayViewModel}"
+    <MenuItem DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
               d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
                                                IsDesignTimeCreatable=False}"
               Header="_Hotkey"
@@ -220,7 +220,7 @@
                              Mode=OneWay}"
               InputGestureText="{Binding PrimaryItem.PrimaryItem.ShortcutKeyString}"
               Command="{Binding AssignHotkeyCommand,
-                                Source={StaticResource ClipTrayViewModel}}" />
+                                Source={x:Static local:MpClipTrayViewModel.Instance}}" />
     <Separator />
     <MenuItem x:Name="ClipTileColorContextMenuItem"
               Style="{StaticResource ColorPalleteMenuItemStyle}" />
@@ -238,7 +238,7 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               ItemsSource="{Binding TagMenuItems,
-                                    Source={StaticResource ClipTrayViewModel}}">
+                                    Source={x:Static local:MpClipTrayViewModel.Instance}}">
         <MenuItem.ItemContainerStyle>
             <Style TargetType="{x:Type MenuItem}">
                 <Setter Property="Header"

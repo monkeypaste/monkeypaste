@@ -158,7 +158,7 @@ namespace MonkeyPaste {
         }
 
         private void InitEditor() {
-            var html = MpHelpers.Instance.LoadTextResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            var html = MpHelpers.LoadTextResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             
             string contentTag = @"<div id='editor'>";
             var data = CopyItem.ItemData; //string.IsNullOrEmpty(CopyItem.ItemHtml) ? CopyItem.ItemText : CopyItem.ItemHtml;

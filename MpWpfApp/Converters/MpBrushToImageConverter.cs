@@ -12,7 +12,7 @@ namespace MpWpfApp {
             if (value is Brush brush) {
                 var bmpSrc = (BitmapSource)new BitmapImage(
                     new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-               return MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+               return MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
             }
             return new Image();
         }

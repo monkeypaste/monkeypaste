@@ -5,11 +5,11 @@ namespace MpWpfApp {
         public string GetDbFilePath() {
             if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) ||
                 !File.Exists(Properties.Settings.Default.DbPath)) {
-                MonkeyPaste.MpConsole.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
-                Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
+                MonkeyPaste.MpConsole.WriteLine("Db does not exist in " + MpHelpers.GetApplicationDirectory());
+                Properties.Settings.Default.DbPath = MpHelpers.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();
-                //MpHelpers.Instance.WriteTextToFile(Properties.Settings.Default.DbPath, string.Empty);
+                //MpHelpers.WriteTextToFile(Properties.Settings.Default.DbPath, string.Empty);
                 //SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
             }
             return Properties.Settings.Default.DbPath;

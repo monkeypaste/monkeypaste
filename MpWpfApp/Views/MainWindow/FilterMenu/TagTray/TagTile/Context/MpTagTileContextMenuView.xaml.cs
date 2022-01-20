@@ -39,7 +39,7 @@ namespace MpWpfApp {
         //            break;
         //        }
         //    }
-        //    MpHelpers.Instance.SetColorChooserMenuItem(
+        //    MpHelpers.SetColorChooserMenuItem(
         //            cm,
         //            cmi,
         //            (s, e1) => {
@@ -72,7 +72,7 @@ namespace MpWpfApp {
             var ttvm = DataContext as MpTagTileViewModel;
             var cm = (ContextMenu)sender;
             cm.DataContext = ttvm;
-            MpHelpers.Instance.SetColorChooserMenuItem(
+            MpHelpers.SetColorChooserMenuItem(
                         cm,
                         ClipTileColorContextMenuItem,
                         (s, e1) => {

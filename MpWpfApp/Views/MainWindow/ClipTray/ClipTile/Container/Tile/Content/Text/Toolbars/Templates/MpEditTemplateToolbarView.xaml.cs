@@ -42,7 +42,7 @@ namespace MpWpfApp {
                 //var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
                 //        SelectedTemplateHyperlinkViewModel.Dispose(false);
                 //        _originalSelection.Text = _originalText;
-                //        var sr = MpHelpers.Instance.FindStringRangeFromPosition(selectionStart, _originalText, true);
+                //        var sr = MpHelpers.FindStringRangeFromPosition(selectionStart, _originalText, true);
                 //        SubSelectedRtbViewModel.Rtb.Selection.Select(sr.Start, sr.End); 
                 var rtbv = _activeRtb.GetVisualAncestor<MpRtbView>();
                 new TextRange(rtbv.LastEditedHyperlink.ElementStart, rtbv.LastEditedHyperlink.ElementEnd).Text = string.Empty;

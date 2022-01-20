@@ -48,7 +48,7 @@ namespace MpWpfApp {
                     Task.Run(async () => {
                         while (!_isLoaded) { await Task.Delay(100); }
 
-                        MpHelpers.Instance.RunOnMainThread(UpdateAdorner);
+                        MpHelpers.RunOnMainThread(UpdateAdorner);
                     });                    
                 }
             }

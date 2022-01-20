@@ -165,7 +165,7 @@ namespace MpWpfApp {
                 }
                 var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == AvatarId);
                 if(ivm == null) {
-                    return MpHelpers.Instance.GetIconImage(AppPath);
+                    return MpHelpers.GetIconImage(AppPath);
                 }
                 return ivm.IconBitmapSource;
             }
@@ -385,13 +385,13 @@ namespace MpWpfApp {
                 var iconColorChooserMenuItem = new MenuItem();
                 var iconContextMenu = new ContextMenu();
                 iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.Instance.SetColorChooserMenuItem(
+                MpHelpers.SetColorChooserMenuItem(
                     iconContextMenu,
                     iconColorChooserMenuItem,
                     (s1, e1) => {
                         var brush = (Brush)((Border)s1).Tag;
                         var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        AppIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                        AppIcon = MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                     }
                 );
                 var iconImageChooserMenuItem = new MenuItem();

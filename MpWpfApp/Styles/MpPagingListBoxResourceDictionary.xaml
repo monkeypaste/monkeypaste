@@ -114,9 +114,9 @@
                                    Orientation="Horizontal"
                                    Grid.Row="1"
                                    Grid.Column="1"
-                                   Value="{Binding ScrollOffset, Source={StaticResource ClipTrayViewModel}}"
+                                   Value="{Binding ScrollOffset, Source={x:Static local:MpClipTrayViewModel.Instance}}"
                                    Minimum="0"
-                                   Maximum="{Binding ClipTrayTotalWidth, Source={StaticResource ClipTrayViewModel}}"
+                                   Maximum="{Binding ClipTrayTotalWidth, Source={x:Static local:MpClipTrayViewModel.Instance}}"
                                    ViewportSize="{TemplateBinding ViewportWidth}"
                                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />-->
                     </Grid>

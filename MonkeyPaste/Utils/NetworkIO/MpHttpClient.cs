@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpHttpClient : MpSingleton<MpHttpClient> {
+    public class MpHttpClient : MpISingleton<MpHttpClient> {
         #region Properties
 
         public HttpClient HttpClient { get; private set; }
@@ -12,6 +13,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constructors
+
+        private static MpHttpClient _instance;
+        public static MpHttpClient Instance => _instance ?? (_instance = new MpHttpClient());
+
+        public async Task Init() {
+            await Task.Delay(1);
+        }
 
         public MpHttpClient() {
             HttpClient = new HttpClient();

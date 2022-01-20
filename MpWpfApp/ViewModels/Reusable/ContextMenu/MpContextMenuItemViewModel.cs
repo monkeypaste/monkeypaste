@@ -158,20 +158,20 @@ namespace MpWpfApp {
                 case nameof(IconBackgroundBrush):
                     if (IconBackgroundBrush != null) {
                         var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        bgBmp = MpHelpers.Instance.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
+                        bgBmp = MpHelpers.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
                         var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                        if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                            borderBmp = MpHelpers.Instance.TintBitmapSource(borderBmp, Colors.White, false);
+                        if (!MpHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                            borderBmp = MpHelpers.TintBitmapSource(borderBmp, Colors.White, false);
                         }
                         var icon = new Image();
-                        icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
+                        icon.Source = MpHelpers.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
                         if (!IsChecked.HasValue || IsChecked.Value) {
                             string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
                             var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
-                            if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                                checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
+                            if (!MpHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                                checkBmp = MpHelpers.TintBitmapSource(checkBmp, Colors.White, false);
                             }
-                            icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
+                            icon.Source = MpHelpers.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
                         }
                         Icon = icon;
                     }

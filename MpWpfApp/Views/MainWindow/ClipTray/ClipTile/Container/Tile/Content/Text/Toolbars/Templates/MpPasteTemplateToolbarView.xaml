@@ -41,7 +41,7 @@
                           Background="Transparent"
                           FontSize="14"
                           IsEnabled="{Binding IsAnyPastingTemplate,
-                                              Source={StaticResource ClipTrayViewModel}}"
+                                              Source={x:Static local:MpClipTrayViewModel.Instance}}"
                           PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
                           ItemsSource="{Binding Templates}"
                           SelectedIndex="{Binding SelectedTemplateIdx,

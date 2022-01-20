@@ -11,7 +11,7 @@ namespace MpWpfApp {
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcher : MpSingleton<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
+    public class MpFileSystemWatcher : MpISingleton<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -21,11 +21,15 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpFileSystemWatcher _instance;
+        public static MpFileSystemWatcher Instance => _instance ?? (_instance = new MpFileSystemWatcher());
+
+
         public MpFileSystemWatcher() {
             
         }
 
-        public async Task Initialize() {
+        public async Task Init() {
             await Task.Delay(1);
             _watchers.Clear();
             _handlerLookup.Clear();

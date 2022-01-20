@@ -159,7 +159,7 @@ namespace MpWpfApp {
         }
 
         public async Task RefreshContext() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 for (int i = 0; i < ContentListBox.Items.Count; i++) {
                     var lbi = ContentListBox.GetListBoxItem(i);
                     if (lbi != null) {
@@ -233,7 +233,7 @@ namespace MpWpfApp {
             int maxCols = int.MinValue;
             var rtbl = this.GetVisualDescendents<RichTextBox>().ToList();
             for (int i = 0; i < rtbl.Count; i++) {
-                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(rtbl[i].Document.ToPlainText()));
+                maxCols = Math.Max(maxCols, MpHelpers.GetColCount(rtbl[i].Document.ToPlainText()));
             }
 
             string separatorLine = string.Empty;
@@ -245,12 +245,12 @@ namespace MpWpfApp {
             for (int i = 0; i < rtbl.Count; i++) {
                 var rtb = rtbl[i];
                 if (i != 0) {
-                    await MpHelpers.Instance.CombineFlowDocumentsAsync(
+                    await MpHelpers.CombineFlowDocumentsAsync(
                     separatorDocument,
                     fullDocument,
                     false);
                 }
-                await MpHelpers.Instance.CombineFlowDocumentsAsync(
+                await MpHelpers.CombineFlowDocumentsAsync(
                     (MpEventEnabledFlowDocument)rtb.Document,
                     fullDocument,
                     false);

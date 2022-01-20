@@ -211,7 +211,7 @@ namespace MonkeyPaste {
             });
 
         public ICommand ChangeColorCommand => new Command(async () => {
-            Tag.HexColor = MpHelpers.Instance.GetRandomColor().ToHex();
+            Tag.HexColor = MpHelpers.GetRandomColor().ToHex();
             await Tag.WriteToDatabaseAsync();
             OnPropertyChanged(nameof(Tag));
         });

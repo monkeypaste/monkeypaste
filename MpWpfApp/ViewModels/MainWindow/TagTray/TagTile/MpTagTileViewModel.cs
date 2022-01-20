@@ -214,7 +214,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
+                return MpHelpers.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -343,11 +343,11 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return Brushes.Red;
                 }
-                return new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor));
+                return new SolidColorBrush(MpHelpers.ConvertHexToColor(Tag.HexColor));
             }
             set {
-                if (new SolidColorBrush(MpHelpers.Instance.ConvertHexToColor(Tag.HexColor)) != value) {
-                    Tag.HexColor = MpHelpers.Instance.ConvertColorToHex(((SolidColorBrush)value).Color);
+                if (new SolidColorBrush(MpHelpers.ConvertHexToColor(Tag.HexColor)) != value) {
+                    Tag.HexColor = MpHelpers.ConvertColorToHex(((SolidColorBrush)value).Color);
                     //Task.Run(async () => {
                     //    await Tag.WriteToDatabaseAsync();
                     //});
@@ -583,7 +583,7 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread((Action)(() => {
+            MpHelpers.RunOnMainThread((Action)(() => {
                 if (sender is MpTag t) {
                     if (Tag == null) {
                         return;
@@ -598,7 +598,7 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(
+            MpHelpers.RunOnMainThread(
                 async() => {
                 if (sender is MpCopyItemTag cit) {
                     if(TagId == cit.TagId) {

@@ -16,14 +16,14 @@ namespace MpWpfApp {
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
             //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
 
-            MpBootstrapper.Init();
-
+            var bs = MpBootstrapper.Init();
+            
             // TODO add color pallete colors and all app.xaml icons as MpIcons and store guids (for initDefaultData)
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-                
+                await bs.Initialize();
                 //MpPreferences.Instance.Init(new MpWpfPreferences());
 
                 MpDb.Instance.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;

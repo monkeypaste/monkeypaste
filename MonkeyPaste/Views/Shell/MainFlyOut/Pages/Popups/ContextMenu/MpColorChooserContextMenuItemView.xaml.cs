@@ -23,7 +23,7 @@ namespace MonkeyPaste {
                     f.Margin = 0;
                     f.WidthRequest = 12;
                     f.HeightRequest = 12;
-                    f.BackgroundColor = MpHelpers.Instance.GetRandomColor();
+                    f.BackgroundColor = MpHelpers.GetRandomColor();
                     f.BorderColor = Color.Black;
                     var tr = new TapGestureRecognizer() {
                         NumberOfTapsRequired = 1

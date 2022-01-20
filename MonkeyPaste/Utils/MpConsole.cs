@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 };
 
                 writeLogTimer.Elapsed += (s, e) => {
-                    MpHelpers.Instance.AppendTextToFile(LogFilePath, _sb.ToString());
+                    MpHelpers.AppendTextToFile(LogFilePath, _sb.ToString());
                     _sb.Clear();
                 };
 

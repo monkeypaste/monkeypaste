@@ -92,7 +92,7 @@ namespace MpWpfApp {
         }
 
         private void _copyItemIdsNeedingView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(UpdateNotifier);
+            MpHelpers.RunOnMainThread(UpdateNotifier);
         }
 
         private void BindingContext_OnCopyItemLinked(object sender, MpCopyItem ci) {
@@ -115,7 +115,7 @@ namespace MpWpfApp {
                 case MpMessageType.TrayScrollChanged:
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
-                    MpHelpers.Instance.RunOnMainThread(UpdateNotifier);
+                    MpHelpers.RunOnMainThread(UpdateNotifier);
                     break;
             }
         }

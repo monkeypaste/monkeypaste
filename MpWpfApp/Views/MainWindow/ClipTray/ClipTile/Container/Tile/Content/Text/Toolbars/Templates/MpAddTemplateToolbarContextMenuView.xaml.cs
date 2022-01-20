@@ -73,7 +73,7 @@ namespace MpWpfApp {
         }
 
         private void TemplateDropDownItem_Click(object sender, RoutedEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 Rtb.Focus();
                 MpTemplateHyperlink thl = null;
                 var mi = sender as MenuItem;
@@ -102,7 +102,7 @@ namespace MpWpfApp {
                 MonkeyPaste.MpConsole.WriteTraceLine("No rtb or rtb context");
                 return;
             }
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 var rtbv = Rtb.GetVisualAncestor<MpRtbView>();
                 rtbv.NewOriginalText = Rtb.Selection.Text;
                 rtbv.NewStartRange = Rtb.Selection;

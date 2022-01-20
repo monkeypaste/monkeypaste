@@ -22,7 +22,6 @@ namespace MpWpfApp {
     public partial class MpSystemTrayView : MpUserControl<MpSystemTrayViewModel> {
         public MpSystemTrayView() {
             InitializeComponent();
-            DataContext = MpResolver.Resolve<MpSystemTrayViewModel>();
         }
 
         private void SystemTrayTaskbarIcon_MouseEnter(object sender, MouseEventArgs e) {

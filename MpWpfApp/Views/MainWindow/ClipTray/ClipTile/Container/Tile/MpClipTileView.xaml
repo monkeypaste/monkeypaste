@@ -22,7 +22,7 @@
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"
                         IsHitTestVisible="{Binding HasScrollVelocity,
-                                                   Source={StaticResource ClipTrayViewModel},
+                                                   Source={x:Static local:MpClipTrayViewModel.Instance},
                                                    Converter={StaticResource BoolFlipConverter}}"
                         Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"

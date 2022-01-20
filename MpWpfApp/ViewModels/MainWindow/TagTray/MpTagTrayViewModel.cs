@@ -17,7 +17,7 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
 
-    public class MpTagTrayViewModel : MpSingletonViewModel<MpTagTrayViewModel>, MpITreeItemViewModel {
+    public class MpTagTrayViewModel : MpViewModelBase, MpISingleton<MpTagTrayViewModel>, MpITreeItemViewModel {
         #region Private Variables
         #endregion
 
@@ -121,13 +121,17 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpTagTrayViewModel _instance;
+        public static MpTagTrayViewModel Instance => _instance ?? (_instance = new MpTagTrayViewModel());
+
+
         public MpTagTrayViewModel() : base() {
             PropertyChanged += MpTagTrayViewModel_PropertyChanged;
         }
 
 
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            await MpHelpers.RunOnMainThreadAsync(async () => {
                 IsBusy = true;
 
                 MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
@@ -321,7 +325,7 @@ namespace MpWpfApp {
 
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(() => {
+            MpHelpers.RunOnMainThread(() => {
                 if (sender is MpTag t) {                    
                     var ttvmToRemove = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
@@ -334,12 +338,12 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(() => {
+            MpHelpers.RunOnMainThread(() => {
             });
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async() => {
+            MpHelpers.RunOnMainThread(async() => {
                 if (sender is MpTag t) {
                     t.StartSync(e.SourceGuid);
                     var dupCheck = TagTileViewModels.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
@@ -408,7 +412,7 @@ namespace MpWpfApp {
                 //add tag to datastore so TagTile collection will automatically add the tile
                 MpTag newTag = new MpTag() {
                     TagName = "Untitled",
-                    HexColor = MpHelpers.Instance.GetRandomColor().ToString(),
+                    HexColor = MpHelpers.GetRandomColor().ToString(),
                     TagSortIdx = TagTileViewModels.Count,
                     ParentTagId = SelectedTagTile.TagId
                 };

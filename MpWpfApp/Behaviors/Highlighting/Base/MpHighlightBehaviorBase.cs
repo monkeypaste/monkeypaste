@@ -96,7 +96,7 @@ namespace MpWpfApp {
         protected override void OnLoad() {
             base.OnLoad();
 
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 while (AssociatedObject == null) {
                     await Task.Delay(100);
                 }
@@ -129,7 +129,7 @@ namespace MpWpfApp {
             }
             string st = MpDataModelProvider.Instance.QueryInfo.SearchText;
 
-            _matches = MpHelpers.Instance.FindStringRangesFromPosition(
+            _matches = MpHelpers.FindStringRangesFromPosition(
                 ContentRange.Start,
                 st);
 

@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpNativeWrapper : MpSingleton2<MpNativeWrapper>, MpINativeInterfaceWrapper {
+    public class MpNativeWrapper : MpISingleton<MpNativeWrapper>, MpINativeInterfaceWrapper {
+
+        private static MpNativeWrapper _instance;
+        public static MpNativeWrapper Instance => _instance ?? (_instance = new MpNativeWrapper());
+
+        public MpNativeWrapper() {
+            throw new Exception("Must be init'd with args");
+        }
+
+        public async Task Init() {
+            await _niw.Init();
+        }
+
         public MpNativeWrapper(MpINativeInterfaceWrapper niw) {
             _niw = niw;
         }
 
-        public void Init() {
-            _niw.Init();
-            IsLoaded = true;
-        }
 
         #region Private Variables
         private MpINativeInterfaceWrapper _niw;
@@ -35,7 +44,7 @@ namespace MonkeyPaste {
             return _niw.GetDbInfo();
         }
 
-        public MpIIconBuilder GetIconBuilder() {
+        public MpIconBuilder GetIconBuilder() {
             return _niw?.GetIconBuilder();
         }
 

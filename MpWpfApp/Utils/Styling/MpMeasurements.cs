@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
 
@@ -11,10 +12,17 @@ namespace MpWpfApp {
         Left
     }
 
-    public class MpMeasurements : MpSingletonViewModel<MpMeasurements> {
+    public class MpMeasurements : MpViewModelBase, MpISingleton<MpMeasurements> {    
+        private static MpMeasurements _instance;
+        public static MpMeasurements Instance => _instance ?? (_instance = new MpMeasurements());
+
         public MpMeasurements() : base() {
-            
+
         }
+        public async Task Init() {
+            await Task.Delay(1);
+        }
+
 
         #region Public Methods
 

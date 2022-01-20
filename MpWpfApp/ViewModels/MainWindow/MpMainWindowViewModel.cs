@@ -18,19 +18,14 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase<object> {
-        #region Singleton Definition
-        private static readonly Lazy<MpMainWindowViewModel> _Lazy = new Lazy<MpMainWindowViewModel>(() => new MpMainWindowViewModel());
-        public static MpMainWindowViewModel Instance { get { return _Lazy.Value; } }
-
-        #endregion
+    public class MpMainWindowViewModel : MpViewModelBase,MpISingleton<MpMainWindowViewModel> {
 
         #region Statics
 
 
         public static void SetLogText(string text, bool append = false) {
             Task.Run(async () => {
-                await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+                await MpHelpers.RunOnMainThreadAsync(() => {
                     text = text == null ? string.Empty : text;
                     var mwvm = (Application.Current.MainWindow as MpMainWindow).DataContext as MpMainWindowViewModel;
                     mwvm.LogText = append ? mwvm.LogText + text : text;
@@ -179,8 +174,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods        
+
+        private static MpMainWindowViewModel _instance;
+        public static MpMainWindowViewModel Instance => _instance ?? (_instance = new MpMainWindowViewModel());
+
+
         public MpMainWindowViewModel() : base(null) {
-            //MpHelpers.Instance.RunOnMainThreadAsync(Init);
+            //MpHelpers.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
@@ -196,7 +196,7 @@ namespace MpWpfApp {
             //    IconBuilder = new MpIconBuilder()
             //});
 
-            //await MpHelpers.Instance.Init();
+            //await MpHelpers.Init();
 
             //MpPluginManager.Instance.Init();
 
@@ -204,42 +204,42 @@ namespace MpWpfApp {
 
             //await MpSourceCollectionViewModel.Instance.Init();
 
-            await MpSearchBoxViewModel.Instance.Init();
-            Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
+            //await MpSearchBoxViewModel.Instance.Init();
+            //Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
 
-            await MpAnalyticItemCollectionViewModel.Instance.Init();
-            Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
+            //await MpAnalyticItemCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
 
-            await MpClipTrayViewModel.Instance.Init();
-            Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
+            //await MpClipTrayViewModel.Instance.Init();
+            //Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
 
-            await MpClipTileSortViewModel.Instance.Init();
-            Application.Current.Resources["ClipTileSortViewModel"] = MpClipTileSortViewModel.Instance;
+            //await MpClipTileSortViewModel.Instance.Init();
+            //Application.Current.Resources["ClipTileSortViewModel"] = MpClipTileSortViewModel.Instance;
 
-            await MpTagTrayViewModel.Instance.Init();
-            Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
+            //await MpTagTrayViewModel.Instance.Init();
+            //Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
 
-            await MpShortcutCollectionViewModel.Instance.Init();
-            Application.Current.Resources["ShortcutCollectionViewModel"] = MpShortcutCollectionViewModel.Instance;
+            //await MpShortcutCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["ShortcutCollectionViewModel"] = MpShortcutCollectionViewModel.Instance;
 
-            await MpAppModeViewModel.Instance.Init();
-            Application.Current.Resources["AppModeViewModel"] = MpAppModeViewModel.Instance;
+            //await MpAppModeViewModel.Instance.Init();
+            //Application.Current.Resources["AppModeViewModel"] = MpAppModeViewModel.Instance;
 
-            await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-            Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
+            //await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
 
-            await MpMatcherCollectionViewModel.Instance.Init();
-            Application.Current.Resources["MatcherCollectionViewModel"] = MpMatcherCollectionViewModel.Instance;
+            //await MpMatcherCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["MatcherCollectionViewModel"] = MpMatcherCollectionViewModel.Instance;
 
-            await MpSideBarTreeCollectionViewModel.Instance.Init();
-            Application.Current.Resources["SideBarTreeCollectionViewModel"] = MpSideBarTreeCollectionViewModel.Instance;
+            //await MpSideBarTreeCollectionViewModel.Instance.Init();
+            //Application.Current.Resources["SideBarTreeCollectionViewModel"] = MpSideBarTreeCollectionViewModel.Instance;
 
             MpMainWindowViewModel.Instance.SetupMainWindowRect();
 
             while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
 
-            Application.Current.Resources["MainWindowViewModel"] = this;
+            //Application.Current.Resources["MainWindowViewModel"] = this;
 
             MpMessenger.Instance.Register<MpMessageType>(
                 MpSearchBoxViewModel.Instance,
@@ -363,8 +363,8 @@ namespace MpWpfApp {
             () => {
                 IsMainWindowOpening = true;
 
-                //Ss = MpHelpers.Instance.CopyScreen();
-                //MpHelpers.Instance.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
+                //Ss = MpHelpers.CopyScreen();
+                //MpHelpers.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
 
 

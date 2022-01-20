@@ -24,7 +24,7 @@ namespace MpWpfApp {
                     return null;
                 }
                 var iData = mpdo.DataFormatLookup as Dictionary<string,string>;
-                var processManager = MpResolver.Resolve<MpProcessHelper.MpProcessManager>();
+                var processManager = MpProcessHelper.MpProcessManager.Instance;
 
                 string processPath, appName, processIconImg64;
 
@@ -36,9 +36,9 @@ namespace MpWpfApp {
                     appName = MpPreferences.Instance.ThisAppSource.App.AppName;
                     processIconImg64 = MpPreferences.Instance.ThisAppSource.App.Icon.IconImage.ImageBase64;
                 } else {
-                    processPath = MpHelpers.Instance.GetProcessPath(processHandle);
-                    appName = MpHelpers.Instance.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpHelpers.Instance.GetIconImage(processPath).ToBase64String();
+                    processPath = MpHelpers.GetProcessPath(processHandle);
+                    appName = MpHelpers.GetProcessApplicationName(processHandle);
+                    processIconImg64 = MpHelpers.GetIconImage(processPath).ToBase64String();
                 }
                 
                 string itemData = null;
@@ -61,7 +61,7 @@ namespace MpWpfApp {
                     itemData = iData[DataFormats.Bitmap];
                 } else if(iData.ContainsKey(DataFormats.Text)) {                    
                     itemType = MpCopyItemType.Text;
-                    itemData = MpHelpers.Instance.ConvertPlainTextToRichText(iData[DataFormats.UnicodeText]);
+                    itemData = MpHelpers.ConvertPlainTextToRichText(iData[DataFormats.UnicodeText]);
                     //itemData = itemData.ToQuillText();
                 } else {
                     MonkeyPaste.MpConsole.WriteTraceLine("clipboard data is not known format");
@@ -121,7 +121,7 @@ namespace MpWpfApp {
                 }
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
-                    itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
+                    itemData = MpHelpers.ConvertRichTextToPlainText((string)itemData);
                     if (((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
                         if (MpPreferences.Instance.NotificationShowCopyItemTooLargeToast) {

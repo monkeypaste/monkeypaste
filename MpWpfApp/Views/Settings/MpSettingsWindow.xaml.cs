@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpSettingsWindow : MpWindow<MpSettingsWindowViewModel> {
         public static async Task ShowDialog(int tabToShow, object args = null) {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            await MpHelpers.RunOnMainThreadAsync(async () => {
                 var swvm = new MpSettingsWindowViewModel();
                 await swvm.InitializeAsync(tabToShow, args);
                 var sw = new MpSettingsWindow();

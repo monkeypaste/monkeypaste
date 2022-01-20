@@ -13,7 +13,7 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(pathStr)) {
                     return new Image();
                 }
-                return MpHelpers.Instance.GetIconImage(pathStr);
+                return MpHelpers.GetIconImage(pathStr);
             }
             return new Image();
         }

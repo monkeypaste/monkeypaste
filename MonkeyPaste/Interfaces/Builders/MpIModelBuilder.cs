@@ -18,7 +18,7 @@ namespace MonkeyPaste {
             MpCopyItemType format,
             string title,
             string description,
-            MpIIconBuilder iconBuilder
+            MpIconBuilder iconBuilder
         */
         //Task<MpAnalyticItem> Build(params object[] args);
 
@@ -28,7 +28,7 @@ namespace MonkeyPaste {
             MpCopyItemType format,
             string title,
             string description,
-            MpIIconBuilder iconBuilder);
+            MpIconBuilder iconBuilder);
     }
 
     public interface MpICopyItemBuilder {
@@ -39,13 +39,9 @@ namespace MonkeyPaste {
         Task<MpUrl> Create(string url);
     }
 
-    public interface MpIIconBuilder {
-        string CreateBorder(string iconBase64, double scale, string hexColor);
-        List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5);
-    }
 
     public interface MpIProcessIconBuilder {
-        MpIIconBuilder IconBuilder { get; set; }
+        MpIconBuilder IconBuilder { get; set; }
         string GetBase64BitmapFromFolderPath(string filepath);
         string GetBase64BitmapFromFilePath(string filepath);
     }

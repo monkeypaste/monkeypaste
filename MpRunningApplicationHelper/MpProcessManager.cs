@@ -11,60 +11,11 @@ using System.Threading.Tasks;
 using System.Timers;
 
 namespace MpProcessHelper {
-    public class MpAppBuilder : MonkeyPaste.MpIAppBuilder {
-
-        public async Task<MpApp> Build(object handleInfo, MpIProcessIconBuilder pib) {
-            object result = await Build(new object[] { handleInfo, pib });
-            return result == null ? null : result as MpApp;
-        }
-
-        public async Task<MpApp> Build(object args) {
-            object result = await Build(args as object[]);
-            return result == null ? null : result as MpApp;
-        }
-
-        public async Task<object> Build(object[] args) {
-            object handleInfo = args[0];
-            MpIProcessIconBuilder pib = args[1] as MpIProcessIconBuilder;
-
-            if (handleInfo == null || handleInfo.GetType() != typeof(IntPtr)) {
-                return null;
-            }
-            IntPtr hWnd = (IntPtr)handleInfo;
-            string appPath = MpProcessManager.GetProcessPath(hWnd);
-            string appName = GetProcessApplicationName(appPath);
-
-            var iconStr = pib.GetBase64BitmapFromFilePath(appPath);
-            var icon = await MpIcon.Create(iconStr);
-            var app = await MpApp.Create(appPath, appName, icon);
-
-            return app;
-        }
-
-        public string GetProcessApplicationName(object handleInfo) {
-            if (handleInfo == null || handleInfo.GetType() != typeof(IntPtr)) {
-                return null;
-            }
-            IntPtr hWnd = (IntPtr)handleInfo;
-            string mwt = MpProcessManager.GetProcessMainWindowTitle(hWnd);
-            if (string.IsNullOrEmpty(mwt)) {
-                return mwt;
-            }
-            var mwta = mwt.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
-            if (mwta.Length == 1) {
-                if (string.IsNullOrEmpty(mwta[0])) {
-                    return "Explorer";
-                }
-                return mwta[0];
-            }
-            return mwta[mwta.Length - 1].Trim();
-        }
-    }
-
-    public class MpProcessManager  {
-
+    public class MpProcessManager  : MonkeyPaste.MpISingleton<MpProcessManager> {
         #region Private Variables
         private System.Timers.Timer _timer;
+
+        private MpIconBuilder _ib;
 
         private string fallback;
         private ObservableCollection<string> _knownAppPaths;
@@ -87,20 +38,33 @@ namespace MpProcessHelper {
 
         #region Events
 
-              
+
         #endregion
 
-        public MpProcessManager(MpIIconBuilder ib) {
-            Task.Run(async () => {
-                var al = await MpDb.Instance.GetItemsAsync<MpApp>();
-                Start(
-                    @"C:\WINDOWS\Explorer.EXE",
-                    al.Select(x => x.AppPath).ToArray(),
-                    ib);
-            });
+        #region Constructor
+
+        private static MpProcessManager _instance;
+        public static MpProcessManager Instance => _instance ?? (_instance = new MpProcessManager());
+
+        public MpProcessManager() {
+            throw new Exception("Must be init'd with args");
         }
 
-        public async void Start(string fallbackProcessPath, string[] knownAppPaths, MpIIconBuilder iconBuilder) {
+        public async Task Init() {
+            var al = await MpDb.Instance.GetItemsAsync<MpApp>();
+            Start(
+                @"C:\WINDOWS\Explorer.EXE",
+                al.Select(x => x.AppPath).ToArray(),
+                _ib);
+        }
+
+        public MpProcessManager(MpIconBuilder ib) {
+            _ib = ib;
+        }
+
+        #endregion
+
+        public async void Start(string fallbackProcessPath, string[] knownAppPaths, MpIconBuilder iconBuilder) {
             //fallback is used when cannot find path from handle
             _iconLoader = new MpProcessIconBuilder(iconBuilder);
 
@@ -114,9 +78,9 @@ namespace MpProcessHelper {
             var handleLookup = CurrentProcessWindowHandleStackDictionary.ToArray();
             foreach (var kvp in CurrentProcessWindowHandleStackDictionary) {
                 if (!_knownAppPaths.Contains(kvp.Key)) {
-                    //var iconBmpSrc = MpHelpers.Instance.GetIconImage(kvp.Key);
+                    //var iconBmpSrc = MpHelpers.GetIconImage(kvp.Key);
                     //var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                    //string appName = MpHelpers.Instance.GetProcessApplicationName(kvp.Value[0]);
+                    //string appName = MpHelpers.GetProcessApplicationName(kvp.Value[0]);
                     //var app = await MpApp.Create(kvp.Key, appName, icon);
                     _knownAppPaths.Add(kvp.Key);
 
@@ -155,7 +119,7 @@ namespace MpProcessHelper {
             if (!_knownAppPaths.Contains(processName)) {
                 //var iconBmpSrc = _iconLoader.GetIconImage(processName);
                 //var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                //var app = await MpApp.Create(processName, MpHelpers.Instance.GetProcessApplicationName(LastHandle), icon);
+                //var app = await MpApp.Create(processName, MpHelpers.GetProcessApplicationName(LastHandle), icon);
                 _knownAppPaths.Add(processName);
                 // this will notify main application of new app found
                 await new MpAppBuilder().Build(LastHandle, _iconLoader);
@@ -164,7 +128,6 @@ namespace MpProcessHelper {
             MonkeyPaste.MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})", GetProcessMainWindowTitle(LastHandle), LastHandle));
         }
 
-        
 
         private void RefreshHandleStack() {
             lock (CurrentProcessWindowHandleStackDictionary) {
@@ -335,7 +298,7 @@ namespace MpProcessHelper {
                 }
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
                 //return GetExecutablePathAboveVista(hwnd);
                 return fallback; //GetApplicationProcessPath();
             }

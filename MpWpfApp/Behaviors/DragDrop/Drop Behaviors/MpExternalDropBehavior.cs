@@ -65,7 +65,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
             if(GetDropTargetRects()[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
-                IntPtr lastHandle = MpResolver.Resolve<MpProcessHelper.MpProcessManager>().LastHandle;
+                IntPtr lastHandle = MpProcessHelper.MpProcessManager.Instance.LastHandle;
                 WinApi.SetForegroundWindow(lastHandle);
                 WinApi.SetActiveWindow(lastHandle);
                 return 0;

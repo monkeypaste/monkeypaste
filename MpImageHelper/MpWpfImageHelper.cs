@@ -18,7 +18,7 @@ namespace MpImageHelper {
         public byte Red;
         public byte Alpha;
     }
-    public class MpImageHelper : MonkeyPaste.MpIIconBuilder {
+    public class MpWpfImageHelper : MonkeyPaste.MpIconBuilder, MpISingleton<MpWpfImageHelper> {
         private List<List<Brush>> _colors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
@@ -120,7 +120,25 @@ namespace MpImageHelper {
                 }
             };
 
-        public MpImageHelper() { }
+        #region MpISingleton Definition
+        //private static readonly Lazy<MpImageHelper> _Lazy = new Lazy<MpImageHelper>(() => new MpImageHelper());
+        //public static MpImageHelper Instance { get { return _Lazy.Value; } }
+        private static MpWpfImageHelper _instance;
+        public static MpWpfImageHelper Instance => _instance ?? (_instance = new MpWpfImageHelper()); 
+        
+        public async Task Init() {
+            await Task.Delay(1);
+        }
+
+        #region Constructor
+
+        public MpWpfImageHelper() { }
+
+        #endregion
+
+        #endregion
+
+
 
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
             BitmapSource formattedBmpSrc = null;
@@ -213,7 +231,7 @@ namespace MpImageHelper {
             return countDictionary.OrderByDescending(o => o.Value).ToList();
         }
 
-        public List<string> CreatePrimaryColorList(BitmapSource bmpSource, int palleteSize = 5) {
+        public  List<string> CreatePrimaryColorList(BitmapSource bmpSource, int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
             var primaryIconColorList = new List<string>();
@@ -292,12 +310,12 @@ namespace MpImageHelper {
             return ScaleBitmapSource(borderBmpSrc, new Size(scale, scale));
         }
 
-        public string CreateBorder(string iconBase64, double scale, string hexColor) {
+        public override string CreateBorder(string iconBase64, double scale, string hexColor) {
             return CreateBorder(iconBase64.ToBitmapSource(), scale, hexColor.ToWinMediaColor()).ToBase64String();
         }
         
             
-        public List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
+        public override List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
             return CreatePrimaryColorList(iconBase64.ToBitmapSource(), palleteSize);
         }
     }

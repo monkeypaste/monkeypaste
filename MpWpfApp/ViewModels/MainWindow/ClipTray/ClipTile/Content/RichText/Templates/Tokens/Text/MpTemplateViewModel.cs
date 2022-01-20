@@ -99,7 +99,7 @@ namespace MpWpfApp {
 
         public Brush TemplateForegroundBrush {
             get {
-                if (MpHelpers.Instance.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
+                if (MpHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
                     return Brushes.Black;
                 }
                 return Brushes.White;
@@ -113,10 +113,10 @@ namespace MpWpfApp {
                 }
                 if(HostClipTileViewModel.IsExpanded) {
                     if (IsHovering) {
-                        return MpHelpers.Instance.GetDarkerBrush(TemplateBrush);
+                        return MpHelpers.GetDarkerBrush(TemplateBrush);
                     }
                     if (IsSelected) {
-                        return MpHelpers.Instance.GetLighterBrush(TemplateBrush);
+                        return MpHelpers.GetLighterBrush(TemplateBrush);
                     }
                 }
                 return TemplateBrush;
@@ -480,7 +480,7 @@ namespace MpWpfApp {
             var colorMenuItem = new MenuItem();
             var colorContextMenu = new ContextMenu();
             colorContextMenu.Items.Add(colorMenuItem);
-            MpHelpers.Instance.SetColorChooserMenuItem(
+            MpHelpers.SetColorChooserMenuItem(
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {

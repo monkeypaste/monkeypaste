@@ -22,7 +22,7 @@ namespace MpWpfApp {
             set {
                 if (_isGlassEnabled != value) {
                     _isGlassEnabled = value;
-                    MpHelpers.Instance.RunOnMainThread(async () => {
+                    MpHelpers.RunOnMainThread(async () => {
                         while(!_isLoaded) { await Task.Delay(100); }
 
                         if (_isGlassEnabled) {

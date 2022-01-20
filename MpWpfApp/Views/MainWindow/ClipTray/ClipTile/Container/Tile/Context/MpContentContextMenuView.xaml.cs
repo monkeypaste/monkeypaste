@@ -25,7 +25,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            MpHelpers.Instance.SetColorChooserMenuItem(
+            MpHelpers.SetColorChooserMenuItem(
                     this,
                     ClipTileColorContextMenuItem,
                     (s, e1) => {
@@ -49,7 +49,7 @@ namespace MpWpfApp {
             ExcludeApplication.Header = string.Format(@"Exclude '{0}'", primarySourceName);
 
             ExcludeApplication.Icon = new Image() {
-                Source = MpHelpers.Instance.MergeImages(
+                Source = MpHelpers.MergeImages(
                             new List<BitmapSource>() {
                                 primarySourceIcon64.ToBitmapSource().Scale(new Size(0.75,0.75)),
                                 (Application.Current.Resources["NoEntryIcon"] as string).ToBitmapSource()

@@ -109,7 +109,7 @@ namespace MpWpfApp {
 
         public void Init() {
             try {
-                if (!MpHelpers.Instance.IsConnectedToNetwork()) {
+                if (!MpHelpers.IsConnectedToNetwork()) {
                     return;
                 }
                 CurrencyList = GetAllCurrencies();

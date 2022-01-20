@@ -37,7 +37,7 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding ToggleTileIsPinnedCommand,
-                                Source={StaticResource TagTrayViewModel}}"
+                                Source={x:Static local:MpTagTrayViewModel.Instance}}"
               CommandParameter="{Binding}" />
     <MenuItem Header="Unpin"
               Visibility="{Binding DataContext.IsPinned,
@@ -48,7 +48,7 @@
                              Converter={StaticResource StringToIconConverter},
                              Mode=OneWay}"
               Command="{Binding ToggleTileIsPinnedCommand,
-                                Source={StaticResource TagTrayViewModel}}"
+                                Source={x:Static local:MpTagTrayViewModel.Instance}}"
               CommandParameter="{Binding}" />
     <Separator />
     <MenuItem x:Name="ClipTileColorContextMenuItem"

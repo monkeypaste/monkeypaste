@@ -38,8 +38,8 @@ namespace MpWpfApp {
                            wbb.Y > cutoffHeight) {
                             return string.Empty;
                         }
-                        if(MpHelpers.Instance.IsValidUrl(word.text)) {
-                            return MonkeyPaste.MpHelpers.Instance.GetFullyFormattedUrl(word.text);
+                        if(MpHelpers.IsValidUrl(word.text)) {
+                            return MonkeyPaste.MpHelpers.GetFullyFormattedUrl(word.text);
                         }
                     }
                 }

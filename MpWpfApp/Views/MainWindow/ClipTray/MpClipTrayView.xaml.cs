@@ -36,7 +36,7 @@ namespace MpWpfApp {
             MpMessenger.Instance.Register<MpMessageType>(
                 MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
-            //MpHelpers.Instance.RunOnMainThread(async () => {
+            //MpHelpers.RunOnMainThread(async () => {
             //    var sv = ClipTray.GetScrollViewer();
             //    while (sv == null) {
             //        await Task.Delay(10);

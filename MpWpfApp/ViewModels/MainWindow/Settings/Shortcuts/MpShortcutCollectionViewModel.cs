@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpSingletonViewModel<MpShortcutCollectionViewModel> {
+    public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingleton<MpShortcutCollectionViewModel> {
         #region Private Variables
         #endregion
 
@@ -45,6 +45,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        private static MpShortcutCollectionViewModel _instance;
+        public static MpShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpShortcutCollectionViewModel());
+
+
         public MpShortcutCollectionViewModel() : base() { }
 
         public async Task Init() {
@@ -166,7 +171,7 @@ namespace MpWpfApp {
         #region Private Methods
 
         private async Task InitHotkeysAndMouseEvents() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
                 try {
                     GlobalHook = Hook.GlobalEvents();
                     ApplicationHook = Hook.AppEvents();
@@ -235,7 +240,7 @@ namespace MpWpfApp {
         }
 
         private async Task InitShortcuts() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(async () => {
+            await MpHelpers.RunOnMainThreadAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
                 var scl = await MpDb.Instance.GetItemsAsync<MpShortcut>();
                 foreach (var sc in scl) {
@@ -429,12 +434,12 @@ namespace MpWpfApp {
         private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
                         System.Windows.Forms.SendKeys.SendWait(" ^ c");
                     }
                 }
                 if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.ApplicationIsActivated()) {
                         System.Windows.Forms.SendKeys.SendWait("^v");
                     }
                 }

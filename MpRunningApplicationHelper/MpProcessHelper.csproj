@@ -5,9 +5,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{56E5FAAD-0C31-400F-B95F-D83517C07ED3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>MpRunningApplicationHelper</RootNamespace>
-    <AssemblyName>MpRunningApplicationHelper</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MpProcessHelper</RootNamespace>
+    <AssemblyName>MpProcessHelper</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -31,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -66,9 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MpAppBuilder.cs" />
     <Compile Include="MpProcessIconBuilder.cs" />
     <Compile Include="MpProcessManager.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi.cs" />
   </ItemGroup>

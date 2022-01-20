@@ -294,17 +294,17 @@ namespace MpWpfApp {
         //        isMouseOverBorder = VisualTreeHelper.HitTest(itemsControlCanvas, p)?.VisualHit == b;
 
         //        if (!_isMouseDown) {
-        //            isFromLeft = MpHelpers.Instance.IsPointInTriangle(p, c, bl, tl);
-        //            isFromTop = MpHelpers.Instance.IsPointInTriangle(p, c, tl, tr);
-        //            isFromRight = MpHelpers.Instance.IsPointInTriangle(p, c, tr, br);
-        //            isFromBottom = MpHelpers.Instance.IsPointInTriangle(p, c, br, bl);
+        //            isFromLeft = MpHelpers.IsPointInTriangle(p, c, bl, tl);
+        //            isFromTop = MpHelpers.IsPointInTriangle(p, c, tl, tr);
+        //            isFromRight = MpHelpers.IsPointInTriangle(p, c, tr, br);
+        //            isFromBottom = MpHelpers.IsPointInTriangle(p, c, br, bl);
 
-        //            isFromTopLeft = MpHelpers.Instance.DistanceBetweenPoints(p, tl) <= maxCornerDistance;
-        //            isFromTopRight = MpHelpers.Instance.DistanceBetweenPoints(p, tr) <= maxCornerDistance;
-        //            isFromBottomRight = MpHelpers.Instance.DistanceBetweenPoints(p, br) <= maxCornerDistance;
-        //            isFromBottomLeft = MpHelpers.Instance.DistanceBetweenPoints(p, bl) <= maxCornerDistance;
+        //            isFromTopLeft = MpHelpers.DistanceBetweenPoints(p, tl) <= maxCornerDistance;
+        //            isFromTopRight = MpHelpers.DistanceBetweenPoints(p, tr) <= maxCornerDistance;
+        //            isFromBottomRight = MpHelpers.DistanceBetweenPoints(p, br) <= maxCornerDistance;
+        //            isFromBottomLeft = MpHelpers.DistanceBetweenPoints(p, bl) <= maxCornerDistance;
 
-        //            if (isMouseOverBorder && MpHelpers.Instance.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
+        //            if (isMouseOverBorder && MpHelpers.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
         //                if (isFromTopLeft || isFromBottomRight) {
         //                    Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
         //                } else if (isFromTopRight || isFromBottomLeft) {

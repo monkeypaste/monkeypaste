@@ -42,6 +42,6 @@
                    Content="Sequence changes will take affect upon application restart" />
         </StackPanel>
         <local:MpShortcutCollectionDataGridView Grid.Row="3"
-                                                DataContext="{StaticResource ShortcutCollectionViewModel}" />
+                                                DataContext="{x:Static local:MpShortcutCollectionViewModel.Instance}" />
     </Grid>
 </UserControl>

@@ -123,8 +123,8 @@ namespace MonkeyPaste {
                 sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
             }
 
-            var domainStr = MpHelpers.Instance.GetUrlDomain(endPoint);
-            var favIconImg64 = await MpHelpers.Instance.GetUrlFaviconAsync(domainStr);
+            var domainStr = MpHelpers.GetUrlDomain(endPoint);
+            var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
 
             var icon = await MpIcon.Create(favIconImg64);
 

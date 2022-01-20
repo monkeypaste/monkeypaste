@@ -517,7 +517,7 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(IsExpanded):
                     if(IsExpanded) {
-                        //MpHelpers.Instance.RunOnMainThread(async () => {
+                        //MpHelpers.RunOnMainThread(async () => {
                         //    await LoadChildren();
                         //});
                     }

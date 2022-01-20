@@ -112,7 +112,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconImageButton_MouseEnter(object sender, MouseEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 while(_isAnimating) {
                     await Task.Delay(10);
                 }
@@ -121,7 +121,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {
-            MpHelpers.Instance.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(async () => {
                 while (_isAnimating) {
                     await Task.Delay(10);
                 }
@@ -194,7 +194,7 @@ namespace MpWpfApp {
             }
             //ctvm.Parent.IsFlipped = true;
 
-            //MpHelpers.Instance.OpenUrl(CopyItem.Source.App.AppPath);
+            //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();
             BindingContext.IsSelected = true;
             foreach (var vctvm in MpClipTrayViewModel.Instance.Items) {

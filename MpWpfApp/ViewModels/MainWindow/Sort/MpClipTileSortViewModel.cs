@@ -10,7 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpClipTileSortViewModel : MpSingletonViewModel<MpClipTileSortViewModel> {
+    public class MpClipTileSortViewModel : MpViewModelBase, MpISingleton<MpClipTileSortViewModel> {
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
@@ -75,11 +75,15 @@ namespace MpWpfApp {
 
         #region Constructors
 
+        private static MpClipTileSortViewModel _instance;
+        public static MpClipTileSortViewModel Instance => _instance ?? (_instance = new MpClipTileSortViewModel());
+
+
         public MpClipTileSortViewModel() : base() { }
 
 
         public async Task Init() {
-            await MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            await MpHelpers.RunOnMainThreadAsync(() => {
 
                 //must be set before property changed registered for loading order
                 SelectedSortType = SortTypes[0];
